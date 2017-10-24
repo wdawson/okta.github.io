@@ -78,6 +78,26 @@ function generate_html() {
     fi
 }
 
+function removeHTMLExtensions() {
+    interject "Removing HTML extensions"
+    # Removing all generated .html files (excludes the main 'index.html' in the dir)
+    find ./dist/ -type f ! -iname 'index.html' -name '*.html' -print0 | while read -d $'\0' f; do mv "$f" "${f%.html}"; done
+}
+
+function generate_conductor_file() {
+
+    pushd $GENERATED_SITE_LOCATION
+    CONDUCTOR_FILE=conductor.yml
+    find -type f -iname 'index.html' | xargs dirname | sed -s "s/^\.//" | while read -r line ; do
+        if [ ! -z "${line}" ]; then
+            echo "  - from: ${line}" >> ${CONDUCTOR_FILE}
+            echo "    to: ${line}/" >> ${CONDUCTOR_FILE}
+        fi
+    done
+    popd
+
+}
+
 function require_env_var() {
     local env_var_name=$1
     eval env_var=\$$env_var_name
