@@ -272,6 +272,10 @@
   function applySelectionTuple(selectionTuple) {
     window.location.replace('#/' + selectionTuple.join('/'));
     loadContent.apply(null, selectionTuple);
+    if (window.ga) {
+      window.ga('set', 'page', window.location.pathname + window.location.hash);
+      window.ga('send', 'pageview');
+    }
   }
 
   /**
