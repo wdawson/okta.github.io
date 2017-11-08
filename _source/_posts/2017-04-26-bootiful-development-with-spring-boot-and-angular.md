@@ -25,7 +25,7 @@ To get started with Spring Boot, navigate to [start.spring.io](https://start.spr
 * [H2](http://www.h2database.com/html/main.html): An in-memory database
 * [JPA](http://www.oracle.com/technetwork/java/javaee/tech/persistence-jsp-140049.html): Standard ORM for Java
 * [Rest Repositories](http://projects.spring.io/spring-data-rest/): Allows you to expose your JPA repositories as REST endpoints
-* [Web](https://github.com/spring-projects/spring-boot/blob/master/spring-boot-starters/spring-boot-starter-web/pom.xml): Spring MVC with Jackson (for JSON), Hibernate Validator, and embedded Tomcat
+* [Web](https://github.com/spring-projects/spring-boot/blob/master/spring-boot-project/spring-boot-starters/spring-boot-starter-web/pom.xml): Spring MVC with Jackson (for JSON), Hibernate Validator, and embedded Tomcat
 
 {% img blog/angular-spring-boot/start.spring.png alt:"start.spring.io" width:"800" %}{: .center-image }
 
@@ -182,7 +182,7 @@ public class BeerController {
 }
 ```
 
-Re-build your application and navigate to http://localhost:8080/good-beers. You should see the list of good beers in your browser.
+Re-build your application and navigate to `http://localhost:8080/good-beers`. You should see the list of good beers in your browser.
 
 {% img blog/angular-spring-boot/good-beers-json.png alt:"Good Beers JSON" width:"800" %}{: .center-image }
 
@@ -344,7 +344,7 @@ Update `app.component.html` to have the `BeerListComponent` rendered when you’
 <app-beer-list></app-beer-list>
 ```
 
-Make sure both apps are started (with `mvn spring-boot:run` in the server directory, and `ng serve` in the client directory) and navigate to <http://localhost:4200>. You should see an error in your console that you means you have to configure cross-origin resource sharing (CORS) on the server.
+Make sure both apps are started (with `mvn spring-boot:run` in the server directory, and `ng serve` in the client directory) and navigate to `http://localhost:4200`. You should see an error in your console that you means you have to configure cross-origin resource sharing (CORS) on the server.
 
 <pre style="color: red">
 Failed to load http://localhost:8080/good-beers: No 'Access-Control-Allow-Origin' header is present on the requested resource. Origin 'http://localhost:4200' is therefore not allowed access.
@@ -354,7 +354,7 @@ To fix this issue, you’ll need to configure Spring Boot to allow cross-domain 
 
 ### Configure CORS for Spring Boot
 
-In the server project, open `BeerController.java` and add a `@CrossOrigin` annotation to enable cross-origin resource sharing (CORS) from the client (http://localhost:4200).
+In the server project, open `BeerController.java` and add a `@CrossOrigin` annotation to enable cross-origin resource sharing (CORS) from the client (`http://localhost:4200`).
 
 ```java
 import org.springframework.web.bind.annotation.CrossOrigin;
