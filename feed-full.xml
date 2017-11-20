@@ -8,6 +8,225 @@
     <atom:link href="https://developer.okta.com/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Add Single Sign-On to Your Spring Boot Web App in 15 Minutes</title>
+        <description>&lt;p&gt;Need a secure web server right now? With Spring Boot and Okta, you can spin up an enterprise-quality REST server with complete user identity and authorization management in less than 20 minutes. Out of the box, Spring Boot and its Starter packages supply a near instant production-ready Tomcat server, and Okta hardens your APIs with a variety of OAuth flows just as fast. This tutorial will walk you through the complete process. The cherry on top will be using Okta to add fully featured client authentication and user administration with just a few lines of code and config! By the end of this tutorial, your secured Spring Boot server will be able to serve web content or function as a backend API, but only to users who have registered with you. Ready? Let’s go!&lt;/p&gt;
+
+&lt;p&gt;This post assumes some basic familiarity with Java, including an understanding of a typical Java project structure, packages, JAR files, annotations, generics, etc. No prior use of Spring, Maven, or any other Java framework is necessary.&lt;/p&gt;
+&lt;h2 id=&quot;get-started-with-spring-boot-and-okta&quot;&gt;Get Started with Spring Boot and Okta&lt;/h2&gt;
+
+&lt;p&gt;Going from zero to secure web server doesn’t happen in a flash. To complete this project you’ll:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Download a brand new Spring Boot starter project using Spring Initializr&lt;/li&gt;
+  &lt;li&gt;Create a new Okta account and access your administration dashboard&lt;/li&gt;
+  &lt;li&gt;Add a few lines of code and config&lt;/li&gt;
+  &lt;li&gt;See Single Sign-On in action on your new server!&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;why-spring&quot;&gt;Why Spring?&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/add-sso-spring-boot-15-min/spring-logo-0107ff70d9ead912ba7a54e0861b14358739e49c308e725079a06dae44cba6d8.png&quot; alt=&quot;Spring&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://spring.io&quot;&gt;Spring&lt;/a&gt; is a mature, widely used, and well-documented set of tools and libraries that were built to make your life easier as a Java developer. It offers an enormous amount of functionality, from easy database connections and server creation (as we’ll see in this tutorial) to turn-key security, messaging, mobile development, and more.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://projects.spring.io/spring-boot/&quot;&gt;Spring Boot&lt;/a&gt; is a sub-project of Spring that focuses on making it super fast and easy to bootstrap a new Spring application. One of its primary attractions is that it requires no mucking around with messy configuration files (a common complaint heard about the early Spring ecosystem). As we’ll soon see, the use of a few simple annotations and Maven dependencies will take us from zero to secured web server in minutes.&lt;/p&gt;
+
+&lt;h2 id=&quot;download-and-initialize-a-new-spring-boot-project&quot;&gt;Download and Initialize a New Spring Boot Project&lt;/h2&gt;
+
+&lt;p&gt;Spring offers a tool called &lt;a href=&quot;https://start.spring.io/&quot;&gt;Spring Initializr&lt;/a&gt; that allows you to create and download a zip file containing a new Spring Boot project with a single click. Head on over there and create a new project that includes the &lt;strong&gt;Web&lt;/strong&gt; and &lt;strong&gt;Security&lt;/strong&gt; starters. I left the default artifact and group intact and unzipped the &lt;code class=&quot;highlighter-rouge&quot;&gt;demo.zip&lt;/code&gt; file in my home directory. That unpacked the following files:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/add-sso-spring-boot-15-min/dir-tree-b82f3b9c8d0cb240b93bbd8423119e0f4cad4bda20b7329ecbab2a908b660f53.png&quot; alt=&quot;Directory tree&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Those of you familiar with &lt;a href=&quot;http://maven.apache.org&quot;&gt;Maven&lt;/a&gt; will recognize the &lt;strong&gt;pom.xml&lt;/strong&gt; file. Just four little dependencies pull in an enormous amount of functionality from Spring:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-boot-starter-security&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-boot-starter-web&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-boot-starter-test&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;scope&amp;gt;&lt;/span&gt;test&lt;span class=&quot;nt&quot;&gt;&amp;lt;/scope&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.security&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-security-test&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;scope&amp;gt;&lt;/span&gt;test&lt;span class=&quot;nt&quot;&gt;&amp;lt;/scope&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Before getting to the fun stuff, make sure everything is kosher by running the server via:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./mvnw spring-boot:run
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Amid all the colorful log statements, the one to look for is likely second to the last:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Tomcat started on port(s): 8080 (http)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/add-sso-spring-boot-15-min/spring-boot-run-40ad38158686f1225e3f9a448698ef5b75d386823aa0c8eb7d89a2334f197a01.png&quot; width=&quot;600&quot; alt=&quot;blog/add-sso-spring-boot-15-min/spring-boot-run.png&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Because you requested the Spring Security Starter package when you created the project, the server is protected by default using &lt;a href=&quot;https://www.httpwatch.com/httpgallery/authentication/&quot;&gt;Basic Authentication&lt;/a&gt;.  This can be verified by opening a browser and visiting:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;http://localhost:8080
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;A browser dialog should appear asking for your username and password (which you haven’t set up yet):&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/add-sso-spring-boot-15-min/basic-auth-prompt-2dc3e4c361ac6b9e91fdda8a1c7b469ba82177909d8cc98782e08f825fa44d02.png&quot; alt=&quot;Screen Shot of browser basic auth&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Rather than bother with setting up a hard coded username and password in your new server, wouldn’t it be better to suddenly have access to full-fledged OAuth session management, user administration, site statistics, and more? We can do that in just minutes with Okta!&lt;/p&gt;
+
+&lt;h2 id=&quot;add-oauth-authentication-to-your-server-with-okta&quot;&gt;Add OAuth Authentication to Your Server with Okta&lt;/h2&gt;
+
+&lt;p&gt;Now it’s time to enhance your server with user management, key and credential storage and rotation, OAuth server maintenance, forgotten password handling, and a slick administration UI. That sounds like a lot of work!  Fortunately, it’s done for you with Okta’s user management and authorization services. You merely plug Okta dependencies into your Spring Boot project, configure a few security settings, and you get all of that and a bag of chips in just a few simple steps.  Here’s how.&lt;/p&gt;
+
+&lt;h3 id=&quot;get-your-okta-credentials&quot;&gt;Get Your Okta Credentials&lt;/h3&gt;
+
+&lt;p&gt;If you’re new to Okta, you can &lt;a href=&quot;https://developer.okta.com/signup/&quot;&gt;sign up here&lt;/a&gt; for a free developer account. You’ll receive an invitation email with your username (your email address) and a temporary password. Follow the link provided in the email, sign in using these credentials, and create your admin account for the first time. You’ll be asked to create a new password, and after completing this page, you will find your Okta developer console. There is much to explore here, so if you’d like, feel free to take a break and browse around!&lt;/p&gt;
+
+&lt;p&gt;When you’re ready to proceed, go to the &lt;strong&gt;Applications&lt;/strong&gt; tab in your Okta dashboard. It should look something like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/add-sso-spring-boot-15-min/okta-app-screen-7d1e74f1473ae098307ecc4fa6308b4d2891f29f640cbe4bc856e2ece3278480.png&quot; alt=&quot;Screen Shot of Okta add application&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Click on the green &lt;strong&gt;Add Application&lt;/strong&gt; button, and since you’re building a web server, select &lt;strong&gt;Web&lt;/strong&gt; &lt;em&gt;(.NET, Java, etc.)&lt;/em&gt; as the application type and click &lt;strong&gt;Next&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/add-sso-spring-boot-15-min/create-app-screen-f61c3d0f4a6836ba3f0092eaad7c498d151f05f7a0286de74eb44003411b84e6.png&quot; alt=&quot;Screen Shot of Okta create application&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In the settings page that follows, there is one default value to change. In the &lt;strong&gt;Login Redirect URIs&lt;/strong&gt; field, replace the default value with:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;http://localhost:8080/login
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/add-sso-spring-boot-15-min/app-settings-screen-a96e2ba5c3574250549c0326777773cdbc13d7006bec2771fdc7dc1eea84c213.png&quot; alt=&quot;Screen Shot of Okta application settings&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Then, click &lt;strong&gt;Done&lt;/strong&gt;. This takes you to home base for your new application. There are a lot of features here too but for now you’ll want to take note of a few pieces of information in the &lt;strong&gt;General&lt;/strong&gt; sub-tab of the &lt;strong&gt;Application&lt;/strong&gt; main tab in the dashboard. The first two are the &lt;strong&gt;Client ID&lt;/strong&gt; and &lt;strong&gt;Client Secret&lt;/strong&gt; located near the bottom of the page:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/add-sso-spring-boot-15-min/app-created-screen-bd8e36294ce66f05f8a7bb0d05a426065ac2ce844787129a248cb53687a5bd86.png&quot; alt=&quot;Screen Shot of Okta application created&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Keep those handy, and keep them safe! You’ll use them in your Spring Boot server to authenticate with Okta.&lt;/p&gt;
+
+&lt;p&gt;Next, go to the &lt;strong&gt;API&lt;/strong&gt; tab at the top of the dashboard, and in this screen, take note of the &lt;strong&gt;Issuer URI&lt;/strong&gt;. If you don’t see it, make sure you’re on the &lt;strong&gt;Authorization Servers&lt;/strong&gt; sub-tab. This is the Okta OAuth Authorization server that your server will communicate with.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/add-sso-spring-boot-15-min/issuer-screen-8ade742dd7c2f3e6f7edc9fd0271b6d36029e225988b9b74942b566200d16334.png&quot; alt=&quot;Screen Shot of Okta OAuth Issuer Location&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now that your &lt;strong&gt;Client ID&lt;/strong&gt;, &lt;strong&gt;Client Secret&lt;/strong&gt;, and &lt;strong&gt;Issuer URI&lt;/strong&gt; are stashed somewhere safely; it’s time to plug Okta into your server. Add the Okta and Spring OAuth dependencies along with the others in the &lt;strong&gt;pom.xml&lt;/strong&gt; file:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;com.okta.spring&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;okta-spring-boot-starter&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;0.2.0&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.security.oauth&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-security-oauth2&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;2.2.0.RELEASE&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Next you’ll add three values to: &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/resources/application.properties&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-properties highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;py&quot;&gt;okta.oauth2.issuer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;(your **Issuer URI**)&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;okta.oauth2.clientId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;(your **Client ID**)&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;okta.oauth2.clientSecret&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;(your **Client Secret**)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Like so:&lt;/p&gt;
+
+&lt;div class=&quot;language-properties highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;py&quot;&gt;okta.oauth2.issuer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;https://dev-279161.oktapreview.com/oauth2/default&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;okta.oauth2.clientId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;0oacqif7do3e0hD0h7&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;okta.oauth2.clientSecret&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;(your **Client Secret**)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;One last bit to do before reaping all that Okta can offer – use it on your server! For this post, the goal is to add single sign-on authentication, so that only users that have registered with you will be able to log into your server and interact with it. The main application class needs to tell the Okta client library to enable single sign-on, and that’s done by adding the following annotation to the main application class at: &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/java/com/example/demo/DemoApplication.java&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@EnableOAuth2Sso&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;While you’re at it, might as well add an endpoint that does something with the new user information we’re about to get. You can give the main Application class the ability to handle requests by decorating it with:&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@RestController&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Okta provides the user ID of the caller via the &lt;code class=&quot;highlighter-rouge&quot;&gt;java.security.Principal&lt;/code&gt; interface. By default, this is the user’s email address. You can add a request handler that echoes the user’s email address like so:&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@GetMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;echoTheUsersEmailAddress&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Principal&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;principal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Hey there! Your email address is: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;principal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;With the new imports, annotations, and request handler, the main &lt;code class=&quot;highlighter-rouge&quot;&gt;DemoApplication.java&lt;/code&gt; should look like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;com&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;example&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;demo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.boot.SpringApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.boot.autoconfigure.SpringBootApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.web.bind.annotation.GetMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.web.bind.annotation.RestController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.security.Principal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;nd&quot;&gt;@RestController&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@EnableOAuth2Sso&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@SpringBootApplication&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DemoApplication&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+   &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+     &lt;span class=&quot;n&quot;&gt;SpringApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DemoApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+   &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nd&quot;&gt;@GetMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;echoTheUsersEmailAddress&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Principal&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;principal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Hey there! Your email address is: &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;principal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;When you restart the server via &lt;code class=&quot;highlighter-rouge&quot;&gt;./mvnw spring-boot:run&lt;/code&gt; and visit &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt; in your browser, you’ll be taken to your personal Okta subdomain to log in:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/add-sso-spring-boot-15-min/okta-login-screen-f0fc8309be745a7b2336af2439db154a430c92383433306380329a18a0c9ca6c.png&quot; alt=&quot;Screen Shot of Okta Login&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You can log in using the email and password you set when you created your Okta account, because you were added by default as a user in the “My Web App” Okta application. Unless you created a new user back in the administration dashboard, this is the only user that has been given permission to access your site.&lt;/p&gt;
+
+&lt;p&gt;Once you’ve logged in, you will be redirected back to your site as an authenticated user, and should be seeing your email address echoed back to you!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/add-sso-spring-boot-15-min/app-success-ec1c6ab803f74452b5190f6bb25a1a4a40be67349dfbdc2454f6375dd6621cda.png&quot; alt=&quot;Screen Shot of result&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;whats-next&quot;&gt;What’s Next?&lt;/h2&gt;
+
+&lt;p&gt;Now the real fun begins, as you create or onboard new users to your app! Take some time to experiment with different permission levels. Check out the audit logs to see what your users’ activities have been. Add users to groups, and customize and control email and text message communications.&lt;/p&gt;
+
+&lt;p&gt;Interested in learning more? Check out these other Java resources:
+Our &lt;a href=&quot;https://developer.okta.com/code/java/&quot;&gt;Java Product Documentation&lt;/a&gt;
+&lt;a href=&quot;https://developer.okta.com/blog/2017/10/27/secure-spa-spring-boot-oauth&quot;&gt;Secure Your SPA with Spring Boot and OAuth&lt;/a&gt;
+&lt;a href=&quot;https://developer.okta.com/blog/2017/10/13/okta-groups-spring-security&quot;&gt;Add Role-Based Access Control to Your App with Spring Security and Thymeleaf&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;And if you have questions about this or any of our other content (or just want to chat!) hit us up on Twitter &lt;a href=&quot;https://twitter.com/OktaDev&quot;&gt;@OktaDev&lt;/a&gt;. We’d love to hear from you!&lt;/p&gt;
+</description>
+        <pubDate>Fri, 17 Nov 2017 00:00:00 +0000</pubDate>
+        <link>https://developer.okta.com/blog/2017/11/17/add-sso-spring-boot-15-min</link>
+        <guid isPermaLink="true">https://developer.okta.com/blog/2017/11/17/add-sso-spring-boot-15-min</guid>
+      </item>
+    
+      <item>
         <title>Add Authentication to Play Framework with OIDC and Okta</title>
         <description>&lt;p&gt;I’ve fallen in love with Play Framework in the past, but then found a more attractive framework in Spring Boot. I fell in love partly because Play was new and sexy at the time, but also because it’s “live reloading” of Java code was a killer feature I’d been looking for. When it added support for Scala in v2.0, I was very excited to learn Scala and discover the power of functional programming. Part of the reason I fell out of love with Play is that I fell &lt;em&gt;really hard&lt;/em&gt; for Spring Boot. I’d used Spring for ten years before I found Spring Boot, so I knew how most things worked. With Play, I had to learn a lot of new things, and it was difficult to keep up.&lt;/p&gt;
 
