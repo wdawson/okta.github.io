@@ -128,11 +128,8 @@ Content-Type: application/json
 ~~~
 ~~~json
 {
-    "errorCode": "E0000021",
-    "errorSummary": "Bad request.  Accept and/or Content-Type headers likely do not match supported values.",
-    "errorLink": "E0000021",
-    "errorId": "oaeZk8heGFbTJe18dEvXkMI0w",
-    "errorCauses": []
+    "error": "invalid_client_metadata",
+    "error_description": "client_name: An object with this field already exists in the current organization"
 }
 ~~~
 
@@ -272,23 +269,6 @@ Header links for use in the next request's `after` parameter:
         "application_type": "web"
     }
 ]
-~~~
-
-##### Response Example: Incorrect Domain Name
-{:.api .api-response .api-response-example}
-
-~~~http
-HTTP/1.1 401 Unauthorized
-Content-Type: application/json
-~~~
-~~~json
-{
-    "errorCode": "E0000011",
-    "errorSummary": "Invalid token provided",
-    "errorLink": "E0000011",
-    "errorId": "oaeYxh8xdnsRL-NOAwHx3Y8_Q",
-    "errorCauses": []
-}
 ~~~
 
 ### List Client Applications Matching a Search Filter
@@ -542,7 +522,7 @@ Content-Type: application/json;charset=UTF-8
 ~~~json
 {
     "error": "invalid_client_metadata",
-    "error_description": "'application_type' cannot be modified. client_name: The field cannot be left blank"
+    "error_description": "client_name: The field cannot be left blank"
 }
 ~~~
 
@@ -674,17 +654,14 @@ HTTP/1.1 204 No Content
 {:.api .api-response .api-response-example}
 
 ~~~http
-HTTP/1.1 404 Not Found
+HTTP/1.1 401 Unauthorized
 Content-Type: application/json;charset=UTF-8
 ~~~
 
 ~~~json
 {
-    "errorCode": "E0000007",
-    "errorSummary": "Not found: Resource not found: 0jrubyXXm4B9zVJPboyT (PublicClientApp)",
-    "errorLink": "E0000007",
-    "errorId": "oae7LrklqzDQCmZSkcOgdImDg",
-    "errorCauses": []
+    "error": "invalid_client",
+    "error_description": "Invalid value for 'client_id' parameter."
 }
 ~~~
 
