@@ -8,6 +8,253 @@
     <atom:link href="https://developer.okta.com/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Build an iOS App with Secure Authentication in 20 Minutes</title>
+        <description>&lt;p&gt;What does it take to build a successful mobile application in today’s ever-changing market? There are (what seems like an infinite) number of design, build, and test cycles performed, just to release your app into the hands of a user.&lt;/p&gt;
+
+&lt;p&gt;In essence:&lt;/p&gt;
+
+&lt;div class=&quot;language-swift highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Users&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;love&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;Product&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;design&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;Product&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;rebuild&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Once completed, the real challenge begins – retaining those users. Mostly that means getting users to log in to your app easily, and then never have to do it again. With Okta, you can effortlessly integrate authentication into your iOS application with the &lt;a href=&quot;https://github.com/okta/okta-sdk-appauth-ios&quot;&gt;Okta AppAuth SDK&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;This post will show you how to add &lt;a href=&quot;https://developer.okta.com/standards/OIDC/&quot;&gt;OpenID Connect&lt;/a&gt; for user Authentication into your native iOS application, using Swift.&lt;/p&gt;
+
+&lt;p&gt;This post also assumes you have the latest version of &lt;a href=&quot;https://itunes.apple.com/us/app/xcode/id497799835?mt=12&quot;&gt;XCode&lt;/a&gt;, along with Swift 3.x+.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Create a new Xcode project&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://synd.co/2yHkGXz&quot;&gt;Sign-up&lt;/a&gt; for a free Okta Developer Edition account&lt;/li&gt;
+  &lt;li&gt;Log in to your Okta account and select &lt;strong&gt;Applications &amp;gt; Add Application &amp;gt; Native&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;Update the &lt;strong&gt;Grant type allowed&lt;/strong&gt; to include &lt;em&gt;Refresh Token&lt;/em&gt;&lt;/li&gt;
+  &lt;li&gt;Click &lt;strong&gt;Done&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;Copy the &lt;strong&gt;Login redirect URI&lt;/strong&gt; and &lt;strong&gt;Client ID&lt;/strong&gt;, as you will need to insert these into your native app configuration&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/ios-app-secure-auth/dev-console-app-builder-639cd2d3ba28430a10dac49c29da5035ffe9f31c50c727c23ba3fabf3ab8c1f6.png&quot; alt=&quot;Developer Console App Builder&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;install-the-okta-appauth-sdk&quot;&gt;Install the Okta AppAuth SDK&lt;/h2&gt;
+
+&lt;p&gt;The &lt;a href=&quot;https://github.com/okta/okta-sdk-appauth-ios&quot;&gt;Okta AppAuth SDK&lt;/a&gt; is available through &lt;a href=&quot;https://cocoapods.org/&quot;&gt;Cocoapods&lt;/a&gt;. For instructions on installing &lt;a href=&quot;https://cocoapods.org/&quot;&gt;Cocoapods&lt;/a&gt;, see &lt;a href=&quot;https://guides.cocoapods.org/using/getting-started.html&quot;&gt;their getting started guide&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;From a terminal window, navigate into your iOS application’s directory to create a &lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt;, where &lt;code class=&quot;highlighter-rouge&quot;&gt;'MyApp'&lt;/code&gt; is the name of your new Xcode project.&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;platform&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:ios&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'9.0'&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;use_frameworks!&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;target&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'MyApp'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;pod&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'OktaAuth'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'~&amp;gt; 0.1'&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Next, install the SDK by running &lt;code class=&quot;highlighter-rouge&quot;&gt;pod install&lt;/code&gt;. You should see the following message appear once the installation is completed:
+&lt;img src=&quot;/assets/blog/ios-app-secure-auth/pod-install-oktaauth-ebf24fd08680c6363a3b30de1967513d6df76aabad873b285fdaccb98e6a740d.png&quot; alt=&quot;Cocoapods Installation&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Open up the newly generated &lt;code class=&quot;highlighter-rouge&quot;&gt;.xcworkspace&lt;/code&gt; file by running the following in your terminal:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Replace 'MyApp' with the name of your iOS application&lt;/span&gt;
+open MyApp.xcworkspace/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;configure-your-ios-app&quot;&gt;Configure your iOS App&lt;/h2&gt;
+
+&lt;p&gt;The SDK uses a &lt;strong&gt;Property List&lt;/strong&gt; (&lt;code class=&quot;highlighter-rouge&quot;&gt;.plist&lt;/code&gt;) file to bootstrap the login flow. We will need to create an &lt;code class=&quot;highlighter-rouge&quot;&gt;Okta.plist&lt;/code&gt; file in your application’s bundle, using your newly created Okta application’s attributes:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;plist&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;version=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;1.0&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;dict&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;key&amp;gt;&lt;/span&gt;issuer&lt;span class=&quot;nt&quot;&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default&lt;span class=&quot;nt&quot;&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;key&amp;gt;&lt;/span&gt;clientId&lt;span class=&quot;nt&quot;&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;{clientIdValue}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;key&amp;gt;&lt;/span&gt;redirectUri&lt;span class=&quot;nt&quot;&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;{redirectUrlValue}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;key&amp;gt;&lt;/span&gt;scopes&lt;span class=&quot;nt&quot;&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;array&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;offline_access&lt;span class=&quot;nt&quot;&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;openid&lt;span class=&quot;nt&quot;&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;profile&lt;span class=&quot;nt&quot;&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;/array&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dict&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/plist&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id=&quot;openid-connect-terminology&quot;&gt;OpenID Connect Terminology&lt;/h3&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Setting&lt;/th&gt;
+      &lt;th&gt;Value&lt;/th&gt;
+      &lt;th&gt;Description&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;issuer&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default&lt;/td&gt;
+      &lt;td&gt;Your organization’s URL, appended with your &lt;code class=&quot;highlighter-rouge&quot;&gt;default&lt;/code&gt; authorization server.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;clientId&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;0oac123..&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;Client ID copied from the &lt;strong&gt;Client Credentials&lt;/strong&gt; section on your Okta Application’s page.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;redirectUri&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;com.oktapreview.{yourOktaOrg}:/callback&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;Login redirect URI copied from the &lt;strong&gt;General Settings&lt;/strong&gt; section on your Okta Application’s page.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;scopes&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;offline_access&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;openid&lt;/code&gt;, and &lt;code class=&quot;highlighter-rouge&quot;&gt;profile&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;Enables your application to receive basic user information via an &lt;a href=&quot;http://openid.net/specs/openid-connect-core-1_0.html#IDToken&quot;&gt;ID Token&lt;/a&gt;.&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;update-the-private-use-uri-scheme&quot;&gt;Update the Private-use URI Scheme&lt;/h3&gt;
+
+&lt;p&gt;To allow apps to communicate with one another on an iOS device, we need to register a &lt;strong&gt;URI Scheme&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;The easiest way to set this up is to navigate to the &lt;strong&gt;Info&lt;/strong&gt; tab under your Application’s target. Specify a &lt;strong&gt;URL Scheme&lt;/strong&gt; to be your &lt;em&gt;redirectUri&lt;/em&gt;, excluding the path.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/ios-app-secure-auth/url-scheme-1894ccb88c5011d94a6528625f74a9d9dc71d82a1a576549a7758812daa313f1.png&quot; alt=&quot;Update Private-Use URI Scheme&quot; width=&quot;750&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;add-user-authentication&quot;&gt;Add User Authentication&lt;/h2&gt;
+&lt;p&gt;First, we need to handle the inter-app communication between the device’s native browser and your application. Open &lt;code class=&quot;highlighter-rouge&quot;&gt;AppDelegate.swift&lt;/code&gt; and add the following:&lt;/p&gt;
+
+&lt;div class=&quot;language-swift highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// AppDelegate.swift&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;OktaAuth&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;application&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;UIApplication&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;open&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;URL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;UIApplicationOpenURLOptionsKey&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Bool&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;OktaAuth&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;resume&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Next, lets add the &lt;strong&gt;login&lt;/strong&gt; code! You can trigger a login event a number of ways. For this article, we will simply add the &lt;strong&gt;login&lt;/strong&gt; action to run during our initial &lt;code class=&quot;highlighter-rouge&quot;&gt;viewDidLoad&lt;/code&gt;. Open your &lt;code class=&quot;highlighter-rouge&quot;&gt;ViewController.swift&lt;/code&gt; file and add the following to start the auth flow:&lt;/p&gt;
+
+&lt;div class=&quot;language-swift highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;OktaAuth&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ViewController&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;UIViewController&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;viewDidLoad&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;viewDidLoad&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;OktaAuth&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;login&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;error&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;error&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+                
+                &lt;span class=&quot;c1&quot;&gt;// Success&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;tokenResponse&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;kt&quot;&gt;OktaAuth&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tokens&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tokenResponse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;accessToken&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;forKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;accessToken&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                    &lt;span class=&quot;kt&quot;&gt;OktaAuth&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tokens&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tokenResponse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idToken&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;forKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;idToken&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                    &lt;span class=&quot;nf&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Success! Received accessToken: &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tokenResponse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;accessToken&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                    &lt;span class=&quot;nf&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Success! Received idToken: &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tokenResponse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idToken&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;whats-happening&quot;&gt;What’s Happening?&lt;/h3&gt;
+&lt;p&gt;Once your application loads, it will trigger the &lt;code class=&quot;highlighter-rouge&quot;&gt;OktaAuth.login()&lt;/code&gt; event. &lt;a href=&quot;https://tools.ietf.org/html/draft-ietf-oauth-native-apps-12&quot;&gt;Best current practice&lt;/a&gt; for native applications suggest initiating the login flow via an in-app browser, instead of an embeddable WebView.&lt;/p&gt;
+
+&lt;p&gt;After the user authenticates using the Okta Sign-In Page, some magic happens behind the scenes. Primarily, handling the &lt;a href=&quot;https://tools.ietf.org/html/rfc7636#section-1.1&quot;&gt;Authorization Code Flow with Proof Key for Code Exchange (PKCE)&lt;/a&gt;. This handshake is abstracted from us by the &lt;a href=&quot;https://github.com/okta/okta-sdk-appauth-ios&quot;&gt;Okta AppAuth SDK&lt;/a&gt;, and allows us to securely receive the requested tokens.&lt;/p&gt;
+
+&lt;p&gt;If there is a successful login event, our application is bounced back to the main page, where we store the &lt;code class=&quot;highlighter-rouge&quot;&gt;accessToken&lt;/code&gt; and the &lt;code class=&quot;highlighter-rouge&quot;&gt;idToken&lt;/code&gt; to the device’s &lt;a href=&quot;https://developer.apple.com/library/content/documentation/Security/Conceptual/keychainServConcepts/02concepts/concepts.html#//apple_ref/doc/uid/TP30000897-CH204-TP9&quot;&gt;Keychain&lt;/a&gt; to ensure the tokens are encrypted.&lt;/p&gt;
+
+&lt;p&gt;Now, let’s see it in action!&lt;/p&gt;
+
+&lt;h2 id=&quot;run-your-app-in-the-simulator&quot;&gt;Run your App in the Simulator&lt;/h2&gt;
+&lt;p&gt;To build and run your iOS application, use the Xcode &lt;a href=&quot;https://developer.apple.com/library/content/documentation/IDEs/Conceptual/iOS_Simulator_Guide/Introduction/Introduction.html&quot;&gt;Simulator&lt;/a&gt;.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Click the ▶️  button on the top-left of your editor.&lt;/li&gt;
+  &lt;li&gt;Alternatively, select &lt;strong&gt;Run&lt;/strong&gt; under the &lt;strong&gt;Product&lt;/strong&gt; toolbar to launch the default simulator.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In a few moments, you should see the Okta Login Page.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/ios-app-secure-auth/mobile-signin-view-2fb5d51046f2ee4a5cd92d57e8f305837e49e0a600ea324f68c668e595ac7da7.png&quot; alt=&quot;Okta Login Page&quot; height=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Enter your &lt;strong&gt;username&lt;/strong&gt; and &lt;strong&gt;password&lt;/strong&gt;, then click &lt;strong&gt;Sign In&lt;/strong&gt;. Upon successful authentication, you’ll be redirected back to your application. Check your debugger to see the following message:&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Success! Received idToken:
+eyJhbGciOiJSUzI1NiIsImtpZCI6IkdOMlBlRU5seEFISGNjLVJmM0pXcktodGFrT3...
+Success! Received accessToken:
+eyJhbGc...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Copy the &lt;code class=&quot;highlighter-rouge&quot;&gt;idToken&lt;/code&gt; response and paste it into &lt;a href=&quot;https://www.jsonwebtoken.io/&quot;&gt;jsonwebtoken.io&lt;/a&gt; to see the information contained within the identity token!&lt;/p&gt;
+
+&lt;h2 id=&quot;request-user-information&quot;&gt;Request User Information&lt;/h2&gt;
+&lt;p&gt;Courtesy of the OpenID Connect API, we have access to a protected &lt;code class=&quot;highlighter-rouge&quot;&gt;userinfo&lt;/code&gt; endpoint. During our initial authentication request, we received an &lt;code class=&quot;highlighter-rouge&quot;&gt;accessToken&lt;/code&gt; and an &lt;code class=&quot;highlighter-rouge&quot;&gt;idToken&lt;/code&gt;, where an &lt;code class=&quot;highlighter-rouge&quot;&gt;idToken&lt;/code&gt; is a Json Web Token (JWT) that represents an authenticated user. The &lt;code class=&quot;highlighter-rouge&quot;&gt;accessToken&lt;/code&gt; is usually an opaque token used specifically for calling and protected API endpoints.&lt;/p&gt;
+
+&lt;p&gt;Using the newly minted &lt;code class=&quot;highlighter-rouge&quot;&gt;accessToken&lt;/code&gt;, lets request more information about the user by calling the &lt;code class=&quot;highlighter-rouge&quot;&gt;userinfo()&lt;/code&gt; method:&lt;/p&gt;
+
+&lt;div class=&quot;language-swift highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;OktaAuth&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;login&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;error&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;error&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+                
+        &lt;span class=&quot;c1&quot;&gt;// Success&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;tokenResponse&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;kt&quot;&gt;OktaAuth&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tokens&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tokenResponse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;accessToken&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;forKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;accessToken&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;kt&quot;&gt;OktaAuth&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tokens&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tokenResponse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idToken&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;forKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;idToken&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                    
+            &lt;span class=&quot;kt&quot;&gt;OktaAuth&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;userinfo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;error&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;error&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Error: &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+                        
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;userinfo&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;userinfo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;forEach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$0&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;: &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;▶️  the application again to see what was returned!&lt;/p&gt;
+
+&lt;h2 id=&quot;whats-next&quot;&gt;What’s Next&lt;/h2&gt;
+&lt;p&gt;Now that you have additional user information, you can store the user’s email address, profile image, and more into your application - or use it for personalization. Using Okta’s &lt;a href=&quot;https://www.okta.com/products/universal-directory/&quot;&gt;Universal Directory&lt;/a&gt;, you can modify user attributes by navigating to  &lt;strong&gt;Applications&lt;/strong&gt; in your Okta Developer Console. Select your new native application, then click on the &lt;strong&gt;Assignments&lt;/strong&gt; tab.&lt;/p&gt;
+
+&lt;p&gt;Edit the user’s profile directly by selecting the &lt;em&gt;pencil&lt;/em&gt; icon, which will display a modal similar to:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/ios-app-secure-auth/user-profile-mapping-b15b659b875d76ae0101b0e02fea8e476ad4fa112cd143002d6cd9cccdcb23c1.png&quot; alt=&quot;Okta User Assignment&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;▶️  the application one last time to see your updated user!&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;picture: https://avatars3.githubusercontent.com/u/7400479?v&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;3&amp;amp;s&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;400
+family_name: Melberg
+name: Jordan Melberg
+updated_at: 1506444347
+email: jordan.melberg@okta.com
+sub: 00u...
+zoneinfo: America/Los_Angeles
+given_name: Jordan
+preferred_username: jordan.melberg@okta.com
+locale: en-US
+email_verified: 1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You did it! You’ve successfully added Authentication into your mobile app with as little as 20 lines of code!&lt;/p&gt;
+</description>
+        <pubDate>Mon, 20 Nov 2017 00:00:00 +0000</pubDate>
+        <link>https://developer.okta.com/blog/2017/11/20/build-an-iOS-app-with-secure-authentication-in-20-minutes</link>
+        <guid isPermaLink="true">https://developer.okta.com/blog/2017/11/20/build-an-iOS-app-with-secure-authentication-in-20-minutes</guid>
+      </item>
+    
+      <item>
         <title>Add Single Sign-On to Your Spring Boot Web App in 15 Minutes</title>
         <description>&lt;p&gt;Need a secure web server right now? With Spring Boot and Okta, you can spin up an enterprise-quality REST server with complete user identity and authorization management in less than 20 minutes. Out of the box, Spring Boot and its Starter packages supply a near instant production-ready Tomcat server, and Okta hardens your APIs with a variety of OAuth flows just as fast. This tutorial will walk you through the complete process. The cherry on top will be using Okta to add fully featured client authentication and user administration with just a few lines of code and config! By the end of this tutorial, your secured Spring Boot server will be able to serve web content or function as a backend API, but only to users who have registered with you. Ready? Let’s go!&lt;/p&gt;
 
@@ -4719,91 +4966,6 @@ Laurent is the VP of Developer Relations at Clever Cloud. Before Clever Cloud, h
         <pubDate>Thu, 28 Sep 2017 00:00:00 +0000</pubDate>
         <link>https://developer.okta.com/blog/2017/09/28/top-10-javaone-2017-sessions-for-java-hipsters</link>
         <guid isPermaLink="true">https://developer.okta.com/blog/2017/09/28/top-10-javaone-2017-sessions-for-java-hipsters</guid>
-      </item>
-    
-      <item>
-        <title>The Okta Developer Console: All New, All You</title>
-        <description>&lt;p&gt;Hello Okta Blogosphere! Another &lt;a href=&quot;https://www.okta.com/blog/2017/03/stormpath-welcome-to-Okta/&quot;&gt;Stormpath transplant&lt;/a&gt; here! As you know, the Okta developer experience team has been working hard to make it easier for YOU to work hard… on integrating your applications with Okta. We recently launched an update to our Developer Console, an all-new Okta experience that is catered to your needs as an application developer.  In this post we’ll discuss the new features, and why we built it the way we did.&lt;/p&gt;
-
-&lt;h3 id=&quot;an-ode-to-consoles&quot;&gt;An Ode To Consoles&lt;/h3&gt;
-
-&lt;p&gt;I love consoles. Whenever I think of them, I think about mission control for the Apollo missions.  What a true console that was! Real-time, analog data streaming into an organized interface for a person to grok, sooo cool! &amp;lt;3 &amp;lt;3 Well, I don’t exactly work at NASA (as I thought I would when I was in 6th grade), but I can still capture this love of data and control for you! Over the last few months my team has built an entirely new Developer Console, and we’re really excited to share it with you!&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/new-dev-console/nasa-console-1-2aa7be030389d8677d8aac448680683e82597af37684143e9c525b5a2833776e.jpg&quot; alt=&quot;Default AS&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;center&gt;&lt;small&gt;Image courtesy of Nasa &lt;a href=&quot;https://images.nasa.gov/#/details-S68-55742.html&quot;&gt;https://images.nasa.gov/#/details-S68-55742.html&lt;/a&gt;&lt;/small&gt;&lt;/center&gt;
-
-&lt;h3 id=&quot;built-for-you&quot;&gt;Built For You&lt;/h3&gt;
-
-&lt;p&gt;Our goal for this new Developer Console was simple: make it easier for application developers to integrate their applications with Okta. As you probably know, Okta is a powerful platform, with a range of features from Active Directory syncing to SAML integrations. To date, our Admin Console has been focused on click-to-configure interfaces that make it easy for your IT organization to get things done.&lt;/p&gt;
-
-&lt;p&gt;As much as I just LOVE SAML, the world is thankfully moving forward. OAuth 2.0 and OpenID Connect is where everyone is going, and Okta supports these protocols with some &lt;a href=&quot;https://developer.okta.com/use_cases/api_access_management/&quot;&gt;awesome features to boot&lt;/a&gt;. Why is this so great? Because it makes it much easier to integrate your new and existing applications into the Okta ecosystem, enabling you to build richer, more deeply integrated experiences that go beyond the traditional Okta SSO experience that your customers already love.&lt;/p&gt;
-
-&lt;p&gt;The new Developer Console is all about bringing you a new experience that is focused on your application development.&lt;/p&gt;
-
-&lt;h3 id=&quot;a-picture-is-worth-a-thousand-words&quot;&gt;A Picture Is Worth a Thousand Words&lt;/h3&gt;
-
-&lt;p&gt;But the real thing is even better!  If you’d like to see the new Developer Console IRL, simply create a free Developer Edition account by visiting &lt;a href=&quot;https://developer.okta.com/signup/&quot;&gt;https://developer.okta.com/signup/&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;As an Okta developer, your thousand foot view now looks like this:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/new-dev-console/new-dev-console-b0c4b335f8bdfd6c14ff8ba92c6295df5ce0a75eb872e46fad1c783be93e5b08.png&quot; alt=&quot;Default AS&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;There’s a lot of new stuff here!  Read on to learn more about each area, and why we’re so excited to have this ready for you.&lt;/p&gt;
-
-&lt;h3 id=&quot;new-look--feel&quot;&gt;New Look &amp;amp; Feel&lt;/h3&gt;
-
-&lt;p&gt;What is a re-vamp without a re-style?  At first glance you’ll notice the new color scheme, which is a general change you’ll see across the entire developer experience at Okta, including the developer site and documentation pages.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/new-dev-console/new-console-nav-416e6d93453dc364009be9acc5d99265c196326e5d8ca33394b3b12f48d8c7ee.png&quot; alt=&quot;Default AS&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;organized-navigation&quot;&gt;Organized Navigation&lt;/h3&gt;
-
-&lt;p&gt;As an application developer, you need quick access to your application configuration and API Access Management features.  We’ve moved these to the top-level navigation for quick access.  Looking for something that seems to be missing?  You can always switch over to the Classic UI, using the drop-down in the upper left.  If you do this often, please let us know!  We’ll be iterating this new menu over time to ensure we’ve captured all the common use cases.&lt;/p&gt;
-
-&lt;h3 id=&quot;data-you-need&quot;&gt;Data You Need&lt;/h3&gt;
-
-&lt;p&gt;When you first sign in to your Developer Console, you’ll be presented with the new Developer Dashboard.  In this view you see metrics that tell you about the number of users and their authentications.  Below that you’ll find the system log for your Organization, which can tell you a lot about the health of your Organization, as well as help with debugging integration issues.&lt;/p&gt;
-
-&lt;p&gt;Interested in some data that you don’t see here?  Reach out and let us know!&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/new-dev-console/metrics-tiles-06b2ddf7fe8bcb07860d2ef8277f1f81df22cc91aa3d95eea987bc332a62679e.png&quot; alt=&quot;Default AS&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;new-application-creation-wizard&quot;&gt;New Application Creation Wizard&lt;/h3&gt;
-
-&lt;p&gt;Okta is powerful, and with that power comes a lot of options :) If you’ve tried to build a custom application against Okta, you likely ran into some questions about which application type to create.  The new developer experience is focused around our &lt;a href=&quot;https://developer.okta.com/standards/OIDC/&quot;&gt;Open ID Connect solutions&lt;/a&gt;, and we’ve built a new application creation wizard that helps you navigate this.  Simply select the type of application you’re building and we’ll help you on your way!  Need multiple types of applications?  Not a problem!  Okta is built for that.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/new-dev-console/app-wizard-d35e9610fc3cae2034be8d4aba1b1c4486b5025d562e8b970d3bcf293a91349f.png&quot; alt=&quot;Default AS&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;sane-defaults&quot;&gt;Sane Defaults&lt;/h3&gt;
-
-&lt;p&gt;In the new application wizard you’ll notice that we pre-fill a lot of the values for you.  These defaults are designed to work with our example applications, so that you don’t have to do a lot of extra configuration to get a proof-of-concept running.  Of course you’ll change these settings as you near production, but the defaults should get you running locally with little effort.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/new-dev-console/app-settings-c30b7358901dd75f8afa4a87f62336c671fba8e1e34a6e85e5e6957abd88c50c.png&quot; alt=&quot;Default AS&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;contextual-help-and-examples&quot;&gt;Contextual Help and Examples&lt;/h3&gt;
-
-&lt;p&gt;Creating and configuring your Okta application is just the first step, from there you need to integrate it into your actual application or service.  As you know, this is best done by example.  When you are creating or editing your application in Okta, there is a new sidebar on the right that will link you to our new &lt;a href=&quot;https://developer.okta.com/quickstart/&quot;&gt;Quickstart Documentation&lt;/a&gt;, tailored to the type of application you are working on.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/new-dev-console/quickstarts-146959b4e0a38420866b79e6878adc2ac95bad6c868f31c2d2bf1a53c3ed19bf.png&quot; alt=&quot;Default AS&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;keep-building-great-apps&quot;&gt;Keep Building Great Apps!&lt;/h3&gt;
-
-&lt;p&gt;Modern development means integrating a lot of SaaS products, including Okta, and none of us have time to waste.  T-minus-zero for your project was technically last week, right? I hope that our new Developer Console helps you get there faster.  So go on, keep building your spaceship!&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/new-dev-console/nasa-console-2-c682489d9f9e5dd435d834d23a3dc136fe2d1834f44171424cea17e243709d1d.jpg&quot; alt=&quot;Default AS&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;center&gt;&lt;small&gt;Image courtesy of Nasa &lt;a href=&quot;https://images.nasa.gov/#/details-KSC-03pd2450.html&quot;&gt;https://images.nasa.gov/#/details-KSC-03pd2450.html&lt;/a&gt;&lt;/small&gt;&lt;/center&gt;
-
-&lt;p&gt;As always, we’re always on and want to hear from you!  If you have any feedback, please hit us up!&lt;/p&gt;
-
-&lt;p&gt;-Robert out&lt;/p&gt;
-
-&lt;p&gt;P.S. Have you been to &lt;a href=&quot;https://www.okta.com/oktane&quot;&gt;Oktane&lt;/a&gt; yet?  It’s really the best place to see all our new features in action.  My team demo’d the Developer Console there this year and it was a blast!  I hope to see you there next year!&lt;/p&gt;
-</description>
-        <pubDate>Mon, 25 Sep 2017 00:00:00 +0000</pubDate>
-        <link>https://developer.okta.com/blog/2017/09/25/all-new-developer-console</link>
-        <guid isPermaLink="true">https://developer.okta.com/blog/2017/09/25/all-new-developer-console</guid>
       </item>
     
   </channel>
