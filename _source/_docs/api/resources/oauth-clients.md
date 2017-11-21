@@ -176,12 +176,14 @@ curl -v -X GET \
 HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 ~~~
-Header links for use in the next request's `after` parameter:
+Header links for pagination:
 
 ~~~http
 <https://{yourOktaDomain}.com/oauth2/v1/clients?limit=20>; rel="self"
 <https://{yourOktaDomain}.com/oauth2/v1/clients?after=xfnIflwIn2TkbpNBs6JQ&limit=20>; rel="next"
 ~~~
+
+Response body:
 
 ~~~json
 [
@@ -309,12 +311,14 @@ curl -v -X GET \
 HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 ~~~
-Header links for use in the next request's `after` parameter:
+Header links for pagination:
 
 ~~~http
 <https://{yourOktaDomain}.com/oauth2/v1/clients?limit=20>; rel="self"
 <https://{yourOktaDomain}.com/oauth2/v1/clients?after=xfnIflwIn2TkbpNBs6JQ&limit=1>; rel="next"
 ~~~
+
+Response body: 
 
 ~~~json
 [
