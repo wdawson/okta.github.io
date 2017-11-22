@@ -457,12 +457,14 @@
 <ul>
   <li><code class="highlighter-rouge">/</code>: A default page to handle basic control of the app.</li>
   <li><code class="highlighter-rouge">/protected</code>: A protected route that can only be accessed by an authenticated user.</li>
+  <li><code class="highlighter-rouge">/login</code>: A custom login page to handle signing users into your app.</li>
 </ul>
 
 <h3><code class="highlighter-rouge">/</code></h3>
 
 <p>First, update <code class="highlighter-rouge">src/app/app.component.html</code> to provide the Login logic:</p>
 <div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- src/app/app.component.html --&gt;</span>
+
 <span class="nt">&lt;link</span>
   <span class="na">href=</span><span class="s">"https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/2.1.0/css/okta-sign-in.min.css"</span>
   <span class="na">type=</span><span class="s">"text/css"</span>
@@ -473,43 +475,117 @@
   <span class="na">rel=</span><span class="s">"stylesheet"</span><span class="nt">/&gt;</span>
 
 <span class="nt">&lt;button</span> <span class="na">routerLink=</span><span class="s">"/"</span><span class="nt">&gt;</span> Home <span class="nt">&lt;/button&gt;</span>
-<span class="nt">&lt;button</span> <span class="err">*</span><span class="na">ngIf=</span><span class="s">"!signIn.isAuthenticated()"</span> <span class="err">(</span><span class="na">click</span><span class="err">)="</span><span class="na">login</span><span class="err">()"</span><span class="nt">&gt;</span> Login <span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="err">*</span><span class="na">ngIf=</span><span class="s">"!signIn.isAuthenticated()"</span> <span class="na">routerLink=</span><span class="s">"/login"</span><span class="nt">&gt;</span> Login <span class="nt">&lt;/button&gt;</span>
 <span class="nt">&lt;button</span> <span class="err">*</span><span class="na">ngIf=</span><span class="s">"signIn.isAuthenticated()"</span> <span class="err">(</span><span class="na">click</span><span class="err">)="</span><span class="na">logout</span><span class="err">()"</span><span class="nt">&gt;</span> Logout <span class="nt">&lt;/button&gt;</span>
 <span class="nt">&lt;button</span> <span class="na">routerLink=</span><span class="s">"/protected"</span><span class="nt">&gt;</span> Protected <span class="nt">&lt;/button&gt;</span>
-
-<span class="c">&lt;!-- Container to inject the Sign-In Widget --&gt;</span>
-<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"okta-signin-container"</span><span class="nt">&gt;&lt;/div&gt;</span>
 
 <span class="nt">&lt;router-outlet&gt;&lt;/router-outlet&gt;</span>
 </code></pre>
 </div>
 
-<p>Then, update <code class="highlighter-rouge">src/app/app.component.ts</code> to handle the <code class="highlighter-rouge">login()</code> and <code class="highlighter-rouge">logout()</code> calls:</p>
+<p>Then, update <code class="highlighter-rouge">src/app/app.component.ts</code> to handle the <code class="highlighter-rouge">logout()</code> call:</p>
 
 <div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="c1">// src/app/app.component.ts</span>
 
 <span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
-<span class="k">import</span> <span class="p">{</span> <span class="nx">OktaAuthService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@okta/okta-angular'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Router</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/router'</span><span class="p">;</span>
 
-<span class="k">import</span> <span class="nx">OktaSignIn</span> <span class="k">from</span> <span class="s1">'@okta/okta-signin-widget/dist/js/okta-sign-in.min.js'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">OktaAuthService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@okta/okta-angular'</span><span class="p">;</span>
 
 <span class="err">@</span><span class="nx">Component</span><span class="p">({</span>
   <span class="na">selector</span><span class="p">:</span> <span class="s1">'app-root'</span><span class="p">,</span>
-  <span class="na">templateUrl</span><span class="p">:</span> <span class="s1">'./app.component.html'</span><span class="p">,</span>
-  <span class="na">styleUrls</span><span class="p">:</span> <span class="p">[</span><span class="s1">'./app.component.css'</span><span class="p">]</span>
+  <span class="na">templateUrl</span><span class="p">:</span> <span class="s1">'./app.component.html'</span>
 <span class="p">})</span>
 <span class="k">export</span> <span class="kr">class</span> <span class="nx">AppComponent</span> <span class="p">{</span>
   <span class="nx">signIn</span><span class="p">;</span>
-  <span class="nx">widget</span><span class="p">;</span>
+  <span class="nx">router</span><span class="p">;</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="k">public</span> <span class="nx">oktaAuth</span><span class="err">:</span> <span class="nx">OktaAuthService</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="k">public</span> <span class="nx">oktaAuth</span><span class="err">:</span> <span class="nx">OktaAuthService</span><span class="p">,</span> <span class="nx">router</span><span class="err">:</span> <span class="nx">Router</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">signIn</span> <span class="o">=</span> <span class="nx">oktaAuth</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">widget</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OktaSignIn</span><span class="p">({</span>
-      <span class="na">baseUrl</span><span class="p">:</span> <span class="s1">'<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>'</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">router</span> <span class="o">=</span> <span class="nx">router</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">async</span> <span class="nx">logout</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Terminates the session with Okta and removes current tokens.</span>
+    <span class="k">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">signIn</span><span class="p">.</span><span class="nx">logout</span><span class="p">();</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">router</span><span class="p">.</span><span class="nx">navigateByUrl</span><span class="p">(</span><span class="s1">'/'</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<h3 id="protected"><code class="highlighter-rouge">/protected</code></h3>
+<p>This route will only be visible to users with a valid <code class="highlighter-rouge">accessToken</code> or <code class="highlighter-rouge">idToken</code>.</p>
+
+<p>Create a new component <code class="highlighter-rouge">src/app/protected.component.ts</code>:</p>
+
+<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="c1">// src/app/protected.component.ts</span>
+
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
+
+<span class="err">@</span><span class="nx">Component</span><span class="p">({</span>
+  <span class="na">selector</span><span class="p">:</span> <span class="s1">'app-secure'</span><span class="p">,</span>
+  <span class="na">template</span><span class="p">:</span> <span class="err">`</span><span class="p">{{</span><span class="nx">message</span><span class="p">}}</span><span class="err">`</span>
+<span class="p">})</span>
+<span class="k">export</span> <span class="kr">class</span> <span class="nx">ProtectedComponent</span> <span class="p">{</span>
+  <span class="nx">message</span><span class="p">;</span>
+
+  <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">message</span> <span class="o">=</span> <span class="s1">'Protected endpoint!'</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>When a user attempts to access a route that is protected by <code class="highlighter-rouge">OktaAuthGuard</code>, it first checks to see if the user has been authenticated. If <code class="highlighter-rouge">isAuthenticated()</code> returns <code class="highlighter-rouge">false</code>, start the login flow.</p>
+
+<h3 id="login"><code class="highlighter-rouge">/login</code></h3>
+<p>This route hosts the Sign-In Widget and redirects if the user is already logged in. If the user is coming from a protected page, they’ll be redirected back to the page upon login.</p>
+
+<p>Create a new component <code class="highlighter-rouge">src/app/login.component.ts</code>:</p>
+
+<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="c1">// src/app/login.component.ts</span>
+
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">OnInit</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Router</span><span class="p">,</span> <span class="nx">NavigationStart</span><span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/router'</span><span class="p">;</span>
+
+<span class="k">import</span> <span class="p">{</span> <span class="nx">OktaAuthService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@okta/okta-angular'</span><span class="p">;</span>
+<span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">OktaSignIn</span> <span class="k">from</span> <span class="s1">'@okta/okta-signin-widget/dist/js/okta-sign-in.min.js'</span><span class="p">;</span>
+
+<span class="err">@</span><span class="nx">Component</span><span class="p">({</span>
+  <span class="na">selector</span><span class="p">:</span> <span class="s1">'app-secure'</span><span class="p">,</span>
+  <span class="na">template</span><span class="p">:</span> <span class="err">`</span>
+    <span class="c">&lt;!--</span> <span class="nx">Container</span> <span class="nx">to</span> <span class="nx">inject</span> <span class="nx">the</span> <span class="nx">Sign</span><span class="o">-</span><span class="nx">In</span> <span class="nx">Widget</span> <span class="o">--&gt;</span>
+    <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"okta-signin-container"</span><span class="o">&gt;&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>  <span class="err">`</span>
+<span class="p">})</span>
+<span class="k">export</span> <span class="kr">class</span> <span class="nx">LoginComponent</span> <span class="p">{</span>
+  <span class="nx">signIn</span><span class="p">;</span>
+
+  <span class="nx">widget</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OktaSignIn</span><span class="p">({</span>
+    <span class="na">baseUrl</span><span class="p">:</span> <span class="s1">'<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>'</span>
+  <span class="p">});</span>
+
+  <span class="kd">constructor</span><span class="p">(</span><span class="nx">oktaAuth</span><span class="err">:</span> <span class="nx">OktaAuthService</span><span class="p">,</span> <span class="nx">router</span><span class="err">:</span> <span class="nx">Router</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">signIn</span> <span class="o">=</span> <span class="nx">oktaAuth</span><span class="p">;</span>
+
+    <span class="c1">// Show the widget when prompted, otherwise remove it from the DOM.</span>
+    <span class="nx">router</span><span class="p">.</span><span class="nx">events</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">event</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">event</span> <span class="k">instanceof</span> <span class="nx">NavigationStart</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">switch</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">url</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">case</span> <span class="s1">'/login'</span><span class="p">:</span>
+            <span class="k">break</span><span class="p">;</span>
+          <span class="k">case</span> <span class="s1">'/protected'</span><span class="p">:</span>
+            <span class="k">break</span><span class="p">;</span>
+          <span class="nl">default</span><span class="p">:</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
     <span class="p">});</span>
   <span class="p">}</span>
 
-  <span class="nx">login</span><span class="p">(){</span>
+  <span class="nx">ngOnInit</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">renderEl</span><span class="p">(</span>
       <span class="p">{</span> <span class="na">el</span><span class="p">:</span> <span class="s1">'#okta-signin-container'</span><span class="p">},</span> <span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">'SUCCESS'</span><span class="p">)</span> <span class="p">{</span>
@@ -520,43 +596,12 @@
       <span class="p">}</span>
     <span class="p">);</span>
   <span class="p">}</span>
-
-  <span class="k">async</span> <span class="nx">logout</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">// Terminates the session with Okta and removes current tokens.</span>
-    <span class="k">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">signIn</span><span class="p">.</span><span class="nx">logout</span><span class="p">();</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
-  <span class="p">}</span>
 <span class="p">}</span>
 </code></pre>
 </div>
-
-<p><code class="highlighter-rouge">/protected</code>
-This route will only be visible to users with a valid <code class="highlighter-rouge">accessToken</code> or <code class="highlighter-rouge">idToken</code>.</p>
-
-<p>Create a new component <code class="highlighter-rouge">src/app/protected.component.ts</code>:</p>
-
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="c1">// src/app/protected.component.ts</span>
-
-<span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
-
-<span class="err">@</span><span class="nx">Component</span><span class="p">({</span>
-  <span class="na">selector</span><span class="p">:</span> <span class="s1">'app-secure'</span><span class="p">,</span>
-  <span class="na">template</span><span class="p">:</span> <span class="err">``</span>
-<span class="p">})</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">ProtectedComponent</span> <span class="p">{</span>
-  <span class="nx">message</span><span class="p">;</span>
-
-  <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">message</span> <span class="o">=</span> <span class="s1">'Protected endpont!'</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</code></pre>
-</div>
-
-<p>When a user attempts to access a route that is protected by <code class="highlighter-rouge">OktaAuthGuard</code>, it first checks to see if the user has been authenticated. If <code class="highlighter-rouge">isAuthenticated()</code> returns <code class="highlighter-rouge">false</code>, start the login flow.</p>
 
 <h3 id="connect-the-routes">Connect the Routes</h3>
-<p>The <code class="highlighter-rouge">OktaAuthModule</code> handles different authentication flows for your application, so it requires your OpenID Connect configuration. By default <code class="highlighter-rouge">okta/okta-angular</code> redirects to the Okta Sign-In Page when the user is not authenticated. To override this behavior, see <a href="https://github.com/okta/okta-oidc-js/tree/master/packages/okta-angular#using-a-custom-login-page">using a custom login-page</a>.</p>
+<p>The <code class="highlighter-rouge">OktaAuthModule</code> handles different authentication flows for your application, so it requires your OpenID Connect configuration. By default <code class="highlighter-rouge">okta/okta-angular</code> redirects to the Okta Sign-In Page when the user is not authenticated. We override this behavior by passing an <code class="highlighter-rouge">onAuthRequired</code> function to the <code class="highlighter-rouge">OktaAuthGuard</code>. For more information, see <a href="https://github.com/okta/okta-oidc-js/tree/master/packages/okta-angular#using-a-custom-login-page">using a custom login-page</a>.</p>
 
 <p>Update <code class="highlighter-rouge">src/app/app.module.ts</code> to include your project components and routes. Your completed file should look similar to:</p>
 
@@ -574,11 +619,17 @@ This route will only be visible to users with a valid <code class="highlighter-r
 
 <span class="k">import</span> <span class="p">{</span> <span class="nx">AppComponent</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'./app.component'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">ProtectedComponent</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'./protected.component'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">LoginComponent</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'./login.component'</span><span class="p">;</span>
 
 <span class="kd">const</span> <span class="nx">config</span> <span class="o">=</span> <span class="p">{</span>
   <span class="na">issuer</span><span class="p">:</span> <span class="s1">'<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default'</span><span class="p">,</span>
   <span class="na">redirectUri</span><span class="p">:</span> <span class="s1">'http://localhost:4200/implicit/callback'</span><span class="p">,</span>
   <span class="na">clientId</span><span class="p">:</span> <span class="s1">'{clientId}'</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="kd">function</span> <span class="nx">onAuthRequired</span><span class="p">({</span> <span class="nx">oktaAuth</span><span class="p">,</span> <span class="nx">router</span> <span class="p">})</span> <span class="p">{</span>
+  <span class="c1">// Redirect the user to your custom login page</span>
+  <span class="nx">router</span><span class="p">.</span><span class="nx">navigate</span><span class="p">([</span><span class="s1">'/login'</span><span class="p">]);</span>
 <span class="p">}</span>
 
 <span class="kd">const</span> <span class="nx">appRoutes</span><span class="err">:</span> <span class="nx">Routes</span> <span class="o">=</span> <span class="p">[</span>
@@ -587,14 +638,22 @@ This route will only be visible to users with a valid <code class="highlighter-r
     <span class="na">component</span><span class="p">:</span> <span class="nx">OktaCallbackComponent</span>
   <span class="p">},</span>
   <span class="p">{</span>
+    <span class="na">path</span><span class="p">:</span> <span class="s1">'login'</span><span class="p">,</span>
+    <span class="na">component</span><span class="p">:</span> <span class="nx">LoginComponent</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
     <span class="na">path</span><span class="p">:</span> <span class="s1">'protected'</span><span class="p">,</span>
     <span class="na">component</span><span class="p">:</span> <span class="nx">ProtectedComponent</span><span class="p">,</span>
-    <span class="na">canActivate</span><span class="p">:</span> <span class="p">[</span> <span class="nx">OktaAuthGuard</span> <span class="p">]</span>
+    <span class="na">canActivate</span><span class="p">:</span> <span class="p">[</span> <span class="nx">OktaAuthGuard</span> <span class="p">],</span>
+    <span class="na">data</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nx">onAuthRequired</span>
+    <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">]</span>
 <span class="err">@</span><span class="nx">NgModule</span><span class="p">({</span>
   <span class="na">declarations</span><span class="p">:</span> <span class="p">[</span>
     <span class="nx">AppComponent</span><span class="p">,</span>
+    <span class="nx">LoginComponent</span><span class="p">,</span>
     <span class="nx">ProtectedComponent</span>
   <span class="p">],</span>
   <span class="na">imports</span><span class="p">:</span> <span class="p">[</span>
@@ -602,7 +661,6 @@ This route will only be visible to users with a valid <code class="highlighter-r
     <span class="nx">RouterModule</span><span class="p">.</span><span class="nx">forRoot</span><span class="p">(</span><span class="nx">appRoutes</span><span class="p">),</span>    
     <span class="nx">OktaAuthModule</span><span class="p">.</span><span class="nx">initAuth</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span>
   <span class="p">],</span>
-  <span class="na">providers</span><span class="p">:</span> <span class="p">[],</span>
   <span class="na">bootstrap</span><span class="p">:</span> <span class="p">[</span><span class="nx">AppComponent</span><span class="p">]</span>
 <span class="p">})</span>
 <span class="k">export</span> <span class="kr">class</span> <span class="nx">AppModule</span> <span class="p">{</span> <span class="p">}</span>
