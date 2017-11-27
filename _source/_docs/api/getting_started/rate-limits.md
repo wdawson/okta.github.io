@@ -11,36 +11,39 @@ excerpt: Understand rate limits at Okta and learn how to design for efficient us
 
 The number of API requests for an organization is limited for all APIs in order to protect the service for all users.
 
-Okta has two types of rate limits: concurrent rate limits for the number of simultaneous transactions, and org-wide rate limits that vary by API
-endpoint. These limits are evaluated separately and reported in headers that are returned with each response.
+Okta has two types of rate limits:  org-wide rate limits that vary by API
+endpoint, and concurrent rate limits on the number of simultaneous transactions regardless of endpoint. These two types of limits are evaluated separately and reported in headers that are returned with each response.
 
 ## Org-Wide Rate Limits
 
-API rate limits apply per minute to the endpoints in an org:
+API rate limits apply per minute to the endpoints in an org. The endpoints listed below that end in `{id}` have their own separate limits from the more general endpoint with the same base. For example, `/api/v1/apps` has a 100 per-minute limit, while `/api/v1/apps/{id}` has a 500 per-minute limit. 
+
+Notice also that for the endpoint `/api/v1/users/{id}`, there are separate limits depending on whether the request is a GET or not. When reading the table, remember that a more specific limit is considered separately from the more general limit.
 
 | Okta API Endpoint                                                                        | Per Minute Limit |
 |:-------------------------------------------------------------------------------------|-------:|
-| `/api/v1/apps` (except `/api/v1/apps/{id}`)                                    |   100 |
+| `/api/v1/apps` (except `/api/v1/apps/{id}`)                                     |   100 |
 | `/api/v1/apps/{id}` (across all IDs, exact URL only)                       |   500 |
 | `/api/v1/authn`                                                                               |   500 |
 | `/api/v1/groups` (except `/api/v1/groups/{id}`)                               |   500 |
 | `/api/v1/groups/{id}` (across all IDs, exact URL only)                    | 1000 |
-| `/api/v1/logs`                                                                                   |    60 |
+| `/api/v1/logs`                                                                                  |     60 |
 | `/api/v1/sessions`                                                                           |   750 |
 | `/api/v1/users`  (except `/api/v1/users/{id}`)                                   |   600 |
 | `/api/v1/users/{id}` GET (across all IDs and query parameters or other qualifiers)       |  2000 |
 | `/api/v1/users/{id}` All other HTTP methods (across all IDS and query parameters or other qualifiers) |   600 |
 | `/api/v1/` (if no other `/api/v1` limit specified in this table)             |  1200 |
 
+Two org-wide rate limits are on a per-second basis instead of per minute:
 
 | Okta API Endpoint                           | Per Second Limit |
 |:----------------------------------------------------------------|-------:|
 | `/oauth2/v1/token`                                                |      4 |
 | `/oauth2/v1`                                                          |    40 |
 
-The following endpoints aren't accessible by developers, but do have org-wide rate limits:
+The following endpoints are used by the Okta home page for authentication and sign on, and have org-wide rate limits:
 
-| Non API-Product Endpoints                 | Limit |
+| Okta Home Page Endpoints                 | Limit |
 |:-----------------------------------------|------:|
 | `/app/{app}/{key}/sso/saml`              |   750 |
 | `/app/office365/{key}/sso/wsfed/active`  |  2000 |
@@ -52,8 +55,6 @@ The following endpoints aren't accessible by developers, but do have org-wide ra
 
 Finally, for all  endpoints not listed in the tables above, the API rate limit is a combined 10,000 requests per minute. 
 
-QUESTION: I'm not sure if this is true if we fold in "Okta End-User Endpoints" Should 3rd table move back to help? Who needs to know 3rd table's limits?
-
 If an org-wide rate limit is exceeded, an HTTP 429 Status Code is returned.
 You can anticipate hitting the rate limit by checking [Okta's rate limiting headers](#check-your-rate-limits-with-oktas-rate-limit-headers).
 
@@ -63,14 +64,81 @@ Okta also enforces concurrent rate limits, which are distinct from [the org-wide
 
 For concurrent rate limits, traffic is measured in three different areas. Counts in one area aren't included in counts for the other two:
 
-* For agent traffic, Okta measured each org's traffic and set the limit above the highest usage in the last four weeks.
+* For agent traffic, Okta has set the limit based on typical org usage. This limit varies from agent to agent.
 * For Office365 traffic, the limit is 75 concurrent transactions per org.
 * For all other traffic including API requests, the limit is 75 concurrent transactions per org.
 
-Okta has verified that these limits are sufficient based on current usage or grandfathered higher limits for those orgs that have historically exceeded this limit.
-
 Any request that would cause Okta to exceed the concurrent limit returns an HTTP 429 error, and the first error every 60 seconds is written to the log.
 Reporting concurrent rate limits once a minute keeps log volume manageable. 
+
+## Check Your Rate Limits with Okta's Rate Limit Headers
+
+Okta provides three headers in each response to report on both concurrent and org-wide rate limits. 
+
+For org-wide rate limits, the three headers show the limit that is being enforced, when it resets, and how close you are to hitting the limit:
+* `X-Rate-Limit-Limit` - the rate limit ceiling that is applicable for the current request.
+* `X-Rate-Limit-Remaining` - the number of requests left for the current rate-limit window.
+* `X-Rate-Limit-Reset` - the time at which the rate limit will reset, specified in UTC epoch time.
+
+For example:
+
+~~~ http
+HTTP/1.1 200 OK
+X-Rate-Limit-Limit: 20
+X-Rate-Limit-Remaining: 15
+X-Rate-Limit-Reset: 1366037820
+~~~
+
+The best way to be sure about org-wide rate limits is to check the relevant headers in the response. The System Log doesn't report every
+API request. Rather, it typically reports completed or attempted real-world events such as configuration changes, user logins, or user lockouts.
+The System Log doesn’t report the rate at which you’ve been calling the API.
+
+Instead of the accumulated counts for time-based rate limits, when a request exceeds the limit for concurrent requests,
+`X-Rate-Limit-Limit`, `X-Rate-Limit-Remaining`, and `X-Rate-Limit-Reset` report the concurrent values. 
+
+The three headers behave a little differently for concurrent rate limits: when the number of unfinished requests is below the concurrent rate limit, request headers only report org-wide rate limits.
+When you exceed a concurrent rate limit threshold, the headers report that the limit has been exceeded. When you drop back down below the concurrent rate limit, the headers  switch back to reporting the time-based rate limits.
+Additionally, the `X-Rate-Limit-Reset` time for concurrent rate limits is only a suggestion. There's no guarantee that enough requests will complete to stop exceeding the concurrent rate limit at the time indicated.
+
+### Example Rate Limit Header with Org-Wide Rate Limit  
+
+This example shows the relevant portion of a rate limit header being returned with  for a request that hasn't exceeded the org-wide rate limit for the `/api/v1/users` endpoint:
+
+~~~http
+HTTP/1.1 200 
+Date: Tue, 27 Sep 2017 21:33:25 GMT
+X-Rate-Limit-Limit: 600
+X-Rate-Limit-Remaining: 598
+X-Rate-Limit-Reset: 1605463000
+~~~
+
+The following example show a rate limit header being returned for a request that has exceeded the rate limit for the `/api/v1/users` endpoint:
+
+~~~http
+HTTP/1.1 200 
+Date: Tue, 27 Sep 2017 21:33:25 GMT
+X-Rate-Limit-Limit: 600
+X-Rate-Limit-Remaining: 0
+X-Rate-Limit-Reset: 1605463723
+~~~
+
+### Example Rate Limit Header with Concurrent Rate Limit  
+
+This example shows the relevant portion of a rate limit header being returned with the error for a request that exceeded the concurrent rate limit. If the rate limit wasn't being exceeded, the headers woul contain information about the org-wide rate limit. You won't ever see non-error concurrent rate limits in the headers.
+
+~~~http
+HTTP/1.1 429 
+Date: Tue, 26 Sep 2017 21:33:25 GMT
+X-Rate-Limit-Limit: 0
+X-Rate-Limit-Remaining: 0
+X-Rate-Limit-Reset: 1506461721
+~~~
+
+The first two header values are always `0` for concurrent rate limit errors.
+The third header reports an estimated time interval when the concurrent rate limit may be resolved. It is not a guarantee.
+
+The error condition resolves itself as soon as there is another concurrent thread available. No intervention is required.
+
 
 ### Example Error Response Events for Concurrent Rate Limit
 
@@ -180,62 +248,6 @@ Reporting concurrent rate limits once a minute keeps log volume manageable.
         "version": "0"
     }
 ~~~
-
-## Check Your Rate Limits with Okta's Rate Limit Headers
-
-Okta provides three headers in each response to report on both concurrent and org-wide rate limits. 
-
-For org-wide rate limits, the three headers show the limit that is being enforced, when it resets, and how close you are to hitting the limit:
-* `X-Rate-Limit-Limit` - the rate limit ceiling that is applicable for the current request.
-* `X-Rate-Limit-Remaining` - the number of requests left for the current rate-limit window.
-* `X-Rate-Limit-Reset` - the time at which the rate limit will reset, specified in UTC epoch time.
-
-For example:
-
-~~~ http
-HTTP/1.1 200 OK
-X-Rate-Limit-Limit: 20
-X-Rate-Limit-Remaining: 15
-X-Rate-Limit-Reset: 1366037820
-~~~
-
-The best way to be sure about org-wide rate limits is to check the relevant headers in the response. The System Log doesn't report every
-API request. Rather, it typically reports completed or attempted real-world events such as configuration changes, user logins, or user lockouts.
-The System Log doesn’t report the rate at which you’ve been calling the API.
-
-Instead of the accumulated counts for time-based rate limits, when a request exceeds the limit for concurrent requests,
-`X-Rate-Limit-Limit`, `X-Rate-Limit-Remaining`, and `X-Rate-Limit-Reset` report the concurrent values. 
-
-The three headers behave a little differently for concurrent rate limits: when the number of unfinished requests is below the concurrent rate limit, request headers only report org-wide rate limits.
-When you exceed a concurrent rate limit threshold, the headers report that the limit has been exceeded. When you drop back down below the concurrent rate limit, the headers  switch back to reporting the time-based rate limits.
-Additionally, the `X-Rate-Limit-Reset` time for concurrent rate limits is only a suggestion. There's no guarantee that enough requests will complete to stop exceeding the concurrent rate limit at the time indicated.
-
-### Example Rate Limit Header with Org-Wide Rate Limit Error  
-
-This example shows the relevant portion of a rate limit header being returned with the error for a request that exceeded the concurrent rate limit.
-
-~~~http
-HTTP/1.1 429 
-Date: Tue, 26 Sep 2017 21:33:25 GMT
-X-Rate-Limit-Limit: 5000
-X-Rate-Limit-Remaining: 4198
-X-Rate-Limit-Reset: 1605463723
-~~~
-
-### Example Rate Limit Header with Concurrent Rate Limit Error  
-
-This example shows the relevant portion of a rate limit header being returned with the error for a request that exceeded the concurrent rate limit.
-
-~~~http
-HTTP/1.1 429 
-Date: Tue, 26 Sep 2017 21:33:25 GMT
-X-Rate-Limit-Limit: 0
-X-Rate-Limit-Remaining: 0
-X-Rate-Limit-Reset: 1506461721
-~~~
-
-The first two header values are `0` because a concurrent limit has been crossed. 
-The third header reports an estimated time interval about when the concurrent rate limit should be resolved.
 
 ## Request Debugging
 
