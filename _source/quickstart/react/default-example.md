@@ -117,6 +117,8 @@ export default withAuth(class Home extends Component {
 Finally, passing in your configuration into `Security`, and connect your application's paths:
 
 ```typescript
+// src/App.js
+
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Security, ImplicitCallback } from '@okta/okta-react';
@@ -134,9 +136,10 @@ class App extends Component {
       <Router>
         <Security issuer={config.issuer}
                   client_id={config.client_id}
-                  redirect_uri={config.redirect_uri} >
+                  redirect_uri={config.redirect_uri}
+        >
           <Route path='/' exact={true} component={Home}/>
-          <Route path='/implicit/callback' component={ImplicitCallback} />
+          <Route path='/implicit/callback' component={ImplicitCallback}/>
         </Security>
       </Router>
     );
@@ -167,7 +170,7 @@ export default withAuth(class MessageList extends Component {
 
   async componentDidMount() {
     try {
-      const response = await fetch('http://localhost:{port}/api/messages', {
+      const response = await fetch('http://localhost:{serverPort}/api/messages', {
         headers: {
           Authorization: 'Bearer ' + await this.props.auth.getAccessToken()
         }
