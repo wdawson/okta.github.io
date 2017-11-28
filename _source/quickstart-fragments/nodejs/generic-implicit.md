@@ -1,8 +1,6 @@
 ---
 layout: quickstart_partial
 exampleDescription: NodeJS Implicit Example
-sitemap:
-  exclude: "yes"
 ---
 
 ## Okta Node.js Quickstart

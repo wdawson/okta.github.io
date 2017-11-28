@@ -1,8 +1,6 @@
 ---
 layout: quickstart_partial
 exampleDescription: PHP Implicit Example
-sitemap:
-  exclude: "yes"
 ---
 
 ## Okta PHP Quickstart

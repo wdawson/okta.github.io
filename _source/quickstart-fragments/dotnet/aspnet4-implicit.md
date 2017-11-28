@@ -1,8 +1,6 @@
 ---
 layout: quickstart_partial
 exampleDescription: ASP.NET 4.x Implicit Example
-sitemap:
-  exclude: "yes"
 ---
 
 ## Okta ASP.NET 4 Quickstart

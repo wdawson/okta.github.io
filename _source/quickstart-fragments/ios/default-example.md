@@ -1,8 +1,6 @@
 ---
 layout: quickstart_partial
 libraryName: Native iOS
-sitemap:
-  exclude: "yes"
 ---
 
 ## Okta iOS Quickstart

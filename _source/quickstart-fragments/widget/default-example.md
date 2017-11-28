@@ -1,8 +1,6 @@
 ---
 layout: quickstart_partial
 libraryName: Sign-In Widget
-sitemap:
-  exclude: "yes"
 ---
 
 ## Okta Sign-In Widget Quickstart

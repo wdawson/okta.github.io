@@ -1,8 +1,6 @@
 ---
 layout: quickstart_partial
 libraryName: Okta Sign-In Page
-sitemap:
-  exclude: "yes"
 ---
 
 ## Okta Sign-In Page Quickstart

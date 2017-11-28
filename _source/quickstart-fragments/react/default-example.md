@@ -1,8 +1,6 @@
 ---
 layout: quickstart_partial
 exampleDescription: React Implicit
-sitemap:
-  exclude: "yes"
 ---
 
 ## Okta React Quickstart

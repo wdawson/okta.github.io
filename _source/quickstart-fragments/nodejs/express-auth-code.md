@@ -1,8 +1,6 @@
 ---
 layout: quickstart_partial
 exampleDescription: Express.js Auth Code Example
-sitemap:
-  exclude: "yes"
 ---
 
 ## Okta Node.js/Express.js Quickstart

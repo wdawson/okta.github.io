@@ -1,8 +1,6 @@
 ---
 layout: quickstart_partial
 exampleDescription: Express.js Implicit Flow Example
-sitemap:
-  exclude: "yes"
 ---
 
 ## Okta Node.js/Express.js Quickstart

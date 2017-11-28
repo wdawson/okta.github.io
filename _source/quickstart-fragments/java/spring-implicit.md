@@ -1,8 +1,6 @@
 ---
 layout: quickstart_partial
 exampleDescription: Spring Implicit Example
-sitemap:
-  exclude: "yes"
 ---
 
 ## Okta Java/Spring Quickstart

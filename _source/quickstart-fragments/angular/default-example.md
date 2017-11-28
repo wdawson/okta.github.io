@@ -1,8 +1,6 @@
 ---
 layout: quickstart_partial
 exampleDescription: Angular Implicit
-sitemap:
-  exclude: "yes"
 ---
 
 ## Okta Angular Quickstart

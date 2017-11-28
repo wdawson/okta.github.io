@@ -1,8 +1,6 @@
 ---
 layout: quickstart_partial
 exampleDescription: ASP.NET Core 2.0 Auth Code Example
-sitemap:
-  exclude: "yes"
 ---
 
 ## Okta ASP.NET Core Quickstart

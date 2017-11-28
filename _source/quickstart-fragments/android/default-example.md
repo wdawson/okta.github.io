@@ -1,8 +1,6 @@
 ---
 layout: quickstart_partial
 libraryName: Native Android
-sitemap:
-  exclude: "yes"
 ---
 
 ## Okta Android Quickstart

@@ -1,8 +1,6 @@
 ---
 layout: quickstart_partial
 exampleDescription: Java Implicit Example
-sitemap:
-  exclude: "yes"
 ---
 
 ## Okta Java Quickstart
