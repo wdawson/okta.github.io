@@ -40,13 +40,13 @@ When reading the following tables, remember that a more specific limit is consid
 | All actions | `/api/v1/`              |  1200 |
 
 ### Okta API Endpoints and Per-Second Limits
-Two org-wide rate limits are on a per-second basis instead of per minute:
+Three org-wide rate limits are on a per-second basis instead of per minute to prevent brute force attacks:
 
 | Okta API Endpoint                           | Per Second Limit |
 |:--------------------------------------------------------------------|-------:|
 | Generate or refresh an OAuth 2.0 token | `/oauth2/v1/token`                            |      4 |
 | All other OpenID Connect operations from Okta authentication server  `/oauth2/v1`   |    40 |
-| Authenticate the same user | `/api/v1/authn/`           |      1 |
+| Authenticate the same user | `/api/v1/authn/`           |      4 |
 
 ### Okta Home Page Endpoints and Per-Minute Limits
 
