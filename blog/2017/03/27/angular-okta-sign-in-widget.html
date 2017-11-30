@@ -206,6 +206,8 @@
 
 <p>Angular 4 was <a href="http://angularjs.blogspot.com/2017/03/angular-400-now-available.html">recently released</a>, as well as <a href="https://github.com/angular/angular-cli/releases/tag/v1.4.4">Angular CLI 1.4.4</a>. To see how you might use Okta’s Sign-In Widget in a simple Angular application, create a new application with Angular CLI. First, you’ll need to install Angular CLI.</p>
 
+<p><strong>NOTE:</strong> This post has been updated to use <a href="https://blog.angular.io/version-5-0-0-of-angular-now-available-37e414935ced">Angular 5</a> and <a href="https://github.com/angular/angular-cli/releases/tag/v1.5.5">Angular CLI 1.5.5</a>.</p>
+
 <div class="language-bash highlighter-rouge"><pre class="highlight"><code>npm install -g @angular/cli
 </code></pre>
 </div>
@@ -223,7 +225,7 @@
   create angular-okta-example/src/favicon.ico <span class="o">(</span>5430 bytes<span class="o">)</span>
   create angular-okta-example/src/index.html <span class="o">(</span>305 bytes<span class="o">)</span>
   create angular-okta-example/src/main.ts <span class="o">(</span>370 bytes<span class="o">)</span>
-  create angular-okta-example/src/polyfills.ts <span class="o">(</span>2498 bytes<span class="o">)</span>
+  create angular-okta-example/src/polyfills.ts <span class="o">(</span>2405 bytes<span class="o">)</span>
   create angular-okta-example/src/styles.css <span class="o">(</span>80 bytes<span class="o">)</span>
   create angular-okta-example/src/test.ts <span class="o">(</span>1085 bytes<span class="o">)</span>
   create angular-okta-example/src/tsconfig.app.json <span class="o">(</span>211 bytes<span class="o">)</span>
@@ -236,10 +238,10 @@
   create angular-okta-example/package.json <span class="o">(</span>1325 bytes<span class="o">)</span>
   create angular-okta-example/protractor.conf.js <span class="o">(</span>722 bytes<span class="o">)</span>
   create angular-okta-example/tsconfig.json <span class="o">(</span>363 bytes<span class="o">)</span>
-  create angular-okta-example/tslint.json <span class="o">(</span>2968 bytes<span class="o">)</span>
-  create angular-okta-example/src/app/app.module.ts <span class="o">(</span>314 bytes<span class="o">)</span>
+  create angular-okta-example/tslint.json <span class="o">(</span>3097 bytes<span class="o">)</span>
+  create angular-okta-example/src/app/app.module.ts <span class="o">(</span>316 bytes<span class="o">)</span>
   create angular-okta-example/src/app/app.component.css <span class="o">(</span>0 bytes<span class="o">)</span>
-  create angular-okta-example/src/app/app.component.html <span class="o">(</span>1120 bytes<span class="o">)</span>
+  create angular-okta-example/src/app/app.component.html <span class="o">(</span>1141 bytes<span class="o">)</span>
   create angular-okta-example/src/app/app.component.spec.ts <span class="o">(</span>986 bytes<span class="o">)</span>
   create angular-okta-example/src/app/app.component.ts <span class="o">(</span>207 bytes<span class="o">)</span>
 You can <span class="sb">`</span>ng <span class="nb">set</span> --global <span class="nv">packageManager</span><span class="o">=</span>yarn<span class="sb">`</span>.
@@ -247,7 +249,7 @@ Installing packages <span class="k">for </span>tooling via npm.
 Installed packages <span class="k">for </span>tooling via npm.
 Successfully initialized git.
 Project <span class="s1">'angular-okta-example'</span> successfully created.
-<span class="o">[</span>mraible:~] 2m6s <span class="err">$</span>
+<span class="o">[</span>mraible:~] 42s <span class="err">$</span>
 </code></pre>
 </div>
 
@@ -265,15 +267,15 @@ Project <span class="s1">'angular-okta-example'</span> successfully created.
 
 <p>Add the widget’s CSS to <code class="highlighter-rouge">src/styles.css</code>:</p>
 
-<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="k">@import</span> <span class="s2">'~https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/2.1.0/css/okta-sign-in.min.css'</span><span class="p">;</span>
-<span class="k">@import</span> <span class="s2">'~https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/2.1.0/css/okta-theme.css'</span><span class="p">;</span>
+<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="k">@import</span> <span class="s2">'~@okta/okta-signin-widget/dist/css/okta-sign-in.min.css'</span><span class="p">;</span>
+<span class="k">@import</span> <span class="s2">'~@okta/okta-signin-widget/dist/css/okta-theme.css'</span><span class="p">;</span>
 </code></pre>
 </div>
 
 <p>Create <code class="highlighter-rouge">src/app/shared/okta/okta.service.ts</code> and use it to wrap the widget’s configuration and make it an injectable service.</p>
 
 <div class="language-ts highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Injectable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
-<span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">OktaSignIn</span> <span class="k">from</span> <span class="s1">'@okta/okta-signin-widget/dist/js/okta-sign-in.min.js'</span><span class="p">;</span>
+<span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">OktaSignIn</span> <span class="k">from</span> <span class="s1">'@okta/okta-signin-widget'</span><span class="p">;</span>
 
 <span class="err">@</span><span class="nx">Injectable</span><span class="p">()</span>
 <span class="k">export</span> <span class="kr">class</span> <span class="nx">Okta</span> <span class="p">{</span>
@@ -388,9 +390,15 @@ your user’s credentials to login. You should see a “Hello {email}” message
 
 <h4 id="customize-the-widget-css">Customize the Widget CSS</h4>
 
-<p>If you’d like to customize the widget’s CSS, the easiest way is you write your own CSS. Remove the CSS <code class="highlighter-rouge">@import</code> statements you added to <code class="highlighter-rouge">src/styles.css</code>. Add an <code class="highlighter-rouge">@import</code> for <a href="https://getbootstrap.com/">Bootstrap 4</a> and a few style rules to position elements. Copy the following code into <code class="highlighter-rouge">src/styles.css</code>.</p>
+<p>If you’d like to customize the widget’s CSS, the easiest way is you write your own CSS. Remove the CSS <code class="highlighter-rouge">@import</code> statements you added to <code class="highlighter-rouge">src/styles.css</code> and install Bootstrap 4.</p>
 
-<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="k">@import</span> <span class="sx">url(https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css)</span><span class="p">;</span>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>npm install bootstrap@4.0.0-beta.2 --save
+</code></pre>
+</div>
+
+<p>Add an <code class="highlighter-rouge">@import</code> for <a href="https://getbootstrap.com/">Bootstrap 4</a> and a few style rules to position elements. Copy the following code into <code class="highlighter-rouge">src/styles.css</code>.</p>
+
+<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="k">@import</span> <span class="s1">"~bootstrap/dist/css/bootstrap.css"</span><span class="p">;</span>
 
 <span class="nf">#okta-login-container</span> <span class="p">{</span>
   <span class="nl">margin</span><span class="p">:</span> <span class="m">0</span> <span class="nb">auto</span><span class="p">;</span>
@@ -419,8 +427,8 @@ your user’s credentials to login. You should see a “Hello {email}” message
 <h2 id="fix-your-tests">Fix Your Tests</h2>
 <p>If you try to run <code class="highlighter-rouge">npm test</code> or <code class="highlighter-rouge">ng test</code>, tests will fail:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>Chrome 61.0.3163 <span class="o">(</span>Mac OS X 10.12.6<span class="o">)</span>: Executed 3 of 3 <span class="o">(</span>3 FAILED<span class="o">)</span> <span class="o">(</span>0 secs / 0.157 secs<span class="o">)</span>
-Chrome 61.0.3163 <span class="o">(</span>Mac OS X 10.12.6<span class="o">)</span> AppComponent should render title <span class="k">in </span>a h1 tag FAILED
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>Chrome 62.0.3202 <span class="o">(</span>Mac OS X 10.12.6<span class="o">)</span>: Executed 3 of 3 <span class="o">(</span>3 FAILED<span class="o">)</span> <span class="o">(</span>0 secs / 0.157 secs<span class="o">)</span>
+Chrome 62.0.3202 <span class="o">(</span>Mac OS X 10.12.6<span class="o">)</span> AppComponent should render title <span class="k">in </span>a h1 tag FAILED
 	Failed: No provider <span class="k">for </span>Okta!
 </code></pre>
 </div>
@@ -444,7 +452,7 @@ Chrome 61.0.3163 <span class="o">(</span>Mac OS X 10.12.6<span class="o">)</span
 
 <p>After making this changes, you should see the sweet smell of success.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>Chrome 61.0.3163 <span class="o">(</span>Mac OS X 10.12.6<span class="o">)</span>: Executed 3 of 3 SUCCESS <span class="o">(</span>0.77 secs / 0.759 secs<span class="o">)</span>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>Chrome 62.0.3202 <span class="o">(</span>Mac OS X 10.12.6<span class="o">)</span>: Executed 3 of 3 SUCCESS <span class="o">(</span>0.77 secs / 0.759 secs<span class="o">)</span>
 </code></pre>
 </div>
 
@@ -452,7 +460,7 @@ Chrome 61.0.3163 <span class="o">(</span>Mac OS X 10.12.6<span class="o">)</span
 
 <h2 id="angular--okta">Angular + Okta</h2>
 
-<p>You can find a completed version of the application created in this blog post <a href="https://github.com/oktadeveloper/okta-angular-sign-in-widget-example">on GitHub</a>. In a future post, I’ll show you how to create a more Angular-native experience, where you control the HTML for the login form.</p>
+<p>You can find a completed version of the application created in this blog post <a href="https://github.com/oktadeveloper/okta-angular-sign-in-widget-example">on GitHub</a>. In a future post, I’ll show you how to create a more Angular-native experience, where <a href="/blog/2017/04/17/angular-authentication-with-oidc">you control the HTML for the login form</a>.</p>
 
 <p>Building authentication in an application is hard. It’s even less fun to build it over and over again in each application you build. Okta does the hard part for you and makes it a lot more fun to be a developer! <a href="https://developer.okta.com/signup/">Sign up for a forever-free developer account and try Okta today!</a>.</p>
 
@@ -462,6 +470,7 @@ Chrome 61.0.3163 <span class="o">(</span>Mac OS X 10.12.6<span class="o">)</span
 
 <ul>
   <li>Sep 30, 2017: Updated to use Angular CLI 1.4.4 and Okta Sign-In Widget 2.1.0. See the code changes in the <a href="https://github.com/oktadeveloper/okta-angular-sign-in-widget-example/pull/8">example app on GitHub</a>. Updated “create an OIDC app” instructions for the <a href="/blog/2017/09/25/all-new-developer-console">Okta Developer Console</a>.</li>
+  <li>Nov 30, 2017: Updated to use Angular CLI 1.5.5 and Okta Sign-In Widget 2.5.0. See the code changes in the <a href="https://github.com/oktadeveloper/okta-angular-sign-in-widget-example/pull/11">example app on GitHub</a>. Changes to this article can be viewed <a href="https://github.com/okta/okta.github.io/pull/1520">in this pull request</a>.</li>
 </ul>
 
 
