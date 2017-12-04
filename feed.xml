@@ -8,6 +8,42 @@
     <atom:link href="https://developer.okta.com/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Use Kong Gateway to Centralize Authentication</title>
+        <description>&lt;p&gt;A customer once asked me: “Hey – Can Okta integrate with Kong?” My first thought was: “What’s Kong?” A Google result later, I was introduced to the &lt;a href=&quot;https://getkong.org/&quot;&gt;Kong API Gateway&lt;/a&gt; – an open-source API Gateway and Microservices management layer.&lt;/p&gt;
+
+&lt;p&gt;Spoiler alert: You totally &lt;em&gt;can&lt;/em&gt; integrate Kong with Okta using its &lt;a href=&quot;https://github.com/nokia/kong-oidc&quot;&gt;OpenID Connect&lt;/a&gt; plugin.&lt;/p&gt;
+
+&lt;p&gt;Still stuck wondering what an API gateway even is? Here’s a metaphor that works for me: You know that sci-fi movie trope in which you have a centralized hub that “jumps” you to other places in the galaxy? In that kind of system all the screening and security happens at the hub. It’s the same with Kong (and other API gateways).&lt;/p&gt;
+
+&lt;p&gt;In the case of the OIDC plugin, only Kong speaks directly to Okta using the &lt;a href=&quot;https://tools.ietf.org/html/rfc6749#section-4.1&quot;&gt;Authorization Code flow&lt;/a&gt;. It then passes the contents of the &lt;a href=&quot;http://openid.net/specs/openid-connect-core-1_0.html#CodeIDToken&quot;&gt;ID Token&lt;/a&gt; to an internal service using an HTTP header called &lt;code class=&quot;highlighter-rouge&quot;&gt;x-userinfo&lt;/code&gt;. Your app just needs to know what to do with this HTTP header. It doesn’t have to do anything with OIDC itself.&lt;/p&gt;
+
+&lt;p&gt;This is easier to understand with some diagrams. Here’s what an architecture might look like without an API Gateway:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/use-kong-gateway-to-centralize-authentication/NoKong-e50ab887e1d7c05df737a991891fde5e21e1372b4143589d650d5dcd480ff4cd.png&quot; alt=&quot;No Kong&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;While you may have a load balancer sitting in front of everything acting as a “traffic cop”, each of your services has to know how to “speak” OIDC.&lt;/p&gt;
+
+&lt;p&gt;Here’s another diagram with an API Gateway in the mix:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/use-kong-gateway-to-centralize-authentication/WithKong-0048b240437e10f760f40758e7c402edf5bb58c5d5b28330740991a8fdf82ae5.png&quot; alt=&quot;With Kong&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In this case, &lt;em&gt;only&lt;/em&gt; the Kong API gateway is interacting with Okta. Kong then passes the &lt;code class=&quot;highlighter-rouge&quot;&gt;x-userinfo&lt;/code&gt; header along after the user authenticates. This enables your services to be a lot leaner – no OIDC stack needed.&lt;/p&gt;
+
+&lt;p&gt;I created a screencast based on &lt;a href=&quot;https://github.com/oktadeveloper/okta-kong-origin-example&quot;&gt;this working example&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;It uses &lt;a href=&quot;https://www.docker.com/&quot;&gt;Docker&lt;/a&gt; to create a container for Kong and another for a &lt;a href=&quot;https://projects.spring.io/spring-boot/&quot;&gt;Spring Boot&lt;/a&gt; app that understands the &lt;code class=&quot;highlighter-rouge&quot;&gt;x-userinfo&lt;/code&gt; HTTP header.&lt;/p&gt;
+
+&lt;p&gt;The slides used in the screencast &lt;a href=&quot;https://speakerdeck.com/dogeared/okta-plus-kong-api-gateway-with-oidc&quot;&gt;can be found on Speakerdeck&lt;/a&gt;.&lt;/p&gt;
+
+&lt;iframe width=&quot;480&quot; height=&quot;270&quot; src=&quot;https://www.youtube.com/embed/JUll6Dgu_pI&quot; frameborder=&quot;0&quot; gesture=&quot;media&quot; allow=&quot;encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+
+</description>
+        <pubDate>Mon, 04 Dec 2017 00:00:00 +0000</pubDate>
+        <link>https://developer.okta.com/blog/2017/12/04/use-kong-gateway-to-centralize-authentication</link>
+        <guid isPermaLink="true">https://developer.okta.com/blog/2017/12/04/use-kong-gateway-to-centralize-authentication</guid>
+      </item>
+    
+      <item>
         <title>Three Developer Tools I'm Thankful For</title>
         <description>&lt;p&gt;I’ve been writing code since I was 12 years old. When I first got started, I
 was using an old MSDOS computer that was given to my family by a member of our
@@ -4882,158 +4918,6 @@ Laurent is the VP of Developer Relations at Clever Cloud. Before Clever Cloud, h
         <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
         <link>https://developer.okta.com/blog/2017/10/10/nosql-options-for-java-developers-part-ii</link>
         <guid isPermaLink="true">https://developer.okta.com/blog/2017/10/10/nosql-options-for-java-developers-part-ii</guid>
-      </item>
-    
-      <item>
-        <title>User Authorization in ASP.NET Core with Okta</title>
-        <description>&lt;p&gt;Authorization is the oft-forgotten piece of identity and access management. The fact is, almost every app needs more than just “are they signed in?” for authorization. Most times, you need to not only know &lt;em&gt;who&lt;/em&gt; “they” are, but what access they are supposed to have. For instance, “are they in the administrator group?” or “are they in a group with some special privileges?” Today, you’ll learn how to do this with Okta in an ASP.NET Core MVC application.&lt;/p&gt;
-
-&lt;p&gt;In the Okta world, users are separated into &lt;code class=&quot;highlighter-rouge&quot;&gt;Groups&lt;/code&gt;. By default however, ASP.NET only has handling for the &lt;code class=&quot;highlighter-rouge&quot;&gt;Authorize&lt;/code&gt; attribute to handle authorization using &lt;code class=&quot;highlighter-rouge&quot;&gt;Roles&lt;/code&gt;. There are a couple of ways you could go about handling authorization using the &lt;code class=&quot;highlighter-rouge&quot;&gt;Groups&lt;/code&gt; that come from Okta:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;You can write your own custom &lt;code class=&quot;highlighter-rouge&quot;&gt;AuthorizeAttribute&lt;/code&gt; and have it looks at groups instead of roles.&lt;/li&gt;
-  &lt;li&gt;You can map the &lt;code class=&quot;highlighter-rouge&quot;&gt;Groups&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;Roles&lt;/code&gt; claims and let the regular ASP.NET &lt;code class=&quot;highlighter-rouge&quot;&gt;AuthorizeAttribute&lt;/code&gt; handle authorization&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;This second approach is far easier to implement, so that’s the approach this article will take.&lt;/p&gt;
-
-&lt;p&gt;Start by cloning the application at &lt;a href=&quot;https://github.com/oktadeveloper/aspnetcore-oidc-okta-example&quot;&gt;https://github.com/oktadeveloper/aspnetcore-oidc-okta-example&lt;/a&gt;. This is the base application with authentication covered in &lt;a href=&quot;https://developer.okta.com/blog/2017/06/29/oidc-user-auth-aspnet-core&quot;&gt;my previous post&lt;/a&gt;. You’ll add authorization to this application.&lt;/p&gt;
-
-&lt;h2 id=&quot;let-aspnet-know-where-your-roles-are&quot;&gt;Let ASP.NET Know Where Your Roles Are&lt;/h2&gt;
-&lt;p&gt;In the &lt;code class=&quot;highlighter-rouge&quot;&gt;startup.cs&lt;/code&gt; file, where the &lt;code class=&quot;highlighter-rouge&quot;&gt;OpenIdConfigurationOptions&lt;/code&gt; are set, one of the items being set is the &lt;code class=&quot;highlighter-rouge&quot;&gt;TokenValidationParameters&lt;/code&gt;. In the new &lt;code class=&quot;highlighter-rouge&quot;&gt;TokenValidationParameters&lt;/code&gt; add a property called &lt;code class=&quot;highlighter-rouge&quot;&gt;RoleClaimType&lt;/code&gt; with a value of &lt;code class=&quot;highlighter-rouge&quot;&gt;ClaimTypes.Role&lt;/code&gt;. This is an enumeration in the &lt;code class=&quot;highlighter-rouge&quot;&gt;System.Security.Claims&lt;/code&gt; namespace that holds the URL that describes the “role” claim type. Ultimately, your &lt;code class=&quot;highlighter-rouge&quot;&gt;TokenValidationParameters&lt;/code&gt; property should look like this.&lt;/p&gt;
-
-&lt;div class=&quot;language-csharp highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;TokenValidationParameters&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TokenValidationParameters&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;ValidateIssuer&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;RoleClaimType&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ClaimTypes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Role&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;add-a-claims-transformer&quot;&gt;Add a Claims Transformer&lt;/h2&gt;
-&lt;p&gt;The &lt;a href=&quot;https://docs.microsoft.com/en-us/aspnet/core/api/microsoft.aspnetcore.authentication.claimstransformer&quot;&gt;Claims Tranformer&lt;/a&gt; is a way to manipulate the &lt;a href=&quot;https://msdn.microsoft.com/en-us/library/system.security.claims.claimsprincipal(v=vs.110).aspx&quot;&gt;ClaimsPrincipal&lt;/a&gt;, which is the main user in your ASP.NET application, once the user is authenticated.&lt;/p&gt;
-
-&lt;p&gt;Add a folder inside the &lt;code class=&quot;highlighter-rouge&quot;&gt;Domain&lt;/code&gt; folder called &lt;code class=&quot;highlighter-rouge&quot;&gt;Authorization&lt;/code&gt;. Then add a class called &lt;code class=&quot;highlighter-rouge&quot;&gt;GroupsToRolesTransformer&lt;/code&gt;. The contents of the transformer should be:&lt;/p&gt;
-
-&lt;div class=&quot;language-csharp highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;System.Linq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;System.Security.Claims&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;System.Threading.Tasks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Microsoft.AspNetCore.Authentication&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Okta.Sdk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Okta.Sdk.Configuration&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;AspnetOkta.Domain.Authorization&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GroupsToRolesTransformer&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IClaimsTransformer&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OktaClient&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;GroupsToRolesTransformer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;client&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;OktaClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OktaClientConfiguration&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;OrgUrl&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;https://{Your Okta Org Url}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;Token&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;JiBBerJabbER&quot;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Task&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ClaimsPrincipal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;TransformAsync&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ClaimsTransformationContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;idClaim&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Principal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;FindFirst&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Type&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ClaimTypes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;NameIdentifier&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idClaim&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-          &lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Users&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;GetUserAsync&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idClaim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-          &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;groups&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Groups&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;ToEnumerable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;group&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;groups&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ClaimsIdentity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Principal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Identity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;AddClaim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Claim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ClaimTypes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Role&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Profile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-          &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Principal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;As you can see here, in the constructor, you are creating an &lt;code class=&quot;highlighter-rouge&quot;&gt;OktaClient&lt;/code&gt; object to be stored in a class-level variable called client. You’ll need your &lt;code class=&quot;highlighter-rouge&quot;&gt;OrgUrl&lt;/code&gt; from Okta (probably something like dev-1234.oktapreview.com) and an API token which you can get from the Okta Developer Dashboard under &lt;code class=&quot;highlighter-rouge&quot;&gt;API&lt;/code&gt; &amp;gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;Tokens&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/aspnet-authz/tokens-ebf5ab3541082a5883161d08cca2433c9492c5590047a5e8593282816191c5e5.png&quot; alt=&quot;API Token Page&quot; width=&quot;800&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Be aware that you only get to see the API token when you create it, so make sure you save it somewhere so you can reference it later.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;Once you’ve created a transformer, it will implement the &lt;code class=&quot;highlighter-rouge&quot;&gt;IClaimsTransformer&lt;/code&gt; interface. There is only one method you’ll need to worry about, and that’s the &lt;code class=&quot;highlighter-rouge&quot;&gt;TransformAsync&lt;/code&gt; method. It takes a &lt;code class=&quot;highlighter-rouge&quot;&gt;ClaimsTransformationContext&lt;/code&gt; and returns a &lt;code class=&quot;highlighter-rouge&quot;&gt;Task&lt;/code&gt; with a &lt;code class=&quot;highlighter-rouge&quot;&gt;ClaimsPrincipal&lt;/code&gt; in it.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Note that if you use the key shortcuts to get Visual Studio (or Visual Studio Code) to implement the interface for you, it will not add the &lt;code class=&quot;highlighter-rouge&quot;&gt;public&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;async&lt;/code&gt; keywords to the signature. You’ll have to add them manually.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;In this method, you’ll get the currently authenticated user’s &lt;code class=&quot;highlighter-rouge&quot;&gt;NameIdentifier&lt;/code&gt; property. This is the ID you’ll use to get the Okta user so that you can get their groups. Just a quick null check for the &lt;code class=&quot;highlighter-rouge&quot;&gt;idClaim&lt;/code&gt; variable and then go and get the &lt;code class=&quot;highlighter-rouge&quot;&gt;Groups&lt;/code&gt; from the &lt;code class=&quot;highlighter-rouge&quot;&gt;user&lt;/code&gt; object. From there, simply loop through the &lt;code class=&quot;highlighter-rouge&quot;&gt;Groups&lt;/code&gt; and add a &lt;code class=&quot;highlighter-rouge&quot;&gt;Claim&lt;/code&gt; using the &lt;code class=&quot;highlighter-rouge&quot;&gt;ClaimTypes.Role&lt;/code&gt; enumeration and using the &lt;code class=&quot;highlighter-rouge&quot;&gt;group.Profile.Name&lt;/code&gt; for the value of the claim.&lt;/p&gt;
-
-&lt;p&gt;Return the context.Principal no matter what. If you didn’t find the user’s identifier, or get a user back from the &lt;code class=&quot;highlighter-rouge&quot;&gt;GetUserAsync&lt;/code&gt; call, at least the application will still get the &lt;code class=&quot;highlighter-rouge&quot;&gt;ClaimsPrincipal&lt;/code&gt; back into the flow of the application.&lt;/p&gt;
-
-&lt;h2 id=&quot;tell-the-application-to-use-your-transformer&quot;&gt;Tell the Application to Use Your Transformer&lt;/h2&gt;
-&lt;p&gt;The only thing left is to configure your application to use the new transformer in your middleware pipeline.&lt;/p&gt;
-
-&lt;p&gt;Right below the OIDC setup in the &lt;code class=&quot;highlighter-rouge&quot;&gt;Configure&lt;/code&gt; method of your &lt;code class=&quot;highlighter-rouge&quot;&gt;startup.cs&lt;/code&gt; file, add the following code:&lt;/p&gt;
-
-&lt;div class=&quot;language-csharp highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;UseClaimsTransformation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ClaimsTransformationOptions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;Transformer&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;GroupsToRolesTransformer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;This tells the application that you want to transform the claims and which claims transformer you want to use.&lt;/p&gt;
-
-&lt;h2 id=&quot;prove-that-it-works&quot;&gt;Prove that it Works&lt;/h2&gt;
-&lt;p&gt;You’ll need to set up two users in two different groups in your Okta Developer Dashboard, call one group “Admin” and the other “Enthusiast”.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/aspnet-authz/add-groups-e0e4bc990f21c1fc15ab0584658b06e25fac3a2a4db97ff6e7f2856e865c68ca.png&quot; alt=&quot;Add Groups Page&quot; width=&quot;800&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Make sure the groups are assigned to your application:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/aspnet-authz/group-assignments-c84e82bcf1a7677c028cb4e146e91aea155d3437a6cdabd1f85bc4dc2611ff72.png&quot; alt=&quot;Assing Groups To Application&quot; width=&quot;800&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Then create some routes in the &lt;code class=&quot;highlighter-rouge&quot;&gt;UserController&lt;/code&gt; decorated with the &lt;code class=&quot;highlighter-rouge&quot;&gt;AuthorizeAttribute&lt;/code&gt;.&lt;/p&gt;
-
-&lt;div class=&quot;language-csharp highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Authorize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Roles&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Admin&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IActionResult&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;AdminOnly&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;View&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-  &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Authorize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Roles&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Enthusiast&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IActionResult&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;EnthusiastOnly&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;View&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Then create matching views for those routes.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;AdminOnly.cshtml&lt;/em&gt;&lt;/p&gt;
-&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;h1&amp;gt;&lt;/span&gt;Admin Dashboard&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h1&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;em&gt;EnthusiastOnly.cshtml&lt;/em&gt;&lt;/p&gt;
-&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;h1&amp;gt;&lt;/span&gt;Enthusiast Dashboard&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h1&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Now you should be able to run your application, log in as a user in the “Admin” group, and go to the &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:5000/User/AdminOnly&lt;/code&gt; route successfully. The &lt;code class=&quot;highlighter-rouge&quot;&gt;EnthusiastOnly&lt;/code&gt; route should return an unauthorized error.&lt;/p&gt;
-
-&lt;p&gt;Log back out and log in as a member of the “Enthusiast” group and go to the &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:5000/User/EnthusiastOnly&lt;/code&gt; URL, and you should be able to get to it.&lt;/p&gt;
-
-&lt;p&gt;Congratulations! You just added authorization to you .NET application! Not only can users get into your application, but you can make sure they have access to the data and functionality they need!&lt;/p&gt;
-
-&lt;h2 id=&quot;learn-more&quot;&gt;Learn More&lt;/h2&gt;
-&lt;p&gt;You can learn more about the .NET  Claims Tranformer at &lt;a href=&quot;https://docs.microsoft.com/en-us/aspnet/core/api/microsoft.aspnetcore.authentication.claimstransformer&quot;&gt;https://docs.microsoft.com/en-us/aspnet/core/api/microsoft.aspnetcore.authentication.claimstransformer&lt;/a&gt; and the broader spectrum of security in .NET at &lt;a href=&quot;https://docs.microsoft.com/en-us/aspnet/core/security/&quot;&gt;https://docs.microsoft.com/en-us/aspnet/core/security/&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;And don’t forget, &lt;a href=&quot;https://developer.okta.com&quot;&gt;Okta&lt;/a&gt; can help you make user management simple! Sign up for a free forever developer account at &lt;a href=&quot;https://developer.okta.com&quot;&gt;https://developer.okta.com&lt;/a&gt;! As always, if you have questions about anything here, feel free to reach out on Twitter &lt;a href=&quot;https://twitter.com/leebrandt&quot;&gt;https://twitter.com/leebrandt&lt;/a&gt; or email me at &lt;a href=&quot;mailto:lee.brandt@okta.com&quot;&gt;lee.brandt@okta.com&lt;/a&gt;.&lt;/p&gt;
-</description>
-        <pubDate>Wed, 04 Oct 2017 00:00:00 +0000</pubDate>
-        <link>https://developer.okta.com/blog/2017/10/04/aspnet-authorization</link>
-        <guid isPermaLink="true">https://developer.okta.com/blog/2017/10/04/aspnet-authorization</guid>
       </item>
     
   </channel>

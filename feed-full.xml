@@ -8,6 +8,42 @@
     <atom:link href="https://developer.okta.com/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Use Kong Gateway to Centralize Authentication</title>
+        <description>&lt;p&gt;A customer once asked me: “Hey – Can Okta integrate with Kong?” My first thought was: “What’s Kong?” A Google result later, I was introduced to the &lt;a href=&quot;https://getkong.org/&quot;&gt;Kong API Gateway&lt;/a&gt; – an open-source API Gateway and Microservices management layer.&lt;/p&gt;
+
+&lt;p&gt;Spoiler alert: You totally &lt;em&gt;can&lt;/em&gt; integrate Kong with Okta using its &lt;a href=&quot;https://github.com/nokia/kong-oidc&quot;&gt;OpenID Connect&lt;/a&gt; plugin.&lt;/p&gt;
+
+&lt;p&gt;Still stuck wondering what an API gateway even is? Here’s a metaphor that works for me: You know that sci-fi movie trope in which you have a centralized hub that “jumps” you to other places in the galaxy? In that kind of system all the screening and security happens at the hub. It’s the same with Kong (and other API gateways).&lt;/p&gt;
+
+&lt;p&gt;In the case of the OIDC plugin, only Kong speaks directly to Okta using the &lt;a href=&quot;https://tools.ietf.org/html/rfc6749#section-4.1&quot;&gt;Authorization Code flow&lt;/a&gt;. It then passes the contents of the &lt;a href=&quot;http://openid.net/specs/openid-connect-core-1_0.html#CodeIDToken&quot;&gt;ID Token&lt;/a&gt; to an internal service using an HTTP header called &lt;code class=&quot;highlighter-rouge&quot;&gt;x-userinfo&lt;/code&gt;. Your app just needs to know what to do with this HTTP header. It doesn’t have to do anything with OIDC itself.&lt;/p&gt;
+
+&lt;p&gt;This is easier to understand with some diagrams. Here’s what an architecture might look like without an API Gateway:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/use-kong-gateway-to-centralize-authentication/NoKong-e50ab887e1d7c05df737a991891fde5e21e1372b4143589d650d5dcd480ff4cd.png&quot; alt=&quot;No Kong&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;While you may have a load balancer sitting in front of everything acting as a “traffic cop”, each of your services has to know how to “speak” OIDC.&lt;/p&gt;
+
+&lt;p&gt;Here’s another diagram with an API Gateway in the mix:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/use-kong-gateway-to-centralize-authentication/WithKong-0048b240437e10f760f40758e7c402edf5bb58c5d5b28330740991a8fdf82ae5.png&quot; alt=&quot;With Kong&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In this case, &lt;em&gt;only&lt;/em&gt; the Kong API gateway is interacting with Okta. Kong then passes the &lt;code class=&quot;highlighter-rouge&quot;&gt;x-userinfo&lt;/code&gt; header along after the user authenticates. This enables your services to be a lot leaner – no OIDC stack needed.&lt;/p&gt;
+
+&lt;p&gt;I created a screencast based on &lt;a href=&quot;https://github.com/oktadeveloper/okta-kong-origin-example&quot;&gt;this working example&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;It uses &lt;a href=&quot;https://www.docker.com/&quot;&gt;Docker&lt;/a&gt; to create a container for Kong and another for a &lt;a href=&quot;https://projects.spring.io/spring-boot/&quot;&gt;Spring Boot&lt;/a&gt; app that understands the &lt;code class=&quot;highlighter-rouge&quot;&gt;x-userinfo&lt;/code&gt; HTTP header.&lt;/p&gt;
+
+&lt;p&gt;The slides used in the screencast &lt;a href=&quot;https://speakerdeck.com/dogeared/okta-plus-kong-api-gateway-with-oidc&quot;&gt;can be found on Speakerdeck&lt;/a&gt;.&lt;/p&gt;
+
+&lt;iframe width=&quot;480&quot; height=&quot;270&quot; src=&quot;https://www.youtube.com/embed/JUll6Dgu_pI&quot; frameborder=&quot;0&quot; gesture=&quot;media&quot; allow=&quot;encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+
+</description>
+        <pubDate>Mon, 04 Dec 2017 00:00:00 +0000</pubDate>
+        <link>https://developer.okta.com/blog/2017/12/04/use-kong-gateway-to-centralize-authentication</link>
+        <guid isPermaLink="true">https://developer.okta.com/blog/2017/12/04/use-kong-gateway-to-centralize-authentication</guid>
+      </item>
+    
+      <item>
         <title>Three Developer Tools I'm Thankful For</title>
         <description>&lt;p&gt;I’ve been writing code since I was 12 years old. When I first got started, I
 was using an old MSDOS computer that was given to my family by a member of our
