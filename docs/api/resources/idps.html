@@ -348,9 +348,12 @@ For example, your app can support logging in with credentials from Facebook, Goo
 
 <p>Adds a new <code class="highlighter-rouge">SAML2</code> type IdP to your organization</p>
 
-<blockquote>
-  <p>You must first add the IdP’s signature certificate to the IdP key store before you can add a SAML 2.0 IdP with a <code class="highlighter-rouge">kid</code> credential reference.</p>
-</blockquote>
+<p>Notes:</p>
+
+<ul>
+  <li>You must first add the IdP’s signature certificate to the IdP key store before you can add a SAML 2.0 IdP with a <code class="highlighter-rouge">kid</code> credential reference.</li>
+  <li>Don’t use <code class="highlighter-rouge">fromURI</code> to automatically redirect a user to a particular app after successfully authenticating with a third-party IdP. Instead, use <a href="#redirecting-with-saml-deep-links">SAML Deep Links</a>. Using <code class="highlighter-rouge">fromURI</code> is not tested and not supported. For more information about using deep links for SP-initiated sign on, see <a href="/standards/SAML/#understanding-sp-initiated-login-flow">Understanding SP-Initiated Login Flow</a>.</li>
+</ul>
 
 <h5 class="api api-request api-request-example" id="request-example">Request Example</h5>
 
@@ -546,6 +549,17 @@ For example, your app can support logging in with credentials from Facebook, Goo
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 </div>
+<h5 id="redirecting-with-saml-deep-links">Redirecting with SAML Deep Links</h5>
+
+<p>Use SAML deep links to automatically redirect the user to an app after successfully authenticating with a third-party IdP. To use deep links, assemble these three parts into a URL:</p>
+
+<ol>
+  <li>SP ACS URL, for example: <code class="highlighter-rouge">https://{myOktaDomain}.com/sso/saml2/:IdPId</code></li>
+  <li>The app to which the user is automatically redirected after successfully authenticated with the IdP, for example: <code class="highlighter-rouge">/app/:app-location/:appId/sso/saml</code></li>
+  <li>Optionally, If the app is an outbound SAML app, you can specify the relayState passed to it, for example: <code class="highlighter-rouge">?RelayState=:anyUrlEncodedValue</code></li>
+</ol>
+
+<p>The deep link for steps 1-3 is: <code class="highlighter-rouge">https://{myOktaDomain}.com/sso/saml2/:IdPId/app/:app-location/:appId/sso/saml?RelayState=:anyUrlEncodedValue</code></p>
 
 <h4 class="api api-operation" id="add-facebook-identity-provider">Add Facebook Identity Provider</h4>
 
