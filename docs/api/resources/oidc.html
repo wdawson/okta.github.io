@@ -1119,6 +1119,14 @@ of the response.</p>
       <td style="text-align: left">FALSE</td>
       <td style="text-align: left"> </td>
     </tr>
+    <tr>
+      <td style="text-align: left">request</td>
+      <td style="text-align: left">A JWT created by the client that enables requests to be passed as a single, self-contained parameter.</td>
+      <td style="text-align: left">Query</td>
+      <td style="text-align: left">JWT</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left">See Description.</td>
+    </tr>
   </tbody>
 </table>
 
@@ -1146,7 +1154,25 @@ The data model for the <a href="https://developer.mozilla.org/en-US/docs/Web/API
  The OAuth 2.0 specification <a href="https://tools.ietf.org/html/rfc6749#section-10.12">requires</a> that clients protect their redirect URIs against CSRF by sending a value in the authorize request which binds the request to the user-agent’s authenticated state.
  Using the <code class="highlighter-rouge">state</code> parameter is also a countermeasure to several other known attacks as outlined in <a href="https://tools.ietf.org/html/rfc6819">OAuth 2.0 Threat Model and Security Considerations</a>.</p>
   </li>
-  <li><a href="https://tools.ietf.org/html/rfc7636">Proof Key for Code Exchange</a> (PKCE) is a stronger mechanism for binding the authorization code to the client than just a client secret, and prevents <a href="https://tools.ietf.org/html/rfc7636#section-1">a code interception attack</a> if both the code and the client credentials are intercepted (which can happen on mobile/native devices). The PKCE-enabled client creates a large random string as code_verifier and derives code_challenge from it using code_challenge_method. It passes the code_challenge and code_challenge_method in the authorization request for code flow. When a client tries to redeem the code, it must pass the code_verifer. Okta recomputes the challenge and returns the requested token only if it matches the code_challenge in the original authorization request. When a client, whose <code class="highlighter-rouge">token_endpoint_auth_method</code> is <code class="highlighter-rouge">none</code>, makes a code flow authorization request, the <code class="highlighter-rouge">code_challenge</code> parameter is required.</li>
+  <li>
+    <p><a href="https://tools.ietf.org/html/rfc7636">Proof Key for Code Exchange</a> (PKCE) is a stronger mechanism for binding the authorization code to the client than just a client secret, and prevents <a href="https://tools.ietf.org/html/rfc7636#section-1">a code interception attack</a> if both the code and the client credentials are intercepted (which can happen on mobile/native devices). The PKCE-enabled client creates a large random string as code_verifier and derives code_challenge from it using code_challenge_method. It passes the code_challenge and code_challenge_method in the authorization request for code flow. When a client tries to redeem the code, it must pass the code_verifer. Okta recomputes the challenge and returns the requested token only if it matches the code_challenge in the original authorization request. When a client, whose <code class="highlighter-rouge">token_endpoint_auth_method</code> is <code class="highlighter-rouge">none</code>, makes a code flow authorization request, the <code class="highlighter-rouge">code_challenge</code> parameter is required.</p>
+  </li>
+  <li>About the <code class="highlighter-rouge">request</code> parameter:
+    <ul>
+      <li>You must sign the JWT using the app’s client secret.</li>
+      <li>The JWT can’t be encrypted.</li>
+      <li>Okta supports these signing algorithms: <a href="https://tools.ietf.org/html/rfc7518#section-5.2.3">HS256</a>, <a href="https://tools.ietf.org/html/rfc7518#section-5.2.4">HS384</a>, and <a href="https://tools.ietf.org/html/rfc7518#section-5.2.5">HS512</a>.</li>
+      <li>We recommend you don’t duplicate any request parameters in both the JWT and the query URI itself. However, you can do so with <code class="highlighter-rouge">state</code>, <code class="highlighter-rouge">nonce</code>, <code class="highlighter-rouge">code_challenge</code>, and <code class="highlighter-rouge">code_challenge_method</code>.</li>
+      <li>Okta validates the <code class="highlighter-rouge">request</code> parameter in the following ways:
+        <ol>
+          <li><code class="highlighter-rouge">iss</code> is required and must  be the <code class="highlighter-rouge">client_id</code>.</li>
+          <li><code class="highlighter-rouge">aud</code> is required and must be same value as the authorization server issuer that mints the ID token or access token. This value is published in metadata for Okta Authorization Server and Custom Authorization Server.</li>
+          <li>JWT lifetime is evaluated using the <code class="highlighter-rouge">iat</code> and <code class="highlighter-rouge">exp</code> claims if present. If the JWT is expired or not yet valid, Okta returns an <code class="highlighter-rouge">invalid_request_object</code>  error.</li>
+          <li>Okta rejects the JWT if the <code class="highlighter-rouge">jti</code> claim is present and it has already been processed.</li>
+        </ol>
+      </li>
+    </ul>
+  </li>
 </ul>
 
 <h4 id="postmessage-data-model">postMessage() Data Model</h4>
@@ -1340,12 +1366,11 @@ Irrespective of the response type, the contents of the response are as described
 
 <h4 id="request-examples">Request Examples</h4>
 
-<p>This request initiates the authorization code flow, as signaled by <code class="highlighter-rouge">response_type=code</code>. The request will return an authorization code that you can use as the <code class="highlighter-rouge">code</code> parameter in a token request.</p>
+<p>This request initiates the authorization code flow, as signaled by <code class="highlighter-rouge">response_type=code</code>. The request returns an authorization code that you can use as the <code class="highlighter-rouge">code</code> parameter in a token request.</p>
 
 <div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -v -X GET <span class="se">\</span>
 -H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
 -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
--H <span class="s2">"Authorization: SSWS </span><span class="k">${</span><span class="nv">api_token</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
 <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/authorize?
   client_id=</span><span class="k">${</span><span class="nv">client_id</span><span class="k">}</span><span class="s2">&amp;
   response_type=code&amp;
@@ -1356,14 +1381,21 @@ Irrespective of the response type, the contents of the response are as described
   nonce=</span><span class="k">${</span><span class="nv">nonce</span><span class="k">}</span><span class="s2">"</span>
 </code></pre>
 </div>
-
-<p>This request initiates the implicit flow, that is, to obtain an ID Token and optionally an Access Token directly from the authorization server, use the same request,
-but with <code class="highlighter-rouge">response_type=id_token</code> or <code class="highlighter-rouge">response_type=id_token token</code>:</p>
+<p>This request does the same thing, but uses the <code class="highlighter-rouge">request</code> parameter to deliver a signed (HS256) JWT that contains all the query parameters:</p>
 
 <div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -v -X GET <span class="se">\</span>
 -H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
 -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
--H <span class="s2">"Authorization: SSWS </span><span class="k">${</span><span class="nv">api_token</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
+<span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/authorize?
+  request=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPa3RhIiwiaWF0IjoxNTEyNTE2MjIxLCJleHAiOjE1NDQwNTIyMjEsImF1ZCI6Ind3dy5leGFtcGxlLmNvbSIsInN1YiI6InNqYWNrc29uQGV4YW1wbGUuY29tIiwiRW1haWwiOiJzamFja3NvbkBleGFtcGxlLmNvbSIsInJlc3BvbnNlX3R5cGUiOiJjb2RlIiwicmVzcG9uc2VfbW9kZSI6ImZvcm1fcG9zdCIsInJlZGlyZWN0X3VyaSI6Im15UmVkaXJlY3RVUkkuY29tIiwic3RhdGUiOiJteVN0YXRlIiwibm9uY2UiOiJteU5vbmNlIiwic2NvcGUiOiJvcGVuaWQgb2ZmbGluZV9hY2Nlc3MifQ.TjPy2_nUerULClavBNHcpnO_Pd1DxNEjQCeSW45ALJg"</span>
+</code></pre>
+</div>
+
+<p>This request initiates the implicit flow, that is, it obtains an ID Token and optionally an Access Token directly from the authorization server. We use the same request as the first example, but with <code class="highlighter-rouge">response_type=id_token</code> or <code class="highlighter-rouge">response_type=id_token token</code>:</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -v -X GET <span class="se">\</span>
+-H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+-H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
 <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/authorize?
   client_id=</span><span class="k">${</span><span class="nv">client_id</span><span class="k">}</span><span class="s2">&amp;
   response_type=id_token token&amp;
