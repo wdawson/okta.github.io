@@ -1433,23 +1433,26 @@ curl -v -X GET \
 
 > Note: Use the `POST` method to make a partial update and the `PUT` method to delete unspecified properties.
 
-{% api_operation put /api/v1/users/*:userId* %}
+{% api_operation put /api/v1/users/*:userId*?strict=*:strict* %}
 
 Updates a user&#8217;s profile and/or credentials using strict-update semantics
 
 All profile properties must be specified when updating a user&#8217;s profile with a `PUT` method. Any property not specified
-in the request is deleted. 
+in the request is deleted.
+
+If strict is set to true, the min age and history password policy validations will be performed. By default this parameter is false.
 
 >Important: Don&#8217;t use `PUT` method for partial updates.
 
 ##### Request Parameters
 {:.api .api-request .api-request-params}
 
-| Parameter   | Description                 | Param Type | DataType                                  | Required |
-|:------------|:----------------------------|:-----------|:------------------------------------------|:---------|
-| userId      | ID of user to update        | URL        | String                                    | TRUE     |
-| profile     | Updated profile for user    | Body       |   [Profile Object](#profile-object)         | FALSE    |
-| credentials | Update credentials for user | Body       |   [Credentials Object](#credentials-object) | FALSE    |
+| Parameter   | Description                                                    | Param Type | DataType                                  | Required |
+|:------------|:---------------------------------------------------------------|:-----------|:------------------------------------------|:---------|
+| userId      | ID of user to update                                           | URL        | String                                    | TRUE     |
+| strict      | If true, validates against min age and history password policy | URL        | String                                    | FALSE    |
+| profile     | Updated profile for user                                       | Body       |   [Profile Object](#profile-object)         | FALSE    |
+| credentials | Update credentials for user                                    | Body       |   [Credentials Object](#credentials-object) | FALSE    |
 
 `profile` and `credentials` can be updated independently or together with a single request.
 
@@ -1461,20 +1464,23 @@ Updated [User](#user-model)
 #### Update Profile
 {:.api .api-operation}
 
-{% api_operation post /api/v1/users/*:userId* %}
+{% api_operation post /api/v1/users/*:userId*?strict=*:strict* %}
 
 Updates a user&#8217;s profile or credentials with partial update semantics
+
+If strict is set to true, the min age and history password policy validations will be performed. By default this parameter is false.
 
 > Important: Use the `POST` method for partial updates. Unspecified properties are set to null with `PUT`.
 
 ##### Request Parameters
 {:.api .api-request .api-request-params}
 
-| Parameter   | Description                 | Param Type | DataType                                  | Required |
-|:------------|:----------------------------|:-----------|:------------------------------------------|:---------|
-| userId      | ID of user to update        | URL        | String                                    | TRUE     |
-| profile     | Updated profile for user    | Body       |   [Profile Object](#profile-object)         | FALSE    |
-| credentials | Update credentials for user | Body       |   [Credentials Object](#credentials-object) | FALSE    |
+| Parameter   | Description                                                    | Param Type | DataType                                  | Required |
+|:------------|:---------------------------------------------------------------|:-----------|:------------------------------------------|:---------|
+| userId      | ID of user to update                                           | URL        | String                                    | TRUE     |
+| strict      | If true, validates against min age and history password policy | URL        | String                                    | FALSE    |
+| profile     | Updated profile for user                                       | Body       |   [Profile Object](#profile-object)         | FALSE    |
+| credentials | Update credentials for user                                    | Body       |   [Credentials Object](#credentials-object) | FALSE    |
 
 `profile` and `credentials` can be updated independently or with a single request.
 
@@ -2587,20 +2593,23 @@ curl -v -X POST \
 ### Change Password
 {:.api .api-operation}
 
-{% api_operation post /api/v1/users/*:id*/credentials/change_password %}
+{% api_operation post /api/v1/users/*:id*/credentials/change_password?strict=*:strict* %}
 
 Changes a user&#8217;s password by validating the user&#8217;s current password
   
 This operation can only be performed on users in `STAGED`, `ACTIVE`, `PASSWORD_EXPIRED`, or `RECOVERY` status that have a valid [password credential](#password-object)
 
+If strict is set to true, the min age password policy validation will be performed. By default this parameter is false.
+
 ##### Request Parameters
 {:.api .api-request .api-request-params}
 
-Parameter   | Description               | Param Type | DataType                            | Required |
-------------| --------------------------| ---------- | ------------------------------------| -------- |
-id          | `id` of user              | URL        | String                              | TRUE     |
-oldPassword | Current password for user | Body       | [Password Object](#password-object) | TRUE     |
-newPassword | New password for user     | Body       | [Password Object](#password-object) | TRUE     |
+Parameter   | Description                                        | Param Type | DataType                            | Required |
+------------| ---------------------------------------------------| ---------- | ------------------------------------| -------- |
+id          | `id` of user                                       | URL        | String                              | TRUE     |
+strict      | If true, validates against password min age policy | URL        | String                              | FALSE    |
+oldPassword | Current password for user                          | Body       | [Password Object](#password-object) | TRUE     |
+newPassword | New password for user                              | Body       | [Password Object](#password-object) | TRUE     |
 
 ##### Response Parameters
 {:.api .api-response .api-response-params}
