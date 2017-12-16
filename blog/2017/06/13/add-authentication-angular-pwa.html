@@ -48,7 +48,7 @@
   <meta class="swiftype" name="summary" data-type="string" content="You’re developing a Progressive Web Application (PWA) and your service worker and web app manifest are working swimmingly. You’ve even taken the time to depl..." />
 
   <link type="text/css" rel="stylesheet" href="/assets/animate-ec43d72c3ed45e08a460b8a2966d8dba6006aebfa0530935c3973fa493a8771f.css">
-  <link type="text/css" rel="stylesheet" href="/assets/okta-61c93307b448829d3c7cc49f2476c99d72a03219166e4655d73d97cea2494d75.css">
+  <link type="text/css" rel="stylesheet" href="/assets/okta-43dc5927557b8154c15ef656cdd0486491b6492bc32fff1149c297de0f054cbe.css">
   
   
   <title>Add Authentication to Your Angular PWA | Okta Developer</title>
@@ -442,7 +442,7 @@ Boot app’s <code class="highlighter-rouge">src/main/resources/application.prop
 </code></pre>
 </div>
 
-<p>Modify <code class="highlighter-rouge">client/src/app/app.component.ts</code> to import <code class="highlighter-rouge">OAuthService</code> and configure your app to use your Okta application settings (replacing <code class="highlighter-rouge">[oidc-client-id]</code> and <code class="highlighter-rouge">[dev-id]</code> with the values from your “Angular PWA” OIDC app).</p>
+<p>Modify <code class="highlighter-rouge">client/src/app/app.component.ts</code> to import <code class="highlighter-rouge">OAuthService</code> and configure your app to use your Okta application settings (replacing <code class="highlighter-rouge"><span class="p">{</span><span class="err">clientId</span><span class="p">}</span></code> and <code class="highlighter-rouge"><span class="p">{</span><span class="err">yourOktaDomain</span><span class="p">}</span></code> with the values from your “Angular PWA” OIDC app).</p>
 
 <div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">OAuthService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'angular-oauth2-oidc'</span><span class="p">;</span>
 
@@ -450,10 +450,10 @@ Boot app’s <code class="highlighter-rouge">src/main/resources/application.prop
 
   <span class="kd">constructor</span><span class="p">(</span><span class="k">private</span> <span class="nx">oauthService</span><span class="err">:</span> <span class="nx">OAuthService</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">redirectUri</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">origin</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">clientId</span> <span class="o">=</span> <span class="s1">'[oidc-client-id]'</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">clientId</span> <span class="o">=</span> <span class="s1">'{clientId}'</span><span class="p">;</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">scope</span> <span class="o">=</span> <span class="s1">'openid profile email'</span><span class="p">;</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">oidc</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">issuer</span> <span class="o">=</span> <span class="s1">'https://dev-[dev-id].oktapreview.com'</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">issuer</span> <span class="o">=</span> <span class="s1">'<span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>/oauth2/default'</span><span class="p">;</span>
 
     <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">loadDiscoveryDocument</span><span class="p">().</span><span class="nx">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">tryLogin</span><span class="p">({});</span>
@@ -602,7 +602,7 @@ Boot app’s <code class="highlighter-rouge">src/main/resources/application.prop
 
 <p>This will likely fail with an error similar to the following:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>https://dev-158606.oktapreview.com/.well-known/openid-configuration net::ERR_FAILED
+<div class="highlighter-rouge"><pre class="highlight"><code>https://dev-158606.oktapreview.com/oauth2/default/.well-known/openid-configuration net::ERR_FAILED
 error loading discovery document 
 </code></pre>
 </div>
@@ -726,7 +726,8 @@ error loading discovery document
   <span class="nx">loginWithPassword</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">createAndSaveNonce</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="nx">nonce</span> <span class="o">=&gt;</span> <span class="p">{</span>
       <span class="kd">const</span> <span class="nx">authClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OktaAuth</span><span class="p">({</span>
-        <span class="na">url</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">issuer</span>
+        <span class="na">url</span><span class="p">:</span> <span class="s1">'<span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>'</span><span class="p">,</span>
+        <span class="na">issuer</span><span class="p">:</span> <span class="s1">'default'</span>
       <span class="p">});</span>
       <span class="nx">authClient</span><span class="p">.</span><span class="nx">signIn</span><span class="p">({</span>
         <span class="na">username</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">username</span><span class="p">,</span>
