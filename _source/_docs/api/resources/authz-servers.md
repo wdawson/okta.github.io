@@ -5,6 +5,18 @@ title: Authorization Servers
 
 # Authorization Server Configuration API
 
+Authorization Servers generate OAuth 2.0 and OpenID Connect tokens, including access tokens and ID tokens. The Okta API gives you the ability to configure and manage authorization servers and the security policies that are attached to them. The following configuration operations can be found on this page:
+
+* [Authorization Server Operations](#authorization-server-operations)
+* [Policy Operations](#policy-operations)
+* [Scope Operations](#scope-operations)
+* [Claim Operations](#claim-operations)
+* [Key Store Operations](#key-store-operations)
+
+This page also has information about the [OAuth 2.0 Objects](#oauth-20-objects) related to these operations.
+
+### Authorization Server Operations
+
 Use the following operations for Custom Authorization Servers:
 
 * [Create Authorization Server](#create-authorization-server)
@@ -18,16 +30,16 @@ Use the following operations for Custom Authorization Servers:
 #### Using the Default Authorization Server
 
 Okta provides a pre-configured Custom Authorization Server with the name `default`.
-This default authorization server includes a basic access policy and rule, which you can edit to control access. 
+This default authorization server includes a basic access policy and rule, which you can edit to control access.
 It allows you to specify `default` instead of the `authorizationServerId` in requests to it:
 
-* `https://{yourOktaDomain}.com/api/v1/authorizationServers/default`  vs 
+* `https://{yourOktaDomain}.com/api/v1/authorizationServers/default`  vs
 * `https://{yourOktaDomain}.com/api/v1/authorizationServers/:authorizationServerId` for other Customer Authorization Servers
 
 #### Create Authorization Server
 {:.api .api-operation}
 
-{% api_operation post /api/v1/authorizationServers %} 
+{% api_operation post /api/v1/authorizationServers %}
 
 Creates a new Custom Authorization Server with key rotation mode as `AUTO`
 
@@ -142,7 +154,7 @@ Updates authorization server identified by *authorizationServerId*.
 | name        | The name of the authorization server                                                                            | String                                                                                                  | TRUE     |
 | description | The description of the authorization server                                                                     | String                                                                                                  | FALSE    |
 | audiences   | The list of audiences this Custom Authorization Server can issue tokens to, currently Okta only supports one audience. | Array                                                                                                   | TRUE     |
-| credentials | The credentials signing object with the `rotationMode` of the authorization server                              |     [Authorization server credentials object](oauth2.html#authorization-server-credentials-signing-object)  | FALSE    |
+| credentials | The credentials signing object with the `rotationMode` of the authorization server                              |    [Authorization server credentials object](oauth2.html#signing-credentials-object)  | FALSE    |
 
 ##### Response Parameters
 {:.api .api-request .api-response-params}
@@ -204,14 +216,14 @@ curl -X DELETE \
 ##### Response Example
 {:.api .api-response .api-response-example}
 
-~~~http 
+~~~http
 HTTP/1.1 204: No content
 ~~~
 
 #### Activate Authorization Server
 {:.api .api-operation}
 
-{% api_operation post /api/v1/authorizationServers/:authorizationServerId/lifecycle/activate %} 
+{% api_operation post /api/v1/authorizationServers/:authorizationServerId/lifecycle/activate %}
 
 Make a Custom Authorization Server available for clients
 
@@ -241,14 +253,14 @@ curl -v -X POST \
 ##### Response Example
 {:.api .api-response .api-response-example}
 
-~~~http 
+~~~http
 HTTP/1.1 204: No content
 ~~~
 
 #### Deactivate Authorization Server
 {:.api .api-operation}
 
-{% api_operation post /api/v1/authorizationServers/:authorizationServerId/lifecycle/deactivate %} 
+{% api_operation post /api/v1/authorizationServers/:authorizationServerId/lifecycle/deactivate %}
 
 Make a Custom Authorization Server unavailable to clients. An inactive Custom Authorization Server can be returned to `ACTIVE` status.
 
@@ -278,7 +290,7 @@ curl -v -X POST \
 ##### Response Example
 {:.api .api-response .api-response-example}
 
-~~~http 
+~~~http
 HTTP/1.1 204: No content
 ~~~
 
@@ -318,7 +330,7 @@ curl -v -X GET \
 ##### Response Example
 {:.api .api-response .api-response-example}
 
-Returns [the policies](#policies-object) defined in the specified Custom Authorization Server
+Returns [the policies](#policy-object) defined in the specified Custom Authorization Server
 
 #### Get a Policy
 
@@ -348,7 +360,7 @@ curl -v -X GET \
 ##### Response Example
 {:.api .api-response .api-response-example}
 
-Returns [the policy](#policies-object) you requested
+Returns [the policy](#policy-object) you requested
 
 #### Create a Policy
 
@@ -359,7 +371,7 @@ Create a policy for a Custom Authorization Server
 ##### Request Parameters
 {:.api .api-request .api-request-params}
 
-[Policy Object](#policies-object)
+[Policy Object](#policy-object)
 
 ##### Request Example
 {:.api .api-request .api-request-example}
@@ -388,7 +400,7 @@ curl -v -X POST \
 ##### Response Example
 {:.api .api-response .api-response-example}
 
-Returns [the policy](#policies-object) you created
+Returns [the policy](#policy-object) you created
 
 #### Update a Policy
 
@@ -434,7 +446,7 @@ curl -v -X PUT \
 ##### Response Example
 {:.api .api-response .api-response-example}
 
-Returns [the policy](#policies-object) you updated
+Returns [the policy](#policy-object) you updated
 
 #### Delete a Policy
 
@@ -465,7 +477,7 @@ curl -v -X DELETE \
 ##### Response Example
 {:.api .api-response .api-response-example}
 
-~~~json 
+~~~json
 Status 204: No content
 ~~~
 
@@ -505,7 +517,7 @@ curl -v -X GET \
 ##### Response Example
 {:.api .api-response .api-response-example}
 
-Returns [the scopes](#scopes-object) defined in the specified Custom Authorization Server
+Returns [the scopes](#scope-object) defined in the specified Custom Authorization Server
 
 
 #### Get a Scope
@@ -536,7 +548,7 @@ curl -v -X GET \
 ##### Response Example
 {:.api .api-response .api-response-example}
 
-Returns [the scope](#scopes-object) you requested
+Returns [the scope](#scope-object) you requested
 
 #### Create a Scope
 
@@ -568,7 +580,7 @@ curl -v -X POST \
 ##### Response Example
 {:.api .api-response .api-response-example}
 
-Returns [the scope](#scopes-object) you created
+Returns [the scope](#scope-object) you created
 
 #### Update a Scope
 
@@ -603,7 +615,7 @@ curl -v -X PUT \
 ##### Response Example
 {:.api .api-response .api-response-example}
 
-Returns [the scope](#scopes-object) you updated
+Returns [the scope](#scope-object) you updated
 
 #### Delete a Scope
 
@@ -634,7 +646,7 @@ curl -v -X DELETE \
 ##### Response Example
 {:.api .api-response .api-response-example}
 
-~~~http 
+~~~http
 HTTP/1.1 204: No content
 ~~~
 
@@ -674,7 +686,7 @@ curl -v -X GET \
 ##### Response Example
 {:.api .api-response .api-response-example}
 
-Returns [the claims](#claims-object) defined in the specified Custom Authorization Server
+Returns [the claims](#claim-object) defined in the specified Custom Authorization Server
 
 
 #### Get a Claim
@@ -705,7 +717,7 @@ curl -v -X GET \
 ##### Response Example
 {:.api .api-response .api-response-example}
 
-Returns [the claim](#claims-object) you requested
+Returns [the claim](#claim-object) you requested
 
 #### Create a Claim
 
@@ -745,7 +757,7 @@ curl -v -X POST \
 ##### Response Example
 {:.api .api-response .api-response-example}
 
-Returns [the claim](#claims-object) you created
+Returns [the claim](#claim-object) you created
 
 #### Update a Claim
 
@@ -790,7 +802,7 @@ curl -v -X PUT \
 ##### Response Example
 {:.api .api-response .api-response-example}
 
-Returns [the claim](#claims-object) you updated
+Returns [the claim](#claim-object) you updated
 
 #### Delete a Claim
 
@@ -821,11 +833,11 @@ curl -v -X DELETE \
 ##### Response Example
 {:.api .api-response .api-response-example}
 
-~~~http 
+~~~http
 HTTP/1.1 204: No content
 ~~~
 
-### Authorization Server Key Store Operations
+### Key Store Operations
 
 * [Get Authorization Server Keys](#get-authorization-server-keys)
 * [Rotate Authorization Server Keys](#rotate-authorization-server-keys)
@@ -909,7 +921,7 @@ Content-Type: application/json;charset=UTF-8
             ]
           }
         }
-      }    
+      }
     },
     {
       "status": "EXPIRED",
@@ -1025,7 +1037,7 @@ Content-Type: application/json;charset=UTF-8
                    ]
                  }
                }
-             }      
+             }
     },
     {
       "status": "EXPIRED",
@@ -1047,7 +1059,7 @@ Content-Type: application/json;charset=UTF-8
                    ]
                  }
                }
-             }      
+             }
     }
   ]
 }
@@ -1073,3 +1085,450 @@ Content-Type: application/json;charset=UTF-8
   ]
 }
 ~~~
+
+## OAuth 2.0 Objects
+
+* [Authorization Server Object](#authorization-server-object)
+* [Policy Object](#policy-object)
+* [Rule Object](#rule-object)
+* [Scope Object](#scope-object)
+* [Claim Object](#claim-object)
+* [Condition Object](#condition-object)
+* [Signing Credentials Object](#signing-credentials-object)
+
+### Authorization Server Object
+
+~~~json
+{
+  "id": "ausain6z9zIedDCxB0h7",
+  "name": "Sample Authorization Server",
+  "description": "Authorization Server Description",
+  "audiences": "https://api.resource.com",
+  "issuer": "https://{yourOktaDomain}.com/oauth2/ausain6z9zIedDCxB0h7",
+  "status": "ACTIVE",
+  "created": "2017-05-17T22:25:57.000Z",
+  "lastUpdated": "2017-05-17T22:25:57.000Z",
+  "credentials": {
+    "signing": {
+      "rotationMode": "AUTO",
+      "lastRotated": "2017-05-17T22:25:57.000Z",
+      "nextRotation": "2017-08-15T22:25:57.000Z",
+      "kid": "WYQxoK4XAwGFn5Zw5AzLxFvqEKLP79BbsKmWeuc5TB4"
+    }
+  },
+  "_links": {
+      "scopes": {
+        "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/ausain6z9zIedDCxB0h7/scopes",
+        "hints": {
+          "allow": [
+            "GET"
+          ]
+        }
+      },
+      "claims": {
+        "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/ausain6z9zIedDCxB0h7/claims",
+        "hints": {
+          "allow": [
+            "GET"
+          ]
+        }
+      },
+      "policies": {
+        "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/ausain6z9zIedDCxB0h7/policies",
+        "hints": {
+          "allow": [
+            "GET"
+          ]
+        }
+      }
+    },
+    "self": {
+      "href": "https:{yourOktaDomain}.com/api/v1/authorizationServers/ausain6z9zIedDCxB0h7",
+      "hints": {
+        "allow": [
+          "GET",
+          "DELETE",
+          "PUT"
+        ]
+      }
+    },
+    "metadata": [
+      {
+        "name": "oauth-authorization-server",
+        "href": "https:{yourOktaDomain}.com/oauth2/ausain6z9zIedDCxB0h7/.well-known/oauth-authorization-server",
+        "hints": {
+          "allow": [
+            "GET"
+          ]
+        }
+      },
+      {
+        "name": "openid-configuration",
+        "href": "{yourOktaDomain}.com/oauth2/ausain6z9zIedDCxB0h7/.well-known/openid-configuration",
+        "hints": {
+          "allow": [
+            "GET"
+          ]
+        }
+      }
+    ],
+    "rotateKey": {
+      "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/ausain6z9zIedDCxB0h7/credentials/lifecycle/keyRotate",
+      "hints": {
+        "allow": [
+          "POST"
+        ]
+      }
+    },
+    "deactivate": {
+          "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/ausain6z9zIedDCxB0h7/lifecycle/deactivate",
+          "hints": {
+            "allow": [
+              "POST"
+        ]
+      }
+    }
+  }
+}
+~~~
+
+#### Authorization Server Properties
+
+| Property   | Description                                                                                                          | Type                                                                    | Required for create or update |
+|:------------|:---------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------|:------------------------------|
+| name        | The name of a Custom Authorization Server                                                                                 | String                                                                  | True                          |
+| description | The description of a Custom Authorization Server                                                                          | String                                                                  | True                          |
+| audiences   | The recipients that the tokens are intended for. This becomes the `aud` claim in an Access Token.                    | Array                                                                   | True                          |
+| issuer      | The complete URL for a Custom Authorization Server. This becomes the `iss` claim in an Access Token.                      | String                                                                  | False                         |
+| status      | Indicates whether a Custom Authorization Server is `ACTIVE` or `INACTIVE`.                                                | Enum                                                                    | False                         |
+| credentials | Keys used to sign tokens.                                                                                            |              [Credentials Object](#signing-credentials-object) | False                         |
+| _links      | List of discoverable resources related to a Custom Authorization Server                                                   |      Links                                                                  | False                         |
+
+### Policy Object
+
+~~~json
+{
+    "type": "OAUTH_AUTHORIZATION_POLICY",
+    "id": "00palyaappA22DPkj0h7",
+    "status": "ACTIVE",
+    "name": "Vendor2 Policy",
+    "description": "Vendor2 policy description",
+    "priority": 1,
+    "system": false,
+    "conditions": {
+      "clients": {
+        "include": [
+          "ALL_CLIENTS"
+        ]
+      }
+    },
+    "created": "2017-05-26T19:43:53.000Z",
+    "lastUpdated": "2017-06-07T15:28:17.000Z",
+    "_links": {
+      "self": {
+        "href": "{yourOktaDomain}.com/api/v1/authorizationServers/ausain6z9zIedDCxB0h7/policies/00palyaappA22DPkj0h7",
+        "hints": {
+          "allow": [
+            "GET",
+            "PUT",
+            "DELETE"
+          ]
+        }
+      },
+      "deactivate": {
+        "href": "{yourOktaDomain}.com/api/v1/authorizationServers/ausain6z9zIedDCxB0h7/policies/00palyaappA22DPkj0h7/lifecycle/deactivate",
+        "hints": {
+          "allow": [
+            "POST"
+          ]
+        }
+      },
+      "rules": {
+        "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/ausain6z9zIedDCxB0h7/policies/00palyaappA22DPkj0h7/rules",
+        "hints": {
+          "allow": [
+            "GET"
+          ]
+        }
+      }
+    }
+  }
+~~~
+
+#### Policy Properties
+
+| Property   | Description                                                                                                         | Type                                      | Required for create or update            |
+|:------------|:--------------------------------------------------------------------------------------------------------------------|:------------------------------------------|:-----------------------------------------|
+| type        | Indicates that the policy is an authorization server policy (`OAUTH_AUTHORIZATION_POLICY`)                          | String                                    | False                                    |
+| id          | ID of the policy                                                                                                    | String                                    | True except for create or get all claims |
+| name        | Name of the policy                                                                                                  | String                                    | True                                     |
+| status      | Specifies whether requests have access to this policy. Valid values: `ACTIVE` or `INACTIVE`                         | Enum                                    | True                                     |
+| description | Description of the policy                                                                                           | String                                    | True                                     |
+| priority    | Specifies the order in which this policy is evaluated in relation to the other policies in a Custom Authorization Server              | Integer                                   | True                                     |
+| system      | Specifies whether Okta created this policy (`true`) or not (`false`).                                               | Boolean                                   | True                                     |
+| conditions  | Specifies the clients that the policy will be applied to.                                                           |                   [Condition Object](#condition-object) | False                                    |
+| created     | Timestamp when the policy was created                                                                               | DateTime                                  | System                                   |
+| lastUpdated | Timestamp when the policy was last updated                                                                          | DateTime                                  | System                                   |
+| _links      | List of discoverable resources related to the policy                                                                | Links                                     | System                                   |
+
+### Rule Object
+
+~~~json
+{
+  "type": "RESOURCE_ACCESS",
+  "status": "ACTIVE",
+  "name": "Default rule",
+  "system": false,
+  "conditions": {
+    "people": {
+      "users": {
+        "include": [],
+        "exclude": []
+      },
+      "groups": {
+        "include": [
+          "EVERYONE"
+        ],
+          "exclude": []
+    }
+    "scopes": {
+      "include": [{
+        "name": "*",
+        "access": "ALLOW"
+      }]
+    },
+  "token": {
+    "accessTokenLifetimeMinutes": 60,
+    "refreshTokenLifetimeMinutes": 0,
+    "refreshTokenWindowMinutes": 10080
+  }
+}
+~~~
+
+#### Rule Properties
+
+| Property  | Description                                                                                   | Type                                     | Required for create or update            |
+|:-----------|:----------------------------------------------------------------------------------------------|:-----------------------------------------|:-----------------------------------------|
+| id         | ID of the rule                                                                                | String                                   | True except for create or get all claims |
+| name       | Name of the rule                                                                              | String                                   | True                                     |
+| status     | Specifies whether requests have access to this claim. Valid values: `ACTIVE` or `INACTIVE`    | Enum                                     | True                                     |
+| system     | Specifies whether the rule was created by Okta or not                                         | Boolean                                  | True                                     |
+| conditions | Specifies the people, groups, grant types and scopes the rule will be applied to              |     [Condition Object](#condition-object)  | False                                    |
+| token      | Specifies lifetime durations for the token minted                                             | Integer                                  | System generated                         |
+
+Token limits:
+
+* accessTokenLifetimeMinutes: minimum 5 minutes, maximum 1 day
+* refreshTokenLifetimeMinutes: minimum Access Token lifetime
+* refreshTokenWindowMinutes: minimum 10 minutes, maximum 90 days
+
+### Scope Object
+
+~~~json
+[
+  {
+    "id": "scpainazg3Ekay92V0h7",
+    "name": "car:drive",
+    "description": "Drive car",
+    "system": false,
+    "default": false,
+    "displayName": "Saml Jackson",
+    "consent": "REQUIRED"
+  }
+]
+~~~
+
+#### Scope Properties
+
+| Property                            | Description                                                                                       | Type    | Default    | Required for create or update |
+|:-------------------------------------|:--------------------------------------------------------------------------------------------------|:--------|:-----------|:------------------------------|
+| id                                   | ID of the scope                                                                                   | String  |            | FALSE                         |
+| name                                 | Name of the scope                                                                                 | String  |            | TRUE                          |
+| description                          | Description of the scope                                                                          | String  |            | FALSE                         |
+| system                               | Whether Okta created the scope                                                                    | Boolean |            | FALSE                         |
+| default                              | Whether the scope is a default scope                                                              | Boolean |            | FALSE                         |
+| displayName {% api_lifecycle beta %} | Name of the end user displayed in a consent dialog                                                | String  |            | FALSE                         |
+| consent {% api_lifecycle beta %}     | Indicates whether a consent dialog is needed for the scope. Valid values: `REQUIRED`, `IMPLICIT`. | Enum    | `IMPLICIT` | FALSE                         |
+
+* {% api_lifecycle beta %} A consent dialog is displayed depending on the values of three elements:
+    * `prompt`, a query parameter used in requests to [`/oauth2/:authorizationServerId/v1/authorize`](/docs/api/resources/oauth2.html#obtain-an-authorization-grant-from-a-user)(custom authorization server) or [`/oauth2/v1/authorize`](/docs/api/resources/oidc.html#authentication-request) (Org authorization server)
+    * `consent_method`, a property on [apps](/docs/api/resources/apps.html#settings-7)
+    * `consent`, a property on scopes as listed in the table above
+
+    | `prompt` Value    | `consent_method`                 | `consent`                   | Result       |
+    |:------------------|:---------------------------------|:----------------------------|:-------------|
+    | `CONSENT`         | `TRUSTED` or `REQUIRED`          | `REQUIRED`                  | Prompted     |
+    | `CONSENT`         | `TRUSTED`                        | `IMPLICIT`                  | Not prompted |
+    | `NONE`            | `TRUSTED`                        | `REQUIRED` or `IMPLICIT`    | Not prompted |
+    | `NONE`            | `REQUIRED`                       | `REQUIRED`                  | Prompted     |
+    | `NONE`            | `REQUIRED`                       | `IMPLICIT`                  | Not prompted | <!--If you change this, change the table in /oauth2.md too. Add 'LOGIN' to first three rows when supported -->
+
+> {% api_lifecycle beta %} Note: Apps created on `/api/v1/apps` default to `consent_method=TRUSTED`, while those created on `/api/v1/clients` default to `consent_method=REQUIRED`.
+
+### Claim Object
+
+~~~json
+[
+  {
+    "id": "oclain6za1HQ0noop0h7",
+    "name": "sub",
+    "status": "ACTIVE",
+    "claimType": "RESOURCE",
+    "valueType": "EXPRESSION",
+    "value": "(appuser != null) ? appuser.userName : app.clientId",
+    "alwaysIncludeInToken": "TRUE"
+    "conditions": {
+      "scopes": []
+    },
+    "system": true
+  },
+  {
+    "id": "oclain9m7hFik68qr0h7",
+    "name": "carDriving",
+    "status": "ACTIVE",
+    "claimType": "IDENTITY",
+    "valueType": "EXPRESSION",
+    "value": "\"drivePlease\"",
+    "alwaysIncludeInToken": "TRUE"
+    "conditions": {
+      "scopes": [
+        "car:drive"
+      ]
+    },
+    "system": false
+  }
+]
+~~~
+
+#### Claim Properties
+
+| Property            | Description                                                                                                                                                                                                                                      | Type                                                 | Required for create or update            |
+|:---------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------|:-----------------------------------------|
+| id                   | ID of the claim                                                                                                                                                                                                                                  | String                                               | True except for create or get all claims |
+| name                 | Name of the claim                                                                                                                                                                                                                                | String                                               | True                                     |
+| status               | Specifies whether requests have access to this claim. Valid values: `ACTIVE` or `INACTIVE`                                                                                                                                                       | Enum                                                 | True                                     |
+| claimType            | Specifies whether the claim is for an Access Token (`RESOURCE`) or ID Token (`IDENTITY`)                                                                                                                                                         | Enum                                                 | True                                     |
+| valueType            | Specifies whether the claim is an Okta EL expression (`EXPRESSION`), a set of groups (`GROUPS`), or a system claim (`SYSTEM`)                                                                                                                    | Enum                                                 | True                                     |
+| value                | Specifies the value of the claim. This value must be a string literal if `valueType` is `GROUPS`, and the string literal is matched with the selected `groupFilterType`. The value must be an Okta EL expression if `valueType` is `EXPRESSION`. | String                                               | True                                     |
+| groupFilterType      | Specifies the type of group filter if `valueType` is `GROUPS`.  [Details](#details-for-groupfiltertype)                                                                                                                                           | Enum                                                 | False                                    |
+| conditions           | Specifies the scopes for this claim                                                                                                                                                                                                              |                          [Condition Object](#condition-object)              | False                                    |
+| alwaysIncludeInToken | Specifies whether to include claims in tokens  [Details](#details-for-alwaysincludeintoken)                                                                                                                                                      | Boolean                                              | False                                    |
+| system               | Specifies whether Okta created this claim                                                                                                                                                                                                        | Boolean                                              | System                                   |
+
+##### Details for `groupFilterType`
+
+If `valueType` is `GROUPS`, then the groups returned are filtered according to the value of `groupFilterType`:
+
+* `STARTS_WITH`: Group names start with `value` (not case sensitive). For example, if `value` is `group1`, then `group123` and `Group123` are included.
+* `EQUALS`: Group name is the same as `value` (not case sensitive). For example, if `value` is `group1`, then `group1` and `Group1` are included, but `group123` isn&#8217;t.
+* `CONTAINS`: Group names contain `value` (not case sensitive). For example, if `value` is `group1`, then `MyGroup123` and `group1` are included.
+* `REGEX`: Group names match the REGEX expression in `value` (case sensitive). For example if `value` is `/^[a-z0-9_-]{3,16}$/`, then any group name that has at least 3 letters, no more than 16, and contains lower case letters, a hyphen, or numbers.
+
+If you have complex filters for groups, you can [create a groups whitelist](/docs/how-to/creating-token-with-groups-claim.html) to put them all in a claim.
+
+##### Details for `alwaysIncludeInToken`
+
+* Always `TRUE` for Access Token
+* If `FALSE` for an ID Token claim, the claim won&#8217;t be included in the ID Token if ID token is requested with Access Token or `authorization_code`, instead the client has to use Access Token to get the claims from the UserInfo endpoint.
+
+### Condition Object
+
+Example from a Rule Object
+~~~json
+  "conditions": {
+    "people": {
+      "users": {
+        "include": [],
+        "exclude": []
+      },
+      "groups": {
+        "include": [
+          "EVERYONE"
+        ],
+        "exclude": []
+      }
+    "scopes": {
+      "include": [{
+        "name": "*",
+        "access": "ALLOW"
+      }]
+  }
+~~~
+
+Example from a Policy Object
+~~~json
+"conditions": {
+  "clients": {
+    "include": [
+      "ALL_CLIENTS"
+    ]
+  }
+}
+~~~
+
+#### Condition Properties
+
+| Property  | Description                                                                                                                                                                          | Type                          | Required for create or update |
+|:-----------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------|:------------------------------|
+| scopes     | Array of scopes this condition includes or excludes.                                                                                                                                  | `include` and `exclude` lists | True                          |
+| clients    | For policies, specifies which clients are included or excluded in the policy.                                                                                                         | `include` and `exclude` lists | True                          |
+| people     | For rules, specifies which users and groups are included or excluded in the rule.                                                                                                     | `include` and `exclude` lists | True                          |
+| grant_type | Can be one of the following: `authorization_code`, `password`, `refresh_token`, or `client_credentials`. Determines the mechanism Okta uses to authorize the creation of the tokens. | Enum                          | True                          |
+
+### Signing Credentials Object
+
+~~~json
+{
+    "credentials": {
+      "signing": {
+        "rotationMode": "AUTO",
+        "lastRotated": "2017-05-17T22:25:57.000Z",
+        "nextRotation": "2017-08-15T22:25:57.000Z",
+        "kid": "WYQxoK4XAwGFn5Zw5AzLxFvqEKLP79BbsKmWeuc5TB4"
+        "use": "sig"
+      }
+    }
+}
+~~~
+
+
+#### Signing Credentials Properties
+
+| ------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------- | ---------- | ---------- |
+| Property      | Description                                                                                                              | DataType   | Required   | Updatable  |
+|:--------------|:-------------------------------------------------------------------------------------------------------------------------|:-----------|:-----------|:-----------|
+| kid           | The ID of the JSON Web Key used for signing tokens issued by the authorization server.                                             | String     | FALSE      | FALSE      |
+| lastRotated   | The timestamp when the authorization server started to use the `kid` for signing tokens.                                  | String     | FALSE      | FALSE      |
+| nextRotation  | The timestamp when authorization server will change key for signing tokens. Only returned when `rotationMode` is `AUTO`.  | String     | FALSE      | FALSE      |
+| rotationMode  | The key rotation mode for the authorization server. Can be `AUTO` or `MANUAL`.                                            | Enum       | FALSE      | TRUE       |
+
+### JSON Web Key Object
+
+This object defines a [JSON Web Key](https://tools.ietf.org/html/rfc7517) for an application's signature or encryption credential.
+
+~~~json
+{
+    "keys": [
+        {
+            "alg": "RS256",
+            "e": "MOAB",
+            "n": "mZXlEiDy[...]Isor9Q",
+            "kid": "WYQxoK4XAwGFn5Zw5AzLxFvqEKLP79BbsKmWeuc5TB4",
+            "kty": "RSA",
+            "use": "sig"
+        }
+    ]
+}
+~~~
+
+#### Key Properties
+
+| Property  | Description                                                                            | Type   |
+|:----------|:---------------------------------------------------------------------------------------|:-------|
+| alg       | The algorithm used with the key. Valid value: `RS256`                                  | String |
+| status    | `ACTIVE`, `NEXT`, or `EXPIRED`                                                         | Enum   |
+| e         | RSA key value (exponent) for key blinding.                                             | String |
+| n         | RSA key value (modulus) for key blinding.                                              | String |
+| kid       | Unique identifier for the certificate.                                                 | String |
+| kty       | Cryptographic algorithm family for the certificate&#8217;s key pair. Valid value: `RSA`| String |
+| use       | How the key is used. Valid value: `sig`                                                | String |
