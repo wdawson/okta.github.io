@@ -77,4 +77,5 @@ if ! artifactory_curl -X PUT -u ${ARTIFACTORY_CREDS} ${DATALOAD} -v -f; then
   exit $PUBLISH_ARTIFACTORY_FAILURE
 fi
 
+
 exit $SUCCESS
