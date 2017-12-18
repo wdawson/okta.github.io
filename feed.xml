@@ -8,6 +8,397 @@
     <atom:link href="https://developer.okta.com/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Get Started with Spring Security 5.0 and OIDC</title>
+        <description>&lt;p&gt;Spring Security is a powerful and highly customizable authentication and access-control framework. It is the de-facto standard for securing Spring-based applications.&lt;/p&gt;
+
+&lt;p&gt;I first encountered Spring Security when it was called Acegi Security in 2005. I had implemented standard Java EE in my open source project, AppFuse. Acegi Security offered a lot more, including remember me and password encryption as standard features. I had managed to get “remember me” working with Java EE, but it wasn’t very clean. I first wrote about &lt;a href=&quot;https://raibledesigns.com/rd/entry/using_acegi_security_with_appfuse&quot;&gt;migrating to Acegi Security&lt;/a&gt; in January 2005.&lt;/p&gt;
+
+&lt;p&gt;I have to admit; it seemed awful at first. Even though it provided more functionality than Java EE authentication, it required reams of XML to configure everything.&lt;/p&gt;
+
+&lt;p&gt;In 2012, I was still using XML when I &lt;a href=&quot;http://raibledesigns.com/rd/entry/upgrading_appfuse_to_spring_security&quot;&gt;upgraded to Spring Security 3.1&lt;/a&gt;. Then Spring Boot came along in 2014 and changed everything.&lt;/p&gt;
+
+&lt;p&gt;These days, Spring Security offers &lt;em&gt;much&lt;/em&gt; simpler configuration via Spring’s JavaConfig. If you look at the &lt;a href=&quot;https://github.com/mraible/jhipster-oidc-example/blob/master/src/main/java/com/okta/developer/config/SecurityConfiguration.java&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SecurityConfiguration.java&lt;/code&gt;&lt;/a&gt; class from the &lt;a href=&quot;https://github.com/mraible/jhipster-oidc-example&quot;&gt;JHipster OIDC example&lt;/a&gt; I &lt;a href=&quot;/blog/2017/10/20/oidc-with-jhipster&quot;&gt;wrote about&lt;/a&gt; recently, you’ll see it’s less than 100 lines of code!&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://spring.io/blog/2017/11/28/spring-security-5-0-0-release-released&quot;&gt;Spring Security 5.0&lt;/a&gt; resolves 400+ tickets, and has a &lt;a href=&quot;https://docs.spring.io/spring-security/site/docs/5.0.0.RELEASE/reference/htmlsingle/#new&quot;&gt;plethora of new features&lt;/a&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.spring.io/spring-security/site/docs/5.0.0.RELEASE/reference/htmlsingle/#jc-oauth2login&quot;&gt;OAuth 2.0 Login&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Reactive Support: &lt;a href=&quot;https://docs.spring.io/spring-security/site/docs/5.0.0.RELEASE/reference/htmlsingle/#jc-webflux&quot;&gt;@EnableWebFluxSecurity&lt;/a&gt;, &lt;a href=&quot;https://docs.spring.io/spring-security/site/docs/5.0.0.RELEASE/reference/htmlsingle/#jc-erms&quot;&gt;@EnableReactiveMethodSecurity&lt;/a&gt;, and &lt;a href=&quot;https://docs.spring.io/spring-security/site/docs/5.0.0.RELEASE/reference/htmlsingle/#test-webflux&quot;&gt;WebFlux Testing Support&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Modernized &lt;a href=&quot;https://docs.spring.io/spring-security/site/docs/5.0.0.RELEASE/reference/htmlsingle/#core-services-password-encoding&quot;&gt;Password Encoding&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Today, I’ll be showing you how to utilize the OAuth 2.0 Login support with Okta. I’ll also show you to retrieve a user’s information via OpenID Connect (OIDC).&lt;/p&gt;
+
+&lt;p&gt;You know that Okta offers &lt;a href=&quot;https://developer.okta.com/pricing/&quot;&gt;free developer accounts&lt;/a&gt; with up to 7,000 active monthly users, right? That should be enough to get your killer app off the ground.&lt;/p&gt;
+
+&lt;p&gt;Spring Security makes authentication with OAuth 2.0 pretty darn easy. It also provides the ability to fetch a user’s information via OIDC. Follow the steps below to learn more!&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;What is OIDC?&lt;/strong&gt;
+If you’re not familiar with OAuth or OIDC, I recommend you read &lt;a href=&quot;/blog/2017/06/21/what-the-heck-is-oauth&quot;&gt;What the Heck is OAuth&lt;/a&gt;. An Open ID Connect flow involves the following steps:&lt;/p&gt;
+
+  &lt;ol&gt;
+    &lt;li&gt;Discover OIDC metadata&lt;/li&gt;
+    &lt;li&gt;Perform OAuth flow to obtain ID token and access tokens&lt;/li&gt;
+    &lt;li&gt;Get JWT signature keys and optionally dynamically register the Client application&lt;/li&gt;
+    &lt;li&gt;Validate JWT ID token locally based on built-in dates and signature&lt;/li&gt;
+    &lt;li&gt;Get additional user attributes as needed with access token&lt;/li&gt;
+  &lt;/ol&gt;
+
+  &lt;p&gt;&lt;img src=&quot;/assets/blog/oauth/oidc-flow-3f640eb4b5d82151643a1d7bc2d55cfab1c1c6e14b6c2ad501660216c6d227c8.png&quot; alt=&quot;OIDC Flow&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;create-a-spring-boot-app&quot;&gt;Create a Spring Boot App&lt;/h2&gt;
+
+&lt;p&gt;Open &lt;a href=&quot;https://start.spring.io&quot;&gt;start.spring.io&lt;/a&gt; in your browser. Spring Initialzr is a site that allows you to create new Spring Boot applications quickly and easily. Set the Spring Boot version (in the top right corner) to &lt;code class=&quot;highlighter-rouge&quot;&gt;2.0.0.M7&lt;/code&gt;. Type in a group and artifact name. As you can see from the screenshot below, I chose &lt;code class=&quot;highlighter-rouge&quot;&gt;com.okta.developer&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;oidc&lt;/code&gt;. For dependencies, select &lt;strong&gt;Web&lt;/strong&gt;, &lt;strong&gt;Reactive Web&lt;/strong&gt;, &lt;strong&gt;Security&lt;/strong&gt;, and &lt;strong&gt;Thymeleaf&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/spring-security-5/start.spring.io-598b672adcf0122a3a26ae6be57f671e99b71b8fd3f4908f6774f1142bd07817.png&quot; alt=&quot;start.spring.io&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Click &lt;strong&gt;Generate Project&lt;/strong&gt;, download the zip, expand it on your hard drive, and open the project in your favorite IDE. Run the app with &lt;code class=&quot;highlighter-rouge&quot;&gt;./mvnw spring-boot:run&lt;/code&gt;, and you’ll be prompted to log in.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/spring-security-5/default-login-956313b1e04f3521da35e38ccd9ef315dfc6a2d6f4c1897d753f010774a09134.png&quot; alt=&quot;Default Login&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Spring Security 4.x prompts you with basic authentication rather than with a login form, so this is one thing that’s different with Spring Security 5.&lt;/p&gt;
+
+&lt;p&gt;The Spring Security starter creates a default user with username “user” and a password that changes every time you start the application. You can find this password in your terminal, similar to the one below.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Using default security password: 103c55b4-2760-4830-9bca-a06a87d384f9
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;In the form, enter “user” for the User and the generated password for Password. The next screen will be a 404 since your app doesn’t have a default route configured for the &lt;code class=&quot;highlighter-rouge&quot;&gt;/&lt;/code&gt; path.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/spring-security-5/post-login-2aaec6635302267e6dce390428f78fc2aba40387e60914c42e926b0a067d4b59.png&quot; alt=&quot;Post Login&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In Spring Boot 1.x, you could change the user’s password, so it’s the same every time by adding the following to &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/resources/application.properties&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;security.user.password=spring security is ph@!
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;However, this is a deprecated feature in Spring Boot 2.0. The good news is this change will &lt;a href=&quot;https://github.com/spring-projects/spring-boot/issues/10963&quot;&gt;likely be reverted before a GA release&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In the meantime, you can copy the password that’s printed to your console and use it with &lt;a href=&quot;https://httpie.org/&quot;&gt;HTTPie&lt;/a&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;http --auth user:&lt;span class=&quot;s1&quot;&gt;'bf91316f-f894-453a-9268-4826cdd7e151'&lt;/span&gt; localhost:8080
+HTTP/1.1 404
+Cache-Control: no-cache, no-store, max-age&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0, must-revalidate
+Content-Type: application/json;charset&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;UTF-8
+Date: Sun, 03 Dec 2017 19:11:50 GMT
+Expires: 0
+Pragma: no-cache
+Set-Cookie: &lt;span class=&quot;nv&quot;&gt;JSESSIONID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;65283FCBDB9E6EF1C0679290AA994B0D; &lt;span class=&quot;nv&quot;&gt;Path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/; HttpOnly
+Transfer-Encoding: chunked
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+X-XSS-Protection: 1; &lt;span class=&quot;nv&quot;&gt;mode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;block
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The response will be a 404 as well.&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+   &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;error&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Not Found&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+   &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;message&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;No message available&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+   &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;path&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+   &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;status&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;404&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+   &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;timestamp&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2017-12-03T19:11:50.846+0000&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You can get rid of the 404 by creating a &lt;code class=&quot;highlighter-rouge&quot;&gt;MainController.java&lt;/code&gt; in the same directory as &lt;code class=&quot;highlighter-rouge&quot;&gt;OidcApplication.java&lt;/code&gt; (&lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/java/com/okta/developer/oidc&lt;/code&gt;). Create a &lt;code class=&quot;highlighter-rouge&quot;&gt;home()&lt;/code&gt; method that maps to &lt;code class=&quot;highlighter-rouge&quot;&gt;/&lt;/code&gt; and returns the user’s name.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;com&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;okta&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;developer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;oidc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.web.bind.annotation.GetMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.web.bind.annotation.RestController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.security.Principal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;nd&quot;&gt;@RestController&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MainController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+   &lt;span class=&quot;nd&quot;&gt;@GetMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;home&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Principal&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Hello &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+   &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Restart your server, log in with &lt;code class=&quot;highlighter-rouge&quot;&gt;user&lt;/code&gt; and the generated password and you should see &lt;code class=&quot;highlighter-rouge&quot;&gt;Hello user&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;http --auth user:&lt;span class=&quot;s1&quot;&gt;'d7c4138d-a1cc-4cc9-8975-97f37567594a'&lt;/span&gt; localhost:8080
+HTTP/1.1 200
+Cache-Control: no-cache, no-store, max-age&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0, must-revalidate
+Content-Length: 10
+Content-Type: text/plain;charset&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;UTF-8
+Date: Sun, 03 Dec 2017 19:26:54 GMT
+Expires: 0
+Pragma: no-cache
+Set-Cookie: &lt;span class=&quot;nv&quot;&gt;JSESSIONID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;22A5A91051B7AFBA1DC8BD30C0B53365; &lt;span class=&quot;nv&quot;&gt;Path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/; HttpOnly
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+X-XSS-Protection: 1; &lt;span class=&quot;nv&quot;&gt;mode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;block
+
+Hello user
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;add-authentication-with-okta&quot;&gt;Add Authentication with Okta&lt;/h2&gt;
+
+&lt;p&gt;In a &lt;a href=&quot;/blog/2017/03/21/spring-boot-oauth&quot;&gt;previous tutorial&lt;/a&gt;, I showed you how to use Spring Security OAuth to provide SSO to your apps. You can do the same thing in Spring Security 5, but you can also specify multiple providers now, which you couldn’t do previously. Spring Security 5 has a &lt;a href=&quot;https://github.com/spring-projects/spring-security/tree/5.0.0.RELEASE/samples/boot/oauth2login&quot;&gt;OAuth 2.0 Login sample&lt;/a&gt;, and &lt;a href=&quot;https://docs.spring.io/spring-security/site/docs/5.0.0.RELEASE/reference/htmlsingle/#jc-oauth2login&quot;&gt;documentation&lt;/a&gt; on how everything works.&lt;/p&gt;
+
+&lt;h3 id=&quot;create-an-openid-connect-app&quot;&gt;Create an OpenID Connect App&lt;/h3&gt;
+
+&lt;p&gt;To integrate with Okta, you’ll need to &lt;a href=&quot;https://developer.okta.com/&quot;&gt;sign up for an account on developer.okta.com&lt;/a&gt;. After confirming your email and logging in, navigate to &lt;strong&gt;Applications&lt;/strong&gt; &amp;gt; &lt;strong&gt;Add Application&lt;/strong&gt;. Click &lt;strong&gt;Web&lt;/strong&gt; and then click &lt;strong&gt;Next&lt;/strong&gt;. Give the app a name you’ll remember, specify &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt; as a Base URI, as well as &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080/login/oauth2/code/okta&lt;/code&gt; for a Login redirect URI.&lt;/p&gt;
+
+&lt;p&gt;Rename &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/resources/application.properties&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/resources/application.yml&lt;/code&gt; and populate it with the following.&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;s&quot;&gt;spring&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+ &lt;span class=&quot;s&quot;&gt;thymeleaf&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+   &lt;span class=&quot;s&quot;&gt;cache&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;false&lt;/span&gt;
+ &lt;span class=&quot;s&quot;&gt;security&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+   &lt;span class=&quot;s&quot;&gt;oauth2&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+     &lt;span class=&quot;s&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+       &lt;span class=&quot;s&quot;&gt;registration&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+         &lt;span class=&quot;s&quot;&gt;okta&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+           &lt;span class=&quot;s&quot;&gt;client-id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;clientId&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
+           &lt;span class=&quot;s&quot;&gt;client-secret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;clientSecret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
+       &lt;span class=&quot;s&quot;&gt;provider&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+         &lt;span class=&quot;s&quot;&gt;okta&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+           &lt;span class=&quot;s&quot;&gt;authorization-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/authorize&lt;/span&gt;
+           &lt;span class=&quot;s&quot;&gt;token-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/token&lt;/span&gt;
+           &lt;span class=&quot;s&quot;&gt;user-info-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/userinfo&lt;/span&gt;
+           &lt;span class=&quot;s&quot;&gt;jwk-set-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/keys&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Copy the client ID and secret from your OIDC app into your &lt;code class=&quot;highlighter-rouge&quot;&gt;application.yml&lt;/code&gt; file. For &lt;code class=&quot;highlighter-rouge&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;yourOktaDomain&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;, use the value of your domain (e.g. &lt;code class=&quot;highlighter-rouge&quot;&gt;dev-158606.oktapreview.com&lt;/code&gt;). Make sure it does &lt;em&gt;not&lt;/em&gt; include &lt;code class=&quot;highlighter-rouge&quot;&gt;-admin&lt;/code&gt; in it.&lt;/p&gt;
+
+&lt;p&gt;You’ll need to add some dependencies to your &lt;code class=&quot;highlighter-rouge&quot;&gt;pom.xml&lt;/code&gt; for Spring Security 5’s OAuth configuration to initialize correctly.&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.security&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-security-config&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.security&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-security-oauth2-client&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.security&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-security-oauth2-jose&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.thymeleaf.extras&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;thymeleaf-extras-springsecurity4&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Restart your app and navigate to &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt; again. You’ll see a link to click on to log in with Okta.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/spring-security-5/login-with-oauth2-a1979692286f6ba2c6ddb77626ea553708f9386a991253bb5b44a7b935f10795.png&quot; alt=&quot;Login with OAuth 2.0&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; If you’d like to learn how to customize the login screen that Spring Security displays, see its &lt;a href=&quot;https://docs.spring.io/spring-security/site/docs/5.0.0.RELEASE/reference/htmlsingle/#oauth2login-advanced-login-page&quot;&gt;OAuth 2.0 Login Page documentation&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;After clicking on the link, you should see a login screen.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/spring-security-5/okta-login-65d1e70e7ddd8a03bf2ba7209551d65aed344469759bd98a30e7210c2d67e348.png&quot; alt=&quot;Okta Login&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Enter the credentials you used to create your account, and you should see a screen like the following after logging in.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/spring-security-5/post-login-oauth2-f3e37f6f8f9af684430202e1c8832a52b4c2f6aa6b42098a0bd9d73f24934b5b.png&quot; alt=&quot;Okta Login&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; It’s possible to change things so &lt;code class=&quot;highlighter-rouge&quot;&gt;Principal#getName()&lt;/code&gt; returns a different value. However, there is a &lt;a href=&quot;https://github.com/spring-projects/spring-boot/pull/10672&quot;&gt;bug in Spring Boot 2.0.0.M7&lt;/a&gt; that prevents the configuration property from working.&lt;/p&gt;
+
+&lt;h3 id=&quot;get-user-information-with-oidc&quot;&gt;Get User Information with OIDC&lt;/h3&gt;
+
+&lt;p&gt;Change your &lt;code class=&quot;highlighter-rouge&quot;&gt;MainController.java&lt;/code&gt; to have the code below. This code adds a &lt;code class=&quot;highlighter-rouge&quot;&gt;/userinfo&lt;/code&gt; mapping that uses Spring WebFlux’s &lt;code class=&quot;highlighter-rouge&quot;&gt;WebClient&lt;/code&gt; to get the user’s information from the user info endpoint. I copied the code below from Spring Security 5’s &lt;a href=&quot;https://github.com/spring-projects/spring-security/tree/5.0.0.RELEASE/samples/boot/oauth2login&quot;&gt;OAuth 2.0 Login sample&lt;/a&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cm&quot;&gt;/*
+* Copyright 2002-2017 the original author or authors.
+*
+* Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;com&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;okta&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;developer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;oidc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.beans.factory.annotation.Autowired&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.http.HttpHeaders&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.security.oauth2.client.OAuth2AuthorizedClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.security.oauth2.client.OAuth2AuthorizedClientService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.stereotype.Controller&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.ui.Model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.util.StringUtils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.web.bind.annotation.RequestMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.web.reactive.function.client.ClientRequest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.web.reactive.function.client.ExchangeFilterFunction&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.web.reactive.function.client.WebClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;reactor.core.publisher.Mono&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.Collections&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;cm&quot;&gt;/**
+* @author Joe Grandja
+*/&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Controller&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MainController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+   &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OAuth2AuthorizedClientService&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authorizedClientService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+   &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;MainController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OAuth2AuthorizedClientService&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authorizedClientService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;authorizedClientService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authorizedClientService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+   &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+   &lt;span class=&quot;nd&quot;&gt;@RequestMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Model&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OAuth2AuthenticationToken&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authentication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+       &lt;span class=&quot;n&quot;&gt;OAuth2AuthorizedClient&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authorizedClient&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getAuthorizedClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;authentication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+       &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addAttribute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;userName&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authentication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+       &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addAttribute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;clientName&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authorizedClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClientRegistration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClientName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;index&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+   &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+   &lt;span class=&quot;nd&quot;&gt;@RequestMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/userinfo&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;userinfo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Model&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OAuth2AuthenticationToken&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authentication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+       &lt;span class=&quot;n&quot;&gt;OAuth2AuthorizedClient&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authorizedClient&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getAuthorizedClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;authentication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+       &lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;userAttributes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Collections&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;emptyMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+       &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;userInfoEndpointUri&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authorizedClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClientRegistration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+               &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getProviderDetails&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getUserInfoEndpoint&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getUri&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;StringUtils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isEmpty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;userInfoEndpointUri&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// userInfoEndpointUri is optional for OIDC Clients&lt;/span&gt;
+           &lt;span class=&quot;n&quot;&gt;userAttributes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WebClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;builder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+                   &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oauth2Credentials&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;authorizedClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+                   &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;uri&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;userInfoEndpointUri&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+                   &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;retrieve&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+                   &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;bodyToMono&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+       &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+       &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addAttribute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;userAttributes&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;userAttributes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;userinfo&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+   &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+   &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OAuth2AuthorizedClient&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getAuthorizedClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OAuth2AuthenticationToken&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authentication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;authorizedClientService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;loadAuthorizedClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+               &lt;span class=&quot;n&quot;&gt;authentication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getAuthorizedClientRegistrationId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authentication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+   &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+   &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ExchangeFilterFunction&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;oauth2Credentials&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OAuth2AuthorizedClient&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authorizedClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ExchangeFilterFunction&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ofRequestProcessor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+               &lt;span class=&quot;n&quot;&gt;clientRequest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                   &lt;span class=&quot;n&quot;&gt;ClientRequest&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authorizedRequest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ClientRequest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;from&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clientRequest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+                           &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;header&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HttpHeaders&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;AUTHORIZATION&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+                                   &lt;span class=&quot;s&quot;&gt;&quot;Bearer &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authorizedClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getAccessToken&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getTokenValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt;
+                           &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+                   &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Mono&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;just&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;authorizedRequest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+               &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+   &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Create a Thymeleaf index page at &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/resources/templates/index.html&lt;/code&gt;. You can use Thymeleaf’s support for Spring Security to show/hide different parts of the page based on the user’s authenticated status.&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3.org/1999/xhtml&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:th=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.thymeleaf.org&quot;&lt;/span&gt;
+     &lt;span class=&quot;na&quot;&gt;xmlns:sec=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.thymeleaf.org/thymeleaf-extras-springsecurity4&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;Spring Security - OAuth 2.0 Login&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;charset=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;utf-8&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;style=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;float: right&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;th:fragment=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;logout&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sec:authorize=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;isAuthenticated()&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;style=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;float:left&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+       &lt;span class=&quot;nt&quot;&gt;&amp;lt;span&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;style=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;font-weight:bold&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;User: &lt;span class=&quot;nt&quot;&gt;&amp;lt;/span&amp;gt;&amp;lt;span&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sec:authentication=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/span&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;style=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;float:none&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;ni&quot;&gt;&amp;amp;nbsp;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;style=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;float:right&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+       &lt;span class=&quot;nt&quot;&gt;&amp;lt;form&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;action=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;#&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;th:action=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;@{/logout}&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;method=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;post&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+           &lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;submit&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Logout&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+       &lt;span class=&quot;nt&quot;&gt;&amp;lt;/form&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;h1&amp;gt;&lt;/span&gt;OAuth 2.0 Login with Spring Security&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h1&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&amp;gt;&lt;/span&gt;
+   You are successfully logged in &lt;span class=&quot;nt&quot;&gt;&amp;lt;span&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;style=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;font-weight:bold&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;th:text=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;${userName}&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/span&amp;gt;&lt;/span&gt;
+   via the OAuth 2.0 Client &lt;span class=&quot;nt&quot;&gt;&amp;lt;span&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;style=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;font-weight:bold&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;th:text=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;${clientName}&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/span&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&amp;gt;&lt;/span&gt;&lt;span class=&quot;ni&quot;&gt;&amp;amp;nbsp;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/userinfo&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;th:href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;@{/userinfo}&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Display User Info&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Create another template at &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/resources/userinfo.html&lt;/code&gt; to display the user’s attributes.&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3.org/1999/xhtml&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:th=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.thymeleaf.org&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;Spring Security - OAuth 2.0 User Info&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;charset=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;utf-8&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;th:replace=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;index::logout&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;h1&amp;gt;&lt;/span&gt;OAuth 2.0 User Info&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h1&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;span&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;style=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;font-weight:bold&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;User Attributes:&lt;span class=&quot;nt&quot;&gt;&amp;lt;/span&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;ul&amp;gt;&lt;/span&gt;
+       &lt;span class=&quot;nt&quot;&gt;&amp;lt;li&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;th:each=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;userAttribute : ${userAttributes}&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+           &lt;span class=&quot;nt&quot;&gt;&amp;lt;span&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;style=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;font-weight:bold&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;th:text=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;${userAttribute.key}&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/span&amp;gt;&lt;/span&gt;: &lt;span class=&quot;nt&quot;&gt;&amp;lt;span&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;th:text=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;${userAttribute.value}&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/span&amp;gt;&lt;/span&gt;
+       &lt;span class=&quot;nt&quot;&gt;&amp;lt;/li&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;/ul&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now, when you’re logged in, you’ll see a link to display user info.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/spring-security-5/index-page-9bd00c3e9b61fac8f2e812c5f9896bf086d3a4db2860a9986ef2b647f692405d.png&quot; alt=&quot;Index Page&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Click on the link, and you’ll see the contents of the ID Token that’s retrieved from the user info endpoint.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/spring-security-5/userinfo-page-947535130b67ae4ef16e647df24155b19c3828e1c57203d1dd33f6d5bb3689c4.png&quot; alt=&quot;UserInfo Page&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;learn-more-about-spring-security-and-oidc&quot;&gt;Learn More about Spring Security and OIDC&lt;/h2&gt;
+
+&lt;p&gt;This article showed you how to implement login with OAuth 2.0 and Spring Security 5. I also showed you how to use OIDC to retrieve a user’s information. The source code for the application developed in this article can be &lt;a href=&quot;https://github.com/oktadeveloper/okta-spring-security-5-example&quot;&gt;found on GitHub&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;These resources provide additional information about Okta and OIDC:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;/documentation/&quot;&gt;Okta Developer Documentation&lt;/a&gt; and its &lt;a href=&quot;/docs/api/resources/oidc.html&quot;&gt;OpenID Connect API&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/blog/2017/07/25/oidc-primer-part-1&quot;&gt;Identity, Claims, &amp;amp; Tokens – An OpenID Connect Primer, Part 1 of 3&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/blog/2017/07/25/oidc-primer-part-2&quot;&gt;OIDC in Action – An OpenID Connect Primer, Part 2 of 3&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/blog/2017/08/01/oidc-primer-part-3&quot;&gt;What’s in a Token? – An OpenID Connect Primer, Part 3 of 3&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/blog/2017/10/13/okta-groups-spring-security&quot;&gt;Add Role-Based Access Control to Your App with Spring Security and Thymeleaf&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If you have any questions about this post, please leave a comment below. You can also post to &lt;a href=&quot;https://stackoverflow.com/questions/tagged/okta&quot;&gt;Stack Overflow with the okta tag&lt;/a&gt; or use our &lt;a href=&quot;https://devforum.okta.com/&quot;&gt;developer forums&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://twitter.com/oktadev&quot;&gt;Follow @OktaDev on Twitter&lt;/a&gt; for more awesome content!&lt;/p&gt;
+</description>
+        <pubDate>Mon, 18 Dec 2017 00:00:00 +0000</pubDate>
+        <link>https://developer.okta.com/blog/2017/12/18/spring-security-5-oidc</link>
+        <guid isPermaLink="true">https://developer.okta.com/blog/2017/12/18/spring-security-5-oidc</guid>
+      </item>
+    
+      <item>
         <title>Bootiful Development with Spring Boot and React</title>
         <description>&lt;p&gt;React has been getting a lot of positive press in the last couple years, making it an appealing frontend option for Java developers! Once you learn how it works, it makes a lot of sense and can be fun to develop with. Not only that, but it’s &lt;em&gt;wicked fast!&lt;/em&gt; If you’ve been following me, or if you’ve read this blog for a bit, you might remember my &lt;a href=&quot;/blog/2017/04/26/bootiful-development-with-spring-boot-and-angular&quot;&gt;Bootiful Development with Spring Boot and Angular&lt;/a&gt; tutorial. Today, I’ll show you how to build the same application, except with React this time. Before we dive into that, let’s talk some more about what React is great for, and why I chose to explore it in this post.&lt;/p&gt;
 
@@ -6306,296 +6697,6 @@ INFO[0000] Started polling for events at: https://dev-12345.oktapreview.com
         <pubDate>Fri, 13 Oct 2017 00:00:00 +0000</pubDate>
         <link>https://developer.okta.com/blog/2017/10/13/okta-groups-spring-security</link>
         <guid isPermaLink="true">https://developer.okta.com/blog/2017/10/13/okta-groups-spring-security</guid>
-      </item>
-    
-      <item>
-        <title>Why Are Webhooks Better Than Serverless Extensibility?</title>
-        <description>&lt;p&gt;When you’ve built a successful software-as-a-service product, you tend to run
-into interesting technical (and business) questions. My favorite question is:
-“How do we add more functionality to our platform faster?” It’s an interesting
-question because &lt;em&gt;everyone&lt;/em&gt; wants to build features faster.&lt;/p&gt;
-
-&lt;p&gt;In a perfect world, you’d be able to hire 100,000 engineers, split them into
-teams of four (&lt;em&gt;with no managers!&lt;/em&gt;), and have each team own a feature: spec it
-out, build it, iterate on it with user feedback, and do it all in perfect
-harmony with every other team.&lt;/p&gt;
-
-&lt;p&gt;But let’s get real. This isn’t a perfect world, there’s no way a company would
-ever have four engineers work in a team without management (&lt;em&gt;ha&lt;/em&gt;)!&lt;/p&gt;
-
-&lt;p&gt;So while you may not be able to build features at a fast enough pace to keep up
-with your product and user growth, you can cheat your way around it with a
-popular hack: platform extensibility.&lt;/p&gt;
-
-&lt;p&gt;Instead of requiring your engineers to sit down and develop every single feature
-every single user has ever requested, you can turn your product into a
-“platform” that your customer’s developers can build against. This way, if a
-customer wants a feature badly enough, they can integrate with your platform
-APIs and BAM: the previously unavailable feature can now be made available! It’s
-ingenious.&lt;/p&gt;
-
-&lt;p&gt;So how do you (as a successful business owner) allow other developers to extend
-your platform? You’ve got a lot of choices. Most of them are horrible, however,
-so I’m only going to talk about the most popular two: webhooks and serverless.&lt;/p&gt;
-
-&lt;h2 id=&quot;serverless-is-the-answer&quot;&gt;Serverless is the Answer!&lt;/h2&gt;
-
-&lt;p&gt;If you’ve been following the internet hype train over the last few years
-(&lt;em&gt;specifically, since 2014&lt;/em&gt;), you’ll be familiar with the term “serverless”,
-also known as “lambdas”, “functions-as-a-service”, etc.&lt;/p&gt;
-
-&lt;p&gt;What all these terms basically refer to is a pattern known as &lt;em&gt;serverless
-extensibility&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;In order to accommodate your customers extending your platform, you allow them
-to upload some code to your servers that &lt;em&gt;you&lt;/em&gt; will run when certain events
-happen in your product.&lt;/p&gt;
-
-&lt;p&gt;I’ll give you a good example.&lt;/p&gt;
-
-&lt;p&gt;Let’s say you’re building an application hosting platform (&lt;em&gt;a-la
-&lt;a href=&quot;https://www.heroku.com/&quot;&gt;Heroku&lt;/a&gt;&lt;/em&gt;). Heroku provides functionality like running
-your application code, logging errors, and provisioning infrastructure
-(databases, etc.).&lt;/p&gt;
-
-&lt;p&gt;If a customer is using your platform and wants to send an email to their
-accounting team every time a new database is provisioned, this can be somewhat
-tricky unless your platform provides either a feature to do this, or
-extensibility options so the customer can do it on their own.&lt;/p&gt;
-
-&lt;p&gt;So, you decide to allow serverless extensibility. A customer can now upload some
-code (in JavaScript) to run on your platform every time a new piece of
-infrastructure is provisioned.&lt;/p&gt;
-
-&lt;p&gt;The customer reads through your docs, and writes a small function that looks
-something like this:&lt;/p&gt;
-
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;module&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;exports&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sendEmail&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;provision&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;service&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;database&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// some code to send an email to the accounting department&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;And then uploads it to your website.&lt;/p&gt;
-
-&lt;p&gt;This is pretty cool for the customer! Without needing to bug you and wait for
-your engineering team to build this email feature out, they were able to write
-some code to accomplish exactly what they wanted!&lt;/p&gt;
-
-&lt;p&gt;And not only can customers “hook” into your platform when infrastructure is
-being provisioned: they can hook in anywhere! Your platform provides tons of
-different extensibility options to make it possible for customers to run their
-code after or before almost every major platform event!&lt;/p&gt;
-
-&lt;p&gt;There are a few core benefits to this:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;The customer can easily build out features they need, and not be bottlenecked by
-the speed of your engineering team&lt;/li&gt;
-  &lt;li&gt;You lose fewer customers because they’ve now got a way to work around issues in
-your product&lt;/li&gt;
-  &lt;li&gt;You’re able to iterate more quickly on your core platform product because you’re
-now able to narrow your scope&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;the-flip-side-of-serverless&quot;&gt;The Flip Side of Serverless&lt;/h2&gt;
-
-&lt;p&gt;So now that you’ve built out serverless extensibility functionality for your
-customers you’ve opened up an infinite amount of customization options. But at
-what cost?&lt;/p&gt;
-
-&lt;p&gt;John, who runs Engineering for one of your largest customers, didn’t sign up for
-this. Your serverless extensibility created a bunch of ongoing work for him and
-his team:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;He has to figure out how your serverless functions work, what hooks are
-available, etc. This is a high learning curve and requires all of his
-engineers to have a thorough understanding of your product in order to be
-productive.&lt;/li&gt;
-  &lt;li&gt;Because your serverless platform only supports running JavaScript ES5 code at
-the moment, John’s team of C# engineers are having issues writing their
-complex application logic in JavaScript which they are not all familiar with.&lt;/li&gt;
-  &lt;li&gt;John’s team doesn’t have any insight into how your serverless platform is
-running his code: they can’t figure out how to monitor server resources, how
-to do proper unit and integration testing, how to look for failures, etc.&lt;/li&gt;
-  &lt;li&gt;John’s team now has to manage code in many different places as opposed to just
-one GitHub repository. Now, each serverless function John’s team writes must
-be manually uploaded into the right place in your platform website,
-maintained, and updated from time to time. Because there is no direct way to
-integrate these serverless functions into the team’s existing codebase, this
-code is now fragmented across your platform which makes it hard to work with.&lt;/li&gt;
-  &lt;li&gt;John’s team is now in a sticky security situation: they’ve got to write
-proprietary code and store it on YOUR platform. They’ve also got to store
-sensitive credentials like their email account information, and any other
-related credentials required to run their serverless software. The security
-team at John’s company isn’t thrilled.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The larger the company, the more challenging this becomes. Coordinating between
-different groups of engineers to figure out where a particular piece of
-functionality is located is difficult and time-consuming. Updating previous
-hooks becomes a test of patience. And documentation for the team’s codebase
-becomes exponentially larger to include all of the domain-specific knowledge
-required to write, update, and maintain these serverless hooks.&lt;/p&gt;
-
-&lt;p&gt;These side effects negate the purpose of the original goal: to let customers get
-functionality they need faster.&lt;/p&gt;
-
-&lt;p&gt;And these are just the &lt;em&gt;customer facing&lt;/em&gt; side effects you’ll notice. There’s a
-vast array of other messes this will cause you and your company:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;You’ve got to build secure, isolated code execution environments to run
-customer code in a sandbox. This is incredibly hard in practice. If you search
-for “&lt;a href=&quot;http://lmgtfy.com/?q=docker+escalation&quot;&gt;docker escalation&lt;/a&gt;” on Google,
-you’ll see what I mean. Even amazing services like Amazon Lambda (the
-first really serverless player) that have incredibly large security teams
-can expose themselves to funny &lt;a href=&quot;https://www.youtube.com/watch?v=YZ058hmLuv0&quot;&gt;security&lt;/a&gt;
-issues.&lt;/li&gt;
-  &lt;li&gt;You’ve got to ensure you respect the customer’s software IP that is now
-running in your infrastructure&lt;/li&gt;
-  &lt;li&gt;You’ve got to scale your infrastructure to support arbitrary amounts of
-customer code in addition to worrying about your own service issues&lt;/li&gt;
-  &lt;li&gt;You’ve got to expose more and more transparent tools to allow your customers
-more insight into your system: error logs, performance monitoring, etc. The
-list can ultimately go on forever.&lt;/li&gt;
-  &lt;li&gt;You’ve got to write documentation to explain each and every hook you support
-and how it works. You’ve also got to show users how to upload the code to your
-platform, how to test it, etc.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Bottom line? Building serverless extensibility functionality into your product
-will likely be the most expensive thing you ever do, engineering-wise–both for
-you and your users.&lt;/p&gt;
-
-&lt;h2 id=&quot;webhooks-going-beyond-serverless-extensibility&quot;&gt;Webhooks, Going Beyond Serverless Extensibility&lt;/h2&gt;
-
-&lt;p&gt;An older approach that’s been tested time and time again, is webhooks. While
-webhooks are not “old” by any means, they predate serverless extensibility
-patterns by at least seven years. My buddy &lt;a href=&quot;http://progrium.com/blog/&quot;&gt;Jeff Lindsay&lt;/a&gt;
-coined the term back in 2007.&lt;/p&gt;
-
-&lt;p&gt;The idea behind webhooks is simple: instead of &lt;em&gt;you&lt;/em&gt; running a customer’s code
-on &lt;em&gt;your platform&lt;/em&gt;, you instead just fire off an HTTP POST request to the
-customer every time something happens, and the customer can then perform
-whatever logic they need based on those incoming requests.&lt;/p&gt;
-
-&lt;p&gt;Simple, right?&lt;/p&gt;
-
-&lt;p&gt;This is a great approach because it’s easier to manage and scale for all parties
-involved.&lt;/p&gt;
-
-&lt;p&gt;It’s simpler for &lt;em&gt;your&lt;/em&gt; company because you now only need to fire off HTTP
-requests when events happen. You don’t need to worry about executing someone
-else’s software, scaling it, etc. The most complicated thing you have to do is
-retry failed HTTP requests (which is mandatory for pretty much all HTTP requests
-anyhow!).&lt;/p&gt;
-
-&lt;p&gt;It’s simpler for your customers because they don’t need to learn anything new
-(other than reading your docs to find out what requests you make, and what data
-you send).&lt;/p&gt;
-
-&lt;p&gt;Customers can simply implement backend logic in their already existing
-application in whatever language/framework/etc. they prefer. The customer
-doesn’t need to learn a new tech stack, new deployment patterns, and doesn’t
-need to figure out how to create a bunch of small, independent programs that are
-scattered all over the place.&lt;/p&gt;
-
-&lt;p&gt;Webhooks allow customers to extend your platform in a simpler,
-easier-to-understand way.&lt;/p&gt;
-
-&lt;h2 id=&quot;webhooks-in-the-wild&quot;&gt;Webhooks in the Wild&lt;/h2&gt;
-
-&lt;h3 id=&quot;twilio&quot;&gt;Twilio&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.twilio.com/&quot;&gt;Twilio&lt;/a&gt; is one of the best known API services in the
-world. Twilio provides API services to manage telephony stuff: phone calls, SMS
-messages, MMS messages, etc.&lt;/p&gt;
-
-&lt;p&gt;Since day one, Twilio has provided core webhook support in their platform.&lt;/p&gt;
-
-&lt;p&gt;Let’s say you’re building an SMS application:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;You buy a phone number through Twilio&lt;/li&gt;
-  &lt;li&gt;Every time that phone number receives an SMS message, Twilio sends an HTTP
-POST request to your web server with the message data inside&lt;/li&gt;
-  &lt;li&gt;You then receive an HTTP POST request to your web app, where you parse the
-request, figure out what the message said, and then take some action (&lt;em&gt;maybe
-you send a response, for instance&lt;/em&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Using this simple back-and-forth messaging pattern, webhooks allow Twilio
-customers to easily integrate with the platform and build high-value apps
-without the hassle.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: My good friend &lt;a href=&quot;http://carter.rabasa.com/&quot;&gt;Carter Rabasa&lt;/a&gt; at Twilio
-recently released support for serverless extensibility &lt;em&gt;in addition to&lt;/em&gt; their
-core webhook support. This was a smart move, as they now appeal to everyone
-(&lt;em&gt;even people who crazily prefer serverless extensibility patterns!&lt;/em&gt;).&lt;/p&gt;
-
-&lt;h3 id=&quot;heroku&quot;&gt;Heroku&lt;/h3&gt;
-
-&lt;p&gt;Remember Heroku from the serverless example before? I hope so!&lt;/p&gt;
-
-&lt;p&gt;Heroku’s application hosting platform recently started &lt;a href=&quot;https://blog.heroku.com/heroku-webhooks&quot;&gt;supporting
-webhooks&lt;/a&gt;, and it’s everything I ever
-dreamed of, and then some!&lt;/p&gt;
-
-&lt;p&gt;Heroku customers are now able to easily hook into their app infrastructure on
-Heroku, and perform complex logic to scale their services more easily, cut down
-cost, keep their ops team informed of issues, etc.&lt;/p&gt;
-
-&lt;h3 id=&quot;github&quot;&gt;GitHub&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://developer.github.com/webhooks/&quot;&gt;GitHub webhooks&lt;/a&gt; have been around
-forever, and are the foundation of many popular developer services like
-&lt;a href=&quot;https://travis-ci.org/&quot;&gt;Travis CI&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;GitHub webhooks allow you to hook into just about every possible action that can
-be taken on a source repository. They’re excellent for analyzing code, tracking
-team performance, automating testing and deploys, as well as a number of other
-great use cases.&lt;/p&gt;
-
-&lt;h2 id=&quot;webhooks-in-your-product&quot;&gt;Webhooks in Your Product&lt;/h2&gt;
-
-&lt;p&gt;Implementing serverless extensibility is hard–both for you and your customers.
-While there are some people who prefer it, it can be a lot of work for everyone
-involved.&lt;/p&gt;
-
-&lt;p&gt;As someone who’s been building developer tools and API services for nearly 17
-years now, one of which generates nearly 30 billion API requests per month, I’d
-encourage you to take some time to think about the best possible way for you to
-open your platform up for customization.&lt;/p&gt;
-
-&lt;p&gt;Picking the wrong extensibility options can be a painful mistake, so it’s a good
-idea to think through the tradeoffs of both approaches, and pick what makes the
-most sense for you.&lt;/p&gt;
-
-&lt;p&gt;If you need some help deciding, please &lt;a href=&quot;mailto:randall.degges@okta.com&quot;&gt;drop me a line&lt;/a&gt; or
-&lt;a href=&quot;https://twitter.com/rdegges&quot;&gt;tweet at me&lt;/a&gt;, I’d be happy to help you out.&lt;/p&gt;
-
-&lt;h2 id=&quot;summary&quot;&gt;Summary&lt;/h2&gt;
-
-&lt;p&gt;While both serverless extensibility and webhooks serve the same purpose, one is
-dramatically simpler than the other.&lt;/p&gt;
-
-&lt;p&gt;Webhooks are a simple solution to a complex problem, while serverless
-extensibility is a complex solution to a complex problem.&lt;/p&gt;
-
-&lt;p&gt;In computer science, as well as many other areas of professional and personal
-life, I like to take the simple path.&lt;/p&gt;
-
-&lt;p&gt;I hope this has been useful.&lt;/p&gt;
-
-&lt;p&gt;-Randall&lt;/p&gt;
-</description>
-        <pubDate>Wed, 11 Oct 2017 00:00:00 +0000</pubDate>
-        <link>https://developer.okta.com/blog/2017/10/11/why-are-webhooks-better-than-serverless-extensibility</link>
-        <guid isPermaLink="true">https://developer.okta.com/blog/2017/10/11/why-are-webhooks-better-than-serverless-extensibility</guid>
       </item>
     
   </channel>
