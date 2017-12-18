@@ -1,6 +1,6 @@
 ---
 layout: docs_page
-title: Authorization Servers
+title: Authorization Server Configuration API
 ---
 
 # Authorization Server Configuration API
@@ -859,7 +859,7 @@ Returns the current keys in rotation for a Custom Authorization Server.
 ##### Response Parameters
 {:.api .api-response .api-res-params}
 
-Returns the [keys](#authorization-server-certificate-key-object) defined for a Custom Authorization Server
+Returns the [keys](#certificate-json-web-key-object) defined for a Custom Authorization Server
 
 ##### Request Example
 {:.api .api-request .api-request-example}
@@ -973,7 +973,7 @@ Rotates the current keys for a Custom Authorization Server. If you rotate keys, 
 ##### Response Parameters
 {:.api .api-response .api-res-params}
 
-Returns the [keys](#authorization-server-certificate-key-object) defined for a Custom Authorization Server
+Returns the [keys](#certificate-json-web-key-object) defined for a Custom Authorization Server
 
 ##### Request Example
 {:.api .api-request .api-request-example}
@@ -1502,7 +1502,7 @@ Example from a Policy Object
 | nextRotation  | The timestamp when authorization server will change key for signing tokens. Only returned when `rotationMode` is `AUTO`.  | String     | FALSE      | FALSE      |
 | rotationMode  | The key rotation mode for the authorization server. Can be `AUTO` or `MANUAL`.                                            | Enum       | FALSE      | TRUE       |
 
-### JSON Web Key Object
+### Certificate JSON Web Key Object
 
 This object defines a [JSON Web Key](https://tools.ietf.org/html/rfc7517) for an application's signature or encryption credential.
 
@@ -1510,12 +1510,23 @@ This object defines a [JSON Web Key](https://tools.ietf.org/html/rfc7517) for an
 {
     "keys": [
         {
+            "status": "ACTIVE",
             "alg": "RS256",
-            "e": "MOAB",
+            "e": "AQAB",
             "n": "mZXlEiDy[...]Isor9Q",
             "kid": "WYQxoK4XAwGFn5Zw5AzLxFvqEKLP79BbsKmWeuc5TB4",
             "kty": "RSA",
             "use": "sig"
+            "_links": {
+              "self": {
+                "href": "https://doc-doctor.oktapreview.com/api/v1/authorizationServers/default/credentials/keys/Vy8zLvevjtTVBAXC138BCq4HQ_vj_RzaTXtlr7ekxfY",
+                "hints": {
+                    "allow": [
+                        "GET"
+                    ]
+                }
+              }
+            }
         }
     ]
 }
