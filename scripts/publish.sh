@@ -25,6 +25,11 @@ then
     exit ${BUILD_FAILURE};
 fi
 
+if ! removeHTMLExtensions;
+then
+    echo "Failed removing .html extensions"
+fi
+
 interject "Generating conductor file in $(pwd)"
 if ! generate_conductor_file;
 then
