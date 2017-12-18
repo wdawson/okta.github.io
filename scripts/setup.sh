@@ -81,7 +81,7 @@ function generate_html() {
 function removeHTMLExtensions() {
     interject "Removing HTML extensions"
     # Removing all generated .html files (excludes the main 'index.html' in the dir)
-    find ./dist/ -type f ! -iname 'index.html' -name '*.html' -print0 | while read -d $'\0' f; do mv"$f" "${f%.html}"; done
+    find ./dist/ -type f ! -iname 'index.html' -name '*.html' -print0 | while read -d $'\0' f; do mv "$f" "${f%.html}"; done
 }
 
 function generate_conductor_file() {
