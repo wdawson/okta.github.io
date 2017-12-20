@@ -3560,7 +3560,7 @@ curl -v -X GET \
 
 ## Identity Provider User Operations
 
-### Listing IdPs associated with a user
+### List IdPs Associated with a User
 {:.api .api-operation}
 
 {% api_operation GET /api/v1/users/*:uid*/idps %}
@@ -3694,7 +3694,92 @@ Content-Type: application/json
 
 {
   "errorCode": "E0000007",
-  "errorSummary": "Not found: Resource not found: 00u3b8ixnOCwbn8Sn0g4 (User)",
+  "errorSummary": "Not found: Resource not found: 00ub0oNGTSWTBKOLGLNR (User)",
+  "errorLink": "E0000007",
+  "errorId": "oaeYW9k9yJuSSSkhaMQdA1-Zg",
+  "errorCauses": []
+}
+~~~
+
+### Get a Linked Identity Provider User 
+{:.api .api-operation}
+
+{% api_operation GET /api/v1/idps/*:id*/users/*:uid* %}
+
+Fetches a linked [IdP user](#identity-provider-user-model) by ID. This endpoint doesn't support the SAML2 [Identity Provider Type](#identity-provider-type).
+
+##### Request Parameters
+{:.api .api-request .api-request-params}
+
+Parameter     | Description                                                                     | Param Type | DataType                                      | Required |
+------------- | ------------------------------------------------------------------------------- | ---------- | --------------------------------------------- | -------- |
+id | ID of the [Identity Provider](#identity-provider-model) | URL | String | TRUE |
+uid           | ID of the Okta User                                                           | URL        | String                                        | TRUE     |
+
+##### Response Parameters
+{:.api .api-response .api-response-params}
+
+Return the associated [Identity Providers](#identity-provider-model)
+
+##### Request Example
+{:.api .api-request .api-request-example}
+
+~~~sh
+curl -v -X GET \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-H "Authorization: SSWS ${api_token}" \
+    'https://{yourOktaDomain}.com/api/v1/idps/0oa62bfdiumsUndnZ0h7/users/00u5t60iloOHN9pBi0h7' \
+~~~
+
+##### Response Example
+{:.api .api-response .api-response-example}
+
+~~~json
+{
+    "id": "00u5t60iloOHN9pBi0h7",
+    "externalId": "externalId",
+    "created": "2017-12-19T17:30:16.000Z",
+    "lastUpdated": "2017-12-19T17:30:16.000Z",
+    "profile": {
+        "profileUrl": null,
+        "firstName": null,
+        "lastName": null,
+        "honorificSuffix": null,
+        "displayName": null,
+        "honorificPrefix": null,
+        "middleName": null,
+        "email": null
+    },
+    "_links": {
+        "idp": {
+            "href": "https://{yourOktaDomain}.com/api/v1/idps/0oa62bfdiumsUndnZ0h7"
+        },
+        "self": {
+            "href": "https://{yourOktaDomain}.com/api/v1/idps/0oa62bfdiumsUndnZ0h7/users/00u5t60iloOHN9pBi0h7",
+            "hints": {
+                "allow": [
+                    "GET",
+                    "DELETE"
+                ]
+            }
+        },
+        "user": {
+            "href": "https://{yourOktaDomain}.com/api/v1/users/00u5t60iloOHN9pBi0h7"
+        }
+    }
+}
+~~~
+
+If the IdP doesn't exist, you receive an error response.
+
+~~~http
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+{
+  "errorCode": "E0000007",
+  "errorSummary": Not found: Resource not found: 0oa62bfdiumsUndnZ0h8 (IdpAppInstance)",
   "errorLink": "E0000007",
   "errorId": "oaeYW9k9yJuSSSkhaMQdA1-Zg",
   "errorCauses": []
