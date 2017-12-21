@@ -8,6 +8,222 @@
     <atom:link href="https://developer.okta.com/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Spread Serverless Holiday Cheer with Lambda and API Gateway</title>
+        <description>&lt;p&gt;It’s that time of year again: Christmas music on the radio, festive decorations in the workplace, and a chill in the air. Except in the Southern Hemisphere, where it’s warm and balmy. And on the International Space Station, where the temperature is strictly regulated. But I digress.&lt;/p&gt;
+
+&lt;p&gt;It’s a season for reconnecting with loved ones, exchanging gifts, and eating delicious food. And, if you’re like me, a little downtime to work on fun projects.&lt;/p&gt;
+
+&lt;p&gt;Looking for something to work on for a few minutes? Why not build an API to spread some holiday cheer? Even if you’re an API or coding newbie, you can follow along with this simple project.&lt;/p&gt;
+
+&lt;h2 id=&quot;cheer-as-a-service&quot;&gt;Cheer as a Service&lt;/h2&gt;
+
+&lt;p&gt;The API will be simple: it will have one route called &lt;code class=&quot;highlighter-rouge&quot;&gt;/cheer&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;GET /cheer
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;OK&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;holidaySeason&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;greeting&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Happy holidays!&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The API will determine whether it’s currently the holiday season using the precise, ultra-scientific method that supermarkets in the USA use to decide whether to start playing Christmas music: is today’s date after Thanksgiving, but before the end of the year?&lt;/p&gt;
+
+&lt;p&gt;If it’s the holidays, the API will return an randomly-selected greeting. If you want to personalize it, you can POST your name:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;POST /cheer
+{
+  &quot;name&quot;: &quot;Nate&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;OK&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;holidaySeason&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;greeting&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Merry Christmas, Nate!&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Use it in your IFTTT recipes, mail merges, and Twitter bots. Cheer-as-a-service is limited only by your imagination!&lt;/p&gt;
+
+&lt;h2 id=&quot;create-a-lambda-function&quot;&gt;Create a Lambda Function&lt;/h2&gt;
+
+&lt;p&gt;For such a simple API, there’s no need to use a web framework, or even set up a server. The whole API can be written in a few lines of JavaScript code and hosted on AWS Lambda for cheap.&lt;/p&gt;
+
+&lt;p&gt;If you don’t have an AWS account, go &lt;a href=&quot;https://aws.amazon.com/account/&quot;&gt;sign up&lt;/a&gt; for free. Then, open the &lt;a href=&quot;https://console.aws.amazon.com/lambda/home?region=us-east-1#/functions&quot;&gt;Lambda console&lt;/a&gt; and create a new function from scratch.&lt;/p&gt;
+
+&lt;p&gt;Name the new function &lt;code class=&quot;highlighter-rouge&quot;&gt;CheerAsAService&lt;/code&gt; and pick Node 6.10 (or higher) as the runtime. If you’ve never created a Lambda function before, pick &lt;strong&gt;Custom role&lt;/strong&gt; from the Role dropdown and create an IAM Role called &lt;code class=&quot;highlighter-rouge&quot;&gt;lambda_basic_execution&lt;/code&gt; (the default) in the popup window. The role controls what permissions your API code has, and this code just needs the basics (permission to execute and create log messages). Click &lt;strong&gt;Create function&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/serverless-holiday-cheer/create-function-2c57f65a7b158bb3b474729d4f5a3b1fe230167b8ac1269c8cc429e86b2f085d.png&quot; alt=&quot;Create a new Lambda function&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Time to write some code! Use the browser code editor to add code above the &lt;code class=&quot;highlighter-rouge&quot;&gt;exports.handler&lt;/code&gt; line:&lt;/p&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;isHolidaySeason&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;now&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;dayOfThanksgiving&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;22&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getFullYear&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getDay&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;isAfterThanksgiving&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getMonth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getMonth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getDay&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;dayOfThanksgiving&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;isAfterThanksgiving&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;isHolidaySeason()&lt;/code&gt; function uses some date math to find Thanksgiving Day (in the USA, the fourth Thursday in November) and compares that to today’s date. (If the months look off, remember that JavaScript counts from January at 0.)&lt;/p&gt;
+
+&lt;p&gt;Next, add some more code above &lt;code class=&quot;highlighter-rouge&quot;&gt;exports.handler&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kr&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;phrases&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+  &lt;span class=&quot;s1&quot;&gt;'Happy holidays'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;s1&quot;&gt;'Merry Christmas'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;s1&quot;&gt;'Ho ho ho'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;s1&quot;&gt;'Feliz Navidad'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;s1&quot;&gt;'Happy Hanukkah'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;s1&quot;&gt;'Season\'s greetings'&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;createCheerfulResponse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;response&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;holidaySeason&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;isHolidaySeason&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+  
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;holidaySeason&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  
+  &lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;randomPick&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;floor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;phrases&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;phrase&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;phrases&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;randomPick&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+  
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;phrase&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;', '&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  
+  &lt;span class=&quot;nx&quot;&gt;phrase&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'!'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  
+  &lt;span class=&quot;nx&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;greeting&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;phrase&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This function generates the JSON response that will be returned to the client. If a name is supplied, it’s used to personalize the response. Feel free to add your own greetings and phrases to the list!&lt;/p&gt;
+
+&lt;p&gt;With these functions in place, you can update the main handler at the bottom. This code runs when Lambda executes your function, so you’ll want to check for a &lt;code class=&quot;highlighter-rouge&quot;&gt;name&lt;/code&gt; parameter (if it’s a POST), and return the API response:&lt;/p&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;exports&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;handler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;callback&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;''&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;httpMethod&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'POST'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;JSON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;parse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+      &lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;''&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;// Leave name blank&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  
+  &lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;responseBody&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;createCheerfulResponse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  
+  &lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;response&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;statusCode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;JSON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stringify&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;responseBody&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+  
+  &lt;span class=&quot;nx&quot;&gt;callback&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;That’s all the code you need! Make sure you click &lt;strong&gt;Save&lt;/strong&gt; at the top-right of the Lambda console.&lt;/p&gt;
+
+&lt;p&gt;You can test the function by creating a test event. Click &lt;strong&gt;Test&lt;/strong&gt; and use this JSON as the test event data:&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;body&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;{\&quot;name\&quot;:\&quot;Frosty the Snowman\&quot;}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;requestContext&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;httpMethod&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;POST&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;stage&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;prod&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;httpMethod&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;POST&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/serverless-holiday-cheer/test-function-a2c003a810b2537f8fba84dab8309529717db81375621e78851ba2d0669e310e.png&quot; alt=&quot;Successful function test&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The function returns the correct response, but it’s not accessible on the public internet yet. To share it with the world, you’ll need to publish it (freeze the code), and then use API Gateway to map the function to a public URL.&lt;/p&gt;
+
+&lt;p&gt;To publish the function, choose &lt;strong&gt;Publish new version&lt;/strong&gt; from the Actions button. The title of the function will update to &lt;code class=&quot;highlighter-rouge&quot;&gt;CheerAsAService:1&lt;/code&gt;. You’ll need this name in a minute, when you link this function to the API Gateway rule you’ll create.&lt;/p&gt;
+
+&lt;h2 id=&quot;create-the-api-in-api-gateway&quot;&gt;Create the API in API Gateway&lt;/h2&gt;
+
+&lt;p&gt;Switch over to the &lt;a href=&quot;https://console.aws.amazon.com/apigateway/home?region=us-east-1#/apis&quot;&gt;API Gateway console&lt;/a&gt; and create a new API called &lt;code class=&quot;highlighter-rouge&quot;&gt;CheerAsAServiceApi&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/serverless-holiday-cheer/new-api-gateway-19e8d118924e09d49d7e8dfc31f5d015d0b78cade90db425095fee009eb9a4b6.png&quot; alt=&quot;Create a new API Gateway API&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The API will have one path (or “resource”), called &lt;code class=&quot;highlighter-rouge&quot;&gt;/cheer&lt;/code&gt;. From the Actions button, click &lt;strong&gt;Create Resource&lt;/strong&gt;. Enter &lt;code class=&quot;highlighter-rouge&quot;&gt;Cheer&lt;/code&gt; as the Resource Name, and the path will be automatically filled in.&lt;/p&gt;
+
+&lt;p&gt;Both the &lt;code class=&quot;highlighter-rouge&quot;&gt;GET&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;POST&lt;/code&gt; methods will be supported. Instead of defining these separately, you can add a single rule that handles any method. With the &lt;code class=&quot;highlighter-rouge&quot;&gt;/cheer&lt;/code&gt; resource selected, choose &lt;strong&gt;Create Method&lt;/strong&gt; from the Actions button. Pick ANY and click the checkmark to add the method.&lt;/p&gt;
+
+&lt;p&gt;Choose &lt;strong&gt;Lambda Function&lt;/strong&gt; as the integration type, and check &lt;strong&gt;Use Lambda Proxy Integration&lt;/strong&gt;. Choose the region you created your Lambda function in (us-east-1, unless you changed the default), and enter the Lambda function name plus version: &lt;code class=&quot;highlighter-rouge&quot;&gt;CheerAsAService:1&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/serverless-holiday-cheer/cheer-method-setup-34c916012dcb546a0f4e046aba50822f700865dc65b53ae7e0c92a66a585a280.png&quot; alt=&quot;Define a method for the /cheer resource&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Click &lt;strong&gt;Save&lt;/strong&gt; to create the method definition. On the Method Execution screen, click &lt;strong&gt;Test&lt;/strong&gt; and pick a method (GET or POST) to send to your function. If everything is configured correctly, you’ll see the JSON response on the right.&lt;/p&gt;
+
+&lt;p&gt;You’re almost there! From the Actions button, choose &lt;strong&gt;Deploy API&lt;/strong&gt;. Create a new stage called &lt;code class=&quot;highlighter-rouge&quot;&gt;production&lt;/code&gt; and click &lt;strong&gt;Deploy&lt;/strong&gt;. When the API is deployed, you’ll get an Invoke URL like:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;https://blah.execute-api.us-east-1.amazonaws.com/production
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You can see your live API in action by adding &lt;code class=&quot;highlighter-rouge&quot;&gt;/cheer&lt;/code&gt; to that URL and requesting it in your browser. Sweet!&lt;/p&gt;
+
+&lt;h2 id=&quot;add-a-domain-name&quot;&gt;Add a Domain Name&lt;/h2&gt;
+
+&lt;p&gt;Right now, your API URL is long and a little boring. Before you share it with the world, you can add a custom domain name to make it more exciting (bonus points for using a trendy TLD like &lt;code class=&quot;highlighter-rouge&quot;&gt;.xyz&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;.io&lt;/code&gt;). I registered &lt;a href=&quot;https://www.holidaycheer.xyz&quot;&gt;holidaycheer.xyz&lt;/a&gt; with my favorite domain registrar so I could use &lt;code class=&quot;highlighter-rouge&quot;&gt;api.holidaycheer.xyz&lt;/code&gt; as my API URL.&lt;/p&gt;
+
+&lt;p&gt;To map a custom domain name to your API in API Gateway, you’ll need to get an SSL/TLS certificate for your domain using &lt;a href=&quot;https://console.aws.amazon.com/acm/home?region=us-east-1&quot;&gt;AWS Certificate Manager&lt;/a&gt; (ACM). No API is too simple for HTTPS!&lt;/p&gt;
+
+&lt;p&gt;Using ACM to get a certificate is easy. Simply click &lt;strong&gt;Request a certificate&lt;/strong&gt;, enter the domain name (I used a wildcard: &lt;code class=&quot;highlighter-rouge&quot;&gt;*.holidaycheer.xyz&lt;/code&gt;) and verify that you are the owner of the domain.&lt;/p&gt;
+
+&lt;p&gt;Then, in the API Gateway console, click on &lt;strong&gt;Custom Domain Names&lt;/strong&gt; and create a new custom name. Pick the certificate you just created, and map the path &lt;code class=&quot;highlighter-rouge&quot;&gt;/&lt;/code&gt; to your API’s &lt;code class=&quot;highlighter-rouge&quot;&gt;production&lt;/code&gt; stage.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/serverless-holiday-cheer/add-custom-domain-name-42c17244a67fbdbf0975579c234ac76be558c4afd961aae48735357f9ecc3070.png&quot; alt=&quot;Add a custom domain name&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;When you click Save, AWS will start setting up a CloudFront distribution for your API. You can see the CloudFront domain name immediately (like &lt;code class=&quot;highlighter-rouge&quot;&gt;dz123.cloudfront.net&lt;/code&gt;). You’ll need to log into your domain registrar and update the DNS settings for your domain name. I added a CNAME record from &lt;code class=&quot;highlighter-rouge&quot;&gt;api.holidaycheer.xyz&lt;/code&gt; to the domain generated by CloudFront.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/serverless-holiday-cheer/cname-record-890ee45cda7a6cf07c31f250426327e4d705822cc46d010792355cadbec17026.png&quot; alt=&quot;Add a custom domain name&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Go grab a cup of coffee (or eggnog), because you’ll be waiting a while. Deploying the CloudFront distribution (and propagating the DNS record changes) can take half an hour or more. Come back when you’ve had enough to drink!&lt;/p&gt;
+
+&lt;p&gt;When everything is deployed, you’ll be able to use a tool like Postman (or any browser) to make requests to your public API:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/serverless-holiday-cheer/post-with-postman-2eb7be684f232408a5d618d1c1a869e32af29a2ec38fdf3ac426950d2a84380a.png&quot; alt=&quot;Add a custom domain name&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;eat-drink-and-code-merrily&quot;&gt;Eat, Drink, and Code Merrily&lt;/h2&gt;
+&lt;p&gt;That’s it! You’ve built a real, working API with a few lines of code and some useful AWS services. The full source code (all 63 lines) is available &lt;a href=&quot;https://github.com/nbarbettini/holidaycheer.xyz&quot;&gt;on GitHub&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;You can try the API out live: &lt;a href=&quot;https://api.holidaycheer.xyz/cheer&quot;&gt;api.holidaycheer.xyz/cheer&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;When you find yourself working on more complicated projects, check out &lt;a href=&quot;https://developer.okta.com/&quot;&gt;Okta’s APIs&lt;/a&gt;. We make it easy to add user identity and authorization to your apps and APIs without a ton of code. How’s that for cheerful?&lt;/p&gt;
+
+&lt;p&gt;From everyone here at Okta, may you and your loved ones have a wonderful (and nerdy) holiday season.&lt;/p&gt;
+
+&lt;p&gt;Stay warm! &amp;lt;3&lt;/p&gt;
+</description>
+        <pubDate>Thu, 21 Dec 2017 00:00:00 +0000</pubDate>
+        <link>https://developer.okta.com/blog/2017/12/21/spread-serverless-holiday-cheer</link>
+        <guid isPermaLink="true">https://developer.okta.com/blog/2017/12/21/spread-serverless-holiday-cheer</guid>
+      </item>
+    
+      <item>
         <title>Get Started with Spring Security 5.0 and OIDC</title>
         <description>&lt;p&gt;Spring Security is a powerful and highly customizable authentication and access-control framework. It is the de-facto standard for securing Spring-based applications.&lt;/p&gt;
 
@@ -6179,524 +6395,6 @@ INFO[0000] Started polling for events at: https://dev-12345.oktapreview.com
         <pubDate>Tue, 17 Oct 2017 00:00:00 +0000</pubDate>
         <link>https://developer.okta.com/blog/2017/10/17/add-the-power-of-webhooks-to-your-app-with-oktas-system-log</link>
         <guid isPermaLink="true">https://developer.okta.com/blog/2017/10/17/add-the-power-of-webhooks-to-your-app-with-oktas-system-log</guid>
-      </item>
-    
-      <item>
-        <title>Add Role-Based Access Control to Your App with Spring Security and Thymeleaf</title>
-        <description>&lt;p&gt;User management functions are required by a wide variety of apps and APIs, and it’s a common use-case to partition access to parts of an application according to roles assigned to a user. This is the basis of role-based access control (RBAC). Okta manages these roles with groups. Users can belong to one or more groups. With the Okta Spring Security integration, these groups are automatically mapped to roles that can be called out in your application to grant or deny access. This is all done using common Spring Security annotations as you’ll see below.&lt;/p&gt;
-
-&lt;p&gt;Okta’s Java dev team is working hard on our next generation SDK and integrations. With Okta’s &lt;a href=&quot;https://github.com/okta/okta-spring-boot&quot;&gt;integration for Spring Boot and Spring Security&lt;/a&gt; you can wire up your Okta tenant to a Spring Boot application and take advantage of the built in RBAC.&lt;/p&gt;
-
-&lt;p&gt;In this post, you’ll walk through a simple example that has some unprotected pages, some pages that can only be accessed by authenticated users and some pages that can only be accessed by users who belong to a particular group.&lt;/p&gt;
-
-&lt;p&gt;All the code used in this demo can be found &lt;a href=&quot;https://github.com/oktadeveloper/okta-spring-security-roles-example&quot;&gt;in this GitHub repo&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;configure-okta&quot;&gt;Configure Okta&lt;/h2&gt;
-
-&lt;p&gt;To get started, let’s get your Okta tenant set up. You’ll then be able to fire up the sample app and see it in action. Head on over to &lt;a href=&quot;https://developer.okta.com&quot;&gt;https://developer.okta.com&lt;/a&gt; and sign up for a developer account.&lt;/p&gt;
-
-&lt;p&gt;Here’s what we are going to do to exercise the code:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Create an &lt;code class=&quot;highlighter-rouge&quot;&gt;admins&lt;/code&gt; group&lt;/li&gt;
-  &lt;li&gt;Create a &lt;code class=&quot;highlighter-rouge&quot;&gt;users&lt;/code&gt; group&lt;/li&gt;
-  &lt;li&gt;Create a user who belongs to the &lt;code class=&quot;highlighter-rouge&quot;&gt;users&lt;/code&gt; groups&lt;/li&gt;
-  &lt;li&gt;Create a second user who belongs to both groups&lt;/li&gt;
-  &lt;li&gt;Create an OpenID Connect (OIDC) application&lt;/li&gt;
-  &lt;li&gt;Add our two groups to the application&lt;/li&gt;
-  &lt;li&gt;Configure the default Authorization Server to include group memberships in access tokens&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;If that seems like a lot – don’t worry! It’s just a bunch of clicking in a friendly webapp.&lt;/p&gt;
-
-&lt;h3 id=&quot;groups&quot;&gt;Groups&lt;/h3&gt;
-
-&lt;p&gt;Navigate in your Okta Admin Dashboard to &lt;code class=&quot;highlighter-rouge&quot;&gt;Users&lt;/code&gt; -&amp;gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;Groups&lt;/code&gt;. Click &lt;code class=&quot;highlighter-rouge&quot;&gt;Add Group&lt;/code&gt; and fill in &lt;code class=&quot;highlighter-rouge&quot;&gt;admins&lt;/code&gt; for the Name. Click &lt;code class=&quot;highlighter-rouge&quot;&gt;Add Group&lt;/code&gt;to save it.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-groups-spring-security/groups-3-895ad9a1fee4a39ba7b29f0992d9835cb53363ab35aeabd59c5041e702c46138.png&quot; alt=&quot;Default AS&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Repeat for the &lt;code class=&quot;highlighter-rouge&quot;&gt;users&lt;/code&gt; group.&lt;/p&gt;
-
-&lt;h3 id=&quot;users&quot;&gt;Users&lt;/h3&gt;
-
-&lt;p&gt;Navigate in your Okta Admin Dashboard to &lt;code class=&quot;highlighter-rouge&quot;&gt;Users&lt;/code&gt; -&amp;gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;People&lt;/code&gt;. Click &lt;code class=&quot;highlighter-rouge&quot;&gt;Add User&lt;/code&gt; and fill in the form. Add this user to the &lt;code class=&quot;highlighter-rouge&quot;&gt;users&lt;/code&gt; group you set up previously. Make sure the checkbox is selected to send an activation email.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-groups-spring-security/users-2-fd6e6827d4f7f706629b39e778be836562c424e266501cc9ab42dc09b634670c.png&quot; alt=&quot;Default AS&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Click &lt;code class=&quot;highlighter-rouge&quot;&gt;Save and Add Another&lt;/code&gt;. Repeat the above steps, only for the second user add to both the &lt;code class=&quot;highlighter-rouge&quot;&gt;users&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;admins&lt;/code&gt; groups.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-groups-spring-security/users-3-6549e4d11eafa511fd9d8912843f2aaae3ddea363004f91bf9c4a15b11687013.png&quot; alt=&quot;Default AS&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: Either the primary or secondary email needs to be a real email address so you can activate the user. Check your email and click the links for both users to activate them.&lt;/p&gt;
-&lt;h3 id=&quot;oidc-application&quot;&gt;OIDC Application&lt;/h3&gt;
-
-&lt;p&gt;Click the &lt;code class=&quot;highlighter-rouge&quot;&gt;Applications&lt;/code&gt; menu item in your Okta Admin Dashboard. Click &lt;code class=&quot;highlighter-rouge&quot;&gt;Add Application&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-groups-spring-security/applications-2-39ea22e813460f6e98b930722f293ec216e2a84348bfffb32d0aa2ea8df3f527.png&quot; alt=&quot;Default AS&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Choose the &lt;code class=&quot;highlighter-rouge&quot;&gt;Web&lt;/code&gt; option and click &lt;code class=&quot;highlighter-rouge&quot;&gt;Next&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Fill out the form like so:&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Field&lt;/th&gt;
-      &lt;th&gt;Value&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Name&lt;/td&gt;
-      &lt;td&gt;Fun with Spring Security Roles&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Base URIs&lt;/td&gt;
-      &lt;td&gt;http://localhost:8080/&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Login redirect URIs&lt;/td&gt;
-      &lt;td&gt;http://localhost:8080/&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Group assignments&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;admins&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;users&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Grant type allowed&lt;/td&gt;
-      &lt;td&gt;Check: &lt;code class=&quot;highlighter-rouge&quot;&gt;Implicit&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;Click&lt;code class=&quot;highlighter-rouge&quot;&gt;Done&lt;/code&gt;!&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-groups-spring-security/applications-3-328d58ce6c9036dbd53644e4b3bb2e2f14e3243b03beb85047081b24a90feecd.png&quot; alt=&quot;Default AS&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: The URIs specified above are the Spring Boot defaults. These can easily be changed later on.&lt;/p&gt;
-
-&lt;p&gt;Scroll down on the resulting page and note the &lt;code class=&quot;highlighter-rouge&quot;&gt;Client ID&lt;/code&gt;. You’ll need it later to configure the Spring Boot app.&lt;/p&gt;
-&lt;h3 id=&quot;authorization-server&quot;&gt;Authorization Server&lt;/h3&gt;
-
-&lt;p&gt;Navigate in your Okta Admin Dashboard to &lt;code class=&quot;highlighter-rouge&quot;&gt;API&lt;/code&gt; -&amp;gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;Authorization Servers&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-groups-spring-security/as-1-edcea0d050e00c96ec6277ec9e6fc756fda21365a5038588ca3d4d23ee38d39f.png&quot; alt=&quot;Default AS&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Note the &lt;code class=&quot;highlighter-rouge&quot;&gt;Issuer URI&lt;/code&gt;. You’ll need it later to configure the Spring Boot app.&lt;/p&gt;
-
-&lt;p&gt;Click the &lt;code class=&quot;highlighter-rouge&quot;&gt;default&lt;/code&gt; link and choose the &lt;code class=&quot;highlighter-rouge&quot;&gt;Claims&lt;/code&gt; tab. Click &lt;code class=&quot;highlighter-rouge&quot;&gt;Add Claim&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Fill out the form like so:&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Field&lt;/th&gt;
-      &lt;th&gt;Value&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Name&lt;/td&gt;
-      &lt;td&gt;groups&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Include in token type&lt;/td&gt;
-      &lt;td&gt;Access Token&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Value type&lt;/td&gt;
-      &lt;td&gt;Groups&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Filter&lt;/td&gt;
-      &lt;td&gt;Regex .*&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Include in&lt;/td&gt;
-      &lt;td&gt;Any scope&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;Click&lt;code class=&quot;highlighter-rouge&quot;&gt;Create&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-groups-spring-security/as-3-379fed7c6f2e9befea19607b2f9a1c1acd97efe8870f61165eedae58431b840b.png&quot; alt=&quot;Default AS&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;This ensures that group membership information is included in the Access Token when a user authenticates. This is key to hooking into Spring Security’s roles and authorities mechanism.&lt;/p&gt;
-
-&lt;h2 id=&quot;configure-your-spring-boot-app&quot;&gt;Configure Your Spring Boot App&lt;/h2&gt;
-
-&lt;p&gt;Clone the &lt;a href=&quot;https://github.com/oktadeveloper/okta-spring-security-roles-example&quot;&gt;GitHub repo&lt;/a&gt;.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/okta/okta.github.io.git
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Open up the project in your favorite IDE or editor. The screenshots below are from &lt;a href=&quot;https://www.jetbrains.com/idea/&quot;&gt;IntelliJ IDEA&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Make a copy of the &lt;code class=&quot;highlighter-rouge&quot;&gt;application.yml.sample&lt;/code&gt; file and name it &lt;code class=&quot;highlighter-rouge&quot;&gt;application.yml&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;Update the values with the information you saved earlier. My settings are shown below:&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Name&lt;/th&gt;
-      &lt;th&gt;Value&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;baseUrl&lt;/td&gt;
-      &lt;td&gt;https://dev-237330.oktapreview.com&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;issuer&lt;/td&gt;
-      &lt;td&gt;https://dev-237330.oktapreview.com/oauth2/default&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;audience&lt;/td&gt;
-      &lt;td&gt;api://default&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;clientId&lt;/td&gt;
-      &lt;td&gt;0oacdldhkydGGruON0h7&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;rolesClaim&lt;/td&gt;
-      &lt;td&gt;groups&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;redirectUri&lt;/td&gt;
-      &lt;td&gt;http://localhost:8080/&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;Let’s fire up the application and see it in action before we jump into the code.&lt;/p&gt;
-
-&lt;p&gt;You can run this from the command line:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mvn spring-boot:run
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;exercise-the-app&quot;&gt;Exercise the App&lt;/h2&gt;
-
-&lt;p&gt;Navigate to the home page and click &lt;code class=&quot;highlighter-rouge&quot;&gt;Login&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-groups-spring-security/app-1-27e3fe11b53cef9560f5178de2bdbecf6c2e9148709c376f4e3c1663184fa34f.png&quot; alt=&quot;Default AS&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Sign in as the user that belongs to the &lt;code class=&quot;highlighter-rouge&quot;&gt;users&lt;/code&gt; group that you created before.&lt;/p&gt;
-
-&lt;p&gt;You’ll see that the app knows who you are and there are a row of buttons on the bottom of the page.&lt;/p&gt;
-
-&lt;p&gt;These buttons are connected to the app such that only members of the &lt;code class=&quot;highlighter-rouge&quot;&gt;users&lt;/code&gt; group will be able to see the page when &lt;code class=&quot;highlighter-rouge&quot;&gt;Users Only&lt;/code&gt; is clicked and only members of the &lt;code class=&quot;highlighter-rouge&quot;&gt;admins&lt;/code&gt; group will be able to see the page when &lt;code class=&quot;highlighter-rouge&quot;&gt;Admins Only&lt;/code&gt; is clicked.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-groups-spring-security/app-3-6117b86cd2a73ab750767098c6eac1b66783fa0af36d74b5d1c8850acf1e5da9.png&quot; alt=&quot;Default AS&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Click &lt;code class=&quot;highlighter-rouge&quot;&gt;Users Only&lt;/code&gt;. You’ll see a page that shows that you’re a member of the &lt;code class=&quot;highlighter-rouge&quot;&gt;users&lt;/code&gt; group.&lt;/p&gt;
-
-&lt;p&gt;Click &lt;code class=&quot;highlighter-rouge&quot;&gt;Back&lt;/code&gt; then &lt;code class=&quot;highlighter-rouge&quot;&gt;Admins Only&lt;/code&gt;. Notice that you get a &lt;code class=&quot;highlighter-rouge&quot;&gt;403 Unauthorized&lt;/code&gt; because you’re not a member of the &lt;code class=&quot;highlighter-rouge&quot;&gt;admins&lt;/code&gt; group.&lt;/p&gt;
-
-&lt;p&gt;Click the &lt;code class=&quot;highlighter-rouge&quot;&gt;Logout&lt;/code&gt; button. Log in again as the user that belongs to the &lt;code class=&quot;highlighter-rouge&quot;&gt;admins&lt;/code&gt; group that you created before.&lt;/p&gt;
-
-&lt;p&gt;Click &lt;code class=&quot;highlighter-rouge&quot;&gt;Admins Only&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-groups-spring-security/app-6-5a5c52a8afe6a20c379b4698b65f8bbde059ed54e595ff2de1d78f3f6ceebcb9.png&quot; alt=&quot;Default AS&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;This time, you can see that you are in both the &lt;code class=&quot;highlighter-rouge&quot;&gt;admins&lt;/code&gt; group and the &lt;code class=&quot;highlighter-rouge&quot;&gt;users&lt;/code&gt; group.&lt;/p&gt;
-&lt;h2 id=&quot;spring-security-code-review&quot;&gt;Spring Security Code Review&lt;/h2&gt;
-
-&lt;p&gt;Now that you’ve seen the app working, let’s jump into the code and see how Okta groups link up to Spring Security roles.&lt;/p&gt;
-
-&lt;p&gt;The demo application &lt;a href=&quot;https://github.com/oktadeveloper/okta-spring-security-roles-example&quot;&gt;found on GitHub&lt;/a&gt; makes use of:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Spring Boot&lt;/li&gt;
-  &lt;li&gt;Spring Security&lt;/li&gt;
-  &lt;li&gt;Spring Security OAuth2&lt;/li&gt;
-  &lt;li&gt;Okta Spring Security Starter&lt;/li&gt;
-  &lt;li&gt;Thymeleaf Templates&lt;/li&gt;
-  &lt;li&gt;Thymeleaf Extras for Spring Security 4&lt;/li&gt;
-  &lt;li&gt;Okta Sign-In Widget&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;The “behind the scenes magic” happens by virtue of the fact that we depend on the &lt;code class=&quot;highlighter-rouge&quot;&gt;okta-spring-security-starter&lt;/code&gt; (from pom.xml):&lt;/p&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;...
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;com.okta.spring&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;okta-spring-security-starter&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;0.1.0&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
-...
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Let’s start at the beginning and take a look at how the Okta Sign-In Widget bridges the gap from the client side to Spring Boot.&lt;/p&gt;
-
-&lt;h3 id=&quot;the-okta-sign-in-widget&quot;&gt;The Okta Sign-In Widget&lt;/h3&gt;
-
-&lt;p&gt;In the &lt;code class=&quot;highlighter-rouge&quot;&gt;login.html&lt;/code&gt; Thymeleaf template, we set up the login widget like so:&lt;/p&gt;
-
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ready&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;baseUrl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;appProperties&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;baseUrl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}]],&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;clientId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;appProperties&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;clientId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}]],&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;redirectUri&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;appProperties&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;redirectUri&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}]],&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;authParams&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;issuer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;appProperties&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;issuer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}]],&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;responseType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'token'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;oktaSignIn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;OktaSignIn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;c1&quot;&gt;// Check if we already have an access token&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;token&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;oktaSignIn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;tokenManager&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'token'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;location&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;href&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/authenticated&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;renderWidget&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Notice that we’ve embedded all the settings to connect to our Okta tenant as inline Thymeleaf Template variables (lines 3 - 8). These values are passed in from the Spring Boot controller as part of the model. This is powerful because you only have to specify these settings in one place. Both server side and client side make use of them. You’ll see how these settings are managed below. For now, just know that they all come from the &lt;code class=&quot;highlighter-rouge&quot;&gt;application.yml&lt;/code&gt; file.&lt;/p&gt;
-
-&lt;p&gt;After the Okta Sign-In Widget is configured and instantiated, we check to see if the user has already logged in. If so, we send them to the &lt;code class=&quot;highlighter-rouge&quot;&gt;/authenticated&lt;/code&gt; page. If not, we render the widget, which gives the user the opportunity to log in.&lt;/p&gt;
-
-&lt;p&gt;Here’s the &lt;code class=&quot;highlighter-rouge&quot;&gt;renderWidget&lt;/code&gt; function:&lt;/p&gt;
-
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;renderWidget&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;oktaSignIn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;renderEl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;el&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'#okta-login-container'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-
-            &lt;span class=&quot;c1&quot;&gt;// check if success&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'SUCCESS'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-
-                &lt;span class=&quot;c1&quot;&gt;// for our example we have the id token and the access token&lt;/span&gt;
-                &lt;span class=&quot;nx&quot;&gt;oktaSignIn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;tokenManager&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'token'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
-
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;location&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;protocol&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;startsWith&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'https'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-                        &lt;span class=&quot;s1&quot;&gt;'WARNING: You are about to pass a bearer token in a cookie over an insecure\n'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
-                        &lt;span class=&quot;s1&quot;&gt;'connection. This should *NEVER* be done in a production environment per\n'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
-                        &lt;span class=&quot;s1&quot;&gt;'https://tools.ietf.org/html/rfc6750'&lt;/span&gt;
-                    &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-                &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-                &lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;cookie&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'access_token='&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;oktaSignIn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;tokenManager&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'token'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;accessToken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-                &lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;location&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;href&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/authenticated&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// handle any errors&lt;/span&gt;
-            &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Once the widget is rendered on the page, the internal logic takes over based on your settings when the user logs in. In this case, you are using the &lt;a href=&quot;https://tools.ietf.org/html/rfc6749#section-1.3.2&quot;&gt;implicit&lt;/a&gt; flow and will get back only an access token as specified by the &lt;code class=&quot;highlighter-rouge&quot;&gt;responseType&lt;/code&gt; parameter of the configuration.&lt;/p&gt;
-
-&lt;p&gt;On successful login, you enter the callback function with a &lt;code class=&quot;highlighter-rouge&quot;&gt;response&lt;/code&gt; object. The response object has your (or in this case, your user’s) access token.&lt;/p&gt;
-
-&lt;p&gt;Line 19 sets a cookie with the access token and line 20 sends the (now authenticated) user to the &lt;code class=&quot;highlighter-rouge&quot;&gt;/authenticated&lt;/code&gt; endpoint.&lt;/p&gt;
-
-&lt;p&gt;At this point, Spring Security can recognize the authenticated user. Before we look at how the Spring Security roles work, let’s first see how Spring Security deals with the access token.&lt;/p&gt;
-
-&lt;h3 id=&quot;spring-security-token-extractor&quot;&gt;Spring Security Token Extractor&lt;/h3&gt;
-
-&lt;p&gt;By default, the Spring Security OAuth 2.0 plugin processes access tokens coming in on an &lt;code class=&quot;highlighter-rouge&quot;&gt;Authorization&lt;/code&gt; header as a bearer token. This is fine for applications that are creating RESTful responses for clients, such as an Angular client.&lt;/p&gt;
-
-&lt;p&gt;For this example, I wanted to keep the architecture and amount of JavaScript minimal, so I wanted full page transitions. This is a little old-school, but it keeps the example code tight and small.&lt;/p&gt;
-
-&lt;p&gt;In order for Spring Security to recognize that a user has authenticated, we need it to be able to handle the token coming in on a cookie.&lt;/p&gt;
-
-&lt;p&gt;Fortunately, Spring Security makes it pretty easy to override the default behavior by setting a &lt;code class=&quot;highlighter-rouge&quot;&gt;TokenExtractor&lt;/code&gt;. Here’s the code that makes this happen from &lt;code class=&quot;highlighter-rouge&quot;&gt;OktaSpringSecurityRolesExampleApplication&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ResourceServerConfigurerAdapter&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;resourceServerConfigurerAdapter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ResourceServerConfigurerAdapter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-        &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;configure&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ResourceServerSecurityConfigurer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resources&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;resources&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;tokenExtractor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TokenExtractor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-                &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-                &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Authentication&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;extract&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HttpServletRequest&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tokenValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;findCookie&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ACCESS_TOKEN_COOKIE_NAME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getCookies&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-                    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tokenValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-                    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;PreAuthenticatedAuthenticationToken&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tokenValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;};&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;All this is doing is pulling the access token from the list of cookies on the incoming request, if it can. The parsing and validation is handled automatically. Pretty neat, eh?&lt;/p&gt;
-
-&lt;h3 id=&quot;role-based-access-controls&quot;&gt;Role Based Access Controls&lt;/h3&gt;
-
-&lt;p&gt;In the application setup, you define which paths are open. All other paths require an authenticated session at least.&lt;/p&gt;
-
-&lt;p&gt;Here’s another excerpt from &lt;code class=&quot;highlighter-rouge&quot;&gt;OktaSpringSecurityRolesExampleApplication&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ResourceServerConfigurerAdapter&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;resourceServerConfigurerAdapter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ResourceServerConfigurerAdapter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-        &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;configure&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HttpSecurity&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;authorizeRequests&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;antMatchers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;/login&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;/images/**&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;permitAll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;and&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;exceptionHandling&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;accessDeniedHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;customAccessDeniedHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;};&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Here, you are telling Spring Security to let any unauthenticated user access the home page (&lt;code class=&quot;highlighter-rouge&quot;&gt;/&lt;/code&gt;), the login page (&lt;code class=&quot;highlighter-rouge&quot;&gt;/login&lt;/code&gt;), and anything that comes from our static images folder.&lt;/p&gt;
-
-&lt;p&gt;You also define a custom access-denied handler. Every other path is automatically locked down by default.&lt;/p&gt;
-
-&lt;p&gt;Here’s the &lt;code class=&quot;highlighter-rouge&quot;&gt;SecureController&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Controller&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SecureController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AppProperties&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;appProperties&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;SecureController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AppProperties&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;appProperties&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;appProperties&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;appProperties&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@RequestMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/authenticated&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;authenticated&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Model&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addAttribute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;appProperties&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;appProperties&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;authenticated&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@RequestMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/users&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@PreAuthorize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;hasAuthority('users')&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roles&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@RequestMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/admins&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@PreAuthorize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;hasAuthority('admins')&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;admins&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roles&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@RequestMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/403&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;error403&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;403&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;There are four paths defined in this controller and all require an authenticated user at a minimum. The real value comes in with the &lt;code class=&quot;highlighter-rouge&quot;&gt;/users&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;/admins&lt;/code&gt; paths.&lt;/p&gt;
-
-&lt;p&gt;Notice that they both have the &lt;code class=&quot;highlighter-rouge&quot;&gt;@PreAuthorize&lt;/code&gt; annotation. This means that the &lt;a href=&quot;https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#expressions&quot;&gt;SpringEL&lt;/a&gt; expression that follows must be satisfied before the method will even be entered. The &lt;code class=&quot;highlighter-rouge&quot;&gt;hasAuthority&lt;/code&gt; function looks to see if the authenticated user belongs to those roles. In this case, these are automatically mapped to the Okta groups we created earlier. That’s why it was key to ensure that the &lt;code class=&quot;highlighter-rouge&quot;&gt;groups&lt;/code&gt; claim was included in the access token from Okta.&lt;/p&gt;
-
-&lt;p&gt;While there was a bit of setup to get to this point, you get role-based access control with one line of code!&lt;/p&gt;
-
-&lt;h3 id=&quot;end-to-end-configuration&quot;&gt;End to End Configuration&lt;/h3&gt;
-
-&lt;p&gt;Since the client side is a set of HTML pages in the form of Thymeleaf templates that are served from the application itself, it makes sense to have a single source for configuration values that are needed on both the client and server.&lt;/p&gt;
-
-&lt;p&gt;Spring makes this easy with the &lt;code class=&quot;highlighter-rouge&quot;&gt;@Component&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;@ConfigurationProperties&lt;/code&gt; annotations.&lt;/p&gt;
-
-&lt;p&gt;Here’s the &lt;code class=&quot;highlighter-rouge&quot;&gt;AppProperties&lt;/code&gt; class:&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@ConfigurationProperties&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;okta.oauth&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AppProperties&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;issuer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;audience&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;clientId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rolesClaim&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;baseUrl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redirectUri&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;c1&quot;&gt;// getters and setters&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;@ConfigurationProperties&lt;/code&gt; tells Spring to pull in all the properties from the &lt;code class=&quot;highlighter-rouge&quot;&gt;application.yml&lt;/code&gt; file that belong to the &lt;code class=&quot;highlighter-rouge&quot;&gt;okta.oauth&lt;/code&gt; key.&lt;/p&gt;
-
-&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;@Component&lt;/code&gt; annotation causes Spring to instantiate this Object and make it available for auto-wiring elsewhere.&lt;/p&gt;
-
-&lt;p&gt;Here’s a snippet from the the &lt;code class=&quot;highlighter-rouge&quot;&gt;HomeController&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Controller&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HomeController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AppProperties&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;appProperties&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;HomeController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AppProperties&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;appProperties&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;appProperties&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;appProperties&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@RequestMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/login&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;login&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Model&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addAttribute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;appProperties&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;appProperties&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;login&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Before returning the &lt;code class=&quot;highlighter-rouge&quot;&gt;login&lt;/code&gt; view when the &lt;code class=&quot;highlighter-rouge&quot;&gt;/login&lt;/code&gt; endpoint is hit, the &lt;code class=&quot;highlighter-rouge&quot;&gt;AppProperties&lt;/code&gt; object (autowired in on lines 4 &amp;amp; 5) is added to the model.&lt;/p&gt;
-
-&lt;p&gt;This is what makes it available to the Thymeleaf template as you saw before:&lt;/p&gt;
-
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;script&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;th&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;inline&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;javascript&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;cm&quot;&gt;/*&amp;lt;![CDATA[*/&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ready&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;baseUrl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;appProperties&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;baseUrl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}]],&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;clientId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;appProperties&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;clientId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}]],&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;redirectUri&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;appProperties&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;redirectUri&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}]],&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;authParams&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;na&quot;&gt;issuer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;appProperties&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;issuer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}]],&lt;/span&gt;
-                &lt;span class=&quot;na&quot;&gt;responseType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'token'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;oktaSignIn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;OktaSignIn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;
-    &lt;span class=&quot;cm&quot;&gt;/*]]&amp;gt;*/&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/script&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;get-coding&quot;&gt;Get Coding!&lt;/h2&gt;
-
-&lt;p&gt;Hopefully you’ve seen the benefit of Okta’s Groups mechanism in conjunction with Spring Security’s role-based access control.&lt;/p&gt;
-
-&lt;p&gt;Try it for yourself and let me know how your experience is with it! You can find me on Twitter &lt;a href=&quot;https://twitter.com/afitnerd&quot;&gt;@afitnerd&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Keep an eye out for upcoming releases of the new Okta Java Spring Boot Integration, which will have support for other OIDC workflows, including &lt;code class=&quot;highlighter-rouge&quot;&gt;code&lt;/code&gt; as well as hosted, configurable login and registration views.&lt;/p&gt;
-</description>
-        <pubDate>Fri, 13 Oct 2017 00:00:00 +0000</pubDate>
-        <link>https://developer.okta.com/blog/2017/10/13/okta-groups-spring-security</link>
-        <guid isPermaLink="true">https://developer.okta.com/blog/2017/10/13/okta-groups-spring-security</guid>
       </item>
     
   </channel>
