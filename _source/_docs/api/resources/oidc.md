@@ -240,6 +240,7 @@ https://www.example.com/#error=invalid_scope&error_description=The+requested+sco
 {:.api .api-operation}
 
 {% api_operation post /oauth2/v1/token %}
+
 {% api_operation post /oauth2/${authorizationServerId}/v1/token %}
 
 The API returns Access Tokens, ID Tokens, and Refresh Tokens, depending on the request parameters.
@@ -348,6 +349,7 @@ Content-Type: application/json;charset=UTF-8
 {:.api .api-operation}
 
 {% api_operation post /oauth2/v1/introspect %}
+
 {% api_operation post /oauth2/**${authorizationServerId}**/v1/introspect %}
 
 The API takes an Access Token or Refresh Token, and returns a boolean indicating whether it is active or not.
@@ -493,6 +495,7 @@ Content-Type: application/json;charset=UTF-8
 
 
 {% api_operation post /oauth2/v1/revoke %}
+
 {% api_operation post /oauth2/**${authorizationServerId}**/v1/revoke %}
 
 The API takes an Access Token or Refresh Token and revokes it. Revoked tokens are considered inactive at the introspection endpoint. A client may only revoke its own tokens.
@@ -548,6 +551,7 @@ Content-Type: application/json;charset=UTF-8
 {:.api .api-operation}
 
 {% api_operation get /oauth2/v1/logout %}
+
 {% api_operation get /oauth2/**${authorizationServerId}**/v1/logout %}
 
 The API takes an ID Token and logs the user out of the Okta session if the subject matches the current Okta session. A `post_logout_redirect_uri` may be specified to redirect the User after the logout has been performed. Otherwise, the user is redirected to the Okta login page.
@@ -588,6 +592,7 @@ curl -v -X GET \
 {:.api .api-operation}
 
 {% api_operation get /oauth2/v1/keys %}
+
 {% api_operation get /oauth2/**${authorizationServerId}**/v1/keys %}
 
 If automatic key rotation is disabled, provide the `client_id` to fetch public keys for your app. Otherwise, this endpoint returns the public keys automatically rotated.
@@ -663,6 +668,7 @@ You can use an [introspection request](#introspection-request) for validation.
 {:.api .api-operation}
 
 {% api_operation get /oauth2/v1/userinfo %}
+
 {% api_operation get /oauth2/**${authorizationServerId}**/v1/userinfo %}
 
 You must include the `access_token` returned from the [/oauth2/v1/authorize](oidc.html#authentication-request) endpoint as an authorization header parameter.
@@ -731,6 +737,7 @@ WWW-Authenticate: Bearer error="insufficient_scope", error_description="The acce
 {:.api .api-operation}
 
 {% api_operation get /oauth2/v1/.well-known/oauth-authorization-server %}
+
 {% api_operation get /oauth2/**${authorizationServerId}**/v1/.well-known/oauth-authorization-server %}
 
 This API endpoint returns metadata related to a Custom Authorization Server that can be used by clients to programmatically configure their interactions with Okta.
@@ -811,6 +818,7 @@ This API doesn't require any authentication and returns a JSON object with the f
 {:.api .api-operation}
 
 {% api_operation get oauth/v1/.well-known/openid-configuration %}
+
 {% api_operation get oauth/**${authorizationServerId}**/v1/.well-known/openid-configuration %}
 
 This API endpoint returns metadata related to OpenID Connect that can be used by clients to programmatically configure their interactions with Okta.
