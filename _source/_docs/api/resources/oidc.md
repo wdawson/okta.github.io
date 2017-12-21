@@ -236,10 +236,11 @@ The requested scope is invalid:
 https://www.example.com/#error=invalid_scope&error_description=The+requested+scope+is+invalid%2C+unknown%2C+or+malformed
 ~~~
 
-### Token Request
+### /token
 {:.api .api-operation}
 
 {% api_operation post /oauth2/v1/token %}
+{% api_operation post /oauth2/${authorizationServerId}/v1/token %}
 
 The API returns Access Tokens, ID Tokens, and Refresh Tokens, depending on the request parameters.
 
@@ -342,3 +343,575 @@ Content-Type: application/json;charset=UTF-8
 }
 ~~~
 
+
+### /introspect
+{:.api .api-operation}
+
+{% api_operation post /oauth2/v1/introspect %}
+{% api_operation post /oauth2/**${authorizationServerId}**/v1/introspect %}
+
+The API takes an Access Token or Refresh Token, and returns a boolean indicating whether it is active or not.
+If the token is active, additional data about the token is also returned. If the token is invalid, expired, or revoked, it is considered inactive.
+An implicit client can only introspect its own tokens, while a confidential client can inspect all Access Tokens.
+
+> Note; [ID Tokens](/standards/OIDC/index.html#id-token) are also valid, however, they are usually validated on the service provider or app side of a flow.
+
+#### Request Parameters
+
+The following parameters can be posted as a part of the URL-encoded form values to the API.
+
+| Parameter             | Description                                                                                                                                                                                                                                                       | Type   |
+|:----------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------|
+| token                 | An Access Token, ID Token, or Refresh Token.                                                                                                                                                                                                                      | String |
+| token_type_hint       | A hint of the type of `token`. Valid values are `access_token`, `id_token` and `refresh_token`.                                                                                                                                                                   | Enum   |
+| client_id             | Required if client has a secret and client credentials are not provided in the Authorization header. This is used in conjunction with `client_secret`  to authenticate the client application.                                                                    | String |
+| client_secret         | Required if the client has a secret and client credentials are not provided in the Authorization header, and if `client_assertion_type` isn&#8217;t specified. This client secret is used in conjunction with `client_id` to authenticate the client application. | String |
+| client_assertion      | Required if the `client_assertion_type` is specified. Contains the JWT signed with the `client_secret`.    [JWT Details](#token-authentication-methods)                                                                                                              | String |
+| client_assertion_type | Indicates a JWT is being used to authenticate the client. Per the    [Client Authentication spec](http://openid.net/specs/openid-connect-core-1_0.html#ClientAuthentication), the valid value is `urn:ietf:params:oauth:client-assertion-type:jwt-bearer`.           | String |
+
+##### Token Authentication Methods
+
+<!--If you change this section, change the section in oauth2.md as well -->
+
+If you authenticate a client with client credentials, provide the [`client_id` and `client_secret`](#request-parameters-1)
+using either of the following methods:
+
+* Provide `client_id` and `client_secret`
+  in an Authorization header in the Basic auth scheme (`client_secret_basic`). For authentication with Basic auth, an HTTP header with the following format must be provided with the POST request:
+  ~~~sh
+  Authorization: Basic ${Base64(<client_id>:<client_secret>)}
+  ~~~
+* Provide the `client_id` and `client_secret`
+  as additional parameters to the POST body (`client_secret_post`)
+* Provide `client_id` in a JWT that you sign with the `client_secret`
+  using HMAC algorithms HS256, HS384, or HS512. Specify the JWT in `client_assertion` and the type, `urn:ietf:params:oauth:client-assertion-type:jwt-bearer`, in `client_assertion_type` in the request.
+
+Use only one of these methods in a single request or an error will occur.
+
+##### Token Claims for Client Authentication with Client Secret JWT
+
+If you use a JWT for client authentication (`client_secret_jwt`), use the following token claims:
+
+| Token Claims | Description                                                                           | Type   |
+|:-------------|:--------------------------------------------------------------------------------------|:-------|
+| exp          | Required. The expiration time of the token in seconds since January 1, 1970 UTC.      | Long   |
+| iat          | Optional. The issuing time of the token in seconds since January 1, 1970 UTC.         | Long   |
+| sub          | Required. The subject of the token. This value must be the same as the `client_id`.   | String |
+| aud          | Required. The full URL of the resource you&#8217;re using the JWT to authenticate to. | String |
+| iss          | Required. The issuer of the token. This value must be the same as the `client_id`.    | String |
+| jti          | Optional. The identifier of the token.                                                | String |
+
+Parameter Details
+
+* If `jti` is specified, the token can only be used once. So, for example, subsequent token requests won&#8217;t succeed.
+* The `exp` claim will fail the request if the expiration time is more than one hour in the future or has already expired.
+* If `iat` is specified, then it must be a time before the request is received.
+
+#### Response Parameters
+
+Based on the type of token and whether it is active or not, the returned JSON contains a different set of information. Besides the claims in the token, the possible top-level members include:
+
+| Parameter  | Description                                                                                                  | Type    |
+|:-----------|:-------------------------------------------------------------------------------------------------------------|:--------|
+| active     | An Access Token or Refresh Token.                                                                            | boolean |
+| token_type | The type of the token. The value is always `Bearer`.                                                         | String  |
+| scope      | A space-delimited list of scopes.                                                                            | String  |
+| client_id  | The ID of the client associated with the token.                                                              | String  |
+| username   | The username associated with the token.                                                                      | String  |
+| exp        | The expiration time of the token in seconds since January 1, 1970 UTC.                                       | Long    |
+| iat        | The issuing time of the token in seconds since January 1, 1970 UTC.                                          | Long    |
+| nbf        | A timestamp in seconds since January 1, 1970 UTC when this token is not be used before.                      | Long    |
+| sub        | The subject of the token.                                                                                    | String  |
+| aud        | The audience of the token.                                                                                   | String  |
+| iss        | The issuer of the token.                                                                                     | String  |
+| jti        | The identifier of the token.                                                                                 | String  |
+| device_id  | The ID of the device associated with the token                                                               | String  |
+| uid        | The user ID. This parameter is returned only if the token is an access token and the subject is an end user. | String  |
+
+#### List of Errors
+
+| Error Id        | Details                                                                                                                                                                                                       |
+|:----------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| invalid_client  | The specified `client_id` wasn&#8217;t found.                                                                                                                                                                 |
+| invalid_request | The request structure was invalid. For example, the basic authentication header was malformed, or both header and form parameters were used for authentication or no authentication information was provided. |
+
+#### Response Example (Success, Access Token)
+
+~~~json
+{
+    "active" : true,
+    "token_type" : "Bearer",
+    "scope" : "openid profile",
+    "client_id" : "a9VpZDRCeFh3Nkk2VdYa",
+    "username" : "john.doe@example.com",
+    "exp" : 1451606400,
+    "iat" : 1451602800,
+    "sub" : "john.doe@example.com",
+    "aud" : "https://{yourOktaDomain}.com",
+    "iss" : "https://{yourOktaDomain}.com/oauth2/orsmsg0aWLdnF3spV0g3",
+    "jti" : "AT.7P4KlczBYVcWLkxduEuKeZfeiNYkZIC9uGJ28Cc-YaI",
+    "uid" : "00uid4BxXw6I6TV4m0g3"
+}
+~~~
+
+#### Response Example (Success, Refresh Token)
+
+~~~json
+{
+    "active" : true,
+    "token_type" : "Bearer",
+    "scope" : "openid profile email",
+    "client_id" : "a9VpZDRCeFh3Nkk2VdYa",
+    "username" : "john.doe@example.com",
+    "exp" : 1451606400,
+    "sub" : "john.doe@example.com",
+    "device_id" : "q4SZgrA9sOeHkfst5uaa"
+}
+~~~
+
+#### Response Example (Success, Inactive Token)
+
+~~~json
+{
+    "active" : false
+}
+~~~
+
+#### Response Example (Error)
+
+~~~http
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json;charset=UTF-8
+{
+    "error" : "invalid_client",
+    "error_description" : "No client credentials found."
+}
+~~~
+
+### /revoke
+{:.api .api-operation}
+
+
+{% api_operation post /oauth2/v1/revoke %}
+{% api_operation post /oauth2/**${authorizationServerId}**/v1/revoke %}
+
+The API takes an Access Token or Refresh Token and revokes it. Revoked tokens are considered inactive at the introspection endpoint. A client may only revoke its own tokens.
+
+> Because this endpoint works with the [Okta Authorization Server](/standards/OAuth/index.html#authorization-servers), you don&#8217;t need an authorization server ID.
+
+#### Request Parameters
+
+The following parameters can be posted as a part of the URL-encoded form values to the API.
+
+| Parameter             | Description                                                                                                                                                                                                                                                                     | Type   |
+|:----------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------|
+| token                 | An Access Token or Refresh Token.                                                                                                                                                                                                                                               | String |
+| token_type_hint       | A hint of the type of `token`. Valid values are `access_token` and `refresh_token`.                                                                                                                                                                                             | Enum   |
+| client_id             | The client ID generated as a part of client registration. This is used in conjunction with the `client_secret` parameter to authenticate the client application.                                                                                                                | String |
+| client_secret         | Required if the client has a secret and client credentials are not provided in the Authorization header, and if `client_assertion_type` isn&#8217;t specified. This client secret is used in conjunction with the `client_id` parameter to authenticate the client application. | String |
+| client_assertion      | Required if the `client_assertion_type` is specified. Contains the JWT signed with the `client_secret`.        [JWT Details](#token-authentication-methods)                                                                                                                           | String |
+| client_assertion_type | Indicates a JWT is being used to authenticate the client. Per the          [Client Authentication spec](http://openid.net/specs/openid-connect-core-1_0.html#ClientAuthentication), the valid value is `urn:ietf:params:oauth:client-assertion-type:jwt-bearer`.                         | String |
+
+A client may only revoke a token generated for that client.
+
+For more information about token authentication, see [Token Authentication Methods](#token-authentication-methods).
+
+#### Response Parameters
+
+A successful revocation is denoted by an empty response with an HTTP 200. Note that revoking an invalid, expired, or revoked token will still be considered a success as to not leak information
+
+#### List of Errors
+
+| Error Id        | Details                                                                                                                                                                                               |
+|:----------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| invalid_client  | The specified `client_id` wasn&#8217;t found.                                                                                                                                                         |
+| invalid_request | The request structure was invalid. E.g. the basic authentication header was malformed, or both header and form parameters were used for authentication or no authentication information was provided. |
+
+#### Response Example (Success)
+
+~~~http
+HTTP/1.1 200 OK
+~~~
+
+#### Response Example (Error)
+
+~~~http
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json;charset=UTF-8
+{
+    "error" : "invalid_client",
+    "error_description" : "No client credentials found."
+}
+~~~
+
+### /logout
+{:.api .api-operation}
+
+{% api_operation get /oauth2/v1/logout %}
+{% api_operation get /oauth2/**${authorizationServerId}**/v1/logout %}
+
+The API takes an ID Token and logs the user out of the Okta session if the subject matches the current Okta session. A `post_logout_redirect_uri` may be specified to redirect the User after the logout has been performed. Otherwise, the user is redirected to the Okta login page.
+
+Use this operation to log out a User by removing their Okta browser session.
+
+#### Request Parameters
+
+The following parameters can be posted as a part of the URL-encoded form values to the API.
+
+| Parameter                | Description                                                                                                                                     | Type   | Required |
+|:-------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------|:-------|:---------|
+| id_token_hint            | A valid ID token with a subject matching the current session.                                                                                   | String | TRUE     |
+| post_logout_redirect_uri | Callback location to redirect to after the logout has been performed. It must match the value preregistered in Okta during client registration. | String | FALSE    |
+| state                    | If the request contained a `state` parameter, then the same unmodified value is returned back in the response.                                  | String | FALSE    |
+
+#### Request Examples
+
+This request initiates a logout and will redirect to the Okta login page on success.
+
+~~~sh
+curl -v -X GET \
+"https://{yourOktaDomain}.com/oauth2/v1/logout?
+  id_token_hint=${id_token_hint}
+~~~
+
+This request initiates a logout and will redirect to the `post_logout_redirect_uri` on success.
+
+~~~sh
+curl -v -X GET \
+"https://{yourOktaDomain}.com/oauth2/v1/logout?
+  id_token_hint=${id_token_hint}&
+  post_logout_redirect_uri=${post_logout_redirect_uri}&
+  state=${state}
+~~~
+
+### /keys
+{:.api .api-operation}
+
+{% api_operation get /oauth2/v1/keys %}
+{% api_operation get /oauth2/**${authorizationServerId}**/v1/keys %}
+
+If automatic key rotation is disabled, provide the `client_id` to fetch public keys for your app. Otherwise, this endpoint returns the public keys automatically rotated.
+
+#### Request Parameters
+{:.api .api-request .api-request-params}
+
+| Parameter | Description                 | Param Type | DataType | Required | Default |
+|:----------|:----------------------------|:-----------|:---------|:---------|:--------|
+| client_id | Your app&#8217;s client ID. | Query      | String   | FALSE    | null    |
+
+#### Response Example
+{:.api .api-response .api-response-example}
+
+~~~http
+HTTP/1.1 200 OK
+Cache-Control → max-age=3832304, must-revalidate
+Content-Type: application/json;charset=UTF-8
+~~~
+~~~json
+{
+  "keys": [
+    {
+      "alg": "RS256",
+      "e": "AQAB",
+      "n": "iKqiD4cr7FZKm6f05K4r-GQOvjRqjOeFmOho9V7SAXYwCyJluaGBLVvDWO1XlduPLOrsG_Wgs67SOG5qeLPR8T1zDK4bfJAo1Tvbw
+            YeTwVSfd_0mzRq8WaVc_2JtEK7J-4Z0MdVm_dJmcMHVfDziCRohSZthN__WM2NwGnbewWnla0wpEsU3QMZ05_OxvbBdQZaDUsNSx4
+            6is29eCdYwhkAfFd_cFRq3DixLEYUsRwmOqwABwwDjBTNvgZOomrtD8BRFWSTlwsbrNZtJMYU33wuLO9ynFkZnY6qRKVHr3YToIrq
+            NBXw0RWCheTouQ-snfAB6wcE2WDN3N5z760ejqQ",
+      "kid": "U5R8cHbGw445Qbq8zVO1PcCpXL8yG6IcovVa3laCoxM",
+      "kty": "RSA",
+      "use": "sig"
+    },
+    {
+      "alg": "RS256",
+      "e": "AQAB",
+      "n": "l1hZ_g2sgBE3oHvu34T-5XP18FYJWgtul_nRNg-5xra5ySkaXEOJUDRERUG0HrR42uqf9jYrUTwg9fp-SqqNIdHRaN8EwRSDRsKAwK
+            3HIJ2NJfgmrrO2ABkeyUq6rzHxAumiKv1iLFpSawSIiTEBJERtUCDcjbbqyHVFuivIFgH8L37-XDIDb0XG-R8DOoOHLJPTpsgH-rJe
+            M5w96VIRZInsGC5OGWkFdtgk6OkbvVd7_TXcxLCpWeg1vlbmX-0TmG5yjSj7ek05txcpxIqYu-7FIGT0KKvXge_BOSEUlJpBhLKU28
+            OtsOnmc3NLIGXB-GeDiUZiBYQdPR-myB4ZoQ",
+      "kid": "Y3vBOdYT-l-I0j-gRQ26XjutSX00TeWiSguuDhW3ngo",
+      "kty": "RSA",
+      "use": "sig"
+    },
+    {
+      "alg": "RS256",
+      "e": "AQAB",
+      "n": "lC4ehVB6W0OCtNPnz8udYH9Ao83B6EKnHA5eTcMOap_lQZ-nKtS1lZwBj4wXRVc1XmS0d2OQFA1VMQ-dHLDE3CiGfsGqWbaiZFdW7U
+            GLO1nAwfDdH6xp3xwpKOMewDXbAHJlXdYYAe2ap-CE9c5WLTUBU6JROuWcorHCNJisj1aExyiY5t3JQQVGpBz2oUIHo7NRzQoKimvp
+            dMvMzcYnTlk1dhlG11b1GTkBclprm1BmOP7Ltjd7aEumOJWS67nKcAZzl48Zyg5KtV11V9F9dkGt25qHauqFKL7w3wu-DYhT0hmyFc
+            wn-tXS6e6HQbfHhR_MQxysLtDGOk2ViWv8AQ",
+      "kid": "h5Sr3LXcpQiQlAUVPdhrdLFoIvkhRTAVs_h39bQnxlU",
+      "kty": "RSA",
+      "use": "sig"
+    }
+  ]
+}
+~~~
+
+>Okta strongly recommends retrieving keys dynamically with the JWKS published in the discovery document.
+
+>Okta also recommends caching or persisting downloaded keys to improve performance by eliminating multiple API requests. If the client application is pinned to a signing key, the verification fails when Okta rotates the key automatically. Pinned client applications must periodically check the cached Okta signing keys.
+
+Any of the two or three keys listed are used to sign tokens. The order of keys in the result doesn&#8217;t indicate which keys are used.
+
+Standard open-source libraries are available for every major language to perform [JWS](https://tools.ietf.org/html/rfc7515) signature validation.
+
+#### Alternative Validation
+
+You can use an [introspection request](#introspection-request) for validation.
+
+### /userinfo
+{:.api .api-operation}
+
+{% api_operation get /oauth2/v1/userinfo %}
+{% api_operation get /oauth2/**${authorizationServerId}**/v1/userinfo %}
+
+You must include the `access_token` returned from the [/oauth2/v1/authorize](oidc.html#authentication-request) endpoint as an authorization header parameter.
+
+This endpoint complies with the [OIDC userinfo spec](http://openid.net/specs/openid-connect-core-1_0.html#UserInfo).
+
+#### Request Example
+{:.api .api-request .api-request-example}
+
+~~~sh
+curl -v -X POST \
+-H "Authorization: Bearer <access_token>" \
+"https://{yourOktaDomain}.com/oauth2/v1/userinfo"
+~~~
+
+#### Response Parameters
+{:.api .api-response .api-response-example}
+
+Returns a JSON document with information requested in the scopes list of the token.
+
+#### Response Example (Success)
+{:.api .api-response .api-response-example}
+~~~json
+{
+  "sub": "00uid4BxXw6I6TV4m0g3",
+  "name" :"John Doe",
+  "nickname":"Jimmy",
+  "given_name":"John",
+  "middle_name":"James",
+  "family_name":"Doe",
+  "profile":"https://profile.wordpress.com/john.doe",
+  "zoneinfo":"America/Los_Angeles",
+  "locale":"en-US",
+  "updated_at":1311280970,
+  "email":"john.doe@example.com",
+  "email_verified":true,
+  "address" : { "street_address": "123 Hollywood Blvd.", "locality": "Los Angeles", "region": "CA", "postal_code": "90210", "country": "US" },
+  "phone_number":"+1 (425) 555-1212"
+}
+~~~
+
+The claims in the response are identical to those returned for the requested scopes in the `id_token` JWT, except for the `sub` claim which is always present.
+See [Scope-Dependent Claims](/standards/OIDC/index.html#scope-dependent-claims-not-always-returned) for more information about individual claims.
+
+#### Response Example (Error)
+{:.api .api-response .api-response-example}
+~~~http
+HTTP/1.1 401 Unauthorized​
+Cache-Control: no-cache, no-store​
+Pragma: no-cache​
+Expires: 0​
+WWW-Authenticate: Bearer error="invalid_token", error_description="The access token is invalid"​
+~~~
+
+#### Response Example (Error)
+{:.api .api-response .api-response-example}
+~~~http
+HTTP/1.1 403 Forbidden​
+Cache-Control: no-cache, no-store​
+Pragma: no-cache​
+Expires: 0​
+WWW-Authenticate: Bearer error="insufficient_scope", error_description="The access token must provide access to at least one of these scopes - profile, email, address or phone"
+~~~
+
+#### /.well-known/oauth-authorization-server
+{:.api .api-operation}
+
+{% api_operation get /oauth2/v1/.well-known/oauth-authorization-server %}
+{% api_operation get /oauth2/**${authorizationServerId}**/v1/.well-known/oauth-authorization-server %}
+
+This API endpoint returns metadata related to a Custom Authorization Server that can be used by clients to programmatically configure their interactions with Okta.
+Custom scopes and custom claims aren't returned.
+
+This API doesn't require any authentication and returns a JSON object with the following structure.
+
+~~~json
+{
+    "issuer": "https://{yourOktaDomain}.com",
+    "authorization_endpoint": "https://{yourOktaDomain}.com/oauth2/{authorizationServerId}/v1/authorize",
+    "token_endpoint": "https://{yourOktaDomain}.com/oauth2/{authorizationServerId}/v1/token",
+    "registration_endpoint": "https://{yourOktaDomain}.com/oauth2/v1/clients",
+    "jwks_uri": "https://{yourOktaDomain}.com/oauth2/{authorizationServerId}/v1/keys",
+    "response_types_supported": [
+        "code",
+        "token",
+        "code token"
+    ],
+    "response_modes_supported": [
+        "query",
+        "fragment",
+        "form_post",
+        "okta_post_message"
+    ],
+    "grant_types_supported": [
+        "authorization_code",
+        "implicit",
+        "refresh_token",
+        "password"
+        "client_credentials"
+    ],
+    "subject_types_supported": [
+        "public"
+    ],
+    "scopes_supported": [
+        "offline_access",
+    ],
+    "token_endpoint_auth_methods_supported": [
+        "client_secret_basic",
+        "client_secret_post",
+        "client_secret_jwt",
+        "none"
+    ],
+    "claims_supported": [
+       "ver",
+       "jti",
+       "iss",
+       "aud",
+       "iat",
+       "exp",
+       "cid",
+       "uid",
+       "scp",
+       "sub"
+  ],
+    "code_challenge_methods_supported": [
+        "S256"
+    ],
+    "introspection_endpoint": "https://{yourOktaDomain}.com/oauth2/{authorizationServerId}/v1/introspect",
+    "introspection_endpoint_auth_methods_supported": [
+        "client_secret_basic",
+        "client_secret_post",
+        "client_secret_jwt",
+        "none"
+    ],
+    "revocation_endpoint": "https://{yourOktaDomain}.com/oauth2/{authorizationServerId}/v1/revoke",
+    "revocation_endpoint_auth_methods_supported": [
+        "client_secret_basic",
+        "client_secret_post",
+        "client_secret_jwt",
+        "none"
+    ]
+}
+~~~
+
+### .well-known/openid-configuration
+{:.api .api-operation}
+
+{% api_operation get oauth/v1/.well-known/openid-configuration %}
+{% api_operation get oauth/**${authorizationServerId}**/v1/.well-known/openid-configuration %}
+
+This API endpoint returns metadata related to OpenID Connect that can be used by clients to programmatically configure their interactions with Okta.
+This API doesn&#8217;t require any authentication and returns a JSON object with the following structure.
+
+~~~json
+{
+    "issuer": "https://{yourOktaDomain}.com",
+    "authorization_endpoint": "https://{yourOktaDomain}.com/oauth2/v1/authorize",
+    "token_endpoint": "https://{yourOktaDomain}.com/oauth2/v1/token",
+    "userinfo_endpoint": "https://{yourOktaDomain}.com/oauth2/v1/userinfo",
+    "registration_endpoint": "https://{yourOktaDomain}.com/oauth2/v1/clients",
+    "jwks_uri": "https://{yourOktaDomain}.com/oauth2/v1/keys",
+    "response_types_supported": [
+        "code",
+        "code id_token",
+        "code token",
+        "code id_token token",
+        "id_token",
+        "id_token token"
+    ],
+    "response_modes_supported": [
+        "query",
+        "fragment",
+        "form_post",
+        "okta_post_message"
+    ],
+    "grant_types_supported": [
+        "authorization_code",
+        "implicit",
+        "refresh_token",
+        "password"
+    ],
+    "subject_types_supported": [
+        "public"
+    ],
+    "id_token_signing_alg_values_supported": [
+        "RS256"
+    ],
+    "scopes_supported": [
+        "openid",
+        "email",
+        "profile",
+        "address",
+        "phone",
+        "offline_access",
+        "groups"
+    ],
+    "token_endpoint_auth_methods_supported": [
+        "client_secret_basic",
+        "client_secret_post",
+        "client_secret_jwt",
+        "none"
+    ],
+    "claims_supported": [
+        "iss",
+        "ver",
+        "sub",
+        "aud",
+        "iat",
+        "exp",
+        "jti",
+        "auth_time",
+        "amr",
+        "idp",
+        "nonce",
+        "name",
+        "nickname",
+        "preferred_username",
+        "given_name",
+        "middle_name",
+        "family_name",
+        "email",
+        "email_verified",
+        "profile",
+        "zoneinfo",
+        "locale",
+        "address",
+        "phone_number",
+        "picture",
+        "website",
+        "gender",
+        "birthdate",
+        "updated_at",
+        "at_hash",
+        "c_hash"
+    ],
+    "introspection_endpoint": "https://{yourOktaDomain}.com/oauth2/v1/introspect",
+    "introspection_endpoint_auth_methods_supported": [
+        "client_secret_basic",
+        "client_secret_post",
+        "client_secret_jwt",
+        "none"
+    ],
+    "revocation_endpoint": "https://{yourOktaDomain}.com/oauth2/v1/revoke",
+    "revocation_endpoint_auth_methods_supported": [
+        "client_secret_basic",
+        "client_secret_post",
+        "client_secret_jwt",
+        "none"
+    ],
+    "end_session_endpoint": "https://{yourOktaDomain}.com/oauth2/v1/logout"
+}
+~~~
