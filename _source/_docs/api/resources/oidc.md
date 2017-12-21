@@ -241,7 +241,7 @@ https://www.example.com/#error=invalid_scope&error_description=The+requested+sco
 
 {% api_operation post /oauth2/v1/token %}
 
-{% api_operation post /oauth2/${authorizationServerId}/v1/token %}
+{% api_operation post /oauth2/**${authorizationServerId}**/v1/token %}
 
 The API returns Access Tokens, ID Tokens, and Refresh Tokens, depending on the request parameters.
 
