@@ -6,9 +6,26 @@
 <body>
     <h2 id="okta-aspnet-core-quickstart">Okta ASP.NET Core Quickstart</h2>
 
+<p>If you want a full, working example, head over to the <a href="https://github.com/oktadeveloper/okta-aspnetcore-mvc-example">ASP.NET Core MVC example</a> repository.</p>
+
 <h3 id="create-a-new-project">Create a new project</h3>
 
-<p>If you don’t already have an ASP.NET Core 2.0 project, create one using <code class="highlighter-rouge">dotnet new mvc</code> or the ASP.NET Core Web Application template in Visual Studio. Choose <strong>No Authentication</strong> if necessary.</p>
+<p>If you don’t already have an ASP.NET Core 2.0 project, create one using <code class="highlighter-rouge">dotnet new mvc</code> or the ASP.NET Core Web Application template in Visual Studio. Choose <strong>No Authentication</strong> as the authentication type.</p>
+
+<h3 id="configure-the-application-in-okta">Configure the application in Okta</h3>
+
+<p>Sign in to your Okta developer account (or <a href="https://developer.okta.com/signup/">create one</a>). Create or update an application in Okta with these settings:</p>
+
+<ul>
+  <li><strong>Application type:</strong> Web</li>
+  <li><strong>Allowed grant types:</strong> Authorization Code</li>
+  <li><strong>Login redirect URI:</strong> http://localhost:60611/authorization-code/callback</li>
+  <li><strong>Logout redirect URI:</strong> http://localhost:60611/signout-callback-oidc</li>
+</ul>
+
+<p>If you are creating an Okta application from scratch, click <strong>Done</strong> to see the full settings page and make sure the settings match the values above.</p>
+
+<p>Scroll to the bottom of the Okta application page to find the client ID and client secret. You’ll need those values in the next step.</p>
 
 <h3 id="configure-the-middleware">Configure the middleware</h3>
 
@@ -20,7 +37,7 @@
 </code></pre>
 </div>
 
-<p>In the <code class="highlighter-rouge">ConfigureServices</code> method, add this <code class="highlighter-rouge">UseAuthentication</code> block and configure it using the information from the Okta application you just created:</p>
+<p>In the <code class="highlighter-rouge">ConfigureServices</code> method, add this <code class="highlighter-rouge">UseAuthentication</code> block and configure it using the information from your Okta application:</p>
 
 <div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="n">services</span><span class="p">.</span><span class="nf">AddAuthentication</span><span class="p">(</span><span class="n">sharedOptions</span> <span class="p">=&gt;</span>
 <span class="p">{</span>
@@ -49,15 +66,26 @@
 </code></pre>
 </div>
 
+<p><strong>Note:</strong> The value of <code class="highlighter-rouge"><span class="p">{</span><span class="err">yourOktaDomain</span><span class="p">}</span></code> should be something like dev-123456.oktapreview.com. Make sure you don’t include <code class="highlighter-rouge">-admin</code> in the value!</p>
+
 <p>Then, in the <code class="highlighter-rouge">Configure</code> method, add this line <strong>above</strong> the <code class="highlighter-rouge">UseMvc</code> line:</p>
 
 <div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="n">app</span><span class="p">.</span><span class="nf">UseAuthentication</span><span class="p">();</span>
 </code></pre>
 </div>
 
-<h3 id="annotate-your-application">Annotate your application</h3>
+<h3 id="secure-your-application">Secure your application</h3>
 
-<p>Use the <code class="highlighter-rouge">[Authorize]</code> attribute on controllers or actions to require a logged-in user.</p>
+<p>Use the <code class="highlighter-rouge">[Authorize]</code> attribute on controllers or actions to require a logged-in user:</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="na">[Authorize]</span>
+<span class="k">public</span> <span class="n">IActionResult</span> <span class="nf">Protected</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// Only for logged-in users!
+</span>    <span class="k">return</span> <span class="nf">View</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre>
+</div>
 
 <p>Alternatively, you can create actions to log the user in (or out):</p>
 
@@ -78,6 +106,7 @@
         <span class="k">return</span> <span class="nf">RedirectToAction</span><span class="p">(</span><span class="s">"Index"</span><span class="p">,</span> <span class="s">"Home"</span><span class="p">);</span>
     <span class="p">}</span>
 
+    <span class="p">[</span><span class="n">HttpPost</span><span class="p">]</span>
     <span class="k">public</span> <span class="n">IActionResult</span> <span class="nf">Logout</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">HttpContext</span><span class="p">.</span><span class="n">User</span><span class="p">.</span><span class="n">Identity</span><span class="p">.</span><span class="n">IsAuthenticated</span><span class="p">)</span>
@@ -91,21 +120,24 @@
 </code></pre>
 </div>
 
-<p>Open a private or incognito window in your browser and try navigating to a route that has the <code class="highlighter-rouge">[Authorize]</code> attribute, or to the <code class="highlighter-rouge">/Account/Login</code> action above. You’ll be redirected to the Okta Sign-In page.</p>
+<h3 id="run-the-project">Run the project</h3>
 
-<blockquote>
-  <p>Note: If you want to log the user out, you’ll need to add a <strong>Logout redirect URI</strong> to the application configuration in Okta with a value of <code class="highlighter-rouge">http://{yourServerUrl}/signout-callback-oidc</code>. For example, <code class="highlighter-rouge">http://localhost:5000/signout-callback-oidc</code>.</p>
-</blockquote>
+<p>Start the project in Visual Studio, or with this command:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>dotnet run
+</code></pre>
+</div>
+
+<p>Open <code class="highlighter-rouge">http://localhost:60611</code> in a private or incognito window in your browser. Try navigating to a route that has the <code class="highlighter-rouge">[Authorize]</code> attribute, or to the <code class="highlighter-rouge">/Account/Login</code> action. You’ll be redirected to the Okta Sign-In page.</p>
 
 <h3 id="thats-it">That’s it!</h3>
 
 <p>ASP.NET Core automatically populates <code class="highlighter-rouge">HttpContext.User</code> with the information Okta sends back about the user. You can check whether the user is logged in with <code class="highlighter-rouge">User.Identity.IsAuthenticated</code> in your actions or views, and see all of the user’s claims in <code class="highlighter-rouge">User.Claims</code>.</p>
 
+<p>The <a href="https://github.com/oktadeveloper/okta-aspnetcore-mvc-example">full example project</a> has more examples of authenticating and interacting with the user’s information (claims).</p>
+
 <p>If you want to do more with the user, you can use the <a href="https://github.com/okta/okta-sdk-dotnet">Okta .NET SDK</a> to get or update the user’s details stored in Okta.</p>
 
-<h3 id="example-project">Example project</h3>
-
-<p>If you want a full, working example, head over to the <a href="https://github.com/oktadeveloper/okta-aspnetcore-mvc-example">ASP.NET Core 2.0 MVC example</a> repository.</p>
 
 </body>
 </html>
