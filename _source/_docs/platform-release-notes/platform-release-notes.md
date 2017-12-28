@@ -1,7 +1,7 @@
 ---
 layout: docs_page
 title: Okta API Release Notes
-excerpt: New events in log and API bug fix
+excerpt: Additional events in log, token preview UI,  and API bug fix
 ---
 
 ## Okta API Release Notes for Release 2017.52
