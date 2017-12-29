@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # List of files to run markdown lint checker
-files=( "_source/quickstart-fragments" "_source/_code" )
+files=( "_source/quickstart-fragments" "_source/_code" "_source/_authentication-guide")
 
 for i in "${files[@]}"
 do
