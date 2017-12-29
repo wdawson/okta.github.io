@@ -9,9 +9,7 @@ When a request is made to the messages api of your PHP application, we need to g
 authorization header and validate that the token. If the token is valid, we can reply with the messages we want to
 provide to the user, if not, we should return a 401 to let the front end know that the request could not be authorized.
 
-> NOTE: The rest of this quickstart assumes that you have an understand of PHP and composer. You should have at least
- PHP7 and the latest version of composer installed on your computer. Your project should contain a `composer.json`
- file that is ready to have dependencies installed.
+> NOTE: The rest of this quickstart assumes that you have an understand of PHP and composer. You should have at least PHP7 and the latest version of composer installed on your computer. Your project should contain a `composer.json` file that is ready to have dependencies installed.
 
 ## Installing Dependencies
 There are a few libraries you will need to install in order for us to verify the token that is provided in the
