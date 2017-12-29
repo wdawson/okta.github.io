@@ -260,98 +260,103 @@
         <a id="edit-link" href="https://github.com/okta/okta.github.io/edit/source/_source/_docs/how-to/creating-token-with-groups-claim.md" data-proofer-ignore>Edit Page</a>
       <h2 id="how-to-create-a-token-with-a-groups-claim-using-the-app-profile">How to Create a Token with a Groups Claim Using the App Profile</h2>
 
-<p>You can add a groups claim for any combination of application groups and user groups into ID tokens or access tokens for API Access Management.
+<p>You can add a groups claim for any combination of application groups and user groups into ID tokens to perform SSO using Okta Authorization Server, or ID tokens and access tokens to perform authentication and authorization using Custom Authorization Server (API Access Management required).
 This process optionally uses Okta’s flexible app profile, which accepts any JSON-compliant content, to create a whitelist of groups
 that can then easily be referenced. This is especially useful if you have a large number of groups to whitelist or otherwise
 need to set group whitelists on a per-application basis.</p>
 
 <h3 id="before-you-start">Before You Start</h3>
 
+<p>Perform the following two tasks before you start for either Okta Authorization Server or Custom Authorization Server.</p>
+
 <ul>
   <li>Create an OAuth 2.0 or OpenID Connect client with the <a href="/docs/api/resources/apps.html#request-example-8">Apps API</a>. In the instruction examples, the client ID is <code class="highlighter-rouge">0oabskvc6442nkvQO0h7</code>.</li>
   <li>Create the groups that you wish to configure in the groups claim. In the instruction examples, we’re configuring the <code class="highlighter-rouge">WestCoastDivision</code> group, and the group ID is <code class="highlighter-rouge">00gbso71miOMjxHRW0h7</code>.</li>
 </ul>
 
-<p>To create a groups claim, assign a group whitelist to your client app, and configure a groups claim that references the whitelist.</p>
+<p>Now use the instructions for your chosen authorization server to create a groups claim, assign a group whitelist to your client app, and configure a groups claim that references the whitelist:</p>
 
-<blockquote>
-  <p>Note: You can perform Step One and Step Three in the user interface if you prefer.</p>
-</blockquote>
+<ul>
+  <li><a href="#create-a-token-with-groups-claim-okta-authorization-server">Create a Token with Groups Claim and Okta Authorization Server</a></li>
+  <li><a href="#create-a-token-with-groups-claim-custom-authorization-server">Create a Token with Groups Claim and Custom Authorization Server</a></li>
+</ul>
 
-<h3 id="step-one-get-the-group-ids">Step One: Get the Group IDs</h3>
+<h3 id="create-a-token-with-groups-claim-okta-authorization-server">Create a Token with Groups Claim (Okta Authorization Server)</h3>
+
+<p>Use this procedure if you have the Okta Authorization Server, not the <code class="highlighter-rouge">default</code> or other Custom Authorization Server.</p>
+
+<h4 id="step-one-get-the-group-ids">Step One: Get the Group IDs</h4>
 
 <p>Send a request to <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/groups</code> and collect the IDs for all the groups you’ll want to whitelist.</p>
 
-<blockquote>
-  <p>Note that this example uses one <code class="highlighter-rouge">groupId</code> for simplicity’s sake.</p>
-</blockquote>
+<p>Request Example:</p>
 
-<h4 id="request-example">Request Example</h4>
-
-<div class="language-http highlighter-rouge"><pre class="highlight"><code><span class="err">curl -X GET \
-  -H 'Accept: application/json' \
-  -H 'Authorization: SSWS ${api_token}' \
-  -H 'Content-Type: application/json' \
-  "<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/groups"
-</span></code></pre>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -X GET <span class="se">\</span>
+  -H <span class="s1">'accept: application/json'</span> <span class="se">\</span>
+  -H <span class="s1">'authorization: SSWS ${api_token}'</span> <span class="se">\</span>
+  -H <span class="s1">'content-type: application/json'</span> <span class="se">\</span>
+  <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/groups"</span>
+</code></pre>
 </div>
 
-<h4 id="response-example">Response Example</h4>
+<p>Response Example:</p>
 
 <div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00gbso71miOMjxHRW0h7"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-08-25T21:15:48.000Z"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"lastUpdated"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-08-25T21:15:48.000Z"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"lastMembershipUpdated"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-08-25T21:16:07.000Z"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"objectClass"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-            </span><span class="s2">"okta:user_group"</span><span class="w">
-        </span><span class="p">],</span><span class="w">
-        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OKTA_GROUP"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"WestCoastDivision"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Employees West of the Rockies"</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00gbso71miOMjxHRW0h7"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-08-25T21:15:48.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"lastUpdated"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-08-25T21:15:48.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"lastMembershipUpdated"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-08-25T21:16:07.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"objectClass"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"okta:user_group"</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OKTA_GROUP"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"WestCoastDivision"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Employees West of the Rockies"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"logo"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"medium"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://op1static.oktacdn.com/assets/img/logos/groups/okta-medium.d7fb831bc4e7e1a5d8bd35dfaf405d9e.png"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"image/png"</span><span class="w">
         </span><span class="p">},</span><span class="w">
-        </span><span class="nt">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"logo"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-                </span><span class="p">{</span><span class="w">
-                    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"medium"</span><span class="p">,</span><span class="w">
-                    </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://op1static.oktacdn.com/assets/img/logos/groups/okta-medium.d7fb831bc4e7e1a5d8bd35dfaf405d9e.png"</span><span class="p">,</span><span class="w">
-                    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"image/png"</span><span class="w">
-                </span><span class="p">},</span><span class="w">
-                </span><span class="p">{</span><span class="w">
-                    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"large"</span><span class="p">,</span><span class="w">
-                    </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://op1static.oktacdn.com/assets/img/logos/groups/okta-large.511fcb0de9da185b52589cb14d581c2c.png"</span><span class="p">,</span><span class="w">
-                    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"image/png"</span><span class="w">
-                </span><span class="p">}</span><span class="w">
-            </span><span class="p">],</span><span class="w">
-            </span><span class="nt">"users"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-                </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/groups/00gbso71miOMjxHRW0h7/users"</span><span class="w">
-            </span><span class="p">},</span><span class="w">
-            </span><span class="nt">"apps"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-                </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/groups/00gbso71miOMjxHRW0h7/apps"</span><span class="w">
-            </span><span class="p">}</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"large"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://op1static.oktacdn.com/assets/img/logos/groups/okta-large.511fcb0de9da185b52589cb14d581c2c.png"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"image/png"</span><span class="w">
         </span><span class="p">}</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="nt">"users"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/groups/00gbso71miOMjxHRW0h7/users"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nt">"apps"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/groups/00gbso71miOMjxHRW0h7/apps"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
     </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
 </div>
 
-<h3 id="step-two--add-list-of-groups-to-profile-of-client-app">Step Two:  Add List of Groups to Profile of Client App</h3>
+<p>This example uses one <code class="highlighter-rouge">groupId</code> for simplicity’s sake.</p>
+
+<h4 id="step-two-add-list-of-groups-to-profile-of-client-app">Step Two: Add List of Groups to Profile of Client App</h4>
 
 <p>If you only have one or two groups to specify, simply add the group IDs to the first parameter of the <code class="highlighter-rouge">getFilteredGroups</code> function described in the next step.
 However, if you have a lot of groups to whitelist, you can put the group IDs in the client app’s profile property bag: <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/apps/:aid</code>.
-This example names the group whitelist <code class="highlighter-rouge">groupwhitelist</code>, but you can name it anything.</p>
+The following example names the group whitelist <code class="highlighter-rouge">groupwhitelist</code>, but you can name it anything.</p>
 
-<h4 id="request-example-1">Request Example</h4>
+<p>Request Example:</p>
 
-<pre><code class="language-curl">curl -X POST \
-  <span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/apps/0oabskvc6442nkvQO0h7 \
-  -H 'accept: application/json' \
-  -H 'authorization: SSWS ${api_token}' \
-  -H 'cache-control: no-cache' \
-  -H 'content-type: application/json' \
-  -d '{
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -X POST <span class="se">\</span>
+  https://<span class="o">{</span>yourOktaDomain<span class="o">}</span>.com/api/v1/apps/0oabskvc6442nkvQO0h7 <span class="se">\</span>
+  -H <span class="s1">'accept: application/json'</span> <span class="se">\</span>
+  -H <span class="s1">'authorization: SSWS ${api_token}'</span> <span class="se">\</span>
+  -H <span class="s1">'cache-control: no-cache'</span> <span class="se">\</span>
+  -H <span class="s1">'content-type: application/json'</span> <span class="se">\</span>
+  -d <span class="s1">'{
     "name": "oidc_client",
     "label": "Sample Client",
     "status": "ACTIVE",
@@ -382,109 +387,339 @@ This example names the group whitelist <code class="highlighter-rouge">groupwhit
       }
     },
     "profile": {
-        "groupwhitelist": [
-            "00gbso71miOMjxHRW0h7"
-            ]
+      "groupwhitelist": [
+        "00gbso71miOMjxHRW0h7"
+      ]
     }
-  }
+  }'</span>
 </code></pre>
+</div>
+
+<p>You can add application groups, user groups, or both to the group whitelist, specified as an array of IDs.</p>
+
+<p>To use the group whitelist for every client that gets this claim in a token, put the attribute name of the whitelist in the first parameter of the <code class="highlighter-rouge">getFilteredGroups</code> function described in the next step.</p>
+
+<h4 id="step-three-configure-a-custom-claim-for-your-groups-okta-authorization-server">Step Three: Configure a Custom Claim for Your Groups (Okta Authorization Server)</h4>
+
+<p>For the Okta Authorization Server, you can only create an ID token with a groups claim, not an access token.</p>
+
+<blockquote>
+  <p>This step requires the Okta user interface. If you are using the Developer Console, select the drop-down control in the left side of the top banner to switch to Classic UI for Step Three.</p>
+</blockquote>
+
+<p>a. In the Okta user interface, navigate to the Sign On tab of the client application you are configuring, and click the <strong>Edit</strong> button in the Open ID Connect ID Token section.</p>
+
+<p>b. In <strong>Groups claim type</strong>, choose <strong>Expression</strong>.</p>
+
+<p>c. In <strong>Group claims filter</strong>, leave the default name <code class="highlighter-rouge">groups</code> or change it if you wish.</p>
+
+<p>d. In <strong>Groups claim expression</strong>, add this expression: <code class="highlighter-rouge">getFilteredGroups(app.profile.groupwhitelist, "group.name", 40)</code>.</p>
+
+<h4 id="step-four-send-a-test-request">Step Four: Send a Test Request</h4>
+
+<p>To obtain a token with the configured groups claim, send a request for an ID token that includes the <code class="highlighter-rouge">groups</code> claim set in step 3.c. as a scope to <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/authorize</code>, as illustrated in the following example.</p>
+
+<p>Request Example for Okta Authorization Server:</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -X GET <span class="se">\</span>
+  <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/authorize?client_id=0oabskvc6442nkvQO0h7
+  &amp;response_type=id_token
+  &amp;response_mode=fragment&amp;scope=openid%20groups
+  &amp;redirect_uri=https%3A%2F%2Fexample.com
+  &amp;state=myState&amp;nonce=</span><span class="k">${</span><span class="nv">yourNonceValue</span><span class="k">}</span><span class="s2">' </span><span class="se">\</span><span class="s2">
+</span></code></pre>
+</div>
+
+<h4 id="step-five-decode-the-jwt-to-verify">Step Five: Decode the JWT to Verify</h4>
+
+<p>Decode the JWT in the response to see that the groups are in the token. For example, this JWK contains the <code class="highlighter-rouge">groups</code> claim in an ID token:</p>
+
+<pre><code class="language-JSON">eyJraWQiOiJiS0U0czM3d01tQWZ5ZzQtVFJQcVg1YW50blE1ajBuNFJKcE9nSl9zT0JVIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiIwMHU1dDYwaWxvT0hOOXBCaTBoNyIsInZlciI6MSwiaXNzIjoiaHR0cHM6Ly9teXN0aWNvcnAub2t0YXByZXZpZXcuY29tIiwiYXVkIjoiMG9hYnNrdmM2NDQybmt2UU8waDciLCJpYXQiOjE1MTQ0OTc3ODEsImV4cCI6MTUxNDUwMTM4MSwianRpIjoiSUQua0FlMWFzU08wM00walp0Y2ZHZGtpWGwwUW9LRHE5aHl3OE1VUU1UNGwtWSIsImFtciI6WyJwd2QiXSwiaWRwIjoiMDBvNXQ2MGlsM1V6eUllNXYwaDciLCJub25jZSI6IjQ1YzExMDJiLTM0MmUtNGZjMC04ZDllLWM0NTY0MmFlOWFkOCIsImF1dGhfdGltZSI6MTUxNDQ5NjM1MCwiZ3JvdXBzIjpbIldlc3RDb2FzdERpdmlzaW9uIl19.ACKbJZ-lbGtgBAQDhamq7K9WJzHS0WySN0R2LXSkBahWWVMU1W-oTh2xDuHmyQv6HZpk-V4epnk-OItRBQb214NsRG8AJGn5n3QGYp5xPWVXXQ_hFZSro4br6Rdn_U8iZebqs6EXpGhxG7tN9VEgB-SkAynHdy2MbQpikGWcxORSA8vQLQhDRt2VZDobienTA8zLeThzOyAmhPjELxHRHFVT1OOrEoCqUV6wlk8LfhATRlxZGm6lrlZQbqxV_PDM8u7zN0l9XV01Rh0WHO7zZ_Oq0PEeQkf-TC9x7Gl_pOuRyRfGEsrqq-ZEL6AZszxotRKQJO1nNahAhfbNESO2mg
+</code></pre>
+
+<p>Example Payload Data for ID Token:</p>
+
+<pre><code class="language-JSON">{
+  "sub": "00u5t60iloOHN9pBi0h7",
+  "ver": 1,
+  "iss": "https://${yourOktaDomain}.com",
+  "aud": "0oabskvc6442nkvQO0h7",
+  "iat": 1514497781,
+  "exp": 1514501381,
+  "jti": "ID.kAe1asSO03M0jZtcfGdkiXl0QoKDq9hyw8MUQMT4l-Y",
+  "amr": [
+    "pwd"
+  ],
+  "idp": "00o5t60il3UzyIe5v0h7",
+  "nonce": "${yourNonceValue}",
+  "auth_time": 1514496350,
+  "groups": [
+    "WestCoastDivision"
+  ]
+}
+</code></pre>
+
+<p>The ID token contains the group WestCoastDivision so the audience (<code class="highlighter-rouge">aud</code>) has access to the group information about the user.</p>
+
+<p>For flows other than implicit, post to the token endpoint <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/token</code> with the user or client you want. Make sure the user is assigned to the app and to one of the groups from your whitelist.</p>
+
+<p>If the results aren’t as expected, start your troubleshooting by inspecting the System Log to see what went wrong. Also, try requesting only an ID token instead of both and ID token and access token.</p>
+
+<h3 id="create-a-token-with-groups-claim-custom-authorization-server">Create a Token with Groups Claim (Custom Authorization Server)</h3>
+
+<h4 id="step-one-get-the-group-ids-1">Step One: Get the Group IDs</h4>
+
+<p>Send a request to <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/groups</code> and collect the IDs for all the groups you’ll want to whitelist.</p>
+
+<p>Request Example:</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -X GET <span class="se">\</span>
+  -H <span class="s1">'accept: application/json'</span> <span class="se">\</span>
+  -H <span class="s1">'authorization: SSWS ${api_token}'</span> <span class="se">\</span>
+  -H <span class="s1">'content-type: application/json'</span> <span class="se">\</span>
+  <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/groups"</span>
+</code></pre>
+</div>
+
+<p>This example uses one <code class="highlighter-rouge">groupId</code> for simplicity’s sake.</p>
+
+<p>Response Example:</p>
+
+<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00gbso71miOMjxHRW0h7"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-08-25T21:15:48.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"lastUpdated"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-08-25T21:15:48.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"lastMembershipUpdated"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-08-25T21:16:07.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"objectClass"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"okta:user_group"</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OKTA_GROUP"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"WestCoastDivision"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Employees West of the Rockies"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"logo"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"medium"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://op1static.oktacdn.com/assets/img/logos/groups/okta-medium.d7fb831bc4e7e1a5d8bd35dfaf405d9e.png"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"image/png"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"large"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://op1static.oktacdn.com/assets/img/logos/groups/okta-large.511fcb0de9da185b52589cb14d581c2c.png"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"image/png"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="nt">"users"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/groups/00gbso71miOMjxHRW0h7/users"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nt">"apps"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/groups/00gbso71miOMjxHRW0h7/apps"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+</div>
+
+<h4 id="step-two--add-list-of-groups-to-profile-of-client-app">Step Two:  Add List of Groups to Profile of Client App</h4>
+
+<p>If you only have one or two groups to specify, simply add the group IDs to the first parameter of the <code class="highlighter-rouge">getFilteredGroups</code> function described in the next step.
+However, if you have a lot of groups to whitelist, you can put the group IDs in the client app’s profile property bag: <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/apps/:aid</code>.</p>
+
+<p>This example names the group whitelist <code class="highlighter-rouge">groupwhitelist</code>, but you can name it anything.</p>
+
+<p>Request Example:</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -X POST <span class="se">\</span>
+  https://<span class="o">{</span>yourOktaDomain<span class="o">}</span>.com/api/v1/apps/0oabskvc6442nkvQO0h7 <span class="se">\</span>
+  -H <span class="s1">'accept: application/json'</span> <span class="se">\</span>
+  -H <span class="s1">'authorization: SSWS ${api_token}'</span> <span class="se">\</span>
+  -H <span class="s1">'cache-control: no-cache'</span> <span class="se">\</span>
+  -H <span class="s1">'content-type: application/json'</span> <span class="se">\</span>
+  -d <span class="s1">'{
+    "name": "oidc_client",
+    "label": "Sample Client",
+    "status": "ACTIVE",
+    "signOnMode": "OPENID_CONNECT",
+    "credentials": {
+      "oauthClient": {
+        "token_endpoint_auth_method": "client_secret_post"
+      }
+    },
+    "settings": {
+      "oauthClient": {
+        "client_uri": "http://localhost:8080",
+        "logo_uri": "http://developer.okta.com/assets/images/logo-new.png",
+        "redirect_uris": [
+          "https://example.com/oauth2/callback",
+          "myapp://callback"
+        ],
+        "response_types": [
+          "token",
+          "id_token",
+          "code"
+        ],
+        "grant_types": [
+          "implicit",
+          "authorization_code"
+        ],
+        "application_type": "native"
+      }
+    },
+    "profile": {
+      "groupwhitelist": [
+        "00gbso71miOMjxHRW0h7"
+      ]
+    }
+  }'</span>
+</code></pre>
+</div>
 
 <p>You can add application groups, user groups or both to the group whitelist, specified as an array of IDs.</p>
 
-<p>To use the group whitelist for every client that gets this claim in a token, put the attribute name of the whitelist in the first parameter of the <code class="highlighter-rouge">getFilteredGroups</code> function described below.</p>
+<p>To use the group whitelist for every client that gets this claim in a token, put the attribute name of the whitelist in the first parameter of the <code class="highlighter-rouge">getFilteredGroups</code> function described in the next step.</p>
 
-<h3 id="step-three-configure-a-custom-claim-for-your-groups">Step Three: Configure a Custom Claim for Your Groups</h3>
+<h4 id="step-three-configure-a-custom-claim-for-your-groups-custom-authorization-server">Step Three: Configure a Custom Claim for Your Groups (Custom Authorization Server)</h4>
 
-<p>Add a custom claim for the ID token on a Custom Authorization Server with the following function: <code class="highlighter-rouge">getFilteredGroups({app.profile.whitelist</code>}, “{value-to-represent-the-group-in-the-token}”, {maximum number of groups to include in token. Must be less than 100.})`.</p>
+<p>Add a custom claim for the ID token or access token on a Custom Authorization Server with the following function:</p>
 
-<h4 id="request-example-2">Request Example</h4>
-
-<p>In this example, the <code class="highlighter-rouge">name</code> for the claim is <code class="highlighter-rouge">groups</code>, but you can name it whatever you wish.</p>
-
-<pre><code class="language-curl">curl -X POST \
-  <span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authorizationServers/ausain6z9zIedDCxB0h7/claims \
-  -H 'accept: application/json' \
-  -H 'authorization: SSWS ${api_token}' \
-  -H 'cache-control: no-cache' \
-  -H 'content-type: application/json' \
-  -d '{
-	"name": "groups",
-	"status": "ACTIVE",
-	"claimType": "RESOURCE",
-	"valueType": "EXPRESSION",
-	"value": "\"getFilteredGroups(app.profile.groupwhitelist, \"group.name\", 40)\"",
-	"conditions": {
-        "scopes": []
-    }
-}'
+<div class="highlighter-rouge"><pre class="highlight"><code> getFilteredGroups({app.profile.whitelist}, 
+ "{value-to-represent-the-group-in-the-token}", 
+ {maximum-number-of-groups-to-include-in-token})
 </code></pre>
+</div>
 
-<p>Hints:</p>
+<p>The maximum number of groups specified must be less than 100.</p>
 
-<ul>
-  <li>You can also configure this value in the Okta user interface for editing claims, in <strong>Mapping</strong>: <code class="highlighter-rouge">getFilteredGroups(app.profile.groupwhitelist, "group.name", 40)</code>.</li>
-  <li>Be sure that you have a policy and rule set up in your Custom Authorization Server or the request in the next step won’t work.</li>
-</ul>
+<p>In the following two examples for creating the groups claim, the <code class="highlighter-rouge">name</code> for the claim is <code class="highlighter-rouge">groups</code>, but you can name it whatever you wish.</p>
+
+<h5 id="request-example-for-access-token">Request Example for Access Token</h5>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -X POST <span class="se">\</span>
+  https://<span class="o">{</span>yourOktaDomain<span class="o">}</span>.com/api/v1/authorizationServers/ausain6z9zIedDCxB0h7/claims <span class="se">\</span>
+  -H <span class="s1">'accept: application/json'</span> <span class="se">\</span>
+  -H <span class="s1">'authorization: SSWS ${api_token}'</span> <span class="se">\</span>
+  -H <span class="s1">'cache-control: no-cache'</span> <span class="se">\</span>
+  -H <span class="s1">'content-type: application/json'</span> <span class="se">\</span>
+  -d <span class="s1">'{
+   "name": "groups",
+   "status": "ACTIVE",
+   "claimType": "RESOURCE",
+   "valueType": "EXPRESSION",
+   "value": "\"getFilteredGroups(app.profile.groupwhitelist, \"group.name\", 40)\"",
+   "conditions": {
+     "scopes": []
+   }
+ }'</span>
+</code></pre>
+</div>
+
+<h5 id="request-example-for-id-token">Request Example for ID Token</h5>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -X POST <span class="se">\</span>
+  https://<span class="o">{</span>yourOktaDomain<span class="o">}</span>.com/api/v1/authorizationServers/ausain6z9zIedDCxB0h7/claims <span class="se">\</span>
+  -H <span class="s1">'accept: application/json'</span> <span class="se">\</span>
+  -H <span class="s1">'authorization: SSWS ${api_token}'</span> <span class="se">\</span>
+  -H <span class="s1">'cache-control: no-cache'</span> <span class="se">\</span>
+  -H <span class="s1">'content-type: application/json'</span> <span class="se">\</span>
+  -d <span class="s1">'{
+   "name": "groups",
+   "status": "ACTIVE",
+   "claimType": "IDENTITY",
+   "valueType": "EXPRESSION",
+   "value": "\"getFilteredGroups(app.profile.groupwhitelist, \"group.name\", 40)\"",
+   "conditions": {
+     "scopes": []
+   }
+ }'</span>
+</code></pre>
+</div>
+
+<p>Be sure that you have a policy and rule set up in your Custom Authorization Server or the request in the next step won’t work.</p>
 
 <p>See <a href="/reference/okta_expression_language/#group-functions">group function documentation</a> for more information about specifying groups with <code class="highlighter-rouge">getFilteredGroups</code>.</p>
 
 <p>Now when you mint a token, groups in the <code class="highlighter-rouge">groupwhitelist</code> that also have the user as a member are included in the <code class="highlighter-rouge">groups</code> claim. Test your configuration in the next step.</p>
 
-<h3 id="step-four-test-that-the-claim-is-delivered-in-the-token">Step Four: Test that the Claim Is Delivered in the Token</h3>
+<h4 id="step-four-send-a-test-request-1">Step Four: Send a Test Request</h4>
 
-<p>Send a request for an ID token to <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/:authorizationServerId/v1/authorize</code> to obtain a token with the right groups claim.</p>
+<p>To obtain a token with the configured groups claim, send a request for an ID token that includes one of the scopes that the claim is associated with: <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/:authorizationServerId/v1/authorize</code>.</p>
 
-<h4 id="request-example-3">Request Example</h4>
+<p>Request Example for Custom Authorization Server:</p>
 
-<pre><code class="language-curl">curl -X GET \
-  '<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/ausain6z9zIedDCxB0h7/v1/authorize?client_id=0oabskvc6442nkvQO0h7
-    &amp;response_type=id_token&amp;response_mode=fragment
-    &amp;scope=openid&amp;redirect_uri=https%3A%2F%2myRedirectUri.com
-    &amp;state=myState&amp;nonce=da2b39ed-b116-4dc5-8393-5d1da350e24b' \
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code> curl -X GET <span class="se">\</span>
+  <span class="s1">'https://${yourOktaDomain}.com/oauth2/ausain6z9zIedDCxB0h7/v1/authorize?client_id=0oabskvc6442nkvQO0h7
+    &amp;response_type=id_token
+    &amp;response_mode=fragment
+    &amp;scope=groups%20openid
+    &amp;redirect_uri=https%3A%2F%2Fexample.com
+    &amp;state=myState&amp;nonce=${myNonceValue}'</span> <span class="se">\</span>
 </code></pre>
+</div>
+
+<blockquote>
+  <p>Note:</p>
+  <ul>
+    <li>In this example, the claim was configured to work with all scopes. If you specify only certain scopes to return the claim, you’ll need to specify one of them in the request.</li>
+    <li>To obtain an access token, simply change <code class="highlighter-rouge">response_type=id_token</code> to <code class="highlighter-rouge">response_type='token'</code>.</li>
+  </ul>
+</blockquote>
+
+<h4 id="step-five-decode-the-jwt-to-verify-1">Step Five: Decode the JWT to Verify</h4>
 
 <p>Decode the JWT in the response to see that the groups are in the token. For example, this JWK contains the group claim:</p>
 
-<pre><code class="language-JSON">eyJhbGciOiJSUzI1NiIsImtpZCI6IlhqNUNEQTkxRGZZc1gyOHBLUzZFbjdLMmlRel9wTUQwNHZ5bXBUQU1wMXcifQ.eyJzdWIiOiI
-wMHU1dDYwaWxvT0hOOXBCaTBoNyIsInZlciI6MSwiaXNzIjoiaHR0cHM6Ly9teXN0aWNvcnAub2t0YXByZXZpZXcuY29tL29hdXRoM
-i9hdXNhaW42ejl6SWVkREN4QjBoNyIsImF1ZCI6IjBvYWJza3ZjNjQ0Mm5rdlFPMGg3IiwiaWF0IjoxNTA1MjQ2NDkwLCJleHAiOjE
-1MDUyNTAwOTAsImp0aSI6IklELlpnWE0zUkVMd3hGOGRUWERhS2EtRGw5TXBzMWZCMUZ4eHpFZkI2RXRrcGsiLCJhbXIiOlsicHdkI
-l0sImlkcCI6IjAwbzV0NjBpbDNVenlJZTV2MGg3Iiwibm9uY2UiOiIyMTg1ZWRmNC04NGE4LTQ5MWUtYmE3Mi0yMGI3NjU0MDI1NDM
-iLCJhdXRoX3RpbWUiOjE1MDUyMzM0ODksIm15Z3JvdXBXaGl0ZWxpc3QiOlsiV2VzdENvYXN0RGl2aXNpb24iXSwiZmlyc3ROYW1lI
-joiTXlzdGkifQ.ZO5mGmjXxE9XUD17hn4NNQtxYZjRK_4dCaXRgpDRajUyzyDW5qmyjZbtv5qbd5JVe3WnT7TVT4qD7UTuVWH6maL-
-nS0aE0_F61ftS0xADdacLiGpGuIh-c62AaE7_tdkZBwUagqz3XebhAwZ3SicLUCIpc9ySWyyKf96eIRD2xps3TDZVDS9e5r20r0GWu
-EhoW9LksrmAdT63GbGMMt0iH_kWY1ePgG2T-UKWDmdoJZqAthPlCkTWzSyN8oRuebcRQQUA5CIzcWGAuGhiDiOw8sp6utPD0u2pm79
-fST36rCGaDHmcm3L60JHlEeIbRArkp_793BB8OKRLdh9weNtcA
+<pre><code class="language-JSON">eyJraWQiOiJ2U2N0OVJ0R2g5ang5QVFfT05aNEFhM19lZ3YwVlktelJKWTZvbmE5R3o4IiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiIwMHU1dDYwaWxvT0hOOXBCaTBoNyIsInZlciI6MSwiaXNzIjoiaHR0cHM6Ly9teXN0aWNvcnAub2t0YXByZXZpZXcuY29tL29hdXRoMi9hdXNhaW42ejl6SWVkREN4QjBoNyIsImF1ZCI6IjBvYWJza3ZjNjQ0Mm5rdlFPMGg3IiwiaWF0IjoxNTE0NDk3MzQ2LCJleHAiOjE1MTQ1MDA5NDYsImp0aSI6IklELlo1RkhPY1BhUUI3Q3ExeXhkRElIRzhieDd0Y3gxVGxYcFdvZTY4cHpGSDgiLCJhbXIiOlsicHdkIl0sImlkcCI6IjAwbzV0NjBpbDNVenlJZTV2MGg3Iiwibm9uY2UiOiIzODBiNTgwMS05MTYzLTRjNGEtOWMyMS1kNjBhMmEzMzJhNzciLCJhdXRoX3RpbWUiOjE1MTQ0OTYzNTAsIm15Z3JvdXBXaGl0ZWxpc3QiOlsiV2VzdENvYXN0RGl2aXNpb24iXX0.X4_rs_bgmWW5cX6p-fur_EN4-Uf2hz3jZZVUgdBRUX0x64O7wbmuPXGicjfLIMH6HRx7bETPjALNoSjvUrFI1IEHBMVROZQGvAYtB5f5ge6ZvZVNk0B8Coz6h3Y9vLmZGwxOFHR0_bbQQC2j01wKKeFPjznfMxtEuBLkD2DXuF7WkHZSmMG5dp7L9LUpvwfCQ2fv1SYRQ_pRVGIxZK5jh9O2yip4LMANbayDkF0Ud8lbq9CAv3Zz4tG77Cwou87yphnHlPgHDrCRRiEbCoe6Q1l8UIfMC3kfaT2HoyJb6jvA91h89jgRbIvUEfasrLoSwUJQv-sYz302QiQdF8WZAQ
 </code></pre>
 
-<h4 id="payload-data-decoded">Payload Data Decoded</h4>
+<p>Example Payload Data for an ID Token:</p>
 
 <pre><code class="language-JSON">{
   "sub": "00u5t60iloOHN9pBi0h7",
   "ver": 1,
   "iss": "<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/ausain6z9zIedDCxB0h7",
   "aud": "0oabskvc6442nkvQO0h7",
-  "iat": 1505323527,
-  "exp": 1505327127,
-  "jti": "ID.T1lKS9a167PIUUl5vxSsAssIUKpr3TRgqbVbi5U_Ono",
+  "iat": 1514497346,
+  "exp": 1514500946,
+  "jti": "ID.Z5FHOcPaQB7Cq1yxdDIHG8bx7tcx1TlXpWoe68pzFH8",
   "amr": [
     "pwd"
   ],
   "idp": "00o5t60il3UzyIe5v0h7",
-  "nonce": "2185edf4-84a8-491e-ba72-20b765402543",
-  "auth_time": 1505320024,
+  "nonce": "${myNonceValue}",
+  "auth_time": 1514496350,
   "groups": [
     "WestCoastDivision"
-  ],
-  "firstName": "Annie"
+  ]
 }
 </code></pre>
 
-<p>The token contains the group WestCoastDivision so the audience (<code class="highlighter-rouge">aud</code>) has access to the group information about the user.</p>
+<p>Example Payload Data for an Access Token:</p>
 
-<blockquote>
-  <p>Reminder: For flows other than implicit, post to the token endpoint <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/:authorizationServerId/v1/token</code> with the user or client you want. Make sure the user is assigned to the app and to one of the groups from your whitelist.</p>
-</blockquote>
+<pre><code class="language-JSON">{
+  "aud": "https://{yourOktaDomain}",
+  "sub": "annie.jackson@acme.com",
+  "iat": 1511983934,
+  "exp": 1511987534,
+  "cid": "0oabskvc6442nkvQO0h7",
+  "uid": "00u5t60iloOHN9pBi0h7",
+  "scp": [
+    "openid"
+  ],
+  "groups": [
+    "WestCoastDivision"
+  ]
+}
+</code></pre>
+
+<p>The ID token or access token contains the group WestCoastDivision so the audience (<code class="highlighter-rouge">aud</code>) has access to the group information about the user.</p>
+
+<p>For flows other than implicit, post to the token endpoint <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/:authorizationServerId/v1/token</code> with the user or client you want. Make sure the user is assigned to the app and to one of the groups from your whitelist.</p>
+
+<p>If the results aren’t as expected, start your troubleshooting by inspecting the System Log to see what went wrong. Also, try requesting only an ID token instead of both and ID token and access token.</p>
 
       </div>
       <div class="TableOfContents TableOfContentsPreload">
