@@ -40,7 +40,6 @@ Our client side application is going to be sending us a call to an api endpoint 
 
 Our first step is to include the composer autoload file.  In your new `messages.php` file, add the following:
 
-
 > NOTE: All code blocks will be added progressively to the file. The full file is provided at the end of this quickstart.
 
 ```php?start_inline=true
@@ -141,7 +140,7 @@ console is reporting `Proxy error: Could not proxy request /api/messages.php fro
 http://localhost:8000.` or similar, close our of both servers (the client server and PHP) and make sure your proxy
 port match and that you are using `0.0.0.0` when starting the PHP server.
 
-#### Full Messages API
+### Full Messages API
 
 ```php
 <?php
