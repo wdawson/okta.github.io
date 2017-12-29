@@ -4,14 +4,14 @@ title: Create a Token with a Groups Claim Using the App Profile
 excerpt: How to use the app profile to create an ID token or access token that contains a groups claim
 ---
 
-## How to Create a Token with a Groups Claim Using the App Profile
+# How to Create a Token with a Groups Claim Using the App Profile
 
 You can add a groups claim for any combination of application groups and user groups into ID tokens to perform SSO using Okta Authorization Server, or ID tokens and access tokens to perform authentication and authorization using Custom Authorization Server (API Access Management required).
 This process optionally uses Okta's flexible app profile, which accepts any JSON-compliant content, to create a whitelist of groups
 that can then easily be referenced. This is especially useful if you have a large number of groups to whitelist or otherwise
 need to set group whitelists on a per-application basis.
 
-### Before You Start
+## Before You Start
 
 Perform the following two tasks before you start for either Okta Authorization Server or Custom Authorization Server.
 
@@ -266,14 +266,22 @@ This example uses one `groupId` for simplicity's sake.
 ]
 ~~~
 
+<<<<<<< HEAD
 #### Step Two:  Add List of Groups to Profile of Client App
+=======
+## Step Two:  Add List of Groups to Profile of Client App
+>>>>>>> Lint how-to
 
 If you only have one or two groups to specify, simply add the group IDs to the first parameter of the `getFilteredGroups` function described in the next step.
 However, if you have a lot of groups to whitelist, you can put the group IDs in the client app's profile property bag: `https://{yourOktaDomain}.com/api/v1/apps/:aid`.
 
 This example names the group whitelist `groupwhitelist`, but you can name it anything.
 
+<<<<<<< HEAD
 Request Example:
+=======
+### Request Example
+>>>>>>> Lint how-to
 
 ~~~sh
 curl -X POST \
@@ -319,14 +327,27 @@ curl -X POST \
     }
   }'
 ~~~
+<<<<<<< HEAD
 
 You can add application groups, user groups or both to the group whitelist, specified as an array of IDs. 
 
 To use the group whitelist for every client that gets this claim in a token, put the attribute name of the whitelist in the first parameter of the `getFilteredGroups` function described in the next step. 
+=======
+
+You can add application groups, user groups or both to the group whitelist, specified as an array of IDs.
+
+To use the group whitelist for every client that gets this claim in a token, put the attribute name of the whitelist in the first parameter of the `getFilteredGroups` function described below.
+
+## Step Three: Configure a Custom Claim for Your Groups
+>>>>>>> Lint how-to
 
 #### Step Three: Configure a Custom Claim for Your Groups (Custom Authorization Server)
 
+<<<<<<< HEAD
 Add a custom claim for the ID token or access token on a Custom Authorization Server with the following function:
+=======
+### Request Example
+>>>>>>> Lint how-to
 
 ~~~
  getFilteredGroups({app.profile.whitelist}, 
@@ -358,6 +379,11 @@ curl -X POST \
    }
  }'
 ~~~
+<<<<<<< HEAD
+=======
+
+Hints:
+>>>>>>> Lint how-to
 
 ##### Request Example for ID Token
 
@@ -386,11 +412,19 @@ See [group function documentation](/reference/okta_expression_language/#group-fu
 
 Now when you mint a token, groups in the `groupwhitelist` that also have the user as a member are included in the `groups` claim. Test your configuration in the next step.
 
+<<<<<<< HEAD
 #### Step Four: Send a Test Request
+=======
+## Step Four: Test that the Claim Is Delivered in the Token
+>>>>>>> Lint how-to
 
 To obtain a token with the configured groups claim, send a request for an ID token that includes one of the scopes that the claim is associated with: `https://{yourOktaDomain}.com/oauth2/:authorizationServerId/v1/authorize`.
 
+<<<<<<< HEAD
 Request Example for Custom Authorization Server:
+=======
+### Request Example
+>>>>>>> Lint how-to
 
 ~~~sh
  curl -X GET \
@@ -414,7 +448,11 @@ Decode the JWT in the response to see that the groups are in the token. For exam
 eyJraWQiOiJ2U2N0OVJ0R2g5ang5QVFfT05aNEFhM19lZ3YwVlktelJKWTZvbmE5R3o4IiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiIwMHU1dDYwaWxvT0hOOXBCaTBoNyIsInZlciI6MSwiaXNzIjoiaHR0cHM6Ly9teXN0aWNvcnAub2t0YXByZXZpZXcuY29tL29hdXRoMi9hdXNhaW42ejl6SWVkREN4QjBoNyIsImF1ZCI6IjBvYWJza3ZjNjQ0Mm5rdlFPMGg3IiwiaWF0IjoxNTE0NDk3MzQ2LCJleHAiOjE1MTQ1MDA5NDYsImp0aSI6IklELlo1RkhPY1BhUUI3Q3ExeXhkRElIRzhieDd0Y3gxVGxYcFdvZTY4cHpGSDgiLCJhbXIiOlsicHdkIl0sImlkcCI6IjAwbzV0NjBpbDNVenlJZTV2MGg3Iiwibm9uY2UiOiIzODBiNTgwMS05MTYzLTRjNGEtOWMyMS1kNjBhMmEzMzJhNzciLCJhdXRoX3RpbWUiOjE1MTQ0OTYzNTAsIm15Z3JvdXBXaGl0ZWxpc3QiOlsiV2VzdENvYXN0RGl2aXNpb24iXX0.X4_rs_bgmWW5cX6p-fur_EN4-Uf2hz3jZZVUgdBRUX0x64O7wbmuPXGicjfLIMH6HRx7bETPjALNoSjvUrFI1IEHBMVROZQGvAYtB5f5ge6ZvZVNk0B8Coz6h3Y9vLmZGwxOFHR0_bbQQC2j01wKKeFPjznfMxtEuBLkD2DXuF7WkHZSmMG5dp7L9LUpvwfCQ2fv1SYRQ_pRVGIxZK5jh9O2yip4LMANbayDkF0Ud8lbq9CAv3Zz4tG77Cwou87yphnHlPgHDrCRRiEbCoe6Q1l8UIfMC3kfaT2HoyJb6jvA91h89jgRbIvUEfasrLoSwUJQv-sYz302QiQdF8WZAQ
 ~~~
 
+<<<<<<< HEAD
 Example Payload Data for an ID Token:
+=======
+### Payload Data Decoded
+>>>>>>> Lint how-to
 
 ~~~JSON
 {
