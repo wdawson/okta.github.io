@@ -11,7 +11,10 @@ folders=(
     "_source/_docs/api/getting_started"
 )
 
-for i in "${folders[@]}"
-do
-   mdl $i -c .markdownlintrc
-done
+lint_errors=$(for i in "${folders[@]}"; do echo "$(mdl $i -c .markdownlintrc)"; done)
+
+if [ "$lint_errors" ];
+then
+    echo "$lint_errors"
+    exit 1;
+fi
