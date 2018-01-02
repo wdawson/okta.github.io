@@ -17,7 +17,7 @@ Jakub.todo
 
 ## Getting Started
 
-If you are new to OAuth 2.0 and OpenID Connect, you should probably start by reading the [Authentication Overview](/_authentication-guide/auth-overview/index.html) before experimenting with the Postman collection.
+If you are new to OAuth 2.0 and OpenID Connect, you should probably start by reading the [Authentication Overview](/_authentication-guide/auth-overview/index.html) before experimenting with the APIs.
 
 <!-- This Postman collection needs to be updated!
 
@@ -30,15 +30,15 @@ You can also view the video [Getting Started with the Okta API and OpenID Connec
 
 ## Endpoints
 
-* `/authorize`
-* `/token`
-* `/introspect`
-* `/revoke`
-* `/logout`
-* `/keys`
-* `/userinfo`
-* `/.well-known/oauth-authorization-server`
-* `/.well-known/openid-configuration`
+* [/authorize](#authorize)
+* [/token](#token)
+* [/introspect](#introspect)
+* [/revoke](#revoke)
+* [/logout](#logout)
+* [/keys](#keys)
+* [/userinfo](#userinfo)
+* [/.well-known/oauth-authorization-server](#well-knownopenid-configuration)
+* [/.well-known/openid-configuration]()
 
 ### /authorize
 {:.api .api-operation}
@@ -733,7 +733,7 @@ Expires: 0​
 WWW-Authenticate: Bearer error="insufficient_scope", error_description="The access token must provide access to at least one of these scopes - profile, email, address or phone"
 ~~~
 
-#### /.well-known/oauth-authorization-server
+### /.well-known/oauth-authorization-server
 {:.api .api-operation}
 
 {% api_operation get /oauth2/v1/.well-known/oauth-authorization-server %}
@@ -743,7 +743,20 @@ WWW-Authenticate: Bearer error="insufficient_scope", error_description="The acce
 This API endpoint returns metadata related to a Custom Authorization Server that can be used by clients to programmatically configure their interactions with Okta.
 Custom scopes and custom claims aren't returned.
 
-This API doesn't require any authentication and returns a JSON object with the following structure.
+#### Request Example
+{:.api .api-request .api-request-example}
+
+~~~sh
+jakub.todo
+~~~
+
+#### Response Parameters
+{:.api .api-response .api-response-example}
+
+jakub.todo
+
+#### Response Example (Success)
+{:.api .api-response .api-response-example}
 
 ~~~json
 {
@@ -814,6 +827,12 @@ This API doesn't require any authentication and returns a JSON object with the f
 }
 ~~~
 
+#### Response Example (Error)
+{:.api .api-response .api-response-example}
+~~~http
+jakub.todo
+~~~
+
 ### .well-known/openid-configuration
 {:.api .api-operation}
 
@@ -822,7 +841,22 @@ This API doesn't require any authentication and returns a JSON object with the f
 {% api_operation get oauth/**${authorizationServerId}**/v1/.well-known/openid-configuration %}
 
 This API endpoint returns metadata related to OpenID Connect that can be used by clients to programmatically configure their interactions with Okta.
-This API doesn&#8217;t require any authentication and returns a JSON object with the following structure.
+This API doesn&#8217;t require any authentication.
+
+#### Request Example
+{:.api .api-request .api-request-example}
+
+~~~sh
+jakub.todo
+~~~
+
+#### Response Parameters
+{:.api .api-response .api-response-example}
+
+jakub.todo
+
+#### Response Example (Success)
+{:.api .api-response .api-response-example}
 
 ~~~json
 {
@@ -922,4 +956,10 @@ This API doesn&#8217;t require any authentication and returns a JSON object with
     ],
     "end_session_endpoint": "https://{yourOktaDomain}.com/oauth2/v1/logout"
 }
+~~~
+
+#### Response Example (Error)
+{:.api .api-response .api-response-example}
+~~~http
+jakub.todo
 ~~~
