@@ -151,10 +151,10 @@ Updates authorization server identified by *authorizationServerId*.
 
 | Parameter   | Description                                                                                                     | Type                                                                                                    | Required |
 |:------------|:----------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------|:---------|
-| name        | The name of the authorization server                                                                            | String                                                                                                  | TRUE     |
-| description | The description of the authorization server                                                                     | String                                                                                                  | FALSE    |
 | audiences   | The list of audiences this Custom Authorization Server can issue tokens to, currently Okta only supports one audience. | Array                                                                                                   | TRUE     |
 | credentials | The credentials signing object with the `rotationMode` of the authorization server                              |    [Authorization server credentials object](oauth2.html#signing-credentials-object)  | FALSE    |
+| description | The description of the authorization server                                                                     | String                                                                                                  | FALSE    |
+| name        | The name of the authorization server                                                                            | String                                                                                                  | TRUE     |
 
 ##### Response Parameters
 {:.api .api-request .api-response-params}
@@ -1196,12 +1196,12 @@ Content-Type: application/json;charset=UTF-8
 
 | Property   | Description                                                                                                          | Type                                                                    | Required for create or update |
 |:------------|:---------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------|:------------------------------|
-| name        | The name of a Custom Authorization Server                                                                                 | String                                                                  | True                          |
-| description | The description of a Custom Authorization Server                                                                          | String                                                                  | True                          |
 | audiences   | The recipients that the tokens are intended for. This becomes the `aud` claim in an Access Token.                    | Array                                                                   | True                          |
-| issuer      | The complete URL for a Custom Authorization Server. This becomes the `iss` claim in an Access Token.                      | String                                                                  | False                         |
-| status      | Indicates whether a Custom Authorization Server is `ACTIVE` or `INACTIVE`.                                                | Enum                                                                    | False                         |
 | credentials | Keys used to sign tokens.                                                                                            |              [Credentials Object](#signing-credentials-object) | False                         |
+| description | The description of a Custom Authorization Server                                                                          | String                                                                  | True                          |
+| issuer      | The complete URL for a Custom Authorization Server. This becomes the `iss` claim in an Access Token.                      | String                                                                  | False                         |
+| name        | The name of a Custom Authorization Server                                                                                 | String                                                                  | True                          |
+| status      | Indicates whether a Custom Authorization Server is `ACTIVE` or `INACTIVE`.                                                | Enum                                                                    | False                         |
 | _links      | List of discoverable resources related to a Custom Authorization Server                                                   |      Links                                                                  | False                         |
 
 ### Policy Object
@@ -1259,16 +1259,16 @@ Content-Type: application/json;charset=UTF-8
 
 | Property   | Description                                                                                                         | Type                                      | Required for create or update            |
 |:------------|:--------------------------------------------------------------------------------------------------------------------|:------------------------------------------|:-----------------------------------------|
-| type        | Indicates that the policy is an authorization server policy (`OAUTH_AUTHORIZATION_POLICY`)                          | String                                    | False                                    |
-| id          | ID of the policy                                                                                                    | String                                    | True except for create or get all claims |
-| name        | Name of the policy                                                                                                  | String                                    | True                                     |
-| status      | Specifies whether requests have access to this policy. Valid values: `ACTIVE` or `INACTIVE`                         | Enum                                    | True                                     |
-| description | Description of the policy                                                                                           | String                                    | True                                     |
-| priority    | Specifies the order in which this policy is evaluated in relation to the other policies in a Custom Authorization Server              | Integer                                   | True                                     |
-| system      | Specifies whether Okta created this policy (`true`) or not (`false`).                                               | Boolean                                   | True                                     |
-| conditions  | Specifies the clients that the policy will be applied to.                                                           |                   [Condition Object](#condition-object) | False                                    |
 | created     | Timestamp when the policy was created                                                                               | DateTime                                  | System                                   |
+| conditions  | Specifies the clients that the policy will be applied to.                                                           |                   [Condition Object](#condition-object) | False                                    |
+| description | Description of the policy                                                                                           | String                                    | True                                     |
+| id          | ID of the policy                                                                                                    | String                                    | True except for create or get all claims |
 | lastUpdated | Timestamp when the policy was last updated                                                                          | DateTime                                  | System                                   |
+| name        | Name of the policy                                                                                                  | String                                    | True                                     |
+| priority    | Specifies the order in which this policy is evaluated in relation to the other policies in a Custom Authorization Server              | Integer                                   | True                                     |
+| status      | Specifies whether requests have access to this policy. Valid values: `ACTIVE` or `INACTIVE`                         | Enum                                    | True                                     |
+| system      | Specifies whether Okta created this policy (`true`) or not (`false`).                                               | Boolean                                   | True                                     |
+| type        | Indicates that the policy is an authorization server policy (`OAUTH_AUTHORIZATION_POLICY`)                          | String                                    | False                                    |
 | _links      | List of discoverable resources related to the policy                                                                | Links                                     | System                                   |
 
 ### Rule Object
@@ -1309,11 +1309,11 @@ Content-Type: application/json;charset=UTF-8
 
 | Property  | Description                                                                                   | Type                                     | Required for create or update            |
 |:-----------|:----------------------------------------------------------------------------------------------|:-----------------------------------------|:-----------------------------------------|
+| conditions | Specifies the people, groups, grant types and scopes the rule will be applied to              |     [Condition Object](#condition-object)  | False                                    |
 | id         | ID of the rule                                                                                | String                                   | True except for create or get all claims |
 | name       | Name of the rule                                                                              | String                                   | True                                     |
 | status     | Specifies whether requests have access to this claim. Valid values: `ACTIVE` or `INACTIVE`    | Enum                                     | True                                     |
 | system     | Specifies whether the rule was created by Okta or not                                         | Boolean                                  | True                                     |
-| conditions | Specifies the people, groups, grant types and scopes the rule will be applied to              |     [Condition Object](#condition-object)  | False                                    |
 | token      | Specifies lifetime durations for the token minted                                             | Integer                                  | System generated                         |
 
 Token limits:
@@ -1342,13 +1342,13 @@ Token limits:
 
 | Property                            | Description                                                                                       | Type    | Default    | Required for create or update |
 |:-------------------------------------|:--------------------------------------------------------------------------------------------------|:--------|:-----------|:------------------------------|
+| consent {% api_lifecycle beta %}     | Indicates whether a consent dialog is needed for the scope. Valid values: `REQUIRED`, `IMPLICIT`. | Enum    | `IMPLICIT` | FALSE                         |
+| default                              | Whether the scope is a default scope                                                              | Boolean |            | FALSE                         |
+| description                          | Description of the scope                                                                          | String  |            | FALSE                         |
+| displayName {% api_lifecycle beta %} | Name of the end user displayed in a consent dialog                                                | String  |            | FALSE                         |
 | id                                   | ID of the scope                                                                                   | String  |            | FALSE                         |
 | name                                 | Name of the scope                                                                                 | String  |            | TRUE                          |
-| description                          | Description of the scope                                                                          | String  |            | FALSE                         |
 | system                               | Whether Okta created the scope                                                                    | Boolean |            | FALSE                         |
-| default                              | Whether the scope is a default scope                                                              | Boolean |            | FALSE                         |
-| displayName {% api_lifecycle beta %} | Name of the end user displayed in a consent dialog                                                | String  |            | FALSE                         |
-| consent {% api_lifecycle beta %}     | Indicates whether a consent dialog is needed for the scope. Valid values: `REQUIRED`, `IMPLICIT`. | Enum    | `IMPLICIT` | FALSE                         |
 
 * {% api_lifecycle beta %} A consent dialog is displayed depending on the values of three elements:
     * `prompt`, a query parameter used in requests to [`/oauth2/:authorizationServerId/v1/authorize`](/docs/api/resources/oauth2.html#obtain-an-authorization-grant-from-a-user)(custom authorization server) or [`/oauth2/v1/authorize`](/docs/api/resources/oidc.html#authentication-request) (Org authorization server)
@@ -1404,16 +1404,16 @@ Token limits:
 
 | Property            | Description                                                                                                                                                                                                                                      | Type                                                 | Required for create or update            |
 |:---------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------|:-----------------------------------------|
+| alwaysIncludeInToken | Specifies whether to include claims in tokens  [Details](#details-for-alwaysincludeintoken)                                                                                                                                                      | Boolean                                              | False                                    |
+| claimType            | Specifies whether the claim is for an Access Token (`RESOURCE`) or ID Token (`IDENTITY`)                                                                                                                                                         | Enum                                                 | True                                     |
+| conditions           | Specifies the scopes for this claim                                                                                                                                                                                                              |                          [Condition Object](#condition-object)              | False                                    |
+| groupFilterType      | Specifies the type of group filter if `valueType` is `GROUPS`.  [Details](#details-for-groupfiltertype)                                                                                                                                           | Enum                                                 | False                                    |
 | id                   | ID of the claim                                                                                                                                                                                                                                  | String                                               | True except for create or get all claims |
 | name                 | Name of the claim                                                                                                                                                                                                                                | String                                               | True                                     |
 | status               | Specifies whether requests have access to this claim. Valid values: `ACTIVE` or `INACTIVE`                                                                                                                                                       | Enum                                                 | True                                     |
-| claimType            | Specifies whether the claim is for an Access Token (`RESOURCE`) or ID Token (`IDENTITY`)                                                                                                                                                         | Enum                                                 | True                                     |
+| system               | Specifies whether Okta created this claim                                                                                                                                                                                                        | Boolean                                              | System                                   |
 | valueType            | Specifies whether the claim is an Okta EL expression (`EXPRESSION`), a set of groups (`GROUPS`), or a system claim (`SYSTEM`)                                                                                                                    | Enum                                                 | True                                     |
 | value                | Specifies the value of the claim. This value must be a string literal if `valueType` is `GROUPS`, and the string literal is matched with the selected `groupFilterType`. The value must be an Okta EL expression if `valueType` is `EXPRESSION`. | String                                               | True                                     |
-| groupFilterType      | Specifies the type of group filter if `valueType` is `GROUPS`.  [Details](#details-for-groupfiltertype)                                                                                                                                           | Enum                                                 | False                                    |
-| conditions           | Specifies the scopes for this claim                                                                                                                                                                                                              |                          [Condition Object](#condition-object)              | False                                    |
-| alwaysIncludeInToken | Specifies whether to include claims in tokens  [Details](#details-for-alwaysincludeintoken)                                                                                                                                                      | Boolean                                              | False                                    |
-| system               | Specifies whether Okta created this claim                                                                                                                                                                                                        | Boolean                                              | System                                   |
 
 ##### Details for `groupFilterType`
 
@@ -1470,10 +1470,10 @@ Example from a Policy Object
 
 | Property  | Description                                                                                                                                                                          | Type                          | Required for create or update |
 |:-----------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------|:------------------------------|
-| scopes     | Array of scopes this condition includes or excludes.                                                                                                                                  | `include` and `exclude` lists | True                          |
 | clients    | For policies, specifies which clients are included or excluded in the policy.                                                                                                         | `include` and `exclude` lists | True                          |
-| people     | For rules, specifies which users and groups are included or excluded in the rule.                                                                                                     | `include` and `exclude` lists | True                          |
 | grant_type | Can be one of the following: `authorization_code`, `password`, `refresh_token`, or `client_credentials`. Determines the mechanism Okta uses to authorize the creation of the tokens. | Enum                          | True                          |
+| people     | For rules, specifies which users and groups are included or excluded in the rule.                                                                                                     | `include` and `exclude` lists | True                          |
+| scopes     | Array of scopes this condition includes or excludes.                                                                                                                                  | `include` and `exclude` lists | True                          |
 
 ### Signing Credentials Object
 
@@ -1537,9 +1537,9 @@ This object defines a [JSON Web Key](https://tools.ietf.org/html/rfc7517) for an
 | Property  | Description                                                                            | Type   |
 |:----------|:---------------------------------------------------------------------------------------|:-------|
 | alg       | The algorithm used with the key. Valid value: `RS256`                                  | String |
-| status    | `ACTIVE`, `NEXT`, or `EXPIRED`                                                         | Enum   |
 | e         | RSA key value (exponent) for key blinding.                                             | String |
-| n         | RSA key value (modulus) for key blinding.                                              | String |
 | kid       | Unique identifier for the certificate.                                                 | String |
 | kty       | Cryptographic algorithm family for the certificate&#8217;s key pair. Valid value: `RSA`| String |
+| n         | RSA key value (modulus) for key blinding.                                              | String |
+| status    | `ACTIVE`, `NEXT`, or `EXPIRED`                                                         | Enum   |
 | use       | How the key is used. Valid value: `sig`                                                | String |
