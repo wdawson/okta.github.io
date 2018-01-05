@@ -3,26 +3,13 @@ layout: docs_page
 title: OpenID Connect
 ---
 
-# OpenID Connect API
+# OpenID Connect & OAuth 2.0 API
 
 {% api_lifecycle ea %}
 
 Okta is a standards-compliant [OAuth 2.0](http://oauth.net/documentation) authorization server and a certified [OpenID Connect Provider](http://openid.net/certification).
 
-The OAuth 2.0 API provides API security via scoped access tokens, and OpenID Connect provides user authentication and an SSO layer which is lighter and easier to use than SAML.
-
-## Getting Started
-
-If you are new to OAuth 2.0 and OpenID Connect, you should probably start by reading the [Authentication Overview](/_authentication-guide/auth-overview/index.html) before experimenting with the APIs.
-
-<!-- This Postman collection needs to be updated!
-
-If you are familiar with
-[the OpenID Connect spec](http://openid.net/specs/openid-connect-core-1_0.html), you may want to experiment with the Postman collection now:
-
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/fd92d7c1ab0fbfdecab2) -->
-
-You can also view the video [Getting Started with the Okta API and OpenID Connect](https://www.youtube.com/watch?v=fPW66abobMI).
+OpenID Connect extends OAuth 2.0. The OAuth 2.0 API provides API security via scoped access tokens, and OpenID Connect provides user authentication and an SSO layer.
 
 ## Endpoints
 
@@ -38,14 +25,27 @@ You can also view the video [Getting Started with the Okta API and OpenID Connec
 | [/.well-known/oauth-authorization-server](#well-knownoauth-authorization-server) | Returns OAuth 2.0 metadata related to the specified authorization server. |
 | [/.well-known/openid-configuration](#well-knownopenid-configuration) | Returns OpenID Connect metadata related to the specified authorization server. |
 
+### Composing Your Base URL
+All of the OAuth 2.0 endpoints on this page are directed to an authorization server, but which authorization server they go to depends on your use case. Your two options are:
+
+1. Okta is your authorization server. This is for the use case where your users are all part of your Okta organization and you would just like to offer them single sign-on with an ID Token. In this case your full URL looks like this:
+
+`https://{yourOktaDomain}.com/oauth2/v1/authorize`
+
+2. You are using a custom authorization server inside Okta. This is for use cases where Okta is the identity platform for your application or API, so your users will be logging in to something other than Okta. In this case your requests are sent to the custom authorizations server, and your full URL looks like this:
+
+`https://{yourOktaDomain}.com/oauth2/${authorizationServerId}/v1/authorize`
+
+If you have a developer account, you can use the `default` authorization server that was created along with your account, in which case the full URL looks like this:
+
+`https://{yourOktaDomain}.com/oauth2/default/v1/authorize`
+
 ### /authorize
 {:.api .api-operation}
 
-{% api_operation get /oauth2/v1/authorize %}
+{% api_operation get ${baseUrl}/v1/authorize %}
 
-{% api_operation get /oauth2/**${authorizationServerId}**/v1/authorize %}
-
-> This endpoint's URL namespace will vary depending on whether you are using a custom authorization server or not. For more information, see (jakub.todo).
+> This endpoint's base URL will vary depending on whether you are using a custom authorization server or not. For more information, see [Composing Your Base URL](#composing-your-base-url).
 
 This is a starting point for OpenID Connect flows such as implicit and authorization code flows. This request
 authenticates the user and returns tokens along with an authorization grant to the client application as a part
@@ -237,13 +237,11 @@ https://www.example.com/#error=invalid_scope&error_description=The+requested+sco
 ### /token
 {:.api .api-operation}
 
-{% api_operation post /oauth2/v1/token %}
-
-{% api_operation post /oauth2/**${authorizationServerId}**/v1/token %}
+{% api_operation post ${baseUrl}/v1/token %}
 
 The API returns access tokens, ID tokens, and refresh tokens, depending on the request parameters.
 
-> This endpoint's URL namespace will vary depending on whether you are using a custom authorization server or not. For more information, see (jakub.todo).
+> This endpoint's base URL will vary depending on whether you are using a custom authorization server or not. For more information, see [Composing Your Base URL](#composing-your-base-url).
 
 #### Request Parameters
 
@@ -345,17 +343,15 @@ Content-Type: application/json;charset=UTF-8
 ### /introspect
 {:.api .api-operation}
 
-{% api_operation post /oauth2/v1/introspect %}
+{% api_operation post ${baseUrl}/v1/introspect %}
 
-{% api_operation post /oauth2/**${authorizationServerId}**/v1/introspect %}
-
-> This endpoint's URL namespace will vary depending on whether you are using a custom authorization server or not. For more information, see (jakub.todo).
+> This endpoint's base URL will vary depending on whether you are using a custom authorization server or not. For more information, see [Composing Your Base URL](#composing-your-base-url).
 
 This endpoint takes an access or refresh token, and returns a boolean indicating whether it is active or not.
 If the token is active, additional data about the token is also returned. If the token is invalid, expired, or revoked, it is considered inactive.
 An implicit client can only introspect its own tokens, while a confidential client can inspect all access tokens. (jakub.todo this needs to either be clarified or removed)
 
-> Note: [ID tokens](/standards/OIDC/index.html#id-token) are also valid, however, they are usually validated on the service provider or app side of a flow.
+> Note: [ID tokens](#id-token) are also valid, however, they are usually validated on the service provider or app side of a flow.
 
 #### Request Parameters
 
@@ -491,11 +487,9 @@ Content-Type: application/json;charset=UTF-8
 {:.api .api-operation}
 
 
-{% api_operation post /oauth2/v1/revoke %}
+{% api_operation post ${baseUrl}/v1/revoke %}
 
-{% api_operation post /oauth2/**${authorizationServerId}**/v1/revoke %}
-
-> This endpoint's URL namespace will vary depending on whether you are using a custom authorization server or not. For more information, see (jakub.todo).
+> This endpoint's base URL will vary depending on whether you are using a custom authorization server or not. For more information, see [Composing Your Base URL](#composing-your-base-url).
 
 The API takes an access or refresh token and revokes it. Revoked tokens are considered inactive at the introspection endpoint. A client may only revoke its own tokens.
 
@@ -547,11 +541,9 @@ Content-Type: application/json;charset=UTF-8
 ### /logout
 {:.api .api-operation}
 
-{% api_operation get /oauth2/v1/logout %}
+{% api_operation get ${baseUrl}/v1/logout %}
 
-{% api_operation get /oauth2/**${authorizationServerId}**/v1/logout %}
-
-> This endpoint's URL namespace will vary depending on whether you are using a custom authorization server or not. For more information, see (jakub.todo).
+> This endpoint's base URL will vary depending on whether you are using a custom authorization server or not. For more information, see [Composing Your Base URL](#composing-your-base-url).
 
 The API takes an ID token and logs the user out of the Okta session if the subject matches the current Okta session. A `post_logout_redirect_uri` may be specified to redirect the User after the logout has been performed. Otherwise, the user is redirected to the Okta login page.
 
@@ -590,11 +582,9 @@ curl -v -X GET \
 ### /keys
 {:.api .api-operation}
 
-{% api_operation get /oauth2/v1/keys %}
+{% api_operation get ${baseUrl}/v1/keys %}
 
-{% api_operation get /oauth2/**${authorizationServerId}**/v1/keys %}
-
-> This endpoint's URL namespace will vary depending on whether you are using a custom authorization server or not. For more information, see (jakub.todo).
+> This endpoint's base URL will vary depending on whether you are using a custom authorization server or not. For more information, see [Composing Your Base URL](#composing-your-base-url).
 
 (jakub.todo Missing an actual description.)
 
@@ -670,11 +660,9 @@ You can use an [introspection request](#introspect) for validation.
 ### /userinfo
 {:.api .api-operation}
 
-{% api_operation get /oauth2/v1/userinfo %}
+{% api_operation get ${baseUrl}/v1/userinfo %}
 
-{% api_operation get /oauth2/**${authorizationServerId}**/v1/userinfo %}
-
-> This endpoint's URL namespace will vary depending on whether you are using a custom authorization server or not. For more information, see (jakub.todo).
+> This endpoint's base URL will vary depending on whether you are using a custom authorization server or not. For more information, see [Composing Your Base URL](#composing-your-base-url).
 
 (jakub.todo Doesn't have a description)
 
@@ -739,11 +727,9 @@ WWW-Authenticate: Bearer error="insufficient_scope", error_description="The acce
 ### /.well-known/oauth-authorization-server
 {:.api .api-operation}
 
-{% api_operation get /oauth2/v1/.well-known/oauth-authorization-server %}
+{% api_operation get ${baseUrl}/v1/.well-known/oauth-authorization-server %}
 
-{% api_operation get /oauth2/**${authorizationServerId}**/v1/.well-known/oauth-authorization-server %}
-
-> This endpoint's URL namespace will vary depending on whether you are using a custom authorization server or not. For more information, see (jakub.todo).
+> This endpoint's base URL namespace will vary depending on whether you are using a custom authorization server or not. For more information, see [Composing Your Base URL](#composing-your-base-url).
 
 This API endpoint returns metadata related to a Custom Authorization Server that can be used by clients to programmatically configure their interactions with Okta.
 Custom scopes and custom claims aren't returned.
@@ -841,11 +827,9 @@ jakub.todo
 ### .well-known/openid-configuration
 {:.api .api-operation}
 
-{% api_operation get oauth/v1/.well-known/openid-configuration %}
+{% api_operation get ${baseUrl}/v1/.well-known/openid-configuration %}
 
-{% api_operation get oauth/**${authorizationServerId}**/v1/.well-known/openid-configuration %}
-
-> This endpoint's URL namespace will vary depending on whether you are using a custom authorization server or not. For more information, see (jakub.todo).
+> This endpoint's base URL will vary depending on whether you are using a custom authorization server or not. For more information, see [Composing Your Base URL](#composing-your-base-url).
 
 This API endpoint returns metadata related to OpenID Connect that can be used by clients to programmatically configure their interactions with Okta.
 This API doesn't require any authentication.
@@ -970,3 +954,303 @@ jakub.todo
 ~~~http
 jakub.todo
 ~~~
+
+## OAuth 2.0 & OpenID Connect Tokens
+
+This section contains detailed information about the objects that are inputted to, or outputted from, the OAuth 2.0 endpoints.
+
+* [Access Token](#access-token)
+* [ID Token](#id-token)
+
+## Access Token
+
+An access token is a JSON web token (JWT) encoded in base64URL format that contains [a header](#jwt-header), [payload](#jwt-payload), and [signature](#jwt-signature). A resource server can authorize the client to access particular resources based on the [scopes and claims](#scopes-and-claims) in the access token.
+
+The lifetime of access token can be configured in the [Access Policies](#access-policies). If the client that
+issued the token is deactivated, the token is immediately and permanently invalidated. Reactivating the
+client does not make the token valid again.
+
+### JWT Header
+
+
+~~~json
+{
+  "alg": "RS256",
+  "kid": "45js03w0djwedsw"
+}
+~~~
+
+
+### JWT Payload
+
+
+~~~json
+{
+  "ver": 1,
+  "jti": "AT.0mP4JKAZX1iACIT4vbEDF7LpvDVjxypPMf0D7uX39RE",
+  "iss": "https://{yourOktaDomain}.com/oauth2/0oacqf8qaJw56czJi0g4",
+  "aud": "https://api.you-company.com",
+  "sub": "00ujmkLgagxeRrAg20g3",
+  "iat": 1467145094,
+  "exp": 1467148694,
+  "cid": "nmdP1fcyvdVO11AL7ECm",
+  "uid": "00ujmkLgagxeRrAg20g3",
+  "scp": [
+    "openid",
+    "email",
+    "flights",
+    "custom"
+  ],
+  "number_of_flights": 2,
+  "flight_number": [
+    "AX102",
+    "CT508"
+  ],
+  "custom_claim": "CustomValue"
+}
+~~~
+
+
+### JWT Signature
+
+This is a digital signature Okta generates using the public key identified by the `kid` property in the header section.
+
+### Access Token Scopes and Claims
+
+Access tokens include reserved scopes and claims, and can optionally include custom scopes and claims.
+
+Scopes are requested in the request parameter, and the Authorization Server uses the [Access Policies](#access-policies) to decide if they can be granted or not. If any of the requested scopes are rejected by the Access Policies, the request will be rejected.
+
+Based on the granted scopes, claims are added into the access token returned from the request.
+
+#### Reserved Scopes and Claims
+
+Okta defines a number of reserved scopes and claims which can't be overridden.
+
+* [Reserved scopes](#reserved-scopes)
+* [Reserved claims in the header section](#reserved-claims-in-the-header-section)
+* [Reserved claims in the payload section](#reserved-claims-in-the-payload-section)
+
+##### Reserved scopes
+
+Reserved scopes: `openid`, `profile`, `email`, `address`, `phone`, `offline_access`, and `groups` are available to ID tokens and
+access tokens, using either Okta Authorization Server or Custom Authorization Server. For details, see [Scopes](/standards/OIDC/index.html#scopes).
+All of these scopes except `groups` and `offline_access` are defined in the OpenID Connect specification.
+
+##### Reserved claims in the header section
+
+The header only includes the following reserved claims:
+
+| Property     | Description                                                                      | DataType     | Example    |
+| :----------- | :------------------------------------------------------------------------------- | :----------- | :----------|
+| alg          | Identifies the digital signature algorithm used. This is always be RS256.        | String       | "RS256"    |
+| kid          | Identifies the `public-key` used to sign the `access_token`. The corresponding `public-key` can be found as a part of the [metadata](/docs/api/resources/oauth2.html#retrieve-authorization-server-metadata) `jwks_uri` value. | String       | "a5dfwef1a-0ead3f5223_w1e" |
+
+##### Reserved claims in the payload section
+
+The payload includes the following reserved claims:
+
+|--------------+-------------------+----------------------------------------------------------------------------------+--------------|--------------------------|
+| Property     |  Description                                                                      | DataType     | Example                  |
+|--------------+---------+----------+----------------------------------------------------------------------------------+--------------|--------------------------|
+| aud     | Identifies the audience(resource URI) that this access token is intended for. | String    | "http://api.example.com/api"     |
+| cid     | Client ID of your application that requests the access token.  | String    | "6joRGIzNCaJfdCPzRjlh"     |
+| exp     | The time the access token expires, represented in Unix time (seconds).   | Integer    | 1311280970     |
+| iat     | The time the access token was issued, represented in Unix time (seconds).   | Integer    | 1311280970     |
+| iss     | The Issuer Identifier of the response. This value will be the unique identifier for the Authorization Server instance.   | String    | "https://{yourOktaDomain}.com/oauth2/0oacqf8qaJw56czJi0g4"     |
+| jti     | A unique identifier for this access token for debugging and revocation purposes.   | String    |  "AT.0mP4JKAZX1iACIT4vbEDF7LpvDVjxypPMf0D7uX39RE"  |
+| scp     | Array of scopes that are granted to this access token.   | Array    | [ "openid", "custom" ]     |
+| sub     | The subject. A name for the user or a unique identifier for the client.  | String    |  "john.doe@example.com"     |
+| uid     | A unique identifier for the user. It will not be included in the access token if there is no user bound to it.  | String    |   "00uk1u7AsAk6dZL3z0g3"     |
+| ver     | The semantic version of the access token.   |  Integer   |  1    |
+
+#### Custom Scopes and Claims
+
+The admin can configure custom scopes and claims, and a groups claim, for the Custom Authorization Server. The admin can also configure a groups claim for the Okta Authorization Server.
+
+##### Custom scopes
+
+If the request that generates the access token contains any custom scopes, those scopes will be part of the *scp* claim together with the scopes provided from the [OIDC specification](http://openid.net/specs/openid-connect-core-1_0.html). The form of these custom scopes must conform to the [OAuth 2.0 specification](https://tools.ietf.org/html/rfc6749#section-3.3).
+
+>*Note:* Scope names can contain the characters < (less than) or > (greater than), but not both characters.
+
+##### Custom claims
+
+Custom claims are associated with scopes. In general, if one of the associated scopes is granted to a token, the custom claim is added into it.
+However, the specifics depend on which claims are requested, whether the request is to the Okta Authorization Server or a Custom Authorization Server, and some configuration choices.
+
+###### Quick reference: which token has which claims?
+
+Okta defines two types of reserved (non-custom) claims, [base](#base-claims-always-present) and [scope-dependent claims](#scope-dependent-claims-not-always-returned).
+Base claims are always returned, and scope-dependent claims are returned depending on the scope requested.
+Custom claims are configured in the Custom Authorization Server, and returned depending on whether it matches a scope in the request, and also depending on the token type, authorization server type, and the token and claim configuration set in the authorization server:
+
+* Base claims are always returned in ID tokens and access tokens for both authorization server types (Okta Authorization Server or Custom Authorization Server).
+* Scope-dependent claims are returned in tokens depending on the response type for either authorization server type. See [the second table in the Scope-Dependent Claims topic](/standards/OIDC/index.html#scope-dependent-claims-not-always-returned) for details.
+* Custom claims require configuration in the Custom Authorization Server. You can specify that claims are to be returned in each token (ID or access) always, or only when requested. Assuming a claim matches a requested scope,
+    it is returned to the ID token if there is no access token requested.
+
+The full set of claims for requested scopes is available via the `/oauth2/v1/userinfo` endpoint. Call this endpoint using the access token.
+
+###### Custom claim configuration
+
+Define custom claims in [the Okta user interface](https://help.okta.com/en/prod/Content/Topics/Security/API_Access.htm?Highlight=custom%20claim) or using [the OAuth 2.0 API](/docs/api/resources/authz-servers#get-a-claim).
+
+A custom claim can be configured in the following ways:
+
+* Choose whether the claim is included in the ID token or the access token.
+* Choose whether the claim is always included in a token, or only when the claim is specified.
+* Define the scopes that this claim is included in: either any scope or a list of scopes that you define.
+* Disable the claim. This is often used for testing.
+* Define the claim value, using [Okta's Expression Language](/reference/okta_expression_language/) or a group filter.
+    * Example of expressions: `"user.region"`, the value of the custom field "region" on the user's profile. You can create expressions to reference application groups.
+    * Example of a set of Okta groups specified by `groupFilterType`: If the token recipient wanted to display a badge for all current customers, you could specify a `groupFilterType` that start with "Customer" (`STARTS_WITH=Customer`). See [`groupFilterType`](/docs/api/resources/oauth2.html#details-for-groupfiltertype) for details.
+        Notice that you can use the group filter (`valueType` is `GROUP`) for Okta groups. For application groups, `valueType` must be `EXPRESSION`.
+
+  The expression is evaluated at runtime, and if the evaluated result is null, that custom claim isn't added into the ID token or access token.
+  The datatype of a claim depends on the type of value. The datatype is:
+    * An array if the claim value is a group filter.
+    * The same datatype as the evaluated result if the claim value is an expression.
+
+>*Note:* For the custom claim with group filter, its value has a limit of 100. If more than 100 groups match the filter, then the request fails. Expect that this limit may change in the future.
+
+## ID Token
+
+OpenID Connect introduces an ID token
+which is a JSON web token (JWT) that contains information about an authentication event
+and claims about the authenticated user.
+
+Clients can use any of the following sequences of operations to obtain an ID token:
+* Basic, or [Authorization code flow](jakub.todo) -- the client obtains
+an authorization code from the authorization server's authentication endpoint and uses it to obtain an ID token and an access
+token from the authorization server's Token endpoint.
+* [Implicit flow](jakub.todo) -- the client obtains an ID
+token and optionally an access token directly from the authorization server's authentication endpoint.
+
+Clients should always [validate ID tokens](jakub.todo) to ensure their integrity.
+
+The ID tokens returned by the authentication endpoint (implicit flow) or the Token endpoint (authorization code flow)
+are identical, except that in the implicit flow, the *nonce* parameter is required (and hence must have been included
+in the request), and the *at_hash* parameter is required if the response includes [an access token](#access-token) but prohibited if the
+response does not include an access token.
+
+The ID Token consists of three period-separated, base64URL-encoded JSON segments: [a header](#id-token-header), [the payload](#id-token-payload), and [the signature](#id-token-signature).
+
+### ID Token Header
+
+~~~json
+{
+  "alg": "RS256",
+  "kid": "45js03w0djwedsw"
+}
+~~~
+
+### ID Token Payload
+
+~~~json
+{
+  "ver": 1,
+  "sub": "00uid4BxXw6I6TV4m0g3",
+  "iss": "https:{myOktaDomain.com}",
+  "aud": "uAaunofWkaDJxukCFeBx",
+  "iat": 1449624026,
+  "exp": 1449627626,
+  "amr": [
+    "pwd"
+  ],
+  "jti": "ID.4eAWJOCMB3SX8XewDfVR",
+  "auth_time": 1449624026,
+  "at_hash": "cpqKfdQA5eH891Ff5oJr_Q",
+  "name" :"John Doe",
+  "nickname":"Jimmy",
+  "preferred_username": "john.doe@example.com",
+  "given_name":"John",
+  "middle_name":"James",
+  "family_name":"Doe",
+  "profile":"https://profile.wordpress.com/john.doe",
+  "zoneinfo":"America/Los_Angeles",
+  "locale":"en-US",
+  "updated_at":1311280970,
+  "email":"john.doe@example.com",
+  "email_verified":true,
+  "address" : { "street_address": "123 Hollywood Blvd.",
+      "locality": "Los Angeles",
+      "region": "CA",
+      "postal_code": "90210",
+      "country": "US"
+    },
+  "phone_number":"+1 (425) 555-1212"
+}
+~~~
+
+### ID Token Signature
+
+This is the digital signature that Okta signs, using the public key identified by the *kid* property in the header section.
+
+### ID Token Claims
+
+The header and payload sections contain claims.
+
+#### Claims in the header section
+
+Claims in the header are always returned.
+
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| ------------- | -------------------------- |
+| Property      | Description                                                                                                                                                                                                  | DataType      | Example                    |
+|:--------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------|:---------------------------|
+| alg           | Identifies the digital signature algorithm used. This is always be RS256.                                                                                                                                    | String        | "RS256"                    |
+| kid           | Identifies the public key used to verify the ID token. The corresponding public key can be found as a part of the   [well-known configuration's](/#well-knownopenid-configuration) `jwks_uri` value.           | String        | "a5dfwef1a-0ead3f5223_w1e" |
+
+#### Claims in the payload section
+
+Claims in the payload are either base claims, independent of scope (always returned), or dependent on scope (not always returned).
+
+##### Base claims (always present)
+
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------   | --------- | --------------------------------------------------- |
+| Property      | Description                                                                                                                                                                | DataType  | Example                                             |
+|:--------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------|:----------------------------------------------------|
+| amr           | JSON array of strings that are identifiers for     [authentication methods](http://self-issued.info/docs/draft-jones-oauth-amr-values-00.html) used in the authentication.     | Array     | [ "pwd", "mfa", "otp", "kba", "sms", "swk", "hwk" ] |
+| aud           | Identifies the audience that this ID token is intended for. It must be one of the OAuth 2.0 client IDs of your application.                                                | String    | "6joRGIzNCaJfdCPzRjlh"                              |
+| auth_time     | The time the end user was authenticated, represented in Unix time (seconds).                                                                                               | Integer   | 1311280970                                          |
+| exp           | The time the ID token expires, represented in Unix time (seconds).                                                                                                         | Integer   | 1311280970                                          |
+| iat           | The time the ID token was issued, represented in Unix time (seconds).                                                                                                      | Integer   | 1311280970                                          |
+| idp           | The id of the Identity Provider that the user authenticated to Okta with. (Used for Social Auth and Inbound SAML). If the IdP is an Okta org, the value is the Okta OrgId.           | String    | "00ok1u7AsAkrwdZL3z0g3"                             |
+| iss           | The Issuer Identifier of the response.                                                                                                                                     | String    | "https://{yourOktaDomain}.com"                         |
+| jti           | A unique identifier for this ID token for debugging and revocation purposes.                                                                                               | String    | "Tlenfse93dgkaksginv"                               |
+| sub           | The subject. A unique identifier for the user.                                                                                                                             | String    | "00uk1u7AsAk6dZL3z0g3"                              |
+| ver           | The semantic version of the ID Token.                                                                                                                                      | Integer   | 1                                                   |
+
+##### Scope-dependent claims (not always returned)
+
+| ------------------ | ----------------- | --------------------------------------------------------------------------------                                                                                                                                                   | -------------  | --------------------------                                                                                                      |
+| Property           | Required Scope    | Description                                                                                                                                                                                                                        | DataType       | Example                                                                                                                         |
+|:-------------------|:------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------|:--------------------------------------------------------------------------------------------------------------------------------|:--|
+| family_name        | profile           | Surname(s) or last name(s) of the user. Note that in some cultures, people can have multiple family names or no family name; all can be present, with the names being separated by space characters.                               | String         | "Doe"                                                                                                                           |
+| given_name         | profile           | Given name(s) or first name(s) of the user. Note that in some cultures, people can have multiple given names; all can be present, with the names being separated by space characters.                                              | String         | "John"                                                                                                                          |
+| locale             | profile           | Language and   [ISO3166‑1](http://www.iso.org/iso/country_codes) country code in uppercase, separated by a dash.                                                                                                                     | String         | "en-US"                                                                                                                         |
+| middle_name        | profile           | Middle name(s) of the user. Note that in some cultures, people can have multiple middle names; all can be present, with the names being separated by space characters. Also note that in some cultures, middle names are not used. | String         | "James"                                                                                                                         |
+| name               | profile           | User's full name in displayable form including all name parts, possibly including titles and suffixes, ordered according to the user's locale and preferences.                                                         | String         | "John Doe"                                                                                                                      |
+| nickname           | profile           | Casual name of the user that may or may not be the same as the given_name.                                                                                                                                                         | String         | "Jimmy"                                                                                                                         |
+| preferred_username | profile           | The chosen login (username) for the end user. By default this is the Okta username.                                                                                                                                                | String         | "john.doe@example.com"                                                                                                          |
+| preferred_username | profile           | The Okta login (username) for the end user.                                                                                                                                                                                        | String         | "john.doe@example.com"                                                                                                          |
+| profile            | profile           | URL of the user's profile page.                                                                                                                                                                                              | String         | "https://profile.wordpress.com/john.doe"                                                                                         |
+| zoneinfo           | profile           | String representing the user's time zone.                                                                                                                                                                                    | String         | "America/Los_Angeles"                                                                                                           |
+
+Be aware of the following before you work with scope-dependent claims:
+
+* To protect against arbitrarily large numbers of groups matching the group filter, the groups claim has a limit of 100.
+If more than 100 groups match the filter, then the request fails. Expect that this limit may change in the future.
+For more information about configuring an app for OpenID Connect, including group claims, see [OpenID Connect Wizard](https://help.okta.com/en/prod/Content/Topics/Apps/Apps_App_Integration_Wizard.htm).
+* **Important:** Scope-dependent claims are returned differently depending on the values in `response_type` and the scopes requested:
+
+    | Response Type             | Claims Returned in ID Token                                                                        | Claims Returned from the Userinfo Endpoint  |
+    |:--------------------------|:---------------------------------------------------------------------------------------------------|:--------------------------------------------|
+    | `code `                   | N/A                                                                                                | N/A                                         |
+    | `token`                   | N/A                                                                                                | N/A                                         |
+    | `id_token`                | Claims associated with requested scopes.                                                           | N/A                                         |
+    | `id_token` `code `        | Claims associated with requested scopes.                                                           | N/A                                         |
+    | `id_token` `token`        | `email` if email scope is requested; `name` and `preferred_username` if profile scope is requested | Claims associated with the requested scopes |
+    | `code` `id_token` `token` | `email` if email scope is requested; `name` and `preferred_username` if profile scope is requested | Claims associated with the requested scopes |
+
+* The full set of claims for the requested scopes is available via the [/oauth2/v1/userinfo](#userinfo) endpoint. Call this endpoint using the access token.

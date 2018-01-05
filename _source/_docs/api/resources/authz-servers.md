@@ -653,10 +653,10 @@ HTTP/1.1 204: No content
 ### Claim Operations
 
 * [Get All Claims](#get-all-claims)
-* [Get a Claims](#get-a-claim)
-* [Create a Claims](#create-a-claim)
-* [Update a Claims](#update-a-claim)
-* [Delete a Claims](#delete-a-claim)
+* [Get a Claim](#get-a-claim)
+* [Create a Claim](#create-a-claim)
+* [Update a Claim](#update-a-claim)
+* [Delete a Claim](#delete-a-claim)
 
 #### Get All Claims
 {:.api .api-operation}
