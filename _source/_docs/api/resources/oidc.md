@@ -865,7 +865,7 @@ HTTP/1.1 404 Not Found
 }
 ~~~
 
-### .well-known/openid-configuration
+### /.well-known/openid-configuration
 {:.api .api-operation}
 
 {% api_operation get ${baseUrl}/v1/.well-known/openid-configuration %}
