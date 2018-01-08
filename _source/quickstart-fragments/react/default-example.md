@@ -14,6 +14,8 @@ This guide will walk you through integrating authentication into a React app wit
 
 At the end of the React instructions you can choose your server type to learn more about post-authentication workflows, such as verifying tokens that your React application can send to your server.
 
+> If you would prefer to download a complete sample application, please visit [React Sample Applications for Okta][].
+
 ## Prerequisites
 * If you do not already have a **Developer Edition Account**, you can create one at [https://developer.okta.com/signup/](https://developer.okta.com/signup/).
 * If you don't have a React app, or are new to React, please continue with the [React Quickstart](https://facebook.github.io/react/docs/installation.html#creating-a-new-application) guide. It will walk you through the creation of a React app, creating routes, and other application development essentials.
@@ -189,3 +191,5 @@ export default withAuth(class MessageList extends Component {
   }
 }));
 ```
+
+[React Sample Applications for Okta]: https://github.com/okta/samples-js-react
