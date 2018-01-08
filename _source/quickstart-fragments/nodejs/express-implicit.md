@@ -7,6 +7,8 @@ exampleDescription: Express.js Implicit Flow Example
 
 In the Generic Node example (see other tab) we show you how to use the simplified [Okta JWT Verifier](https://www.npmjs.com/package/@okta/jwt-verifier) to verify Okta's JWTs.  In the example below we use the same verifier to create a simple Express middleware function that can prevent a request from completing if the request is not authenticated with a valid access token.  To learn more about validating Okta access tokens, please see [Validating Access Tokens](https://developer.okta.com/standards/OAuth/index.html#validating-access-tokens).
 
+> If you would prefer to download a complete sample application, please visit [Express Sample Applications for Okta][].
+
 ```javascript
 const express = require('express');
 const OktaJwtVerifier = require('@okta/jwt-verifier');
@@ -74,3 +76,5 @@ app.listen(3000, () => {
   console.log('Serve Ready on port 3000');
 });
 ```
+
+[Express Sample Applications for Okta]: https://github.com/okta/samples-nodejs-express-4
