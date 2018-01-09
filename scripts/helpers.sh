@@ -106,7 +106,6 @@ function generate_html() {
 }
 
 function generate_conductor_file() {
-
     pushd $GENERATED_SITE_LOCATION
     CONDUCTOR_FILE=conductor.yml
     find -type f -iname 'index.html' | xargs dirname | sed -s "s/^\.//" | while read -r line ; do
@@ -116,7 +115,6 @@ function generate_conductor_file() {
         fi
     done
     popd
-
 }
 
 function require_env_var() {
@@ -125,17 +123,6 @@ function require_env_var() {
     if [[ -z "${env_var}" ]]; then
         echo "Environment variable '${env_var_name}' must be defined, but isn't.";
         exit 1
-    fi
-}
-
-# Verify for occurences of localhost:4000 have been removed
-function check_for_localhost_links() {
-    local links=$(grep -R "localhost:4000"  --include="*.html" ../* --exclude-dir={node_modules,scripts,tests,dist} --exclude={README.md,package.json})
-    if [ "$links" ];
-    then
-        echo $links
-        echo "Files contain localhost:4000!"
-        return 1
     fi
 }
 
@@ -235,6 +222,13 @@ function check_sample_code_orgs() {
         echo "$oktaPreviewUrls"
         echo "Files contain old URL reference -> oktapreview.com"
         return 1
+    fi
+}
+
+function check_for_quickstart_pages_in_sitemap() {
+    if grep "quickstart/[^<]" dist/sitemap.xml;
+    then
+        exit 1
     fi
 }
 
