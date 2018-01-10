@@ -276,17 +276,17 @@ Describes the client performing the action.
 
 ### GeographicalContext Object
 
-Describes the location of the target that the action was performed on.
+Describes the physical location of the client that performs the action that kicks off this event.
 
-|------------+----------------------------------------------------------------+-----------------+----------|
-| Property   | Description                                                    | DataType        | Nullable |
-| ---------- | -------------------------------------------------------------- | --------------- | -------- |
-| geolocation | Geolocation of the target                                     | [Geolocation Object](#geolocation-object) | TRUE |
-| city       | City of the event                                              | String          | TRUE     |
-| state      | State of the client                                            | String          | TRUE     |
-| country    | Country of the client                                          | String          | TRUE     |
-| postalCode | Postal code of the client                                      | String          | TRUE     |
-|------------+----------------------------------------------------------------+-----------------+----------|
+|-------------+-----------------------------------------------------------------------------------------+---------------------------------------+----------|
+| Property    | Description                                                                             | DataType                              | Nullable |
+| ----------- | --------------------------------------------------------------------------------------- | ------------------------------------- | -------- |
+| geolocation | Geolocation (latitude, longitude) of the client                                         | [Geolocation Object](#geolocation-object) | TRUE |
+| city        | What city the client made its request from, if available (e.g. Seattle, San Francisco). | String                                | TRUE     |
+| state       | Full name of the state/province that the client made its request from (e.g. Montana, Incheon). | String                         | TRUE     |
+| country     | Full name of the country the client made its request from (e.g.: France, Uganda).       | String                                | TRUE     |
+| postalCode  | Postal code of the location the client made its request from                            | String                                | TRUE     |
+|-------------+-----------------------------------------------------------------------------------------+---------------------------------------+----------|
 
 ### Geolocation Object
 
