@@ -3115,14 +3115,14 @@ curl -v -X GET \
 
 {% api_lifecycle beta %}
 
-These operations can be used to manage a user's emails.
+Manage a user's email with the following operations.
 
 ### User Email Object
 
 | Property    | Description                                 | Datatype                                                        | Unique |
 |:------------|:--------------------------------------------|:----------------------------------------------------------------|:-------|
 | id          | The ID of the email object                  | String                                                          | TRUE   |
-| status      | Whether is email is verified or not         | String                                                          | FALSE  |
+| status      | Whether the email is verified or not         | String                                                          | FALSE  |
 | value       | The value of the email address              | String                                                          | FALSE  |
 | _links      | Discoverable resources related to the email | [JSON HAL](http://tools.ietf.org/html/draft-kelly-json-hal-06)  | FALSE  |
 
@@ -3177,7 +3177,7 @@ Example
 
 {% api_operation get /api/v1/users/*:uid*/emails %}
 
-List a users emails
+Lists a user's email
 
 #### Request
 {:.api .api-request .api-request-example}
@@ -3191,7 +3191,7 @@ Content-Type: application/json
 #### Response (Verified Email)
 {:.api .api-response .api-response-example}
 
-> Note: Though the email is in `VERIFIED` status, the `verify` operation is still published for completeness.
+> Note: Although the email is in `VERIFIED` status, the `verify` operation is still published for completeness.
 
 ~~~json
 [
@@ -3283,7 +3283,7 @@ Content-Type: application/json
 
 {% api_operation get /api/v1/users/*:uid*/emails/*:eid* %}
 
-Get a particular email for a user
+Gets a particular email for a user
 
 #### Request
 {:.api .api-request .api-request-example}
@@ -3338,9 +3338,9 @@ Content-Type: application/json
 
 {% api_operation post /api/v1/users/*:uid*/emails/*:eid*/verify %}
 
-Trigger email verification flow for an unverified email
+Triggers email verification flow for an unverified email
 
-> Verification is idempotent and can be retried at any time.  Issuing a new verification will replace any previously issued verification tokens!
+> Verification is idempotent and can be retried at any time.  Issuing a new verification invalidates any previously issued verification tokens.
 
 #### Request Parameters
 {:.api .api-request .api-request-params}
@@ -3350,17 +3350,17 @@ Trigger email verification flow for an unverified email
 | uid         | `id` of user                                                              | URL        | String             | TRUE     |                             |
 | eid         | `id` of email                                                             | URL        | String             | TRUE     |                             |
 | sendEmail   | Sends a verification email to the user if `true`                          | Query      | Boolean            | FALSE    | TRUE                        |
-| redirectUri | Specifies where the end-user is redirected after verification             | Body       | String             | FALSE    | `/app/UserHome`             |
+| redirectUri | Specifies where the end user is redirected after verification             | Body       | String             | FALSE    | `/app/UserHome`             |
 | expiresAt   | Timestamp when the verification token expires                             | Body       | Date               | FALSE    | 5 days |
 | actions     | Extensible actions performed when verification token is validated          | Body       | Actions Object     | FALSE    |                             |
 
 ##### Actions Object
-> `signOn` property determines whether user has to sign-in after clicking on email verification link to complete verification process. Thus, if `signOn` is set to `REQUIRED`, an Okta session is granted after the user has signed in.
 
 | Property      | DataType                         | Nullable | Unique | Readonly | Default          |
 |:--------------|:---------------------------------|:---------|:-------|:---------|:-----------------|
 | signOn        | `NOT_REQUIRED` or `REQUIRED`     | TRUE     | FALSE  | FALSE    | `REQUIRED`       |
 
+The `signOn` property determines whether a user has to sign in after clicking on an email verification link to complete the verification process. Thus, if `signOn` is set to `REQUIRED`, an Okta session is granted after the user has signed in.
 
 #### Request
 {:.api .api-request .api-request-example}
@@ -3417,11 +3417,11 @@ Content-Type: application/json
 
 {% api_operation post /api/v1/users/*:id*/emails/*:eid*/change %}
 
-Change a verified email.
+Changes a verified email
 
-This operation delays a profile update/push until the user has verified their email address.
+This operation delays a profile update or profile push until the user has verified their email address.
 
-> Email changes are idempotent.  Issuing a new change verification will replace any previously issued change verification tokens!
+> Email changes are idempotent.  Issuing a new change verification replaces any previously issued change verification tokens.
 
 #### Request Parameters
 {:.api .api-request .api-request-params}
@@ -3432,17 +3432,17 @@ This operation delays a profile update/push until the user has verified their em
 | eid         | `id` of email                                                              | URL        | String             | TRUE     |                             |
 | sendEmail   | Sends a verification email to the user if `true`                           | Query      | Boolean            | FALSE    | TRUE                        |
 | value       | Target email address that will replace current email address when verified | Body       | String (RFC Email) | TRUE     |                             |
-| redirectUri | Specifies where the end-user is redirected after verification              | Body       | String             | FALSE    | `/app/UserHome`             |
+| redirectUri | Specifies where the end user is redirected after verification              | Body       | String             | FALSE    | `/app/UserHome`             |
 | expiresAt   | Timestamp when the verification token expires                              | Body       | Date               | FALSE    | 5 days |
 | actions     | Extensible actions peformed when verification token is validated           | Body       | Actions Object     | FALSE    |                             |
 
 ##### Actions Object
 
-> `signOn` property determines whether user has to sign-in after clicking on email verification link to complete verification process. Thus, if `signOn` is set to `REQUIRED`, an Okta session is granted after the user has signed in.
-
 | Property      | DataType                         | Nullable | Unique | Readonly | Default          |
 |:--------------|:---------------------------------|:---------|:-------|:---------|:-----------------|
 | signOn        | `NOT_REQUIRED` or `REQUIRED`     | TRUE     | FALSE  | FALSE    | `REQUIRED`       |
+
+The `signOn` property determines whether a user has to sign in after clicking on an email verification link to complete the verification process. Thus, if `signOn` is set to `REQUIRED`, an Okta session is granted after the user has signed in.
 
 #### Request
 {:.api .api-request .api-request-example}
