@@ -282,9 +282,9 @@ Describes the physical location of the client that performs the action that kick
 | Property    | Description                                                                             | DataType                              | Nullable |
 | ----------- | --------------------------------------------------------------------------------------- | ------------------------------------- | -------- |
 | geolocation | Geolocation (latitude, longitude) of the client                                         | [Geolocation Object](#geolocation-object) | TRUE |
-| city        | What city the client made its request from, if available (e.g. Seattle, San Francisco). | String                                | TRUE     |
-| state       | Full name of the state/province that the client made its request from (e.g. Montana, Incheon). | String                         | TRUE     |
-| country     | Full name of the country the client made its request from (e.g.: France, Uganda).       | String                                | TRUE     |
+| city        | The city that the client made its request from, if available (e.g. Seattle, San Francisco) | String                             | TRUE     |
+| state       | Full name of the state/province that the client made its request from (e.g. Montana, Incheon) | String                          | TRUE     |
+| country     | Full name of the country the client made its request from (e.g.: France, Uganda)        | String                                | TRUE     |
 | postalCode  | Postal code of the location the client made its request from                            | String                                | TRUE     |
 |-------------+-----------------------------------------------------------------------------------------+---------------------------------------+----------|
 
