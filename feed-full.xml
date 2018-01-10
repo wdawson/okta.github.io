@@ -8,6 +8,168 @@
     <atom:link href="https://developer.okta.com/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Build an App for iOS and Android with Xamarin</title>
+        <description>&lt;p&gt;&lt;a href=&quot;https://www.xamarin.com/&quot;&gt;Xamarin&lt;/a&gt; is a cross-platform technology that makes it possible to build native applications for Android and iOS using a single, shared codebase. Like other technologies such as React Native and NativeScript, it allows development teams to spend less time writing code for both platforms.&lt;/p&gt;
+
+&lt;p&gt;Xamarin is open-source (and free). Under the hood, it uses Mono (a version of the Microsoft .NET runtime), so Xamarin apps are usually written in C#. You can build Xamarin apps on Windows using Visual Studio, or Mac using Visual Studio for Mac. Even though Xamarin apps are not written in Swift (or Java), they still look and feel like real, native apps on the device.&lt;/p&gt;
+
+&lt;p&gt;In this tutorial, I’ll show you how to use Xamarin to build a basic app for both iOS and Android, even if you’ve never done any app development before!&lt;/p&gt;
+
+&lt;h2 id=&quot;set-up-xamarin-on-windows&quot;&gt;Set Up Xamarin on Windows&lt;/h2&gt;
+&lt;p&gt;&lt;em&gt;Skip to the next section if you have a Mac!&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;If you don’t have Visual Studio installed, download the &lt;a href=&quot;https://www.visualstudio.com/downloads/&quot;&gt;free Community Edition&lt;/a&gt; from Microsoft.&lt;/p&gt;
+
+&lt;p&gt;When you install Visual Studio, be sure to pick the &lt;strong&gt;Mobile development with .NET&lt;/strong&gt; workload, which installs the Xamarin tools you need:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/build-app-for-ios-android-with-xamarin/vs-xamarin-workload-6d6d17cf5ee2bc44f4908450598b793432b0e3a5cf730e802a081215e5e9d1b0.gif&quot; alt=&quot;Install the Mobile development with .NET workload&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;If Visual Studio is already installed, open the Visual Studio Installer to make sure you have the above workload selected.&lt;/p&gt;
+
+&lt;p&gt;Once you have these tools installed, you’re ready to create a Xamarin project! Skip the next section.&lt;/p&gt;
+
+&lt;h2 id=&quot;set-up-xamarin-on-mac&quot;&gt;Set Up Xamarin on Mac&lt;/h2&gt;
+&lt;p&gt;If you have a Mac, you’ll need to install Visual Studio for Mac. Follow the &lt;a href=&quot;https://docs.microsoft.com/en-us/visualstudio/mac/installation&quot;&gt;official instructions&lt;/a&gt; to install the free Community Edition.&lt;/p&gt;
+
+&lt;p&gt;Once the application is installed, you’re ready to create a Xamarin project!&lt;/p&gt;
+
+&lt;h2 id=&quot;xamarin-and-xamarin-forms&quot;&gt;Xamarin and Xamarin Forms&lt;/h2&gt;
+&lt;p&gt;The base Xamarin SDK contains API bindings for each mobile platform, so you can call Android or iOS APIs from C# code. This allows you to build native apps using shared C# code, but you still need to design the UI separately for each platform.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.xamarin.com/forms&quot;&gt;Xamarin.Forms&lt;/a&gt; is an additional library that makes it possible to build your UI once (in XAML, a markup language for describing UI layouts). Xamarin.Forms then does the hard work of translating your XAML layout into the appropriate UI elements on the target platform. You can drop down to the “lower” Xamarin SDK level and interact with the platform APIs whenever you need to.&lt;/p&gt;
+
+&lt;p&gt;Deciding whether to use Xamarin.Forms in your project depends on how complex your app is. If you’re building an app that needs UI ultra-tailored for each platform or includes a lot of complex user interactions (such as a game), you’re better off with base Xamarin.&lt;/p&gt;
+
+&lt;p&gt;However, if you’re building a straightforward app that doesn’t need much platform-specific functionality or custom UI, using Xamarin.Forms means you can write even less code. Data-entry apps, productivity tools, and prototypes are great candidates. Since the goal of this tutorial is building a simple demo app, you’ll use Xamarin.Forms here!&lt;/p&gt;
+
+&lt;h2 id=&quot;create-a-new-xamarinforms-project&quot;&gt;Create a New Xamarin.Forms Project&lt;/h2&gt;
+&lt;p&gt;In Visual Studio, choose &lt;strong&gt;File - New Project&lt;/strong&gt;, pick the &lt;strong&gt;Cross-Platform&lt;/strong&gt; category, and choose the &lt;strong&gt;Cross-Platform App (Xamarin.Forms)&lt;/strong&gt; template. Name the project HelloWorldApp.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/build-app-for-ios-android-with-xamarin/vs-xamarin-new-project-6e9b382d3b6038f5c84f46749762bfb9a602d40cfe141ef97c641e7ae909d21d.gif&quot; alt=&quot;Create new Cross-Platform App (Xamarin.Forms) project&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Then, pick the &lt;strong&gt;Blank App&lt;/strong&gt; template and the platforms you want to build the app for. Choose &lt;strong&gt;Xamarin.Forms&lt;/strong&gt; as the UI Technology, and &lt;strong&gt;.NET Standard&lt;/strong&gt; as the Code Sharing Strategy:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/build-app-for-ios-android-with-xamarin/vs-xamarin-new-project-subtype-4039aa12d9583ac5637fc376e1d7d58df30eee8b8e881c7bcc40dc302c282134.png&quot; alt=&quot;Choose project creation options&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In Visual Studio for Mac, choose &lt;strong&gt;File - New Solution&lt;/strong&gt;, pick the &lt;strong&gt;Multiplatform - App&lt;/strong&gt; category, and choose the &lt;strong&gt;Blank Forms App&lt;/strong&gt; template:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/build-app-for-ios-android-with-xamarin/vs-mac-xamarin-new-project-d70309e6a1ffef7896ed7ba0ac108d640dd8b639036d01b1fc9fbf54e58e5af9.gif&quot; alt=&quot;Choose project creation options&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Creating the new project may take a few minutes. The Blank App template creates a solution with a few sub-projects:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;HelloWorldApp&lt;/strong&gt;: Contains the XAML and shared code for each platform-specific project.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;HelloWorldApp.Android&lt;/strong&gt; (or Droid): Android-specific code. For a simple project, you won’t have to change much here.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;HelloWorldApp.iOS&lt;/strong&gt;: iOS-specific code. You won’t have to change much here, either.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If you picked Windows (UWP) as a platform, your solution will contain an additional project targeting Windows devices.&lt;/p&gt;
+
+&lt;p&gt;In this tutorial, you’ll only need to modify the shared code project: HelloWorldApp.&lt;/p&gt;
+
+&lt;h2 id=&quot;add-a-page&quot;&gt;Add a Page&lt;/h2&gt;
+&lt;p&gt;UI views are called “pages” in Xamarin.Forms lingo, and your app already contains one called &lt;code class=&quot;highlighter-rouge&quot;&gt;MainPage&lt;/code&gt; (or &lt;code class=&quot;highlighter-rouge&quot;&gt;HelloWorldAppPage&lt;/code&gt; in Visual Studio for Mac). Double-click the XAML file in the Solution Explorer, and replace everything within the &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;ContentPage&amp;gt;&lt;/code&gt; tags with this markup:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;ContentPage.Padding&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;OnPlatform&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;x:TypeArguments=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Thickness&quot;&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;iOS=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;20, 40, 20, 20&quot;&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;Android=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;20, 20, 20, 20&quot;&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;WinPhone=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;20, 20, 20, 20&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/ContentPage.Padding&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;ContentPage.Content&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;StackLayout&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;VerticalOptions=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;FillAndExpand&quot;&lt;/span&gt;
+                &lt;span class=&quot;na&quot;&gt;HorizontalOptions=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;FillAndExpand&quot;&lt;/span&gt;
+                &lt;span class=&quot;na&quot;&gt;Orientation=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Vertical&quot;&lt;/span&gt;
+                &lt;span class=&quot;na&quot;&gt;Spacing=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;15&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;Label&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;Text=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Enter your name&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;Entry&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;x:Name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;NameEntry&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;Text=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Jane Doe&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;Button&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;x:Name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;SayHelloButton&quot;&lt;/span&gt; 
+                &lt;span class=&quot;na&quot;&gt;Text=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Say Hello&quot;&lt;/span&gt;
+                &lt;span class=&quot;na&quot;&gt;Clicked=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;SayHelloButtonOnClicked&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/StackLayout&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/ContentPage.Content&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This XAML markup creates a basic layout containing Label, Entry (text box), and Button elements. The element names (specified with &lt;code class=&quot;highlighter-rouge&quot;&gt;x:Name&lt;/code&gt;) will be used to refer to these elements later in code. These XAML elements are generic and aren’t yet tied to a specific platform. Xamarin.Forms will automatically translate the elements in proper &lt;code class=&quot;highlighter-rouge&quot;&gt;UIButton&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;EditText&lt;/code&gt; views when your app runs on iOS or Android.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;Clicked&lt;/code&gt; attribute on the Button element wires up the button click event to a handler called &lt;code class=&quot;highlighter-rouge&quot;&gt;SayHelloButtonClicked&lt;/code&gt;, which doesn’t exist yet. You’ll write that next.&lt;/p&gt;
+
+&lt;h2 id=&quot;add-code-to-the-page&quot;&gt;Add Code to the Page&lt;/h2&gt;
+&lt;p&gt;Each XAML file is paired with a C# code file, sometimes called a “code-behind”. Open up the code for the &lt;code class=&quot;highlighter-rouge&quot;&gt;MainPage.xaml&lt;/code&gt; (or &lt;code class=&quot;highlighter-rouge&quot;&gt;HelloWorldAppPage.xaml&lt;/code&gt;) file by expanding it in the Solution Explorer and selecting the &lt;code class=&quot;highlighter-rouge&quot;&gt;MainPage.xaml.cs&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/build-app-for-ios-android-with-xamarin/vs-xamarin-open-xamlcs-ed211cae42a17a3082142a4aabb5a9fec440b3e95ac315444811048755953bcc.gif&quot; alt=&quot;Expand MainPage and open C# code file&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Below the &lt;code class=&quot;highlighter-rouge&quot;&gt;public MainPage()&lt;/code&gt; method, add the new &lt;code class=&quot;highlighter-rouge&quot;&gt;SayHelloButtonClicked&lt;/code&gt; method:&lt;/p&gt;
+
+&lt;div class=&quot;language-csharp highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;SayHelloButtonClicked&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EventArgs&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NameEntry&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;DisplayAlert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Greeting&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Hello {name}!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Howdy&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You may need to add the following declaration at the top of the file:&lt;/p&gt;
+
+&lt;div class=&quot;language-csharp highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Because it’s referenced in the &lt;code class=&quot;highlighter-rouge&quot;&gt;Clicked&lt;/code&gt; attribute, this method will run when the button is pressed or tapped on the XAML page. First, the value of the textbox is assigned to the &lt;code class=&quot;highlighter-rouge&quot;&gt;name&lt;/code&gt; variable, and then the &lt;code class=&quot;highlighter-rouge&quot;&gt;DisplayAlert&lt;/code&gt; method is called to display a modal alert on the device.&lt;/p&gt;
+
+&lt;p&gt;That’s it! Your new Xamarin app is ready to go. To test it, you can use a simulator, or you can use Xamarin Live Player to test it on a live device.&lt;/p&gt;
+
+&lt;h2 id=&quot;test-your-xamarin-app-on-your-own-device&quot;&gt;Test Your Xamarin App on Your Own Device&lt;/h2&gt;
+&lt;p&gt;The quickest (and coolest) way to test a Xamarin project is with &lt;a href=&quot;https://www.xamarin.com/live&quot;&gt;Xamarin Live Player&lt;/a&gt;, a small app you can download onto your own phone or device. After downloading the app, &lt;a href=&quot;https://developer.xamarin.com/guides/cross-platform/live/install/&quot;&gt;pair it with Visual Studio&lt;/a&gt;. Then, pick Live Player as the device target.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/build-app-for-ios-android-with-xamarin/vs-xamarin-start-live-player-60f95a4e1d3a39f7ffdcad305b7ff880d2c740751a861d5ab6e59eaee33b6e3f.gif&quot; alt=&quot;Pick Live Player and start debugging&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Start debugging by pressing the play icon, or choose &lt;strong&gt;Run - Start Debugging&lt;/strong&gt; on the Mac. You’ll be asked to scan a QR code to pair Visual Studio with your device, and Live Player will connect to your computer. (If it hangs, make sure your computer and your device are on the same wi-fi network).&lt;/p&gt;
+
+&lt;p&gt;After Live Player connects, you’ll be able to immediately start using your app on your device! You can even make changes to the code in Visual Studio and Live Player will refresh the app on your device automatically. Super cool.&lt;/p&gt;
+
+&lt;h2 id=&quot;test-your-xamarin-app-on-android&quot;&gt;Test Your Xamarin App on Android&lt;/h2&gt;
+&lt;p&gt;If you have the Visual Studio Android Emulator installed, testing the Android version of your Xamarin app is simple. In the Visual Studio toolbar, pick the &lt;strong&gt;HelloWorldApp.Android&lt;/strong&gt; project and choose an Android device to emulate. Then, click the play button to start the emulator.&lt;/p&gt;
+
+&lt;p&gt;The Android emulator can be slow to load, so give it some time. If everything builds properly, you’ll see your app running on Android:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/build-app-for-ios-android-with-xamarin/android-emulator-74b0af109c30b8daa52c996c84f03fab8ed3167d3399f9227ffb3ba27be13c1e.gif&quot; alt=&quot;Testing on the Android emulator&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;test-your-xamarin-app-on-ios&quot;&gt;Test Your Xamarin App on iOS&lt;/h2&gt;
+&lt;p&gt;Testing your Xamarin app on iOS is a little trickier, because it requires a Mac to provide the simulator. (Unless you’re already on a Mac and using Visual Studio for Mac, in which case, you’re good to go!)&lt;/p&gt;
+
+&lt;p&gt;If you’re on Windows and have a Mac handy, follow the &lt;a href=&quot;https://developer.xamarin.com/guides/ios/getting_started/installation/windows/&quot;&gt;official instructions&lt;/a&gt; to set up the Mac agent and connect it to Visual Studio. Then, pick the &lt;strong&gt;HelloWorld.iOS&lt;/strong&gt; project, and switch the architecture to &lt;strong&gt;iPhone Simulator&lt;/strong&gt;. Choose a device version and click play.&lt;/p&gt;
+
+&lt;p&gt;After the project builds, the simulator will launch on the Mac:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/build-app-for-ios-android-with-xamarin/ios-emulator-df8b6d1675fb5f7d5d8df5d6e155237e1c76b9dfbbdb79b3fe5b94898d9c3110.gif&quot; alt=&quot;Testing on the iOS simulator&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;next-steps&quot;&gt;Next Steps&lt;/h2&gt;
+&lt;p&gt;This tutorial only scratches the surface. There’s a ton more you can do with Xamarin!&lt;/p&gt;
+
+&lt;p&gt;Here’s some further reading:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://developer.xamarin.com/samples/tag/Xamarin.Forms/&quot;&gt;Xamarin.Forms samples apps&lt;/a&gt; and &lt;a href=&quot;https://github.com/xamarin/xamarin-forms-samples&quot;&gt;code on GitHub&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://blog.xamarin.com/xamarin-forms-tips-beating-learning-curve/&quot;&gt;Xamarin.Forms: Tips for Beating the Learning Curve&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://blog.xamarin.com/developing-enterprise-apps-using-xamarin-forms/&quot;&gt;Developing Enterprise Apps using Xamarin.Forms&lt;/a&gt; and the accompanying &lt;a href=&quot;http://aka.ms/XamarinPatternsEbook&quot;&gt;free eBook&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Do you want to learn more about Xamarin? What about other cross-platform app stacks like React Native, NativeScript, or Flutter? Let me know in the comments below!&lt;/p&gt;
+</description>
+        <pubDate>Wed, 10 Jan 2018 00:00:00 +0000</pubDate>
+        <link>https://developer.okta.com/blog/2018/01/10/build-app-for-ios-android-with-xamarin</link>
+        <guid isPermaLink="true">https://developer.okta.com/blog/2018/01/10/build-app-for-ios-android-with-xamarin</guid>
+      </item>
+    
+      <item>
         <title>Spread Serverless Holiday Cheer with Lambda and API Gateway</title>
         <description>&lt;p&gt;It’s that time of year again: Christmas music on the radio, festive decorations in the workplace, and a chill in the air. Except in the Southern Hemisphere, where it’s warm and balmy. And on the International Space Station, where the temperature is strictly regulated. But I digress.&lt;/p&gt;
 
