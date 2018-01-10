@@ -4186,6 +4186,582 @@ Consent grants remain valid until the user manually revokes them, or until the u
 </code></pre>
 </div>
 
+<h2 id="user-email-operations">User Email Operations</h2>
+
+<p><a href="/docs/api/getting_started/releases-at-okta.html#beta"> <span class="api-label api-label-beta "> <i class="fa fa-warning"></i> Beta </span> </a></p>
+
+<p>These operations can be used to manage a user’s emails.</p>
+
+<h3 id="user-email-object">User Email Object</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Property</th>
+      <th style="text-align: left">Description</th>
+      <th style="text-align: left">Datatype</th>
+      <th style="text-align: left">Unique</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">id</td>
+      <td style="text-align: left">The ID of the email object</td>
+      <td style="text-align: left">String</td>
+      <td style="text-align: left">TRUE</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">status</td>
+      <td style="text-align: left">Whether is email is verified or not</td>
+      <td style="text-align: left">String</td>
+      <td style="text-align: left">FALSE</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">value</td>
+      <td style="text-align: left">The value of the email address</td>
+      <td style="text-align: left">String</td>
+      <td style="text-align: left">FALSE</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">_links</td>
+      <td style="text-align: left">Discoverable resources related to the email</td>
+      <td style="text-align: left"><a href="http://tools.ietf.org/html/draft-kelly-json-hal-06">JSON HAL</a></td>
+      <td style="text-align: left">FALSE</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Example</p>
+
+<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00T196qTp3LIMZQ0L0g3"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"UNVERIFIED | VERIFIED"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"saml.jackson@example.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/api/v1/users/00uzjoiIBruZE06jj0g3/emails/00T196qTp3LIMZQ0L0g3"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="s2">"GET"</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"verify"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/api/v1/users/00uzjoiIBruZE06jj0g3/emails/00T196qTp3LIMZQ0L0g3/verify"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="s2">"POST"</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"change"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/api/v1/users/00uzjoiIBruZE06jj0g3/emails/00T196qTp3LIMZQ0L0g3/change"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="s2">"POST"</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/api/v1/users/00uzjoiIBruZE06jj0g3"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="s2">"GET"</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<h3 class="api api-operation" id="list-emails">List Emails</h3>
+
+<p><a href="/docs/api/getting_started/releases-at-okta.html#beta"> <span class="api-label api-label-beta "> <i class="fa fa-warning"></i> Beta </span> </a></p>
+
+<p><span class="api-uri-template api-uri-get"><span class="api-label">GET</span> /api/v1/users/<em>:uid</em>/emails</span></p>
+
+<p>List a users emails</p>
+
+<h4 class="api api-request api-request-example" id="request">Request</h4>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>GET /api/v1/users/00uzjoiIBruZE06jj0g3/emails HTTP/1.1
+Accept: application/json
+Content-Type: application/json
+</code></pre>
+</div>
+
+<h4 class="api api-response api-response-example" id="response-verified-email">Response (Verified Email)</h4>
+
+<blockquote>
+  <p>Note: Though the email is in <code class="highlighter-rouge">VERIFIED</code> status, the <code class="highlighter-rouge">verify</code> operation is still published for completeness.</p>
+</blockquote>
+
+<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00T196qTp3LIMZQ0L0g3"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VERIFIED"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"saml.jackson@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/api/v1/users/00uzjoiIBruZE06jj0g3/emails/00T196qTp3LIMZQ0L0g3"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="s2">"GET"</span><span class="w">
+          </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nt">"verify"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/api/v1/users/00uzjoiIBruZE06jj0g3/emails/00T196qTp3LIMZQ0L0g3/verify"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="s2">"POST"</span><span class="w">
+          </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nt">"change"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/api/v1/users/00uzjoiIBruZE06jj0g3/emails/00T196qTp3LIMZQ0L0g3/change"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="s2">"POST"</span><span class="w">
+          </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nt">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/api/v1/users/00uzjoiIBruZE06jj0g3"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="s2">"GET"</span><span class="w">
+          </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+</div>
+
+<h4 class="api api-response api-response-example" id="response-unverified-email">Response (Unverified Email)</h4>
+
+<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00T196qTp3LIMZQ0L0g3"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"UNVERIFIED"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"saml.jackson@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/api/v1/users/00uzjoiIBruZE06jj0g3/emails/00T196qTp3LIMZQ0L0g3"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="s2">"GET"</span><span class="w">
+          </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nt">"verify"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/api/v1/users/00uzjoiIBruZE06jj0g3/emails/00T196qTp3LIMZQ0L0g3/verify"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="s2">"POST"</span><span class="w">
+          </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nt">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/api/v1/users/00uzjoiIBruZE06jj0g3"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="s2">"GET"</span><span class="w">
+          </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+</div>
+
+<h3 class="api api-operation" id="get-email">Get Email</h3>
+
+<p><a href="/docs/api/getting_started/releases-at-okta.html#beta"> <span class="api-label api-label-beta "> <i class="fa fa-warning"></i> Beta </span> </a></p>
+
+<p><span class="api-uri-template api-uri-get"><span class="api-label">GET</span> /api/v1/users/<em>:uid</em>/emails/<em>:eid</em></span></p>
+
+<p>Get a particular email for a user</p>
+
+<h4 class="api api-request api-request-example" id="request-1">Request</h4>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>GET /api/v1/users/00uzjoiIBruZE06jj0g3/emails/00T196qTp3LIMZQ0L0g3 HTTP/1.1
+Accept: application/json
+Content-Type: application/json
+</code></pre>
+</div>
+
+<h4 class="api api-response api-response-example" id="response">Response</h4>
+
+<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00T196qTp3LIMZQ0L0g3"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"UNVERIFIED"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"saml.jackson@example.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/api/v1/users/00uzjoiIBruZE06jj0g3/emails/00T196qTp3LIMZQ0L0g3"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="s2">"GET"</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"verify"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/api/v1/users/00uzjoiIBruZE06jj0g3/emails/00T196qTp3LIMZQ0L0g3/verify"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="s2">"POST"</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/api/v1/users/00uzjoiIBruZE06jj0g3"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="s2">"GET"</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<h3 class="api api-operation" id="verify-email">Verify Email</h3>
+
+<p><a href="/docs/api/getting_started/releases-at-okta.html#beta"> <span class="api-label api-label-beta "> <i class="fa fa-warning"></i> Beta </span> </a></p>
+
+<p><span class="api-uri-template api-uri-post"><span class="api-label">POST</span> /api/v1/users/<em>:uid</em>/emails/<em>:eid</em>/verify</span></p>
+
+<p>Trigger email verification flow for an unverified email</p>
+
+<blockquote>
+  <p>Verification is idempotent and can be retried at any time.  Issuing a new verification will replace any previously issued verification tokens!</p>
+</blockquote>
+
+<h4 class="api api-request api-request-params" id="request-parameters-27">Request Parameters</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Parameter</th>
+      <th>Description</th>
+      <th>Param Type</th>
+      <th>DataType</th>
+      <th>Required</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">uid</td>
+      <td><code class="highlighter-rouge">id</code> of user</td>
+      <td>URL</td>
+      <td>String</td>
+      <td>TRUE</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">eid</td>
+      <td><code class="highlighter-rouge">id</code> of email</td>
+      <td>URL</td>
+      <td>String</td>
+      <td>TRUE</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">sendEmail</td>
+      <td>Sends a verification email to the user if <code class="highlighter-rouge">true</code></td>
+      <td>Query</td>
+      <td>Boolean</td>
+      <td>FALSE</td>
+      <td>TRUE</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">redirectUri</td>
+      <td>Specifies where the end-user is redirected after verification</td>
+      <td>Body</td>
+      <td>String</td>
+      <td>FALSE</td>
+      <td><code class="highlighter-rouge">/app/UserHome</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">expiresAt</td>
+      <td>Timestamp when the verification token expires</td>
+      <td>Body</td>
+      <td>Date</td>
+      <td>FALSE</td>
+      <td>5 days</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">actions</td>
+      <td>Extensible actions performed when verification token is validated</td>
+      <td>Body</td>
+      <td>Actions Object</td>
+      <td>FALSE</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="actions-object">Actions Object</h5>
+<blockquote>
+  <p><code class="highlighter-rouge">signOn</code> property determines whether user has to sign-in after clicking on email verification link to complete verification process. Thus, if <code class="highlighter-rouge">signOn</code> is set to <code class="highlighter-rouge">REQUIRED</code>, an Okta session is granted after the user has signed in.</p>
+</blockquote>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Property</th>
+      <th style="text-align: left">DataType</th>
+      <th style="text-align: left">Nullable</th>
+      <th style="text-align: left">Unique</th>
+      <th style="text-align: left">Readonly</th>
+      <th style="text-align: left">Default</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">signOn</td>
+      <td style="text-align: left"><code class="highlighter-rouge">NOT_REQUIRED</code> or <code class="highlighter-rouge">REQUIRED</code></td>
+      <td style="text-align: left">TRUE</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left"><code class="highlighter-rouge">REQUIRED</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 class="api api-request api-request-example" id="request-2">Request</h4>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>POST /api/v1/users/00uzjoiIBruZE06jj0g3/emails/00T196qTp3LIMZQ0L0g3/verify HTTP/1.1
+Accept: application/json
+Content-Type: application/json
+
+<span class="o">{</span>
+  <span class="s2">"redirectUri"</span>: <span class="s2">"https://example.com/some/page?state=blah&amp;custom=true"</span>,
+  <span class="s2">"expiresAt"</span>: <span class="s2">"2017-06-14T00:17:57.000Z"</span>,
+  <span class="s2">"actions"</span>: <span class="o">{</span>
+    <span class="s2">"signOn"</span>: <span class="s2">"REQUIRED"</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<h4 class="api api-response api-response-example" id="response-1">Response</h4>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>HTTP/1.1 202 Accepted
+Content-Type: application/json
+
+<span class="o">{</span>
+  <span class="s2">"verificationToken"</span>: <span class="s2">"HcjJ03HcEEFEydBk5N8k"</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<h5 id="errors">Errors</h5>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+<span class="o">{</span>
+  <span class="s2">"errorCode"</span>: <span class="s2">"E0000001"</span>,
+  <span class="s2">"errorSummary"</span>: <span class="s2">"Api validation failed: expiresAt"</span>,
+  <span class="s2">"errorLink"</span>: <span class="s2">"E0000001"</span>,
+  <span class="s2">"errorId"</span>: <span class="s2">"oaeWGQKoQHeQmy0u8w8bPwi_Q"</span>,
+  <span class="s2">"errorCauses"</span>: <span class="o">[</span>
+    <span class="o">{</span>
+      <span class="s2">"errorSummary"</span>: <span class="s2">"The verification token must not expire in the past"</span>
+    <span class="o">}</span>
+  <span class="o">]</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<h3 class="api api-operation" id="change-email-credential">Change Email Credential</h3>
+
+<p><a href="/docs/api/getting_started/releases-at-okta.html#beta"> <span class="api-label api-label-beta "> <i class="fa fa-warning"></i> Beta </span> </a></p>
+
+<p><span class="api-uri-template api-uri-post"><span class="api-label">POST</span> /api/v1/users/<em>:id</em>/emails/<em>:eid</em>/change</span></p>
+
+<p>Change a verified email.</p>
+
+<p>This operation delays a profile update/push until the user has verified their email address.</p>
+
+<blockquote>
+  <p>Email changes are idempotent.  Issuing a new change verification will replace any previously issued change verification tokens!</p>
+</blockquote>
+
+<h4 class="api api-request api-request-params" id="request-parameters-28">Request Parameters</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Parameter</th>
+      <th>Description</th>
+      <th>Param Type</th>
+      <th>DataType</th>
+      <th>Required</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">uid</td>
+      <td><code class="highlighter-rouge">id</code> of user</td>
+      <td>URL</td>
+      <td>String</td>
+      <td>TRUE</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">eid</td>
+      <td><code class="highlighter-rouge">id</code> of email</td>
+      <td>URL</td>
+      <td>String</td>
+      <td>TRUE</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">sendEmail</td>
+      <td>Sends a verification email to the user if <code class="highlighter-rouge">true</code></td>
+      <td>Query</td>
+      <td>Boolean</td>
+      <td>FALSE</td>
+      <td>TRUE</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">value</td>
+      <td>Target email address that will replace current email address when verified</td>
+      <td>Body</td>
+      <td>String (RFC Email)</td>
+      <td>TRUE</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">redirectUri</td>
+      <td>Specifies where the end-user is redirected after verification</td>
+      <td>Body</td>
+      <td>String</td>
+      <td>FALSE</td>
+      <td><code class="highlighter-rouge">/app/UserHome</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">expiresAt</td>
+      <td>Timestamp when the verification token expires</td>
+      <td>Body</td>
+      <td>Date</td>
+      <td>FALSE</td>
+      <td>5 days</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">actions</td>
+      <td>Extensible actions peformed when verification token is validated</td>
+      <td>Body</td>
+      <td>Actions Object</td>
+      <td>FALSE</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="actions-object-1">Actions Object</h5>
+
+<blockquote>
+  <p><code class="highlighter-rouge">signOn</code> property determines whether user has to sign-in after clicking on email verification link to complete verification process. Thus, if <code class="highlighter-rouge">signOn</code> is set to <code class="highlighter-rouge">REQUIRED</code>, an Okta session is granted after the user has signed in.</p>
+</blockquote>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Property</th>
+      <th style="text-align: left">DataType</th>
+      <th style="text-align: left">Nullable</th>
+      <th style="text-align: left">Unique</th>
+      <th style="text-align: left">Readonly</th>
+      <th style="text-align: left">Default</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">signOn</td>
+      <td style="text-align: left"><code class="highlighter-rouge">NOT_REQUIRED</code> or <code class="highlighter-rouge">REQUIRED</code></td>
+      <td style="text-align: left">TRUE</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left"><code class="highlighter-rouge">REQUIRED</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 class="api api-request api-request-example" id="request-3">Request</h4>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>POST /api/v1/users/00uzjoiIBruZE06jj0g3/emails/00T196qTp3LIMZQ0L0g3/change HTTP/1.1
+Accept: application/json
+Content-Type: application/json
+
+<span class="o">{</span>
+  <span class="s2">"redirectUri"</span>: <span class="s2">"https://example.com/some/page?state=blah&amp;custom=true"</span>,
+  <span class="s2">"expiresAt"</span>: <span class="s2">"2017-06-14T00:17:57.000Z"</span>,
+  <span class="s2">"value"</span>: <span class="s2">"update@example.com"</span>,
+  <span class="s2">"actions"</span>: <span class="o">{</span>
+    <span class="s2">"signOn"</span>: <span class="s2">"REQUIRED"</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<h4 class="api api-response api-response-example" id="response-2">Response</h4>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>HTTP/1.1 202 Accepted
+Content-Type: application/json
+
+<span class="o">{</span>
+  <span class="s2">"verificationToken"</span>: <span class="s2">"HcjJ03HcEEFEydBk5N8k"</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<h5 id="errors-1">Errors</h5>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+<span class="o">{</span>
+  <span class="s2">"errorCode"</span>: <span class="s2">"E0000001"</span>,
+  <span class="s2">"errorSummary"</span>: <span class="s2">"Api validation failed: expiresAt"</span>,
+  <span class="s2">"errorLink"</span>: <span class="s2">"E0000001"</span>,
+  <span class="s2">"errorId"</span>: <span class="s2">"oaeWGQKoQHeQmy0u8w8bPwi_Q"</span>,
+  <span class="s2">"errorCauses"</span>: <span class="o">[</span>
+    <span class="o">{</span>
+      <span class="s2">"errorSummary"</span>: <span class="s2">"The verification token must not expire in the past"</span>
+    <span class="o">}</span>
+  <span class="o">]</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+<span class="o">{</span>
+  <span class="s2">"errorCode"</span>: <span class="s2">"E0000001"</span>,
+  <span class="s2">"errorSummary"</span>: <span class="s2">"Api validation failed: value"</span>,
+  <span class="s2">"errorLink"</span>: <span class="s2">"E0000001"</span>,
+  <span class="s2">"errorId"</span>: <span class="s2">"oaeWGQKoQHeQmy0u8w8bPwi_Q"</span>,
+  <span class="s2">"errorCauses"</span>: <span class="o">[</span>
+    <span class="o">{</span>
+      <span class="s2">"errorSummary"</span>: <span class="s2">"The verification token must not expire in the past"</span>
+    <span class="o">}</span>
+  <span class="o">]</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
 <h2 id="user-model">User Model</h2>
 
 <h3 id="example">Example</h3>
@@ -5380,7 +5956,7 @@ A hashed password may be specified in a Password Object when creating or updatin
     <tr>
       <td style="text-align: left">_links</td>
       <td style="text-align: left">Discoverable resources related to the grant</td>
-      <td style="text-align: left">    <a href="http://tools.ietf.org/html/draft-kelly-json-hal-06">JSON HAL</a></td>
+      <td style="text-align: left"><a href="http://tools.ietf.org/html/draft-kelly-json-hal-06">JSON HAL</a></td>
       <td style="text-align: left">FALSE</td>
     </tr>
   </tbody>
