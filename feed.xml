@@ -77,6 +77,266 @@ As always, feel free to contact me via &lt;a href=&quot;https://twitter.com/leeb
       </item>
     
       <item>
+        <title>Add Single Sign-On to Your Vert.x Server with Okta</title>
+        <description>&lt;p&gt;Vert.x has continued to gain traction as a contender to the Spring ecosystem, largely due to improved performance and its polyglot accessibility. Fortunately, securing a Vert.x server with industry-leading authentication and authorization is almost as quick and easy as it is in Spring! In just a few minutes, you can have secure single sign-on guarding your server and giving you access to a wealth of information about your users. This tutorial will walk you through that process, as you stand up a new Vert.x server and integrate it with Okta for security and user management.&lt;/p&gt;
+
+&lt;h2 id=&quot;a-quick-recap-of-the-3-legged-oauth-flow&quot;&gt;A Quick Recap of the 3-Legged OAuth Flow&lt;/h2&gt;
+
+&lt;p&gt;This example will be using the third-party provider OAuth flow known as the 3-legged flow (the meat of single sign-on). Before launching into the code, a brief refresher of this process might be helpful.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-problem&quot;&gt;The problem&lt;/h3&gt;
+
+&lt;p&gt;I’m a web server, and I want to secure my site and require users to log in. However, writing, maintaining, and managing user identities is a lot of work.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-solution&quot;&gt;The solution&lt;/h3&gt;
+
+&lt;p&gt;Let someone else deal with it. To achieve this, a bit of cooperation is required between me (the web server), my user (perhaps on a web browser), and whoever is handling auth for me (in this example, Okta). These three cooperating participants are the three “legs” of the 3-legged OAuth flow. The process they go through is a three-way handshake:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;The user’s browser requests a protected resource from me, the web server&lt;/li&gt;
+  &lt;li&gt;I, the web server, decide that the user needs to sign in first. I refuse to service the request, and instead return a 302 redirect response that tells the browser to go visit Okta instead&lt;/li&gt;
+  &lt;li&gt;The browser complies, visits Okta instead, and the user signs in. Okta then returns its own 302 redirect, telling the browser to go back and visit me again… but this time, carrying a secret code&lt;/li&gt;
+  &lt;li&gt;The browser visits me once again, but this time I see that it carries with it this secret code. I now make my own direct call to Okta, exchanging this secret code for sensitive information about the user such as their name, email address, or phone number&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The above handshake is what will be happening behind the scenes once this example is completed. Vert.x supplies a handy OAuth library to take care of this entire process for you – all you need to do is configure it and register it appropriately.  That’s what this tutorial demonstrates.&lt;/p&gt;
+
+&lt;p&gt;As a starter guide, this post assumes only basic familiarity with Java and a few Java essentials such as Maven. If you already have a Vert.x server running, feel free to fast forward to the good stuff: you’ll integrate with Okta in the &lt;a href=&quot;#configure-the-vertx-oauth-handler&quot;&gt;Configure the Vert.x OAuth Handler&lt;/a&gt; section.&lt;/p&gt;
+
+&lt;p&gt;The completed code example, including imports and pom.xml, can be found &lt;a href=&quot;https://github.com/oktadeveloper/OktaBlogs/tree/master/VertxAndOkta&quot;&gt;on Github&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;start-a-new-vertx-server&quot;&gt;Start A New Vert.x Server&lt;/h2&gt;
+
+&lt;p&gt;To kick things off, visit the &lt;a href=&quot;http://start.vertx.io&quot;&gt;Vert.x Starter page&lt;/a&gt; and generate a new project.  For this tutorial, you can leave all the default values in place, and include the &lt;code class=&quot;highlighter-rouge&quot;&gt;Vert.x Web&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;OAuth&lt;/code&gt;, and &lt;code class=&quot;highlighter-rouge&quot;&gt;Vert.x Config&lt;/code&gt; dependencies:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/sso-oauth-vertx/vertx-generate-588a96dcba33591cf8783311f398d90c06f00f6174f315d9a6072e1f96207064.png&quot; alt=&quot;Generate a Vert.x project&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;After clicking generate, downloading, and unzipping locally, you should see the following simple directory structure:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/sso-oauth-vertx/vertx-project-tree-ec41b09a90dbb6abc4114f2ff1110b3ca329735f4415a54739e62283dfa6da1e.png&quot; alt=&quot;Vert.x project tree&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And running with &lt;code class=&quot;highlighter-rouge&quot;&gt;mvn compile exec:java&lt;/code&gt; from the &lt;code class=&quot;highlighter-rouge&quot;&gt;demo&lt;/code&gt; directory should start the server on port 8080:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/sso-oauth-vertx/vertx-compile-91d703dedebf657b29b6fbfeba3e9e1158a1cec539a1df9b3b9ee0b9fbdbf603.png&quot; alt=&quot;Vert.x project compiling&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Visiting &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt; in your browser returns a reassuring hello world response:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/sso-oauth-vertx/vertx-hello-2db8c2e0d3082a709465699304091576afcf87e7409990a0ba975a9164751ed9.png&quot; alt=&quot;Vert.x initial hello world page&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;At this point, a proper next step would be to switch to https before continuing to add authentication. However, to keep the tutorial short and focused, that part will be skipped and the examples will continue to use the unencrypted http server mode.&lt;/p&gt;
+
+&lt;h2 id=&quot;bring-in-the-vertx-config&quot;&gt;Bring in the Vert.x Config&lt;/h2&gt;
+
+&lt;p&gt;Vert.x offers a versatile config library, albeit a little more work to set up than in Spring. This example will make use of a handful of config values, so you can take this opportunity to add Vert.x Config to your project. The dependency should already be present in your &lt;code class=&quot;highlighter-rouge&quot;&gt;pom.xml&lt;/code&gt; if you specified Vert.x Config when creating the starter project.&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;io.vertx&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;vertx-config&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;${vertx.version}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Create a file called &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/application.json&lt;/code&gt; and add the following content:&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+   &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;clientId&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;{okta-client-id}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+   &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;clientSecret&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;{okta-client-secret}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+   &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;issuer&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;https://{yourOktaDomain}/oauth2/default&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+   &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;callbackUrl&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://localhost:8080/login&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+   &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;port&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8080&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You’ll be updating those values shortly. Now in &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/java/com/example/demo/MainVerticle.java&lt;/code&gt;, replace the contents of the &lt;code class=&quot;highlighter-rouge&quot;&gt;start()&lt;/code&gt; method with the following, which will load the config. Notice that when it completes, it calls a method called &lt;code class=&quot;highlighter-rouge&quot;&gt;startServer()&lt;/code&gt; that doesn’t exist yet. You will add that in the next section.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;ConfigStoreOptions&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fileStore&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ConfigStoreOptions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+       &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;file&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+       &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setConfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;JsonObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;path&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;src/main/application.json&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;ConfigRetrieverOptions&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;options&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ConfigRetrieverOptions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+       &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addStore&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fileStore&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;ConfigRetriever&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;retriever&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ConfigRetriever&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vertx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;retriever&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getConfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ar&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ar&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;failed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+           &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;failed to retrieve config.&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+       &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+           &lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;mergeIn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ar&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+           &lt;span class=&quot;n&quot;&gt;startServer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+       &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+   &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;incorporate-the-vertx-router&quot;&gt;Incorporate the Vert.x Router&lt;/h2&gt;
+
+&lt;p&gt;By leveraging the &lt;a href=&quot;http://vertx.io/docs/apidocs/io/vertx/ext/web/Router.html&quot;&gt;Vert.x Router&lt;/a&gt;, you will be able to easily intercept calls to sensitive endpoints and enforce preauthentication. To do this, you’ll now implement  the &lt;code class=&quot;highlighter-rouge&quot;&gt;startServer()&lt;/code&gt; method in &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/java/com/example/demo/MainVerticle.java&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;startServer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;Router&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;router&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vertx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;route&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/private/secret&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+	    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;handler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Hi&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;vertx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;createHttpServer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+		&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;requestHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;router:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;accept&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+		&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;listen&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getInteger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;port&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;In the example above, you have created a new endpoint at &lt;code class=&quot;highlighter-rouge&quot;&gt;/private/secret&lt;/code&gt; with the intent of soon protecting every endpoint under the &lt;code class=&quot;highlighter-rouge&quot;&gt;/private&lt;/code&gt; path. But first, the Vert.x OAuth handler needs to be set up.&lt;/p&gt;
+
+&lt;h2 id=&quot;create-an-okta-account-and-gather-credentials&quot;&gt;Create an Okta Account and Gather Credentials&lt;/h2&gt;
+
+&lt;p&gt;If you don’t already have a free Okta account, you can follow &lt;a href=&quot;https://developer.okta.com/blog/2017/11/20/add-sso-spring-boot-15-min#get-your-okta-credentials&quot;&gt;these instructions&lt;/a&gt; to create one and set up your first Okta application. There are four key pieces of information you will need to gather:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Client Id - e.g.: &lt;strong&gt;&lt;em&gt;oot9wrjjararhfaa&lt;/em&gt;&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;Client Secret - (keep it secret!)&lt;/li&gt;
+  &lt;li&gt;Issuer - e.g.: &lt;strong&gt;&lt;em&gt;https://dev-123123.oktapreview.com/oauth2/default&lt;/em&gt;&lt;/strong&gt; …be sure to include the &lt;strong&gt;&lt;em&gt;/oauth2/default&lt;/em&gt;&lt;/strong&gt; path!&lt;/li&gt;
+  &lt;li&gt;Callback Url - this will be &lt;strong&gt;&lt;em&gt;http://localhost:8080/login&lt;/em&gt;&lt;/strong&gt; if you followed the instructions above.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;These values can now be used in your &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/application.json&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;h2 id=&quot;configure-the-vertx-oauth-handler&quot;&gt;Configure the Vert.x OAuth Handler&lt;/h2&gt;
+
+&lt;p&gt;Vert.x comes with an out-of-the-box OAuth manager that integrates nicely with Okta as an identity provider.  To keep things tidy, you’ll create a separate factory method in &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/java/com/example/demo/MainVerticle.java&lt;/code&gt;that produces a configured OAuth handler.  Add the following to the &lt;code class=&quot;highlighter-rouge&quot;&gt;MainVerticle&lt;/code&gt; class, replacing the client info below with your account details obtained from the Okta developer dashboard:&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;AuthHandler&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getOAuthHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Router&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;OAuth2Auth&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;oauth2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OAuth2Auth&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vertx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OAuth2FlowType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;AUTH_CODE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OAuth2ClientOptions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setClientID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;clientId&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setClientSecret&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;clientSecret&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setSite&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;issuer&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setTokenPath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/v1/token&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setAuthorizationPath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/v1/authorize&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setUserInfoPath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/v1/userinfo&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setUseBasicAuthorizationHeader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;OAuth2AuthHandler&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authHandler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OAuth2AuthHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oauth2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;callbackUrl&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;authHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;extraParams&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;JsonObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;{\&quot;scope\&quot;:\&quot;openid profile email\&quot;}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;authHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setupCallback&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;route&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;In the above example, note the three requested scopes: &lt;strong&gt;openid&lt;/strong&gt;, &lt;strong&gt;profile&lt;/strong&gt;, and  &lt;strong&gt;email&lt;/strong&gt;. Future posts will explore additional scopes and authorization levels, but for now, these three will provide the absolute essentials (such as the user’s name and email address). Using the email address, you can also directly query Okta’s API for additional information about the user, and to perform account management tasks.&lt;/p&gt;
+
+&lt;h2 id=&quot;intercept-and-authorize-protected-endpoints&quot;&gt;Intercept and Authorize Protected Endpoints&lt;/h2&gt;
+
+&lt;p&gt;Now that the &lt;code class=&quot;highlighter-rouge&quot;&gt;AuthHandler&lt;/code&gt; is prepared, it needs to precede request handling of any protected endpoint and authenticate the user. By using a wildcard to register it as the top-level handler for all paths below &lt;code class=&quot;highlighter-rouge&quot;&gt;/private/&lt;/code&gt;, it will only need to be dealt with once for all future handlers you might create. Any request handler below the &lt;code class=&quot;highlighter-rouge&quot;&gt;/private/&lt;/code&gt; path can then be guaranteed that when it is called, it will only be from a properly authenticated user.&lt;/p&gt;
+
+&lt;p&gt;Alter the &lt;code class=&quot;highlighter-rouge&quot;&gt;startServer()&lt;/code&gt; method of the &lt;code class=&quot;highlighter-rouge&quot;&gt;MainVerticle&lt;/code&gt; class as indicated below to generate and register the handler:&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;startServer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;Router&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;router&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vertx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;//create and register the auth handler to intercept all&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;//requests below the /private/ URI:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;AuthHandler&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authHandler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getOAuthHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;route&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/private/*&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;handler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;authHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;route&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/private/secret&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+	    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;handler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Hi&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;vertx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;createHttpServer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+		&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;requestHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;router:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;accept&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+		&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;listen&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;“&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;”&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This would be an excellent time to start up the server again and make sure everything is running as expected. By running &lt;code class=&quot;highlighter-rouge&quot;&gt;mvn compile java:exec&lt;/code&gt; again and hitting &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080/private/secret&lt;/code&gt; from your browser, you should now be automatically redirected to Okta’s login page. After logging in, you should then be redirected back to your site to continue responding to the original &lt;code class=&quot;highlighter-rouge&quot;&gt;/private/secret&lt;/code&gt; request.&lt;/p&gt;
+
+&lt;h2 id=&quot;extract-user-info-from-the-jwt&quot;&gt;Extract User Info from the JWT&lt;/h2&gt;
+
+&lt;p&gt;Now that callers to your &lt;code class=&quot;highlighter-rouge&quot;&gt;/private/&lt;/code&gt; APIs are logged in, the next thing you’ll want is their information. This is delivered in the form of a &lt;a href=&quot;https://www.jsonwebtoken.io/&quot;&gt;JSON Web Token&lt;/a&gt;, which must be extracted and decoded. The Vert.x OAuth handler hides this as a named member of a stringified JSON object called the &lt;strong&gt;principal&lt;/strong&gt;, which is itself a component of the context’s &lt;strong&gt;user&lt;/strong&gt; object. That encoded token is then decoded and verified using the JWT library of your choice. This example uses &lt;a href=&quot;https://github.com/okta/okta-jwt-verifier-java&quot;&gt;Okta’s JWT verifier library&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Both the &lt;code class=&quot;highlighter-rouge&quot;&gt;access_token&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;id_token&lt;/code&gt; are available, but this tutorial will only decode the &lt;code class=&quot;highlighter-rouge&quot;&gt;id_token&lt;/code&gt;. There is a similar function to decode the &lt;code class=&quot;highlighter-rouge&quot;&gt;access_token&lt;/code&gt; if needed.  To accomplish this, include the Okta JWT lib dependency in your &lt;code class=&quot;highlighter-rouge&quot;&gt;pom.xml&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;com.okta.jwt&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;okta-jwt-verifier&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;0.2.0&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;…and add the following new function to the &lt;code class=&quot;highlighter-rouge&quot;&gt;MainVertical&lt;/code&gt; class:&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getIdClaims&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;RoutingContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;JwtVerifier&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;jwtVerifier&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;JwtHelper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setIssuerUrl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;“&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;issuer&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;”&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setAudience&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;api://default&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setClientId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;clientId&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;Jwt&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;idTokenJwt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;jwtVerifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;decodeIdToken&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;principal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;id_token&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;idTokenJwt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClaims&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//do something with the exception...&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;And that’s it! You can now access user information in your request handler. To demonstrate, the &lt;code class=&quot;highlighter-rouge&quot;&gt;/private/secret&lt;/code&gt; handler can be updated to retrieve claims from the JWT as shown below:&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;startServer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;Router&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;router&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vertx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;AuthHandler&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authHandler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getOAuthHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;route&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/private/*&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;handler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;authHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;route&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/private/secret&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;handler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;claims&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getIdClaims&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Hi &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+                            &lt;span class=&quot;n&quot;&gt;claims&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+                            &lt;span class=&quot;s&quot;&gt;&quot;, the email address we have on file for you is: &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+                            &lt;span class=&quot;n&quot;&gt;claims&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;email&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;vertx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;createHttpServer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;requestHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;router:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;accept&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;listen&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;“&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;”&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;With this final change, restarting your server and once again hitting &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080/private/secret&lt;/code&gt;, your browser should now display a message with your authenticated user’s information!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/sso-oauth-vertx/vertx-final-d439004fa9d194232f04778cb0a479140534bbc78de1082853b25f8e434d91ec.png&quot; alt=&quot;Browser screen shot showing user's details&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;onward-and-upward&quot;&gt;Onward and Upward&lt;/h2&gt;
+
+&lt;p&gt;Congratulations, you now have a high-performance Vert.x server protected by Okta’s state-of-the-art security and identity management! Okta provides a &lt;a href=&quot;https://github.com/okta/okta-sdk-java&quot;&gt;Java SDK&lt;/a&gt; for interacting further with users and accounts, including adding custom data and attributes to your users.&lt;/p&gt;
+
+&lt;p&gt;Thanks for reading, and as always, please hit us up in the comments below with questions. We’d love to have you follow us on Twitter &lt;a href=&quot;https://twitter.com/OktaDev&quot;&gt;@OktaDev&lt;/a&gt;, or read on for more great Java content from our blog:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://developer.okta.com/blog/2017/12/18/spring-security-5-oidc&quot;&gt;Get Started with Spring Security 5.0 and OIDC&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://developer.okta.com/blog/2017/12/06/bootiful-development-with-spring-boot-and-react&quot;&gt;Bootiful Development with Spring Boot and React&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://developer.okta.com/blog/2017/12/04/use-kong-gateway-to-centralize-authentication&quot;&gt;Use Kong Gateway to Centralize Authentication&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://developer.okta.com/blog/2017/12/04/basic-crud-angular-and-spring-boot&quot;&gt;Build a Basic CRUD App with Angular 5.0 and Spring Boot 2.0&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://developer.okta.com/blog/2017/10/27/secure-spa-spring-boot-oauth&quot;&gt;Secure Your SPA with Spring Boot and OAuth&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Thu, 11 Jan 2018 00:00:00 +0000</pubDate>
+        <link>https://developer.okta.com/blog/2018/01/11/sso-oauth-vertx</link>
+        <guid isPermaLink="true">https://developer.okta.com/blog/2018/01/11/sso-oauth-vertx</guid>
+      </item>
+    
+      <item>
         <title>Build an App for iOS and Android with Xamarin</title>
         <description>&lt;p&gt;&lt;a href=&quot;https://www.xamarin.com/&quot;&gt;Xamarin&lt;/a&gt; is a cross-platform technology that makes it possible to build native applications for Android and iOS using a single, shared codebase. Like other technologies such as React Native and NativeScript, it allows development teams to spend less time writing code for both platforms.&lt;/p&gt;
 
@@ -4981,497 +5241,6 @@ Authorization:&lt;span class=&quot;s2&quot;&gt;&quot;Bearer eyJhbGciOiJS...&quot
         <pubDate>Fri, 20 Oct 2017 00:00:00 +0000</pubDate>
         <link>https://developer.okta.com/blog/2017/10/20/oidc-with-jhipster</link>
         <guid isPermaLink="true">https://developer.okta.com/blog/2017/10/20/oidc-with-jhipster</guid>
-      </item>
-    
-      <item>
-        <title>Use OpenID Connect to Build a Simple Node.js Website</title>
-        <description>&lt;p&gt;If you’ve ever spent time trying to figure out the best way to handle user
-authentication for your Node app and been confused: you’re not alone. Over the
-last few years authentication practices have changed quite a bit.&lt;/p&gt;
-
-&lt;p&gt;Today I’m going to show you how to use OpenID Connect to build an extremely
-simple Node.js website (using Express.js) that allows you to manage your users,
-log them in, and log them out.&lt;/p&gt;
-
-&lt;p&gt;Back in the day, all websites would require users to register with a
-username/password and log in with those same credentials. This was simple, but
-caused a lot of security problems because developers would need to write the
-code to authenticate the user directly, store their credentials, manage their
-data, etc. It also required developers to build custom authorization schemes so
-that they could track what permissions their users had to perform certain
-operations.&lt;/p&gt;
-
-&lt;p&gt;A while later, OAuth came into fashion with a new idea: let a user have one
-account with a large OAuth provider (Google, Facebook, etc.), and let users log
-into your service via their OAuth account with that provider. This had some nice
-benefits: developers no longer had to worry about storing passwords and managing
-credentials. The downside was that OAuth is a flexible protocol, and doesn’t lay
-out rules around authorization, data management, etc. This means that developers
-using pure OAuth are required to write a lot of custom security code themselves,
-which causes problems.&lt;/p&gt;
-
-&lt;p&gt;Just recently, however, &lt;a href=&quot;http://openid.net/connect/&quot;&gt;OpenID Connect&lt;/a&gt; (OIDC) has
-come onto the scene. It’s a protocol built on top of OAuth that provides
-everything you could ever want: simplified user authentication, simplified
-authorization, and lots of nice management to tie them all together. OIDC has
-been gaining popularity in the development community.&lt;/p&gt;
-
-&lt;p&gt;The only problem with OIDC is that there still aren’t a ton of great tools and
-integrations to make using it easy.&lt;/p&gt;
-
-&lt;p&gt;One of my amazing &lt;a href=&quot;https://developer.okta.com/&quot;&gt;Okta&lt;/a&gt; colleagues,
-&lt;a href=&quot;https://github.com/robertjd&quot;&gt;Robert&lt;/a&gt;, has been working on a new Node.js
-library,
-&lt;a href=&quot;https://www.npmjs.com/package/@okta/oidc-middleware#customizing-routes&quot;&gt;oidc-middleware&lt;/a&gt;,
-that attempts to make adding user authentication and authorization to your Node
-apps simple.&lt;/p&gt;
-
-&lt;p&gt;So, without further ado, let’s build something together! I’ll show you how to
-use the new oidc-middleware package to build a simple website.&lt;/p&gt;
-
-&lt;h2 id=&quot;create-an-okta-account&quot;&gt;Create an Okta Account&lt;/h2&gt;
-
-&lt;p&gt;The first thing you’ll need to do before we build our simple Node.js website is
-to create a free &lt;a href=&quot;https://developer.okta.com/signup/&quot;&gt;Okta developer account&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;If you haven’t heard of Okta before, we’re an API service that allows you to
-easily store your user accounts, manage them from a simple web UI, handle user
-login and registration, password reset functionality, social login, single
-sign-on, and lots more.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: If you’d like to skip the following sections and get straight into the
-code, you can visit the &lt;a href=&quot;https://github.com/oktadeveloper/okta-express-example&quot;&gt;Github
-repo&lt;/a&gt; for this
-application directly.&lt;/p&gt;
-
-&lt;h2 id=&quot;create-an-application&quot;&gt;Create an Application&lt;/h2&gt;
-
-&lt;p&gt;Now that you’ve got an Okta account, you need to create an Application. Using
-Okta, you can create as many Applications as you’d like. Each Application
-represents an actual application you might be building.&lt;/p&gt;
-
-&lt;p&gt;Since you’re going to be building a simple Node website right now, you only need
-to create a single Application.&lt;/p&gt;
-
-&lt;p&gt;To get started, go log into your new Okta dashboard. Once you’re in, click the
-“Applications” tab. You’ll see something like this:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/use-openid-connect-to-build-a-simple-node-website/okta-application-dashboard-2411f71868af3851f962ad8affabfe2872fbb07a54192bcfca3414167c917c6d.png&quot; alt=&quot;Okta Application Dashboard&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;This is where you can view all of your Okta applications, and manage them.&lt;/p&gt;
-
-&lt;p&gt;Since we don’t have an Application created yet, let’s do that now. Click the big
-green “Add Application” button and then click the “Web” box (because you’re
-going to build a web app):&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/use-openid-connect-to-build-a-simple-node-website/okta-create-application-04063eaccb4f7c883af3263faafa4b93c6073386edbf8ba29bb19c720be7f261.png&quot; alt=&quot;Okta Create Application&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Once you move to the next screen, you’ll be able to configure your app settings.
-There’s a lot of things you can do here (feel free to play around with it
-sometime!), but for now: leave all the defaults as-is.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/use-openid-connect-to-build-a-simple-node-website/okta-application-settings-41831c8166894414b8ec815c36907c2637f79d5b9151faed18ba92d934f9defd.png&quot; alt=&quot;Okta Application Settings&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Next, you’ll want to copy down a few settings that we’ll need later on.&lt;/p&gt;
-
-&lt;p&gt;To start, you’ll need the Client ID and Client Secret of your newly created
-Application. You’ll find this on the page you land one once you’ve created your
-new Application:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/use-openid-connect-to-build-a-simple-node-website/okta-application-secrets-f5032e6ea8d2a1b8425f647b0bcbd8db246abd99e16d68ad66aad759d4404bb3.png&quot; alt=&quot;Okta Application Secrets&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Next, you’ll need your Okta Organization URL. If you go to the “Dashboard” page,
-you should see it at the top-right hand corner of the page. It’s the setting
-called “Org URL”. Here’s what mine looks like, for example:
-&lt;code class=&quot;highlighter-rouge&quot;&gt;dev-111464.oktapreview.com&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/use-openid-connect-to-build-a-simple-node-website/okta-org-url-d30c4e1fad7ad4043e25564d217f4233ca29e9e0e4f6ed2b941c2c624c4ecb44.png&quot; alt=&quot;Okta Org URL&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Now that you have those settings, keep them someplace safe and we’ll use them
-soon.&lt;/p&gt;
-
-&lt;h2 id=&quot;build-the-expressjs-app&quot;&gt;Build the Express.js App&lt;/h2&gt;
-
-&lt;p&gt;The next thing you’ll do is build a simple Express.js app without any sort of
-login capabilities. It will be very simple (but that’s the point!).&lt;/p&gt;
-
-&lt;h3 id=&quot;create-the-application-skeleton&quot;&gt;Create the Application Skeleton&lt;/h3&gt;
-
-&lt;p&gt;To get started, create a new folder somewhere on your computer, and enter it.
-Then create a &lt;code class=&quot;highlighter-rouge&quot;&gt;server.js&lt;/code&gt; file and insert the following code:&lt;/p&gt;
-
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;s2&quot;&gt;&quot;use strict&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kr&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;express&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;// App settings&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;view engine&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;pug&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;// App middleware&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;use&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/static&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;static&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;static&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;// App routes&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;index&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-
-&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/dashboard&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;dashboard&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-
-&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/logout&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;redirect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-
-&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;listen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;This is a basic Express.js application:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;It creates an Express application&lt;/li&gt;
-  &lt;li&gt;It configures Express to serve static files (css, images, etc.)&lt;/li&gt;
-  &lt;li&gt;It contains three routes: a home page route, a dashboard route, and a logout
-route. The home page route simply shows an HTML template (that we’ll create in
-a moment). The dashboard route shows a dashboard template. And the logout
-route redirects the user back to the home page. Simple!&lt;/li&gt;
-  &lt;li&gt;On the very last line of the file, Express will start up a local web server on
-port 3000 so you can view the website locally.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Next, you’ll need to create a new directory called &lt;code class=&quot;highlighter-rouge&quot;&gt;views&lt;/code&gt;, and inside it,
-create a &lt;code class=&quot;highlighter-rouge&quot;&gt;base.pug&lt;/code&gt; template with the following contents:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-jade&quot;&gt;doctype html
-html(lang=&quot;en&quot;)
-  head
-    meta(charset=&quot;utf-8&quot;)
-    meta(name=&quot;viewport&quot;, content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;)
-
-    link(rel=&quot;stylesheet&quot;, href=&quot;https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css&quot;, integrity=&quot;sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M&quot;, crossorigin=&quot;anonymous&quot;)
-    link(rel=&quot;stylesheet&quot;, href=&quot;/static/css/style.css&quot;)
-
-  body
-    .container
-      block body
-
-    script(src=&quot;https://code.jquery.com/jquery-3.2.1.slim.min.js&quot;, integrity=&quot;sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN&quot;, crossorigin=&quot;anonymous&quot;)
-    script(src=&quot;https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js&quot;, integrity=&quot;sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4&quot;, crossorigin=&quot;anonymous&quot;)
-    script(src=&quot;https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js&quot;, integrity=&quot;sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1&quot;, crossorigin=&quot;anonymous&quot;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This is a simple &lt;a href=&quot;https://pugjs.org/api/getting-started.html&quot;&gt;pug&lt;/a&gt; template that
-contains nothing more than some very basic HTML formatting, and
-&lt;a href=&quot;http://getbootstrap.com/&quot;&gt;Bootstrap&lt;/a&gt;. If you aren’t already familiar with pug,
-you may want to read through this &lt;a href=&quot;https://www.sitepoint.com/jade-tutorial-for-beginners/&quot;&gt;excellent beginner’s
-tutorial&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: pug used to be named &lt;code class=&quot;highlighter-rouge&quot;&gt;jade&lt;/code&gt;, this is useful to know if you’re looking
-for resources online.&lt;/p&gt;
-
-&lt;p&gt;Next, you’ll want to create the HTML template that renders the home page of the
-site. Create the file &lt;code class=&quot;highlighter-rouge&quot;&gt;views/index.pug&lt;/code&gt; and include the following code:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-jade&quot;&gt;extends base.pug
-
-block body
-  h1.text-center Welcome to the Example App!
-
-  .jumbotron
-    p.
-      Thanks for checking out this super simple Okta sample app.  If you login
-      below, you'll be taken to an admin panel that is only accessible for
-      authenticated users.
-
-    p.
-      Please #[a(href=&quot;/login&quot;) login] to continue.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This is your simple home page template.&lt;/p&gt;
-
-&lt;p&gt;Now, let’s create a dashboard page. This page will be what the user sees after
-logging into the website. Create the file &lt;code class=&quot;highlighter-rouge&quot;&gt;views/dashboard.pug&lt;/code&gt; and include the
-following:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-jade&quot;&gt;extends base.pug
-
-block body
-  h1.text-center User Dashboard
-
-  .jumbotron
-    ul
-      li Your Email Address is: #{user.preferred_username}
-      li Your First Name is: #{user.given_name}
-      li Your Last Name is: #{user.family_name}
-
-    p.
-      If you'd like to logout, please #[a(href=&quot;/logout&quot;) click here].
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Next, let’s add a bit of CSS to make things look nice. Create a new folder to store your static assets (css, images, etc.):&lt;/p&gt;
-
-&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;w&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;mkdir&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt; -p static/css
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Now create the file &lt;code class=&quot;highlighter-rouge&quot;&gt;static/css/style.css&lt;/code&gt; and include the following:&lt;/p&gt;
-
-&lt;div class=&quot;language-css highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;h1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nl&quot;&gt;margin-top&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2em&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;nc&quot;&gt;.jumbotron&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nl&quot;&gt;margin-top&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2em&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Now, if you want to run this simple website, you can do so by installing the
-required dependencies, then starting up your Node server on the command line:&lt;/p&gt;
-
-&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;w&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;npm&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt; install express pug     # install dependencies
-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt; server.js              # run the server
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Once the server is running, you can view the site by visiting
-&lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:3000&lt;/code&gt; in your browser.&lt;/p&gt;
-
-&lt;p&gt;Remember how I said this would be a simple website? I wasn’t lying! Here’s what
-your new website homepage will look like:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/use-openid-connect-to-build-a-simple-node-website/app-home-137a5c82c6dab5164a56cf35c6993f1c635a3eee4427313d62ae45070cf7a7c0.png&quot; alt=&quot;Application Homepage&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;By now, you should have a working website with no authentication. So let’s take
-it one step further in the next section and add OIDC.&lt;/p&gt;
-
-&lt;h3 id=&quot;add-openid-connect-to-your-website&quot;&gt;Add OpenID Connect to Your Website&lt;/h3&gt;
-
-&lt;p&gt;To get started, you’ll need to install two new Node.js libraries:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/expressjs/session&quot;&gt;express-session&lt;/a&gt;, which will manage user
-sessions for your website, and
-&lt;a href=&quot;https://github.com/okta/okta-oidc-js/tree/master/packages/oidc-middleware&quot;&gt;oidc-middleware&lt;/a&gt;, which will handle all
-of the OIDC implementation details for your website&lt;/p&gt;
-
-&lt;p&gt;To install these libraries, run the following command:&lt;/p&gt;
-
-&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;w&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;npm&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt; install express-session @okta/oidc-middleware
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Next, you’ll need to import these libraries in your &lt;code class=&quot;highlighter-rouge&quot;&gt;server.js&lt;/code&gt; from before:&lt;/p&gt;
-
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kr&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;express&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;kr&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;session&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;express-session&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;kr&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ExpressOIDC&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;@okta/oidc-middleware&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ExpressOIDC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Now that the libraries are imported properly, you can initialize the session
-middleware and the OIDC middleware:&lt;/p&gt;
-
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// App middleware&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;use&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/static&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;static&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;static&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-
-&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;use&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;cookie&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;httpOnly&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;secret&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;long random string&quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}));&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;oidc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ExpressOIDC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;issuer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;client_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;{clientId}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;client_secret&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;{clientSecret}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;redirect_uri&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;http://localhost:3000/authorization-code/callback&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;routes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;callback&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;defaultRedirect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dashboard&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;scope&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'openid profile'&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;The session middleware contains a number &lt;a href=&quot;https://github.com/expressjs/session&quot;&gt;of
-options&lt;/a&gt;, but the only ones we’ll need for
-now are the following two:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;cookie.httponly&lt;/code&gt;: this option tells the browser that JavaScript code should
-not be allowed to access the session data. JavaScript on clients is a
-dangerous thing, ensuring your cookies that contain identity information are
-safe is always of top importance.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;secret&lt;/code&gt;: this option should be a long random string that you create. It
-should be the same across all your webservers, but never shared publicly or
-stored in a public place. This value is used to ensure your user’s identity
-information is protected cryptographically inside of cookies.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The OIDC middleware also contains a number &lt;a href=&quot;https://www.npmjs.com/package/@okta/oidc-middleware#new-expressoidcconfig&quot;&gt;of
-options&lt;/a&gt;.
-I’ll walk you through them briefly:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;issuer&lt;/code&gt;: this should be your Org URL value (that you wrote down earlier) with
-&lt;code class=&quot;highlighter-rouge&quot;&gt;/oauth2/default&lt;/code&gt; appended. This is the OAuth2 endpoint that’s used for
-handling authorization.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;client_id/client_secret&lt;/code&gt;: these values are what you wrote down earlier after
-creating your Okta Application. They can be found in your Application settings
-in Okta.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;redirect_uri&lt;/code&gt;: this setting tells Okta where to redirect the user after
-they’ve signed in. This value should stay the same as it is listed above, as
-this library will handle that route for you automatically.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;routes.callback.default_redirect&lt;/code&gt;: this option tells Okta where to redirect a
-user once they’ve been signed into your website. In this case, you’ll want to
-redirect them to the dashboard page.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;scope&lt;/code&gt;: the OpenID Connect protocol has a lot of standard scopes that
-determine what data about your user is returned to you once the user has been
-signed in. The values here provide basic user information for your website. To
-view a complete list of available scopes, check out &lt;a href=&quot;https://developer.okta.com/standards/OIDC/index.html#scope-dependent-claims-not-always-returned&quot;&gt;this
-page&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Now that you’ve configured OIDC for your website, it’s time to hook up the
-routes:&lt;/p&gt;
-
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// App routes&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;use&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;oidc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;index&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-
-&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/dashboard&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;oidc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ensureAuthenticated&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;userinfo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;dashboard&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;userinfo&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-
-&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/logout&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;logout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;redirect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;The first thing that’s happening above is that you’re using the built-in OIDC
-routes that ship with the oidc-middleware library. This library provides routes
-to handle authenticating the user properly (behind the scenes), and a number of
-other things. I’ll show you how these work soon.&lt;/p&gt;
-
-&lt;p&gt;You’ll also notice that your dashboard route is now using a new Node.js
-middleware: &lt;code class=&quot;highlighter-rouge&quot;&gt;oidc.ensureAuthenticated()&lt;/code&gt;. This middleware will do the following:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;If a user tries to visit &lt;code class=&quot;highlighter-rouge&quot;&gt;/dashboard&lt;/code&gt; and is not logged in, they will be
-redirected to Okta to log in, before being allowed to visit the page&lt;/li&gt;
-  &lt;li&gt;If a user tries to visit &lt;code class=&quot;highlighter-rouge&quot;&gt;/dashboard&lt;/code&gt; and they &lt;em&gt;are&lt;/em&gt; logged in, they will be
-allowed to view the page with no problems&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;You’ll also notice that inside the dashboard route, you’re now able to access
-the logged-in user’s personal information via &lt;code class=&quot;highlighter-rouge&quot;&gt;req.userinfo&lt;/code&gt;. The
-oidc-middleware library makes this object available to you whenever a user is
-logged in. You’ll notice that that this object shows the following information:&lt;/p&gt;
-
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'00uc5nynm5RZivEun0h7'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Randall Degges'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;locale&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'en-US'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;preferred_username&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'r@rdegges.com'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;given_name&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Randall'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;family_name&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Degges'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;zoneinfo&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'America/Los_Angeles'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;updated_at&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1507772025&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;The data that’s returned about each logged-in user can be modified by including
-more (or fewer) scopes (as mentioned previously).&lt;/p&gt;
-
-&lt;p&gt;In the code above, you’ll also notice that there is a real logout
-implementation. The oidc-middleware library includes a new method:
-&lt;code class=&quot;highlighter-rouge&quot;&gt;req.logout()&lt;/code&gt;, which wipes all session data and logs the user out of your
-application.&lt;/p&gt;
-
-&lt;h3 id=&quot;modify-the-server-start&quot;&gt;Modify the Server Start&lt;/h3&gt;
-
-&lt;p&gt;Now that you’ve got your code in place, there’s only one tiny piece of code left
-to change: the code that starts your web server.&lt;/p&gt;
-
-&lt;p&gt;Normally when your Node application starts running, via the &lt;code class=&quot;highlighter-rouge&quot;&gt;app.listen()&lt;/code&gt;
-method, the web site is immediately online. Now that you’re using OIDC, however,
-you don’t actually want that behavior.&lt;/p&gt;
-
-&lt;p&gt;In order to set up the OIDC rules and policies, the oidc-middleware library
-performs its setup routines asynchronously. If your site was to immediately go
-online, it could cause errors when users try to view protected pages, etc.&lt;/p&gt;
-
-&lt;p&gt;To get around this, you’ll want to modify your server start code like so:&lt;/p&gt;
-
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;oidc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ready&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;listen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-
-&lt;span class=&quot;nx&quot;&gt;oidc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;error&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;By listening for the events that the oidc-middleware library provides, you can
-safely start your Node server as soon as the OIDC setup has finished, thereby
-solving any timing problems you might have run into otherwise.&lt;/p&gt;
-
-&lt;h2 id=&quot;test-it-out&quot;&gt;Test It Out&lt;/h2&gt;
-
-&lt;p&gt;Now that your application has been built, why not try it out? If you visit
-&lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:3000&lt;/code&gt; and click through the prompts,
-you’ll see how everything fits together:&lt;/p&gt;
-
-&lt;p&gt;Once you click login, you’ll be redirected to &lt;code class=&quot;highlighter-rouge&quot;&gt;/login&lt;/code&gt; The oidc-middleware will
-intercept that &lt;code class=&quot;highlighter-rouge&quot;&gt;/login&lt;/code&gt; request, and redirect the user to Okta’s hosted sign-in
-page where they’ll be prompted for their email address and password The user
-will then enter their credentials, and log in They will then be redirected back
-to your local website, where the oidc-middleware library will again intercept
-the request, create a session for the user, and log them in Finally, they will
-be redirected to the dashboard page (&lt;code class=&quot;highlighter-rouge&quot;&gt;/dashboard&lt;/code&gt;), where your route code will
-run and echo their basic information back to them&lt;/p&gt;
-
-&lt;p&gt;Here’s what each of the pages looks like in the flow:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/use-openid-connect-to-build-a-simple-node-website/app-home-137a5c82c6dab5164a56cf35c6993f1c635a3eee4427313d62ae45070cf7a7c0.png&quot; alt=&quot;Application Homepage&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Then, once you click “login”, you’ll be taken to the login page:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/use-openid-connect-to-build-a-simple-node-website/app-login-a2d19dbaa6587203d3d377bd6174b461156199ddc4c41ad3718e22c6a9d4754d.png&quot; alt=&quot;Application Login Page&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Finally, once you’ve logged in, you’ll be taken to the dashboard page where you
-can view your user information:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/use-openid-connect-to-build-a-simple-node-website/app-dashboard-bff49f950ea36afc1fcbb2a3c93ed79d94e92c927c5fa7f9ba8bdbafb8f10c53.png&quot; alt=&quot;Application Dashboard&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;resources&quot;&gt;Resources&lt;/h2&gt;
-
-&lt;p&gt;Now that you’ve built your first Node.js site using OIDC to handle
-authentication using our new &lt;a href=&quot;https://github.com/okta/okta-oidc-js/tree/master/packages/oidc-middleware&quot;&gt;oidc-middleware
-library&lt;/a&gt;, you might want to learn more
-about OIDC.&lt;/p&gt;
-
-&lt;p&gt;One of my good friends and co-workers &lt;a href=&quot;https://twitter.com/afitnerd&quot;&gt;Micah
-Silverman&lt;/a&gt; recently published a three part primer
-to OIDC which I strongly recommend you read if you’re interested in learning
-more about OIDC. You can &lt;a href=&quot;https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1&quot;&gt;check it out
-here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;You can also &lt;a href=&quot;https://twitter.com/rdegges&quot;&gt;follow myself&lt;/a&gt; and
-&lt;a href=&quot;https://twitter.com/oktadev&quot;&gt;Okta&lt;/a&gt; on Twitter to see more of what I’m working
-on, and ask any auth-related questions you might have.&lt;/p&gt;
-</description>
-        <pubDate>Thu, 19 Oct 2017 00:00:00 +0000</pubDate>
-        <link>https://developer.okta.com/blog/2017/10/19/use-openid-connect-to-build-a-simple-node-website</link>
-        <guid isPermaLink="true">https://developer.okta.com/blog/2017/10/19/use-openid-connect-to-build-a-simple-node-website</guid>
       </item>
     
   </channel>
