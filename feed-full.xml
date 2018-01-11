@@ -8,6 +8,75 @@
     <atom:link href="https://developer.okta.com/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Two Approaches to Setting Up a MERN Stack Application</title>
+        <description>&lt;p&gt;The trend I’ve seen in web applications is a backend API written in a server-side technology like Node, with a front-end single-page application written in something like React. The problem with these stacks is that it can be hard to run and deploy them as a single unit. The API and UI will need to be started, stopped and deployed separately. That can be a bit of a pain when developing, and if you are writing the API to only be consumed by that single front end, the extra steps can be unnecessary. If this sounds like you, I’ll show you the two main paths I found for setting up a MERN (Mongo, Express, React, and Node) stack application to run and deploy as a single code base.&lt;/p&gt;
+
+&lt;h2 id=&quot;1-roll-your-own&quot;&gt;1. Roll Your Own&lt;/h2&gt;
+
+&lt;p&gt;I found a great &lt;a href=&quot;https://daveceddia.com/create-react-app-express-backend/&quot;&gt;couple&lt;/a&gt; of &lt;a href=&quot;https://daveceddia.com/create-react-app-express-production/&quot;&gt;articles&lt;/a&gt; on setting up React and Node to run together by &lt;a href=&quot;https://daveceddia.com/&quot;&gt;Dave Ceddia&lt;/a&gt; who writes a &lt;strong&gt;lot&lt;/strong&gt; about React.
+The first tutorial is fine for setting up the development environment, but it doesn’t talk much about how to get things ready to deploy. I deploy most of my personal stuff on &lt;a href=&quot;https://heroku.com&quot;&gt;Heroku&lt;/a&gt;, so the second article was just what the doctor ordered for me.
+The tl;dr is to start with &lt;code class=&quot;highlighter-rouge&quot;&gt;create-react-app&lt;/code&gt; to generate the base React application, then add the Express application around it. The biggest trick is in the &lt;code class=&quot;highlighter-rouge&quot;&gt;scripts&lt;/code&gt; section of the server’s &lt;code class=&quot;highlighter-rouge&quot;&gt;package.json&lt;/code&gt; file. Here’s what I did by following David’s tutorial and then adding a little magic of my own.&lt;/p&gt;
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;s2&quot;&gt;&quot;scripts&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&quot;start&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;forever -m 5 bin/www&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&quot;heroku-postbuild&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;cd client &amp;amp;&amp;amp; yarn --production=false &amp;amp;&amp;amp; yarn run build&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&quot;dev&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;concurrently \&quot;forever -m 5 -w bin/www\&quot; \&quot;cd client &amp;amp;&amp;amp; yarn start\&quot;&quot;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;heroku-postbuild&lt;/code&gt; script is straight from David’s article, and it tells Heroku to make a production build of the React app. The fact that it says &lt;code class=&quot;highlighter-rouge&quot;&gt;--production=false&lt;/code&gt; just means that Heroku will install the React scripts that the package needs to compile the React app and put it into the &lt;code class=&quot;highlighter-rouge&quot;&gt;client/build&lt;/code&gt; folder for the Node application to access it.
+My own piece was adding the &lt;code class=&quot;highlighter-rouge&quot;&gt;dev&lt;/code&gt; script. It uses &lt;a href=&quot;https://www.npmjs.com/package/concurrently&quot;&gt;concurrently&lt;/a&gt; to run the Node API and the React client app all at once. This way, I can just run &lt;code class=&quot;highlighter-rouge&quot;&gt;yarn dev&lt;/code&gt; to run my development version of the application with one command, instead of having to do them manually from the command line.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-good-parts&quot;&gt;The Good Parts&lt;/h3&gt;
+
+&lt;p&gt;I have more control of what goes into my application. If I use &lt;a href=&quot;https://facebook.github.io/jest&quot;&gt;Jest&lt;/a&gt; for testing or &lt;a href=&quot;https://circleci.com&quot;&gt;CircleCI&lt;/a&gt; for my builds, I don’t have to modify or remove someone else’s code to make my app work the way I do. This also means I can add only those things I understand. I can lean on &lt;code class=&quot;highlighter-rouge&quot;&gt;create-react-app&lt;/code&gt; to make the webpack configurations for me and I won’t have utilities I don’t understand how to use.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-downside&quot;&gt;The Downside&lt;/h3&gt;
+
+&lt;p&gt;This is really meant for a Heroku-deployed application. Assuming you’re pretty familiar with your hosting provider, you should be able to modify it for your needs. This approach also leaves you with the job of adding your own tools for testing, continuous integration/deployment, containerization, and everything else.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-verdict&quot;&gt;The Verdict&lt;/h3&gt;
+
+&lt;p&gt;For those that suffer from the Not Invented Here (NIH) problem, this will likely be your approach. You will however, not save yourself a ton of time in boilerplate as you set up the configs for everything not included in the &lt;code class=&quot;highlighter-rouge&quot;&gt;create-react-app&lt;/code&gt; template.&lt;/p&gt;
+
+&lt;h2 id=&quot;2-try-the-mern-tools&quot;&gt;2. Try the MERN Tools&lt;/h2&gt;
+
+&lt;p&gt;The &lt;a href=&quot;http://mern.io/&quot;&gt;MERN site&lt;/a&gt; has two different ways to kick off your MERN project: a &lt;a href=&quot;https://github.com/Hashnode/mern-starter&quot;&gt;MERN Starter project on GitHub&lt;/a&gt;, and the &lt;a href=&quot;https://github.com/Hashnode/mern-cli&quot;&gt;MERN CLI&lt;/a&gt;. The CLI simply uses the starter project to generate the base application, so it really depends on whether or not you want to install the CLI npm package.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-good-parts-1&quot;&gt;The Good Parts&lt;/h3&gt;
+
+&lt;p&gt;Not only is it a fully-fleshed MERN stack application, it’s created by &lt;a href=&quot;https://hashnode.com/&quot;&gt;Hashnode&lt;/a&gt;, a JavaScript community forum with lots of knowledgeable folks. It has Docker containers already set up with Dockerfiles and compose files for development and production. It is MIT-licensed, which is a permissive, flexible open source license. The project also generates standard dot files (e.g., &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitignore&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;.eslintrc&lt;/code&gt;, etc) so you’ll end up following best practices for MERN stack development (or it will be easy for you to change them to meet your development style). It includes a &lt;code class=&quot;highlighter-rouge&quot;&gt;.travis.yml&lt;/code&gt; file ready to use with &lt;a href=&quot;https://travis-ci.org&quot;&gt;Travis CI&lt;/a&gt; for continuous integration/deployment. The starter even has a couple of embedded JavaScript templates for creating React components and Express modules once you start working on your project. Finally, it is very well organized and follows the community’s standards for project organization.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-tricky-parts&quot;&gt;The Tricky Parts&lt;/h3&gt;
+
+&lt;p&gt;I’m a big believer in not using generated code unless I understand how that code works. For me, the point of generating code is not to skip parts I don’t understand, it’s to keep me from having to do all that typing.
+That said, there is a lot of semi-advanced stuff in the starter project. If you don’t know Docker, it might be confusing. It also has several webpack configs that can be hard to follow if you’re not super familiar with webpack. There are &lt;code class=&quot;highlighter-rouge&quot;&gt;util&lt;/code&gt; folders in the client and server of the application that can be hard to understand for those new to React, Node, or testing with JavaScript. There may also be things in the application template that you don’t need or want if you use a different testing framework, mocking library, or build service.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-verdict-1&quot;&gt;The Verdict&lt;/h3&gt;
+
+&lt;p&gt;This is probably the best solution for those who are creating an enterprise-level application with the MERN stack. Despite being somewhat advanced, the documentation is stellar. The fact that it’s made by Hashnode means you have a direct line to a community of people who can answer questions about it if you run into problems or something you simply don’t understand.&lt;/p&gt;
+
+&lt;h2 id=&quot;which-one-is-for-me&quot;&gt;Which One Is For Me?&lt;/h2&gt;
+
+&lt;p&gt;As with all things software, it depends. I recommend generating a project with MERN.io and checking out what dependencies and practices are included. Then decide for yourself if it’s right for you. Also, read through the generated project and make sure you understand what’s going on in the code. Make sure you can follow how the packages that are included are being used. It can be a great way to learn how to do things the conventional way. 
+If you want to learn how to set up these different pieces manually, I’d suggest rolling your own. Or, if you know you don’t need all the things that come in the MERN.io generated application, you might consider rolling your own. If you &lt;em&gt;do&lt;/em&gt; roll your own, I suggest referring to the &lt;a href=&quot;http://mern.io/documentation.html&quot;&gt;MERN.io style and organization&lt;/a&gt; of the project for guidance on the “proper” way to do things.&lt;/p&gt;
+
+&lt;h2 id=&quot;learn-more&quot;&gt;Learn More&lt;/h2&gt;
+
+&lt;p&gt;To learn more about the &lt;code class=&quot;highlighter-rouge&quot;&gt;create-react-app&lt;/code&gt; (CRA) npm package, see the &lt;a href=&quot;https://github.com/facebookincubator/create-react-app&quot;&gt;GitHub repo&lt;/a&gt;.
+For more awesome React resources, check out:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Matt Raible’s post on &lt;a href=&quot;https://developer.okta.com/blog/2017/12/06/bootiful-development-with-spring-boot-and-react&quot;&gt;React with Spring Boot&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;My post on &lt;a href=&quot;https://developer.okta.com/blog/2017/03/30/react-okta-sign-in-widget&quot;&gt;React Authentication with Okta&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Matt Raible’s post on &lt;a href=&quot;https://developer.okta.com/blog/2017/07/20/the-ultimate-guide-to-progressive-web-applications&quot;&gt;Progressive Web Apps&lt;/a&gt;
+As always, feel free to contact me via &lt;a href=&quot;https://twitter.com/leebrandt&quot;&gt;Twitter&lt;/a&gt; or via the comments below, and be sure to check out &lt;a href=&quot;https://developer.okta.com/signup/&quot;&gt;Okta’s Free-Forever Developer Account&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Thu, 11 Jan 2018 00:00:00 +0000</pubDate>
+        <link>https://developer.okta.com/blog/2018/01/11/two-approaches-to-setting-up-a-mern-stack-app</link>
+        <guid isPermaLink="true">https://developer.okta.com/blog/2018/01/11/two-approaches-to-setting-up-a-mern-stack-app</guid>
+      </item>
+    
+      <item>
         <title>Build an App for iOS and Android with Xamarin</title>
         <description>&lt;p&gt;&lt;a href=&quot;https://www.xamarin.com/&quot;&gt;Xamarin&lt;/a&gt; is a cross-platform technology that makes it possible to build native applications for Android and iOS using a single, shared codebase. Like other technologies such as React Native and NativeScript, it allows development teams to spend less time writing code for both platforms.&lt;/p&gt;
 
