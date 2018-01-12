@@ -223,7 +223,7 @@
 </code></pre>
 </div>
 
-<p>You will be prompted to select a starter project and optionally link your app to your Ionic Dashboard. For this tutorial, choose the <strong>tabs</strong> starter project and do not connect the app to your Ionic Dashboard.</p>
+<p>You will be prompted to select a starter project. For this tutorial, choose the <strong>tabs</strong> starter project. When prompted to integrate your app with Cordova, answer yes. When prompted to install the free Ionic Pro SDK and connect your app, answer no.</p>
 
 <p>Project creation may take a minute or two to complete, depending on your internet connection speed. Run the commands below to start your Ionic application.</p>
 
@@ -266,11 +266,17 @@ ionic serve
   <li>Change the <strong>Base URI</strong> and <strong>Login redirect URI</strong> to <code class="highlighter-rouge">http://localhost:8100</code> and click <strong>Done</strong>. You should see settings like the following:</li>
 </ul>
 
-<p><img src="/assets/blog/ionic-authentication/oidc-settings-46747e5e9af164cf56d05f055a659520252558872d9319cadd831d5e7104b990.png" alt="Okta OIDC Settings" width="800" /></p>
+<p><img src="/assets/blog/ionic-authentication/oidc-settings-46747e5e9af164cf56d05f055a659520252558872d9319cadd831d5e7104b990.png" alt="Okta OIDC Settings" width="700" class="center-image" /></p>
 
 <h2 id="create-a-login-page">Create a Login Page</h2>
 
-<p>To make a login page for authentication, create <code class="highlighter-rouge">src/pages/login/login.ts</code> and <code class="highlighter-rouge">src/pages/login/login.html</code>. In <code class="highlighter-rouge">login.html</code>, add a form with username and password fields.</p>
+<p>Generate a login page for authentication by running the following command:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>ionic g page Login
+</code></pre>
+</div>
+
+<p>In the generated <code class="highlighter-rouge">src/pages/login/login.html</code>, add a form with username and password fields.</p>
 
 <div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ion-header&gt;</span>
   <span class="nt">&lt;ion-navbar&gt;</span>
@@ -312,17 +318,17 @@ ionic serve
 
 <p>Install <code class="highlighter-rouge">angular-oauth2-oidc</code> and the Okta Auth SDK using npm.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>npm install angular-oauth2-oidc@1.0.20 @okta/okta-auth-js --save
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>npm install angular-oauth2-oidc @okta/okta-auth-js --save
 </code></pre>
 </div>
 
 <p>In <code class="highlighter-rouge">src/pages/login/login.ts</code>, add the basic structure of the <code class="highlighter-rouge">LoginPage</code> class and a constructor that configures your OIDC settings with the <code class="highlighter-rouge">OAuthService</code> from angular-oauth2-oidc. You will need to replace <code class="highlighter-rouge"><span class="p">{</span><span class="err">clientId</span><span class="p">}</span></code> with the Client ID from your Okta OIDC settings and <code class="highlighter-rouge"><span class="p">{</span><span class="err">yourOktaDomain</span><span class="p">}</span></code> with your account’s correct URI.</p>
 
 <div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">ViewChild</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
-<span class="k">import</span> <span class="p">{</span> <span class="nx">NavController</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'ionic-angular'</span><span class="p">;</span>
-<span class="k">import</span> <span class="p">{</span> <span class="nx">OAuthService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'angular-oauth2-oidc'</span><span class="p">;</span>
-<span class="k">import</span> <span class="nx">OktaAuth</span> <span class="k">from</span> <span class="s1">'@okta/okta-auth-js'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">IonicPage</span><span class="p">,</span> <span class="nx">NavController</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'ionic-angular'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">JwksValidationHandler</span><span class="p">,</span> <span class="nx">OAuthService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'angular-oauth2-oidc'</span><span class="p">;</span>
 
+<span class="err">@</span><span class="nx">IonicPage</span><span class="p">()</span>
 <span class="err">@</span><span class="nx">Component</span><span class="p">({</span>
   <span class="na">selector</span><span class="p">:</span> <span class="s1">'page-login'</span><span class="p">,</span>
   <span class="na">templateUrl</span><span class="p">:</span> <span class="s1">'login.html'</span>
@@ -338,9 +344,15 @@ ionic serve
     <span class="nx">oauthService</span><span class="p">.</span><span class="nx">clientId</span> <span class="o">=</span> <span class="s1">'{clientId}'</span><span class="p">;</span>
     <span class="nx">oauthService</span><span class="p">.</span><span class="nx">scope</span> <span class="o">=</span> <span class="s1">'openid profile email'</span><span class="p">;</span>
     <span class="nx">oauthService</span><span class="p">.</span><span class="nx">issuer</span> <span class="o">=</span> <span class="s1">'<span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>/oauth2/default'</span><span class="p">;</span>
+    <span class="nx">oauthService</span><span class="p">.</span><span class="nx">tokenValidationHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">JwksValidationHandler</span><span class="p">();</span>
+    
+    <span class="c1">// Load Discovery Document and then try to login the user</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">loadDiscoveryDocument</span><span class="p">().</span><span class="nx">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">tryLogin</span><span class="p">();</span>
+    <span class="p">});</span>
   <span class="p">}</span>
 
-  <span class="nx">ionViewDidLoad</span><span class="p">()</span><span class="err">:</span> <span class="k">void</span> <span class="p">{</span>
+  <span class="nx">ionViewDidLoad</span><span class="p">():</span> <span class="k">void</span> <span class="p">{</span>
     <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">email</span><span class="p">.</span><span class="nx">setFocus</span><span class="p">();</span>
     <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
@@ -383,45 +395,40 @@ ionic serve
 </code></pre>
 </div>
 
-<p>Update <code class="highlighter-rouge">src/app/app.module.ts</code> to add <code class="highlighter-rouge">LoginPage</code> to its <code class="highlighter-rouge">declarations</code> and <code class="highlighter-rouge">entryComponents</code>. You’ll also need to add <code class="highlighter-rouge">OAuthService</code> to its <code class="highlighter-rouge">providers</code>.</p>
+<p>Update <code class="highlighter-rouge">src/app/app.module.ts</code> to add <code class="highlighter-rouge">OAuthModule</code>, <code class="highlighter-rouge">HttpClientModule</code>, and <code class="highlighter-rouge">LoginPageModule</code> as imports.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">LoginPage</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../pages/login/login'</span><span class="p">;</span>
-<span class="k">import</span> <span class="p">{</span> <span class="nx">OAuthService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'angular-oauth2-oidc'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">LoginPageModule</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../pages/login/login.module'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">OAuthModule</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'angular-oauth2-oidc'</span><span class="p">;</span>
 
 <span class="err">@</span><span class="nx">NgModule</span><span class="p">({</span>
-  <span class="na">declarations</span><span class="p">:</span> <span class="p">[</span>
-    <span class="p">...</span>
-    <span class="nx">LoginPage</span>
+  <span class="p">...</span>
+  <span class="na">imports</span><span class="p">:</span> <span class="p">[</span>
+    <span class="nx">BrowserModule</span><span class="p">,</span>
+    <span class="nx">LoginPageModule</span><span class="p">,</span>
+    <span class="nx">OAuthModule</span><span class="p">.</span><span class="nx">forRoot</span><span class="p">(),</span>
+    <span class="nx">IonicModule</span><span class="p">.</span><span class="nx">forRoot</span><span class="p">(</span><span class="nx">MyApp</span><span class="p">)</span>
   <span class="p">],</span>
   <span class="p">...</span>
-  <span class="na">entryComponents</span><span class="p">:</span> <span class="p">[</span>
-    <span class="p">...</span>
-    <span class="nx">LoginPage</span>
-  <span class="p">],</span>
-  <span class="na">providers</span><span class="p">:</span> <span class="p">[</span>
-    <span class="nx">OAuthService</span><span class="p">,</span>
-    <span class="p">...</span>
-  <span class="p">]</span>
 <span class="p">})</span>
 </code></pre>
 </div>
 
 <p>Run <code class="highlighter-rouge">ionic serve</code> to make sure the <code class="highlighter-rouge">LoginPage</code> is displayed when the app first loads. You’ll see the following error when the app tries to load:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>No provider for Http!
+<div class="highlighter-rouge"><pre class="highlight"><code>No provider for HttpClient!
 </code></pre>
 </div>
 
 <p>This error happens because <code class="highlighter-rouge">OAuthService</code> has a dependency on Angular’s <code class="highlighter-rouge">Http</code>, but it hasn’t been imported into your project. Add <code class="highlighter-rouge">HttpModule</code> as an import in <code class="highlighter-rouge">src/app/app.module.ts</code>.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">HttpModule</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/http'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">HttpClientModule</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/common/http'</span><span class="p">;</span>
 
 <span class="err">@</span><span class="nx">NgModule</span><span class="p">({</span>
   <span class="p">...</span>
   <span class="na">imports</span><span class="p">:</span> <span class="p">[</span>
-    <span class="nx">BrowserModule</span><span class="p">,</span>
-    <span class="nx">HttpModule</span><span class="p">,</span>
-    <span class="nx">IonicModule</span><span class="p">.</span><span class="nx">forRoot</span><span class="p">(</span><span class="nx">MyApp</span><span class="p">)</span>
+    <span class="p">...</span>
+    <span class="nx">HttpClientModule</span><span class="p">,</span>
+    <span class="p">...</span>
   <span class="p">],</span>
   <span class="p">...</span>
 <span class="p">})</span>
@@ -434,15 +441,16 @@ ionic serve
 
 <p>Add a <code class="highlighter-rouge">login()</code> method in <code class="highlighter-rouge">src/app/pages/login/login.ts</code> that uses the Okta Auth SDK to 1) login and 2) exchange the session token for an identity and access token. An <a href="https://openid.net/specs/openid-connect-core-1_0.html#IDToken">ID token</a> is similar to an identity card, in standard JWT format, signed by the OpenID Provider. Access tokens are part of the OAuth specification. An access token can be a JWT. They are used to access protected resources, often by setting them as an <code class="highlighter-rouge">Authentication</code> header when making a request.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">TabsPage</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../tabs/tabs'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">OktaAuth</span> <span class="k">from</span> <span class="s1">'@okta/okta-auth-js'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">TabsPage</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../tabs/tabs'</span><span class="p">;</span>
 <span class="p">...</span>
 <span class="nx">login</span><span class="p">()</span><span class="err">:</span> <span class="k">void</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">createAndSaveNonce</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="nx">nonce</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="nx">authClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OktaAuth</span><span class="p">({</span>
       <span class="na">clientId</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">clientId</span><span class="p">,</span>
       <span class="na">redirectUri</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">redirectUri</span><span class="p">,</span>
-      <span class="na">url</span><span class="p">:</span> <span class="s1">'https://dev-[dev-id].oktapreview.com'</span><span class="p">,</span>
-      <span class="na">issuer</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">issuer</span>
+      <span class="na">url</span><span class="p">:</span> <span class="s1">'https://{yourOktaDomain}.oktapreview.com'</span><span class="p">,</span>
+      <span class="na">issuer</span><span class="p">:</span> <span class="s1">'default'</span>
     <span class="p">});</span>
     <span class="k">return</span> <span class="nx">authClient</span><span class="p">.</span><span class="nx">signIn</span><span class="p">({</span>
       <span class="na">username</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">username</span><span class="p">,</span>
@@ -456,11 +464,14 @@ ionic serve
           <span class="na">scopes</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">scope</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">' '</span><span class="p">)</span>
         <span class="p">})</span>
           <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">tokens</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-            <span class="c1">// oauthService.processIdToken doesn't set an access token</span>
-            <span class="c1">// set it manually so oauthService.authorizationHeader() works</span>
-            <span class="nx">localStorage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span><span class="s1">'access_token'</span><span class="p">,</span> <span class="nx">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">accessToken</span><span class="p">);</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">processIdToken</span><span class="p">(</span><span class="nx">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">idToken</span><span class="p">,</span> <span class="nx">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">accessToken</span><span class="p">);</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">navCtrl</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">TabsPage</span><span class="p">);</span>
+            <span class="kd">const</span> <span class="nx">idToken</span> <span class="o">=</span> <span class="nx">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">idToken</span><span class="p">;</span>
+            <span class="kd">const</span> <span class="nx">accessToken</span> <span class="o">=</span> <span class="nx">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">accessToken</span><span class="p">;</span>
+            <span class="kd">const</span> <span class="nx">keyValuePair</span> <span class="o">=</span> <span class="err">`#</span><span class="nx">id_token</span><span class="o">=</span><span class="nx">$</span><span class="p">{</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">idToken</span><span class="p">)}</span><span class="o">&amp;</span><span class="nx">access_token</span><span class="o">=</span><span class="nx">$</span><span class="p">{</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">accessToken</span><span class="p">)}</span><span class="err">`</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">tryLogin</span><span class="p">({</span>
+              <span class="na">customHashFragment</span><span class="p">:</span> <span class="nx">keyValuePair</span><span class="p">,</span>
+              <span class="na">disableOAuth2StateCheck</span><span class="p">:</span> <span class="kc">true</span>
+            <span class="p">});</span>
+          <span class="k">this</span><span class="p">.</span><span class="nx">navCtrl</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">TabsPage</span><span class="p">);</span>
           <span class="p">});</span>
       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
         <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">'We cannot handle the '</span> <span class="o">+</span> <span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">+</span> <span class="s1">' status'</span><span class="p">);</span>
@@ -501,11 +512,11 @@ ionic serve
 </code></pre>
 </div>
 
-<p>You can (optionally), pretty up the login screen by adding a logo above the form. Download <a href="https://www.okta.com/sites/all/themes/Okta/images/blog/Logos/Okta_Logo_BrightBlue_Medium.png">this image</a>, copy it to <code class="highlighter-rouge">src/assets/image/okta.png</code>, and add the following above the <code class="highlighter-rouge">&lt;form&gt;</code> tag in <code class="highlighter-rouge">login.html</code>.</p>
+<p>You can (optionally), pretty up the login screen by adding a logo above the form. Download <a href="https://www.okta.com/sites/all/themes/Okta/images/blog/Logos/Okta_Logo_BrightBlue_Medium.png">this image</a>, copy it to <code class="highlighter-rouge">src/assets/imgs/okta.png</code>, and add the following above the <code class="highlighter-rouge">&lt;form&gt;</code> tag in <code class="highlighter-rouge">login.html</code>. You might want to edit the image so it’s only 300 pixels wide. This reduces its size to 12 KB instead of 110 KB.</p>
 
 <div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ion-row&gt;</span>
   <span class="nt">&lt;ion-col</span> <span class="na">text-center</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"assets/image/okta.png"</span> <span class="na">width=</span><span class="s">"300"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"assets/imgs/okta.png"</span> <span class="na">width=</span><span class="s">"300"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;/ion-col&gt;</span>
 <span class="nt">&lt;/ion-row&gt;</span>
 </code></pre>
@@ -529,7 +540,7 @@ ionic serve
 <p>In <code class="highlighter-rouge">src/pages/home/home.ts</code>, add a <code class="highlighter-rouge">logout()</code> method, as well as methods to get a name and claims from the identity token. Claims in an ID token are bits of information about the issuer, the user, intended audience, expiration date, and issue date. You can see the <a href="https://openid.net/specs/openid-connect-core-1_0.html#IDToken">standard claims in the OIDC spec</a>.</p>
 
 <div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
-<span class="k">import</span> <span class="p">{</span> <span class="nx">NavController</span><span class="p">,</span> <span class="nx">App</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'ionic-angular'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">App</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'ionic-angular'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">LoginPage</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../login/login'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">OAuthService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'angular-oauth2-oidc'</span><span class="p">;</span>
 
@@ -539,12 +550,12 @@ ionic serve
 <span class="p">})</span>
 <span class="k">export</span> <span class="kr">class</span> <span class="nx">HomePage</span> <span class="p">{</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="k">public</span> <span class="nx">app</span><span class="err">:</span> <span class="nx">App</span><span class="p">,</span> <span class="k">public</span> <span class="nx">navCtrl</span><span class="err">:</span> <span class="nx">NavController</span><span class="p">,</span> <span class="k">public</span> <span class="nx">oauthService</span><span class="err">:</span> <span class="nx">OAuthService</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="k">public</span> <span class="nx">app</span><span class="err">:</span> <span class="nx">App</span><span class="p">,</span> <span class="k">public</span> <span class="nx">oauthService</span><span class="err">:</span> <span class="nx">OAuthService</span><span class="p">)</span> <span class="p">{</span>
   <span class="p">}</span>
-
+  
   <span class="nx">logout</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">logOut</span><span class="p">();</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">getRootNav</span><span class="p">().</span><span class="nx">setRoot</span><span class="p">(</span><span class="nx">LoginPage</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">logOut</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">getRootNavs</span><span class="p">()[</span><span class="mi">0</span><span class="p">].</span><span class="nx">setRoot</span><span class="p">(</span><span class="nx">LoginPage</span><span class="p">);</span>
   <span class="p">}</span>
 
   <span class="nx">get</span> <span class="nx">givenName</span><span class="p">()</span> <span class="p">{</span>
@@ -681,8 +692,13 @@ Error: Cannot read property 'replace' of undefined
 
 <div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="nx">redirectLogin</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">oktaLogin</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="nx">success</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">localStorage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span><span class="s1">'access_token'</span><span class="p">,</span> <span class="nx">success</span><span class="p">.</span><span class="nx">access_token</span><span class="p">);</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">processIdToken</span><span class="p">(</span><span class="nx">success</span><span class="p">.</span><span class="nx">id_token</span><span class="p">,</span> <span class="nx">success</span><span class="p">.</span><span class="nx">access_token</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">idToken</span> <span class="o">=</span> <span class="nx">success</span><span class="p">.</span><span class="nx">id_token</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">accessToken</span> <span class="o">=</span> <span class="nx">success</span><span class="p">.</span><span class="nx">access_token</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">keyValuePair</span> <span class="o">=</span> <span class="err">`#</span><span class="nx">id_token</span><span class="o">=</span><span class="nx">$</span><span class="p">{</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">idToken</span><span class="p">)}</span><span class="o">&amp;</span><span class="nx">access_token</span><span class="o">=</span><span class="nx">$</span><span class="p">{</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">accessToken</span><span class="p">)}</span><span class="err">`</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">tryLogin</span><span class="p">({</span>
+      <span class="na">customHashFragment</span><span class="p">:</span> <span class="nx">keyValuePair</span><span class="p">,</span>
+      <span class="na">disableOAuth2StateCheck</span><span class="p">:</span> <span class="kc">true</span>
+    <span class="p">});</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">navCtrl</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">TabsPage</span><span class="p">);</span>
   <span class="p">},</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">error</span> <span class="o">=</span> <span class="nx">error</span><span class="p">;</span>
@@ -880,6 +896,12 @@ What Progressive Web Apps can do for you</a>.</p>
   <li><a href="/blog/2017/06/13/add-authentication-angular-pwa">Adding Authentication to your Angular PWA</a></li>
   <li><a href="/blog/2017/05/17/develop-a-mobile-app-with-ionic-and-spring-boot">Tutorial: Develop a Mobile App With Ionic and Spring Boot</a></li>
   <li><a href="/blog/2017/05/09/progressive-web-applications-with-angular-and-spring-boot">Build Your First Progressive Web Application with Angular and Spring Boot</a></li>
+</ul>
+
+<p><strong>Changelog:</strong></p>
+
+<ul>
+  <li>Jan 11, 2018: Updated to use Ionic CLI 3.19.0 and angular-oauth2-oidc 3.1.4. See the code changes in the <a href="https://github.com/oktadeveloper/okta-ionic-auth-example/pull/6">example app on GitHub</a>. Changes to this article can be viewed <a href="https://github.com/okta/okta.github.io/pull/1628">in this pull request</a>.</li>
 </ul>
 
 
