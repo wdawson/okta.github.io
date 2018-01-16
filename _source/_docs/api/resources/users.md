@@ -1263,7 +1263,7 @@ curl -v -X GET \
 #### List Users with Search
 {:.api .api-operation}
 
-> Listing users with search is an {% api_lifecycle ea %} feature.
+> Listing users with search is an {% api_lifecycle ea %} feature and should not be used as a part of any critical flows, like authentication.
 
 Searches for user by the properties specified in the search parameter (case insensitive)
 
@@ -3767,7 +3767,7 @@ Specifies a password for a user
 
 | Property | DataType | Nullable | Unique | Readonly | MinLength       | MaxLength | Validation      |
 |:---------|:---------|:---------|:-------|:---------|:----------------|:----------|:----------------|
-| value    | String   | TRUE     | FALSE  | FALSE    | Password Policy | 40        | Password Policy |
+| value    | String   | TRUE     | FALSE  | FALSE    | Password Policy | 72        | Password Policy |
 | hash     | [Hashed Password Object](#hashed-password-object)     | TRUE     | FALSE  | FALSE    | N/A | N/A |  |
 
 A password value is a **write-only** property. 
