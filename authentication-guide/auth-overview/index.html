@@ -314,7 +314,7 @@
 <p>Other important terms:</p>
 
 <ul>
-  <li>An OAuth 2.0 “grant” is the authorization given (or “granted”) to the client by the user. Examples of grants are “authorization code” and “client credentials”.</li>
+  <li>An OAuth 2.0 “grant” is the authorization given (or “granted”) to the client by the user. Examples of grants are “authorization code” and “client credentials”. Each OAuth grant has a corresponding flow, explained below.</li>
   <li>The “access token” is issued by the authorization server (Okta) in exchange for the grant.</li>
   <li>The “refresh token” is an optional token that is exchanged for a new access token if the access token has expired.</li>
 </ul>
@@ -334,8 +334,7 @@
   <p>If you’d like to see the OAuth 2.0 spec, you can find it here: <a href="https://tools.ietf.org/html/rfc6749">https://tools.ietf.org/html/rfc6749</a></p>
 </blockquote>
 
-<p>At the core of both OAuth 2.0 and its OpenID Connect extension is the authorization server. An authorization server is simply an OAuth 2.0 token minting engine. Each authorization server has a unique issuer URI
-and its own signing key for tokens in order to keep proper boundary between security domains. In the context of this guide, Okta is your authorization server.</p>
+<p>At the core of both OAuth 2.0 and its OpenID Connect extension is the authorization server. An authorization server is simply an OAuth 2.0 token minting engine. Each authorization server has a unique issuer URI and its own signing key for tokens in order to keep a proper boundary between security domains. In the context of this guide, Okta is your authorization server.</p>
 
 <p>The authorization server also acts as an OpenID Connect Provider,
 which means you can request <a href="/standards/OIDC/index.html#id-token">ID tokens</a>
@@ -365,43 +364,54 @@ in addition to <a href="/standards/OAuth/#access-token">access tokens</a> from t
 
 <h2 id="choosing-an-oauth-20-flow">Choosing an OAuth 2.0 Flow</h2>
 
-<p>Depending on what kind of client you are building, you will want to use a different OAuth 2.0 flow. The flowchart below can quickly help you decide which flow to use. Further explanation about each flow is included below.</p>
+<p>Depending on your use case, you will need to use a different OAuth flow. This section will help you choose an OAuth flow based on (1) the type of token you need, and/or (2) the type of client application that you are building.</p>
 
-<p><img src="/assets/oauth_grant_flowchart-f86032c33959485158c10977cca230d76557213d31b9a7de585f8868074ae0b2.png" alt="OAuth Flow Diagram" width="800px" /></p>
+<h3 id="does-your-application-need-an-id-token">Does your application need an ID token?</h3>
 
-<!-- Source for image. Generated using http://www.plantuml.com/plantuml/uml/
+<p>Any OAuth flow can give you an access token, but not all support ID tokens.</p>
 
-@startuml
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th style="text-align: center">Access Token</th>
+      <th style="text-align: center">ID Token</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Authorization Code</strong></td>
+      <td style="text-align: center">✅</td>
+      <td style="text-align: center">✅</td>
+    </tr>
+    <tr>
+      <td><strong>Authorization Code with PKCE</strong></td>
+      <td style="text-align: center">✅</td>
+      <td style="text-align: center">✅</td>
+    </tr>
+    <tr>
+      <td><strong>Implicit</strong></td>
+      <td style="text-align: center">✅</td>
+      <td style="text-align: center">✅</td>
+    </tr>
+    <tr>
+      <td><strong>Resource Owner Password</strong></td>
+      <td style="text-align: center">✅</td>
+      <td style="text-align: center">❌</td>
+    </tr>
+    <tr>
+      <td><strong>Client Credentials</strong></td>
+      <td style="text-align: center">✅</td>
+      <td style="text-align: center">❌</td>
+    </tr>
+  </tbody>
+</table>
 
-skinparam monochrome true
+<h3 id="what-kind-of-client-are-you-building">What kind of client are you building?</h3>
 
-start
+<p>Depending on what kind of client you are building, you will want to use a different OAuth 2.0 flow. The flowchart below can quickly help you decide which flow to use. Further explanation about each is included below.</p>
 
-if (Is your client public?) then (yes)
-    if (Is your client a SPA or native app?) then (SPA)
-    :Implicit Flow;
-    end      
-    else (native)
-    :Auth Code w PKCE;
-    end
-    endif
-else(no)
-
-if (Does the client have \nan end-user?) then (no)
-  :Client Credentials Flow;
-  end
-else (yes)
-
-if (Is the client highly trusted \nand other flows are not \nviable?) then (yes)
-  :Resource Owner Flow;
-  end
-else (no)
-  :Authorization Code Flow;
-  end
-
-@enduml
-
--->
+<p><img src="/assets/oauth_grant_flowchart-4df2fa5b34df168c22f447542c81c3dcc44dfa5afc118f14889dacbd948c36bd.png" alt="OAuth Flow Diagram" width="800px" /></p>
 
 <h5 id="is-your-client-public">Is your client public?</h5>
 
@@ -411,11 +421,11 @@ else (no)
 
 <p>If your client application is a Single Page Application (SPA), you should use the <a href="#implicit-flow">Implicit flow</a>.</p>
 
-<p>If your client application is a native application, you should use the <a href="#authorization-code-with-pkce">Authorization code flow with PKCE</a>.</p>
+<p>If your client application is a native application, you should use the <a href="#authorization-code-with-pkce-flow">Authorization code with PKCE flow</a>.</p>
 
 <h5 id="does-the-client-have-an-end-user">Does the client have an end-user?</h5>
 
-<p>If your client application is running on a server with no direct end-user, then it can be trusted to store credentials and use them responsibly. If your client application will only be doing machine-to-machine interaction, then you should use the <a href="#client-credentials-flow">Client Credentials flow</a>.</p>
+<p>If your client application is running on a server with no direct end user, then it can be trusted to store credentials and use them responsibly. If your client application will only be doing machine-to-machine interaction, then you should use the <a href="#client-credentials-flow">Client Credentials flow</a>.</p>
 
 <h5 id="does-the-resource-owner-own-the-client">Does the resource owner own the client?</h5>
 
@@ -451,7 +461,7 @@ app -> client: Response
 
 <p>For information how to set up your application to use this flow, see <a href="/authentication-guide/implementing-authentication/auth-code">Implement the Authorization Code Flow</a>.</p>
 
-<h3 id="authorization-code-with-pkce">Authorization Code with PKCE</h3>
+<h3 id="authorization-code-with-pkce-flow">Authorization Code with PKCE Flow</h3>
 
 <p>For native/mobile applications, the client secret cannot be stored in the application because it could easily be exposed. Additionally, mobile redirects use <code class="highlighter-rouge">app://</code> protocols, which are prone to interception. Basically, a rogue application could intercept the authorization code as it is being passed through the mobile/native operating system. Therefore native apps should make use of Proof Key for Code Exchange (PKCE), which acts like a secret but isn’t hard-coded, to keep the Authorization Code flow secure.</p>
 
