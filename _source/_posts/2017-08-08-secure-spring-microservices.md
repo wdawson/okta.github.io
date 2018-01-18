@@ -31,6 +31,7 @@ git clone https://github.com/oktadeveloper/spring-boot-microservices-example.git
 export STORMPATH_CLIENT_BASEURL=[base-url]
 export OKTA_APPLICATION_ID=[application-id]
 export OKTA_API_TOKEN=[api-token]
+export OKTA_AUTHORIZATIONSERVER_ID=default
 ```
 
 ## Add Stormpath's Zuul Support to the Edge Service
@@ -45,7 +46,7 @@ The **edge-service** application handles the routing to the backend `beer-catalo
 <dependency>
     <groupId>com.stormpath.sdk</groupId>
     <artifactId>stormpath-bom</artifactId>
-    <version>2.0.0-okta-rc3</version>
+    <version>2.0.4-okta</version>
     <type>pom</type>
     <scope>import</scope>
 </dependency>
@@ -426,6 +427,7 @@ After logging in, you should see a page displaying your user's information.
 {% img blog/microservices-spring-secure/zuul-home.png alt:"Stormpath Zuul Home" width:"800" %}
 
 Click the **Logout** button to delete the cookies in your browser and end your session.
+
 ## Add Okta's Sign-In Widget to the Client
 
 Install [Okta's Sign-In Widget](https://developer.okta.com/code/javascript/okta_sign-in_widget) to make it possible to communicate with the secured server.
@@ -435,92 +437,59 @@ cd client
 npm install @okta/okta-signin-widget --save
 ```
 
+Add the widget's CSS to `src/styles.css`:
+
+```css
+@import '~@okta/okta-signin-widget/dist/css/okta-sign-in.min.css';
+@import '~@okta/okta-signin-widget/dist/css/okta-theme.css';
+```
+
 Create `client/src/app/shared/okta/okta.service.ts` and use it to configure the widget to talk to your Okta instance.
 
 ```typescript
 import { Injectable } from '@angular/core';
-import * as OktaSignIn from '@okta/okta-signin-widget/dist/js/okta-sign-in.min.js'
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Observable } from 'rxjs/Observable';
+import * as OktaSignIn from '@okta/okta-signin-widget';
 
 @Injectable()
-export class OktaAuthService {
-
-  signIn = new OktaSignIn({
-    baseUrl: 'https://{yourOktaDomain}.com',
-    clientId: '{clientId}',
-    authParams: {
-      issuer: 'default',
-      responseType: ['id_token', 'token'],
-      scopes: ['openid', 'email', 'profile']
-    }
-  });
-
-  public user$: Observable<any>;
-  public userSource: ReplaySubject<any>;
+export class OktaService {
+  widget;
 
   constructor() {
-    this.userSource = new ReplaySubject<any>(1);
-    // create an observable that can be subscribed to for user events
-    this.user$ = this.userSource.asObservable();
-  }
-
-  isAuthenticated() {
-    // Checks if there is a current accessToken in the TokenManger.
-    return !!this.signIn.tokenManager.get('accessToken');
-  }
-
-  login() {
-    // Launches the widget and stores the tokens.
-    this.signIn.renderEl({el: '#okta-signin-container'}, response => {
-      if (response.status === 'SUCCESS') {
-        response.forEach(token => {
-          if (token.idToken) {
-            this.signIn.tokenManager.add('idToken', token);
-          }
-          if (token.accessToken) {
-            this.signIn.tokenManager.add('accessToken', token);
-          }
-          this.userSource.next(this.idTokenAsUser);
-          this.signIn.hide();
-        });
-      } else {
-        console.error(response);
+    this.widget = new OktaSignIn({
+      baseUrl: 'https://{yourOktaDomain}.com',
+      clientId: '{clientId}',
+      authParams: {
+        issuer: 'default',
+        responseType: ['id_token', 'token'],
+        scopes: ['openid', 'email', 'profile']
       }
     });
   }
 
-  get idTokenAsUser() {
-    const token = this.signIn.tokenManager.get('idToken');
-    return {
-      name: token.claims.name,
-      email: token.claims.email,
-      username: token.claims.preferred_username
-    }
+  getWidget() {
+    return this.widget;
   }
 
-  async logout() {
-    // Terminates the session with Okta and removes current tokens.
-    this.signIn.tokenManager.clear();
-    await this.signIn.signOut();
-    this.signIn.remove();
-    this.userSource.next(undefined);
+  getIdToken() {
+    return this.widget.tokenManager.get('idToken');
+  }
+
+  getAccessToken() {
+    return this.widget.tokenManager.get('accessToken');
   }
 }
 ```
 
 Make sure to replace `{yourOktaDomain}` and `{clientId}` in the above code.
 
-Add `OktaAuthService` as a provider to `client/src/app/app.module.ts`.
+Add `OktaService` as a provider to `client/src/app/app.module.ts`.
 
 ```typescript
-import { OktaAuthService } from './shared/okta/okta.service';
+import { OktaService } from './shared/okta/okta.service';
 
 @NgModule({
   ...
-  providers: [
-    BeerService, GiphyService, OktaAuthService
-  ],
+  providers: [OktaService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
@@ -531,26 +500,24 @@ it exists.
 
 ```typescript
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
-import 'rxjs/add/operator/map';
-import { Observable } from 'rxjs';
-import { OktaAuthService } from '../okta/okta.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+import { OktaService } from '../okta/okta.service';
 
 @Injectable()
 export class BeerService {
 
-  constructor(private http: Http, private oktaService: OktaAuthService) {
+  constructor(private http: HttpClient, private oktaService: OktaService) {
   }
 
   getAll(): Observable<any> {
-    const headers: Headers = new Headers();
-    if (this.oktaService.isAuthenticated()) {
-      const accessToken = this.oktaService.signIn.tokenManager.get('accessToken');
-      headers.append('Authorization', accessToken.tokenType + ' ' + accessToken.accessToken);
+    let headers: HttpHeaders = new HttpHeaders();
+    if (this.oktaService.getAccessToken()) {
+      const accessToken = this.oktaService.getAccessToken();
+      // headers is immutable, so re-assign
+      headers = headers.append('Authorization', accessToken.tokenType + ' ' + accessToken.accessToken);
     }
-    const options = new RequestOptions({ headers: headers });
-    return this.http.get('http://localhost:8081/good-beers', options)
-      .map((response: Response) => response.json());
+    return this.http.get('http://localhost:8081/good-beers', {headers: headers});
   }
 }
 ```
@@ -559,9 +526,9 @@ Modify `app.component.html` to add a placeholder for the widget and a section to
 
 {% raw %}
 ```html
-<md-toolbar color="primary">
-  <span>{{title}}</span>
-</md-toolbar>
+<mat-toolbar color="primary">
+  <span>Welcome to {{title}}!</span>
+</mat-toolbar>
 
 <!-- Container to inject the Sign-In Widget -->
 <div id="okta-signin-container"></div>
@@ -571,72 +538,125 @@ Modify `app.component.html` to add a placeholder for the widget and a section to
     Welcome {{user?.name}}!
   </h2>
 
-  <button md-raised-button (click)="oktaService.logout()">Logout</button>
-</div>
-<md-progress-bar mode="indeterminate" *shellRender></md-progress-bar>
-<div [hidden]="!user" *shellNoRender>
+  <button mat-raised-button (click)="logout()">Logout</button>
+
   <app-beer-list></app-beer-list>
 </div>
 ```
 {% endraw %}
 
-You’ll notice the `user` variable in the HTML. To resolve this, you need to change your `AppComponent`, so it 1) shows
-the login or converts the token on initial load and 2) subscribes to changes in the `user$` observable from `OktaAuthService`.
+You’ll notice the `user` variable in the HTML. To resolve this, you need to change your `AppComponent` so it renders the Sign-In Widget. Angular's `ChangeDetectorRef` is used to notify Angular when things have changed and rendering needs to process changed variables.
 
 ```typescript
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { OktaAuthService } from './shared/okta/okta.service';
+import { OktaService } from './shared/okta/okta.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'app works!';
+  title = 'app';
   user;
+  signIn;
 
-  constructor(public oktaService: OktaAuthService, private changeDetectorRef: ChangeDetectorRef) {
+  constructor(private oktaService: OktaService,
+              private changeDetectorRef: ChangeDetectorRef) {
+    this.signIn = oktaService.getWidget();
+  }
+
+  showLogin() {
+    this.signIn.renderEl({el: '#okta-signin-container'}, (response) => {
+      if (response.status === 'SUCCESS') {
+        response.forEach(token => {
+          if (token.idToken) {
+            this.signIn.tokenManager.add('idToken', token);
+            this.user = this.getUser(token);
+          }
+          if (token.accessToken) {
+            this.signIn.tokenManager.add('accessToken', token);
+          }
+        });
+        this.signIn.remove();
+        this.changeDetectorRef.detectChanges();
+      }
+    });
+  }
+
+  getUser(token) {
+    return {
+      name: token.claims.name,
+      email: token.claims.email,
+      username: token.claims.preferred_username
+    };
   }
 
   ngOnInit() {
-    // 1. for initial load and browser refresh
-    if (this.oktaService.isAuthenticated()) {
-      this.user = this.oktaService.idTokenAsUser;
-    } else {
-      this.oktaService.login();
-    }
-
-    // 2. register a listener for authentication and logout
-    this.oktaService.user$.subscribe(user => {
-      this.user = user;
-      if (!user) {
-        this.oktaService.login();
+    this.signIn.session.get((response) => {
+      if (response.status !== 'INACTIVE') {
+        const token = this.oktaService.getIdToken();
+        this.user = this.getUser(token);
+        this.changeDetectorRef.detectChanges();
+      } else {
+        this.showLogin();
       }
-      // Let Angular know that model changed.
-      // See https://github.com/okta/okta-signin-widget/issues/268 for more info.
+    });
+  }
+
+  logout() {
+    this.signIn.signOut(() => {
+      this.user = undefined;
       this.changeDetectorRef.detectChanges();
+      this.showLogin();
     });
   }
 }
 ```
 
-Okta's Sign-In Widget ships with CSS that make it looks good out-of-the-box. To use them in your application, modify 
- `client/src/styles.css` to have the following two imports. 
+In order for the `BeerListComponent` to detect that you've logged in, you need to use add a constructor dependency on `ChangeDetectorRef` and invoke its `detectChanges()` method when you set the `giphyUrl` property on each `beer`.
 
-```css
-@import '~https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/2.1.0/css/okta-sign-in.min.css';
-@import '~https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/2.1.0/css/okta-theme.css';
+```typescript
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { BeerService, GiphyService } from '../shared';
+
+@Component({
+  selector: 'app-beer-list',
+  templateUrl: './beer-list.component.html',
+  styleUrls: ['./beer-list.component.css'],
+  providers: [BeerService, GiphyService]
+})
+export class BeerListComponent implements OnInit {
+  beers: Array<any>;
+
+  constructor(private beerService: BeerService,
+              private giphyService: GiphyService,
+              private changeDetectorRef: ChangeDetectorRef) { }
+
+  ngOnInit() {
+    this.beerService.getAll().subscribe(
+      data => {
+        this.beers = data;
+        for (const beer of this.beers) {
+          this.giphyService.get(beer.name).subscribe(url => {
+            beer.giphyUrl = url;
+            this.changeDetectorRef.detectChanges();
+          });
+        }
+      },
+      error => console.log(error)
+    )
+  }
+}
 ```
 
 ### Verify Authentication Works
 
 Navigate to `http://localhost:4200`, and you should see a login form like the following. 
 
-{% img blog/microservices-spring-secure/angular-login.png alt:"Angular Login" width:"800" %}
+{% img blog/microservices-spring-secure/angular-login.png alt:"Angular Login" width:"800" %}{: .center-image }
 
-**NOTE:** If it logs you in automatically, this is likely because you have cookies for `http://localhost:8080` still in 
-your browser. Clear your cookies, or try an incognito window.
+**NOTE:** If it logs you in automatically, this is likely because you have cookies for `http://localhost:8080` still in your browser. Clear your cookies, or try an incognito window.
 
 If you want to adjust the style of the form, so it isn't right up against the top toolbar, add the following to `styles.css`.
 
@@ -646,7 +666,7 @@ If you want to adjust the style of the form, so it isn't right up against the to
 }
 ```
 
-{% img blog/microservices-spring-secure/angular-login-top-margin.png alt:"Angular Login Styled" width:"800" %}
+{% img blog/microservices-spring-secure/angular-login-top-margin.png alt:"Angular Login Styled" width:"800" %}{: .center-image }
 
 You should be able to log in, see a welcome message, as well as a logout button.
 
@@ -664,3 +684,7 @@ git checkout okta
 ```
 
 Learn more about Okta and its APIs at [developer.okta.com](http://developer.okta.com). If you have questions about this tutorial, please hit me up on Twitter [@mraible](https://twitter.com/mraible) or post a question to [Stack Overflow with an “okta” tag](https://stackoverflow.com/questions/tagged/okta).
+
+**Changelog:**
+
+* Jan 18, 2018: Updated to use latest client from [Build Your First Progressive Web Application with Angular and Spring Boot](/blog/2017/05/09/progressive-web-applications-with-angular-and-spring-boot) and the Okta Sign-In Widget v2.5.0. See the code changes in the [example app on GitHub](https://github.com/oktadeveloper/spring-boot-microservices-example/pull/7). Changes to this article can be viewed [in this pull request](https://github.com/okta/okta.github.io/pull/1649).
