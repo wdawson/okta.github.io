@@ -219,18 +219,16 @@
 <h2 id="create-an-ionic-application">Create an Ionic Application</h2>
 <p>From a terminal window, create a new application using the following command:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>ionic start ionic-auth
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ionic start ionic-auth
+</code></pre></div></div>
 
 <p>You will be prompted to select a starter project. For this tutorial, choose the <strong>tabs</strong> starter project. When prompted to integrate your app with Cordova, answer yes. When prompted to install the free Ionic Pro SDK and connect your app, answer no.</p>
 
 <p>Project creation may take a minute or two to complete, depending on your internet connection speed. Run the commands below to start your Ionic application.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>cd ionic-auth
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ionic-auth
 ionic serve
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>This command will open your default browser on http://localhost:8100. You can use Chrome’s device toolbar to see what the application will look like on an iPhone 6.</p>
 
@@ -272,13 +270,12 @@ ionic serve
 
 <p>Generate a login page for authentication by running the following command:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>ionic g page Login
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ionic g page Login
+</code></pre></div></div>
 
 <p>In the generated <code class="highlighter-rouge">src/pages/login/login.html</code>, add a form with username and password fields.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ion-header&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;ion-header&gt;</span>
   <span class="nt">&lt;ion-navbar&gt;</span>
     <span class="nt">&lt;ion-title&gt;</span>
       Login
@@ -311,35 +308,33 @@ ionic serve
     <span class="nt">&lt;/ion-row&gt;</span>
   <span class="nt">&lt;/form&gt;</span>
 <span class="nt">&lt;/ion-content&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You can leverage a couple of open source libraries to perform the actual authentication. The first one is <a href="https://github.com/manfredsteyer">Manfred Steyer’s</a> <a href="https://github.com/manfredsteyer/angular-oauth2-oidc">angular-oauth2-oidc</a>. This library allows you to interact with identity and access tokens easily. The second is the <a href="/code/javascript/okta_auth_sdk">Okta Auth SDK</a>. <a href="/blog/2017/06/21/what-the-heck-is-oauth">OAuth is not an authentication protocol</a>, but OIDC is. Why is it necessary to add Okta’s authentication library then? Because OIDC authentication works via redirect (when using in a SPA) and I’d rather perform authentication without redirecting to Okta.</p>
 
 <p>Install <code class="highlighter-rouge">angular-oauth2-oidc</code> and the Okta Auth SDK using npm.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>npm install angular-oauth2-oidc @okta/okta-auth-js --save
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install angular-oauth2-oidc @okta/okta-auth-js <span class="nt">--save</span>
+</code></pre></div></div>
 
-<p>In <code class="highlighter-rouge">src/pages/login/login.ts</code>, add the basic structure of the <code class="highlighter-rouge">LoginPage</code> class and a constructor that configures your OIDC settings with the <code class="highlighter-rouge">OAuthService</code> from angular-oauth2-oidc. You will need to replace <code class="highlighter-rouge"><span class="p">{</span><span class="err">clientId</span><span class="p">}</span></code> with the Client ID from your Okta OIDC settings and <code class="highlighter-rouge"><span class="p">{</span><span class="err">yourOktaDomain</span><span class="p">}</span></code> with your account’s correct URI.</p>
+<p>In <code class="highlighter-rouge">src/pages/login/login.ts</code>, add the basic structure of the <code class="highlighter-rouge">LoginPage</code> class and a constructor that configures your OIDC settings with the <code class="highlighter-rouge">OAuthService</code> from angular-oauth2-oidc. You will need to replace <code class="highlighter-rouge">{clientId}</code> with the Client ID from your Okta OIDC settings and <code class="highlighter-rouge">{yourOktaDomain}</code> with your account’s correct URI.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">ViewChild</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">ViewChild</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">IonicPage</span><span class="p">,</span> <span class="nx">NavController</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'ionic-angular'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">JwksValidationHandler</span><span class="p">,</span> <span class="nx">OAuthService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'angular-oauth2-oidc'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">IonicPage</span><span class="p">()</span>
-<span class="err">@</span><span class="nx">Component</span><span class="p">({</span>
+<span class="p">@</span><span class="nd">IonicPage</span><span class="p">()</span>
+<span class="p">@</span><span class="nd">Component</span><span class="p">({</span>
   <span class="na">selector</span><span class="p">:</span> <span class="s1">'page-login'</span><span class="p">,</span>
   <span class="na">templateUrl</span><span class="p">:</span> <span class="s1">'login.html'</span>
 <span class="p">})</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">LoginPage</span> <span class="p">{</span>
-  <span class="err">@</span><span class="nx">ViewChild</span><span class="p">(</span><span class="s1">'email'</span><span class="p">)</span> <span class="nx">email</span><span class="err">:</span> <span class="kr">any</span><span class="p">;</span>
-  <span class="k">private</span> <span class="nx">username</span><span class="err">:</span> <span class="kr">string</span><span class="p">;</span>
-  <span class="k">private</span> <span class="nx">password</span><span class="err">:</span> <span class="kr">string</span><span class="p">;</span>
-  <span class="k">private</span> <span class="nx">error</span><span class="err">:</span> <span class="kr">string</span><span class="p">;</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">LoginPage</span> <span class="p">{</span>
+  <span class="p">@</span><span class="nd">ViewChild</span><span class="p">(</span><span class="s1">'email'</span><span class="p">)</span> <span class="nx">email</span><span class="p">:</span> <span class="nx">any</span><span class="p">;</span>
+  <span class="kr">private</span> <span class="nx">username</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="kr">private</span> <span class="nx">password</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="kr">private</span> <span class="nx">error</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="k">private</span> <span class="nx">navCtrl</span><span class="err">:</span> <span class="nx">NavController</span><span class="p">,</span> <span class="k">private</span> <span class="nx">oauthService</span><span class="err">:</span> <span class="nx">OAuthService</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">navCtrl</span><span class="p">:</span> <span class="nx">NavController</span><span class="p">,</span> <span class="kr">private</span> <span class="nx">oauthService</span><span class="p">:</span> <span class="nx">OAuthService</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">oauthService</span><span class="p">.</span><span class="nx">redirectUri</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">origin</span><span class="p">;</span>
     <span class="nx">oauthService</span><span class="p">.</span><span class="nx">clientId</span> <span class="o">=</span> <span class="s1">'{clientId}'</span><span class="p">;</span>
     <span class="nx">oauthService</span><span class="p">.</span><span class="nx">scope</span> <span class="o">=</span> <span class="s1">'openid profile email'</span><span class="p">;</span>
@@ -358,12 +353,11 @@ ionic serve
     <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Modify <code class="highlighter-rouge">src/app/app.component.ts</code> to check to see if the user is logged in. If they’re not, set the <code class="highlighter-rouge">LoginPage</code> as the rootPage.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">Platform</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'ionic-angular'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">StatusBar</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@ionic-native/status-bar'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">SplashScreen</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@ionic-native/splash-screen'</span><span class="p">;</span>
@@ -372,14 +366,14 @@ ionic serve
 <span class="k">import</span> <span class="p">{</span> <span class="nx">OAuthService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'angular-oauth2-oidc'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">LoginPage</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../pages/login/login'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">Component</span><span class="p">({</span>
+<span class="p">@</span><span class="nd">Component</span><span class="p">({</span>
   <span class="na">templateUrl</span><span class="p">:</span> <span class="s1">'app.html'</span>
 <span class="p">})</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">MyApp</span> <span class="p">{</span>
-  <span class="nl">rootPage</span><span class="p">:</span> <span class="kr">any</span> <span class="o">=</span> <span class="nx">TabsPage</span><span class="p">;</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">MyApp</span> <span class="p">{</span>
+  <span class="nl">rootPage</span><span class="p">:</span> <span class="nx">any</span> <span class="o">=</span> <span class="nx">TabsPage</span><span class="p">;</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="nx">platform</span><span class="err">:</span> <span class="nx">Platform</span><span class="p">,</span> <span class="nx">statusBar</span><span class="err">:</span> <span class="nx">StatusBar</span><span class="p">,</span> <span class="nx">splashScreen</span><span class="err">:</span> <span class="nx">SplashScreen</span><span class="p">,</span>
-              <span class="nx">oauthService</span><span class="err">:</span> <span class="nx">OAuthService</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="nx">platform</span><span class="p">:</span> <span class="nx">Platform</span><span class="p">,</span> <span class="nx">statusBar</span><span class="p">:</span> <span class="nx">StatusBar</span><span class="p">,</span> <span class="nx">splashScreen</span><span class="p">:</span> <span class="nx">SplashScreen</span><span class="p">,</span>
+              <span class="nx">oauthService</span><span class="p">:</span> <span class="nx">OAuthService</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">hasValidIdToken</span><span class="p">())</span> <span class="p">{</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">rootPage</span> <span class="o">=</span> <span class="nx">TabsPage</span><span class="p">;</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
@@ -392,15 +386,14 @@ ionic serve
     <span class="p">});</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Update <code class="highlighter-rouge">src/app/app.module.ts</code> to add <code class="highlighter-rouge">OAuthModule</code>, <code class="highlighter-rouge">HttpClientModule</code>, and <code class="highlighter-rouge">LoginPageModule</code> as imports.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">LoginPageModule</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../pages/login/login.module'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">LoginPageModule</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../pages/login/login.module'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">OAuthModule</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'angular-oauth2-oidc'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">NgModule</span><span class="p">({</span>
+<span class="p">@</span><span class="nd">NgModule</span><span class="p">({</span>
   <span class="p">...</span>
   <span class="na">imports</span><span class="p">:</span> <span class="p">[</span>
     <span class="nx">BrowserModule</span><span class="p">,</span>
@@ -410,20 +403,18 @@ ionic serve
   <span class="p">],</span>
   <span class="p">...</span>
 <span class="p">})</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Run <code class="highlighter-rouge">ionic serve</code> to make sure the <code class="highlighter-rouge">LoginPage</code> is displayed when the app first loads. You’ll see the following error when the app tries to load:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>No provider for HttpClient!
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>No provider for HttpClient!
+</code></pre></div></div>
 
 <p>This error happens because <code class="highlighter-rouge">OAuthService</code> has a dependency on Angular’s <code class="highlighter-rouge">Http</code>, but it hasn’t been imported into your project. Add <code class="highlighter-rouge">HttpModule</code> as an import in <code class="highlighter-rouge">src/app/app.module.ts</code>.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">HttpClientModule</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/common/http'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">HttpClientModule</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/common/http'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">NgModule</span><span class="p">({</span>
+<span class="p">@</span><span class="nd">NgModule</span><span class="p">({</span>
   <span class="p">...</span>
   <span class="na">imports</span><span class="p">:</span> <span class="p">[</span>
     <span class="p">...</span>
@@ -432,8 +423,7 @@ ionic serve
   <span class="p">],</span>
   <span class="p">...</span>
 <span class="p">})</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Now the login screen should load. You can use Chrome’s Device Toolbar to see what it’ll look like on an iPhone 6.</p>
 
@@ -441,10 +431,10 @@ ionic serve
 
 <p>Add a <code class="highlighter-rouge">login()</code> method in <code class="highlighter-rouge">src/app/pages/login/login.ts</code> that uses the Okta Auth SDK to 1) login and 2) exchange the session token for an identity and access token. An <a href="https://openid.net/specs/openid-connect-core-1_0.html#IDToken">ID token</a> is similar to an identity card, in standard JWT format, signed by the OpenID Provider. Access tokens are part of the OAuth specification. An access token can be a JWT. They are used to access protected resources, often by setting them as an <code class="highlighter-rouge">Authentication</code> header when making a request.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">OktaAuth</span> <span class="k">from</span> <span class="s1">'@okta/okta-auth-js'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">OktaAuth</span> <span class="k">from</span> <span class="s1">'@okta/okta-auth-js'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">TabsPage</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../tabs/tabs'</span><span class="p">;</span>
 <span class="p">...</span>
-<span class="nx">login</span><span class="p">()</span><span class="err">:</span> <span class="k">void</span> <span class="p">{</span>
+<span class="nx">login</span><span class="p">():</span> <span class="k">void</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">createAndSaveNonce</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="nx">nonce</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="nx">authClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OktaAuth</span><span class="p">({</span>
       <span class="na">clientId</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">clientId</span><span class="p">,</span>
@@ -466,7 +456,7 @@ ionic serve
           <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">tokens</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
             <span class="kd">const</span> <span class="nx">idToken</span> <span class="o">=</span> <span class="nx">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">idToken</span><span class="p">;</span>
             <span class="kd">const</span> <span class="nx">accessToken</span> <span class="o">=</span> <span class="nx">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">accessToken</span><span class="p">;</span>
-            <span class="kd">const</span> <span class="nx">keyValuePair</span> <span class="o">=</span> <span class="err">`#</span><span class="nx">id_token</span><span class="o">=</span><span class="nx">$</span><span class="p">{</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">idToken</span><span class="p">)}</span><span class="o">&amp;</span><span class="nx">access_token</span><span class="o">=</span><span class="nx">$</span><span class="p">{</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">accessToken</span><span class="p">)}</span><span class="err">`</span><span class="p">;</span>
+            <span class="kd">const</span> <span class="nx">keyValuePair</span> <span class="o">=</span> <span class="s2">`#id_token=</span><span class="p">${</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">idToken</span><span class="p">)}</span><span class="s2">&amp;access_token=</span><span class="p">${</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">accessToken</span><span class="p">)}</span><span class="s2">`</span><span class="p">;</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">tryLogin</span><span class="p">({</span>
               <span class="na">customHashFragment</span><span class="p">:</span> <span class="nx">keyValuePair</span><span class="p">,</span>
               <span class="na">disableOAuth2StateCheck</span><span class="p">:</span> <span class="kc">true</span>
@@ -482,49 +472,46 @@ ionic serve
     <span class="p">});</span>
   <span class="p">});</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You want an identity token so you can have more information about the user. You want an access token so you can use it to access protected APIs that require a Bearer token. For example, in <a href="/blog/2017/06/13/add-authentication-angular-pwa">Adding Authentication to Your Angular PWA</a>, there’s a <code class="highlighter-rouge">BeerService</code> that sends an access token when it makes an API request.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Injectable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Injectable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">Http</span><span class="p">,</span> <span class="nx">Response</span><span class="p">,</span> <span class="nx">Headers</span><span class="p">,</span> <span class="nx">RequestOptions</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/http'</span><span class="p">;</span>
 <span class="k">import</span> <span class="s1">'rxjs/add/operator/map'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'rxjs'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">OAuthService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'angular-oauth2-oidc'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">Injectable</span><span class="p">()</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">BeerService</span> <span class="p">{</span>
+<span class="p">@</span><span class="nd">Injectable</span><span class="p">()</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">BeerService</span> <span class="p">{</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="k">private</span> <span class="nx">http</span><span class="err">:</span> <span class="nx">Http</span><span class="p">,</span> <span class="k">private</span> <span class="nx">oauthService</span><span class="err">:</span> <span class="nx">OAuthService</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">http</span><span class="p">:</span> <span class="nx">Http</span><span class="p">,</span> <span class="kr">private</span> <span class="nx">oauthService</span><span class="p">:</span> <span class="nx">OAuthService</span><span class="p">)</span> <span class="p">{</span>
   <span class="p">}</span>
 
-  <span class="nx">getAll</span><span class="p">()</span><span class="err">:</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="kr">any</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="nx">getAll</span><span class="p">():</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="na">headers</span><span class="p">:</span> <span class="nx">Headers</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Headers</span><span class="p">();</span>
     <span class="nx">headers</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">'Authorization'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">authorizationHeader</span><span class="p">());</span>
 
     <span class="kd">let</span> <span class="nx">options</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RequestOptions</span><span class="p">({</span> <span class="na">headers</span><span class="p">:</span> <span class="nx">headers</span> <span class="p">});</span>
 
-    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'http://localhost:8080/good-beers'</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'http://localhost:8080/good-beers'</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span>
       <span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="na">response</span><span class="p">:</span> <span class="nx">Response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You can (optionally), pretty up the login screen by adding a logo above the form. Download <a href="https://www.okta.com/sites/all/themes/Okta/images/blog/Logos/Okta_Logo_BrightBlue_Medium.png">this image</a>, copy it to <code class="highlighter-rouge">src/assets/imgs/okta.png</code>, and add the following above the <code class="highlighter-rouge">&lt;form&gt;</code> tag in <code class="highlighter-rouge">login.html</code>. You might want to edit the image so it’s only 300 pixels wide. This reduces its size to 12 KB instead of 110 KB.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ion-row&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;ion-row&gt;</span>
   <span class="nt">&lt;ion-col</span> <span class="na">text-center</span><span class="nt">&gt;</span>
     <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"assets/imgs/okta.png"</span> <span class="na">width=</span><span class="s">"300"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;/ion-col&gt;</span>
 <span class="nt">&lt;/ion-row&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>When you sign in, there’s not much proof on the UI. Add a “Logout” button in the top right corner of the home screen. Replace the <code class="highlighter-rouge">&lt;ion-header&gt;</code> in <code class="highlighter-rouge">src/pages/home/home.html</code> with the HTML below.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ion-header&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;ion-header&gt;</span>
   <span class="nt">&lt;ion-navbar&gt;</span>
     <span class="nt">&lt;ion-title&gt;</span>Home<span class="nt">&lt;/ion-title&gt;</span>
     <span class="nt">&lt;ion-buttons</span> <span class="na">end</span><span class="nt">&gt;</span>
@@ -534,23 +521,22 @@ ionic serve
     <span class="nt">&lt;/ion-buttons&gt;</span>
   <span class="nt">&lt;/ion-navbar&gt;</span>
 <span class="nt">&lt;/ion-header&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>In <code class="highlighter-rouge">src/pages/home/home.ts</code>, add a <code class="highlighter-rouge">logout()</code> method, as well as methods to get a name and claims from the identity token. Claims in an ID token are bits of information about the issuer, the user, intended audience, expiration date, and issue date. You can see the <a href="https://openid.net/specs/openid-connect-core-1_0.html#IDToken">standard claims in the OIDC spec</a>.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">App</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'ionic-angular'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">LoginPage</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../login/login'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">OAuthService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'angular-oauth2-oidc'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">Component</span><span class="p">({</span>
+<span class="p">@</span><span class="nd">Component</span><span class="p">({</span>
   <span class="na">selector</span><span class="p">:</span> <span class="s1">'page-home'</span><span class="p">,</span>
   <span class="na">templateUrl</span><span class="p">:</span> <span class="s1">'home.html'</span>
 <span class="p">})</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">HomePage</span> <span class="p">{</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">HomePage</span> <span class="p">{</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="k">public</span> <span class="nx">app</span><span class="err">:</span> <span class="nx">App</span><span class="p">,</span> <span class="k">public</span> <span class="nx">oauthService</span><span class="err">:</span> <span class="nx">OAuthService</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">public</span> <span class="nx">app</span><span class="p">:</span> <span class="nx">App</span><span class="p">,</span> <span class="kr">public</span> <span class="nx">oauthService</span><span class="p">:</span> <span class="nx">OAuthService</span><span class="p">)</span> <span class="p">{</span>
   <span class="p">}</span>
   
   <span class="nx">logout</span><span class="p">()</span> <span class="p">{</span>
@@ -558,24 +544,23 @@ ionic serve
     <span class="k">this</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">getRootNavs</span><span class="p">()[</span><span class="mi">0</span><span class="p">].</span><span class="nx">setRoot</span><span class="p">(</span><span class="nx">LoginPage</span><span class="p">);</span>
   <span class="p">}</span>
 
-  <span class="nx">get</span> <span class="nx">givenName</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">claims</span><span class="err">:</span> <span class="kr">any</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">getIdentityClaims</span><span class="p">();</span>
+  <span class="kd">get</span> <span class="nx">givenName</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">claims</span><span class="p">:</span> <span class="nx">any</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">getIdentityClaims</span><span class="p">();</span>
     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">claims</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="nx">claims</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
   <span class="p">}</span>
 
-  <span class="nx">get</span> <span class="nx">claims</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">get</span> <span class="nx">claims</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">getIdentityClaims</span><span class="p">();</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>To display this information on the home tab, add the following HTML just after the second paragraph in <code class="highlighter-rouge">src/app/home/home.html</code>.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="err">*</span><span class="na">ngIf=</span><span class="s">"givenName"</span><span class="nt">&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="err">*</span><span class="na">ngIf=</span><span class="s">"givenName"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;hr&gt;</span>
   <span class="nt">&lt;p&gt;</span>You are logged in as: <span class="nt">&lt;b&gt;</span>{{ givenName }}<span class="nt">&lt;/b&gt;&lt;/p&gt;</span>
   <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"claims"</span><span class="nt">&gt;</span>
@@ -583,12 +568,11 @@ ionic serve
     <span class="nt">&lt;pre&gt;</span>{{claims | json}}<span class="nt">&lt;/pre&gt;</span>
   <span class="nt">&lt;/div&gt;</span>
 <span class="nt">&lt;/div&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Update <code class="highlighter-rouge">src/app/home/home.scss</code> to add some CSS to make the raw JSON look a bit better.</p>
 
-<div class="language-scss highlighter-rouge"><pre class="highlight"><code><span class="nt">page-home</span> <span class="p">{</span>
+<div class="language-scss highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">page-home</span> <span class="p">{</span>
   <span class="nc">.claims</span> <span class="p">{</span>
     <span class="nt">pre</span> <span class="p">{</span>
       <span class="nl">color</span><span class="p">:</span> <span class="no">green</span><span class="p">;</span>
@@ -600,8 +584,7 @@ ionic serve
     <span class="nl">padding</span><span class="p">:</span> <span class="m">10px</span><span class="p">;</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Now you should see your name and claims information displayed when you log in.</p>
 
@@ -621,9 +604,8 @@ ionic serve
 
 <p>The <code class="highlighter-rouge">LoginPage</code> tries to auto-focus onto the <code class="highlighter-rouge">email</code> field when it loads. To auto-activate the keyboard you’ll need to tell Cordova it’s OK to display the keyboard without user interaction. You can do this by adding the following to <code class="highlighter-rouge">config.xml</code> in the root directory.</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;preference</span> <span class="na">name=</span><span class="s">"KeyboardDisplayRequiresUserAction"</span> <span class="na">value=</span><span class="s">"false"</span> <span class="nt">/&gt;</span>
-</code></pre>
-</div>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;preference</span> <span class="na">name=</span><span class="s">"KeyboardDisplayRequiresUserAction"</span> <span class="na">value=</span><span class="s">"false"</span> <span class="nt">/&gt;</span>
+</code></pre></div></div>
 <h3 id="ios">iOS</h3>
 
 <p>To emulate or deploy to an iOS device, you’ll need a Mac and a fresh installation of <a href="https://developer.apple.com/xcode/">Xcode</a>. If you’d like to build iOS apps on Windows, Ionic offers an <a href="http://ionic.io/cloud#packaging">Ionic Package</a> service.</p>
@@ -632,19 +614,17 @@ ionic serve
 
 <p>You may encounter an error like the following:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>** BUILD SUCCEEDED **
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>** BUILD SUCCEEDED **
 
 Error: Cannot read property 'replace' of undefined
 
 [ERROR] An error occurred while running cordova emulate ios (exit code 1).
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>This is a <a href="">known issue</a> and can be solved by running the following commands:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="nb">cd </span>platforms/ios/cordova <span class="o">&amp;&amp;</span> npm install ios-sim
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>platforms/ios/cordova <span class="o">&amp;&amp;</span> npm install ios-sim
+</code></pre></div></div>
 
 <p><strong>TIP:</strong> The biggest problem I found when running the app in Simulator was that it was difficult to get the keyboard to pop up. To workaround this, I used <strong>Hardware</strong> &gt; <strong>Keyboard</strong> &gt; <strong>Toggle Software Keyboard</strong> when I needed to type text in a field.</p>
 
@@ -660,13 +640,12 @@ Error: Cannot read property 'replace' of undefined
 
 <p>Install the <a href="https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-inappbrowser/">Cordova In-App Browser plugin</a> using the following command:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>ionic cordova plugin add cordova-plugin-inappbrowser
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ionic cordova plugin add cordova-plugin-inappbrowser
+</code></pre></div></div>
 
 <p>Open <code class="highlighter-rouge">src/app/pages/login/login.html</code> and wrap the <code class="highlighter-rouge">&lt;form&gt;</code> with a <code class="highlighter-rouge">&lt;div&gt;</code> that only shows this login form when running in a browser. Add a new <code class="highlighter-rouge">&lt;div&gt;</code> that is displayed when running in an emulator or on a device.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ion-content</span> <span class="na">padding</span><span class="nt">&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;ion-content</span> <span class="na">padding</span><span class="nt">&gt;</span>
   <span class="nt">&lt;ion-row&gt;</span>
    <span class="c">&lt;!-- optional logo --&gt;</span>
   <span class="nt">&lt;/ion-row&gt;</span>
@@ -679,22 +658,20 @@ Error: Cannot read property 'replace' of undefined
     <span class="nt">&lt;button</span> <span class="na">ion-button</span> <span class="na">full</span> <span class="err">(</span><span class="na">click</span><span class="err">)="</span><span class="na">redirectLogin</span><span class="err">()"</span><span class="nt">&gt;</span>Login with Okta<span class="nt">&lt;/button&gt;</span>
   <span class="nt">&lt;/div&gt;</span>
 <span class="nt">&lt;/ion-content&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Open <code class="highlighter-rouge">src/pages/login/login.ts</code> and add a reference to <code class="highlighter-rouge">window</code> just below the imports.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="kr">declare</span> <span class="kd">const</span> <span class="nb">window</span><span class="err">:</span> <span class="kr">any</span><span class="p">;</span>
-</code></pre>
-</div>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">declare</span> <span class="kd">const</span> <span class="nb">window</span><span class="p">:</span> <span class="nx">any</span><span class="p">;</span>
+</code></pre></div></div>
 
 <p>Then add the methods below to facilitate logging in with OAuth.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="nx">redirectLogin</span><span class="p">()</span> <span class="p">{</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">redirectLogin</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">oktaLogin</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="nx">success</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="nx">idToken</span> <span class="o">=</span> <span class="nx">success</span><span class="p">.</span><span class="nx">id_token</span><span class="p">;</span>
     <span class="kd">const</span> <span class="nx">accessToken</span> <span class="o">=</span> <span class="nx">success</span><span class="p">.</span><span class="nx">access_token</span><span class="p">;</span>
-    <span class="kd">const</span> <span class="nx">keyValuePair</span> <span class="o">=</span> <span class="err">`#</span><span class="nx">id_token</span><span class="o">=</span><span class="nx">$</span><span class="p">{</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">idToken</span><span class="p">)}</span><span class="o">&amp;</span><span class="nx">access_token</span><span class="o">=</span><span class="nx">$</span><span class="p">{</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">accessToken</span><span class="p">)}</span><span class="err">`</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">keyValuePair</span> <span class="o">=</span> <span class="s2">`#id_token=</span><span class="p">${</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">idToken</span><span class="p">)}</span><span class="s2">&amp;access_token=</span><span class="p">${</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">accessToken</span><span class="p">)}</span><span class="s2">`</span><span class="p">;</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">tryLogin</span><span class="p">({</span>
       <span class="na">customHashFragment</span><span class="p">:</span> <span class="nx">keyValuePair</span><span class="p">,</span>
       <span class="na">disableOAuth2StateCheck</span><span class="p">:</span> <span class="kc">true</span>
@@ -705,11 +682,11 @@ Error: Cannot read property 'replace' of undefined
   <span class="p">});</span>
 <span class="p">}</span>
 
-<span class="nx">oktaLogin</span><span class="p">():</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="kr">any</span><span class="o">&gt;</span> <span class="p">{</span>
+<span class="nx">oktaLogin</span><span class="p">():</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span> <span class="p">{</span>
   <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">createAndSaveNonce</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="nx">nonce</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="kd">let</span> <span class="na">state</span><span class="p">:</span> <span class="kr">string</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000000000</span><span class="p">).</span><span class="nx">toString</span><span class="p">();</span>
+    <span class="kd">let</span> <span class="na">state</span><span class="p">:</span> <span class="nx">string</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000000000</span><span class="p">).</span><span class="nx">toString</span><span class="p">();</span>
     <span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">crypto</span><span class="p">)</span> <span class="p">{</span>
-      <span class="kd">const</span> <span class="nx">array</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Uint32Array</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+      <span class="kd">const</span> <span class="nx">array</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Uint32Array</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
       <span class="nb">window</span><span class="p">.</span><span class="nx">crypto</span><span class="p">.</span><span class="nx">getRandomValues</span><span class="p">(</span><span class="nx">array</span><span class="p">);</span>
       <span class="nx">state</span> <span class="o">=</span> <span class="nx">array</span><span class="p">.</span><span class="nx">join</span><span class="p">().</span><span class="nx">toString</span><span class="p">();</span>
     <span class="p">}</span>
@@ -745,7 +722,7 @@ Error: Cannot read property 'replace' of undefined
   <span class="p">});</span>
 <span class="p">}</span>
 
-<span class="nx">buildOAuthUrl</span><span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">nonce</span><span class="p">):</span> <span class="kr">string</span> <span class="p">{</span>
+<span class="nx">buildOAuthUrl</span><span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">nonce</span><span class="p">):</span> <span class="nx">string</span> <span class="p">{</span>
   <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">issuer</span> <span class="o">+</span> <span class="s1">'/v1/authorize?'</span> <span class="o">+</span>
       <span class="s1">'client_id='</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">clientId</span> <span class="o">+</span> <span class="s1">'&amp;'</span> <span class="o">+</span>
       <span class="s1">'redirect_uri='</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">redirectUri</span> <span class="o">+</span> <span class="s1">'&amp;'</span> <span class="o">+</span>
@@ -753,23 +730,20 @@ Error: Cannot read property 'replace' of undefined
       <span class="s1">'scope='</span> <span class="o">+</span> <span class="nb">encodeURI</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">oauthService</span><span class="p">.</span><span class="nx">scope</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'&amp;'</span> <span class="o">+</span>
       <span class="s1">'state='</span> <span class="o">+</span> <span class="nx">state</span> <span class="o">+</span> <span class="s1">'&amp;nonce='</span> <span class="o">+</span> <span class="nx">nonce</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Change the <code class="highlighter-rouge">redirectUri</code> that’s set in the constructor to hard-code <code class="highlighter-rouge">http://localhost:8100</code>. If you skip this step <code class="highlighter-rouge">window.location.origin</code> will result in a <code class="highlighter-rouge">file://</code> origin being sent when the app is running on a device. By making it a known URL, we can look for it with the in-app browser on the “loadstart” event.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="kd">constructor</span><span class="p">(</span><span class="k">private</span> <span class="nx">navCtrl</span><span class="err">:</span> <span class="nx">NavController</span><span class="p">,</span> <span class="k">private</span> <span class="nx">oauthService</span><span class="err">:</span> <span class="nx">OAuthService</span><span class="p">)</span> <span class="p">{</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">navCtrl</span><span class="p">:</span> <span class="nx">NavController</span><span class="p">,</span> <span class="kr">private</span> <span class="nx">oauthService</span><span class="p">:</span> <span class="nx">OAuthService</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">oauthService</span><span class="p">.</span><span class="nx">redirectUri</span> <span class="o">=</span> <span class="s1">'http://localhost:8100'</span><span class="p">;</span>
   <span class="p">...</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You’ll have to re-deploy your app to your phone after making these changes.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>ionic cordova emulate ios
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ionic cordova emulate ios
+</code></pre></div></div>
 
 <p>Now you should be able to log in by clicking on the “Login with Okta” button and entering valid credentials.</p>
 
@@ -787,22 +761,19 @@ Error: Cannot read property 'replace' of undefined
 
 <p>To deploy the app to an iPhone, start by plugging one into your computer. Then run the following commands to build the app and run it on your device.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>ionic cordova run ios
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ionic cordova run ios
+</code></pre></div></div>
 
 <p>This command will likely fail if you haven’t previously set up code signing for your application.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Signing for "MyApp" requires a development team. Select a development team in the project editor.
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Signing for "MyApp" requires a development team. Select a development team in the project editor.
 Code signing is required for product type 'Application' in SDK 'iOS 10.3'
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Open your project in Xcode using the command below.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>open platforms/ios/MyApp.xcodeproj
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>open platforms/ios/MyApp.xcodeproj
+</code></pre></div></div>
 
 <p><a href="http://ionicframework.com/docs/intro/deploying/#ios-devices">Ionic’s deployment documentation</a> provides instructions to solve this issue.</p>
 
@@ -828,33 +799,30 @@ Code signing is required for product type 'Application' in SDK 'iOS 10.3'
 
 <p>To deploy to the Android emulator, run <code class="highlighter-rouge">ionic cordova emulate android</code>. This command will install Android support and print out instructions about how to create an emulator image.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Error: No emulator images (avds) found.
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Error: No emulator images (avds) found.
 1. Download desired System Image by running:
 /Users/mraible/Library/Android/sdk/tools/android sdk
 2. Create an AVD by running: /Users/mraible/Library/Android/sdk/tools/android avd
 HINT: For a faster emulator, use an Intel System Image and install the HAXM device driver
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Run the first suggestion and download your desired system image. Then run the second command and created an AVD (Android Virtual Device) with the following settings:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>AVD Name: TestPhone
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AVD Name: TestPhone
 Device: Nexus 5
 Target: Android 7.1.1
 CPU/ABI: Google APIs Intel Axom (x86_64)
 Skin: Skin with dynamic hardware controls
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><strong>WARNING:</strong> These instructions won’t work with version 2.3.2 of Android Studio on Mac. When you try to run the first command, it’ll say the following:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>*************************************************************************
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>*************************************************************************
 The "android" command is deprecated.
 For manual SDK, AVD, and project management, please use Android Studio.
 For command-line tools, use tools/bin/sdkmanager and tools/bin/avdmanager
 *************************************************************************
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>To solve this problem, open Android Studio, select “Open an existing Android Studio project” and select the <code class="highlighter-rouge">ionic-auth/platforms/android</code> directory. If prompted to upgrade, choose “OK”, then proceed to create a new AVD as <a href="https://developer.android.com/studio/run/managing-avds.html#createavd">described in Android Studio’s documentation</a>.</p>
 
@@ -872,9 +840,8 @@ For command-line tools, use tools/bin/sdkmanager and tools/bin/avdmanager
 
 <p><strong>NOTE</strong>: If you get an application error that says “The connection to the server was unsuccessful. (<code class="highlighter-rouge">file:///android/www/index.html</code>)”, add the following line to <code class="highlighter-rouge">config.xml</code>. This line sets the default timeout to 60 seconds (default is 20). Thanks to the <a href="http://stackoverflow.com/a/31377846">Stack Overflow community</a> for this solution.</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;preference</span> <span class="na">name=</span><span class="s">"loadUrlTimeoutValue"</span> <span class="na">value=</span><span class="s">"60000"</span><span class="nt">/&gt;</span>
-</code></pre>
-</div>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;preference</span> <span class="na">name=</span><span class="s">"loadUrlTimeoutValue"</span> <span class="na">value=</span><span class="s">"60000"</span><span class="nt">/&gt;</span>
+</code></pre></div></div>
 
 <h2 id="pwas-with-ionic">PWAs with Ionic</h2>
 <p>Ionic ships with support for creating progressive web apps (PWAs). This means you can deploy your Ionic app as a web app (rather than a mobile app) and make it run offline in <a href="http://caniuse.com/#feat=serviceworkers">browsers that support service workers</a>.</p>

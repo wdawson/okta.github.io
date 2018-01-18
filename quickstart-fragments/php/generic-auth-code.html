@@ -9,7 +9,7 @@
 <h2 id="redirecting-to-authorization-endpoint">Redirecting to Authorization Endpoint</h2>
 <p>First you need to generate a URL to the authorization endpoint for the Authorization Server and redirect the user.</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
 
 <span class="nv">$query</span> <span class="o">=</span> <span class="nb">http_build_query</span><span class="p">([</span>
     <span class="s1">'client_id'</span> <span class="o">=&gt;</span> <span class="s1">''</span><span class="p">,</span>
@@ -22,8 +22,7 @@
 <span class="p">]);</span>
 
 <span class="nb">header</span><span class="p">(</span><span class="s1">'Location: '</span> <span class="o">.</span> <span class="s1">'<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/authorize?'</span><span class="o">.</span><span class="nv">$query</span><span class="p">);</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <blockquote>
   <p>The <code class="highlighter-rouge">nonce</code> should be a generated string such as UUID, and the <code class="highlighter-rouge">state</code> can be any string representing state of the
 application.</p>
@@ -34,7 +33,7 @@ application.</p>
 
 <p>This code should be placed in the file specified for your <code class="highlighter-rouge">redirect_uri</code> from the previous step.</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
 
 <span class="k">if</span><span class="p">(</span><span class="nb">array_key_exists</span><span class="p">(</span><span class="s1">'state'</span><span class="p">,</span> <span class="nv">$_REQUEST</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nv">$_REQUEST</span><span class="p">[</span><span class="s1">'state'</span><span class="p">]</span> <span class="o">!==</span> <span class="nv">$state</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">throw</span> <span class="k">new</span> <span class="nx">\Exception</span><span class="p">(</span><span class="s1">'State does not match.'</span><span class="p">);</span>
@@ -73,25 +72,22 @@ application.</p>
     <span class="nb">curl_close</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
     <span class="k">return</span> <span class="nb">json_decode</span><span class="p">(</span><span class="nv">$output</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>The result of this will provide you with an access token for that user.</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="nv">$jwt</span> <span class="o">=</span> <span class="nv">$exchange</span><span class="o">-&gt;</span><span class="na">access_token</span><span class="p">;</span>
-</code></pre>
-</div>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$jwt</span> <span class="o">=</span> <span class="nv">$exchange</span><span class="o">-&gt;</span><span class="na">access_token</span><span class="p">;</span>
+</code></pre></div></div>
 
 <p>This access token is a JWT and should be verified according to the process described in <a href="/authentication-guide/tokens/">Working With OAuth 2.0 Tokens</a>.  This verification can be done easily with the <a href="https://github.com/okta/okta-jwt-verifier-php">Okta JWT Verifier for PHP</a>.</p>
 
 <h3 id="handling-errors">Handling Errors</h3>
 <p>If an error is present in the login, an <code class="highlighter-rouge">error</code> query parameter will be present.</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="k">if</span><span class="p">(</span><span class="nb">array_key_exists</span><span class="p">(</span><span class="s1">'error'</span><span class="p">,</span> <span class="nv">$_REQUEST</span><span class="p">))</span> <span class="p">{</span>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span><span class="p">(</span><span class="nb">array_key_exists</span><span class="p">(</span><span class="s1">'error'</span><span class="p">,</span> <span class="nv">$_REQUEST</span><span class="p">))</span> <span class="p">{</span>
     <span class="k">throw</span> <span class="k">new</span> <span class="nx">\Exception</span><span class="p">(</span><span class="nv">$_REQUEST</span><span class="p">[</span><span class="s1">'error'</span><span class="p">]);</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 </body>
 </html>

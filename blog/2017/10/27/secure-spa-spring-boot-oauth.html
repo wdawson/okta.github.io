@@ -200,15 +200,14 @@
 
 <p>If you haven’t tried out <a href="https://start.spring.io">start.spring.io</a> go check it out right now… with a couple of clicks it will get you a basic, runnable Spring Boot Application.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>curl https://start.spring.io/starter.tgz <span class="se">\</span>
- -d <span class="nv">artifactId</span><span class="o">=</span>oauth-implicit-example  <span class="se">\</span>
- -d <span class="nv">dependencies</span><span class="o">=</span>security,web <span class="se">\</span>
- -d <span class="nv">language</span><span class="o">=</span>java <span class="se">\</span>
- -d <span class="nb">type</span><span class="o">=</span>maven-project <span class="se">\</span>
- -d <span class="nv">baseDir</span><span class="o">=</span>oauth-implicit-example <span class="se">\</span>
- | tar -xzvf -
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl https://start.spring.io/starter.tgz <span class="se">\</span>
+ <span class="nt">-d</span> <span class="nv">artifactId</span><span class="o">=</span>oauth-implicit-example  <span class="se">\</span>
+ <span class="nt">-d</span> <span class="nv">dependencies</span><span class="o">=</span>security,web <span class="se">\</span>
+ <span class="nt">-d</span> <span class="nv">language</span><span class="o">=</span>java <span class="se">\</span>
+ <span class="nt">-d</span> <span class="nb">type</span><span class="o">=</span>maven-project <span class="se">\</span>
+ <span class="nt">-d</span> <span class="nv">baseDir</span><span class="o">=</span>oauth-implicit-example <span class="se">\</span>
+ | <span class="nb">tar</span> <span class="nt">-xzvf</span> -
+</code></pre></div></div>
 
 <p>If you want to download the project from your browser go to: <a href="https://start.spring.io/#!artifactId=oauth-implicit-example">start.spring.io</a> search for and select the ‘security’ dependencies then click the big green “Generate Project” button.</p>
 
@@ -217,43 +216,40 @@
 <h3 id="write-some-code">Write Some Code!</h3>
 
 <p>Well, almost. First, add the Spring OAuth 2.0 dependency to your <code class="highlighter-rouge">pom.xml</code></p>
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
    <span class="nt">&lt;groupId&gt;</span>org.springframework.security.oauth<span class="nt">&lt;/groupId&gt;</span>
    <span class="nt">&lt;artifactId&gt;</span>spring-security-oauth2<span class="nt">&lt;/artifactId&gt;</span>
    <span class="nt">&lt;version&gt;</span>2.2.0.RELEASE<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Open up <code class="highlighter-rouge">DemoApplication.java</code>, if you are following along (and you are right?) then this should located in <code class="highlighter-rouge">src/main/java/com/example/oauthimplicitexample</code>. It shouldn’t be hard to find, the project only contains two Java classes and one of them is a test.</p>
 
 <p>Annotate the class with <code class="highlighter-rouge">@EnableResourceServer</code>, this will tell Spring Security to add the necessary Filters and logic to handle the OAuth implicit requests.</p>
 
 <p>Next, add a Controller:</p>
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@RestController</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RestController</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MessageOfTheDayController</span> <span class="o">{</span>
    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"/mod"</span><span class="o">)</span>
    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getMessageOfTheDay</span><span class="o">(</span><span class="n">Principal</span> <span class="n">principal</span><span class="o">)</span> <span class="o">{</span>
        <span class="k">return</span> <span class="s">"The message of the day is boring for user: "</span> <span class="o">+</span> <span class="n">principal</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
    <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>That is it! It’s basically hello world with an extra annotation. Start your app back up with <code class="highlighter-rouge">./mvnw spring-boot:run</code>. You should be able to hit <code class="highlighter-rouge">http://localhost:8080/mod</code>:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>curl -v http://localhost:8080/mod
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> http://localhost:8080/mod
 
 HTTP/1.1 401
-Content-Type: application/json;charset<span class="o">=</span>UTF-8
+Content-Type: application/json<span class="p">;</span><span class="nv">charset</span><span class="o">=</span>UTF-8
 WWW-Authenticate: Bearer <span class="nv">realm</span><span class="o">=</span><span class="s2">"oauth2-resource"</span>, <span class="nv">error</span><span class="o">=</span><span class="s2">"unauthorized"</span>, <span class="nv">error_description</span><span class="o">=</span><span class="s2">"Full authentication is required to access this resource"</span>
 
 <span class="o">{</span>
    <span class="s2">"error"</span>: <span class="s2">"unauthorized"</span>,
    <span class="s2">"error_description"</span>: <span class="s2">"Full authentication is required to access this resource"</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>A <code class="highlighter-rouge">401</code>? Yup, secure by default! Plus, we haven’t actually supplied any of the configuration detail for our OAuth IdP. Stop the server with <code class="highlighter-rouge">^C</code> and move to the next section.</p>
 
@@ -278,12 +274,11 @@ WWW-Authenticate: Bearer <span class="nv">realm</span><span class="o">=</span><s
 
 <p>An application resource server only needs to know how to validate an access token. Since the format of the access token is not defined by the OAuth 2.0 or OIDC specs, the tokens are validated remotely.</p>
 
-<div class="language-yml highlighter-rouge"><pre class="highlight"><code><span class="s">security</span><span class="pi">:</span>
- <span class="s">oauth2</span><span class="pi">:</span>
-   <span class="s">resource</span><span class="pi">:</span>
-     <span class="s">userInfoUri</span><span class="pi">:</span> <span class="s">https://dev-123456.oktapreview.com/oauth2/default/v1/userinfo</span>
-</code></pre>
-</div>
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">security</span><span class="pi">:</span>
+ <span class="na">oauth2</span><span class="pi">:</span>
+   <span class="na">resource</span><span class="pi">:</span>
+     <span class="na">userInfoUri</span><span class="pi">:</span> <span class="s">https://dev-123456.oktapreview.com/oauth2/default/v1/userinfo</span>
+</code></pre></div></div>
 
 <p>At this point you could start up your application and start validating access tokens! But of course you would need an access token to validate…</p>
 
@@ -292,7 +287,7 @@ WWW-Authenticate: Bearer <span class="nv">realm</span><span class="o">=</span><s
 <p>To keep things simple you’re going to reuse your existing Spring Boot application to host your SPA. Typically these assets could be hosted somewhere else: a different application, a CDN, etc. It just seems like overkill to host a lonely index.html file in a different application for the purposes of this tutorial.</p>
 
 <p>Create a new file <code class="highlighter-rouge">src/main/resources/static/index.html</code> and populate it with the following:</p>
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;!doctype html&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!doctype html&gt;</span>
 
 <span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
 <span class="nt">&lt;head&gt;</span>
@@ -383,7 +378,7 @@ WWW-Authenticate: Bearer <span class="nv">realm</span><span class="o">=</span><s
    <span class="p">});</span>
 
    <span class="c1">// Check if we already have an access token</span>
-   <span class="kr">const</span> <span class="nx">token</span> <span class="o">=</span> <span class="nx">oktaSignIn</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'my_access_token'</span><span class="p">);</span>
+   <span class="kd">const</span> <span class="nx">token</span> <span class="o">=</span> <span class="nx">oktaSignIn</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'my_access_token'</span><span class="p">);</span>
 
    <span class="c1">// if we do great, just go with it!</span>
    <span class="k">if</span> <span class="p">(</span><span class="nx">token</span><span class="p">)</span> <span class="p">{</span>
@@ -420,8 +415,7 @@ WWW-Authenticate: Bearer <span class="nv">realm</span><span class="o">=</span><s
 <span class="nt">&lt;/script&gt;</span>
 <span class="nt">&lt;/body&gt;</span>
 <span class="nt">&lt;/html&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>This page does a few things:</p>
 <ul>
@@ -434,7 +428,7 @@ WWW-Authenticate: Bearer <span class="nv">realm</span><span class="o">=</span><s
 
 <p>In the same package as your Spring Boot Application class create a new <code class="highlighter-rouge">SignInWidgetConfigController</code> class:</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@RestController</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RestController</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">SignInWidgetConfigController</span> <span class="o">{</span>
 
    <span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">issuerUrl</span><span class="o">;</span>
@@ -466,24 +460,22 @@ WWW-Authenticate: Bearer <span class="nv">realm</span><span class="o">=</span><s
        <span class="o">}</span>
    <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Add the corresponding configuration to your <code class="highlighter-rouge">application.yml</code> file:</p>
 
-<div class="language-yml highlighter-rouge"><pre class="highlight"><code><span class="s">okta</span><span class="pi">:</span>
- <span class="s">oauth2</span><span class="pi">:</span>
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">okta</span><span class="pi">:</span>
+ <span class="na">oauth2</span><span class="pi">:</span>
    <span class="c1"># Client ID from above step</span>
-   <span class="s">clientId</span><span class="pi">:</span> <span class="s">00ICU81200ICU812</span>
-   <span class="s">issuer</span><span class="pi">:</span> <span class="s">https://dev-123456.oktapreview.com/oauth2/default</span>
-</code></pre>
-</div>
+   <span class="na">clientId</span><span class="pi">:</span> <span class="s">00ICU81200ICU812</span>
+   <span class="na">issuer</span><span class="pi">:</span> <span class="s">https://dev-123456.oktapreview.com/oauth2/default</span>
+</code></pre></div></div>
 
 <p>The last thing is to allow public access to the <code class="highlighter-rouge">index.html</code> page and <code class="highlighter-rouge">/sign-in-widget-config</code></p>
 
 <p>Define a <code class="highlighter-rouge">ResourceServerConfigurerAdapter</code> Bean in your Application to allow access to those resources.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@Bean</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Bean</span>
 <span class="kd">protected</span> <span class="n">ResourceServerConfigurerAdapter</span> <span class="nf">resourceServerConfigurerAdapter</span><span class="o">()</span> <span class="o">{</span>
    <span class="k">return</span> <span class="k">new</span> <span class="nf">ResourceServerConfigurerAdapter</span><span class="o">()</span> <span class="o">{</span>
        <span class="nd">@Override</span>
@@ -494,8 +486,7 @@ WWW-Authenticate: Bearer <span class="nv">realm</span><span class="o">=</span><s
        <span class="o">}</span>
    <span class="o">};</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="fire-it-up">Fire it up!</h3>
 
@@ -512,22 +503,20 @@ WWW-Authenticate: Bearer <span class="nv">realm</span><span class="o">=</span><s
 
 <p>These may or may not be issues for your application, but resolving them is as simple as adding another dependency to your pom file:</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
    <span class="nt">&lt;groupId&gt;</span>com.okta.spring<span class="nt">&lt;/groupId&gt;</span>
    <span class="nt">&lt;artifactId&gt;</span>okta-spring-boot-starter<span class="nt">&lt;/artifactId&gt;</span>
    <span class="nt">&lt;version&gt;</span>0.2.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You can even trim down your <code class="highlighter-rouge">application.yml</code> file if you want to, any of the <code class="highlighter-rouge">security.*</code> properties will take precedence over the <code class="highlighter-rouge">okta.*</code> ones:</p>
 
-<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">okta</span><span class="pi">:</span>
- <span class="s">oauth2</span><span class="pi">:</span>
-   <span class="s">clientId</span><span class="pi">:</span> <span class="s">00ICU81200ICU812</span>
-   <span class="s">issuer</span><span class="pi">:</span> <span class="s">https://dev-123456.oktapreview.com/oauth2/default</span>
-</code></pre>
-</div>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">okta</span><span class="pi">:</span>
+ <span class="na">oauth2</span><span class="pi">:</span>
+   <span class="na">clientId</span><span class="pi">:</span> <span class="s">00ICU81200ICU812</span>
+   <span class="na">issuer</span><span class="pi">:</span> <span class="s">https://dev-123456.oktapreview.com/oauth2/default</span>
+</code></pre></div></div>
 
 <p>Restart your application and the first two concerns have been taken care of!</p>
 
@@ -548,18 +537,17 @@ WWW-Authenticate: Bearer <span class="nv">realm</span><span class="o">=</span><s
 
 <p>To enable use of the <code class="highlighter-rouge">@PreAuthorize</code> annotation you need to add the <code class="highlighter-rouge">@EnableGlobalMethodSecurity</code> to your Spring Boot Application.  If you want to validate the OAuth scopes as well, you will need to add a <code class="highlighter-rouge">OAuth2MethodSecurityExpressionHandler</code>. Just drop the following snippet in your Spring Boot Application.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@EnableGlobalMethodSecurity</span><span class="o">(</span><span class="n">prePostEnabled</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@EnableGlobalMethodSecurity</span><span class="o">(</span><span class="n">prePostEnabled</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span>
 <span class="kd">protected</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">GlobalSecurityConfiguration</span> <span class="kd">extends</span> <span class="n">GlobalMethodSecurityConfiguration</span> <span class="o">{</span>
    <span class="nd">@Override</span>
    <span class="kd">protected</span> <span class="n">MethodSecurityExpressionHandler</span> <span class="nf">createExpressionHandler</span><span class="o">()</span> <span class="o">{</span>
        <span class="k">return</span> <span class="k">new</span> <span class="nf">OAuth2MethodSecurityExpressionHandler</span><span class="o">();</span>
    <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Finally, update <code class="highlighter-rouge">MessageOfTheDayController</code> with a <code class="highlighter-rouge">@PreAuthorize</code> (in this case you are allowing members of the group ‘Everyone’ or anyone with the ‘email’ scope).</p>
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@RestController</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RestController</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MessageOfTheDayController</span> <span class="o">{</span>
    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"/mod"</span><span class="o">)</span>
    <span class="nd">@PreAuthorize</span><span class="o">(</span><span class="s">"hasAuthority('Everyone') || #oauth2.hasScope('email')"</span><span class="o">)</span>
@@ -567,8 +555,7 @@ WWW-Authenticate: Bearer <span class="nv">realm</span><span class="o">=</span><s
        <span class="k">return</span> <span class="s">"The message of the day is boring for user: "</span> <span class="o">+</span> <span class="n">principal</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
    <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="learn-more">Learn More!</h2>
 

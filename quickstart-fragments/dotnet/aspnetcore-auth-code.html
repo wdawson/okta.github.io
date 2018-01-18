@@ -31,15 +31,14 @@
 
 <p>Make sure you have these <code class="highlighter-rouge">using</code> statements at the top of your <code class="highlighter-rouge">Startup.cs</code> file:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="nn">Microsoft.AspNetCore.Authentication.Cookies</span><span class="p">;</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">Microsoft.AspNetCore.Authentication.Cookies</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">Microsoft.AspNetCore.Authentication.OpenIdConnect</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">Microsoft.IdentityModel.Tokens</span><span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>In the <code class="highlighter-rouge">ConfigureServices</code> method, add this <code class="highlighter-rouge">UseAuthentication</code> block and configure it using the information from your Okta application:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="n">services</span><span class="p">.</span><span class="nf">AddAuthentication</span><span class="p">(</span><span class="n">sharedOptions</span> <span class="p">=&gt;</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">services</span><span class="p">.</span><span class="nf">AddAuthentication</span><span class="p">(</span><span class="n">sharedOptions</span> <span class="p">=&gt;</span>
 <span class="p">{</span>
     <span class="n">sharedOptions</span><span class="p">.</span><span class="n">DefaultAuthenticateScheme</span> <span class="p">=</span> <span class="n">CookieAuthenticationDefaults</span><span class="p">.</span><span class="n">AuthenticationScheme</span><span class="p">;</span>
     <span class="n">sharedOptions</span><span class="p">.</span><span class="n">DefaultSignInScheme</span> <span class="p">=</span> <span class="n">CookieAuthenticationDefaults</span><span class="p">.</span><span class="n">AuthenticationScheme</span><span class="p">;</span>
@@ -63,33 +62,30 @@
         <span class="n">NameClaimType</span> <span class="p">=</span> <span class="s">"name"</span>
     <span class="p">};</span>
 <span class="p">});</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<p><strong>Note:</strong> The value of <code class="highlighter-rouge"><span class="p">{</span><span class="err">yourOktaDomain</span><span class="p">}</span></code> should be something like dev-123456.oktapreview.com. Make sure you don’t include <code class="highlighter-rouge">-admin</code> in the value!</p>
+<p><strong>Note:</strong> The value of <code class="highlighter-rouge">{yourOktaDomain}</code> should be something like dev-123456.oktapreview.com. Make sure you don’t include <code class="highlighter-rouge">-admin</code> in the value!</p>
 
 <p>Then, in the <code class="highlighter-rouge">Configure</code> method, add this line <strong>above</strong> the <code class="highlighter-rouge">UseMvc</code> line:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="n">app</span><span class="p">.</span><span class="nf">UseAuthentication</span><span class="p">();</span>
-</code></pre>
-</div>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">app</span><span class="p">.</span><span class="nf">UseAuthentication</span><span class="p">();</span>
+</code></pre></div></div>
 
 <h3 id="secure-your-application">Secure your application</h3>
 
 <p>Use the <code class="highlighter-rouge">[Authorize]</code> attribute on controllers or actions to require a logged-in user:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="na">[Authorize]</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[Authorize]</span>
 <span class="k">public</span> <span class="n">IActionResult</span> <span class="nf">Protected</span><span class="p">()</span>
 <span class="p">{</span>
-    <span class="c1">// Only for logged-in users!
-</span>    <span class="k">return</span> <span class="nf">View</span><span class="p">();</span>
+    <span class="c1">// Only for logged-in users!</span>
+    <span class="k">return</span> <span class="nf">View</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Alternatively, you can create actions to log the user in (or out):</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="nn">Microsoft.AspNetCore.Authentication.Cookies</span><span class="p">;</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">Microsoft.AspNetCore.Authentication.Cookies</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">Microsoft.AspNetCore.Authentication.OpenIdConnect</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">Microsoft.AspNetCore.Authorization</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">Microsoft.AspNetCore.Mvc</span><span class="p">;</span>
@@ -117,16 +113,14 @@
         <span class="k">return</span> <span class="nf">RedirectToAction</span><span class="p">(</span><span class="s">"Index"</span><span class="p">,</span> <span class="s">"Home"</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="run-the-project">Run the project</h3>
 
 <p>Start the project in Visual Studio, or with this command:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>dotnet run
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet run
+</code></pre></div></div>
 
 <p>Open <code class="highlighter-rouge">http://localhost:60611</code> in a private or incognito window in your browser. Try navigating to a route that has the <code class="highlighter-rouge">[Authorize]</code> attribute, or to the <code class="highlighter-rouge">/Account/Login</code> action. You’ll be redirected to the Okta Sign-In page.</p>
 

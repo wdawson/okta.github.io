@@ -279,18 +279,17 @@
 
 <p>Here’s typical set of claims:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"family_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Silverman"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"given_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Micah"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"locale"</span><span class="p">:</span><span class="w"> </span><span class="s2">"en-US"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Micah Silverman"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"preferred_username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"micah.silverman@okta.com"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"sub"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00u9vme99nxudvxZA0h7"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"updated_at"</span><span class="p">:</span><span class="w"> </span><span class="mi">1490198843</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"zoneinfo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"America/Los_Angeles"</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+    "family_name": "Silverman",
+    "given_name": "Micah",
+    "locale": "en-US",
+    "name": "Micah Silverman",
+    "preferred_username": "micah.silverman@okta.com",
+    "sub": "00u9vme99nxudvxZA0h7",
+    "updated_at": 1490198843,
+    "zoneinfo": "America/Los_Angeles"
+}
+</code></pre></div></div>
 
 <p>A number of the <code class="highlighter-rouge">profile</code> claims are included above. That’s because the request for the user’s info was made using a token that was obtained with the <code class="highlighter-rouge">profile</code> scope. In other words, a request is made that results in the issuance of a token. That token contains certain information based on the scopes specified in the original request.</p>
 
@@ -345,30 +344,28 @@
 
 <p>Here’s an example using <a href="https://httpie.org">HTTPie</a>:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>http https://micah.oktapreview.com/oauth2/.../v1/userinfo
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http https://micah.oktapreview.com/oauth2/.../v1/userinfo
 
 HTTP/1.1 400 Bad Request
 ...
 WWW-Authenticate: Bearer error="invalid_request", error_description="The access token is missing."
 ...
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Let’s try again with an expired access token:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>http https://micah.oktapreview.com/oauth2/.../v1/userinfo \
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http https://micah.oktapreview.com/oauth2/.../v1/userinfo \
 Authorization:"Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6Ik93bFNJS3p3Mmt1Wk8zSmpnMW5Dc2RNelJhOEV1elY5emgyREl6X3RVRUkifQ..."
 
 HTTP/1.1 401 Unauthorized
 ...
 WWW-Authenticate: Bearer error="invalid_token", error_description="The token has expired."
 ...
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Finally, let’s try with a valid access token:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>http https://micah.oktapreview.com/oauth2/.../v1/userinfo \
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http https://micah.oktapreview.com/oauth2/.../v1/userinfo \
 Authorization:"Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6Ik93bFNJS3p3Mmt1Wk8zSmpnMW5Dc2RNelJhOEV1elY5emgyREl6X3RVRUkifQ..."
 
 HTTP/1.1 200 OK
@@ -387,8 +384,7 @@ HTTP/1.1 200 OK
     "updated_at": 1490198843,
     "zoneinfo": "America/Los_Angeles"
 }
-</code></pre>
-</div>
+</code></pre></div></div>
 <h3 id="refresh-tokens">Refresh Tokens</h3>
 
 <p>Refresh tokens are used to obtain new access tokens. Typically, refresh tokens will be long-lived while access tokens are short-lived. This allows for long-lived sessions that can be killed if necessary. Here’s a typical scenario:</p>

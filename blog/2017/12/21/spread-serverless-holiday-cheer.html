@@ -202,34 +202,30 @@
 
 <p>The API will be simple: it will have one route called <code class="highlighter-rouge">/cheer</code>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>GET /cheer
-</code></pre>
-</div>
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="mi">200</span><span class="w"> </span><span class="err">OK</span><span class="w">
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET /cheer
+</code></pre></div></div>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">200</span><span class="w"> </span><span class="err">OK</span><span class="w">
 </span><span class="p">{</span><span class="w">
-  </span><span class="nt">"holidaySeason"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"greeting"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Happy holidays!"</span><span class="w">
+  </span><span class="s2">"holidaySeason"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"greeting"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Happy holidays!"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>The API will determine whether it’s currently the holiday season using the precise, ultra-scientific method that supermarkets in the USA use to decide whether to start playing Christmas music: is today’s date after Thanksgiving, but before the end of the year?</p>
 
 <p>If it’s the holidays, the API will return an randomly-selected greeting. If you want to personalize it, you can POST your name:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>POST /cheer
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>POST /cheer
 {
   "name": "Nate"
 }
-</code></pre>
-</div>
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="mi">200</span><span class="w"> </span><span class="err">OK</span><span class="w">
+</code></pre></div></div>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">200</span><span class="w"> </span><span class="err">OK</span><span class="w">
 </span><span class="p">{</span><span class="w">
-  </span><span class="nt">"holidaySeason"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"greeting"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Merry Christmas, Nate!"</span><span class="w">
+  </span><span class="s2">"holidaySeason"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"greeting"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Merry Christmas, Nate!"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>Use it in your IFTTT recipes, mail merges, and Twitter bots. Cheer-as-a-service is limited only by your imagination!</p>
 
@@ -245,7 +241,7 @@
 
 <p>Time to write some code! Use the browser code editor to add code above the <code class="highlighter-rouge">exports.handler</code> line:</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">isHolidaySeason</span><span class="p">()</span> <span class="p">{</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">isHolidaySeason</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">let</span> <span class="nx">now</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
   <span class="kd">let</span> <span class="nx">dayOfThanksgiving</span> <span class="o">=</span> <span class="mi">22</span> <span class="o">+</span> <span class="p">(</span><span class="mi">11</span> <span class="o">-</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">now</span><span class="p">.</span><span class="nx">getFullYear</span><span class="p">(),</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span><span class="nx">getDay</span><span class="p">())</span> <span class="o">%</span> <span class="mi">7</span><span class="p">;</span>
 
@@ -254,20 +250,19 @@
   
   <span class="k">return</span> <span class="nx">isAfterThanksgiving</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>The <code class="highlighter-rouge">isHolidaySeason()</code> function uses some date math to find Thanksgiving Day (in the USA, the fourth Thursday in November) and compares that to today’s date. (If the months look off, remember that JavaScript counts from January at 0.)</p>
 
 <p>Next, add some more code above <code class="highlighter-rouge">exports.handler</code>:</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">phrases</span> <span class="o">=</span> <span class="p">[</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">phrases</span> <span class="o">=</span> <span class="p">[</span>
   <span class="s1">'Happy holidays'</span><span class="p">,</span>
   <span class="s1">'Merry Christmas'</span><span class="p">,</span>
   <span class="s1">'Ho ho ho'</span><span class="p">,</span>
   <span class="s1">'Feliz Navidad'</span><span class="p">,</span>
   <span class="s1">'Happy Hanukkah'</span><span class="p">,</span>
-  <span class="s1">'Season\'s greetings'</span>
+  <span class="s1">'Season</span><span class="se">\'</span><span class="s1">s greetings'</span>
 <span class="p">];</span>
 
 <span class="kd">function</span> <span class="nx">createCheerfulResponse</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
@@ -291,14 +286,13 @@
   <span class="nx">response</span><span class="p">.</span><span class="nx">greeting</span> <span class="o">=</span> <span class="nx">phrase</span><span class="p">;</span>
   <span class="k">return</span> <span class="nx">response</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>This function generates the JSON response that will be returned to the client. If a name is supplied, it’s used to personalize the response. Feel free to add your own greetings and phrases to the list!</p>
 
 <p>With these functions in place, you can update the main handler at the bottom. This code runs when Lambda executes your function, so you’ll want to check for a <code class="highlighter-rouge">name</code> parameter (if it’s a POST), and return the API response:</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">exports</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">context</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">exports</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">context</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="kd">let</span> <span class="nx">name</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
   
   <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">httpMethod</span> <span class="o">===</span> <span class="s1">'POST'</span><span class="p">)</span> <span class="p">{</span>
@@ -320,23 +314,21 @@
   
   <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">response</span><span class="p">);</span>
 <span class="p">};</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>That’s all the code you need! Make sure you click <strong>Save</strong> at the top-right of the Lambda console.</p>
 
 <p>You can test the function by creating a test event. Click <strong>Test</strong> and use this JSON as the test event data:</p>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"body"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"name\":\"Frosty the Snowman\"}"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"requestContext"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"httpMethod"</span><span class="p">:</span><span class="w"> </span><span class="s2">"POST"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"stage"</span><span class="p">:</span><span class="w"> </span><span class="s2">"prod"</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"body"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{</span><span class="se">\"</span><span class="s2">name</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Frosty the Snowman</span><span class="se">\"</span><span class="s2">}"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"requestContext"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"httpMethod"</span><span class="p">:</span><span class="w"> </span><span class="s2">"POST"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"stage"</span><span class="p">:</span><span class="w"> </span><span class="s2">"prod"</span><span class="w">
   </span><span class="p">},</span><span class="w">
-  </span><span class="nt">"httpMethod"</span><span class="p">:</span><span class="w"> </span><span class="s2">"POST"</span><span class="w">
+  </span><span class="s2">"httpMethod"</span><span class="p">:</span><span class="w"> </span><span class="s2">"POST"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p><img src="/assets/blog/serverless-holiday-cheer/test-function-a2c003a810b2537f8fba84dab8309529717db81375621e78851ba2d0669e310e.png" alt="Successful function test" width="700" class="center-image" /></p>
 
@@ -362,9 +354,8 @@
 
 <p>You’re almost there! From the Actions button, choose <strong>Deploy API</strong>. Create a new stage called <code class="highlighter-rouge">production</code> and click <strong>Deploy</strong>. When the API is deployed, you’ll get an Invoke URL like:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>https://blah.execute-api.us-east-1.amazonaws.com/production
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://blah.execute-api.us-east-1.amazonaws.com/production
+</code></pre></div></div>
 
 <p>You can see your live API in action by adding <code class="highlighter-rouge">/cheer</code> to that URL and requesting it in your browser. Sweet!</p>
 

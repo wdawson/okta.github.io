@@ -200,168 +200,156 @@
 <h2 id="choose-your-docker-compose-version">Choose Your Docker Compose Version</h2>
 <p>The first line of any <code class="highlighter-rouge">docker-compose.yml</code> file is the <code class="highlighter-rouge">version</code> setting. In this case, you’ll use version 3.3, so just tell Docker Compose that.</p>
 
-<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">version</span><span class="pi">:</span> <span class="s">‘3.3’</span>
-</code></pre>
-</div>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">version</span><span class="pi">:</span> <span class="s">‘3.3’</span>
+</code></pre></div></div>
 
 <p>You can see the documentation for <code class="highlighter-rouge">docker-compose</code> version 3 at <a href="https://docs.docker.com/compose/compose-file/">https://docs.docker.com/compose/compose-file/</a> and you can see what the differences are between versions.</p>
 
 <h2 id="define-node-and-mongo-services">Define Node and Mongo Services</h2>
 <p>Services are how Docker refers to each container you want to build in the docker-compose file. In this case, you’ll create two services: one for the NodeJS application, and one for the MongoDB database.</p>
 
-<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">services</span><span class="pi">:</span>
-  <span class="s">app</span><span class="pi">:</span>
-  <span class="s">db</span><span class="pi">:</span>
-</code></pre>
-</div>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">app</span><span class="pi">:</span>
+  <span class="na">db</span><span class="pi">:</span>
+</code></pre></div></div>
 
 <p>Remember that indention is how the YAML file format groups information, so indention is important. Here, you’ve indented the <code class="highlighter-rouge">app</code> and <code class="highlighter-rouge">db</code> services under the <code class="highlighter-rouge">services</code> tag. These can be named whatever you want. In this case <code class="highlighter-rouge">app</code> and ‘db` are just easiest to refer to. Now, you’ll put some meat on these two services.</p>
 
 <p>First, tell Docker what image you want to build the <code class="highlighter-rouge">app</code> service from by specifying that you’ll be building from the <code class="highlighter-rouge">sample:1.0</code> image. So you’ll specify that indented under the <code class="highlighter-rouge">app</code> tag.</p>
 
-<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">app</span><span class="pi">:</span>
-  <span class="s">image</span><span class="pi">:</span> <span class="s">sample:1.0</span>
-</code></pre>
-</div>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">app</span><span class="pi">:</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">sample:1.0</span>
+</code></pre></div></div>
 
 <p>Of course that image doesn’t exist, so you’ll need to let Docker know where to find the <code class="highlighter-rouge">Dockerfile</code> to build it by setting a build context. If you don’t, Docker will try to pull the image from Docker Hub and when that fails it will fail the <code class="highlighter-rouge">docker-compose</code> command altogether.</p>
 
-<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">app</span><span class="pi">:</span>
-  <span class="s">image</span><span class="pi">:</span> <span class="s">sample:1.0</span>
-  <span class="s">build</span><span class="pi">:</span> <span class="s">.</span>
-</code></pre>
-</div>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">app</span><span class="pi">:</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">sample:1.0</span>
+  <span class="na">build</span><span class="pi">:</span> <span class="s">.</span>
+</code></pre></div></div>
 <p>Here, you’ve specified that the build context is the current directory, so when Docker can’t find the <code class="highlighter-rouge">sample:1.0</code> image locally, it will build it using the Dockerfile in the current directory.</p>
 
 <p>Next, you’ll tell Docker what the container name should be once it’s built the image to create the container from.</p>
 
-<div class="language-yaml highlighter-rouge"><pre class="highlight"><code> <span class="s">app</span><span class="pi">:</span>
-  <span class="s">image</span><span class="pi">:</span> <span class="s">sample:1.0</span>
-  <span class="s">container_name</span><span class="pi">:</span> <span class="s">sample_app</span>
-  <span class="s">build</span><span class="pi">:</span> <span class="s">.</span>
-</code></pre>
-</div>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="na">app</span><span class="pi">:</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">sample:1.0</span>
+  <span class="na">container_name</span><span class="pi">:</span> <span class="s">sample_app</span>
+  <span class="na">build</span><span class="pi">:</span> <span class="s">.</span>
+</code></pre></div></div>
 
 <p>Now, when Docker builds the image, it will immediately create a container named <code class="highlighter-rouge">sample_app</code> from that image.</p>
 
 <p>By default, NodeJS apps run on port 3000, so you’ll need to map that port to 80, since this is the “production” <code class="highlighter-rouge">docker-compose</code> file. You do that using the <code class="highlighter-rouge">ports</code> tag in YAML.</p>
 
-<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">app</span><span class="pi">:</span>
-  <span class="s">image</span><span class="pi">:</span> <span class="s">sample:1.0</span>
-  <span class="s">container_name</span><span class="pi">:</span> <span class="s">sample_app</span>
-  <span class="s">build</span><span class="pi">:</span> <span class="s">.</span>
-  <span class="s">ports</span><span class="pi">:</span> 
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">app</span><span class="pi">:</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">sample:1.0</span>
+  <span class="na">container_name</span><span class="pi">:</span> <span class="s">sample_app</span>
+  <span class="na">build</span><span class="pi">:</span> <span class="s">.</span>
+  <span class="na">ports</span><span class="pi">:</span> 
     <span class="pi">-</span> <span class="s">80:3000</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Here, you’ve mapped port 80 on the host operating system, to port 3000 from the container. That way, when you’ve moved this container to a production host, users of the application can go to the host machine’s port 80 and have those requests answered from the container on port 3000.</p>
 
 <p>Your application will be getting data from a MongoDB database and to do that the application will need a connection string that it will get from an environment variable called “MONGO_URI”. To set environment variables in the container once it’s built, use the <code class="highlighter-rouge">environment</code> tag in the YAML file.</p>
 
-<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">app</span><span class="pi">:</span>
-  <span class="s">image</span><span class="pi">:</span> <span class="s">sample:1.0</span>
-  <span class="s">container_name</span><span class="pi">:</span> <span class="s">sample_app</span>
-  <span class="s">build</span><span class="pi">:</span> <span class="s">.</span>
-  <span class="s">ports</span><span class="pi">:</span> 
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">app</span><span class="pi">:</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">sample:1.0</span>
+  <span class="na">container_name</span><span class="pi">:</span> <span class="s">sample_app</span>
+  <span class="na">build</span><span class="pi">:</span> <span class="s">.</span>
+  <span class="na">ports</span><span class="pi">:</span> 
     <span class="pi">-</span> <span class="s">80:3000</span>
-  <span class="s">environment</span><span class="pi">:</span>
+  <span class="na">environment</span><span class="pi">:</span>
     <span class="pi">-</span> <span class="s">MONGO_URI=mongodb://sampledb/sample</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="create-a-docker-network">Create a Docker Network</h2>
 <p>For the application service to actually be able to reach the sample database, it will need to be on the same network. To put both of these services on the same network, create one in the <code class="highlighter-rouge">docker-compose</code> file by using the <code class="highlighter-rouge">networks</code> tag at the top level (the same level of indention as the <code class="highlighter-rouge">services</code> tag.</p>
 
-<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">version</span><span class="pi">:</span> <span class="s1">'</span><span class="s">3.3'</span>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">version</span><span class="pi">:</span> <span class="s1">'</span><span class="s">3.3'</span>
 
-<span class="s">services</span><span class="pi">:</span>
+<span class="na">services</span><span class="pi">:</span>
   <span class="s">app:...</span>
   <span class="s">db:...</span>
-<span class="s">networks</span><span class="pi">:</span>
-  <span class="s">samplenet</span><span class="pi">:</span>
-    <span class="s">driver</span><span class="pi">:</span> <span class="s">bridge</span>
-</code></pre>
-</div>
+<span class="na">networks</span><span class="pi">:</span>
+  <span class="na">samplenet</span><span class="pi">:</span>
+    <span class="na">driver</span><span class="pi">:</span> <span class="s">bridge</span>
+</code></pre></div></div>
 
 <p>This creates a network called “samplenet” using a bridge type network. This will allow the two containers to communicate over a virtual network between them.</p>
 
 <p>Back in the app section of the file, join the app service to the “samplenet” network:</p>
 
-<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">app</span><span class="pi">:</span>
-  <span class="s">image</span><span class="pi">:</span> <span class="s">sample:1.0</span>
-  <span class="s">container_name</span><span class="pi">:</span> <span class="s">sample_app</span>
-  <span class="s">build</span><span class="pi">:</span> <span class="s">.</span>
-  <span class="s">ports</span><span class="pi">:</span> 
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">app</span><span class="pi">:</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">sample:1.0</span>
+  <span class="na">container_name</span><span class="pi">:</span> <span class="s">sample_app</span>
+  <span class="na">build</span><span class="pi">:</span> <span class="s">.</span>
+  <span class="na">ports</span><span class="pi">:</span> 
     <span class="pi">-</span> <span class="s">80:3000</span>
-  <span class="s">environment</span><span class="pi">:</span>
+  <span class="na">environment</span><span class="pi">:</span>
     <span class="pi">-</span> <span class="s">MONGO_URI=mongodb://sampledb/sample</span>
-  <span class="s">networks</span><span class="pi">:</span> 
+  <span class="na">networks</span><span class="pi">:</span> 
     <span class="pi">-</span> <span class="s">samplenet</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <h2 id="create-the-mongodb-service">Create the MongoDB Service</h2>
 <p>Now the app service is ready, but it won’t be much good without the db service. So add the same kinds of things in the next section for the db service.</p>
 
-<div class="language-yaml highlighter-rouge"><pre class="highlight"><code> <span class="s">db</span><span class="pi">:</span>
-  <span class="s">image</span><span class="pi">:</span> <span class="s">mongo:3.0.15</span>
-  <span class="s">container_name</span><span class="pi">:</span> <span class="s">sample_db</span>
-  <span class="s">networks</span><span class="pi">:</span>
-    <span class="s">samplenet</span><span class="pi">:</span>
-      <span class="s">aliases</span><span class="pi">:</span>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="na">db</span><span class="pi">:</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">mongo:3.0.15</span>
+  <span class="na">container_name</span><span class="pi">:</span> <span class="s">sample_db</span>
+  <span class="na">networks</span><span class="pi">:</span>
+    <span class="na">samplenet</span><span class="pi">:</span>
+      <span class="na">aliases</span><span class="pi">:</span>
         <span class="pi">-</span> <span class="s2">"</span><span class="s">sampledb"</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>This service builds from the official MongoDB 3.0.15 image and creates a container named “sample_db”. It also joins the “samplenet” network with an alias of “sampledb”. This is like a DNS name on a physical network, it allows other services on the “samplenet” network to refer to it by its alias. This is important because without it, the app service would have a much harder time talking to it. (I don’t know that it <em>couldn’t</em>, it would just probably have to use the container’s full hash!)</p>
 
 <h2 id="use-docker-volumes">Use Docker Volumes</h2>
 <p>You’ll also want to create a volume mount in the database service. Volumes allow you to mount folders on the host machine to folders in the container. Meaning, when something inside the container refers to a folder, it will actually be accessing a folder on the host machine. This is especially helpful for database containers because containers are meant to be disposable. With a mount to the physical folder on the host machine, you’ll be able to destroy a container and rebuild it and the data files for the container will still be there on the host machine. So add a volume tag in the db section mounting the <code class="highlighter-rouge">/data/db</code> folder in the container (where Mongo stores its data) to the <code class="highlighter-rouge">db</code> folder in your application’s root folder so that the final db section looks like the following.</p>
 
-<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">db</span><span class="pi">:</span>
-  <span class="s">image</span><span class="pi">:</span> <span class="s">mongo:3.0.15</span>
-  <span class="s">container_name</span><span class="pi">:</span> <span class="s">sample_db</span>
-  <span class="s">volumes</span><span class="pi">:</span>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">db</span><span class="pi">:</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">mongo:3.0.15</span>
+  <span class="na">container_name</span><span class="pi">:</span> <span class="s">sample_db</span>
+  <span class="na">volumes</span><span class="pi">:</span>
     <span class="pi">-</span> <span class="s">./db:/data/db</span>
-  <span class="s">networks</span><span class="pi">:</span>
-    <span class="s">samplenet</span><span class="pi">:</span>
-      <span class="s">aliases</span><span class="pi">:</span>
+  <span class="na">networks</span><span class="pi">:</span>
+    <span class="na">samplenet</span><span class="pi">:</span>
+      <span class="na">aliases</span><span class="pi">:</span>
         <span class="pi">-</span> <span class="s2">"</span><span class="s">sampledb"</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="review-your-docker-compose-file">Review Your Docker Compose File</h2>
 <p>With all that done, your final docker-compose.yml file should look like:</p>
 
-<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">version</span><span class="pi">:</span> <span class="s1">'</span><span class="s">3.3'</span>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">version</span><span class="pi">:</span> <span class="s1">'</span><span class="s">3.3'</span>
 
-<span class="s">services</span><span class="pi">:</span>
-  <span class="s">app</span><span class="pi">:</span>
-    <span class="s">image</span><span class="pi">:</span> <span class="s">sample:1.0</span>
-    <span class="s">container_name</span><span class="pi">:</span> <span class="s">sample_app</span>
-    <span class="s">build</span><span class="pi">:</span> <span class="s">.</span>
-    <span class="s">ports</span><span class="pi">:</span> 
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">app</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">sample:1.0</span>
+    <span class="na">container_name</span><span class="pi">:</span> <span class="s">sample_app</span>
+    <span class="na">build</span><span class="pi">:</span> <span class="s">.</span>
+    <span class="na">ports</span><span class="pi">:</span> 
       <span class="pi">-</span> <span class="s">80:3000</span>
-    <span class="s">environment</span><span class="pi">:</span>
+    <span class="na">environment</span><span class="pi">:</span>
       <span class="pi">-</span> <span class="s">MONGO_URI=mongodb://sampledb/sample</span>
-    <span class="s">depends_on</span><span class="pi">:</span> 
+    <span class="na">depends_on</span><span class="pi">:</span> 
       <span class="pi">-</span> <span class="s">db</span>
-    <span class="s">networks</span><span class="pi">:</span> 
+    <span class="na">networks</span><span class="pi">:</span> 
       <span class="pi">-</span> <span class="s">samplenet</span>
-  <span class="s">db</span><span class="pi">:</span>
-    <span class="s">image</span><span class="pi">:</span> <span class="s">mongo:3.0.15</span>
-    <span class="s">container_name</span><span class="pi">:</span> <span class="s">sample_db</span>
-    <span class="s">volumes</span><span class="pi">:</span>
+  <span class="na">db</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">mongo:3.0.15</span>
+    <span class="na">container_name</span><span class="pi">:</span> <span class="s">sample_db</span>
+    <span class="na">volumes</span><span class="pi">:</span>
       <span class="pi">-</span> <span class="s">./db:/data/db</span>
-    <span class="s">networks</span><span class="pi">:</span>
-      <span class="s">samplenet</span><span class="pi">:</span>
-        <span class="s">aliases</span><span class="pi">:</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="na">samplenet</span><span class="pi">:</span>
+        <span class="na">aliases</span><span class="pi">:</span>
           <span class="pi">-</span> <span class="s2">"</span><span class="s">sampledb"</span>
-<span class="s">networks</span><span class="pi">:</span>
-  <span class="s">samplenet</span><span class="pi">:</span>
-    <span class="s">driver</span><span class="pi">:</span> <span class="s">bridge</span>
-</code></pre>
-</div>
+<span class="na">networks</span><span class="pi">:</span>
+  <span class="na">samplenet</span><span class="pi">:</span>
+    <span class="na">driver</span><span class="pi">:</span> <span class="s">bridge</span>
+</code></pre></div></div>
 
 <p>With that all done, you should be able to save the file and run <code class="highlighter-rouge">docker-compose up -d</code> in the folder where you docker-compose.yml file is and watch Docker build and start your environment for you.</p>
 

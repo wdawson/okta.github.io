@@ -263,56 +263,51 @@
 
 <p>Click <strong>Generate Project</strong>, download the generated ZIP file and open it in your favorite editor. Add the <code class="highlighter-rouge">spring-security-saml-dsl</code> dependency to your <code class="highlighter-rouge">pom.xml</code>.</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.springframework.security.extensions<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>spring-security-saml-dsl<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;version&gt;</span>1.0.0.M3<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You’ll also need to add the Spring Milestone repository since a milestone release is all that’s available at the time of this writing.</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;repositories&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;repositories&gt;</span>
     <span class="nt">&lt;repository&gt;</span>
         <span class="nt">&lt;id&gt;</span>spring-milestones<span class="nt">&lt;/id&gt;</span>
         <span class="nt">&lt;name&gt;</span>Spring Milestones<span class="nt">&lt;/name&gt;</span>
         <span class="nt">&lt;url&gt;</span>https://repo.spring.io/libs-milestone<span class="nt">&lt;/url&gt;</span>
     <span class="nt">&lt;/repository&gt;</span>
 <span class="nt">&lt;/repositories&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><strong>NOTE:</strong> If you’d like to see instructions for Gradle, please view the project’s <a href="https://github.com/spring-projects/spring-security-saml-dsl/blob/master/README.md">README.md</a>.</p>
 
 <p>In <code class="highlighter-rouge">src/main/resources/application.properties</code>, add the following key/value pairs. Make sure to use the “Identity Provider metadata” value you copied earlier (hint: you can find it again under the “Sign On” tab in your Okta application).</p>
 
-<div class="language-properties highlighter-rouge"><pre class="highlight"><code><span class="py">server.port</span> <span class="p">=</span> <span class="s">8443</span>
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">server.port</span> <span class="p">=</span> <span class="s">8443</span>
 <span class="py">server.ssl.enabled</span> <span class="p">=</span> <span class="s">true</span>
-<span class="err">server.ssl.key-</span><span class="py">alias</span> <span class="p">=</span> <span class="s">spring</span>
-<span class="err">server.ssl.key-</span><span class="py">store</span> <span class="p">=</span> <span class="s">src/main/resources/saml/keystore.jks</span>
-<span class="err">server.ssl.key-store-</span><span class="py">password</span> <span class="p">=</span> <span class="s">secret</span>
+<span class="py">server.ssl.key-alias</span> <span class="p">=</span> <span class="s">spring</span>
+<span class="py">server.ssl.key-store</span> <span class="p">=</span> <span class="s">src/main/resources/saml/keystore.jks</span>
+<span class="py">server.ssl.key-store-password</span> <span class="p">=</span> <span class="s">secret</span>
 
-<span class="err">security.saml2.metadata-</span><span class="py">url</span> <span class="p">=</span> <span class="s">&lt;your metadata url&gt;</span>
-</code></pre>
-</div>
+<span class="py">security.saml2.metadata-url</span> <span class="p">=</span> <span class="s">&lt;your metadata url&gt;</span>
+</code></pre></div></div>
 
 <p>From a terminal window, navigate to the <code class="highlighter-rouge">src/main/resources</code> directory of your app and create a <code class="highlighter-rouge">saml</code> directory. Navigate into the directory and run the following command. Use “secret” when prompted for a keystore password.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>keytool -genkey -v -keystore keystore.jks -alias spring -keyalg RSA -keysize 2048 -validity 10000
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>keytool <span class="nt">-genkey</span> <span class="nt">-v</span> <span class="nt">-keystore</span> keystore.jks <span class="nt">-alias</span> spring <span class="nt">-keyalg</span> RSA <span class="nt">-keysize</span> 2048 <span class="nt">-validity</span> 10000
+</code></pre></div></div>
 
 <p>The values for the rest of the questions don’t matter since you’re not generating a real certificate. However, you will need to answer “yes” to the following question.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>Is <span class="nv">CN</span><span class="o">=</span>Unknown, <span class="nv">OU</span><span class="o">=</span>Unknown, <span class="nv">O</span><span class="o">=</span>Unknown, <span class="nv">L</span><span class="o">=</span>Unknown, <span class="nv">ST</span><span class="o">=</span>Unknown, <span class="nv">C</span><span class="o">=</span>Unknown correct?
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Is <span class="nv">CN</span><span class="o">=</span>Unknown, <span class="nv">OU</span><span class="o">=</span>Unknown, <span class="nv">O</span><span class="o">=</span>Unknown, <span class="nv">L</span><span class="o">=</span>Unknown, <span class="nv">ST</span><span class="o">=</span>Unknown, <span class="nv">C</span><span class="o">=</span>Unknown correct?
   <span class="o">[</span>no]:
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Create a <code class="highlighter-rouge">SecurityConfiguration.java</code> file in the <code class="highlighter-rouge">com.example</code> package.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">extensions</span><span class="o">.</span><span class="na">saml2</span><span class="o">.</span><span class="na">config</span><span class="o">.</span><span class="na">SAMLConfigurer</span><span class="o">.</span><span class="na">saml</span><span class="o">;</span>
 
@@ -365,12 +360,11 @@
                 <span class="o">.</span><span class="na">metadataFilePath</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">metadataUrl</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Create an <code class="highlighter-rouge">IndexController.java</code> file in the same directory and use it to set the default view to <code class="highlighter-rouge">index</code>.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">org.springframework.stereotype.Controller</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RequestMapping</span><span class="o">;</span>
@@ -383,12 +377,11 @@
         <span class="k">return</span> <span class="s">"index"</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Since you chose Thymeleaf when creating your application, you can create a <code class="highlighter-rouge">src/main/resources/templates/index.html</code> and it will automatically be rendered after you sign-in. Create this file and populate it with the following HTML.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="nt">&lt;html&gt;</span>
 <span class="nt">&lt;head&gt;</span>
     <span class="nt">&lt;title&gt;</span>Spring Security SAML Example<span class="nt">&lt;/title&gt;</span>
@@ -397,8 +390,7 @@
 Hello SAML!
 <span class="nt">&lt;/body&gt;</span>
 <span class="nt">&lt;/html&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="run-the-app-and-login-with-okta">Run the App and Login with Okta</h2>
 

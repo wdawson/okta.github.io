@@ -320,34 +320,32 @@
 
 <h3 id="2-using-the-implicit-flow">2. Using the Implicit Flow</h3>
 
-<p>Kicking off this flow is very similar to the <a href="/authentication-guide/implementing-authentication/auth-code.html">authorization code flow</a> except that the <code class="highlighter-rouge">response_type</code> is <code class="highlighter-rouge">token</code> and/or <code class="highlighter-rouge">id_token</code> instead of <code class="highlighter-rouge">code</code>.</p>
+<p>Kicking off this flow is very similar to the <a href="/authentication-guide/implementing-authentication/auth-code">authorization code flow</a> except that the <code class="highlighter-rouge">response_type</code> is <code class="highlighter-rouge">token</code> and/or <code class="highlighter-rouge">id_token</code> instead of <code class="highlighter-rouge">code</code>.</p>
 
 <p>Your browser makes a request to your authorization server’s <code class="highlighter-rouge">/authorize</code> endpoint. If you are using the default Okta authorization server, then your request URL would look something like this:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/authorize?client_id=0oabv6kx4qq6
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/authorize?client_id=0oabv6kx4qq6
 h1U5l0h7&amp;response_type=token&amp;scope=openid&amp;redirect_uri=http%3A%2F%2Flocalhost%3
 A8080&amp;state=state-296bc9a0-a2a2-4a57-be1a-d0e2fd9bb601&amp;nonce=foo'
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Note the parameters that are being passed:</p>
 
 <ul>
   <li><code class="highlighter-rouge">client_id</code> matches the Client ID of your Okta OAuth application that you created above. You can find it at the bottom of your application’s General tab.</li>
   <li><code class="highlighter-rouge">response_type</code> is <code class="highlighter-rouge">token</code>. It could also be <code class="highlighter-rouge">id_token</code> or both.</li>
-  <li><code class="highlighter-rouge">scope</code> is <code class="highlighter-rouge">openid</code> which is required, though additional scopes can be requested. For more information about scopes, see <a href="/standards/OIDC/index.html#scopes">here</a>.</li>
+  <li><code class="highlighter-rouge">scope</code> is <code class="highlighter-rouge">openid</code> which is required, though additional scopes can be requested. For more information about scopes, see <a href="/standards/OIDC/#scopes">here</a>.</li>
   <li><code class="highlighter-rouge">redirect_uri</code> is the callback location where the user-agent will be directed to along with the <code class="highlighter-rouge">access_token</code>. This must match one of the “Login redirect URIs” you specified when you were creating your Okta application in Step 1.</li>
   <li><code class="highlighter-rouge">state</code> is an arbitrary alphanumeric string that the authorization server will reproduce when redirecting the user-agent back to the client. This is used to help prevent cross-site request forgery.</li>
 </ul>
 
-<p>For more information on these parameters, see <a href="/docs/api/resources/oauth2.html#obtain-an-authorization-grant-from-a-user">the OAuth 2.0 API reference</a>.</p>
+<p>For more information on these parameters, see <a href="/docs/api/resources/oauth2#obtain-an-authorization-grant-from-a-user">the OAuth 2.0 API reference</a>.</p>
 
 <p>If the user does not have an existing session, this will open the Okta Sign-in Page. If they have an existing session, or after they authenticate, they will arrive at the specified <code class="highlighter-rouge">redirect_uri</code> along with a <code class="highlighter-rouge">token</code> as a hash fragment:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>http://localhost:8080/#access_token=eyJhb[...]erw&amp;token_type=Bearer&amp;expires_in=
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://localhost:8080/#access_token=eyJhb[...]erw&amp;token_type=Bearer&amp;expires_in=
 3600&amp;scope=openid&amp;state=state-296bc9a0-a2a2-4a57-be1a-d0e2fd9bb601
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Your application must now extract the token(s) from the URI and store them.</p>
 

@@ -84,16 +84,15 @@
 
 <p>You will need to use the <a href="https://github.com/okta/okta-oidc-js/tree/master/packages/okta-vue">Okta Vue SDK</a> library to sign in the user by redirecting to the authorization endpoint on your Okta Org. You can install it via npm:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>npm install @okta/okta-vue --save
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install @okta/okta-vue <span class="nt">--save</span>
+</code></pre></div></div>
 
 <h3 id="configuration">Configuration</h3>
 <p>You will need the values from the OIDC client that you created in the previous step to instantiate the middleware. You will also need to know your Okta Org URL, which you can see on the home page of the Okta Developer console.</p>
 
 <p>In your application’s <a href="https://router.vuejs.org/en/essentials/getting-started.html">vue-router</a> configuration, import the <code class="highlighter-rouge">@okta/okta-vue</code> plugin and pass it your OpenID Connect client information:</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="c1">// router/index.js</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// router/index.js</span>
 
 <span class="k">import</span> <span class="nx">Auth</span> <span class="k">from</span> <span class="s1">'@okta/okta-vue'</span>
 
@@ -103,8 +102,7 @@
   <span class="na">redirect_uri</span><span class="p">:</span> <span class="s1">'http://localhost:{port}/implicit/callback'</span><span class="p">,</span>
   <span class="na">scope</span><span class="p">:</span> <span class="s1">'openid profile email'</span>
 <span class="p">})</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="attach-components-to-routes">Attach Components to Routes</h2>
 
@@ -118,13 +116,13 @@
 <h3 id="provide-the-login-and-logout-buttons">Provide the Login and Logout Buttons</h3>
 <p>In the relevant location in your application, you will want to provide <code class="highlighter-rouge">Login</code> and <code class="highlighter-rouge">Logout</code> buttons for the user. You can show/hide the correct button by using the <code class="highlighter-rouge">$auth.isAuthenticated()</code> method. For example:</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="c1">// src/App.vue</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// src/App.vue</span>
 
 <span class="o">&lt;</span><span class="nx">template</span><span class="o">&gt;</span>
   <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"app"</span><span class="o">&gt;</span>
     <span class="o">&lt;</span><span class="nx">router</span><span class="o">-</span><span class="nx">link</span> <span class="nx">to</span><span class="o">=</span><span class="s2">"/"</span> <span class="nx">tag</span><span class="o">=</span><span class="s2">"button"</span> <span class="nx">id</span><span class="o">=</span><span class="s1">'home-button'</span><span class="o">&gt;</span> <span class="nx">Home</span> <span class="o">&lt;</span><span class="sr">/router-link</span><span class="err">&gt;
-</span>    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">v</span><span class="o">-</span><span class="k">if</span><span class="o">=</span><span class="s1">'authenticated'</span> <span class="nx">v</span><span class="o">-</span><span class="nx">on</span><span class="err">:</span><span class="nx">click</span><span class="o">=</span><span class="s1">'logout'</span> <span class="nx">id</span><span class="o">=</span><span class="s1">'logout-button'</span><span class="o">&gt;</span> <span class="nx">Logout</span> <span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
-</span>    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">v</span><span class="o">-</span><span class="k">else</span> <span class="nx">v</span><span class="o">-</span><span class="nx">on</span><span class="err">:</span><span class="nx">click</span><span class="o">=</span><span class="s1">'$auth.loginRedirect'</span> <span class="nx">id</span><span class="o">=</span><span class="s1">'login-button'</span><span class="o">&gt;</span> <span class="nx">Login</span> <span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
+</span>    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">v</span><span class="o">-</span><span class="k">if</span><span class="o">=</span><span class="s1">'authenticated'</span> <span class="nx">v</span><span class="o">-</span><span class="nx">on</span><span class="p">:</span><span class="nx">click</span><span class="o">=</span><span class="s1">'logout'</span> <span class="nx">id</span><span class="o">=</span><span class="s1">'logout-button'</span><span class="o">&gt;</span> <span class="nx">Logout</span> <span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
+</span>    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">v</span><span class="o">-</span><span class="k">else</span> <span class="nx">v</span><span class="o">-</span><span class="nx">on</span><span class="p">:</span><span class="nx">click</span><span class="o">=</span><span class="s1">'$auth.loginRedirect'</span> <span class="nx">id</span><span class="o">=</span><span class="s1">'login-button'</span><span class="o">&gt;</span> <span class="nx">Login</span> <span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
 </span>    <span class="o">&lt;</span><span class="nx">router</span><span class="o">-</span><span class="nx">view</span><span class="o">/&gt;</span>
   <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
 </span><span class="o">&lt;</span><span class="sr">/template</span><span class="err">&gt;
@@ -147,11 +145,11 @@
   <span class="p">},</span>
   <span class="na">methods</span><span class="p">:</span> <span class="p">{</span>
     <span class="k">async</span> <span class="nx">isAuthenticated</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">authenticated</span> <span class="o">=</span> <span class="k">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">$auth</span><span class="p">.</span><span class="nx">isAuthenticated</span><span class="p">()</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">authenticated</span> <span class="o">=</span> <span class="kr">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">$auth</span><span class="p">.</span><span class="nx">isAuthenticated</span><span class="p">()</span>
     <span class="p">},</span>
     <span class="k">async</span> <span class="nx">logout</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="k">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">$auth</span><span class="p">.</span><span class="nx">logout</span><span class="p">()</span>
-      <span class="k">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">isAuthenticated</span><span class="p">()</span>
+      <span class="kr">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">$auth</span><span class="p">.</span><span class="nx">logout</span><span class="p">()</span>
+      <span class="kr">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">isAuthenticated</span><span class="p">()</span>
 
       <span class="c1">// Navigate back to home</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">$router</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span> <span class="na">path</span><span class="p">:</span> <span class="s1">'/'</span> <span class="p">})</span>
@@ -159,13 +157,12 @@
   <span class="p">}</span>
 <span class="p">}</span>
 <span class="o">&lt;</span><span class="sr">/script</span><span class="err">&gt;
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h3 id="create-the-callback-handler">Create the Callback Handler</h3>
 <p>In order to handle the redirect back from Okta, you need to capture the token values from the URL. You’ll use <code class="highlighter-rouge">/implicit/callback</code> as the callback URL, and use the default <code class="highlighter-rouge">Auth.handleCallback()</code> component included.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="c1">// router/index.js</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// router/index.js</span>
 
 <span class="kd">const</span> <span class="nx">router</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Router</span><span class="p">({</span>
   <span class="p">...</span>
@@ -175,8 +172,7 @@
     <span class="p">...</span>
   <span class="p">]</span>
 <span class="p">})</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="use-the-access-token">Use the Access Token</h2>
 
@@ -184,11 +180,11 @@
 
 <p>Here is what the Vue component could look like for this hypothetical example using <a href="https://github.com/axios/axios">axios</a>:</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="c1">// src/components/MessageList.vue</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// src/components/MessageList.vue</span>
 
 <span class="o">&lt;</span><span class="nx">template</span><span class="o">&gt;</span>
   <span class="o">&lt;</span><span class="nx">ul</span> <span class="nx">v</span><span class="o">-</span><span class="k">if</span><span class="o">=</span><span class="s2">"posts &amp;&amp; posts.length"</span><span class="o">&gt;</span>
-    <span class="o">&lt;</span><span class="nx">li</span> <span class="nx">v</span><span class="o">-</span><span class="k">for</span><span class="o">=</span><span class="s2">"post in posts"</span> <span class="err">:</span><span class="nx">key</span><span class="o">=</span><span class="s1">'post.title'</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">li</span> <span class="nx">v</span><span class="o">-</span><span class="k">for</span><span class="o">=</span><span class="s2">"post in posts"</span> <span class="p">:</span><span class="nx">key</span><span class="o">=</span><span class="s1">'post.title'</span><span class="o">&gt;</span>
       <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;&lt;</span><span class="nx">strong</span><span class="o">&gt;&lt;</span><span class="sr">/strong&gt;&lt;/</span><span class="nx">p</span><span class="o">&gt;</span>
       <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;&lt;</span><span class="sr">/p</span><span class="err">&gt;
 </span>    <span class="o">&lt;</span><span class="sr">/li</span><span class="err">&gt;
@@ -205,18 +201,17 @@
     <span class="p">}</span>
   <span class="p">},</span>
   <span class="k">async</span> <span class="nx">created</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="nx">axios</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">common</span><span class="p">[</span><span class="s1">'Authorization'</span><span class="p">]</span> <span class="o">=</span> <span class="err">`</span><span class="nx">Bearer</span> <span class="nx">$</span><span class="p">{</span><span class="k">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">$auth</span><span class="p">.</span><span class="nx">getAccessToken</span><span class="p">()}</span><span class="err">`</span>
+    <span class="nx">axios</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">common</span><span class="p">[</span><span class="s1">'Authorization'</span><span class="p">]</span> <span class="o">=</span> <span class="s2">`Bearer </span><span class="p">${</span><span class="kr">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">$auth</span><span class="p">.</span><span class="nx">getAccessToken</span><span class="p">()}</span><span class="s2">`</span>
     <span class="k">try</span> <span class="p">{</span>
-      <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">axios</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="err">`</span><span class="na">http</span><span class="p">:</span><span class="c1">//localhost:{serverPort}/api/messages`)</span>
+      <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">axios</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`http://localhost:{serverPort}/api/messages`</span><span class="p">)</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">posts</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span>
     <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="err">`</span><span class="nx">Errors</span><span class="o">!</span> <span class="nx">$</span><span class="p">{</span><span class="nx">e</span><span class="p">}</span><span class="err">`</span><span class="p">)</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">`Errors! </span><span class="p">${</span><span class="nx">e</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">}</span>
 <span class="o">&lt;</span><span class="sr">/script</span><span class="err">&gt;
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>In the next section you can select your server technology to see how your server can read this incoming token and validate it.</p>
 

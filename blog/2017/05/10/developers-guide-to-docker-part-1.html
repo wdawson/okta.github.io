@@ -220,9 +220,8 @@
 <h2 id="listing-and-getting-images">Listing and Getting Images</h2>
 <p>To list the images you have downloaded to your host machine, run a simple command:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>docker image list
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker image list
+</code></pre></div></div>
 
 <p><img src="/assets/blog/docker-for-developers/docker-image-list-e3625942b732eef4164c6b16517ef5b556348f21a9b2059e6b7ac6644eb13e1c.png" alt="Docker Image List" width="800" /></p>
 
@@ -230,9 +229,8 @@
 
 <p>To pull the latest version of the <a href="https://www.nginx.com/">NGINX</a> image from <a href="https://hub.docker.com">Docker Hub</a>, run the command:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>docker pull nginx:latest
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull nginx:latest
+</code></pre></div></div>
 <p><img src="/assets/blog/docker-for-developers/docker-pull-65d41ddcf8e26f6ec0ca7b8f71b7cb691034c09ac42679d65616cf9f57f8ad85.png" alt="Docker Pull" width="800" /></p>
 
 <p>You can leave off the <code class="highlighter-rouge">:latest</code> and Docker will pull the image tagged with latest, but we’ll be explicit here. Just remember that <code class="highlighter-rouge">:latest</code> changes every time the owner of that image uploads a new version. So it’s not a good idea to use latest in production. Generally, the latest image will also have another tag (1.13.0 at the time of this article) that is much better to use for production. It will still be the same image, even if NGINX uploads a new version of the image tomorrow.</p>
@@ -241,18 +239,16 @@
 
 <p>You can now run a container based on the <code class="highlighter-rouge">nginx:latest</code> image by running:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>docker run -it nginx:latest /bin/bash
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">-it</span> nginx:latest /bin/bash
+</code></pre></div></div>
 <p><img src="/assets/blog/docker-for-developers/docker-run-it-52467fb1a4206f5e0ca810b8b3160f2f332013a8c553edbb98b289812f356dde.png" alt="Docker Run" width="800" /></p>
 
 <p>This tells Docker that we want to run a container based on the <code class="highlighter-rouge">nginx:latest</code> image, that we want it to be interactive (<code class="highlighter-rouge">-i</code>), that we want a pseudo tty shell (<code class="highlighter-rouge">-t</code>), and finally, we want the main command for this container to be <code class="highlighter-rouge">/bin/bash</code>. This runs the <code class="highlighter-rouge">/bin/bash</code> command at process ID 1 in the container. This means, when the bash shell in the container exits, the container will stop.</p>
 
 <p>You should be dropped into a shell for the nginx container. We can open a new terminal while that one is running and see it from the host by typing:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>docker container list
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker container list
+</code></pre></div></div>
 <p>this should give is a listing like:</p>
 
 <p><img src="/assets/blog/docker-for-developers/docker-ps-dee9d2044bee5fcec3224c96ec1bc8cdf25d4e9116051c108a3a1668f5e1fe39.png" alt="Docker Container List" /></p>
@@ -263,9 +259,8 @@
 
 <p>But what if you want to see <strong>all</strong> the containers whether they’re running or not? You can run the <code class="highlighter-rouge">docker container list</code> command with the <code class="highlighter-rouge">-a</code> switch (for all).</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>docker container list -a
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker container list <span class="nt">-a</span>
+</code></pre></div></div>
 
 <p><img src="/assets/blog/docker-for-developers/docker-ps-a-9fb653f03693fd9f22829b25939695d010b32e000d1f57794c9f11265df625d9.png" alt="Docker Image List All" width="800" /></p>
 
@@ -274,16 +269,14 @@
 <h3 id="cleaning-up-your-docker-environment">Cleaning Up Your Docker Environment</h3>
 <p>Just because the container isn’t running, doesn’t mean it’s gone. It’s still there in a stopped state. If you want to actually delete a container from your host machine you use the <code class="highlighter-rouge">rm</code> command like so:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>docker rm determined_banach
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker rm determined_banach
+</code></pre></div></div>
 <p>You could also use the <code class="highlighter-rouge">Container ID</code> to remove a container, but you actually only have to give it as much of the ID as you need to make it unique in the list of containers. So if there are three containers on the host that all start with <code class="highlighter-rouge">41...</code> you would just have to type the first three characters of the <code class="highlighter-rouge">Container ID</code> (<code class="highlighter-rouge">416</code> for example) to remove it.</p>
 
 <p>If you decide you don’t want to build any more containers from a particular image, you can remove it with the <code class="highlighter-rouge">rmi</code> command.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>docker rmi nginx:latest
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker rmi nginx:latest
+</code></pre></div></div>
 
 <p>You don’t have to specify <code class="highlighter-rouge">:latest</code> for the image tag, Docker will assume you’re referring to <code class="highlighter-rouge">:latest</code> if you don’t specify, but it’s good practice to always use a tagged image. In a production scenario, it’s important to <strong>not</strong> use <code class="highlighter-rouge">:latest</code>, as the <code class="highlighter-rouge">:latest</code> image is updated whenever a new version of the image is pushed to the repository. So the image you get with the <code class="highlighter-rouge">:latest</code> tag today maybe <strong>very</strong> different from the one you got yesterday.</p>
 

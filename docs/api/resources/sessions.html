@@ -289,9 +289,9 @@
 
 <h3 id="session-token">Session Token</h3>
 
-<p>A <a href="./authn.html#session-token">session token</a> is a one-time bearer token that provides proof of authentication and may be redeemed for an interactive SSO session in Okta in a user agent. Session tokens can only be used <strong>once</strong> to establish a session for a user and are revoked when the token expires.</p>
+<p>A <a href="authn#session-token">session token</a> is a one-time bearer token that provides proof of authentication and may be redeemed for an interactive SSO session in Okta in a user agent. Session tokens can only be used <strong>once</strong> to establish a session for a user and are revoked when the token expires.</p>
 
-<p>Okta provides a very rich <a href="./authn.html">Authentication API</a> to validate a <a href="./authn.html#primary-authentication">user’s primary credentials</a> and secondary <a href="./authn.html#verify-factor">MFA factor</a>. A session token is returned after successful authentication which can be later exchanged for a session cookie using one of the following flows:</p>
+<p>Okta provides a very rich <a href="authn">Authentication API</a> to validate a <a href="authn#primary-authentication">user’s primary credentials</a> and secondary <a href="authn#verify-factor">MFA factor</a>. A session token is returned after successful authentication which can be later exchanged for a session cookie using one of the following flows:</p>
 
 <ul>
   <li><a href="/use_cases/authentication/session_cookie#retrieving-a-session-cookie-via-openid-connect-authorization-endpoint">Retrieving a session cookie by visiting the OpenID Connect Authorization Endpoint</a></li>
@@ -353,7 +353,7 @@
     </tr>
     <tr>
       <td>sessionToken</td>
-      <td>Session token obtained via <a href="./authn.html">Authentication API</a></td>
+      <td>Session token obtained via <a href="authn">Authentication API</a></td>
       <td>Body</td>
       <td>String</td>
       <td>TRUE</td>
@@ -370,64 +370,62 @@
 
 <h5 class="api api-request api-request-example" id="request-example">Request Example</h5>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -v -X POST <span class="se">\</span>
--H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
--H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
--d <span class="s1">'{
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> POST <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+<span class="nt">-d</span> <span class="s1">'{
   "sessionToken": "00HiohZYpJgMSHwmL9TQy7RRzuY-q9soKp1SPmYYow"
 }'</span> <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions"</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h5 class="api api-response api-response-example" id="response-example">Response Example</h5>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"login"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@example.com"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00ubgaSARVOQDIOXMORI"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-08-30T18:41:35.818Z"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"lastPasswordVerification"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-08-30T18:41:35.818Z"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"lastFactorVerification"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"amr"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"login"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@example.com"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00ubgaSARVOQDIOXMORI"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-08-30T18:41:35.818Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"lastPasswordVerification"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-08-30T18:41:35.818Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"lastFactorVerification"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"amr"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="s2">"pwd"</span><span class="w">
   </span><span class="p">],</span><span class="w">
-  </span><span class="nt">"idp"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00oi5cpnylv792IcF0g3"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OKTA"</span><span class="w">
+  </span><span class="s2">"idp"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00oi5cpnylv792IcF0g3"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OKTA"</span><span class="w">
   </span><span class="p">},</span><span class="w">
-  </span><span class="nt">"mfaActive"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+  </span><span class="s2">"mfaActive"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
           </span><span class="s2">"GET"</span><span class="p">,</span><span class="w">
           </span><span class="s2">"DELETE"</span><span class="w">
         </span><span class="p">]</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">},</span><span class="w">
-    </span><span class="nt">"refresh"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ/lifecycle/refresh"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"refresh"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ/lifecycle/refresh"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
           </span><span class="s2">"POST"</span><span class="w">
         </span><span class="p">]</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">},</span><span class="w">
-    </span><span class="nt">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Isaac Brock"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00uit00ZK6ELuzPoD0g3"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Isaac Brock"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00uit00ZK6ELuzPoD0g3"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
           </span><span class="s2">"GET"</span><span class="w">
         </span><span class="p">]</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">}</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h4 class="api api-operation" id="get-session">Get Session</h4>
 
@@ -441,13 +439,12 @@
 
 <h5 class="api api-request api-request-example" id="request-example-1">Request Example</h5>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -v -X GET <span class="se">\</span>
--H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
--H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
--H <span class="s2">"Authorization: SSWS </span><span class="k">${</span><span class="nv">api_token</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> GET <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: SSWS </span><span class="k">${</span><span class="nv">api_token</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
 <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ"</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h5 class="api api-response api-response-example" id="response-examples">Response Examples</h5>
 
@@ -455,57 +452,56 @@
 
 <p>If the session is invalid, a <code class="highlighter-rouge">404 Not Found</code> response will be returned.</p>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"login"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@example.com"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00u0abcdefGHIJKLMNOP"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-01-03T09:13:17.000Z"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"lastPasswordVerification"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-01-03T07:02:00.000Z"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"lastFactorVerification"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"amr"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"login"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@example.com"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00u0abcdefGHIJKLMNOP"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-01-03T09:13:17.000Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"lastPasswordVerification"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-01-03T07:02:00.000Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"lastFactorVerification"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"amr"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="s2">"pwd"</span><span class="w">
   </span><span class="p">],</span><span class="w">
-  </span><span class="nt">"idp"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01a2bcdef3GHIJKLMNOP"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OKTA"</span><span class="w">
+  </span><span class="s2">"idp"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01a2bcdef3GHIJKLMNOP"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OKTA"</span><span class="w">
   </span><span class="p">},</span><span class="w">
-  </span><span class="nt">"mfaActive"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"refresh"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ/lifecycle/refresh"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+  </span><span class="s2">"mfaActive"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"refresh"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ/lifecycle/refresh"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
           </span><span class="s2">"POST"</span><span class="w">
         </span><span class="p">]</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">},</span><span class="w">
-    </span><span class="nt">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
            </span><span class="s2">"GET"</span><span class="p">,</span><span class="w">
            </span><span class="s2">"DELETE"</span><span class="w">
         </span><span class="p">]</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">},</span><span class="w">
-    </span><span class="nt">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Isaac Brock"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00uit00ZK6ELuzPoD0g3"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Isaac Brock"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00uit00ZK6ELuzPoD0g3"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
           </span><span class="s2">"GET"</span><span class="w">
         </span><span class="p">]</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">}</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h3 class="api api-operation" id="extend-session">Extend Session</h3>
 
-<p><span class="api-uri-template api-uri-put"><span class="api-label">PUT</span> /api/v1/sessions/<em>:id</em></span>  <a href="/docs/api/getting_started/releases-at-okta.html#deprecation"> <span class="api-label api-label-deprecated "> <i class="fa fa-fire-extinguisher"></i> Deprecated </span> </a></p>
+<p><span class="api-uri-template api-uri-put"><span class="api-label">PUT</span> /api/v1/sessions/<em>:id</em></span>  <a href="/docs/api/getting_started/releases-at-okta#deprecation"> <span class="api-label api-label-deprecated "> <i class="fa fa-fire-extinguisher"></i> Deprecated </span> </a></p>
 
 <p>Extends the lifetime of a user’s session.</p>
 
@@ -550,63 +546,61 @@
 
 <h5 class="api api-request api-request-example" id="request-example-2">Request Example</h5>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -v -X PUT <span class="se">\</span>
--H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
--H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
--H <span class="s2">"Authorization: SSWS </span><span class="k">${</span><span class="nv">api_token</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> PUT <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: SSWS </span><span class="k">${</span><span class="nv">api_token</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
 <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ"</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h5 class="api api-response api-response-example" id="response-example-1">Response Example</h5>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"login"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@example.com"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00ubgaSARVOQDIOXMORI"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-08-30T18:41:35.818Z"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"lastPasswordVerification"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-08-30T18:41:35.818Z"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"lastFactorVerification"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"amr"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"login"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@example.com"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00ubgaSARVOQDIOXMORI"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-08-30T18:41:35.818Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"lastPasswordVerification"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-08-30T18:41:35.818Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"lastFactorVerification"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"amr"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="s2">"pwd"</span><span class="w">
   </span><span class="p">],</span><span class="w">
-  </span><span class="nt">"idp"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00oi5cpnylv792IcF0g3"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OKTA"</span><span class="w">
+  </span><span class="s2">"idp"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00oi5cpnylv792IcF0g3"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OKTA"</span><span class="w">
   </span><span class="p">},</span><span class="w">
-  </span><span class="nt">"mfaActive"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+  </span><span class="s2">"mfaActive"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
           </span><span class="s2">"GET"</span><span class="p">,</span><span class="w">
           </span><span class="s2">"DELETE"</span><span class="w">
         </span><span class="p">]</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">},</span><span class="w">
-    </span><span class="nt">"refresh"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ/lifecycle/refresh"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"refresh"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ/lifecycle/refresh"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
           </span><span class="s2">"POST"</span><span class="w">
         </span><span class="p">]</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">},</span><span class="w">
-    </span><span class="nt">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Isaac Brock"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00uit00ZK6ELuzPoD0g3"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Isaac Brock"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00uit00ZK6ELuzPoD0g3"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
           </span><span class="s2">"GET"</span><span class="w">
         </span><span class="p">]</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">}</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h3 class="api api-request" id="refresh-session">Refresh Session</h3>
 
@@ -651,63 +645,61 @@
 
 <h5 class="api api-request api-request-example" id="request-example-3">Request Example</h5>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -v -X POST <span class="se">\</span>
--H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
--H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
--H <span class="s2">"Authorization: SSWS </span><span class="k">${</span><span class="nv">api_token</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> POST <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: SSWS </span><span class="k">${</span><span class="nv">api_token</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
 <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ/lifecycle/refresh"</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h5 class="api api-response api-response-example" id="response-example-2">Response Example</h5>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"login"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@example.com"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00ubgaSARVOQDIOXMORI"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-08-30T18:41:35.818Z"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"lastPasswordVerification"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-08-30T18:41:35.818Z"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"lastFactorVerification"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"amr"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"login"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@example.com"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00ubgaSARVOQDIOXMORI"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-08-30T18:41:35.818Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"lastPasswordVerification"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-08-30T18:41:35.818Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"lastFactorVerification"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"amr"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="s2">"pwd"</span><span class="w">
   </span><span class="p">],</span><span class="w">
-  </span><span class="nt">"idp"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00oi5cpnylv792IcF0g3"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OKTA"</span><span class="w">
+  </span><span class="s2">"idp"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00oi5cpnylv792IcF0g3"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OKTA"</span><span class="w">
   </span><span class="p">},</span><span class="w">
-  </span><span class="nt">"mfaActive"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+  </span><span class="s2">"mfaActive"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
           </span><span class="s2">"GET"</span><span class="p">,</span><span class="w">
           </span><span class="s2">"DELETE"</span><span class="w">
         </span><span class="p">]</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">},</span><span class="w">
-    </span><span class="nt">"refresh"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ/lifecycle/refresh"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"refresh"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ/lifecycle/refresh"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
           </span><span class="s2">"POST"</span><span class="w">
         </span><span class="p">]</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">},</span><span class="w">
-    </span><span class="nt">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Isaac Brock"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00uit00ZK6ELuzPoD0g3"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Isaac Brock"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00uit00ZK6ELuzPoD0g3"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
           </span><span class="s2">"GET"</span><span class="w">
         </span><span class="p">]</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">}</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h3 class="api api-operation" id="close-session">Close Session</h3>
 
@@ -752,19 +744,17 @@
 
 <h5 class="api api-request api-request-example" id="request-example-4">Request Example</h5>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -v -X DELETE <span class="se">\</span>
--H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
--H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
--H <span class="s2">"Authorization: SSWS </span><span class="k">${</span><span class="nv">api_token</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> DELETE <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: SSWS </span><span class="k">${</span><span class="nv">api_token</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
 <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ"</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h5 class="api api-response api-response-example" id="response-example-3">Response Example</h5>
 
-<div class="language-http highlighter-rouge"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">204</span> <span class="ne">No Content</span>
-</code></pre>
-</div>
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">204</span> <span class="ne">No Content</span>
+</code></pre></div></div>
 
 <h3 class="api api-operation" id="get-current-session">Get Current Session</h3>
 
@@ -778,12 +768,11 @@
 
 <h5 class="api api-request api-request-example" id="request-example-5">Request Example</h5>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -v -X GET <span class="se">\</span>
--H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
--H <span class="s2">"Cookie: </span><span class="k">${</span><span class="nv">okta_session_cookie</span><span class="k">}</span><span class="s2">"</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> GET <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Cookie: </span><span class="k">${</span><span class="nv">okta_session_cookie</span><span class="k">}</span><span class="s2">"</span>
 <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/me"</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h5 class="api api-response api-response-example" id="response-examples-1">Response Examples</h5>
 
@@ -791,54 +780,53 @@
 
 <p>If the session is invalid, a <code class="highlighter-rouge">404 Not Found</code> response will be returned.</p>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"login"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@example.com"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00u0abcdefGHIJKLMNOP"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-01-03T07:02:00.000Z"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-01-03T09:13:17.000Z"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"lastPasswordVerification"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-01-03T07:02:00.000Z"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"lastFactorVerification"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"amr"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"login"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00u0abcdefGHIJKLMNOP"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-01-03T07:02:00.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-01-03T09:13:17.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"lastPasswordVerification"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-01-03T07:02:00.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"lastFactorVerification"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amr"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"pwd"</span><span class="w">
     </span><span class="p">],</span><span class="w">
-    </span><span class="nt">"idp"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01a2bcdef3GHIJKLMNOP"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OKTA"</span><span class="w">
+    </span><span class="s2">"idp"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01a2bcdef3GHIJKLMNOP"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OKTA"</span><span class="w">
     </span><span class="p">},</span><span class="w">
-    </span><span class="nt">"mfaActive"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"refresh"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/me/lifecycle/refresh"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-                </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"mfaActive"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"refresh"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/me/lifecycle/refresh"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
                     </span><span class="s2">"POST"</span><span class="w">
                 </span><span class="p">]</span><span class="w">
             </span><span class="p">}</span><span class="w">
         </span><span class="p">},</span><span class="w">
-        </span><span class="nt">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/me"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-                </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/me"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
                     </span><span class="s2">"GET"</span><span class="p">,</span><span class="w">
                     </span><span class="s2">"DELETE"</span><span class="w">
                 </span><span class="p">]</span><span class="w">
             </span><span class="p">}</span><span class="w">
         </span><span class="p">},</span><span class="w">
-        </span><span class="nt">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Isaac Brock"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/me"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-                </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Isaac Brock"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/me"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
                     </span><span class="s2">"GET"</span><span class="w">
                 </span><span class="p">]</span><span class="w">
             </span><span class="p">}</span><span class="w">
         </span><span class="p">}</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h3 class="api api-request" id="refresh-current-session">Refresh Current Session</h3>
 
@@ -852,13 +840,12 @@
 
 <h5 class="api api-request api-request-example" id="request-example-6">Request Example</h5>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -v -X POST <span class="se">\</span>
--H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
--H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
--H <span class="s2">"Cookie: </span><span class="k">${</span><span class="nv">okta_session_cookie</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> POST <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Cookie: </span><span class="k">${</span><span class="nv">okta_session_cookie</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
 <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/me/lifecycle/refresh"</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h5 class="api api-response api-response-example" id="response-example-4">Response Example</h5>
 
@@ -866,54 +853,53 @@
 
 <p>If the session is invalid, a <code class="highlighter-rouge">404 Not Found</code> response will be returned.</p>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"login"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@example.com"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00u0abcdefGHIJKLMNOP"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-01-03T07:02:00.000Z"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-01-03T09:13:17.000Z"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"lastPasswordVerification"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-01-03T07:02:00.000Z"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"lastFactorVerification"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"amr"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"login"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00u0abcdefGHIJKLMNOP"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-01-03T07:02:00.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-01-03T09:13:17.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"lastPasswordVerification"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-01-03T07:02:00.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"lastFactorVerification"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amr"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"pwd"</span><span class="w">
     </span><span class="p">],</span><span class="w">
-    </span><span class="nt">"idp"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01a2bcdef3GHIJKLMNOP"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OKTA"</span><span class="w">
+    </span><span class="s2">"idp"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01a2bcdef3GHIJKLMNOP"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OKTA"</span><span class="w">
     </span><span class="p">},</span><span class="w">
-    </span><span class="nt">"mfaActive"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"refresh"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/me/lifecycle/refresh"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-                </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"mfaActive"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"refresh"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/me/lifecycle/refresh"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
                     </span><span class="s2">"POST"</span><span class="w">
                 </span><span class="p">]</span><span class="w">
             </span><span class="p">}</span><span class="w">
         </span><span class="p">},</span><span class="w">
-        </span><span class="nt">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/me"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-                </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/me"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
                     </span><span class="s2">"GET"</span><span class="p">,</span><span class="w">
                     </span><span class="s2">"DELETE"</span><span class="w">
                 </span><span class="p">]</span><span class="w">
             </span><span class="p">}</span><span class="w">
         </span><span class="p">},</span><span class="w">
-        </span><span class="nt">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Isaac Brock"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/me"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-                </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Isaac Brock"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/me"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
                     </span><span class="s2">"GET"</span><span class="w">
                 </span><span class="p">]</span><span class="w">
             </span><span class="p">}</span><span class="w">
         </span><span class="p">}</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h3 class="api api-request" id="close-current-session">Close Current Session</h3>
 
@@ -927,12 +913,11 @@
 
 <h5 class="api api-response api-response-example" id="response-example-5">Response Example</h5>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -v -X DELETE <span class="se">\</span>
--H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
--H <span class="s2">"Cookie: </span><span class="k">${</span><span class="nv">okta_session_cookie</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> DELETE <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Cookie: </span><span class="k">${</span><span class="nv">okta_session_cookie</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
 <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/me"</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h5 class="api api-response api-response-example" id="response-example-6">Response Example</h5>
 
@@ -940,63 +925,61 @@
 
 <p>If the session is invalid, a <code class="highlighter-rouge">404 Not Found</code> response will be returned.</p>
 
-<div class="language-http highlighter-rouge"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">204</span> <span class="ne">No Content</span>
-</code></pre>
-</div>
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">204</span> <span class="ne">No Content</span>
+</code></pre></div></div>
 
 <h2 id="session-model">Session Model</h2>
 
 <h3 id="example">Example</h3>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"login"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@example.com"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00ubgaSARVOQDIOXMORI"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-08-30T18:41:35.818Z"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"lastPasswordVerification"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-08-30T18:41:35.818Z"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"lastFactorVerification"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-08-30T18:41:35.818Z"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"amr"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"login"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@example.com"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00ubgaSARVOQDIOXMORI"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-08-30T18:41:35.818Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"lastPasswordVerification"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-08-30T18:41:35.818Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"lastFactorVerification"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-08-30T18:41:35.818Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"amr"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="s2">"pwd"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"otp"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"mfa"</span><span class="w">
   </span><span class="p">],</span><span class="w">
-  </span><span class="nt">"idp"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00oi5cpnylv792IcF0g3"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OKTA"</span><span class="w">
+  </span><span class="s2">"idp"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00oi5cpnylv792IcF0g3"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OKTA"</span><span class="w">
   </span><span class="p">},</span><span class="w">
-  </span><span class="nt">"mfaActive"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+  </span><span class="s2">"mfaActive"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
           </span><span class="s2">"GET"</span><span class="p">,</span><span class="w">
           </span><span class="s2">"DELETE"</span><span class="w">
         </span><span class="p">]</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">},</span><span class="w">
-    </span><span class="nt">"refresh"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ/lifecycle/refresh"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"refresh"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/101W_juydrDRByB7fUdRyE2JQ/lifecycle/refresh"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
           </span><span class="s2">"POST"</span><span class="w">
         </span><span class="p">]</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">},</span><span class="w">
-    </span><span class="nt">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Isaac Brock"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00uit00ZK6ELuzPoD0g3"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Isaac Brock"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00uit00ZK6ELuzPoD0g3"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
           </span><span class="s2">"GET"</span><span class="w">
         </span><span class="p">]</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">}</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h3 id="session-properties">Session Properties</h3>
 
@@ -1032,7 +1015,7 @@
     </tr>
     <tr>
       <td>userId</td>
-      <td>unique key for the <a href="users.html#get-user-with-id">user</a></td>
+      <td>unique key for the <a href="users#get-user-with-id">user</a></td>
       <td>String</td>
       <td>FALSE</td>
       <td>TRUE</td>
@@ -1088,7 +1071,7 @@
     </tr>
     <tr>
       <td>mfaActive</td>
-      <td>indicates whether the user has <a href="./factors.html#list-enrolled-factors">enrolled an MFA factor</a></td>
+      <td>indicates whether the user has <a href="factors#list-enrolled-factors">enrolled an MFA factor</a></td>
       <td>Boolean</td>
       <td>FALSE</td>
       <td>FALSE</td>
@@ -1098,7 +1081,7 @@
 </table>
 
 <blockquote>
-  <p>The <code class="highlighter-rouge">mfaActive</code> parameter is a  <a href="/docs/api/getting_started/releases-at-okta.html#deprecation"> <span class="api-label api-label-deprecated "> <i class="fa fa-fire-extinguisher"></i> Deprecated </span> </a>  feature. Use the <code class="highlighter-rouge">lastFactorVerification</code> attribute in conjunction with <code class="highlighter-rouge">amr</code> to understand if the user has performed MFA for the current session. Use the <a href="./factors.html#list-enrolled-factors">Factors API</a> to query the factor enrollment status for a given user.</p>
+  <p>The <code class="highlighter-rouge">mfaActive</code> parameter is a  <a href="/docs/api/getting_started/releases-at-okta#deprecation"> <span class="api-label api-label-deprecated "> <i class="fa fa-fire-extinguisher"></i> Deprecated </span> </a>  feature. Use the <code class="highlighter-rouge">lastFactorVerification</code> attribute in conjunction with <code class="highlighter-rouge">amr</code> to understand if the user has performed MFA for the current session. Use the <a href="factors#list-enrolled-factors">Factors API</a> to query the factor enrollment status for a given user.</p>
 </blockquote>
 
 <h4 id="optional-session-properties">Optional Session Properties</h4>
@@ -1125,11 +1108,11 @@
 </table>
 
 <blockquote>
-  <p>The <code class="highlighter-rouge">cookieToken</code> is a  <a href="/docs/api/getting_started/releases-at-okta.html#deprecation"> <span class="api-label api-label-deprecated "> <i class="fa fa-fire-extinguisher"></i> Deprecated </span> </a>  property. Instead, use the <a href="./authn.html">Authentication API</a>, which supports the full user authentication pipeline and produces a <code class="highlighter-rouge">sessionToken</code> which can be used in this API.</p>
+  <p>The <code class="highlighter-rouge">cookieToken</code> is a  <a href="/docs/api/getting_started/releases-at-okta#deprecation"> <span class="api-label api-label-deprecated "> <i class="fa fa-fire-extinguisher"></i> Deprecated </span> </a>  property. Instead, use the <a href="authn">Authentication API</a>, which supports the full user authentication pipeline and produces a <code class="highlighter-rouge">sessionToken</code> which can be used in this API.</p>
 </blockquote>
 
 <blockquote>
-  <p>The <code class="highlighter-rouge">cookieTokenUrl</code> is a  <a href="/docs/api/getting_started/releases-at-okta.html#deprecation"> <span class="api-label api-label-deprecated "> <i class="fa fa-fire-extinguisher"></i> Deprecated </span> </a>  property, because modern browsers block cookies set via embedding images from another origin (cross-domain).</p>
+  <p>The <code class="highlighter-rouge">cookieTokenUrl</code> is a  <a href="/docs/api/getting_started/releases-at-okta#deprecation"> <span class="api-label api-label-deprecated "> <i class="fa fa-fire-extinguisher"></i> Deprecated </span> </a>  property, because modern browsers block cookies set via embedding images from another origin (cross-domain).</p>
 </blockquote>
 
 <h3 id="session-status">Session Status</h3>
@@ -1258,14 +1241,13 @@
   <p>The <code class="highlighter-rouge">id</code> will be the org id if the type is <code class="highlighter-rouge">OKTA</code>; otherwise it will be the IDP instance id.</p>
 </blockquote>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"idp"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0oabhnUQFYHMBNVSVXMV"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE_DIRECTORY"</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"idp"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0oabhnUQFYHMBNVSVXMV"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE_DIRECTORY"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
       </div>
       <div class="TableOfContents TableOfContentsPreload">

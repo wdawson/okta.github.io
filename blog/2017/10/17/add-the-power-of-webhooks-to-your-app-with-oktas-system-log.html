@@ -237,7 +237,7 @@ via a web application. And, because of the widespread adoption of webhooks, you 
 
 <p>Let’s start by looking at the main loop that drives the core of this program:</p>
 
-<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">for</span><span class="x"> </span><span class="p">{</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span><span class="x"> </span><span class="p">{</span><span class="x">
     </span><span class="k">for</span><span class="x"> </span><span class="n">logEvents</span><span class="o">.</span><span class="n">Next</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
         </span><span class="n">logEvent</span><span class="p">,</span><span class="x"> </span><span class="n">raw</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">logEvents</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span><span class="x">
         </span><span class="k">if</span><span class="x"> </span><span class="o">!</span><span class="n">logEvent</span><span class="o">.</span><span class="n">Published</span><span class="o">.</span><span class="n">IsZero</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
@@ -251,8 +251,7 @@ via a web application. And, because of the widespread adoption of webhooks, you 
     </span><span class="p">}</span><span class="x">
     </span><span class="n">logEvents</span><span class="o">.</span><span class="n">Sleep</span><span class="p">()</span><span class="x">
 </span><span class="p">}</span><span class="x">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>What you see above are two nested <code class="highlighter-rouge">for</code> loops.</p>
 
@@ -262,7 +261,7 @@ via a web application. And, because of the widespread adoption of webhooks, you 
 
 <p>Now that you’ve got an idea of how the main loop works let’s take a look at the whole function that runs the main loop. This code below contains the main loop, but also has the code we use to configure the Okta log client as well as the event processing code which loads configuration from a file named <code class="highlighter-rouge">loghook.csv</code>:</p>
 
-<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
     </span><span class="n">log</span><span class="o">.</span><span class="n">SetOutput</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">Stdout</span><span class="p">)</span><span class="x">
     </span><span class="n">log</span><span class="o">.</span><span class="n">SetLevel</span><span class="p">(</span><span class="n">log</span><span class="o">.</span><span class="n">InfoLevel</span><span class="p">)</span><span class="x">
 
@@ -293,8 +292,7 @@ via a web application. And, because of the widespread adoption of webhooks, you 
         </span><span class="n">logEvents</span><span class="o">.</span><span class="n">Sleep</span><span class="p">()</span><span class="x">
     </span><span class="p">}</span><span class="x">
 </span><span class="p">}</span><span class="x">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>Note in particular the use of <code class="highlighter-rouge">os.Getenv</code> which we use to get Okta configuration from environment variables.</p>
 
@@ -304,10 +302,9 @@ via a web application. And, because of the widespread adoption of webhooks, you 
 
 <p>In this project, we configure <code class="highlighter-rouge">log</code> to send log output to the <a href="https://www.gnu.org/software/libc/manual/html_node/Standard-Streams.html">Standard Out</a> stream and to only display messages marked as the “Information” <a href="https://tools.ietf.org/html/rfc5424#page-11">severity level</a> or higher:</p>
 
-<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="n">log</span><span class="o">.</span><span class="n">SetOutput</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">Stdout</span><span class="p">)</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">log</span><span class="o">.</span><span class="n">SetOutput</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">Stdout</span><span class="p">)</span><span class="x">
 </span><span class="n">log</span><span class="o">.</span><span class="n">SetLevel</span><span class="p">(</span><span class="n">log</span><span class="o">.</span><span class="n">InfoLevel</span><span class="p">)</span><span class="x">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h2 id="get-system-log-events-from-okta">Get System Log Events From Okta</h2>
 
@@ -328,15 +325,14 @@ via a web application. And, because of the widespread adoption of webhooks, you 
 
 <p>The code below is syntactic sugar used to initialize a stateful iterator for the System Log.</p>
 
-<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">c</span><span class="x"> </span><span class="o">*</span><span class="n">logClient</span><span class="p">)</span><span class="x"> </span><span class="n">Tail</span><span class="p">()</span><span class="x"> </span><span class="p">(</span><span class="o">*</span><span class="n">logEventResult</span><span class="p">,</span><span class="x"> </span><span class="kt">error</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">c</span><span class="x"> </span><span class="o">*</span><span class="n">logClient</span><span class="p">)</span><span class="x"> </span><span class="n">Tail</span><span class="p">()</span><span class="x"> </span><span class="p">(</span><span class="o">*</span><span class="n">logEventResult</span><span class="p">,</span><span class="x"> </span><span class="kt">error</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
     </span><span class="n">logEvent</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="o">&amp;</span><span class="n">logEventResult</span><span class="p">{</span><span class="x">
         </span><span class="n">logClient</span><span class="o">:</span><span class="x"> </span><span class="n">c</span><span class="p">,</span><span class="x">
         </span><span class="n">offset</span><span class="o">:</span><span class="x">    </span><span class="o">-</span><span class="m">1</span><span class="p">,</span><span class="x">
     </span><span class="p">}</span><span class="x">
     </span><span class="k">return</span><span class="x"> </span><span class="n">logEvent</span><span class="p">,</span><span class="x"> </span><span class="no">nil</span><span class="x">
 </span><span class="p">}</span><span class="x">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h3 id="next">Next()</h3>
 
@@ -351,7 +347,7 @@ via a web application. And, because of the widespread adoption of webhooks, you 
 
 <p>Here is the code that implements this logic:</p>
 
-<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">l</span><span class="x"> </span><span class="o">*</span><span class="n">logEventResult</span><span class="p">)</span><span class="x"> </span><span class="n">Next</span><span class="p">()</span><span class="x"> </span><span class="kt">bool</span><span class="x"> </span><span class="p">{</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">l</span><span class="x"> </span><span class="o">*</span><span class="n">logEventResult</span><span class="p">)</span><span class="x"> </span><span class="n">Next</span><span class="p">()</span><span class="x"> </span><span class="kt">bool</span><span class="x"> </span><span class="p">{</span><span class="x">
     </span><span class="k">if</span><span class="x"> </span><span class="n">l</span><span class="o">.</span><span class="n">offset</span><span class="x"> </span><span class="o">==</span><span class="x"> </span><span class="o">-</span><span class="m">1</span><span class="x"> </span><span class="p">{</span><span class="x">
         </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">l</span><span class="o">.</span><span class="n">getEvents</span><span class="p">(</span><span class="s">""</span><span class="p">)</span><span class="x">
         </span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
@@ -374,8 +370,7 @@ via a web application. And, because of the widespread adoption of webhooks, you 
     </span><span class="n">l</span><span class="o">.</span><span class="n">offset</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="o">-</span><span class="m">1</span><span class="x">
     </span><span class="k">return</span><span class="x"> </span><span class="no">false</span><span class="x">
 </span><span class="p">}</span><span class="x">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>Astute readers will note that the <code class="highlighter-rouge">Next()</code> function makes several calls to the private <code class="highlighter-rouge">getEvents()</code> function. Let’s take a look at that function. Here’s what the <code class="highlighter-rouge">getEvents()</code> function does:</p>
 
@@ -383,7 +378,7 @@ via a web application. And, because of the widespread adoption of webhooks, you 
   <li>
     <p>Construct the request URL, using query parameters if needed.</p>
 
-    <div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="n">log</span><span class="o">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">"Events since: "</span><span class="p">,</span><span class="x"> </span><span class="n">l</span><span class="o">.</span><span class="n">Since</span><span class="p">)</span><span class="x">
+    <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">log</span><span class="o">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">"Events since: "</span><span class="p">,</span><span class="x"> </span><span class="n">l</span><span class="o">.</span><span class="n">Since</span><span class="p">)</span><span class="x">
 </span><span class="k">if</span><span class="x"> </span><span class="n">loc</span><span class="x"> </span><span class="o">==</span><span class="x"> </span><span class="s">""</span><span class="x"> </span><span class="p">{</span><span class="x">
     </span><span class="n">u</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">url</span><span class="o">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">logClient</span><span class="o">.</span><span class="n">oktaOrgUrl</span><span class="x"> </span><span class="o">+</span><span class="x"> </span><span class="s">"/api/v1/logs"</span><span class="p">)</span><span class="x">
     </span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
@@ -402,55 +397,50 @@ via a web application. And, because of the widespread adoption of webhooks, you 
 </span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
     </span><span class="k">return</span><span class="x"> </span><span class="n">l</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
 </span><span class="p">}</span><span class="x">
-</span></code></pre>
-    </div>
+</span></code></pre></div>    </div>
   </li>
   <li>
     <p>Set the appropriate headers for our HTTP request to Okta.</p>
 
-    <div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="n">req</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">"Accept"</span><span class="p">,</span><span class="x"> </span><span class="s">"application/json"</span><span class="p">)</span><span class="x">
+    <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">req</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">"Accept"</span><span class="p">,</span><span class="x"> </span><span class="s">"application/json"</span><span class="p">)</span><span class="x">
 </span><span class="n">req</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span><span class="x"> </span><span class="s">"SSWS "</span><span class="o">+</span><span class="n">l</span><span class="o">.</span><span class="n">logClient</span><span class="o">.</span><span class="n">apiToken</span><span class="p">)</span><span class="x">
 </span><span class="n">req</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">"Cache-Control"</span><span class="p">,</span><span class="x"> </span><span class="s">"no-cache"</span><span class="p">)</span><span class="x">
 </span><span class="n">req</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">"Content-Type"</span><span class="p">,</span><span class="x"> </span><span class="s">"application/json"</span><span class="p">)</span><span class="x">
-</span></code></pre>
-    </div>
+</span></code></pre></div>    </div>
   </li>
   <li>
     <p>Execute the HTTP request, checking for errors.</p>
 
-    <div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="n">resp</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">http</span><span class="o">.</span><span class="n">DefaultClient</span><span class="o">.</span><span class="n">Do</span><span class="p">(</span><span class="n">req</span><span class="p">)</span><span class="x">
+    <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">resp</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">http</span><span class="o">.</span><span class="n">DefaultClient</span><span class="o">.</span><span class="n">Do</span><span class="p">(</span><span class="n">req</span><span class="p">)</span><span class="x">
 </span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
     </span><span class="k">return</span><span class="x"> </span><span class="n">l</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
 </span><span class="p">}</span><span class="x">
 </span><span class="k">defer</span><span class="x"> </span><span class="n">resp</span><span class="o">.</span><span class="n">Body</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span><span class="x">
-</span></code></pre>
-    </div>
+</span></code></pre></div>    </div>
   </li>
   <li>
     <p>Determine if the response was paginated by checking for a <code class="highlighter-rouge">Link</code> header in the HTTP response</p>
 
-    <div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">for</span><span class="x"> </span><span class="n">_</span><span class="p">,</span><span class="x"> </span><span class="n">value</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="k">range</span><span class="x"> </span><span class="n">resp</span><span class="o">.</span><span class="n">Header</span><span class="p">[</span><span class="s">"Link"</span><span class="p">]</span><span class="x"> </span><span class="p">{</span><span class="x">
+    <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span><span class="x"> </span><span class="n">_</span><span class="p">,</span><span class="x"> </span><span class="n">value</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="k">range</span><span class="x"> </span><span class="n">resp</span><span class="o">.</span><span class="n">Header</span><span class="p">[</span><span class="s">"Link"</span><span class="p">]</span><span class="x"> </span><span class="p">{</span><span class="x">
     </span><span class="n">match</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">rfc5988</span><span class="o">.</span><span class="n">FindStringSubmatch</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="x">
     </span><span class="n">link</span><span class="p">,</span><span class="x"> </span><span class="n">rel</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">match</span><span class="p">[</span><span class="m">1</span><span class="p">],</span><span class="x"> </span><span class="n">match</span><span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="x">
     </span><span class="k">if</span><span class="x"> </span><span class="n">rel</span><span class="x"> </span><span class="o">==</span><span class="x"> </span><span class="s">"next"</span><span class="x"> </span><span class="p">{</span><span class="x">
         </span><span class="n">l</span><span class="o">.</span><span class="n">nextLink</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="n">link</span><span class="x">
     </span><span class="p">}</span><span class="x">
 </span><span class="p">}</span><span class="x">
-</span></code></pre>
-    </div>
+</span></code></pre></div>    </div>
   </li>
   <li>
     <p>Finally, decode the response into an array of raw JSON strings</p>
 
-    <div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="n">l</span><span class="o">.</span><span class="n">offset</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="m">0</span><span class="x">
+    <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">l</span><span class="o">.</span><span class="n">offset</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="m">0</span><span class="x">
 </span><span class="n">l</span><span class="o">.</span><span class="n">events</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="nb">make</span><span class="p">([]</span><span class="n">json</span><span class="o">.</span><span class="n">RawMessage</span><span class="p">,</span><span class="x"> </span><span class="m">100</span><span class="p">)</span><span class="x">
 </span><span class="n">err</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="n">json</span><span class="o">.</span><span class="n">NewDecoder</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">Body</span><span class="p">)</span><span class="o">.</span><span class="n">Decode</span><span class="p">(</span><span class="o">&amp;</span><span class="n">l</span><span class="o">.</span><span class="n">events</span><span class="p">)</span><span class="x">
 </span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
     </span><span class="k">return</span><span class="x"> </span><span class="n">l</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
 </span><span class="p">}</span><span class="x">
 </span><span class="k">return</span><span class="x"> </span><span class="no">nil</span><span class="x">
-</span></code></pre>
-    </div>
+</span></code></pre></div>    </div>
   </li>
 </ol>
 
@@ -458,7 +448,7 @@ via a web application. And, because of the widespread adoption of webhooks, you 
 
 <p>Here’s what it all looks like when it’s put together into one function:</p>
 
-<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">l</span><span class="x"> </span><span class="o">*</span><span class="n">logEventResult</span><span class="p">)</span><span class="x"> </span><span class="n">getEvents</span><span class="p">(</span><span class="n">loc</span><span class="x"> </span><span class="kt">string</span><span class="p">)</span><span class="x"> </span><span class="kt">error</span><span class="x"> </span><span class="p">{</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">l</span><span class="x"> </span><span class="o">*</span><span class="n">logEventResult</span><span class="p">)</span><span class="x"> </span><span class="n">getEvents</span><span class="p">(</span><span class="n">loc</span><span class="x"> </span><span class="kt">string</span><span class="p">)</span><span class="x"> </span><span class="kt">error</span><span class="x"> </span><span class="p">{</span><span class="x">
     </span><span class="n">log</span><span class="o">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">"Events since: "</span><span class="p">,</span><span class="x"> </span><span class="n">l</span><span class="o">.</span><span class="n">Since</span><span class="p">)</span><span class="x">
     </span><span class="k">if</span><span class="x"> </span><span class="n">loc</span><span class="x"> </span><span class="o">==</span><span class="x"> </span><span class="s">""</span><span class="x"> </span><span class="p">{</span><span class="x">
         </span><span class="n">u</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">url</span><span class="o">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">logClient</span><span class="o">.</span><span class="n">oktaOrgUrl</span><span class="x"> </span><span class="o">+</span><span class="x"> </span><span class="s">"/api/v1/logs"</span><span class="p">)</span><span class="x">
@@ -505,14 +495,13 @@ via a web application. And, because of the widespread adoption of webhooks, you 
     </span><span class="p">}</span><span class="x">
     </span><span class="k">return</span><span class="x"> </span><span class="no">nil</span><span class="x">
 </span><span class="p">}</span><span class="x">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h3 id="get">Get()</h3>
 
 <p>Gets the current System Log event from the internal <code class="highlighter-rouge">events</code> property, using the <code class="highlighter-rouge">offset</code> property to keep track of which property is the current one.</p>
 
-<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">l</span><span class="x"> </span><span class="o">*</span><span class="n">logEventResult</span><span class="p">)</span><span class="x"> </span><span class="n">Get</span><span class="p">()</span><span class="x"> </span><span class="p">(</span><span class="o">*</span><span class="n">oktaLogEvent</span><span class="p">,</span><span class="x"> </span><span class="o">*</span><span class="p">[]</span><span class="kt">byte</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">l</span><span class="x"> </span><span class="o">*</span><span class="n">logEventResult</span><span class="p">)</span><span class="x"> </span><span class="n">Get</span><span class="p">()</span><span class="x"> </span><span class="p">(</span><span class="o">*</span><span class="n">oktaLogEvent</span><span class="p">,</span><span class="x"> </span><span class="o">*</span><span class="p">[]</span><span class="kt">byte</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
     </span><span class="n">raw</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="p">[]</span><span class="kt">byte</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">offset</span><span class="p">])</span><span class="x">
     </span><span class="n">l</span><span class="o">.</span><span class="n">offset</span><span class="x"> </span><span class="o">+=</span><span class="x"> </span><span class="m">1</span><span class="x">
 
@@ -524,14 +513,13 @@ via a web application. And, because of the widespread adoption of webhooks, you 
     </span><span class="p">}</span><span class="x">
     </span><span class="k">return</span><span class="x"> </span><span class="o">&amp;</span><span class="n">oktaEvent</span><span class="p">,</span><span class="x"> </span><span class="o">&amp;</span><span class="n">raw</span><span class="x">
 </span><span class="p">}</span><span class="x">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h3 id="sleep">Sleep()</h3>
 
 <p>This code is used to wait between calls to the System Log. Uses the value in the <code class="highlighter-rouge">LOGHOOK_RETRY_SECONDS</code> environment variable as the number of seconds to wait, or 15 seconds otherwise.</p>
 
-<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">l</span><span class="x"> </span><span class="o">*</span><span class="n">logEventResult</span><span class="p">)</span><span class="x"> </span><span class="n">Sleep</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">l</span><span class="x"> </span><span class="o">*</span><span class="n">logEventResult</span><span class="p">)</span><span class="x"> </span><span class="n">Sleep</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
     </span><span class="n">ts</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">l</span><span class="o">.</span><span class="n">Since</span><span class="o">.</span><span class="n">Format</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">RFC3339</span><span class="p">)</span><span class="x">
     </span><span class="n">log</span><span class="o">.</span><span class="n">WithFields</span><span class="p">(</span><span class="n">log</span><span class="o">.</span><span class="n">Fields</span><span class="p">{</span><span class="s">"last_seen"</span><span class="o">:</span><span class="x"> </span><span class="n">ts</span><span class="p">})</span><span class="o">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">"Sleeping"</span><span class="p">)</span><span class="x">
     </span><span class="k">var</span><span class="x"> </span><span class="n">retrySeconds</span><span class="x"> </span><span class="kt">int</span><span class="x">
@@ -541,8 +529,7 @@ via a web application. And, because of the widespread adoption of webhooks, you 
     </span><span class="p">}</span><span class="x">
     </span><span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">Second</span><span class="x"> </span><span class="o">*</span><span class="x"> </span><span class="n">time</span><span class="o">.</span><span class="n">Duration</span><span class="p">(</span><span class="n">retrySeconds</span><span class="p">))</span><span class="x">
 </span><span class="p">}</span><span class="x">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h2 id="process-events">Process Events</h2>
 
@@ -573,7 +560,7 @@ via a web application. And, because of the widespread adoption of webhooks, you 
 
 <p>Loading the <code class="highlighter-rouge">loghook.csv</code> file is easy, we just use Go’s <a href="https://golang.org/pkg/encoding/csv/">built-in CSV parsing package</a>:</p>
 
-<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">p</span><span class="x"> </span><span class="o">*</span><span class="n">eventProcessor</span><span class="p">)</span><span class="x"> </span><span class="n">LoadConfig</span><span class="p">(</span><span class="n">filename</span><span class="x"> </span><span class="kt">string</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">p</span><span class="x"> </span><span class="o">*</span><span class="n">eventProcessor</span><span class="p">)</span><span class="x"> </span><span class="n">LoadConfig</span><span class="p">(</span><span class="n">filename</span><span class="x"> </span><span class="kt">string</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
     </span><span class="n">f</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">os</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="x">
     </span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
         </span><span class="n">log</span><span class="o">.</span><span class="n">Fatal</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
@@ -584,12 +571,11 @@ via a web application. And, because of the widespread adoption of webhooks, you 
         </span><span class="n">p</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">record</span><span class="p">[</span><span class="m">0</span><span class="p">],</span><span class="x"> </span><span class="n">record</span><span class="p">[</span><span class="m">1</span><span class="p">])</span><span class="x">
     </span><span class="p">}</span><span class="x">
 </span><span class="p">}</span><span class="x">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>For each line in the CSV file, we call the <code class="highlighter-rouge">Add()</code> method to process the regular expression and URL in the line, then append an array containing the compiled regular expression and URL to our list of “processors”:</p>
 
-<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">p</span><span class="x"> </span><span class="o">*</span><span class="n">eventProcessor</span><span class="p">)</span><span class="x"> </span><span class="n">Add</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span><span class="x"> </span><span class="n">destination</span><span class="x"> </span><span class="kt">string</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">p</span><span class="x"> </span><span class="o">*</span><span class="n">eventProcessor</span><span class="p">)</span><span class="x"> </span><span class="n">Add</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span><span class="x"> </span><span class="n">destination</span><span class="x"> </span><span class="kt">string</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
     </span><span class="n">re</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">regexp</span><span class="o">.</span><span class="n">Compile</span><span class="p">(</span><span class="n">expression</span><span class="p">)</span><span class="x">
     </span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
         </span><span class="n">log</span><span class="o">.</span><span class="n">Fatal</span><span class="p">(</span><span class="s">"Error compiling Regular Expression: "</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="p">)</span><span class="x">
@@ -601,12 +587,11 @@ via a web application. And, because of the widespread adoption of webhooks, you 
     </span><span class="n">p</span><span class="o">.</span><span class="n">Handlers</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="nb">append</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">Handlers</span><span class="p">,</span><span class="x"> </span><span class="n">eventHandler</span><span class="p">{</span><span class="n">re</span><span class="p">,</span><span class="x"> </span><span class="n">url</span><span class="p">})</span><span class="x">
     </span><span class="n">log</span><span class="o">.</span><span class="n">Info</span><span class="p">(</span><span class="n">fmt</span><span class="o">.</span><span class="n">Sprintf</span><span class="p">(</span><span class="s">"Sending events matching '%s' to '%s'"</span><span class="p">,</span><span class="x"> </span><span class="n">expression</span><span class="p">,</span><span class="x"> </span><span class="n">destination</span><span class="p">))</span><span class="x">
 </span><span class="p">}</span><span class="x">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>Here are how we define the <code class="highlighter-rouge">eventProcessor</code> type and the <code class="highlighter-rouge">Handler</code> Array in the <code class="highlighter-rouge">eventProcessor</code>:</p>
 
-<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">type</span><span class="x"> </span><span class="n">eventHandler</span><span class="x"> </span><span class="k">struct</span><span class="x"> </span><span class="p">{</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span><span class="x"> </span><span class="n">eventHandler</span><span class="x"> </span><span class="k">struct</span><span class="x"> </span><span class="p">{</span><span class="x">
     </span><span class="n">Expression</span><span class="x"> </span><span class="o">*</span><span class="n">regexp</span><span class="o">.</span><span class="n">Regexp</span><span class="x">
     </span><span class="n">URL</span><span class="x">        </span><span class="o">*</span><span class="n">url</span><span class="o">.</span><span class="n">URL</span><span class="x">
 </span><span class="p">}</span><span class="x">
@@ -620,15 +605,14 @@ via a web application. And, because of the widespread adoption of webhooks, you 
     </span><span class="n">processor</span><span class="o">.</span><span class="n">Handlers</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="p">[]</span><span class="n">eventHandler</span><span class="p">{}</span><span class="x">
     </span><span class="k">return</span><span class="x"> </span><span class="n">processor</span><span class="x">
 </span><span class="p">}</span><span class="x">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>Finally, here is one of the core functions in this program, the function that processes each event and determines if the event should be sent via a webhook.</p>
 
 <p>This function works by iterating over each handler. If the <code class="highlighter-rouge">eventType</code> of that event matches the regular expression for a handler, then a webhook is sent to the URL that corresponds to that
 regular expression:</p>
 
-<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">p</span><span class="x"> </span><span class="o">*</span><span class="n">eventProcessor</span><span class="p">)</span><span class="x"> </span><span class="n">Process</span><span class="p">(</span><span class="n">event</span><span class="x"> </span><span class="o">*</span><span class="n">oktaLogEvent</span><span class="p">,</span><span class="x"> </span><span class="n">raw</span><span class="x"> </span><span class="o">*</span><span class="p">[]</span><span class="kt">byte</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">p</span><span class="x"> </span><span class="o">*</span><span class="n">eventProcessor</span><span class="p">)</span><span class="x"> </span><span class="n">Process</span><span class="p">(</span><span class="n">event</span><span class="x"> </span><span class="o">*</span><span class="n">oktaLogEvent</span><span class="p">,</span><span class="x"> </span><span class="n">raw</span><span class="x"> </span><span class="o">*</span><span class="p">[]</span><span class="kt">byte</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
     </span><span class="k">for</span><span class="x"> </span><span class="n">_</span><span class="p">,</span><span class="x"> </span><span class="n">handler</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="k">range</span><span class="x"> </span><span class="n">p</span><span class="o">.</span><span class="n">Handlers</span><span class="x"> </span><span class="p">{</span><span class="x">
         </span><span class="n">re</span><span class="p">,</span><span class="x"> </span><span class="n">url</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">handler</span><span class="o">.</span><span class="n">Expression</span><span class="p">,</span><span class="x"> </span><span class="n">handler</span><span class="o">.</span><span class="n">URL</span><span class="x">
         </span><span class="n">log</span><span class="o">.</span><span class="n">WithFields</span><span class="p">(</span><span class="n">log</span><span class="o">.</span><span class="n">Fields</span><span class="p">{</span><span class="x">
@@ -641,14 +625,13 @@ regular expression:</p>
         </span><span class="p">}</span><span class="x">
     </span><span class="p">}</span><span class="x">
 </span><span class="p">}</span><span class="x">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h2 id="send-your-webhooks">Send Your Webhooks</h2>
 
 <p>Last is <code class="highlighter-rouge">sendWebhook</code>, the function that makes the HTTP request (or webhook) to a URL. This code is a pretty standard HTTP client, we set up a POST request, configure a few headers, then make the request.</p>
 
-<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="n">sendWebhook</span><span class="p">(</span><span class="n">url</span><span class="x"> </span><span class="o">*</span><span class="n">url</span><span class="o">.</span><span class="n">URL</span><span class="p">,</span><span class="x"> </span><span class="n">event</span><span class="x"> </span><span class="o">*</span><span class="n">oktaLogEvent</span><span class="p">,</span><span class="x"> </span><span class="n">payload</span><span class="x"> </span><span class="o">*</span><span class="p">[]</span><span class="kt">byte</span><span class="p">)</span><span class="x"> </span><span class="kt">error</span><span class="x"> </span><span class="p">{</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="n">sendWebhook</span><span class="p">(</span><span class="n">url</span><span class="x"> </span><span class="o">*</span><span class="n">url</span><span class="o">.</span><span class="n">URL</span><span class="p">,</span><span class="x"> </span><span class="n">event</span><span class="x"> </span><span class="o">*</span><span class="n">oktaLogEvent</span><span class="p">,</span><span class="x"> </span><span class="n">payload</span><span class="x"> </span><span class="o">*</span><span class="p">[]</span><span class="kt">byte</span><span class="p">)</span><span class="x"> </span><span class="kt">error</span><span class="x"> </span><span class="p">{</span><span class="x">
     </span><span class="n">log</span><span class="o">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">"POSTing to URL:"</span><span class="p">,</span><span class="x"> </span><span class="n">url</span><span class="p">)</span><span class="x">
 
     </span><span class="n">req</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">http</span><span class="o">.</span><span class="n">NewRequest</span><span class="p">(</span><span class="s">"POST"</span><span class="p">,</span><span class="x"> </span><span class="n">url</span><span class="o">.</span><span class="n">String</span><span class="p">(),</span><span class="x"> </span><span class="n">bytes</span><span class="o">.</span><span class="n">NewReader</span><span class="p">(</span><span class="o">*</span><span class="n">payload</span><span class="p">))</span><span class="x">
@@ -666,14 +649,13 @@ regular expression:</p>
     </span><span class="k">return</span><span class="x"> </span><span class="no">nil</span><span class="x">
 </span><span class="p">}</span><span class="x">
 
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>The only thing that isn’t obvious above is where the <code class="highlighter-rouge">userAgent</code> string is defined. This string is configured once at runtime and will look something like this: <code class="highlighter-rouge">loghook/0.0.2 go/1.8.3 darwin/16.7.0</code></p>
 
 <p>Here is how the <code class="highlighter-rouge">userAgent</code> string is defined:</p>
 
-<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="n">makeUserAgent</span><span class="p">()</span><span class="x"> </span><span class="kt">string</span><span class="x"> </span><span class="p">{</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="n">makeUserAgent</span><span class="p">()</span><span class="x"> </span><span class="kt">string</span><span class="x"> </span><span class="p">{</span><span class="x">
     </span><span class="n">goVersion</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">strings</span><span class="o">.</span><span class="n">Replace</span><span class="p">(</span><span class="n">runtime</span><span class="o">.</span><span class="n">Version</span><span class="p">(),</span><span class="x"> </span><span class="s">"go"</span><span class="p">,</span><span class="x"> </span><span class="s">""</span><span class="p">,</span><span class="x"> </span><span class="o">-</span><span class="m">1</span><span class="p">)</span><span class="x">
     </span><span class="n">osVersion</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">osversion</span><span class="o">.</span><span class="n">GetString</span><span class="p">()</span><span class="x">
     </span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
@@ -690,8 +672,7 @@ regular expression:</p>
 </span><span class="p">}</span><span class="x">
 
 </span><span class="k">var</span><span class="x"> </span><span class="n">userAgent</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="n">makeUserAgent</span><span class="p">()</span><span class="x">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h2 id="running-loghook-yourself">Running Loghook Yourself</h2>
 
@@ -699,22 +680,20 @@ regular expression:</p>
 
 <p>Get loghook on your system by downloading a pre-compiled binary above or compiling it yourself as follows:</p>
 
-<div class="language-console highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">git</span><span class="kv"> clone https://github.com/jpf/loghook.git
-</span><span class="w">$ </span><span class="nc">cd</span><span class="kv"> loghook
-</span><span class="w">$ </span><span class="nc">go</span><span class="kv"> get github.com/getlantern/osversion
-</span><span class="w">$ </span><span class="nc">go</span><span class="kv"> get github.com/sirupsen/logrus
-</span><span class="w">$ </span><span class="nc">go</span><span class="kv"> build loghook.go
-</span></code></pre>
-</div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> git clone https://github.com/jpf/loghook.git
+<span class="gp">$</span> <span class="nb">cd </span>loghook
+<span class="gp">$</span> go get github.com/getlantern/osversion
+<span class="gp">$</span> go get github.com/sirupsen/logrus
+<span class="gp">$</span> go build loghook.go
+</code></pre></div></div>
 
 <p>At this point, you will have a binary named <code class="highlighter-rouge">loghook</code> in your current directory. Now you’ll need to configure the environment variables that <code class="highlighter-rouge">loghook</code> uses and then edit the <code class="highlighter-rouge">loghook.csv</code> file:</p>
 
-<div class="language-console highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">export</span><span class="kv"> OKTA_ORG_URL="<span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>"
-</span><span class="w">$ </span><span class="nc">export</span><span class="kv"> OKTA_API_KEY="01A_BcDE23fgH4IJKLM5nop_QRstUvwXYZ6aBC78dE"
-</span></code></pre>
-</div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> <span class="nb">export </span><span class="nv">OKTA_ORG_URL</span><span class="o">=</span><span class="s2">"<span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>"</span>
+<span class="gp">$</span> <span class="nb">export </span><span class="nv">OKTA_API_KEY</span><span class="o">=</span><span class="s2">"01A_BcDE23fgH4IJKLM5nop_QRstUvwXYZ6aBC78dE"</span>
+</code></pre></div></div>
 
-<p><strong>IMPORTANT</strong>: The values for <code class="highlighter-rouge">OKTA_ORG_URL</code> and <code class="highlighter-rouge">OKTA_API_KEY</code> above are examples. You will need to use the URL for your own Okta org as well as <a href="https://developer.okta.com/docs/api/getting_started/getting_a_token.html">create an API token</a> to allow <code class="highlighter-rouge">loghook</code> to connect to your Okta org.</p>
+<p><strong>IMPORTANT</strong>: The values for <code class="highlighter-rouge">OKTA_ORG_URL</code> and <code class="highlighter-rouge">OKTA_API_KEY</code> above are examples. You will need to use the URL for your own Okta org as well as <a href="https://developer.okta.com/docs/api/getting_started/getting_a_token">create an API token</a> to allow <code class="highlighter-rouge">loghook</code> to connect to your Okta org.</p>
 
 <p>Now, you’ll need to edit the <code class="highlighter-rouge">loghook.csv</code> file and add entries for where you want to send the webhooks. The <a href="https://requestb.in/">RequestBin</a> tool is a great resource to use for setting up a quick and temporary webhook endpoint for testing.</p>
 
@@ -726,20 +705,18 @@ regular expression:</p>
 
 <p>Once you do this, start up <code class="highlighter-rouge">loghook</code> by running this command:</p>
 
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>./loghook
-</code></pre>
-</div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">./loghook
+</span></code></pre></div></div>
 
 <p>You’ll know it’s working if you see output like this:</p>
 
-<div class="language-console highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">./loghook</span><span class="kv">
-</span>INFO[0000] Sending events matching '^example.example' to 'http://example.com'
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> ./loghook
+<span class="go">INFO[0000] Sending events matching '^example.example' to 'http://example.com'
 INFO[0000] Sending events matching '.*' to 'https://requestb.in/0ab12345'
 INFO[0000] Started polling for events at: https://dev-12345.oktapreview.com
-</code></pre>
-</div>
+</span></code></pre></div></div>
 
-<p>I hope that this post has inspired you to think of cool ways you can use webhooks with your own Okta org. I highly suggest checking out <a href="https://zapier.com/">Zapier</a> and in particular the excellent <a href="https://zapier.com/blog/how-use-zapier-webhooks/">Zapier Webhook support</a> that Zapier provides. You should also take a look at this post on <a href="https://developer.okta.com/blog/2017/10/11/why-are-webhooks-better-than-serverless-extensibility">the webhooks vs serverless debate</a> by my friend and colleague Randall Degges.</p>
+<p>I hope that this post has inspired you to think of cool ways you can use webhooks with your own Okta org. I highly suggest checking out <a href="https://zapier.com/">Zapier</a> and in particular the excellent <a href="https://zapier.com/blog/how-use-zapier-webhooks/">Zapier Webhook support</a> that Zapier provides. You should also take a look at this post on <a href="/blog/2017/10/11/why-are-webhooks-better-than-serverless-extensibility">the webhooks vs serverless debate</a> by my friend and colleague Randall Degges.</p>
 
 <p><a href="mailto:joel.franusic@okta.com">Let me know</a> how you’re using <code class="highlighter-rouge">loghook</code> or if you have any questions or comments about this post. And don’t forget to follow our team on Twitter <a href="https://twitter.com/OktaDev">@oktadev</a>. Thanks for reading!</p>
 

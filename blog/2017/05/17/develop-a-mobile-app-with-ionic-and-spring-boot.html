@@ -208,14 +208,13 @@
 
 <p>I recently wrote about how to build a Spring Boot API in <a href="/blog/2017/04/26/bootiful-development-with-spring-boot-and-angular">Bootiful Development with Spring Boot with Angular</a>. Rather than covering that again, you can clone the existing project and copy the <code class="highlighter-rouge">server</code> directory into <code class="highlighter-rouge">spring-boot-ionic-example</code>.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>git clone https://github.com/oktadeveloper/spring-boot-angular-example.git
-cp -r spring-boot-angular-example/server ~/spring-boot-ionic-example/.
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/oktadeveloper/spring-boot-angular-example.git
+cp <span class="nt">-r</span> spring-boot-angular-example/server ~/spring-boot-ionic-example/.
+</code></pre></div></div>
 
 <p>This project contains a <code class="highlighter-rouge">beers</code> API that allows you to <abbr title="Create, Read, Update, and Delete">CRUD</abbr> a list of beer names. It also contains a <code class="highlighter-rouge">/good-beers</code> endpoint that filters out less-than-great beers. A <code class="highlighter-rouge">BeerCommandLineRunner</code> class creates the default list of beers:</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@Component</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Component</span>
 <span class="kd">class</span> <span class="nc">BeerCommandLineRunner</span> <span class="kd">implements</span> <span class="n">CommandLineRunner</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="kd">final</span> <span class="n">BeerRepository</span> <span class="n">repository</span><span class="o">;</span>
 
@@ -233,19 +232,17 @@ cp -r spring-boot-angular-example/server ~/spring-boot-ionic-example/.
         <span class="n">repository</span><span class="o">.</span><span class="na">findAll</span><span class="o">().</span><span class="na">forEach</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">println</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>The <code class="highlighter-rouge">BeerRepository</code> interface is decorated with <code class="highlighter-rouge">@RepositoryRestResource</code> to expose CRUD endpoints for the <code class="highlighter-rouge">Beer</code> entity.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@RepositoryRestResource</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RepositoryRestResource</span>
 <span class="kd">interface</span> <span class="nc">BeerRepository</span> <span class="kd">extends</span> <span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Beer</span><span class="o">,</span> <span class="n">Long</span><span class="o">&gt;</span> <span class="o">{}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>The last piece of the API is the <code class="highlighter-rouge">BeerController</code> that exposes <code class="highlighter-rouge">/good-beers</code> and specifies cross-origin resource sharing (CORS) settings.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@RestController</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RestController</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">BeerController</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="n">BeerRepository</span> <span class="n">repository</span><span class="o">;</span>
 
@@ -268,8 +265,7 @@ cp -r spring-boot-angular-example/server ~/spring-boot-ionic-example/.
                 <span class="o">!</span><span class="n">beer</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="s">"PBR"</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You should be able to start the <code class="highlighter-rouge">server</code> application by running it in your favorite IDE or from the command line using <code class="highlighter-rouge">mvn spring-boot:run</code>. You’ll want to do this from the <code class="highlighter-rouge">server</code> directory. If you don’t have Maven installed, you can use the Maven wrapper that’s included in the project (<code class="highlighter-rouge">./mvnw spring-boot:run</code>).</p>
 
@@ -281,24 +277,21 @@ cp -r spring-boot-angular-example/server ~/spring-boot-ionic-example/.
 
 <p>To create an Ionic app to display data from your API, you’ll first need to install Ionic CLI and Cordova:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>npm install -g ionic cordova
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install <span class="nt">-g</span> ionic cordova
+</code></pre></div></div>
 
 <p>The <a href="http://ionicframework.com/docs/cli/">Ionic CLI</a> is a command-line tool that significantly reduces the time it takes to develop an Ionic app. It’s like a Swiss Army Knife: It brings together a bunch of miscellaneous tools under a single interface. The CLI contains a number of useful commands for Ionic development, such as <code class="highlighter-rouge">start</code>, <code class="highlighter-rouge">build</code>, <code class="highlighter-rouge">generate</code>, <code class="highlighter-rouge">serve</code>, and <code class="highlighter-rouge">run</code>.</p>
 
 <p>After installation completes, create a new application using the following command:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>ionic start ionic-beer --type ionic-angular
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ionic start ionic-beer <span class="nt">--type</span> ionic-angular
+</code></pre></div></div>
 
 <p>You will be prompted to select a starter project and optionally link your app to your Ionic Dashboard. For the purposes of this tutorial, choose the <strong>tabs</strong> starter project and do not link the app to your Ionic Dashboard.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="nb">cd </span>ionic-beer
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>ionic-beer
 ionic serve
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>This will open your default browser on <code class="highlighter-rouge">http://localhost:8100</code>. You can click through the tabbed interface to see the default structure of the app.</p>
 
@@ -310,18 +303,17 @@ ionic serve
 
 <p>Run <code class="highlighter-rouge">ionic generate page beer</code> to create a component and a template to display the list of good beers. This creates a number of files in <code class="highlighter-rouge">src/pages/beer</code>:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>beer.html
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>beer.html
 beer.module.ts
 beer.scss
 beer.ts
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Open <code class="highlighter-rouge">src/app/app.module.ts</code> and add <code class="highlighter-rouge">BeerPageModule</code> to the <code class="highlighter-rouge">imports</code> list in <code class="highlighter-rouge">app.module.ts</code>.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">BeerPageModule</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../pages/beer/beer.module'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">BeerPageModule</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../pages/beer/beer.module'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">NgModule</span><span class="p">({</span>
+<span class="p">@</span><span class="nd">NgModule</span><span class="p">({</span>
   <span class="p">...</span>
   <span class="na">imports</span><span class="p">:</span> <span class="p">[</span>
     <span class="nx">BrowserModule</span><span class="p">,</span>
@@ -330,37 +322,35 @@ beer.ts
   <span class="p">],</span>
   <span class="p">...</span>
 <span class="p">})</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Create <code class="highlighter-rouge">src/providers/beer-service.ts</code> to hold a <code class="highlighter-rouge">BeerService</code> that fetches the beer list from the Spring Boot API. Populate it with constants for the API path and add a <code class="highlighter-rouge">getGoodBeers()</code> method.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Injectable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Injectable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">Http</span><span class="p">,</span> <span class="nx">Response</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/http'</span><span class="p">;</span>
 <span class="k">import</span> <span class="s1">'rxjs/add/operator/map'</span><span class="p">;</span>
 <span class="k">import</span> <span class="s1">'rxjs/add/operator/catch'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'rxjs'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">Injectable</span><span class="p">()</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">BeerService</span> <span class="p">{</span>
-  <span class="k">public</span> <span class="nx">API</span> <span class="o">=</span> <span class="s1">'http://localhost:8080'</span><span class="p">;</span>
-  <span class="k">public</span> <span class="nx">BEER_API</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">API</span> <span class="o">+</span> <span class="s1">'/beers'</span><span class="p">;</span>
+<span class="p">@</span><span class="nd">Injectable</span><span class="p">()</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">BeerService</span> <span class="p">{</span>
+  <span class="kr">public</span> <span class="nx">API</span> <span class="o">=</span> <span class="s1">'http://localhost:8080'</span><span class="p">;</span>
+  <span class="kr">public</span> <span class="nx">BEER_API</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">API</span> <span class="o">+</span> <span class="s1">'/beers'</span><span class="p">;</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="k">public</span> <span class="nx">http</span><span class="err">:</span> <span class="nx">Http</span><span class="p">)</span> <span class="p">{}</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">public</span> <span class="nx">http</span><span class="p">:</span> <span class="nx">Http</span><span class="p">)</span> <span class="p">{}</span>
 
-  <span class="nx">getGoodBeers</span><span class="p">()</span><span class="err">:</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="kr">any</span><span class="o">&gt;</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">API</span> <span class="o">+</span> <span class="s1">'/good-beers'</span><span class="p">)</span>
+  <span class="nx">getGoodBeers</span><span class="p">():</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">API</span> <span class="o">+</span> <span class="s1">'/good-beers'</span><span class="p">)</span>
       <span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="na">response</span><span class="p">:</span> <span class="nx">Response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><strong>NOTE:</strong> If you receive TypeScript errors with this code, make sure your imports match. In particular, <code class="highlighter-rouge">Response</code> needs to be imported for <code class="highlighter-rouge">getGoodBeers()</code> to compile.</p>
 
 <p>Replace the HTML in <code class="highlighter-rouge">src/pages/beer/beer.html</code> to show the list of beers.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ion-header&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;ion-header&gt;</span>
   <span class="nt">&lt;ion-navbar&gt;</span>
     <span class="nt">&lt;ion-title&gt;</span>Good Beers<span class="nt">&lt;/ion-title&gt;</span>
   <span class="nt">&lt;/ion-navbar&gt;</span>
@@ -373,38 +363,36 @@ beer.ts
     <span class="nt">&lt;/ion-item&gt;</span>
   <span class="nt">&lt;/ion-list&gt;</span>
 <span class="nt">&lt;/ion-content&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Modify <code class="highlighter-rouge">src/pages/beer/beer.module.ts</code> to import <code class="highlighter-rouge">BeerService</code> and add it as a provider. You could add it as a provider in each component, but adding it in the module allows all components to use it.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">BeerService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../../providers/beer-service'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">BeerService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../../providers/beer-service'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">NgModule</span><span class="p">({</span>
+<span class="p">@</span><span class="nd">NgModule</span><span class="p">({</span>
   <span class="p">...</span>
   <span class="na">providers</span><span class="p">:</span> <span class="p">[</span>
     <span class="nx">BeerService</span>
   <span class="p">]</span>
 <span class="p">})</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Update <code class="highlighter-rouge">src/pages/beer/beer.ts</code> to import <code class="highlighter-rouge">BeerService</code> and add it as a dependency in the constructor. Call the <code class="highlighter-rouge">getGoodBeers()</code> method in the <code class="highlighter-rouge">ionViewDidLoad()</code> lifecycle method.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">IonicPage</span><span class="p">,</span> <span class="nx">NavController</span><span class="p">,</span> <span class="nx">NavParams</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'ionic-angular'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">BeerService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../../providers/beer-service'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">IonicPage</span><span class="p">()</span>
-<span class="err">@</span><span class="nx">Component</span><span class="p">({</span>
+<span class="p">@</span><span class="nd">IonicPage</span><span class="p">()</span>
+<span class="p">@</span><span class="nd">Component</span><span class="p">({</span>
   <span class="na">selector</span><span class="p">:</span> <span class="s1">'page-beer'</span><span class="p">,</span>
   <span class="na">templateUrl</span><span class="p">:</span> <span class="s1">'beer.html'</span>
 <span class="p">})</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">BeerPage</span> <span class="p">{</span>
-  <span class="k">private</span> <span class="nx">beers</span><span class="err">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="kr">any</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">BeerPage</span> <span class="p">{</span>
+  <span class="kr">private</span> <span class="nx">beers</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span><span class="p">;</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="k">public</span> <span class="nx">navCtrl</span><span class="err">:</span> <span class="nx">NavController</span><span class="p">,</span> <span class="k">public</span> <span class="nx">navParams</span><span class="err">:</span> <span class="nx">NavParams</span><span class="p">,</span>
-              <span class="k">public</span> <span class="nx">beerService</span><span class="err">:</span> <span class="nx">BeerService</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">public</span> <span class="nx">navCtrl</span><span class="p">:</span> <span class="nx">NavController</span><span class="p">,</span> <span class="kr">public</span> <span class="nx">navParams</span><span class="p">:</span> <span class="nx">NavParams</span><span class="p">,</span>
+              <span class="kr">public</span> <span class="nx">beerService</span><span class="p">:</span> <span class="nx">BeerService</span><span class="p">)</span> <span class="p">{</span>
   <span class="p">}</span>
 
   <span class="nx">ionViewDidLoad</span><span class="p">()</span> <span class="p">{</span>
@@ -413,22 +401,21 @@ beer.ts
     <span class="p">})</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>To expose this page on the tab bar, modify <code class="highlighter-rouge">src/pages/tabs/tabs.ts</code> and re-arrange things so <code class="highlighter-rouge">BeerPage</code> is second in the list.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
 
 <span class="k">import</span> <span class="p">{</span> <span class="nx">HomePage</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../home/home'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">AboutPage</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../about/about'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">ContactPage</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../contact/contact'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">BeerPage</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../beer/beer'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">Component</span><span class="p">({</span>
+<span class="p">@</span><span class="nd">Component</span><span class="p">({</span>
   <span class="na">templateUrl</span><span class="p">:</span> <span class="s1">'tabs.html'</span>
 <span class="p">})</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">TabsPage</span> <span class="p">{</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">TabsPage</span> <span class="p">{</span>
   <span class="nx">tab1Root</span> <span class="o">=</span> <span class="nx">HomePage</span><span class="p">;</span>
   <span class="nx">tab2Root</span> <span class="o">=</span> <span class="nx">BeerPage</span><span class="p">;</span>
   <span class="nx">tab3Root</span> <span class="o">=</span> <span class="nx">AboutPage</span><span class="p">;</span>
@@ -436,39 +423,37 @@ beer.ts
 
   <span class="kd">constructor</span><span class="p">()</span> <span class="p">{}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You’ll also need to update <code class="highlighter-rouge">src/pages/tabs/tabs.html</code> to have the new tab order and to specify which icon to use.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ion-tabs&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;ion-tabs&gt;</span>
   <span class="nt">&lt;ion-tab</span> <span class="err">[</span><span class="na">root</span><span class="err">]="</span><span class="na">tab1Root</span><span class="err">"</span> <span class="na">tabTitle=</span><span class="s">"Home"</span> <span class="na">tabIcon=</span><span class="s">"home"</span><span class="nt">&gt;&lt;/ion-tab&gt;</span>
   <span class="nt">&lt;ion-tab</span> <span class="err">[</span><span class="na">root</span><span class="err">]="</span><span class="na">tab2Root</span><span class="err">"</span> <span class="na">tabTitle=</span><span class="s">"Beer"</span> <span class="na">tabIcon=</span><span class="s">"beer"</span><span class="nt">&gt;&lt;/ion-tab&gt;</span>
   <span class="nt">&lt;ion-tab</span> <span class="err">[</span><span class="na">root</span><span class="err">]="</span><span class="na">tab3Root</span><span class="err">"</span> <span class="na">tabTitle=</span><span class="s">"Contact"</span> <span class="na">tabIcon=</span><span class="s">"contacts"</span><span class="nt">&gt;&lt;/ion-tab&gt;</span>
   <span class="nt">&lt;ion-tab</span> <span class="err">[</span><span class="na">root</span><span class="err">]="</span><span class="na">tab4Root</span><span class="err">"</span> <span class="na">tabTitle=</span><span class="s">"About"</span> <span class="na">tabIcon=</span><span class="s">"information-circle"</span><span class="nt">&gt;&lt;/ion-tab&gt;</span>
 <span class="nt">&lt;/ion-tabs&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="add-some-fun-with-animated-gifs">Add Some Fun with Animated GIFs</h3>
 
 <p>Create a <code class="highlighter-rouge">GiphyService</code> class in <code class="highlighter-rouge">src/providers/giphy-service.ts</code> with code that searches Giphy’s API.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Injectable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Injectable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">Http</span><span class="p">,</span> <span class="nx">Response</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/http'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'rxjs'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">Injectable</span><span class="p">()</span>
+<span class="p">@</span><span class="nd">Injectable</span><span class="p">()</span>
 <span class="c1">// http://tutorials.pluralsight.com/front-end-javascript/getting-started-with-angular-2-by-building-a-giphy-search-application</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">GiphyService</span> <span class="p">{</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">GiphyService</span> <span class="p">{</span>
 
   <span class="c1">// Public beta key: https://github.com/Giphy/GiphyAPI#public-beta-key</span>
   <span class="nx">giphyApi</span> <span class="o">=</span> <span class="s1">'https://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&amp;q='</span><span class="p">;</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="k">public</span> <span class="nx">http</span><span class="err">:</span> <span class="nx">Http</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">public</span> <span class="nx">http</span><span class="p">:</span> <span class="nx">Http</span><span class="p">)</span> <span class="p">{</span>
   <span class="p">}</span>
 
-  <span class="nx">get</span><span class="p">(</span><span class="nx">searchTerm</span><span class="p">)</span><span class="err">:</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="kr">any</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="kd">get</span><span class="p">(</span><span class="nx">searchTerm</span><span class="p">):</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="kd">let</span> <span class="nx">apiLink</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">giphyApi</span> <span class="o">+</span> <span class="nx">searchTerm</span><span class="p">;</span>
     <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">request</span><span class="p">(</span><span class="nx">apiLink</span><span class="p">).</span><span class="nx">map</span><span class="p">((</span><span class="na">res</span><span class="p">:</span> <span class="nx">Response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
       <span class="kd">let</span> <span class="nx">results</span> <span class="o">=</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">().</span><span class="nx">data</span><span class="p">;</span>
@@ -480,80 +465,75 @@ beer.ts
     <span class="p">});</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Update <code class="highlighter-rouge">beer.module.ts</code> to import <code class="highlighter-rouge">GiphyService</code> and include it as a provider.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">GiphyService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../../providers/giphy-service'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">GiphyService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../../providers/giphy-service'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">NgModule</span><span class="p">({</span>
+<span class="p">@</span><span class="nd">NgModule</span><span class="p">({</span>
   <span class="p">...</span>
   <span class="na">providers</span><span class="p">:</span> <span class="p">[</span>
     <span class="nx">BeerService</span><span class="p">,</span>
     <span class="nx">GiphyService</span>
   <span class="p">]</span>
 <span class="p">})</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Modify <code class="highlighter-rouge">beer.ts</code> to import <code class="highlighter-rouge">GiphyService</code> and set a <code class="highlighter-rouge">giphyUrl</code> on each beer.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">IonicPage</span><span class="p">,</span> <span class="nx">NavController</span><span class="p">,</span> <span class="nx">NavParams</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'ionic-angular'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">BeerService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../../providers/beer-service'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">GiphyService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../../providers/giphy-service'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">IonicPage</span><span class="p">()</span>
-<span class="err">@</span><span class="nx">Component</span><span class="p">({</span>
+<span class="p">@</span><span class="nd">IonicPage</span><span class="p">()</span>
+<span class="p">@</span><span class="nd">Component</span><span class="p">({</span>
   <span class="na">selector</span><span class="p">:</span> <span class="s1">'page-beer'</span><span class="p">,</span>
   <span class="na">templateUrl</span><span class="p">:</span> <span class="s1">'beer.html'</span>
 <span class="p">})</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">BeerPage</span> <span class="p">{</span>
-  <span class="k">private</span> <span class="nx">beers</span><span class="err">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="kr">any</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">BeerPage</span> <span class="p">{</span>
+  <span class="kr">private</span> <span class="nx">beers</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span><span class="p">;</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="k">public</span> <span class="nx">navCtrl</span><span class="err">:</span> <span class="nx">NavController</span><span class="p">,</span> <span class="k">public</span> <span class="nx">navParams</span><span class="err">:</span> <span class="nx">NavParams</span><span class="p">,</span>
-              <span class="k">public</span> <span class="nx">beerService</span><span class="err">:</span> <span class="nx">BeerService</span><span class="p">,</span> <span class="k">public</span> <span class="nx">giphyService</span><span class="err">:</span> <span class="nx">GiphyService</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">public</span> <span class="nx">navCtrl</span><span class="p">:</span> <span class="nx">NavController</span><span class="p">,</span> <span class="kr">public</span> <span class="nx">navParams</span><span class="p">:</span> <span class="nx">NavParams</span><span class="p">,</span>
+              <span class="kr">public</span> <span class="nx">beerService</span><span class="p">:</span> <span class="nx">BeerService</span><span class="p">,</span> <span class="kr">public</span> <span class="nx">giphyService</span><span class="p">:</span> <span class="nx">GiphyService</span><span class="p">)</span> <span class="p">{</span>
   <span class="p">}</span>
 
   <span class="nx">ionViewDidLoad</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">beerService</span><span class="p">.</span><span class="nx">getGoodBeers</span><span class="p">().</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">beers</span> <span class="o">=&gt;</span> <span class="p">{</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">beers</span> <span class="o">=</span> <span class="nx">beers</span><span class="p">;</span>
-      <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">beer</span> <span class="nx">of</span> <span class="k">this</span><span class="p">.</span><span class="nx">beers</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">giphyService</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">beer</span><span class="p">.</span><span class="nx">name</span><span class="p">).</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">url</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">beer</span> <span class="k">of</span> <span class="k">this</span><span class="p">.</span><span class="nx">beers</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">giphyService</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">beer</span><span class="p">.</span><span class="nx">name</span><span class="p">).</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">url</span> <span class="o">=&gt;</span> <span class="p">{</span>
           <span class="nx">beer</span><span class="p">.</span><span class="nx">giphyUrl</span> <span class="o">=</span> <span class="nx">url</span>
         <span class="p">});</span>
       <span class="p">}</span>
     <span class="p">})</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Update <code class="highlighter-rouge">beer.html</code> to display the image retrieved:</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ion-item</span> <span class="err">*</span><span class="na">ngFor=</span><span class="s">"let beer of beers"</span><span class="nt">&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;ion-item</span> <span class="err">*</span><span class="na">ngFor=</span><span class="s">"let beer of beers"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;ion-avatar</span> <span class="na">item-left</span><span class="nt">&gt;</span>
     <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{{beer.giphyUrl}}"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;/ion-avatar&gt;</span>
   <span class="nt">&lt;h2&gt;</span>{{beer.name}}<span class="nt">&lt;/h2&gt;</span>
 <span class="nt">&lt;/ion-item&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Start the Spring Boot app in one terminal window and run <code class="highlighter-rouge">ionic serve</code> in another. Open <code class="highlighter-rouge">http://localhost:8100</code> in your browser. Click on the Beer icon, and you’ll likely see an error in your browser.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Uncaught (in promise): Error: No provider for Http!
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Uncaught (in promise): Error: No provider for Http!
+</code></pre></div></div>
 
 <p><img src="/assets/blog/ionic-spring-boot/no-http-provider-da85a2e1b4601e81e16697457b5923b7af4457881c52a6df8973a9e14e266a1d.png" alt="No provider for Http!" width="800" /></p>
 
 <p>This highlights one of the slick features of Ionic: errors display in your browser, not just the browser’s console. Add <code class="highlighter-rouge">HttpModule</code> to the list of imports in <code class="highlighter-rouge">src/app/app.module.ts</code> to solve this issue.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">HttpModule</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/http'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">HttpModule</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/http'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">NgModule</span><span class="p">({</span>
+<span class="p">@</span><span class="nd">NgModule</span><span class="p">({</span>
   <span class="p">...</span>
   <span class="na">imports</span><span class="p">:</span> <span class="p">[</span>
     <span class="nx">BrowserModule</span><span class="p">,</span>
@@ -561,23 +541,20 @@ beer.ts
     <span class="nx">IonicModule</span><span class="p">.</span><span class="nx">forRoot</span><span class="p">(</span><span class="nx">MyApp</span><span class="p">),</span>
     <span class="nx">BeerPageModule</span>
   <span class="p">],</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>After making this change, you’ll likely see the following error in your browser’s console.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>XMLHttpRequest cannot load http://localhost:8080/good-beers. No 'Access-Control-Allow-Origin'
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>XMLHttpRequest cannot load http://localhost:8080/good-beers. No 'Access-Control-Allow-Origin'
 header is present on the requested resource. Origin 'http://localhost:8100' is therefore
 not allowed access. The response had HTTP status code 401.
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>To fix this, open your Spring Boot application’s <code class="highlighter-rouge">BeerController.java</code> class and change its <code class="highlighter-rouge">@CrossOrigin</code> annotation to allow <code class="highlighter-rouge">http://localhost:8100</code> and <code class="highlighter-rouge">file://</code>. This enables cross-origin resource sharing (CORS) from both the browser and the mobile client.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@CrossOrigin</span><span class="o">(</span><span class="n">origins</span> <span class="o">=</span> <span class="o">{</span><span class="s">"http://localhost:8100"</span><span class="o">,</span><span class="s">"file://"</span><span class="o">})</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@CrossOrigin</span><span class="o">(</span><span class="n">origins</span> <span class="o">=</span> <span class="o">{</span><span class="s">"http://localhost:8100"</span><span class="o">,</span><span class="s">"file://"</span><span class="o">})</span>
 <span class="kd">public</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Beer</span><span class="o">&gt;</span> <span class="nf">goodBeers</span><span class="o">()</span> <span class="o">{</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Recompile this class, and DevTools should restart the application.</p>
 
@@ -589,7 +566,7 @@ not allowed access. The response had HTTP status code 401.
 
 <p>Change the header in <code class="highlighter-rouge">beer.html</code> to have a button that opens a modal to add a new beer.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ion-header&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;ion-header&gt;</span>
   <span class="nt">&lt;ion-navbar&gt;</span>
     <span class="nt">&lt;ion-title&gt;</span>Good Beers<span class="nt">&lt;/ion-title&gt;</span>
     <span class="nt">&lt;ion-buttons</span> <span class="na">end</span><span class="nt">&gt;</span>
@@ -600,25 +577,23 @@ not allowed access. The response had HTTP status code 401.
     <span class="nt">&lt;/ion-buttons&gt;</span>
   <span class="nt">&lt;/ion-navbar&gt;</span>
 <span class="nt">&lt;/ion-header&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>In this same file, change <code class="highlighter-rouge">&lt;ion-item&gt;</code> to have a click handler for opening the modal for the current item.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ion-item</span> <span class="err">*</span><span class="na">ngFor=</span><span class="s">"let beer of beers"</span> <span class="err">(</span><span class="na">click</span><span class="err">)="</span><span class="na">openModal</span><span class="err">({</span><span class="na">id:</span> <span class="na">beer</span><span class="err">.</span><span class="na">id</span><span class="err">})"</span><span class="nt">&gt;</span>
-</code></pre>
-</div>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;ion-item</span> <span class="err">*</span><span class="na">ngFor=</span><span class="s">"let beer of beers"</span> <span class="err">(</span><span class="na">click</span><span class="err">)="</span><span class="na">openModal</span><span class="err">({</span><span class="na">id:</span> <span class="na">beer</span><span class="err">.</span><span class="na">id</span><span class="err">})"</span><span class="nt">&gt;</span>
+</code></pre></div></div>
 
 <p>Add <code class="highlighter-rouge">ModalController</code> as a dependency in <code class="highlighter-rouge">beer.ts</code> and add an <code class="highlighter-rouge">openModal()</code> method.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">IonicPage</span><span class="p">,</span> <span class="nx">ModalController</span><span class="p">,</span> <span class="nx">NavController</span><span class="p">,</span> <span class="nx">NavParams</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'ionic-angular'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">IonicPage</span><span class="p">,</span> <span class="nx">ModalController</span><span class="p">,</span> <span class="nx">NavController</span><span class="p">,</span> <span class="nx">NavParams</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'ionic-angular'</span><span class="p">;</span>
 
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">BeerPage</span> <span class="p">{</span>
-  <span class="k">private</span> <span class="nx">beers</span><span class="err">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="kr">any</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">BeerPage</span> <span class="p">{</span>
+  <span class="kr">private</span> <span class="nx">beers</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span><span class="p">;</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="k">public</span> <span class="nx">navCtrl</span><span class="err">:</span> <span class="nx">NavController</span><span class="p">,</span> <span class="k">public</span> <span class="nx">navParams</span><span class="err">:</span> <span class="nx">NavParams</span><span class="p">,</span>
-              <span class="k">public</span> <span class="nx">beerService</span><span class="err">:</span> <span class="nx">BeerService</span><span class="p">,</span> <span class="k">public</span> <span class="nx">giphyService</span><span class="err">:</span> <span class="nx">GiphyService</span><span class="p">,</span>
-              <span class="k">public</span> <span class="nx">modalCtrl</span><span class="err">:</span> <span class="nx">ModalController</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">public</span> <span class="nx">navCtrl</span><span class="p">:</span> <span class="nx">NavController</span><span class="p">,</span> <span class="kr">public</span> <span class="nx">navParams</span><span class="p">:</span> <span class="nx">NavParams</span><span class="p">,</span>
+              <span class="kr">public</span> <span class="nx">beerService</span><span class="p">:</span> <span class="nx">BeerService</span><span class="p">,</span> <span class="kr">public</span> <span class="nx">giphyService</span><span class="p">:</span> <span class="nx">GiphyService</span><span class="p">,</span>
+              <span class="kr">public</span> <span class="nx">modalCtrl</span><span class="p">:</span> <span class="nx">ModalController</span><span class="p">)</span> <span class="p">{</span>
   <span class="p">}</span>
 
   <span class="c1">// ionViewDidLoad()</span>
@@ -630,36 +605,35 @@ not allowed access. The response had HTTP status code 401.
     <span class="nx">modal</span><span class="p">.</span><span class="nx">onDidDismiss</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">ionViewDidLoad</span><span class="p">())</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>This won’t compile because <code class="highlighter-rouge">BeerModalPage</code> doesn’t exist. Create <code class="highlighter-rouge">beer-modal.ts</code> in the same directory. This page will retrieve the beer from the <code class="highlighter-rouge">beerId</code> that’s passed in. It will render the name, allow editing, and show the Giphy image found for the name.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">BeerService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../../providers/beer-service'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">BeerService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../../providers/beer-service'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">ViewChild</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">GiphyService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../../providers/giphy-service'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">NavParams</span><span class="p">,</span> <span class="nx">ViewController</span><span class="p">,</span> <span class="nx">ToastController</span><span class="p">,</span> <span class="nx">NavController</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'ionic-angular'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">NgForm</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/forms'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">Component</span><span class="p">({</span>
+<span class="p">@</span><span class="nd">Component</span><span class="p">({</span>
   <span class="na">templateUrl</span><span class="p">:</span> <span class="s1">'./beer-modal.html'</span>
 <span class="p">})</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">BeerModalPage</span> <span class="p">{</span>
-  <span class="err">@</span><span class="nx">ViewChild</span><span class="p">(</span><span class="s1">'name'</span><span class="p">)</span> <span class="nx">name</span><span class="p">;</span>
-  <span class="nl">beer</span><span class="p">:</span> <span class="kr">any</span> <span class="o">=</span> <span class="p">{};</span>
-  <span class="nl">error</span><span class="p">:</span> <span class="kr">any</span><span class="p">;</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">BeerModalPage</span> <span class="p">{</span>
+  <span class="p">@</span><span class="nd">ViewChild</span><span class="p">(</span><span class="s1">'name'</span><span class="p">)</span> <span class="nx">name</span><span class="p">;</span>
+  <span class="nl">beer</span><span class="p">:</span> <span class="nx">any</span> <span class="o">=</span> <span class="p">{};</span>
+  <span class="nl">error</span><span class="p">:</span> <span class="nx">any</span><span class="p">;</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="k">public</span> <span class="nx">beerService</span><span class="err">:</span> <span class="nx">BeerService</span><span class="p">,</span>
-              <span class="k">public</span> <span class="nx">giphyService</span><span class="err">:</span> <span class="nx">GiphyService</span><span class="p">,</span>
-              <span class="k">public</span> <span class="nx">params</span><span class="err">:</span> <span class="nx">NavParams</span><span class="p">,</span>
-              <span class="k">public</span> <span class="nx">viewCtrl</span><span class="err">:</span> <span class="nx">ViewController</span><span class="p">,</span>
-              <span class="k">public</span> <span class="nx">toastCtrl</span><span class="err">:</span> <span class="nx">ToastController</span><span class="p">,</span>
-              <span class="k">public</span> <span class="nx">navCtrl</span><span class="err">:</span> <span class="nx">NavController</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">public</span> <span class="nx">beerService</span><span class="p">:</span> <span class="nx">BeerService</span><span class="p">,</span>
+              <span class="kr">public</span> <span class="nx">giphyService</span><span class="p">:</span> <span class="nx">GiphyService</span><span class="p">,</span>
+              <span class="kr">public</span> <span class="nx">params</span><span class="p">:</span> <span class="nx">NavParams</span><span class="p">,</span>
+              <span class="kr">public</span> <span class="nx">viewCtrl</span><span class="p">:</span> <span class="nx">ViewController</span><span class="p">,</span>
+              <span class="kr">public</span> <span class="nx">toastCtrl</span><span class="p">:</span> <span class="nx">ToastController</span><span class="p">,</span>
+              <span class="kr">public</span> <span class="nx">navCtrl</span><span class="p">:</span> <span class="nx">NavController</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">beerService</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'id'</span><span class="p">)).</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">beer</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">beerService</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'id'</span><span class="p">)).</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">beer</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">beer</span> <span class="o">=</span> <span class="nx">beer</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">beer</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nx">beer</span><span class="p">.</span><span class="nx">_links</span><span class="p">.</span><span class="nx">self</span><span class="p">.</span><span class="nx">href</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">giphyService</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">beer</span><span class="p">.</span><span class="nx">name</span><span class="p">).</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">url</span> <span class="o">=&gt;</span> <span class="nx">beer</span><span class="p">.</span><span class="nx">giphyUrl</span> <span class="o">=</span> <span class="nx">url</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">beer</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nx">beer</span><span class="p">.</span><span class="nx">_links</span><span class="p">.</span><span class="nb">self</span><span class="p">.</span><span class="nx">href</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">giphyService</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">beer</span><span class="p">.</span><span class="nx">name</span><span class="p">).</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">url</span> <span class="o">=&gt;</span> <span class="nx">beer</span><span class="p">.</span><span class="nx">giphyUrl</span> <span class="o">=</span> <span class="nx">url</span><span class="p">);</span>
       <span class="p">});</span>
     <span class="p">}</span>
   <span class="p">}</span>
@@ -686,12 +660,11 @@ not allowed access. The response had HTTP status code 401.
     <span class="p">},</span><span class="mi">150</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Add the import for <code class="highlighter-rouge">BeerModalPage</code> to <code class="highlighter-rouge">beer.ts</code>, then create <code class="highlighter-rouge">src/pages/beer/beer-modal.html</code> as a template for this page.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ion-header&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;ion-header&gt;</span>
   <span class="nt">&lt;ion-toolbar&gt;</span>
     <span class="nt">&lt;ion-title&gt;</span>
       {{beer ? 'Beer Details' : 'Add Beer'}}
@@ -731,17 +704,16 @@ not allowed access. The response had HTTP status code 401.
     <span class="nt">&lt;/ion-row&gt;</span>
   <span class="nt">&lt;/form&gt;</span>
 <span class="nt">&lt;/ion-content&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You’ll also need to modify <code class="highlighter-rouge">beer-service.ts</code> to have <code class="highlighter-rouge">get()</code> and <code class="highlighter-rouge">save()</code> methods.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="nx">get</span><span class="p">(</span><span class="nx">id</span><span class="err">:</span> <span class="kr">string</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">BEER_API</span> <span class="o">+</span> <span class="s1">'/'</span> <span class="o">+</span> <span class="nx">id</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">response</span><span class="err">:</span> <span class="nx">Response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">get</span><span class="p">(</span><span class="nx">id</span><span class="p">:</span> <span class="nx">string</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">BEER_API</span> <span class="o">+</span> <span class="s1">'/'</span> <span class="o">+</span> <span class="nx">id</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">response</span><span class="p">:</span> <span class="nx">Response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
 <span class="p">}</span>
 
-<span class="nx">save</span><span class="p">(</span><span class="nx">beer</span><span class="err">:</span> <span class="kr">any</span><span class="p">)</span><span class="err">:</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="kr">any</span><span class="o">&gt;</span> <span class="p">{</span>
+<span class="nx">save</span><span class="p">(</span><span class="nx">beer</span><span class="p">:</span> <span class="nx">any</span><span class="p">):</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span> <span class="p">{</span>
   <span class="kd">let</span> <span class="na">result</span><span class="p">:</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">Response</span><span class="o">&gt;</span><span class="p">;</span>
   <span class="k">if</span> <span class="p">(</span><span class="nx">beer</span><span class="p">[</span><span class="s1">'href'</span><span class="p">])</span> <span class="p">{</span>
     <span class="nx">result</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="nx">beer</span><span class="p">.</span><span class="nx">href</span><span class="p">,</span> <span class="nx">beer</span><span class="p">);</span>
@@ -751,21 +723,19 @@ not allowed access. The response had HTTP status code 401.
   <span class="k">return</span> <span class="nx">result</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="na">response</span><span class="p">:</span> <span class="nx">Response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
     <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span> <span class="o">=&gt;</span> <span class="nx">Observable</span><span class="p">.</span><span class="k">throw</span><span class="p">(</span><span class="nx">error</span><span class="p">));</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>At this point, if you try to add or edit a beer name, you’ll likely see an error in your browser’s console.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Uncaught (in promise): Error: No component factory found for BeerModalPage.
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Uncaught (in promise): Error: No component factory found for BeerModalPage.
 Did you add it to @NgModule.entryComponents?
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>To fix this problem, add <code class="highlighter-rouge">BeerModalPage</code> to the <code class="highlighter-rouge">declarations</code> and <code class="highlighter-rouge">entryComponent</code> lists in <code class="highlighter-rouge">beer.module.ts</code>.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">BeerModalPage</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'./beer-modal'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">BeerModalPage</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'./beer-modal'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">NgModule</span><span class="p">({</span>
+<span class="p">@</span><span class="nd">NgModule</span><span class="p">({</span>
   <span class="na">declarations</span><span class="p">:</span> <span class="p">[</span>
     <span class="nx">BeerPage</span><span class="p">,</span>
     <span class="nx">BeerModalPage</span>
@@ -775,15 +745,13 @@ Did you add it to @NgModule.entryComponents?
     <span class="nx">BeerModalPage</span>
   <span class="p">]</span>
 <span class="p">})</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Now if you try to edit a beer’s name, you’ll see another CORS in your browser’s console. Add a <code class="highlighter-rouge">@CrossOrigin</code> annotation to <code class="highlighter-rouge">BeerRepository.java</code> (in your Spring Boot project) that matches the one in <code class="highlighter-rouge">BeerController</code>.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@RepositoryRestResource</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RepositoryRestResource</span>
 <span class="nd">@CrossOrigin</span><span class="o">(</span><span class="n">origins</span> <span class="o">=</span> <span class="o">{</span><span class="s">"http://localhost:8100"</span><span class="o">,</span><span class="s">"file://"</span><span class="o">})</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Re-compile and now everything should work as expected. For example, below is a screenshot that shows I added a new beer and what it looks like when editing it.</p>
 
@@ -793,7 +761,7 @@ Did you add it to @NgModule.entryComponents?
 
 <p>To add swipe-to-delete functionality on the list of beers, open <code class="highlighter-rouge">beer.html</code> and make it so <code class="highlighter-rouge">&lt;ion-item-sliding&gt;</code> wraps <code class="highlighter-rouge">&lt;ion-item&gt;</code> and contains the <code class="highlighter-rouge">*ngFor</code>. Add a delete button using <code class="highlighter-rouge">&lt;ion-item-options&gt;</code>.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ion-content</span> <span class="na">padding</span><span class="nt">&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;ion-content</span> <span class="na">padding</span><span class="nt">&gt;</span>
   <span class="nt">&lt;ion-list&gt;</span>
     <span class="nt">&lt;ion-item-sliding</span> <span class="err">*</span><span class="na">ngFor=</span><span class="s">"let beer of beers"</span><span class="nt">&gt;</span>
       <span class="nt">&lt;ion-item</span> <span class="err">(</span><span class="na">click</span><span class="err">)="</span><span class="na">openModal</span><span class="err">({</span><span class="na">id:</span> <span class="na">beer</span><span class="err">.</span><span class="na">id</span><span class="err">})"</span><span class="nt">&gt;</span>
@@ -810,12 +778,11 @@ Did you add it to @NgModule.entryComponents?
     <span class="nt">&lt;/ion-item-sliding&gt;</span>
   <span class="nt">&lt;/ion-list&gt;</span>
 <span class="nt">&lt;/ion-content&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Add a <code class="highlighter-rouge">remove()</code> method to <code class="highlighter-rouge">beer.ts</code>.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="nx">remove</span><span class="p">(</span><span class="nx">beer</span><span class="p">)</span> <span class="p">{</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">remove</span><span class="p">(</span><span class="nx">beer</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">beerService</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="nx">beer</span><span class="p">.</span><span class="nx">id</span><span class="p">).</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">response</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">beers</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">beers</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="nx">beer</span><span class="p">)</span> <span class="p">{</span>
@@ -830,26 +797,23 @@ Did you add it to @NgModule.entryComponents?
     <span class="p">}</span>
   <span class="p">});</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Add and import <code class="highlighter-rouge">ToastController</code> as a dependency in the constructor, so everything compiles.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="kd">constructor</span><span class="p">(</span><span class="k">public</span> <span class="nx">navCtrl</span><span class="err">:</span> <span class="nx">NavController</span><span class="p">,</span> <span class="k">public</span> <span class="nx">navParams</span><span class="err">:</span> <span class="nx">NavParams</span><span class="p">,</span>
-          <span class="k">public</span> <span class="nx">beerService</span><span class="err">:</span> <span class="nx">BeerService</span><span class="p">,</span> <span class="k">public</span> <span class="nx">giphyService</span><span class="err">:</span> <span class="nx">GiphyService</span><span class="p">,</span>
-          <span class="k">public</span> <span class="nx">modalCtrl</span><span class="err">:</span> <span class="nx">ModalController</span><span class="p">,</span> <span class="k">public</span> <span class="nx">toastCtrl</span><span class="err">:</span> <span class="nx">ToastController</span><span class="p">)</span> <span class="p">{</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">constructor</span><span class="p">(</span><span class="kr">public</span> <span class="nx">navCtrl</span><span class="p">:</span> <span class="nx">NavController</span><span class="p">,</span> <span class="kr">public</span> <span class="nx">navParams</span><span class="p">:</span> <span class="nx">NavParams</span><span class="p">,</span>
+          <span class="kr">public</span> <span class="nx">beerService</span><span class="p">:</span> <span class="nx">BeerService</span><span class="p">,</span> <span class="kr">public</span> <span class="nx">giphyService</span><span class="p">:</span> <span class="nx">GiphyService</span><span class="p">,</span>
+          <span class="kr">public</span> <span class="nx">modalCtrl</span><span class="p">:</span> <span class="nx">ModalController</span><span class="p">,</span> <span class="kr">public</span> <span class="nx">toastCtrl</span><span class="p">:</span> <span class="nx">ToastController</span><span class="p">)</span> <span class="p">{</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You’ll also need to modify <code class="highlighter-rouge">beer-service.ts</code> to have a <code class="highlighter-rouge">remove()</code> method.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="nx">remove</span><span class="p">(</span><span class="nx">id</span><span class="err">:</span> <span class="kr">string</span><span class="p">)</span> <span class="p">{</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">remove</span><span class="p">(</span><span class="nx">id</span><span class="p">:</span> <span class="nx">string</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">BEER_API</span> <span class="o">+</span> <span class="s1">'/'</span> <span class="o">+</span> <span class="nx">id</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">response</span><span class="err">:</span> <span class="nx">Response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
+    <span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">response</span><span class="p">:</span> <span class="nx">Response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>After making these additions, you should be able to delete beer names. To emulate a left swipe in your browser, click on the item and drag it to the left.</p>
 
@@ -865,7 +829,7 @@ Did you add it to @NgModule.entryComponents?
 
 <p>To register a service worker, and improve the app’s score, uncomment the following block in <code class="highlighter-rouge">src/index.html</code>.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- un-comment this code to enable service worker
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- un-comment this code to enable service worker
 &lt;script&gt;
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('service-worker.js')
@@ -873,8 +837,7 @@ if ('serviceWorker' in navigator) {
     .catch(err =&gt; console.log('Error', err));
 }
 &lt;/script&gt;--&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>After making this change, the score should improve. In my tests, it increased to 75/100. The remaining issues were:</p>
 
@@ -886,10 +849,9 @@ if ('serviceWorker' in navigator) {
 
 <p>If you refresh the app and Chrome doesn’t prompt you to install the app (a PWA feature), you probably need to turn on a couple of features. Copy and paste the following URLs into Chrome and enable each feature.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>chrome://flags/#bypass-app-banner-engagement-checks
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chrome://flags/#bypass-app-banner-engagement-checks
 chrome://flags/#enable-add-to-shelf
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>After enabling these flags, you’ll see an error in your browser’s console about <code class="highlighter-rouge">src/assets/imgs/logo.png</code> not being found. This file is referenced in <code class="highlighter-rouge">src/manifest.json</code>. You can fix this by copying a 512x512 PNG (<a href="http://www.iconsdb.com/orange-icons/beer-icon.html">like this one</a>) into this location or by modifying <code class="highlighter-rouge">src/manifest.json</code> accordingly. At the very least, you should modify <code class="highlighter-rouge">src/manifest.json</code> to have your app’s name.</p>
 
@@ -915,20 +877,18 @@ chrome://flags/#enable-add-to-shelf
 
 <p>If you don’t have a Cloud Foundry account, you’ll need to <a href="https://account.run.pivotal.io/z/uaa/sign-up">create one</a>. Then install its command line tools (and login) for this script to work.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>brew tap cloudfoundry/tap <span class="o">&amp;&amp;</span> brew install cf-cli
-cf login -a api.run.pivotal.io
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew tap cloudfoundry/tap <span class="o">&amp;&amp;</span> brew install cf-cli
+cf login <span class="nt">-a</span> api.run.pivotal.io
+</code></pre></div></div>
 
 <p>After logging into Cloud Foundry, you should be able to run <code class="highlighter-rouge">./deploy.sh</code>. This script will deploy the server and modify <code class="highlighter-rouge">beer.service.ts</code> to point to it. It will also try to deploy to your phone, so you may need to complete the steps below before it will work.</p>
 
 <p>To deploy the app to an iPhone, start by plugging it into your computer. Then run the following commands to install ios-deploy/ios-sim, build the app, and run it on your device.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>npm install -g ios-deploy ios-sim
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install -g ios-deploy ios-sim
 ionic cordova build ios --prod
 open platforms/ios/MyApp.xcodeproj
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Select your phone as the target in Xcode and click the play button to run your app. The first time you do this, Xcode may spin for a while with a “Processing symbol files” message at the top.</p>
 
@@ -946,33 +906,30 @@ open platforms/ios/MyApp.xcodeproj
 
 <p>To deploy to the Android emulator, run <code class="highlighter-rouge">ionic cordova emulate android</code>. This will install Andorid support and print out instructions about how to create an emulator image.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Error: No emulator images (avds) found.
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Error: No emulator images (avds) found.
 1. Download desired System Image by running:
 /Users/mraible/Library/Android/sdk/tools/android sdk
 2. Create an AVD by running: /Users/mraible/Library/Android/sdk/tools/android avd
 HINT: For a faster emulator, use an Intel System Image and install the HAXM device driver
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Run the first suggestion and download your desired system image. Then run the second command and created an AVD (Android Virtual Device) with the following settings:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>AVD Name: TestPhone
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AVD Name: TestPhone
 Device: Nexus 5
 Target: Android 7.1.1
 CPU/ABI: Google APIs Intel Axom (x86_64)
 Skin: Skin with dynamic hardware controls
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><strong>WARNING:</strong> These instructions won’t work with version 2.3.2 of Android Studio on Mac. When you try to run the first command, it’ll say the following:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>*************************************************************************
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>*************************************************************************
 The "android" command is deprecated.
 For manual SDK, AVD, and project management, please use Android Studio.
 For command-line tools, use tools/bin/sdkmanager and tools/bin/avdmanager
 *************************************************************************
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>To solve this problem, open Android Studio, select “Open an existing Android Studio project” and select the <code class="highlighter-rouge">ionic-beer/platforms/android</code> directory. If prompted to upgrade, choose “OK”, then proceed to create a new AVD as <a href="https://developer.android.com/studio/run/managing-avds.html#createavd">described in Android Studio’s documentation</a>.</p>
 
@@ -982,9 +939,8 @@ For command-line tools, use tools/bin/sdkmanager and tools/bin/avdmanager
 
 <p><strong>NOTE</strong>: If you get an application error that says “The connection to the server was unsuccessful. (<code class="highlighter-rouge">file:///android/www/index.html</code>)”, add the following line to <code class="highlighter-rouge">config.xml</code>. This sets the default timeout to 60 seconds (default is 20). Thanks to <a href="http://stackoverflow.com/a/31377846">Stack Overflow</a> for the answer.</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;preference</span> <span class="na">name=</span><span class="s">"loadUrlTimeoutValue"</span> <span class="na">value=</span><span class="s">"60000"</span><span class="nt">/&gt;</span>
-</code></pre>
-</div>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;preference</span> <span class="na">name=</span><span class="s">"loadUrlTimeoutValue"</span> <span class="na">value=</span><span class="s">"60000"</span><span class="nt">/&gt;</span>
+</code></pre></div></div>
 
 <h2 id="learn-more">Learn More</h2>
 

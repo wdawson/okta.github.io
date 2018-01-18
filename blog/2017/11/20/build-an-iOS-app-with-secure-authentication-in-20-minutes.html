@@ -192,12 +192,11 @@
 
 <p>In essence:</p>
 
-<div class="language-swift highlighter-rouge"><pre class="highlight"><code>  <span class="k">while</span> <span class="kt">Users</span><span class="o">.</span><span class="n">love</span> <span class="o">!=</span> <span class="kc">true</span> <span class="p">{</span>
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">while</span> <span class="kt">Users</span><span class="o">.</span><span class="n">love</span> <span class="o">!=</span> <span class="kc">true</span> <span class="p">{</span>
     <span class="kt">Product</span><span class="o">.</span><span class="nf">design</span><span class="p">()</span>
     <span class="kt">Product</span><span class="o">.</span><span class="nf">rebuild</span><span class="p">()</span>
   <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Once completed, the real challenge begins – retaining those users. Mostly that means getting users to log in to your app easily, and then never have to do it again. With Okta, you can effortlessly integrate authentication into your iOS application with the <a href="https://github.com/okta/okta-sdk-appauth-ios">Okta AppAuth SDK</a>.</p>
 
@@ -222,30 +221,28 @@
 
 <p>From a terminal window, navigate into your iOS application’s directory to create a <code class="highlighter-rouge">Podfile</code>, where <code class="highlighter-rouge">'MyApp'</code> is the name of your new Xcode project.</p>
 
-<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="n">platform</span> <span class="ss">:ios</span><span class="p">,</span> <span class="s1">'9.0'</span>
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">platform</span> <span class="ss">:ios</span><span class="p">,</span> <span class="s1">'9.0'</span>
 <span class="n">use_frameworks!</span>
 
 <span class="n">target</span> <span class="s1">'MyApp'</span> <span class="k">do</span>
   <span class="n">pod</span> <span class="s1">'OktaAuth'</span><span class="p">,</span> <span class="s1">'~&gt; 0.1'</span>
 <span class="k">end</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Next, install the SDK by running <code class="highlighter-rouge">pod install</code>. You should see the following message appear once the installation is completed:
 <img src="/assets/blog/ios-app-secure-auth/pod-install-oktaauth-ebf24fd08680c6363a3b30de1967513d6df76aabad873b285fdaccb98e6a740d.png" alt="Cocoapods Installation" width="600" class="center-image" /></p>
 
 <p>Open up the newly generated <code class="highlighter-rouge">.xcworkspace</code> file by running the following in your terminal:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="c"># Replace 'MyApp' with the name of your iOS application</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Replace 'MyApp' with the name of your iOS application</span>
 open MyApp.xcworkspace/
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="configure-your-ios-app">Configure your iOS App</h2>
 
 <p>The SDK uses a <strong>Property List</strong> (<code class="highlighter-rouge">.plist</code>) file to bootstrap the login flow. We will need to create an <code class="highlighter-rouge">Okta.plist</code> file in your application’s bundle, using your newly created Okta application’s attributes:</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
 <span class="cp">&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span>
 <span class="nt">&lt;plist</span> <span class="na">version=</span><span class="s">"1.0"</span><span class="nt">&gt;</span>
 <span class="nt">&lt;dict&gt;</span>
@@ -263,8 +260,7 @@ open MyApp.xcworkspace/
 	<span class="nt">&lt;/array&gt;</span>
 <span class="nt">&lt;/dict&gt;</span>
 <span class="nt">&lt;/plist&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <h3 id="openid-connect-terminology">OpenID Connect Terminology</h3>
 
 <table>
@@ -310,18 +306,17 @@ open MyApp.xcworkspace/
 <h2 id="add-user-authentication">Add User Authentication</h2>
 <p>First, we need to handle the inter-app communication between the device’s native browser and your application. Open <code class="highlighter-rouge">AppDelegate.swift</code> and add the following:</p>
 
-<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="c1">// AppDelegate.swift</span>
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// AppDelegate.swift</span>
 <span class="kd">import</span> <span class="kt">OktaAuth</span>
 
-<span class="kd">func</span> <span class="nf">application</span><span class="p">(</span><span class="n">_</span> <span class="nv">app</span><span class="p">:</span> <span class="kt">UIApplication</span><span class="p">,</span> <span class="n">open</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt">UIApplicationOpenURLOptionsKey</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="nf">application</span><span class="p">(</span><span class="n">_</span> <span class="nv">app</span><span class="p">:</span> <span class="kt">UIApplication</span><span class="p">,</span> <span class="kd">open</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt">UIApplicationOpenURLOptionsKey</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="p">{</span>
     <span class="k">return</span> <span class="kt">OktaAuth</span><span class="o">.</span><span class="nf">resume</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="n">options</span><span class="p">)</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Next, lets add the <strong>login</strong> code! You can trigger a login event a number of ways. For this article, we will simply add the <strong>login</strong> action to run during our initial <code class="highlighter-rouge">viewDidLoad</code>. Open your <code class="highlighter-rouge">ViewController.swift</code> file and add the following to start the auth flow:</p>
 
-<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="kd">import</span> <span class="kt">OktaAuth</span>
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">import</span> <span class="kt">OktaAuth</span>
 
 <span class="kd">class</span> <span class="kt">ViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
     <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
@@ -340,8 +335,7 @@ open MyApp.xcworkspace/
                 <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="whats-happening">What’s Happening?</h3>
 <p>Once your application loads, it will trigger the <code class="highlighter-rouge">OktaAuth.login()</code> event. <a href="https://tools.ietf.org/html/draft-ietf-oauth-native-apps-12">Best current practice</a> for native applications suggest initiating the login flow via an in-app browser, instead of an embeddable WebView.</p>
@@ -365,12 +359,11 @@ open MyApp.xcworkspace/
 
 <p>Enter your <strong>username</strong> and <strong>password</strong>, then click <strong>Sign In</strong>. Upon successful authentication, you’ll be redirected back to your application. Check your debugger to see the following message:</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>Success! Received idToken:
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Success! Received idToken:
 eyJhbGciOiJSUzI1NiIsImtpZCI6IkdOMlBlRU5seEFISGNjLVJmM0pXcktodGFrT3...
 Success! Received accessToken:
 eyJhbGc...
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Copy the <code class="highlighter-rouge">idToken</code> response and paste it into <a href="https://www.jsonwebtoken.io/">jsonwebtoken.io</a> to see the information contained within the identity token!</p>
 
@@ -379,7 +372,7 @@ eyJhbGc...
 
 <p>Using the newly minted <code class="highlighter-rouge">accessToken</code>, lets request more information about the user by calling the <code class="highlighter-rouge">userinfo()</code> method:</p>
 
-<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="kt">OktaAuth</span>
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">OktaAuth</span>
     <span class="o">.</span><span class="nf">login</span><span class="p">()</span>
     <span class="o">.</span><span class="nf">start</span><span class="p">(</span><span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">response</span><span class="p">,</span> <span class="n">error</span> <span class="k">in</span>
         <span class="k">if</span> <span class="n">error</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span> <span class="nf">print</span><span class="p">(</span><span class="n">error</span><span class="o">!</span><span class="p">)</span> <span class="p">}</span>
@@ -398,8 +391,7 @@ eyJhbGc...
             <span class="p">}</span>
         <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>▶️  the application again to see what was returned!</p>
 
@@ -412,7 +404,7 @@ eyJhbGc...
 
 <p>▶️  the application one last time to see your updated user!</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>picture: https://avatars3.githubusercontent.com/u/7400479?v<span class="o">=</span>3&amp;s<span class="o">=</span>400
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>picture: https://avatars3.githubusercontent.com/u/7400479?v<span class="o">=</span>3&amp;s<span class="o">=</span>400
 family_name: Melberg
 name: Jordan Melberg
 updated_at: 1506444347
@@ -423,8 +415,7 @@ given_name: Jordan
 preferred_username: jordan.melberg@okta.com
 locale: en-US
 email_verified: 1
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You did it! You’ve successfully added Authentication into your mobile app with as little as 20 lines of code!</p>
 

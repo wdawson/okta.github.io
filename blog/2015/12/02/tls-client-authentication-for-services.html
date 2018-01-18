@@ -279,10 +279,9 @@ other explicitly, the rotation would be much more difficult, especially if you
 can’t take downtime. We’ll use the trust store for both the client and the
 server, so you only need to make one, which you can copy if you need to.</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c"># Import your root certificate into a new trust store and follow the prompts</span>
-keytool -import -alias root -file root.crt -keystore truststore.jks
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Import your root certificate into a new trust store and follow the prompts</span>
+keytool <span class="nt">-import</span> <span class="nt">-alias</span> root <span class="nt">-file</span> root.crt <span class="nt">-keystore</span> truststore.jks
+</code></pre></div></div>
 
 <p>Now that we’ve set up trust, we want to issue the certificate for our service
 that chains up to the root. We’ll use the global CA to issue our server its
@@ -297,32 +296,31 @@ your client does not have a certificate for service-to-service communication,
 you can follow a similar pattern to create its certificate. But if it does have
 an existing certificate, you can just reuse that one.</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c"># Create our server's key</span>
-openssl genrsa -out server.key 2048
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Create our server's key</span>
+openssl genrsa <span class="nt">-out</span> server.key 2048
 
 <span class="c"># Create the csr and follow the prompts for country code, ou, etc</span>
-openssl req -new -key server.key -sha256 -out server.csr
+openssl req <span class="nt">-new</span> <span class="nt">-key</span> server.key <span class="nt">-sha256</span> <span class="nt">-out</span> server.csr
 
 <span class="c"># Sign the csr with your CA</span>
-openssl ca -in server.csr -days 365 -config my-ca-conf.cnf -out server.crt
+openssl ca <span class="nt">-in</span> server.csr <span class="nt">-days</span> 365 <span class="nt">-config</span> my-ca-conf.cnf <span class="nt">-out</span> server.crt
 
 <span class="c"># Cat the cert chain together (except the root)</span>
-cat server.crt global.crt &gt; chain.crt
+<span class="nb">cat </span>server.crt global.crt <span class="o">&gt;</span> chain.crt
 
 <span class="c"># Create pkcs12 file for key and cert chain</span>
-openssl pkcs12 -export -name server-tls -in chain.crt -inkey server.key -out server.p12
+openssl pkcs12 <span class="nt">-export</span> <span class="nt">-name</span> server-tls <span class="nt">-in</span> chain.crt <span class="nt">-inkey</span> server.key <span class="nt">-out</span> server.p12
 
 <span class="c"># Create JKS for server</span>
-keytool -importkeystore -destkeystore keystore.jks -srckeystore server.p12 -srcstoretype pkcs12 -alias server-tls
-</code></pre>
-</div>
+keytool <span class="nt">-importkeystore</span> <span class="nt">-destkeystore</span> keystore.jks <span class="nt">-srckeystore</span> server.p12 <span class="nt">-srcstoretype</span> pkcs12 <span class="nt">-alias</span> server-tls
+</code></pre></div></div>
 
 <h3 id="server-configuration">Server Configuration</h3>
 
 <p>Now that we have our key and trust stores, let’s configure the server’s
 Dropwizard application connector.</p>
 
-<div class="language-conf highlighter-rouge"><pre class="highlight"><code><span class="n">server</span>:
+<div class="language-conf highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">server</span>:
   <span class="n">applicationConnectors</span>:
     - <span class="n">type</span>: <span class="n">https</span>
     <span class="n">port</span>: <span class="m">8443</span>
@@ -351,8 +349,7 @@ Dropwizard application connector.</p>
 </span>    <span class="n">supportedProtocols</span>: [<span class="s2">"TLSv1.2"</span>]
     <span class="n">supportedCipherSuites</span>: [<span class="s2">"TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384"</span>]
     <span class="n">allowRenegotiation</span>: <span class="n">false</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p style="text-align: center;font-size: x-small;">Dropwizard code is Copyright © 2010-2013 Coda Hale, Yammer Inc., 2014-2015 Dropwizard Team and/or its affiliates.
 <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0</a>.</p>
@@ -364,51 +361,47 @@ server, telling Java to debug the SSL handshakes, and make sure we see it
 refusing the connection for the right reason. In one terminal start the
 Dropwizard server debugging SSL.</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>java -Djavax.net.debug<span class="o">=</span>SSL,keymanager,trustmanager -jar your/jar.jar server config.yml
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>java <span class="nt">-Djavax</span>.net.debug<span class="o">=</span>SSL,keymanager,trustmanager <span class="nt">-jar</span> your/jar.jar server config.yml
+</code></pre></div></div>
 
 <p>In another terminal run the following curl commands and verify you get the
 expected results. First, make sure that the server does not talk HTTP over our
 port.</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl localhost:443
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl localhost:443
 curl: <span class="o">(</span>52<span class="o">)</span> Empty reply from server
 
 <span class="c"># The server should print something like the following because of no TLS:</span>
 <span class="c"># javax.net.ssl.SSLException: Unrecognized SSL message, plaintext connection?</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Next, check that the server is sending your certificate back over HTTPS.
 curl has a preconfigured list of trusted certs and chances are your
 root certificate is not in there.</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl https://localhost:443
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl https://localhost:443
 curl: <span class="o">(</span>60<span class="o">)</span> SSL certificate problem: Invalid certificate chain
 
 <span class="c"># The server will print a bunch of stuff ending with something like:</span>
 <span class="c"># javax.net.ssl.SSLException: Received close_notify during handshake</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Finally, ensure that the server terminates the connection if no client cert is
 provided.</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -k https://localhost:443
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">-k</span> https://localhost:443
 curl: <span class="o">(</span>35<span class="o">)</span> Server aborted the SSL handshake
 
 <span class="c"># The server will, again, print a bunch of stuff ending with something like:</span>
 <span class="c"># javax.net.ssl.SSLHandshakeException: null cert chain</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="client-configuration">Client Configuration</h3>
 
 <p>Now we’ll configure our client to talk to the server. I’ll use the Jersey 2.X
 API, but there are equivalents in the 1.X as well as in the Apache HTTP library.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="c1">// Assume the following variables are initialized already</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Assume the following variables are initialized already</span>
 <span class="n">String</span> <span class="n">password</span><span class="o">;</span>
 <span class="n">RSAPrivateKey</span> <span class="n">clientKey</span><span class="o">;</span>
 <span class="n">X509Certificate</span> <span class="n">clientCert</span><span class="o">;</span>
@@ -440,8 +433,7 @@ API, but there are equivalents in the 1.X as well as in the Apache HTTP library.
 
 <span class="n">SSLContext</span> <span class="n">sslContext</span> <span class="o">=</span> <span class="n">sslConfig</span><span class="o">.</span><span class="na">createSSLContext</span><span class="o">();</span>
 <span class="n">Client</span> <span class="n">client</span> <span class="o">=</span> <span class="n">ClientBuilder</span><span class="o">.</span><span class="na">newBuilder</span><span class="o">().</span><span class="na">sslContext</span><span class="o">(</span><span class="n">sslContext</span><span class="o">).</span><span class="na">build</span><span class="o">();</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p style="text-align: center;font-size: x-small;">Jersey code is Copyright © 2010-2015 Oracle and/or its affiliates.
 <a href="https://jersey.java.net/license.html">GPL 2.0 Selected</a>.</p>
@@ -475,13 +467,12 @@ in the other direction (client verifying the server).</p>
 is one that Dropwizard supports this verification with a tricky configuration
 change for the underlying Java SSL connection.</p>
 
-<div class="language-conf highlighter-rouge"><pre class="highlight"><code><span class="n">server</span>:
+<div class="language-conf highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">server</span>:
   <span class="n">applicationConnectors</span>:
     - <span class="n">type</span>: <span class="n">https</span>
       <span class="c">#...
 </span>      <span class="n">endpointIdentificationAlgorithm</span>: <span class="n">HTTPS</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>The HTTPS endpoint identification algorithm will cause Java to do hostname
 verification against your cert. Specifically, this will check the hostname of
@@ -503,7 +494,7 @@ need to set up a filter in our server and configure a regex to match the DN in
 the certificate(s) that are allowed to communicate with our service or else
 return a 403 response.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">javax.annotation.Priority</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">javax.annotation.Priority</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">javax.servlet.http.HttpServletRequest</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">javax.ws.rs.Priorities</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">javax.ws.rs.container.ContainerRequestContext</span><span class="o">;</span>
@@ -568,8 +559,7 @@ return a 403 response.</p>
                 <span class="o">.</span><span class="na">build</span><span class="o">();</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p style="text-align: center;font-size: x-small;">Dropwizard code is Copyright © 2010-2013 Coda Hale, Yammer Inc., 2014-2015 Dropwizard Team and/or its affiliates.
 <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0</a>.

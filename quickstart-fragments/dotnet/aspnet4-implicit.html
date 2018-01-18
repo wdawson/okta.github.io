@@ -39,7 +39,7 @@
 
 <p>Make sure you have these <code class="highlighter-rouge">using</code> statements at the top of your <code class="highlighter-rouge">Startup.cs</code> file:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Threading.Tasks</span><span class="p">;</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Threading.Tasks</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">Microsoft.IdentityModel.Protocols</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">Microsoft.IdentityModel.Protocols.OpenIdConnect</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">Microsoft.IdentityModel.Tokens</span><span class="p">;</span>
@@ -47,16 +47,15 @@
 <span class="k">using</span> <span class="nn">Microsoft.Owin.Security</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">Microsoft.Owin.Security.Jwt</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">Owin</span><span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Add the following code to your <code class="highlighter-rouge">Configuration</code> method:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">public</span> <span class="k">void</span> <span class="nf">Configuration</span><span class="p">(</span><span class="n">IAppBuilder</span> <span class="n">app</span><span class="p">)</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">void</span> <span class="nf">Configuration</span><span class="p">(</span><span class="n">IAppBuilder</span> <span class="n">app</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="c1">// Configure JWT Bearer middleware
-</span>    <span class="c1">// with an OpenID Connect Authority
-</span>
+    <span class="c1">// Configure JWT Bearer middleware</span>
+    <span class="c1">// with an OpenID Connect Authority</span>
+
     <span class="kt">var</span> <span class="n">authority</span> <span class="p">=</span> <span class="s">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default"</span><span class="p">;</span>
 
     <span class="kt">var</span> <span class="n">configurationManager</span> <span class="p">=</span> <span class="k">new</span> <span class="n">ConfigurationManager</span><span class="p">&lt;</span><span class="n">OpenIdConnectConfiguration</span><span class="p">&gt;(</span>
@@ -79,14 +78,13 @@
         <span class="p">}</span>
     <span class="p">});</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="protect-application-resources">Protect application resources</h3>
 
 <p>Use the <code class="highlighter-rouge">[Authorize]</code> attribute on API controllers or actions to require an authenticated user. For example, create an <code class="highlighter-rouge">/api/messages</code> route in a new API controller that returns secret messages if a token is present:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">System.Security.Claims</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">System.Web.Http</span><span class="p">;</span>
@@ -106,13 +104,12 @@
 
         <span class="k">return</span> <span class="k">new</span> <span class="kt">string</span><span class="p">[]</span>
         <span class="p">{</span>
-            <span class="err">$</span><span class="s">"For {login ?? "</span><span class="n">your</span><span class="s">"} eyes only"</span><span class="p">,</span>
+            <span class="s">$"For </span><span class="p">{</span><span class="n">login</span> <span class="p">??</span> <span class="s">"your"</span><span class="p">}</span><span class="s"> eyes only"</span><span class="p">,</span>
             <span class="s">"Your mission, should you choose to accept it..."</span>
         <span class="p">};</span>
     <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="thats-it">That’s it!</h3>
 

@@ -419,9 +419,8 @@
 
 <p>Include the following script tag in your target web page:</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"https://ok1static.oktacdn.com/assets/js/sdk/okta-auth-js/1.8.0/okta-auth-js.min.js"</span> <span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;&lt;/script&gt;</span>
-</code></pre>
-</div>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"https://ok1static.oktacdn.com/assets/js/sdk/okta-auth-js/1.8.0/okta-auth-js.min.js"</span> <span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</code></pre></div></div>
 
 <h2 id="part-1-retrieve-and-store-an-openid-connect-token">Part 1: Retrieve and Store an OpenID Connect Token</h2>
 
@@ -441,13 +440,12 @@
 
 <p>To initialize the SDK, create a new instance of the <code class="highlighter-rouge">OktaAuth</code> object:</p>
 
-<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">authClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OktaAuth</span><span class="p">({</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">authClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OktaAuth</span><span class="p">({</span>
   <span class="na">url</span><span class="p">:</span> <span class="s1">'<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>'</span><span class="p">,</span>
   <span class="na">clientId</span><span class="p">:</span> <span class="s1">'0oab4exampleR4Jbi0h7'</span><span class="p">,</span>
   <span class="na">redirectUri</span><span class="p">:</span> <span class="s1">'http://localhost:3333'</span>
 <span class="p">});</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Replace each of these property values with ones from your Okta org and application. For more information about these properties, see the [Client Configuration section of the Auth SDK reference][authjs-client-configuration].</p>
 
@@ -455,11 +453,10 @@
 
 <p>To retrieve an ID Token from Okta, you will use the <code class="highlighter-rouge">token.getWithRedirect</code> method, specifying that you want an <code class="highlighter-rouge">id_token</code> included in the response:</p>
 
-<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="nx">authClient</span><span class="p">.</span><span class="nx">token</span><span class="p">.</span><span class="nx">getWithRedirect</span><span class="p">({</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">authClient</span><span class="p">.</span><span class="nx">token</span><span class="p">.</span><span class="nx">getWithRedirect</span><span class="p">({</span>
   <span class="na">responseType</span><span class="p">:</span> <span class="s1">'id_token'</span>
 <span class="p">});</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><a href="https://github.com/okta/okta-auth-js#tokengetwithredirectoptions">Read more about getWithRedirect in the Auth SDK Reference</a>.</p>
 
@@ -467,15 +464,13 @@
 
 <p>After the redirect, the URL will contain an ID Token in the form of a JWT. The <code class="highlighter-rouge">token.parseFromUrl</code> method can be used to parse that token from the URL:</p>
 
-<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="nx">authClient</span><span class="p">.</span><span class="nx">token</span><span class="p">.</span><span class="nx">parseFromUrl</span><span class="p">()</span>
-</code></pre>
-</div>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">authClient</span><span class="p">.</span><span class="nx">token</span><span class="p">.</span><span class="nx">parseFromUrl</span><span class="p">()</span>
+</code></pre></div></div>
 
 <p>You can also display a specific part of the parsed token:</p>
 
-<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="err">`</span><span class="nx">hi</span> <span class="nx">$</span><span class="p">{</span><span class="nx">idToken</span><span class="p">.</span><span class="nx">claims</span><span class="p">.</span><span class="nx">email</span><span class="p">}</span><span class="o">!</span><span class="err">`</span><span class="p">);</span>
-</code></pre>
-</div>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`hi </span><span class="p">${</span><span class="nx">idToken</span><span class="p">.</span><span class="nx">claims</span><span class="p">.</span><span class="nx">email</span><span class="p">}</span><span class="s2">!`</span><span class="p">);</span>
+</code></pre></div></div>
 
 <p><a href="https://github.com/okta/okta-auth-js#tokenparsefromurloptions">Read more about parseFromUrl in the Auth SDK Reference</a>.</p>
 
@@ -483,29 +478,26 @@
 
 <p>Once the token has been parsed out of the URL, you can add it to the Token Manager using the <code class="highlighter-rouge">tokenManager.add</code> method.</p>
 
-<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="nx">authClient</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s1">'idToken'</span><span class="p">,</span> <span class="nx">idToken</span><span class="p">);</span>
-</code></pre>
-</div>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">authClient</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s1">'idToken'</span><span class="p">,</span> <span class="nx">idToken</span><span class="p">);</span>
+</code></pre></div></div>
 
 <p><a href="https://github.com/okta/okta-auth-js#tokenmanageraddkey-token">Read more about tokenManager.add in the Auth SDK Reference</a>.</p>
 
 <p>The full code to parse the token, display the email from it, and then add it to the SDK’s Token Manager looks like this:</p>
 
-<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="nx">authClient</span><span class="p">.</span><span class="nx">token</span><span class="p">.</span><span class="nx">parseFromUrl</span><span class="p">()</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">authClient</span><span class="p">.</span><span class="nx">token</span><span class="p">.</span><span class="nx">parseFromUrl</span><span class="p">()</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">idToken</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="err">`</span><span class="nx">hi</span> <span class="nx">$</span><span class="p">{</span><span class="nx">idToken</span><span class="p">.</span><span class="nx">claims</span><span class="p">.</span><span class="nx">email</span><span class="p">}</span><span class="o">!</span><span class="err">`</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`hi </span><span class="p">${</span><span class="nx">idToken</span><span class="p">.</span><span class="nx">claims</span><span class="p">.</span><span class="nx">email</span><span class="p">}</span><span class="s2">!`</span><span class="p">);</span>
     <span class="nx">authClient</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s1">'idToken'</span><span class="p">,</span> <span class="nx">idToken</span><span class="p">);</span>
   <span class="p">})</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="retrieve-the-stored-token">Retrieve the Stored Token</h3>
 
 <p>A token that is stored in the Token Manager can be retrieved using the <code class="highlighter-rouge">tokenManager.get</code> method.</p>
 
-<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">idToken</span> <span class="o">=</span> <span class="nx">authClient</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'idToken'</span><span class="p">);</span>
-</code></pre>
-</div>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">idToken</span> <span class="o">=</span> <span class="nx">authClient</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'idToken'</span><span class="p">);</span>
+</code></pre></div></div>
 
 <p><a href="https://github.com/okta/okta-auth-js#tokenmanagergetkey">Read more about tokenManager.get in the Auth SDK Reference</a>.</p>
 
@@ -513,7 +505,7 @@
 
 <p>Putting it all together, the final example looks like this:</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"https://ok1static.oktacdn.com/assets/js/sdk/okta-auth-js/1.8.0/okta-auth-js.min.js"</span> <span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;&lt;/script&gt;</span>
 
 <span class="nt">&lt;body&gt;</span>
@@ -528,16 +520,16 @@
       <span class="na">redirectUri</span><span class="p">:</span> <span class="s1">'http://localhost:3333'</span>
     <span class="p">});</span>
     <span class="c1">// Attempt to retrieve ID Token from Token Manager</span>
-    <span class="kd">var</span> <span class="nx">idToken</span> <span class="o">=</span> <span class="nx">authClient</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'idToken'</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">idToken</span> <span class="o">=</span> <span class="nx">authClient</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'idToken'</span><span class="p">);</span>
     <span class="c1">// If ID Token exists, return it in console.log</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">idToken</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="err">`</span><span class="nx">hi</span> <span class="nx">$</span><span class="p">{</span><span class="nx">idToken</span><span class="p">.</span><span class="nx">claims</span><span class="p">.</span><span class="nx">email</span><span class="p">}</span><span class="o">!</span><span class="err">`</span><span class="p">);</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`hi </span><span class="p">${</span><span class="nx">idToken</span><span class="p">.</span><span class="nx">claims</span><span class="p">.</span><span class="nx">email</span><span class="p">}</span><span class="s2">!`</span><span class="p">);</span>
     <span class="c1">// If ID Token isn't found, try to parse it from the current URL</span>
     <span class="p">}</span>
     <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">authClient</span><span class="p">.</span><span class="nx">token</span><span class="p">.</span><span class="nx">parseFromUrl</span><span class="p">()</span>
       <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">idToken</span> <span class="o">=&gt;</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="err">`</span><span class="nx">hi</span> <span class="nx">$</span><span class="p">{</span><span class="nx">idToken</span><span class="p">.</span><span class="nx">claims</span><span class="p">.</span><span class="nx">email</span><span class="p">}</span><span class="o">!</span><span class="err">`</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`hi </span><span class="p">${</span><span class="nx">idToken</span><span class="p">.</span><span class="nx">claims</span><span class="p">.</span><span class="nx">email</span><span class="p">}</span><span class="s2">!`</span><span class="p">);</span>
         <span class="c1">// Store parsed token in Token Manager</span>
         <span class="nx">authClient</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s1">'idToken'</span><span class="p">,</span> <span class="nx">idToken</span><span class="p">);</span>
         <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">idToken</span><span class="p">);</span>
@@ -552,8 +544,7 @@
   <span class="nt">&lt;/script&gt;</span>
 <span class="nt">&lt;/body&gt;</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="part-2-get-an-okta-session-cookie">Part 2: Get an Okta Session Cookie</h2>
 
@@ -561,7 +552,7 @@
 
 <p><a href="https://github.com/okta/okta-auth-js#signinoptions">Read more about signIn in the Auth SDK Reference</a>.</p>
 
-<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="k">else</span> <span class="p">{</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">else</span> <span class="p">{</span>
   <span class="c1">// You're not logged in, you need a sessionToken</span>
   <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">prompt</span><span class="p">(</span><span class="s1">'What is your username?'</span><span class="p">);</span>
   <span class="kd">var</span> <span class="nx">password</span> <span class="o">=</span> <span class="nx">prompt</span><span class="p">(</span><span class="s1">'What is your password?'</span><span class="p">);</span>
@@ -575,8 +566,7 @@
     <span class="p">}</span>
   <span class="p">});</span>
 <span class="p">});</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <blockquote>
   <p>This example, like everything else on this page, is for illustrative purposes only. The <code class="highlighter-rouge">prompt()</code> method is not considered a secure way of asking for user authentication credentials.</p>
@@ -584,7 +574,7 @@
 
 <h4 id="complete-okta-session-and-oidc-token-example">Complete Okta Session and OIDC Token Example</h4>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"https://ok1static.oktacdn.com/assets/js/sdk/okta-auth-js/1.8.0/okta-auth-js.min.js"</span> <span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;&lt;/script&gt;</span>
 
 <span class="nt">&lt;body&gt;</span>
@@ -599,15 +589,15 @@
       <span class="na">redirectUri</span><span class="p">:</span> <span class="s1">'http://localhost:3333'</span>
     <span class="p">});</span>
     <span class="c1">// Attempt to retrieve ID Token from Token Manager</span>
-    <span class="kd">var</span> <span class="nx">idToken</span> <span class="o">=</span> <span class="nx">authClient</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'idToken'</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">idToken</span> <span class="o">=</span> <span class="nx">authClient</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'idToken'</span><span class="p">);</span>
     <span class="c1">// If ID Token exists, return it in console.log</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">idToken</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="err">`</span><span class="nx">hi</span> <span class="nx">$</span><span class="p">{</span><span class="nx">idToken</span><span class="p">.</span><span class="nx">claims</span><span class="p">.</span><span class="nx">email</span><span class="p">}</span><span class="o">!</span><span class="err">`</span><span class="p">);</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`hi </span><span class="p">${</span><span class="nx">idToken</span><span class="p">.</span><span class="nx">claims</span><span class="p">.</span><span class="nx">email</span><span class="p">}</span><span class="s2">!`</span><span class="p">);</span>
     <span class="c1">// If ID Token isn't found, try to parse it from the current URL</span>
     <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">authClient</span><span class="p">.</span><span class="nx">token</span><span class="p">.</span><span class="nx">parseFromUrl</span><span class="p">()</span>
       <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">idToken</span> <span class="o">=&gt;</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="err">`</span><span class="nx">hi</span> <span class="nx">$</span><span class="p">{</span><span class="nx">idToken</span><span class="p">.</span><span class="nx">claims</span><span class="p">.</span><span class="nx">email</span><span class="p">}</span><span class="o">!</span><span class="err">`</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`hi </span><span class="p">${</span><span class="nx">idToken</span><span class="p">.</span><span class="nx">claims</span><span class="p">.</span><span class="nx">email</span><span class="p">}</span><span class="s2">!`</span><span class="p">);</span>
         <span class="c1">// Store parsed token in Token Manager</span>
         <span class="nx">authClient</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s1">'idToken'</span><span class="p">,</span> <span class="nx">idToken</span><span class="p">);</span>
         <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">idToken</span><span class="p">);</span>
@@ -628,8 +618,7 @@
     <span class="p">}</span>
   <span class="nt">&lt;/script&gt;</span>
 <span class="nt">&lt;/body&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 
       </div>

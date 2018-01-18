@@ -432,7 +432,7 @@ you need to set up an Okta chiclet (application icon) that an Okta user selects 
 application using SAML via SimpleSAMLphp.</p>
 
 <p>To set up Okta to connect to your application, follow the guide to
-<a href="/standards/SAML/setting_up_a_saml_application_in_okta.html">setting up a SAML application in Okta</a>.
+<a href="/standards/SAML/setting_up_a_saml_application_in_okta">setting up a SAML application in Okta</a>.
 As you follow the instructions, there are two steps where you will do things differently:</p>
 
 <ul>
@@ -504,47 +504,41 @@ PHP, reconfiguring Apache, and creating some symbolic links.</p>
     <p>When you follow the directions for installing SimpleSAMLphp,
 install it to a directory named <code class="highlighter-rouge">simplesamlphp</code> in your home directory.</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>$ cd ~
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cd ~
 $ mkdir simplesamlphp
 $ cd simplesamlphp
 $ git clone git@github.com:simplesamlphp/simplesamlphp.git
 $ git clone git@github.com:jpf/okta-simplesamlphp-example.git
-</code></pre>
-    </div>
+</code></pre></div>    </div>
   </li>
   <li>
     <p>Install php56 and php56-mcrypt with <a href="http://brew.sh/">homebrew</a>.</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>$ brew install php56
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ brew install php56
 $ brew install php56-mcrypt
-</code></pre>
-    </div>
+</code></pre></div>    </div>
   </li>
   <li>
     <p>Edit <code class="highlighter-rouge">httpd.conf</code> to use the new version of PHP that you installed with homebrew.</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>$ sudo $EDITOR /etc/apache2/httpd.conf
-</code></pre>
-    </div>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo $EDITOR /etc/apache2/httpd.conf
+</code></pre></div>    </div>
 
     <p>Find this line:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>LoadModule php5_module libexec/apache2/libphp5.so
-</code></pre>
-    </div>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>LoadModule php5_module libexec/apache2/libphp5.so
+</code></pre></div>    </div>
 
     <p>and change it to this:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>LoadModule php5_module /usr/local/Cellar/php56/5.6.7/libexec/apache2/libphp5.so
-</code></pre>
-    </div>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>LoadModule php5_module /usr/local/Cellar/php56/5.6.7/libexec/apache2/libphp5.so
+</code></pre></div>    </div>
   </li>
   <li>
     <p>Find the <code class="highlighter-rouge">DocumentRoot</code> for your setup of Apache.</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>$ grep ^DocumentRoot /etc/apache2/httpd.conf
-</code></pre>
-    </div>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ grep ^DocumentRoot /etc/apache2/httpd.conf
+</code></pre></div>    </div>
   </li>
   <li>
     <p><code class="highlighter-rouge">cd</code> to the <code class="highlighter-rouge">DocumentRoot</code> directory.</p>
@@ -552,17 +546,15 @@ $ brew install php56-mcrypt
     <p>Assuming that the command above returned <code class="highlighter-rouge">DocumentRoot "/Library/WebServer/Documents"</code>,
 then <code class="highlighter-rouge">cd</code> to that directory</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>$ cd /Library/WebServer/Documents
-</code></pre>
-    </div>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cd /Library/WebServer/Documents
+</code></pre></div>    </div>
   </li>
   <li>
     <p>Add symbolic links from <code class="highlighter-rouge">DocumentRoot</code> to your <code class="highlighter-rouge">simplesamlphp</code> and <code class="highlighter-rouge">okta-simplesamlphp-example</code> directories.</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>$ sudo ln -s ~/simplesamlphp/simplesamlphp .
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo ln -s ~/simplesamlphp/simplesamlphp .
 $ sudo ln -s ~/simplesamlphp/okta-simplesamlphp-example .
-</code></pre>
-    </div>
+</code></pre></div>    </div>
   </li>
 </ol>
 
@@ -572,40 +564,36 @@ $ sudo ln -s ~/simplesamlphp/okta-simplesamlphp-example .
   <li>
     <p><code class="highlighter-rouge">cd</code> to the directory you set up earlier.</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>$ cd ~/simplesamlphp
-</code></pre>
-    </div>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cd ~/simplesamlphp
+</code></pre></div>    </div>
   </li>
   <li>
     <p>Copy the modified SimpleSAMLphp configuration files from the example application
 to the nested <code class="highlighter-rouge">simplesamlphp</code> directory.</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>$ cp okta-simplesamlphp-example/saml-autoconfig.php simplesamlphp/
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cp okta-simplesamlphp-example/saml-autoconfig.php simplesamlphp/
 $ mkdir simplesamlphp/config
 $ cp simplesamlphp/config-templates/config.php simplesamlphp/config/
 $ cp okta-simplesamlphp-example/authsources.php simplesamlphp/config/
 $ mkdir simplesamlphp/metadata
 $ cp okta-simplesamlphp-example/saml20-idp-remote.php simplesamlphp/metadata/
-</code></pre>
-    </div>
+</code></pre></div>    </div>
   </li>
   <li>
     <p>Install the PHP dependencies for SimpleSAMLphp using <a href="https://getcomposer.org/">Composer</a></p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>$ brew install homebrew/php/composer
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ brew install homebrew/php/composer
 $ cd ~/simplesamlphp/simplesamlphp
 $ composer install
-</code></pre>
-    </div>
+</code></pre></div>    </div>
   </li>
   <li>
     <p>Open the <code class="highlighter-rouge">config.php</code> configuration file for SimpleSAMLphp in your favorite text editor.</p>
 
     <p>Run this command:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>$ $EDITOR config/config.php
-</code></pre>
-    </div>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ $EDITOR config/config.php
+</code></pre></div>    </div>
 
     <p>Then, from inside of your text editor, do the folowing:</p>
 
@@ -622,9 +610,8 @@ $ composer install
         <p>There is an example command in for generating a “secret salt” in the
 <code class="highlighter-rouge">config.php</code> file. If that doesn’t work for you, try the one below:</p>
 
-        <div class="highlighter-rouge"><pre class="highlight"><code>$ dd if=/dev/urandom bs=1 count=48 2&gt; /dev/null | openssl base64
-</code></pre>
-        </div>
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ dd if=/dev/urandom bs=1 count=48 2&gt; /dev/null | openssl base64
+</code></pre></div>        </div>
       </li>
     </ul>
   </li>
@@ -633,25 +620,23 @@ $ composer install
 
     <p>Run this command:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>$ $EDITOR saml-autoconfig.php
-</code></pre>
-    </div>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ $EDITOR saml-autoconfig.php
+</code></pre></div>    </div>
 
     <p>Then, using your text editor, modify the contents of the <code class="highlighter-rouge">metadata_url_for</code> array as shown below:</p>
 
-    <div class="language-php highlighter-rouge"><pre class="highlight"><code>$metadata_url_for = array(
-    'example-okta-com'=&gt; '{metadata-url}'
-);
-</code></pre>
-    </div>
+    <div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$metadata_url_for</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">'example-okta-com'</span><span class="o">=&gt;</span> <span class="s1">'{metadata-url}'</span>
+<span class="p">);</span>
+</code></pre></div>    </div>
 
-    <p>Be sure to replace the contents of <code class="highlighter-rouge"><span class="p">{</span><span class="err">metdata-url</span><span class="p">}</span></code> with the link
+    <p>Be sure to replace the contents of <code class="highlighter-rouge">{metdata-url}</code> with the link
 that you copied in step #10 of the
-“<a href="/standards/SAML/setting_up_a_saml_application_in_okta.html">Setting up a SAML application in Okta</a>”
+“<a href="/standards/SAML/setting_up_a_saml_application_in_okta">Setting up a SAML application in Okta</a>”
 instructions that you followed above!</p>
 
     <blockquote>
-      <p>Note: The contents of <code class="highlighter-rouge"><span class="p">{</span><span class="err">metadata-url</span><span class="p">}</span></code> should look similar to this:
+      <p>Note: The contents of <code class="highlighter-rouge">{metadata-url}</code> should look similar to this:
 <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/app/a0b1c2deFGHIJKLMNOPQ/sso/saml/metadata</code></p>
     </blockquote>
   </li>
@@ -726,7 +711,7 @@ array should not be hard coded, but should come from a dynamic datastore.</p>
 
 <p>If you want to learn more about SAML and what to consider when writing a
 SAML implementation, Okta’s in-depth
-<a href="/docs/getting_started/saml_guidance.html">SAML guidance</a>
+<a href="/docs/getting_started/saml_guidance">SAML guidance</a>
 is a great place to learn more.</p>
 
 <p>Finally, if you got this far in this guide and still have questions,

@@ -287,7 +287,7 @@ and the client obtains an Okta session.</p>
 
 <h2 id="getting-started">Getting Started</h2>
 
-<p>If you are new to OpenID Connect, read <a href="/standards/OIDC/index.html">the standards topic</a> before experimenting with the Postman collection. If you are familiar with
+<p>If you are new to OpenID Connect, read <a href="/standards/OIDC/">the standards topic</a> before experimenting with the Postman collection. If you are familiar with
 <a href="http://openid.net/specs/openid-connect-core-1_0.html">the OpenID Connect spec</a>, you may want to experiment with the Postman collection now:</p>
 
 <p><a href="https://app.getpostman.com/run-collection/fd92d7c1ab0fbfdecab2"><img src="https://run.pstmn.io/button.svg" alt="Run in Postman" /></a></p>
@@ -307,62 +307,58 @@ and the client obtains an Okta session.</p>
 <p><span class="api-uri-template api-uri-get"><span class="api-label">GET</span> /oauth2/v1/userinfo</span>
 <span class="api-uri-template api-uri-post"><span class="api-label">POST</span> /oauth2/v1/userinfo</span></p>
 
-<p>You must include the <code class="highlighter-rouge">access_token</code> returned from the <a href="oidc.html#authentication-request">/oauth2/v1/authorize</a> endpoint as an authorization header parameter.</p>
+<p>You must include the <code class="highlighter-rouge">access_token</code> returned from the <a href="oidc#authentication-request">/oauth2/v1/authorize</a> endpoint as an authorization header parameter.</p>
 
 <p>This endpoint complies with the <a href="http://openid.net/specs/openid-connect-core-1_0.html#UserInfo">OIDC userinfo spec</a>.</p>
 
 <h4 class="api api-request api-request-example" id="request-example">Request Example</h4>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -v -X POST <span class="se">\</span>
--H <span class="s2">"Authorization: Bearer &lt;access_token&gt;"</span> <span class="se">\</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> POST <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: Bearer &lt;access_token&gt;"</span> <span class="se">\</span>
 <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/userinfo"</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h4 class="api api-response api-response-example" id="response-parameters">Response Parameters</h4>
 
 <p>Returns a JSON document with information requested in the scopes list of the token.</p>
 
 <h4 class="api api-response api-response-example" id="response-example-success">Response Example (Success)</h4>
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"sub"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00uid4BxXw6I6TV4m0g3"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"name"</span><span class="w"> </span><span class="p">:</span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"nickname"</span><span class="p">:</span><span class="s2">"Jimmy"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"given_name"</span><span class="p">:</span><span class="s2">"John"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"middle_name"</span><span class="p">:</span><span class="s2">"James"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"family_name"</span><span class="p">:</span><span class="s2">"Doe"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"profile"</span><span class="p">:</span><span class="s2">"https://profile.wordpress.com/john.doe"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"zoneinfo"</span><span class="p">:</span><span class="s2">"America/Los_Angeles"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"locale"</span><span class="p">:</span><span class="s2">"en-US"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"updated_at"</span><span class="p">:</span><span class="mi">1311280970</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"email"</span><span class="p">:</span><span class="s2">"john.doe@example.com"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"email_verified"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"address"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"street_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123 Hollywood Blvd."</span><span class="p">,</span><span class="w"> </span><span class="nt">"locality"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Los Angeles"</span><span class="p">,</span><span class="w"> </span><span class="nt">"region"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="p">,</span><span class="w"> </span><span class="nt">"postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"90210"</span><span class="p">,</span><span class="w"> </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="w"> </span><span class="p">},</span><span class="w">
-  </span><span class="nt">"phone_number"</span><span class="p">:</span><span class="s2">"+1 (425) 555-1212"</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"sub"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00uid4BxXw6I6TV4m0g3"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"nickname"</span><span class="p">:</span><span class="s2">"Jimmy"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"given_name"</span><span class="p">:</span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"middle_name"</span><span class="p">:</span><span class="s2">"James"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"family_name"</span><span class="p">:</span><span class="s2">"Doe"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"profile"</span><span class="p">:</span><span class="s2">"https://profile.wordpress.com/john.doe"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"zoneinfo"</span><span class="p">:</span><span class="s2">"America/Los_Angeles"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"locale"</span><span class="p">:</span><span class="s2">"en-US"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"updated_at"</span><span class="p">:</span><span class="mi">1311280970</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"email"</span><span class="p">:</span><span class="s2">"john.doe@example.com"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"email_verified"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"address"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"street_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123 Hollywood Blvd."</span><span class="p">,</span><span class="w"> </span><span class="s2">"locality"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Los Angeles"</span><span class="p">,</span><span class="w"> </span><span class="s2">"region"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="p">,</span><span class="w"> </span><span class="s2">"postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"90210"</span><span class="p">,</span><span class="w"> </span><span class="s2">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"phone_number"</span><span class="p">:</span><span class="s2">"+1 (425) 555-1212"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>The claims in the response are identical to those returned for the requested scopes in the <code class="highlighter-rouge">id_token</code> JWT, except for the <code class="highlighter-rouge">sub</code> claim which is always present.
-See <a href="/standards/OIDC/index.html#scope-dependent-claims-not-always-returned">Scope-Dependent Claims</a> for more information about individual claims.</p>
+See <a href="/standards/OIDC/#scope-dependent-claims-not-always-returned">Scope-Dependent Claims</a> for more information about individual claims.</p>
 
 <h4 class="api api-response api-response-example" id="response-example-error">Response Example (Error)</h4>
-<div class="language-http highlighter-rouge"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> <span class="ne">Unauthorized​</span>
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> <span class="ne">Unauthorized​</span>
 <span class="na">Cache-Control</span><span class="p">:</span> <span class="s">no-cache, no-store​</span>
 <span class="na">Pragma</span><span class="p">:</span> <span class="s">no-cache​</span>
 <span class="na">Expires</span><span class="p">:</span> <span class="s">0​</span>
 <span class="na">WWW-Authenticate</span><span class="p">:</span> <span class="s">Bearer error="invalid_token", error_description="The access token is invalid"​</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h4 class="api api-response api-response-example" id="response-example-error-1">Response Example (Error)</h4>
-<div class="language-http highlighter-rouge"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">403</span> <span class="ne">Forbidden​</span>
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">403</span> <span class="ne">Forbidden​</span>
 <span class="na">Cache-Control</span><span class="p">:</span> <span class="s">no-cache, no-store​</span>
 <span class="na">Pragma</span><span class="p">:</span> <span class="s">no-cache​</span>
 <span class="na">Expires</span><span class="p">:</span> <span class="s">0​</span>
 <span class="na">WWW-Authenticate</span><span class="p">:</span> <span class="s">Bearer error="insufficient_scope", error_description="The access token must provide access to at least one of these scopes - profile, email, address or phone"</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h4 id="validating-id-tokens">Validating ID Tokens</h4>
 
@@ -377,7 +373,7 @@ If the token is active, additional data about the token is also returned. If the
 An implicit client can only introspect its own tokens, while a confidential client can inspect all Access Tokens.</p>
 
 <blockquote>
-  <p>Note; <a href="/standards/OIDC/index.html#id-token">ID Tokens</a> are also valid, however, they are usually validated on the service provider or app side of a flow.</p>
+  <p>Note; <a href="/standards/OIDC/#id-token">ID Tokens</a> are also valid, however, they are usually validated on the service provider or app side of a flow.</p>
 </blockquote>
 
 <h4 id="request-parameters">Request Parameters</h4>
@@ -436,9 +432,8 @@ using either of the following methods:</p>
 <ul>
   <li>Provide <code class="highlighter-rouge">client_id</code> and <code class="highlighter-rouge">client_secret</code>
 in an Authorization header in the Basic auth scheme (<code class="highlighter-rouge">client_secret_basic</code>). For authentication with Basic auth, an HTTP header with the following format must be provided with the POST request:
-    <div class="language-sh highlighter-rouge"><pre class="highlight"><code>Authorization: Basic <span class="k">${</span><span class="nv">Base64</span><span class="p">(&lt;client_id&gt;</span>:<span class="p">&lt;client_secret&gt;)</span><span class="k">}</span>
-</code></pre>
-    </div>
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Authorization: Basic <span class="k">${</span><span class="nv">Base64</span><span class="p">(&lt;client_id&gt;</span>:<span class="p">&lt;client_secret&gt;)</span><span class="k">}</span>
+</code></pre></div>    </div>
   </li>
   <li>Provide the <code class="highlighter-rouge">client_id</code> and <code class="highlighter-rouge">client_secret</code>
 as additional parameters to the POST body (<code class="highlighter-rouge">client_secret_post</code>)</li>
@@ -611,56 +606,52 @@ using HMAC algorithms HS256, HS384, or HS512. Specify the JWT in <code class="hi
 
 <h4 id="response-example-success-access-token">Response Example (Success, Access Token)</h4>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"active"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"token_type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Bearer"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"scope"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"openid profile"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"client_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"a9VpZDRCeFh3Nkk2VdYa"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"username"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"john.doe@example.com"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"exp"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1451606400</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"iat"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1451602800</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"sub"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"john.doe@example.com"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"aud"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"iss"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/orsmsg0aWLdnF3spV0g3"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"jti"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"AT.7P4KlczBYVcWLkxduEuKeZfeiNYkZIC9uGJ28Cc-YaI"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"uid"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"00uid4BxXw6I6TV4m0g3"</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"active"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"token_type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Bearer"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"scope"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"openid profile"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"client_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"a9VpZDRCeFh3Nkk2VdYa"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"username"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"john.doe@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"exp"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1451606400</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"iat"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1451602800</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"sub"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"john.doe@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"aud"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"iss"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/orsmsg0aWLdnF3spV0g3"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"jti"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"AT.7P4KlczBYVcWLkxduEuKeZfeiNYkZIC9uGJ28Cc-YaI"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"uid"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"00uid4BxXw6I6TV4m0g3"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h4 id="response-example-success-refresh-token">Response Example (Success, Refresh Token)</h4>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"active"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"token_type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Bearer"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"scope"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"openid profile email"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"client_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"a9VpZDRCeFh3Nkk2VdYa"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"username"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"john.doe@example.com"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"exp"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1451606400</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"sub"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"john.doe@example.com"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"device_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"q4SZgrA9sOeHkfst5uaa"</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"active"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"token_type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Bearer"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"scope"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"openid profile email"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"client_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"a9VpZDRCeFh3Nkk2VdYa"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"username"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"john.doe@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"exp"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1451606400</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"sub"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"john.doe@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"device_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"q4SZgrA9sOeHkfst5uaa"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h4 id="response-example-success-inactive-token">Response Example (Success, Inactive Token)</h4>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"active"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"active"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h4 id="response-example-error-2">Response Example (Error)</h4>
 
-<div class="language-http highlighter-rouge"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> <span class="ne">Unauthorized</span>
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> <span class="ne">Unauthorized</span>
 <span class="na">Content-Type</span><span class="p">:</span> <span class="s">application/json;charset=UTF-8</span>
 <span class="s">{</span>
 <span class="s">    "error" : "invalid_client",</span>
 <span class="s">    "error_description" : "No client credentials found."</span>
 <span class="s">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 class="api api-operation" id="revocation-request">Revocation Request</h3>
 
@@ -669,7 +660,7 @@ using HMAC algorithms HS256, HS384, or HS512. Specify the JWT in <code class="hi
 <p>The API takes an Access Token or Refresh Token and revokes it. Revoked tokens are considered inactive at the introspection endpoint. A client may only revoke its own tokens.</p>
 
 <blockquote>
-  <p>Because this endpoint works with the <a href="/standards/OAuth/index.html#authorization-servers">Okta Authorization Server</a>, you don’t need an authorization server ID.</p>
+  <p>Because this endpoint works with the <a href="/standards/OAuth/#authorization-servers">Okta Authorization Server</a>, you don’t need an authorization server ID.</p>
 </blockquote>
 
 <h4 id="request-parameters-1">Request Parameters</h4>
@@ -749,20 +740,18 @@ using HMAC algorithms HS256, HS384, or HS512. Specify the JWT in <code class="hi
 
 <h4 id="response-example-success-1">Response Example (Success)</h4>
 
-<div class="language-http highlighter-rouge"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
-</code></pre>
-</div>
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+</code></pre></div></div>
 
 <h4 id="response-example-error-3">Response Example (Error)</h4>
 
-<div class="language-http highlighter-rouge"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> <span class="ne">Unauthorized</span>
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> <span class="ne">Unauthorized</span>
 <span class="na">Content-Type</span><span class="p">:</span> <span class="s">application/json;charset=UTF-8</span>
 <span class="s">{</span>
 <span class="s">    "error" : "invalid_client",</span>
 <span class="s">    "error_description" : "No client credentials found."</span>
 <span class="s">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 class="api api-operation" id="get-keys">Get Keys</h3>
 
@@ -797,50 +786,48 @@ using HMAC algorithms HS256, HS384, or HS512. Specify the JWT in <code class="hi
 
 <h4 class="api api-response api-response-example" id="response-example">Response Example</h4>
 
-<div class="language-http highlighter-rouge"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
 <span class="s">Cache-Control → max-age=3832304, must-revalidate</span>
 <span class="na">Content-Type</span><span class="p">:</span> <span class="s">application/json;charset=UTF-8</span>
-</code></pre>
-</div>
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"keys"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+</code></pre></div></div>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"keys"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"alg"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RS256"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"e"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AQAB"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"n"</span><span class="p">:</span><span class="w"> </span><span class="s2">"iKqiD4cr7FZKm6f05K4r-GQOvjRqjOeFmOho9V7SAXYwCyJluaGBLVvDWO1XlduPLOrsG_Wgs67SOG5qeLPR8T1zDK4bfJAo1Tvbw
+      </span><span class="s2">"alg"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RS256"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"e"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AQAB"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"n"</span><span class="p">:</span><span class="w"> </span><span class="s2">"iKqiD4cr7FZKm6f05K4r-GQOvjRqjOeFmOho9V7SAXYwCyJluaGBLVvDWO1XlduPLOrsG_Wgs67SOG5qeLPR8T1zDK4bfJAo1Tvbw
             YeTwVSfd_0mzRq8WaVc_2JtEK7J-4Z0MdVm_dJmcMHVfDziCRohSZthN__WM2NwGnbewWnla0wpEsU3QMZ05_OxvbBdQZaDUsNSx4
             6is29eCdYwhkAfFd_cFRq3DixLEYUsRwmOqwABwwDjBTNvgZOomrtD8BRFWSTlwsbrNZtJMYU33wuLO9ynFkZnY6qRKVHr3YToIrq
             NBXw0RWCheTouQ-snfAB6wcE2WDN3N5z760ejqQ"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"kid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"U5R8cHbGw445Qbq8zVO1PcCpXL8yG6IcovVa3laCoxM"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"kty"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RSA"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"use"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sig"</span><span class="w">
+      </span><span class="s2">"kid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"U5R8cHbGw445Qbq8zVO1PcCpXL8yG6IcovVa3laCoxM"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"kty"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RSA"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"use"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sig"</span><span class="w">
     </span><span class="p">},</span><span class="w">
     </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"alg"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RS256"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"e"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AQAB"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"n"</span><span class="p">:</span><span class="w"> </span><span class="s2">"l1hZ_g2sgBE3oHvu34T-5XP18FYJWgtul_nRNg-5xra5ySkaXEOJUDRERUG0HrR42uqf9jYrUTwg9fp-SqqNIdHRaN8EwRSDRsKAwK
+      </span><span class="s2">"alg"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RS256"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"e"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AQAB"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"n"</span><span class="p">:</span><span class="w"> </span><span class="s2">"l1hZ_g2sgBE3oHvu34T-5XP18FYJWgtul_nRNg-5xra5ySkaXEOJUDRERUG0HrR42uqf9jYrUTwg9fp-SqqNIdHRaN8EwRSDRsKAwK
             3HIJ2NJfgmrrO2ABkeyUq6rzHxAumiKv1iLFpSawSIiTEBJERtUCDcjbbqyHVFuivIFgH8L37-XDIDb0XG-R8DOoOHLJPTpsgH-rJe
             M5w96VIRZInsGC5OGWkFdtgk6OkbvVd7_TXcxLCpWeg1vlbmX-0TmG5yjSj7ek05txcpxIqYu-7FIGT0KKvXge_BOSEUlJpBhLKU28
             OtsOnmc3NLIGXB-GeDiUZiBYQdPR-myB4ZoQ"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"kid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Y3vBOdYT-l-I0j-gRQ26XjutSX00TeWiSguuDhW3ngo"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"kty"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RSA"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"use"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sig"</span><span class="w">
+      </span><span class="s2">"kid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Y3vBOdYT-l-I0j-gRQ26XjutSX00TeWiSguuDhW3ngo"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"kty"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RSA"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"use"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sig"</span><span class="w">
     </span><span class="p">},</span><span class="w">
     </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"alg"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RS256"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"e"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AQAB"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"n"</span><span class="p">:</span><span class="w"> </span><span class="s2">"lC4ehVB6W0OCtNPnz8udYH9Ao83B6EKnHA5eTcMOap_lQZ-nKtS1lZwBj4wXRVc1XmS0d2OQFA1VMQ-dHLDE3CiGfsGqWbaiZFdW7U
+      </span><span class="s2">"alg"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RS256"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"e"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AQAB"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"n"</span><span class="p">:</span><span class="w"> </span><span class="s2">"lC4ehVB6W0OCtNPnz8udYH9Ao83B6EKnHA5eTcMOap_lQZ-nKtS1lZwBj4wXRVc1XmS0d2OQFA1VMQ-dHLDE3CiGfsGqWbaiZFdW7U
             GLO1nAwfDdH6xp3xwpKOMewDXbAHJlXdYYAe2ap-CE9c5WLTUBU6JROuWcorHCNJisj1aExyiY5t3JQQVGpBz2oUIHo7NRzQoKimvp
             dMvMzcYnTlk1dhlG11b1GTkBclprm1BmOP7Ltjd7aEumOJWS67nKcAZzl48Zyg5KtV11V9F9dkGt25qHauqFKL7w3wu-DYhT0hmyFc
             wn-tXS6e6HQbfHhR_MQxysLtDGOk2ViWv8AQ"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"kid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"h5Sr3LXcpQiQlAUVPdhrdLFoIvkhRTAVs_h39bQnxlU"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"kty"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RSA"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"use"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sig"</span><span class="w">
+      </span><span class="s2">"kid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"h5Sr3LXcpQiQlAUVPdhrdLFoIvkhRTAVs_h39bQnxlU"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"kty"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RSA"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"use"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sig"</span><span class="w">
     </span><span class="p">}</span><span class="w">
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <blockquote>
   <p>Okta strongly recommends retrieving keys dynamically with the JWKS published in the discovery document.</p>
@@ -865,14 +852,14 @@ using HMAC algorithms HS256, HS384, or HS512. Specify the JWT in <code class="hi
 <p>This API endpoint returns metadata related to OpenID Connect that can be used by clients to programmatically configure their interactions with Okta.
 This API doesn’t require any authentication and returns a JSON object with the following structure.</p>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"issuer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"authorization_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/authorize"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"token_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/token"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"userinfo_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/userinfo"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"registration_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/clients"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"jwks_uri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/keys"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"response_types_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"issuer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"authorization_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/authorize"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"token_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/token"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"userinfo_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/userinfo"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"registration_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/clients"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"jwks_uri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/keys"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"response_types_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"code"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"code id_token"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"code token"</span><span class="p">,</span><span class="w">
@@ -880,25 +867,25 @@ This API doesn’t require any authentication and returns a JSON object with the
         </span><span class="s2">"id_token"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"id_token token"</span><span class="w">
     </span><span class="p">],</span><span class="w">
-    </span><span class="nt">"response_modes_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"response_modes_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"query"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"fragment"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"form_post"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"okta_post_message"</span><span class="w">
     </span><span class="p">],</span><span class="w">
-    </span><span class="nt">"grant_types_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"grant_types_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"authorization_code"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"implicit"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"refresh_token"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"password"</span><span class="w">
     </span><span class="p">],</span><span class="w">
-    </span><span class="nt">"subject_types_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"subject_types_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"public"</span><span class="w">
     </span><span class="p">],</span><span class="w">
-    </span><span class="nt">"id_token_signing_alg_values_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"id_token_signing_alg_values_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"RS256"</span><span class="w">
     </span><span class="p">],</span><span class="w">
-    </span><span class="nt">"scopes_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"scopes_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"openid"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"email"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"profile"</span><span class="p">,</span><span class="w">
@@ -907,13 +894,13 @@ This API doesn’t require any authentication and returns a JSON object with the
         </span><span class="s2">"offline_access"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"groups"</span><span class="w">
     </span><span class="p">],</span><span class="w">
-    </span><span class="nt">"token_endpoint_auth_methods_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"token_endpoint_auth_methods_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"client_secret_basic"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"client_secret_post"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"client_secret_jwt"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"none"</span><span class="w">
     </span><span class="p">],</span><span class="w">
-    </span><span class="nt">"claims_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"claims_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"iss"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"ver"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"sub"</span><span class="p">,</span><span class="w">
@@ -946,24 +933,23 @@ This API doesn’t require any authentication and returns a JSON object with the
         </span><span class="s2">"at_hash"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"c_hash"</span><span class="w">
     </span><span class="p">],</span><span class="w">
-    </span><span class="nt">"introspection_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/introspect"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"introspection_endpoint_auth_methods_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"introspection_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/introspect"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"introspection_endpoint_auth_methods_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"client_secret_basic"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"client_secret_post"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"client_secret_jwt"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"none"</span><span class="w">
     </span><span class="p">],</span><span class="w">
-    </span><span class="nt">"revocation_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/revoke"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"revocation_endpoint_auth_methods_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"revocation_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/revoke"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"revocation_endpoint_auth_methods_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"client_secret_basic"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"client_secret_post"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"client_secret_jwt"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"none"</span><span class="w">
     </span><span class="p">],</span><span class="w">
-    </span><span class="nt">"end_session_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/logout"</span><span class="w">
+    </span><span class="s2">"end_session_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/logout"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h3 class="api api-operation" id="authentication-request">Authentication Request</h3>
 
@@ -974,7 +960,7 @@ authenticates the user and returns tokens along with an authorization grant to t
 of the response.</p>
 
 <blockquote>
-  <p>Because this endpoint works with the <a href="/standards/OAuth/index.html#authorization-servers">Okta Authorization Server</a>, you don’t need an authorization server ID.</p>
+  <p>Because this endpoint works with the <a href="/standards/OAuth/#authorization-servers">Okta Authorization Server</a>, you don’t need an authorization server ID.</p>
 </blockquote>
 
 <h4 class="api api-request api-request-params" id="request-parameters-3">Request Parameters</h4>
@@ -1057,7 +1043,7 @@ of the response.</p>
     </tr>
     <tr>
       <td style="text-align: left">scope</td>
-      <td style="text-align: left"><code class="highlighter-rouge">openid</code> is required. Other   <a href="/standards/OIDC/index.html#scopes">scopes</a> may also be included.</td>
+      <td style="text-align: left"><code class="highlighter-rouge">openid</code> is required. Other   <a href="/standards/OIDC/#scopes">scopes</a> may also be included.</td>
       <td style="text-align: left">Query</td>
       <td style="text-align: left">String</td>
       <td style="text-align: left">TRUE</td>
@@ -1197,7 +1183,7 @@ The data model for the <a href="https://developer.mozilla.org/en-US/docs/Web/API
     </tr>
     <tr>
       <td style="text-align: left">access_token</td>
-      <td style="text-align: left">The <code class="highlighter-rouge">access_token</code> used to access the   <a href="/docs/api/resources/oidc.html#get-user-information"><code class="highlighter-rouge">/oauth2/v1/userinfo</code></a> endpoint. This is returned if the <code class="highlighter-rouge">response_type</code> included a token. <b>Important</b>: Unlike the ID Token JWT, the <code class="highlighter-rouge">access_token</code> structure is specific to Okta, and is subject to change.</td>
+      <td style="text-align: left">The <code class="highlighter-rouge">access_token</code> used to access the   <a href="/docs/api/resources/oidc#get-user-information"><code class="highlighter-rouge">/oauth2/v1/userinfo</code></a> endpoint. This is returned if the <code class="highlighter-rouge">response_type</code> included a token. <b>Important</b>: Unlike the ID Token JWT, the <code class="highlighter-rouge">access_token</code> structure is specific to Okta, and is subject to change.</td>
       <td style="text-align: left">String</td>
     </tr>
     <tr>
@@ -1245,7 +1231,7 @@ Irrespective of the response type, the contents of the response are as described
     </tr>
     <tr>
       <td style="text-align: left">access_token</td>
-      <td style="text-align: left">Used to access the   <a href="/docs/api/resources/oidc.html#get-user-information"><code class="highlighter-rouge">/oauth2/v1/userinfo</code></a> endpoint. This is returned if <code class="highlighter-rouge">response_type</code> includes <code class="highlighter-rouge">token</code>. Unlike the ID Token JWT, the <code class="highlighter-rouge">access_token</code> structure is specific to Okta, and is subject to change.</td>
+      <td style="text-align: left">Used to access the   <a href="/docs/api/resources/oidc#get-user-information"><code class="highlighter-rouge">/oauth2/v1/userinfo</code></a> endpoint. This is returned if <code class="highlighter-rouge">response_type</code> includes <code class="highlighter-rouge">token</code>. Unlike the ID Token JWT, the <code class="highlighter-rouge">access_token</code> structure is specific to Okta, and is subject to change.</td>
       <td style="text-align: left">String</td>
     </tr>
     <tr>
@@ -1368,9 +1354,9 @@ Irrespective of the response type, the contents of the response are as described
 
 <p>This request initiates the authorization code flow, as signaled by <code class="highlighter-rouge">response_type=code</code>. The request returns an authorization code that you can use as the <code class="highlighter-rouge">code</code> parameter in a token request.</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -v -X GET <span class="se">\</span>
--H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
--H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> GET <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
 <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/authorize?
   client_id=</span><span class="k">${</span><span class="nv">client_id</span><span class="k">}</span><span class="s2">&amp;
   response_type=code&amp;
@@ -1379,23 +1365,21 @@ Irrespective of the response type, the contents of the response are as described
   redirect_uri=</span><span class="k">${</span><span class="nv">redirect_uri</span><span class="k">}</span><span class="s2">&amp;
   state=</span><span class="k">${</span><span class="nv">state</span><span class="k">}</span><span class="s2">&amp;
   nonce=</span><span class="k">${</span><span class="nv">nonce</span><span class="k">}</span><span class="s2">"</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>This request does the same thing, but uses the <code class="highlighter-rouge">request</code> parameter to deliver a signed (HS256) JWT that contains all the query parameters:</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -v -X GET <span class="se">\</span>
--H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
--H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> GET <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
 <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/authorize?
   request=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPa3RhIiwiaWF0IjoxNTEyNTE2MjIxLCJleHAiOjE1NDQwNTIyMjEsImF1ZCI6Ind3dy5leGFtcGxlLmNvbSIsInN1YiI6InNqYWNrc29uQGV4YW1wbGUuY29tIiwiRW1haWwiOiJzamFja3NvbkBleGFtcGxlLmNvbSIsInJlc3BvbnNlX3R5cGUiOiJjb2RlIiwicmVzcG9uc2VfbW9kZSI6ImZvcm1fcG9zdCIsInJlZGlyZWN0X3VyaSI6Im15UmVkaXJlY3RVUkkuY29tIiwic3RhdGUiOiJteVN0YXRlIiwibm9uY2UiOiJteU5vbmNlIiwic2NvcGUiOiJvcGVuaWQgb2ZmbGluZV9hY2Nlc3MifQ.TjPy2_nUerULClavBNHcpnO_Pd1DxNEjQCeSW45ALJg"</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>This request initiates the implicit flow, that is, it obtains an ID Token and optionally an Access Token directly from the authorization server. We use the same request as the first example, but with <code class="highlighter-rouge">response_type=id_token</code> or <code class="highlighter-rouge">response_type=id_token token</code>:</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -v -X GET <span class="se">\</span>
--H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
--H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> GET <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
 <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/authorize?
   client_id=</span><span class="k">${</span><span class="nv">client_id</span><span class="k">}</span><span class="s2">&amp;
   response_type=id_token token&amp;
@@ -1404,29 +1388,26 @@ Irrespective of the response type, the contents of the response are as described
   redirect_uri=</span><span class="k">${</span><span class="nv">redirect_uri</span><span class="k">}</span><span class="s2">&amp;
   state=</span><span class="k">${</span><span class="nv">state</span><span class="k">}</span><span class="s2">&amp;
   nonce=</span><span class="k">${</span><span class="nv">nonce</span><span class="k">}</span><span class="s2">"</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h4 id="response-example-success-2">Response Example (Success)</h4>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"access_token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ2ZXIiOjEsImp0aSI6IkFULm43cUkyS2hnbjFSZkUwbllQbFJod0N6UmU5eElIOUQ1cXFQYzNBNTQzbDQiLCJpc3MiOiJodHRwczovL21pbG  xpd2F5cy5va3RhLmNvbS9vYXV0aDIvYXVzOXVnbGRjbTJ0SFpqdjQwaDciLCJhdWQiOiJodHRwczovL21pbGxpd2F5cy5va3RhLmNvbSIsImlhdCI6MTQ4OTY5Nzk0NSwiZXhwIjoxNDk1MjIxMTQ1LCJjaWQiOiJBeD  VYclI0YU5Ea2pDYWNhSzdobiIsInVpZCI6IjAwdTljcDFqY3R3Ymp0a2tiMGg3Iiwic2NwIjpbIm9wZW5pZCIsIm9mZmxpbmVfYWNjZXNzIl0sInN1YiI6ImZvcmQucHJlZmVjdEBtaWxsaXdheXMuY29tIn0.hb3oS9  2Nb7QmLz2R99SfB_qqTP9GsMCtc2umA2sJwe4"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"token_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bearer"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"expires_in"</span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"openid offline_access"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"refresh_token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"IJFLydLpLZ7-9spMSePkqgBSTnjBluJIJi6HESG84cE"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"id_token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMHU5Y3AxamN0d2JqdGtrYjBoNyIsInZlciI6MSwiaXNzIjoiaHR0cHM6Ly9taWxsaXdheXMub2t0YS5jb20vb2F1dGgyL2F1czl1Z2  xkY20ydEhaanY0MGg3IiwiYXVkIjoiQXg1WHJSNGFORGtqQ2FjYUs3aG4iLCJpYXQiOjE0ODk2OTc5NDUsImV4cCI6MTQ5NTIyMTE3NSwianRpIjoiSUQuNEVvdWx5WnM4MU9aaVdqQWNHQWdadmg0eUFScUdacjIwWF  RLdW1WRDRNMCIsImFtciI6WyJwd2QiXSwiaWRwIjoiMDBvOWNwMWpjNmhjc0dWN2kwaDciLCJub25jZSI6ImNjYmJmNDNkLTc5MTUtNDMwMC05NTZkLWQxYjc1ODk1YWNiNyIsImF1dGhfdGltZSI6MTQ4OTY5NjAzNy  wiYXRfaGFzaCI6IlRoaHNhUFd6bVlKMVlmcm1kNDM1Q0EifQ._uLqItzLzKb6m6G2-Jqs6OmrG_iWMg0P6UKQqzVggPc"</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"access_token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ2ZXIiOjEsImp0aSI6IkFULm43cUkyS2hnbjFSZkUwbllQbFJod0N6UmU5eElIOUQ1cXFQYzNBNTQzbDQiLCJpc3MiOiJodHRwczovL21pbG  xpd2F5cy5va3RhLmNvbS9vYXV0aDIvYXVzOXVnbGRjbTJ0SFpqdjQwaDciLCJhdWQiOiJodHRwczovL21pbGxpd2F5cy5va3RhLmNvbSIsImlhdCI6MTQ4OTY5Nzk0NSwiZXhwIjoxNDk1MjIxMTQ1LCJjaWQiOiJBeD  VYclI0YU5Ea2pDYWNhSzdobiIsInVpZCI6IjAwdTljcDFqY3R3Ymp0a2tiMGg3Iiwic2NwIjpbIm9wZW5pZCIsIm9mZmxpbmVfYWNjZXNzIl0sInN1YiI6ImZvcmQucHJlZmVjdEBtaWxsaXdheXMuY29tIn0.hb3oS9  2Nb7QmLz2R99SfB_qqTP9GsMCtc2umA2sJwe4"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"token_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bearer"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"expires_in"</span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"openid offline_access"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"refresh_token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"IJFLydLpLZ7-9spMSePkqgBSTnjBluJIJi6HESG84cE"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"id_token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMHU5Y3AxamN0d2JqdGtrYjBoNyIsInZlciI6MSwiaXNzIjoiaHR0cHM6Ly9taWxsaXdheXMub2t0YS5jb20vb2F1dGgyL2F1czl1Z2  xkY20ydEhaanY0MGg3IiwiYXVkIjoiQXg1WHJSNGFORGtqQ2FjYUs3aG4iLCJpYXQiOjE0ODk2OTc5NDUsImV4cCI6MTQ5NTIyMTE3NSwianRpIjoiSUQuNEVvdWx5WnM4MU9aaVdqQWNHQWdadmg0eUFScUdacjIwWF  RLdW1WRDRNMCIsImFtciI6WyJwd2QiXSwiaWRwIjoiMDBvOWNwMWpjNmhjc0dWN2kwaDciLCJub25jZSI6ImNjYmJmNDNkLTc5MTUtNDMwMC05NTZkLWQxYjc1ODk1YWNiNyIsImF1dGhfdGltZSI6MTQ4OTY5NjAzNy  wiYXRfaGFzaCI6IlRoaHNhUFd6bVlKMVlmcm1kNDM1Q0EifQ._uLqItzLzKb6m6G2-Jqs6OmrG_iWMg0P6UKQqzVggPc"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h4 id="response-example-error-4">Response Example (Error)</h4>
 
 <p>The requested scope is invalid:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>https://www.example.com/#error=invalid_scope&amp;error_description=The+requested+scope+is+invalid%2C+unknown%2C+or+malformed
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://www.example.com/#error=invalid_scope&amp;error_description=The+requested+scope+is+invalid%2C+unknown%2C+or+malformed
+</code></pre></div></div>
 
 <h3 class="api api-operation" id="token-request">Token Request</h3>
 
@@ -1435,7 +1416,7 @@ Irrespective of the response type, the contents of the response are as described
 <p>The API returns Access Tokens, ID Tokens, and Refresh Tokens, depending on the request parameters.</p>
 
 <blockquote>
-  <p>Because this endpoint works with the <a href="/standards/OAuth/index.html#authorization-servers">Okta Authorization Server</a>, you don’t need an authorization server ID.</p>
+  <p>Because this endpoint works with the <a href="/standards/OAuth/#authorization-servers">Okta Authorization Server</a>, you don’t need an authorization server ID.</p>
 </blockquote>
 
 <h4 id="request-parameters-4">Request Parameters</h4>
@@ -1637,19 +1618,19 @@ Generally speaking, the scopes specified in a request are included in the Access
 
 <h4 id="response-example-success-3">Response Example (Success)</h4>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"access_token"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJhbGciOiJSUzI1NiJ9.eyJ2ZXIiOjEsImlzcyI6Imh0dHA6Ly9yYWluLm9rdGExLmNvbToxODAyIiwiaWF0IjoxNDQ5Nj
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"access_token"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJhbGciOiJSUzI1NiJ9.eyJ2ZXIiOjEsImlzcyI6Imh0dHA6Ly9yYWluLm9rdGExLmNvbToxODAyIiwiaWF0IjoxNDQ5Nj
                       I0MDI2LCJleHAiOjE0NDk2Mjc2MjYsImp0aSI6IlVmU0lURzZCVVNfdHA3N21BTjJxIiwic2NvcGVzIjpbIm9wZW5pZCIsI
                       mVtYWlsIl0sImNsaWVudF9pZCI6InVBYXVub2ZXa2FESnh1a0NGZUJ4IiwidXNlcl9pZCI6IjAwdWlkNEJ4WHc2STZUVjRt
                       MGczIn0.HaBu5oQxdVCIvea88HPgr2O5evqZlCT4UXH4UKhJnZ5px-ArNRqwhxXWhHJisslswjPpMkx1IgrudQIjzGYbtLF
                       jrrg2ueiU5-YfmKuJuD6O2yPWGTsV7X6i7ABT6P-t8PRz_RNbk-U1GXWIEkNnEWbPqYDAm_Ofh7iW0Y8WDA5ez1jbtMvd-o
                       XMvJLctRiACrTMLJQ2e5HkbUFxgXQ_rFPNHJbNSUBDLqdi2rg_ND64DLRlXRY7hupNsvWGo0gF4WEUk8IZeaLjKw8UoIs-E
                       TEwJlAMcvkhoVVOsN5dPAaEKvbyvPC1hUGXb4uuThlwdD3ECJrtwgKqLqcWonNtiw"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"token_type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Bearer"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"expires_in"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"scope"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"openid email"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"refresh_token"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"a9VpZDRCeFh3Nkk2VdY"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"id_token"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIwMHVpZDRCeFh3Nkk2VFY0bTBnMyIsImVtYWlsIjoid2VibWFzdGVyQGNsb3VkaXR1ZG
+    </span><span class="s2">"token_type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Bearer"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"expires_in"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"scope"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"openid email"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"refresh_token"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"a9VpZDRCeFh3Nkk2VdY"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"id_token"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIwMHVpZDRCeFh3Nkk2VFY0bTBnMyIsImVtYWlsIjoid2VibWFzdGVyQGNsb3VkaXR1ZG
                   UubmV0IiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInZlciI6MSwiaXNzIjoiaHR0cDovL3JhaW4ub2t0YTEuY29tOjE4MDIiLCJsb
                   2dpbiI6ImFkbWluaXN0cmF0b3IxQGNsb3VkaXR1ZGUubmV0IiwiYXVkIjoidUFhdW5vZldrYURKeHVrQ0ZlQngiLCJpYXQiOjE0
                   NDk2MjQwMjYsImV4cCI6MTQ0OTYyNzYyNiwiYW1yIjpbInB3ZCJdLCJqdGkiOiI0ZUFXSk9DTUIzU1g4WGV3RGZWUiIsImF1dGh
@@ -1659,19 +1640,17 @@ Generally speaking, the scopes specified in a request are included in the Access
                   T3yZFdWwzkSDc0BGygfiFyNhCezfyT454wbciSZgrA9ROeHkfPCaX7KCFO8GgQEkGRoQntFBNjluFhNLJIUkEFovEDlfuB4tv_M
                   8BM75celdy3jkpOurg"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h4 id="response-example-error-5">Response Example (Error)</h4>
 
-<div class="language-http highlighter-rouge"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> <span class="ne">Unauthorized</span>
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> <span class="ne">Unauthorized</span>
 <span class="na">Content-Type</span><span class="p">:</span> <span class="s">application/json;charset=UTF-8</span>
 <span class="s">{</span>
 <span class="s">    "error" : "invalid_client",</span>
 <span class="s">    "error_description" : "No client credentials found."</span>
 <span class="s">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 class="api api-operation" id="logout-request">Logout Request</h3>
 
@@ -1720,21 +1699,19 @@ Generally speaking, the scopes specified in a request are included in the Access
 
 <p>This request initiates a logout and will redirect to the Okta login page on success.</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -v -X GET <span class="se">\</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> GET <span class="se">\</span>
 <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/logout?
   id_token_hint=</span><span class="k">${</span><span class="nv">id_token_hint</span><span class="k">}</span><span class="s2">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>This request initiates a logout and will redirect to the <code class="highlighter-rouge">post_logout_redirect_uri</code> on success.</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -v -X GET <span class="se">\</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> GET <span class="se">\</span>
 <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/logout?
   id_token_hint=</span><span class="k">${</span><span class="nv">id_token_hint</span><span class="k">}</span><span class="s2">&amp;
   post_logout_redirect_uri=</span><span class="k">${</span><span class="nv">post_logout_redirect_uri</span><span class="k">}</span><span class="s2">&amp;
   state=</span><span class="k">${</span><span class="nv">state</span><span class="k">}</span><span class="s2">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
       </div>
       <div class="TableOfContents TableOfContentsPreload">

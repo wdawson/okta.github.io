@@ -14,14 +14,13 @@
 
 <p>Make sure you have these <code class="highlighter-rouge">using</code> statements at the top of your <code class="highlighter-rouge">Startup.cs</code> file:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="nn">Microsoft.AspNetCore.Authentication.JwtBearer</span><span class="p">;</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">Microsoft.AspNetCore.Authentication.JwtBearer</span><span class="p">;</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>In the <code class="highlighter-rouge">ConfigureServices</code> method, add this <code class="highlighter-rouge">UseAuthentication</code> block and configure it using the information from the Okta application you just created:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="n">services</span><span class="p">.</span><span class="nf">AddAuthentication</span><span class="p">(</span><span class="n">sharedOptions</span> <span class="p">=&gt;</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">services</span><span class="p">.</span><span class="nf">AddAuthentication</span><span class="p">(</span><span class="n">sharedOptions</span> <span class="p">=&gt;</span>
 <span class="p">{</span>
     <span class="n">sharedOptions</span><span class="p">.</span><span class="n">DefaultAuthenticateScheme</span> <span class="p">=</span> <span class="n">JwtBearerDefaults</span><span class="p">.</span><span class="n">AuthenticationScheme</span><span class="p">;</span>
     <span class="n">sharedOptions</span><span class="p">.</span><span class="n">DefaultChallengeScheme</span> <span class="p">=</span> <span class="n">JwtBearerDefaults</span><span class="p">.</span><span class="n">AuthenticationScheme</span><span class="p">;</span>
@@ -30,20 +29,18 @@
     <span class="n">options</span><span class="p">.</span><span class="n">Authority</span> <span class="p">=</span> <span class="s">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default"</span><span class="p">;</span>
     <span class="n">options</span><span class="p">.</span><span class="n">Audience</span> <span class="p">=</span> <span class="s">"api://default"</span><span class="p">;</span>
 <span class="p">});</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Then, in the <code class="highlighter-rouge">Configure</code> method, add this line <strong>above</strong> the <code class="highlighter-rouge">UseMvc</code> line:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="n">app</span><span class="p">.</span><span class="nf">UseAuthentication</span><span class="p">();</span>
-</code></pre>
-</div>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">app</span><span class="p">.</span><span class="nf">UseAuthentication</span><span class="p">();</span>
+</code></pre></div></div>
 
 <h3 id="protect-application-resources">Protect application resources</h3>
 
 <p>Use the <code class="highlighter-rouge">[Authorize]</code> attribute on controllers or actions to require an authenticated user. For example, create an <code class="highlighter-rouge">/api/messages</code> route in a new controller that returns secret messages if a token is present:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">System.Threading.Tasks</span><span class="p">;</span>
@@ -65,13 +62,12 @@
 
         <span class="k">return</span> <span class="k">new</span> <span class="kt">string</span><span class="p">[]</span>
         <span class="p">{</span>
-            <span class="err">$</span><span class="s">"For {login ?? "</span><span class="n">your</span><span class="s">"} eyes only"</span><span class="p">,</span>
+            <span class="s">$"For </span><span class="p">{</span><span class="n">login</span> <span class="p">??</span> <span class="s">"your"</span><span class="p">}</span><span class="s"> eyes only"</span><span class="p">,</span>
             <span class="s">"Your mission, should you choose to accept it..."</span>
         <span class="p">};</span>
     <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="thats-it">That’s it!</h3>
 

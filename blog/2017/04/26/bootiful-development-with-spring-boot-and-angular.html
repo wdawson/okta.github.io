@@ -231,7 +231,7 @@ dependencies==devtools,h2,data-jpa,data-rest,web -d
 
 <p>Create a <code class="highlighter-rouge">com.example.demo.beer</code> package and a <code class="highlighter-rouge">Beer.java</code> file in it. This will be the entity that holds your data.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">demo</span><span class="o">.</span><span class="na">beer</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">demo</span><span class="o">.</span><span class="na">beer</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">javax.persistence.Entity</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">javax.persistence.GeneratedValue</span><span class="o">;</span>
@@ -275,23 +275,21 @@ dependencies==devtools,h2,data-jpa,data-rest,web -d
                 <span class="sc">'}'</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Add a <code class="highlighter-rouge">BeerRepository</code> class that leverages Spring Data to do CRUD on this entity.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">demo</span><span class="o">.</span><span class="na">beer</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">demo</span><span class="o">.</span><span class="na">beer</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">org.springframework.data.jpa.repository.JpaRepository</span><span class="o">;</span>
 
 <span class="kd">interface</span> <span class="nc">BeerRepository</span> <span class="kd">extends</span> <span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Beer</span><span class="o">,</span> <span class="n">Long</span><span class="o">&gt;</span> <span class="o">{</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Add a <code class="highlighter-rouge">BeerCommandLineRunner</code> that uses this repository and creates a default set of data.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">demo</span><span class="o">.</span><span class="na">beer</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">demo</span><span class="o">.</span><span class="na">beer</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">org.springframework.boot.CommandLineRunner</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.springframework.stereotype.Component</span><span class="o">;</span>
@@ -317,8 +315,7 @@ dependencies==devtools,h2,data-jpa,data-rest,web -d
         <span class="n">repository</span><span class="o">.</span><span class="na">findAll</span><span class="o">().</span><span class="na">forEach</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">println</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Rebuild your project and you should see a list of beers printed in your terminal.</p>
 
@@ -326,17 +323,16 @@ dependencies==devtools,h2,data-jpa,data-rest,web -d
 
 <p>Add a <a href="http://docs.spring.io/spring-data/rest/docs/current/api/org/springframework/data/rest/core/annotation/RepositoryRestResource.html"><code class="highlighter-rouge">@RepositoryRestResource</code></a> annotation to <code class="highlighter-rouge">BeerRepository</code> to expose all its CRUD operations as REST endpoints.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.springframework.data.rest.core.annotation.RepositoryRestResource</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.springframework.data.rest.core.annotation.RepositoryRestResource</span><span class="o">;</span>
 
 <span class="nd">@RepositoryRestResource</span>
 <span class="kd">interface</span> <span class="nc">BeerRepository</span> <span class="kd">extends</span> <span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Beer</span><span class="o">,</span> <span class="n">Long</span><span class="o">&gt;</span> <span class="o">{</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Add a <code class="highlighter-rouge">BeerController</code> class to create an endpoint that filters out less-than-great beers.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">demo</span><span class="o">.</span><span class="na">beer</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">demo</span><span class="o">.</span><span class="na">beer</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.GetMapping</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="o">;</span>
@@ -368,8 +364,7 @@ dependencies==devtools,h2,data-jpa,data-rest,web -d
                 <span class="o">!</span><span class="n">beer</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="s">"PBR"</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Re-build your application and navigate to <code class="highlighter-rouge">http://localhost:8080/good-beers</code>. You should see the list of good beers in your browser.</p>
 
@@ -377,9 +372,8 @@ dependencies==devtools,h2,data-jpa,data-rest,web -d
 
 <p>You should also see this same result in your terminal window when using HTTPie.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>http localhost:8080/good-beers
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http localhost:8080/good-beers
+</code></pre></div></div>
 
 <h2 id="create-a-project-with-angular-cli">Create a Project with Angular CLI</h2>
 
@@ -387,19 +381,17 @@ dependencies==devtools,h2,data-jpa,data-rest,web -d
 
 <p>To create an Angular project, make sure you have <a href="https://nodejs.org/">Node.js</a> and the latest <a href="https://github.com/angular/angular-cli#updating-angular-cli">Angular CLI installed</a>.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>npm install -g @angular/cli@latest
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install <span class="nt">-g</span> @angular/cli@latest
+</code></pre></div></div>
 
 <p>Run <code class="highlighter-rouge">ng --version</code> to confirm you’re using version 1.0.0 (or later). From a terminal window, cd into the root of the <code class="highlighter-rouge">spring-boot-angular-example</code> directory and run the following command.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>ng new client
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ng new client
+</code></pre></div></div>
 
 <p>This will create a new <code class="highlighter-rouge">client</code> directory and run <code class="highlighter-rouge">npm install</code> to install all the necessary dependencies. To verify everything works, run <code class="highlighter-rouge">ng e2e</code> in a terminal window. If everything works, you should see output like the following in your terminal.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>10:02:13] I/launcher - Running 1 instances of WebDriver
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>10:02:13] I/launcher - Running 1 instances of WebDriver
 <span class="o">[</span>10:02:13] I/direct - Using ChromeDriver directly...
 Jasmine started
 
@@ -409,8 +401,7 @@ Jasmine started
 Executed 1 of 1 spec SUCCESS <span class="k">in </span>1 sec.
 <span class="o">[</span>10:02:16] I/launcher - 0 instance<span class="o">(</span>s<span class="o">)</span> of WebDriver still running
 <span class="o">[</span>10:02:16] I/launcher - chrome <span class="c">#01 passed</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><strong>TIP:</strong> If you’re just getting started with Angular, you might want to <a href="https://www.youtube.com/watch?v=Jq3szz2KOOs">watch this video of my recent Getting Started with Angular webinar</a>.</p>
 
@@ -422,61 +413,56 @@ Executed 1 of 1 spec SUCCESS <span class="k">in </span>1 sec.
 
 <p>Thus far, you’ve created a <code class="highlighter-rouge">good-beers</code> API and an Angular app, but you haven’t created the UI to display the list of beers from your API. To do this, create a <code class="highlighter-rouge">&lt;beer-list&gt;</code> component by running Angular CLI’s <code class="highlighter-rouge">generate component</code> command.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>ng generate component beer-list
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ng generate component beer-list
   create src/app/beer-list/beer-list.component.css <span class="o">(</span>0 bytes<span class="o">)</span>
   create src/app/beer-list/beer-list.component.html <span class="o">(</span>28 bytes<span class="o">)</span>
   create src/app/beer-list/beer-list.component.spec.ts <span class="o">(</span>643 bytes<span class="o">)</span>
   create src/app/beer-list/beer-list.component.ts <span class="o">(</span>280 bytes<span class="o">)</span>
   update src/app/app.module.ts <span class="o">(</span>406 bytes<span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><strong>TIP:</strong> There is a <code class="highlighter-rouge">g</code> alias for <code class="highlighter-rouge">generate</code> and a <code class="highlighter-rouge">c</code> alias for <code class="highlighter-rouge">component</code>, so you can type <code class="highlighter-rouge">ng g c beer-list</code> too.</p>
 
 <p>Create a <code class="highlighter-rouge">beer</code> service:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>ng g s beer
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ng g s beer
   create src/app/beer.service.spec.ts <span class="o">(</span>362 bytes<span class="o">)</span>
   create src/app/beer.service.ts <span class="o">(</span>110 bytes<span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Create a <code class="highlighter-rouge">src/app/shared/beer</code> directory and move <code class="highlighter-rouge">beer.service.*</code> into it.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>mkdir -p src/app/shared/beer
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir <span class="nt">-p</span> src/app/shared/beer
 mv src/app/beer.service.<span class="k">*</span> src/app/shared/beer/.
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Create a <code class="highlighter-rouge">src/app/shared/index.ts</code> file and export the <code class="highlighter-rouge">BeerService</code>. The reason for this file is so you can export multiple classes and import them in one line rather than multiple.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">export</span> <span class="o">*</span> <span class="k">from</span> <span class="s1">'./beer/beer.service'</span><span class="p">;</span>
-</code></pre>
-</div>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="o">*</span> <span class="k">from</span> <span class="s1">'./beer/beer.service'</span><span class="p">;</span>
+</code></pre></div></div>
 
 <p>Modify <code class="highlighter-rouge">beer.service.ts</code> to call the “good-beers” API service.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Injectable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Injectable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">HttpClient</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/common/http'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'rxjs/Observable'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">Injectable</span><span class="p">()</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">BeerService</span> <span class="p">{</span>
+<span class="p">@</span><span class="nd">Injectable</span><span class="p">()</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">BeerService</span> <span class="p">{</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="k">private</span> <span class="nx">http</span><span class="err">:</span> <span class="nx">HttpClient</span><span class="p">)</span> <span class="p">{}</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">http</span><span class="p">:</span> <span class="nx">HttpClient</span><span class="p">)</span> <span class="p">{}</span>
 
-  <span class="nx">getAll</span><span class="p">()</span><span class="err">:</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="kr">any</span><span class="o">&gt;</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'http://localhost:8080/good-beers'</span><span class="p">);</span>
+  <span class="nx">getAll</span><span class="p">():</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'http://localhost:8080/good-beers'</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Open <code class="highlighter-rouge">src/app/app.module.ts</code> and add <code class="highlighter-rouge">HttpClientModule</code> as an import.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">HttpClientModule</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/common/http'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">HttpClientModule</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/common/http'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">NgModule</span><span class="p">({</span>
+<span class="p">@</span><span class="nd">NgModule</span><span class="p">({</span>
   <span class="p">...</span>
   <span class="na">imports</span><span class="p">:</span> <span class="p">[</span>
     <span class="nx">BrowserModule</span><span class="p">,</span>
@@ -484,24 +470,23 @@ mv src/app/beer.service.<span class="k">*</span> src/app/shared/beer/.
   <span class="p">],</span>
   <span class="p">...</span>
 <span class="p">})</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Modify <code class="highlighter-rouge">beer-list.component.ts</code> to use the <code class="highlighter-rouge">BeerService</code> and store the results in a local variable. Notice that you need to add the service as a provider in the <code class="highlighter-rouge">@Component</code> definition or you will see an error.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">OnInit</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">OnInit</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">BeerService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../shared'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">Component</span><span class="p">({</span>
+<span class="p">@</span><span class="nd">Component</span><span class="p">({</span>
   <span class="na">selector</span><span class="p">:</span> <span class="s1">'app-beer-list'</span><span class="p">,</span>
   <span class="na">templateUrl</span><span class="p">:</span> <span class="s1">'./beer-list.component.html'</span><span class="p">,</span>
   <span class="na">styleUrls</span><span class="p">:</span> <span class="p">[</span><span class="s1">'./beer-list.component.css'</span><span class="p">],</span>
   <span class="na">providers</span><span class="p">:</span> <span class="p">[</span><span class="nx">BeerService</span><span class="p">]</span>
 <span class="p">})</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">BeerListComponent</span> <span class="k">implements</span> <span class="nx">OnInit</span> <span class="p">{</span>
-  <span class="nl">beers</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="kr">any</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">BeerListComponent</span> <span class="kr">implements</span> <span class="nx">OnInit</span> <span class="p">{</span>
+  <span class="nl">beers</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span><span class="p">;</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="k">private</span> <span class="nx">beerService</span><span class="err">:</span> <span class="nx">BeerService</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">beerService</span><span class="p">:</span> <span class="nx">BeerService</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
 
   <span class="nx">ngOnInit</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">beerService</span><span class="p">.</span><span class="nx">getAll</span><span class="p">().</span><span class="nx">subscribe</span><span class="p">(</span>
@@ -512,24 +497,21 @@ mv src/app/beer.service.<span class="k">*</span> src/app/shared/beer/.
     <span class="p">)</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Modify <code class="highlighter-rouge">beer-list.component.html</code> so it renders the list of beers.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;h2&gt;</span>Beer List<span class="nt">&lt;/h2&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;h2&gt;</span>Beer List<span class="nt">&lt;/h2&gt;</span>
 
 <span class="nt">&lt;div</span> <span class="err">*</span><span class="na">ngFor=</span><span class="s">"let b of beers"</span><span class="nt">&gt;</span>
   {{b.name}}
 <span class="nt">&lt;/div&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Update <code class="highlighter-rouge">app.component.html</code> to have the <code class="highlighter-rouge">BeerListComponent</code> rendered when you’re logged in.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;app-beer-list&gt;&lt;/app-beer-list&gt;</span>
-</code></pre>
-</div>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;app-beer-list&gt;&lt;/app-beer-list&gt;</span>
+</code></pre></div></div>
 
 <p>Make sure both apps are started (with <code class="highlighter-rouge">mvn spring-boot:run</code> in the server directory, and <code class="highlighter-rouge">ng serve</code> in the client directory) and navigate to <code class="highlighter-rouge">http://localhost:4200</code>. You should see an error in your console that you means you have to configure cross-origin resource sharing (CORS) on the server.</p>
 
@@ -543,13 +525,12 @@ Failed to load http://localhost:8080/good-beers: No 'Access-Control-Allow-Origin
 
 <p>In the server project, open <code class="highlighter-rouge">BeerController.java</code> and add a <code class="highlighter-rouge">@CrossOrigin</code> annotation to enable cross-origin resource sharing (CORS) from the client (<code class="highlighter-rouge">http://localhost:4200</code>).</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.CrossOrigin</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.CrossOrigin</span><span class="o">;</span>
 <span class="o">...</span>
     <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"/good-beers"</span><span class="o">)</span>
     <span class="nd">@CrossOrigin</span><span class="o">(</span><span class="n">origins</span> <span class="o">=</span> <span class="s">"http://localhost:4200"</span><span class="o">)</span>
     <span class="kd">public</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Beer</span><span class="o">&gt;</span> <span class="nf">goodBeers</span><span class="o">()</span> <span class="o">{</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>After making these changes, you should be able to see a list of beers from your Spring Boot API.</p>
 
@@ -557,23 +538,23 @@ Failed to load http://localhost:8080/good-beers: No 'Access-Control-Allow-Origin
 
 <p>To make it look a little better, add a <a href="http://giphy.com">Giphy</a> service to fetch images based on the beer’s name. Create <code class="highlighter-rouge">src/app/shared/giphy/giphy.service.ts</code> and place the following code inside it.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Injectable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Injectable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">HttpClient</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/common/http'</span><span class="p">;</span>
 <span class="k">import</span> <span class="s1">'rxjs/add/operator/map'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">Injectable</span><span class="p">()</span>
+<span class="p">@</span><span class="nd">Injectable</span><span class="p">()</span>
 <span class="c1">// http://tutorials.pluralsight.com/front-end-javascript/getting-started-with-angular-2-by-building-a-giphy-search-application</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">GiphyService</span> <span class="p">{</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">GiphyService</span> <span class="p">{</span>
 
   <span class="c1">// Public beta key: https://github.com/Giphy/GiphyAPI#public-beta-key</span>
   <span class="nx">giphyApi</span> <span class="o">=</span> <span class="s1">'//api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&amp;q='</span><span class="p">;</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="k">public</span> <span class="nx">http</span><span class="err">:</span> <span class="nx">HttpClient</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">public</span> <span class="nx">http</span><span class="p">:</span> <span class="nx">HttpClient</span><span class="p">)</span> <span class="p">{</span>
   <span class="p">}</span>
 
-  <span class="nx">get</span><span class="p">(</span><span class="nx">searchTerm</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">get</span><span class="p">(</span><span class="nx">searchTerm</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="nx">apiLink</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">giphyApi</span> <span class="o">+</span> <span class="nx">searchTerm</span><span class="p">;</span>
-    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">apiLink</span><span class="p">).</span><span class="nx">map</span><span class="p">((</span><span class="nx">response</span><span class="err">:</span> <span class="kr">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">apiLink</span><span class="p">).</span><span class="nx">map</span><span class="p">((</span><span class="nx">response</span><span class="p">:</span> <span class="nx">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">images</span><span class="p">.</span><span class="nx">original</span><span class="p">.</span><span class="nx">url</span><span class="p">;</span>
       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
@@ -582,56 +563,52 @@ Failed to load http://localhost:8080/good-beers: No 'Access-Control-Allow-Origin
     <span class="p">});</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Add an export for this class in <code class="highlighter-rouge">src/app/shared/index.ts</code>.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">export</span> <span class="o">*</span> <span class="k">from</span> <span class="s1">'./beer/beer.service'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="o">*</span> <span class="k">from</span> <span class="s1">'./beer/beer.service'</span><span class="p">;</span>
 <span class="k">export</span> <span class="o">*</span> <span class="k">from</span> <span class="s1">'./giphy/giphy.service'</span><span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Then add it to <code class="highlighter-rouge">BeerListComponent</code> to set a <code class="highlighter-rouge">giphyUrl</code> on each <code class="highlighter-rouge">beer</code> object.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">OnInit</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">OnInit</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">BeerService</span><span class="p">,</span> <span class="nx">GiphyService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../shared'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">Component</span><span class="p">({</span>
+<span class="p">@</span><span class="nd">Component</span><span class="p">({</span>
   <span class="na">selector</span><span class="p">:</span> <span class="s1">'app-beer-list'</span><span class="p">,</span>
   <span class="na">templateUrl</span><span class="p">:</span> <span class="s1">'./beer-list.component.html'</span><span class="p">,</span>
   <span class="na">styleUrls</span><span class="p">:</span> <span class="p">[</span><span class="s1">'./beer-list.component.css'</span><span class="p">],</span>
   <span class="na">providers</span><span class="p">:</span> <span class="p">[</span><span class="nx">BeerService</span><span class="p">,</span> <span class="nx">GiphyService</span><span class="p">]</span>
 <span class="p">})</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">BeerListComponent</span> <span class="k">implements</span> <span class="nx">OnInit</span> <span class="p">{</span>
-  <span class="nl">beers</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="kr">any</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">BeerListComponent</span> <span class="kr">implements</span> <span class="nx">OnInit</span> <span class="p">{</span>
+  <span class="nl">beers</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span><span class="p">;</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="k">private</span> <span class="nx">beerService</span><span class="err">:</span> <span class="nx">BeerService</span><span class="p">,</span>
-              <span class="k">private</span> <span class="nx">giphyService</span><span class="err">:</span> <span class="nx">GiphyService</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">beerService</span><span class="p">:</span> <span class="nx">BeerService</span><span class="p">,</span>
+              <span class="kr">private</span> <span class="nx">giphyService</span><span class="p">:</span> <span class="nx">GiphyService</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
 
   <span class="nx">ngOnInit</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">beerService</span><span class="p">.</span><span class="nx">getAll</span><span class="p">().</span><span class="nx">subscribe</span><span class="p">(</span>
       <span class="nx">data</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">beers</span> <span class="o">=</span> <span class="nx">data</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">beer</span> <span class="nx">of</span> <span class="k">this</span><span class="p">.</span><span class="nx">beers</span><span class="p">)</span> <span class="p">{</span>
-          <span class="k">this</span><span class="p">.</span><span class="nx">giphyService</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">beer</span><span class="p">.</span><span class="nx">name</span><span class="p">).</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">url</span> <span class="o">=&gt;</span> <span class="nx">beer</span><span class="p">.</span><span class="nx">giphyUrl</span> <span class="o">=</span> <span class="nx">url</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">beer</span> <span class="k">of</span> <span class="k">this</span><span class="p">.</span><span class="nx">beers</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">this</span><span class="p">.</span><span class="nx">giphyService</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">beer</span><span class="p">.</span><span class="nx">name</span><span class="p">).</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">url</span> <span class="o">=&gt;</span> <span class="nx">beer</span><span class="p">.</span><span class="nx">giphyUrl</span> <span class="o">=</span> <span class="nx">url</span><span class="p">);</span>
         <span class="p">}</span>
       <span class="p">},</span>
       <span class="nx">error</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span>
     <span class="p">)</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Then update <code class="highlighter-rouge">beer-list.component.html</code> to include a reference to this image.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="err">*</span><span class="na">ngFor=</span><span class="s">"let b of beers"</span><span class="nt">&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="err">*</span><span class="na">ngFor=</span><span class="s">"let b of beers"</span><span class="nt">&gt;</span>
   {{b.name}}<span class="nt">&lt;br&gt;</span>
   <span class="nt">&lt;img</span> <span class="na">width=</span><span class="s">"200"</span> <span class="na">src=</span><span class="s">"{{b.giphyUrl}}"</span> <span class="na">alt=</span><span class="s">"{{b.name}}"</span><span class="nt">&gt;</span>
 <span class="nt">&lt;/div&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>The result should look something like the following list of beer names with images.</p>
 
@@ -652,7 +629,7 @@ Failed to load http://localhost:8080/good-beers: No 'Access-Control-Allow-Origin
 
 <p>You can find the source code associated with this article <a href="https://github.com/oktadeveloper/spring-boot-angular-example">on GitHub</a>. If you find any bugs, please file an issue on GitHub, or ask your question on Stack Overflow with an <a href="http://stackoverflow.com/questions/tagged/okta">okta tag</a>. Of course, you can always <a href="https://twitter.com/mraible">ping me on Twitter</a> too.</p>
 
-<p><strong>Update:</strong> To learn how to turn this application into a progressive web application that can work offline, see <a href="/blog/2017/05/09/progressive-web-applications-with-angular-and-spring-boot.html">Build Your First Progressive Web Application with Angular and Spring Boot</a>. I also wrote a <a href="/blog/2017/05/17/develop-a-mobile-app-with-ionic-and-spring-boot.html">tutorial that shows how to develop an Ionic mobile app for this Spring Boot backend</a>.</p>
+<p><strong>Update:</strong> To learn how to turn this application into a progressive web application that can work offline, see <a href="/blog/2017/05/09/progressive-web-applications-with-angular-and-spring-boot">Build Your First Progressive Web Application with Angular and Spring Boot</a>. I also wrote a <a href="/blog/2017/05/17/develop-a-mobile-app-with-ionic-and-spring-boot">tutorial that shows how to develop an Ionic mobile app for this Spring Boot backend</a>.</p>
 
 <p><strong>Update 2:</strong> To see how to develop this same application with Spring Boot, React, and Okta, see <a href="/blog/2017/12/06/bootiful-development-with-spring-boot-and-react">Bootiful Development with Spring Boot and React</a>.</p>
 

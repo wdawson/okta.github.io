@@ -27,7 +27,7 @@
 
 <p>Paste this code into the new class:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Startup</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Startup</span>
 <span class="p">{</span>
     <span class="k">public</span> <span class="k">void</span> <span class="nf">Configuration</span><span class="p">(</span><span class="n">IAppBuilder</span> <span class="n">app</span><span class="p">)</span>
     <span class="p">{</span>
@@ -77,8 +77,8 @@
                 <span class="p">},</span>
                 <span class="n">AuthorizationCodeReceived</span> <span class="p">=</span> <span class="k">async</span> <span class="n">context</span> <span class="p">=&gt;</span>
                 <span class="p">{</span>
-                    <span class="c1">// Exchange code for access and ID tokens
-</span>                    <span class="kt">var</span> <span class="n">tokenClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TokenClient</span><span class="p">(</span>
+                    <span class="c1">// Exchange code for access and ID tokens</span>
+                    <span class="kt">var</span> <span class="n">tokenClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TokenClient</span><span class="p">(</span>
                         <span class="n">issuer</span> <span class="p">+</span> <span class="s">"/v1/token"</span><span class="p">,</span> <span class="n">clientId</span><span class="p">,</span> <span class="n">clientSecret</span><span class="p">);</span>
                     <span class="kt">var</span> <span class="n">tokenResponse</span> <span class="p">=</span> <span class="k">await</span> <span class="n">tokenClient</span><span class="p">.</span><span class="nf">RequestAuthorizationCodeAsync</span><span class="p">(</span>
                         <span class="n">context</span><span class="p">.</span><span class="n">ProtocolMessage</span><span class="p">.</span><span class="n">Code</span><span class="p">,</span> <span class="n">redirectUri</span><span class="p">);</span>
@@ -115,12 +115,11 @@
         <span class="p">});</span>
     <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Add these using statements at the top of the file:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">System.Configuration</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">System.IdentityModel.Tokens</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
@@ -133,8 +132,7 @@
 <span class="k">using</span> <span class="nn">Microsoft.Owin.Security.Cookies</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">Microsoft.Owin.Security.OpenIdConnect</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">Owin</span><span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="configure-the-application-in-okta">Configure the application in Okta</h3>
 
@@ -155,7 +153,7 @@
 
 <p>Open the <code class="highlighter-rouge">Web.config</code> file and add these keys to the <code class="highlighter-rouge">&lt;appSettings&gt;</code> section:</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- 1. Replace these values with your Okta configuration --&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- 1. Replace these values with your Okta configuration --&gt;</span>
 <span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"okta:ClientId"</span> <span class="na">value=</span><span class="s">"{clientId}"</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"okta:ClientSecret"</span> <span class="na">value=</span><span class="s">"{clientSecret}"</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"okta:Issuer"</span> <span class="na">value=</span><span class="s">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default"</span> <span class="nt">/&gt;</span>
@@ -163,29 +161,27 @@
 <span class="c">&lt;!-- 2. Update the Okta application with these values --&gt;</span>
 <span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"okta:RedirectUri"</span> <span class="na">value=</span><span class="s">"http://localhost:59896/authorization-code/callback"</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"okta:PostLogoutRedirectUri"</span> <span class="na">value=</span><span class="s">"http://localhost:59896/Account/PostLogout"</span> <span class="nt">/&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<p>Copy the client ID and client secret from your Okta application into the appropriate keys in <code class="highlighter-rouge">Web.config</code>, and replace <code class="highlighter-rouge"><span class="p">{</span><span class="err">yourOktaDomain</span><span class="p">}</span></code> with your Okta domain name. You can find your Okta domain name in the top-right corner of the Dashboard page.</p>
+<p>Copy the client ID and client secret from your Okta application into the appropriate keys in <code class="highlighter-rouge">Web.config</code>, and replace <code class="highlighter-rouge">{yourOktaDomain}</code> with your Okta domain name. You can find your Okta domain name in the top-right corner of the Dashboard page.</p>
 
-<p><strong>Note</strong>: The value of <code class="highlighter-rouge"><span class="p">{</span><span class="err">yourOktaDomain</span><span class="p">}</span></code> should be something like <code class="highlighter-rouge">dev-123456.oktapreview.com</code>. Make sure you don’t include <code class="highlighter-rouge">-admin</code> in the value!</p>
+<p><strong>Note</strong>: The value of <code class="highlighter-rouge">{yourOktaDomain}</code> should be something like <code class="highlighter-rouge">dev-123456.oktapreview.com</code>. Make sure you don’t include <code class="highlighter-rouge">-admin</code> in the value!</p>
 
 <h3 id="secure-your-application">Secure your application</h3>
 
 <p>Use the <code class="highlighter-rouge">[Authorize]</code> attribute on controllers or actions to require a logged-in user:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="na">[Authorize]</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[Authorize]</span>
 <span class="k">public</span> <span class="n">ActionResult</span> <span class="nf">Protected</span><span class="p">()</span>
 <span class="p">{</span>
-    <span class="c1">// Only for logged-in users!
-</span>    <span class="k">return</span> <span class="nf">View</span><span class="p">();</span>
+    <span class="c1">// Only for logged-in users!</span>
+    <span class="k">return</span> <span class="nf">View</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Create a basic <code class="highlighter-rouge">AccountController</code> to handle login and logout:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">AccountController</span> <span class="p">:</span> <span class="n">Controller</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">AccountController</span> <span class="p">:</span> <span class="n">Controller</span>
 <span class="p">{</span>
     <span class="k">public</span> <span class="n">ActionResult</span> <span class="nf">Login</span><span class="p">()</span>
     <span class="p">{</span>
@@ -217,21 +213,19 @@
         <span class="k">return</span> <span class="nf">RedirectToAction</span><span class="p">(</span><span class="s">"Index"</span><span class="p">,</span> <span class="s">"Home"</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Add these using statements at the top of the <code class="highlighter-rouge">AccountController.cs</code> file:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Web</span><span class="p">;</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Web</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">System.Web.Mvc</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">Microsoft.Owin.Security.Cookies</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">Microsoft.Owin.Security.OpenIdConnect</span><span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You can also update your views to show whether the user is logged in. Add this code to <code class="highlighter-rouge">_Layout.cshtml</code>:</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"navbar-collapse collapse"</span><span class="nt">&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"navbar-collapse collapse"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">"nav navbar-nav"</span><span class="nt">&gt;</span>
         <span class="nt">&lt;li&gt;</span>@Html.ActionLink("Home", "Index", "Home")<span class="nt">&lt;/li&gt;</span>
         <span class="nt">&lt;li&gt;</span>@Html.ActionLink("About", "About", "Home")<span class="nt">&lt;/li&gt;</span>
@@ -256,8 +250,7 @@
         <span class="nt">&lt;/ul&gt;</span>
     }
 <span class="nt">&lt;/div&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="run-the-project">Run the project</h3>
 

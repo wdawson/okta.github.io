@@ -230,7 +230,7 @@ and budget.</p>
 <p>A smart team will optimize around this and choose the lesser of two evils; forcing the logic into whichever application 
 they have access to. This is an example of <a href="http://www.melconway.com/Home/Committees_Paper.html">Conway’s Law</a> in action.</p>
 
-<p><img src="/assets/blog/microservices-spring-boot/conways-law-56c3557dd259e3eca55e0d0fc700df235fbaacf9af9dc53dc00af78dd625d951.png" alt="Conway's Law" width="560" /></p>
+<p><img src="/assets/blog/microservices-spring-boot/conways-law-56c3557dd259e3eca55e0d0fc700df235fbaacf9af9dc53dc00af78dd625d951.png" alt="Conway's Law" width="560" class="center-image" /></p>
 
 <blockquote>
   <p>Any organization that designs a system (defined broadly) will produce a design whose structure is a copy of the 
@@ -310,39 +310,35 @@ and Client Side Load Balancing (Ribbon).</p>
 <p>To begin, create a <code class="highlighter-rouge">spring-boot-microservices-example</code> directory. Navigate to <a href="https://start.spring.io">start.spring.io</a>. 
 Enter <code class="highlighter-rouge">eureka-service</code> as an artifact name and select <code class="highlighter-rouge">Eureka Server</code> as a dependency.</p>
 
-<p><img src="/assets/blog/microservices-spring-boot/eureka-service-a4a7139d34d39919709bfdbf50bd2d1f173282aa29061c9f3bf06fcd79119e2b.png" alt="Eureka Server" width="800" /></p>
+<p><img src="/assets/blog/microservices-spring-boot/eureka-service-a4a7139d34d39919709bfdbf50bd2d1f173282aa29061c9f3bf06fcd79119e2b.png" alt="Eureka Server" width="800" class="center-image" /></p>
 
 <p>Click the <strong>Generate Project</strong> button and expand <code class="highlighter-rouge">eureka-service.zip</code> into the <code class="highlighter-rouge">spring-boot-microservices-example</code> directory.</p>
 
 <p>Modify <code class="highlighter-rouge">src/main/resources/application.properties</code> to add a port number and disable registration.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>server.port=8761
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>server.port=8761
 eureka.client.register-with-eureka=false
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Open <code class="highlighter-rouge">src/main/java/com/example/EurekaServiceApplication.java</code> and add <code class="highlighter-rouge">@EnableEurekaServer</code> above <code class="highlighter-rouge">@SpringBootApplication</code>.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.springframework.cloud.netflix.eureka.server.EnableEurekaServer</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.springframework.cloud.netflix.eureka.server.EnableEurekaServer</span><span class="o">;</span>
 
 <span class="nd">@EnableEurekaServer</span>
 <span class="nd">@SpringBootApplication</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>This annotation, and the aforementioned properties, configures a registry that other applications can talk to.</p>
 
 <p>Start the application from the command line using:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>./mvnw spring-boot:run
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./mvnw spring-boot:run
+</code></pre></div></div>
 
 <p>Or if you’re using Windows:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>mvnw.bat spring-boot:run
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mvnw.bat spring-boot:run
+</code></pre></div></div>
 
 <p>After it starts, you should be able to open <code class="highlighter-rouge">http://localhost:8761</code> and see there are no services available.</p>
 
@@ -374,7 +370,7 @@ Java and web development.</p>
 You can add this code to <code class="highlighter-rouge">BeerCatalogServiceApplication.java</code>, or create separate files for each class. The code below 
 assumes you’re putting all classes in the same file.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@Data</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Data</span>
 <span class="nd">@AllArgsConstructor</span>
 <span class="nd">@NoArgsConstructor</span>
 <span class="nd">@ToString</span>
@@ -413,12 +409,11 @@ assumes you’re putting all classes in the same file.</p>
         <span class="n">beerRepository</span><span class="o">.</span><span class="na">findAll</span><span class="o">().</span><span class="na">forEach</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">println</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>If you’re using an editor that doesn’t auto-import classes, here’s the list of imports needed at the top of <code class="highlighter-rouge">BeerCatalogServiceApplication.java</code>.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">lombok.AllArgsConstructor</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">lombok.AllArgsConstructor</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">lombok.Data</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">lombok.NoArgsConstructor</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">lombok.ToString</span><span class="o">;</span>
@@ -434,31 +429,28 @@ assumes you’re putting all classes in the same file.</p>
 <span class="kn">import</span> <span class="nn">javax.persistence.GeneratedValue</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">javax.persistence.Id</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">java.util.stream.Stream</span><span class="o">;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Add an application name in <code class="highlighter-rouge">beer-catalog-service/src/main/resources/application.properties</code> to display in the Eureka 
 service, and set the port to 8080.</p>
 
-<div class="language-properties highlighter-rouge"><pre class="highlight"><code><span class="py">server.port</span><span class="p">=</span><span class="s">8080</span>
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">server.port</span><span class="p">=</span><span class="s">8080</span>
 <span class="py">spring.application.name</span><span class="p">=</span><span class="s">beer-catalog-service</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Start the beer-catalog-service with Maven (<code class="highlighter-rouge">mvn spring-boot:run</code>) or your IDE.</p>
 
 <p>At this point, you should be able to use <a href="https://httpie.org/">HTTPie</a> to see the list of beers from the catalog service.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>http localhost:8080/beers
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http localhost:8080/beers
+</code></pre></div></div>
 
-<p><img src="/assets/blog/microservices-spring-boot/httpie-beers-55c9dd1ccc635e94d87126b68e1c6c7d2842922bada596895d6366b372b1af77.png" alt="HTTPie Beers" width="800" /></p>
+<p><img src="/assets/blog/microservices-spring-boot/httpie-beers-55c9dd1ccc635e94d87126b68e1c6c7d2842922bada596895d6366b372b1af77.png" alt="HTTPie Beers" width="800" class="center-image" /></p>
 
 <p>However, if you open the Eureka Service at <code class="highlighter-rouge">http://localhost:8761</code>, you will not see the service registered. To register 
 the beer-catalog-service, you need to add <code class="highlighter-rouge">@EnableDiscoveryClient</code> to <code class="highlighter-rouge">BeerCatalogServiceApplication.java</code>.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.springframework.cloud.client.discovery.EnableDiscoveryClient</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.springframework.cloud.client.discovery.EnableDiscoveryClient</span><span class="o">;</span>
 
 <span class="nd">@EnableDiscoveryClient</span>
 <span class="nd">@SpringBootApplication</span>
@@ -468,16 +460,15 @@ the beer-catalog-service, you need to add <code class="highlighter-rouge">@Enabl
         <span class="n">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">BeerCatalogServiceApplication</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Re-compile this class, watch devtools restart your application, and return to <code class="highlighter-rouge">http://localhost:8761</code>. If you’re not 
 using an IDE, it might be easiest to cancel and restart <code class="highlighter-rouge">mvn spring-boot:run</code>. Now the service should show up.</p>
 
-<p><img src="/assets/blog/microservices-spring-boot/eureka-instances-registered-bec9bf9b85ba26b71cc28298fe1965a17bd615e5b78977ee435d36e3d89172a7.png" alt="Eureka instances registered" width="800" /></p>
+<p><img src="/assets/blog/microservices-spring-boot/eureka-instances-registered-bec9bf9b85ba26b71cc28298fe1965a17bd615e5b78977ee435d36e3d89172a7.png" alt="Eureka instances registered" width="800" class="center-image" /></p>
 
 <p><a name="intellij-auto-compile"></a></p>
-<div style="padding: 12px 12px 2px 25px; border: 1px solid silver; border-left: 5px solid #ddd">
+<div style="padding: 12px 12px 12px 25px; border: 1px solid silver; border-left: 5px solid #ddd">
 <strong>Compile on Save in IntelliJ</strong><br />
 
 <p>By default IntelliJ IDEA does not automatically compile files when the application is running. 
@@ -516,7 +507,7 @@ not available.</p>
   <li>Lombok: to reduce boilerplate code</li>
 </ul>
 
-<p><img src="/assets/blog/microservices-spring-boot/edge-service-c7e8714c119427b1c95b0264182bf4b964d8b023b49f5bd008f1e6a3086c79c0.png" alt="Edge Service" width="800" /></p>
+<p><img src="/assets/blog/microservices-spring-boot/edge-service-c7e8714c119427b1c95b0264182bf4b964d8b023b49f5bd008f1e6a3086c79c0.png" alt="Edge Service" width="800" class="center-image" /></p>
 
 <p>Click the <strong>Generate Project</strong> button and expand <code class="highlighter-rouge">edge-service.zip</code> into <code class="highlighter-rouge">spring-boot-microservices-example</code> and open 
 the project in your favorite IDE.</p>
@@ -524,15 +515,14 @@ the project in your favorite IDE.</p>
 <p>Since the <code class="highlighter-rouge">beer-catalog-service</code> is running on port 8080, you’ll need to configure this application to run on a different 
 port. Modify <code class="highlighter-rouge">edge-service/src/main/resources/application.properties</code> to set the port to 8081 and set an application name.</p>
 
-<div class="language-properties highlighter-rouge"><pre class="highlight"><code><span class="py">server.port</span><span class="p">=</span><span class="s">8081</span>
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">server.port</span><span class="p">=</span><span class="s">8081</span>
 <span class="py">spring.application.name</span><span class="p">=</span><span class="s">edge-service</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>To enable Feign, Hystrix, and registration with the Eureka server, add the appropriate annotations to 
 <code class="highlighter-rouge">EdgeServiceApplication.java</code>:</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.springframework.cloud.client.discovery.EnableDiscoveryClient</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.springframework.cloud.netflix.feign.EnableFeignClients</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.springframework.cloud.netflix.zuul.EnableZuulProxy</span><span class="o">;</span>
@@ -548,30 +538,27 @@ port. Modify <code class="highlighter-rouge">edge-service/src/main/resources/app
         <span class="n">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">EdgeServiceApplication</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Create a <code class="highlighter-rouge">Beer</code> DTO (Data Transfer Object) in this same file. Lombok’s 
 <a href="https://projectlombok.org/features/Data.html"><code class="highlighter-rouge">@Data</code></a> will generate a <code class="highlighter-rouge">toString()</code> methods, getters, setters, and 
 appropriate constructors.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@Data</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Data</span>
 <span class="kd">class</span> <span class="nc">Beer</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Create a <code class="highlighter-rouge">BeerClient</code> that uses Feign to talk to the <code class="highlighter-rouge">beer-catalog-service</code>.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@FeignClient</span><span class="o">(</span><span class="s">"beer-catalog-service"</span><span class="o">)</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@FeignClient</span><span class="o">(</span><span class="s">"beer-catalog-service"</span><span class="o">)</span>
 <span class="kd">interface</span> <span class="nc">BeerClient</span> <span class="o">{</span>
 
     <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"/beers"</span><span class="o">)</span>
     <span class="n">Resources</span><span class="o">&lt;</span><span class="n">Beer</span><span class="o">&gt;</span> <span class="nf">readBeers</span><span class="o">();</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Create a <code class="highlighter-rouge">RestController</code> that filters out less-than-great beers and exposes a <code class="highlighter-rouge">/good-beers</code> endpoint.</p>
 
@@ -579,7 +566,7 @@ appropriate constructors.</p>
 install it by going to Preferences -&gt; Plugins -&gt; Browse Plugins. Search for “lombok plugin” and click to install it. 
 Restart Intellij for the changes to take effect.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@RestController</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RestController</span>
 <span class="kd">class</span> <span class="nc">GoodBeerApiAdapterRestController</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="kd">final</span> <span class="n">BeerClient</span> <span class="n">beerClient</span><span class="o">;</span>
@@ -603,8 +590,7 @@ Restart Intellij for the changes to take effect.</p>
                 <span class="o">!</span><span class="n">beer</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="s">"PBR"</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Start the <code class="highlighter-rouge">edge-service</code> application with Maven or your IDE and verify it registers successfully with the Eureka server.</p>
 
@@ -612,56 +598,52 @@ Restart Intellij for the changes to take effect.</p>
 
 <p>You should be able to invoke the <code class="highlighter-rouge">/good-beers</code> endpoint as well.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>http localhost:8081/good-beers
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>http localhost:8081/good-beers
 HTTP/1.1 200
-Content-Type: application/json;charset<span class="o">=</span>UTF-8
+Content-Type: application/json<span class="p">;</span><span class="nv">charset</span><span class="o">=</span>UTF-8
 Date: Tue, 25 Apr 2017 17:37:50 GMT
 Transfer-Encoding: chunked
 X-Application-Context: edge-service:8081
-</code></pre>
-</div>
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="w">
+</code></pre></div></div>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Kentucky Brunch Brand Stout"</span><span class="w">
+        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Kentucky Brunch Brand Stout"</span><span class="w">
     </span><span class="p">},</span><span class="w">
     </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Good Morning"</span><span class="w">
+        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Good Morning"</span><span class="w">
     </span><span class="p">},</span><span class="w">
     </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Very Hazy"</span><span class="w">
+        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Very Hazy"</span><span class="w">
     </span><span class="p">},</span><span class="w">
     </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"King Julius"</span><span class="w">
+        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"King Julius"</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">]</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>This is cool, but if you shut down the <code class="highlighter-rouge">beer-catalog-service</code> application, you’ll get a 500 internal server error.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>http localhost:8081/good-beers
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>http localhost:8081/good-beers
 HTTP/1.1 500
 Connection: close
-Content-Type: application/json;charset<span class="o">=</span>UTF-8
+Content-Type: application/json<span class="p">;</span><span class="nv">charset</span><span class="o">=</span>UTF-8
 Date: Tue, 25 Apr 2017 17:40:32 GMT
 Transfer-Encoding: chunked
 X-Application-Context: edge-service:8081
-</code></pre>
-</div>
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Internal Server Error"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"exception"</span><span class="p">:</span><span class="w"> </span><span class="s2">"java.lang.RuntimeException"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"com.netflix.client.ClientException: Load balancer does not have available server for client: beer-catalog-service"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/good-beers"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1493142032310</span><span class="w">
+</code></pre></div></div>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"error"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Internal Server Error"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"exception"</span><span class="p">:</span><span class="w"> </span><span class="s2">"java.lang.RuntimeException"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"com.netflix.client.ClientException: Load balancer does not have available server for client: beer-catalog-service"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/good-beers"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1493142032310</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>To fix this, you can use Hystrix to create a fallback method and tell the <code class="highlighter-rouge">goodBeers()</code> method to use it.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Beer</span><span class="o">&gt;</span> <span class="nf">fallback</span><span class="o">()</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Beer</span><span class="o">&gt;</span> <span class="nf">fallback</span><span class="o">()</span> <span class="o">{</span>
     <span class="k">return</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
 <span class="o">}</span>
 
@@ -670,22 +652,19 @@ X-Application-Context: edge-service:8081
 <span class="kd">public</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Beer</span><span class="o">&gt;</span> <span class="nf">goodBeers</span><span class="o">()</span> <span class="o">{</span>
     <span class="k">return</span> <span class="err">…</span> 
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Restart the <code class="highlighter-rouge">edge-service</code> and you should see an empty list returned.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>http localhost:8081/good-beers
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>http localhost:8081/good-beers
 HTTP/1.1 200
-Content-Type: application/json;charset<span class="o">=</span>UTF-8
+Content-Type: application/json<span class="p">;</span><span class="nv">charset</span><span class="o">=</span>UTF-8
 Date: Tue, 25 Apr 2017 17:44:18 GMT
 Transfer-Encoding: chunked
 X-Application-Context: edge-service:8081
-</code></pre>
-</div>
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">[]</span><span class="w">
-</span></code></pre>
-</div>
+</code></pre></div></div>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[]</span><span class="w">
+</span></code></pre></div></div>
 
 <p>Start the <code class="highlighter-rouge">beer-catalog-service</code> again and this list should eventually return the full list of good beer names.</p>
 
@@ -693,35 +672,31 @@ X-Application-Context: edge-service:8081
 
 <p>You can copy the Angular PWA client I created in a <a href="/blog/2017/05/09/progressive-web-applications-with-angular-and-spring-boot">previous tutorial</a> and install its dependencies.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>git clone git@github.com:oktadeveloper/spring-boot-angular-pwa-example.git
-cp -r spring-boot-angular-pwa-example/client ~/spring-boot-microservices-example/.
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone git@github.com:oktadeveloper/spring-boot-angular-pwa-example.git
+cp <span class="nt">-r</span> spring-boot-angular-pwa-example/client ~/spring-boot-microservices-example/.
 <span class="nb">cd</span> ~/spring-boot-microservices-example/client
 npm install
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Then modify the <code class="highlighter-rouge">BeerService</code> in <code class="highlighter-rouge">client/src/app/shared/beer/beer.service.ts</code> to <strong>use port 8081</strong> instead of <code class="highlighter-rouge">8080</code>.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="nx">getAll</span><span class="p">()</span><span class="err">:</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="kr">any</span><span class="o">&gt;</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'http://localhost:8081/good-beers'</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="na">response</span><span class="p">:</span> <span class="nx">Response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">getAll</span><span class="p">():</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'http://localhost:8081/good-beers'</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Modify <code class="highlighter-rouge">GoodBeerApiAdapterRestController</code> in <code class="highlighter-rouge">EdgeServiceApplication.java</code> to allow cross-origin requests from any client.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"/good-beers"</span><span class="o">)</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"/good-beers"</span><span class="o">)</span>
 <span class="nd">@CrossOrigin</span><span class="o">(</span><span class="n">origins</span> <span class="o">=</span> <span class="s">"*"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Beer</span><span class="o">&gt;</span> <span class="nf">goodBeers</span><span class="o">()</span> <span class="o">{</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Restart the <code class="highlighter-rouge">edge-service</code> and start the Angular client by running <code class="highlighter-rouge">npm start</code> in the client directory.</p>
 
 <p>Open <code class="highlighter-rouge">http://localhost:4200</code> in your browser and verify that network calls to <code class="highlighter-rouge">/good-beers</code> go over port <code class="highlighter-rouge">8081</code>.</p>
 
-<p><img src="/assets/blog/microservices-spring-boot/angular-pwa-800a8d50d995e9d877af0410d8bfb997ed8834ad035278ab6373ea3f10b94c6d.png" alt="Angular PWA Client" width="800" /></p>
+<p><img src="/assets/blog/microservices-spring-boot/angular-pwa-800a8d50d995e9d877af0410d8bfb997ed8834ad035278ab6373ea3f10b94c6d.png" alt="Angular PWA Client" width="800" class="center-image" /></p>
 
 <h3 id="deploy-to-cloud-foundry">Deploy to Cloud Foundry</h3>
 
@@ -730,7 +705,7 @@ so they work with Cloud Foundry’s Eureka service.</p>
 
 <p>Create <code class="highlighter-rouge">edge-service/src/main/resources/application-cloud.properties</code> and populate it with the following:</p>
 
-<div class="language-properties highlighter-rouge"><pre class="highlight"><code><span class="py">eureka.instance.hostname</span><span class="p">=</span><span class="s">${vcap.application.uris[0]:localhost}</span>
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">eureka.instance.hostname</span><span class="p">=</span><span class="s">${vcap.application.uris[0]:localhost}</span>
 <span class="py">eureka.instance.nonSecurePort</span><span class="p">=</span><span class="s">80</span>
 <span class="py">eureka.instance.metadataMap.instanceId</span><span class="p">=</span><span class="s">${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}</span>
 <span class="py">eureka.instance.leaseRenewalIntervalInSeconds</span> <span class="p">=</span> <span class="s">5</span>
@@ -738,12 +713,11 @@ so they work with Cloud Foundry’s Eureka service.</p>
 <span class="py">eureka.client.region</span> <span class="p">=</span> <span class="s">default</span>
 <span class="py">eureka.client.registryFetchIntervalSeconds</span> <span class="p">=</span> <span class="s">5</span>
 <span class="py">eureka.client.serviceUrl.defaultZone</span><span class="p">=</span><span class="s">${vcap.services.pwa-eureka-service.credentials.uri}/eureka/</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Create <code class="highlighter-rouge">beer-catalog-service/src/main/resources/application-cloud.properties</code> and populate it with similar properties.</p>
 
-<div class="language-properties highlighter-rouge"><pre class="highlight"><code><span class="py">eureka.instance.hostname</span><span class="p">=</span><span class="s">${vcap.application.uris[0]:localhost}</span>
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">eureka.instance.hostname</span><span class="p">=</span><span class="s">${vcap.application.uris[0]:localhost}</span>
 <span class="py">eureka.instance.nonSecurePort</span><span class="p">=</span><span class="s">80</span>
 <span class="py">eureka.instance.metadataMap.instanceId</span><span class="p">=</span><span class="s">${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}</span>
 <span class="py">eureka.instance.leaseRenewalIntervalInSeconds</span> <span class="p">=</span> <span class="s">5</span>
@@ -751,8 +725,7 @@ so they work with Cloud Foundry’s Eureka service.</p>
 <span class="py">eureka.client.region</span> <span class="p">=</span> <span class="s">default</span>
 <span class="py">eureka.client.registryFetchIntervalSeconds</span> <span class="p">=</span> <span class="s">5</span>
 <span class="py">eureka.client.serviceUrl.defaultZone</span><span class="p">=</span><span class="s">${vcap.services.pwa-eureka-service.credentials.uri}/eureka/</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>In the properties above, <code class="highlighter-rouge">pwa-eureka-service</code> is the name you’ll give to the Eureka service when you deploy it to 
 Cloud Foundry.</p>
@@ -763,9 +736,7 @@ download/install the <a href="https://github.com/cloudfoundry/cli#downloads">Clo
 
 <p>There are quite a few steps involved to deploy all the services and the Angular client for production. For that reason, 
 I wrote a <a href="https://github.com/oktadeveloper/spring-boot-microservices-example/blob/master/deploy.sh"><code class="highlighter-rouge">deploy.sh</code></a> script 
-that automates everything. Note that it uses a 
-<a href="https://github.com/oktadeveloper/spring-boot-microservices-example/blob/master/sw.py"><code class="highlighter-rouge">sw.py</code></a> Python script to change 
-the names of Angular’s generated JavaScript files.</p>
+that automates everything.</p>
 
 <h2 id="when-to-use-microservices">When to Use Microservices</h2>
 
@@ -806,6 +777,11 @@ or <a href="https://github.com/oktadeveloper/spring-boot-microservices-example/i
 
 <p><strong>Update:</strong> To learn about how security fits into all this, see <a href="/blog/2017/08/08/secure-spring-microservices.html">Secure a Spring Microservices Architecture with Spring Security, JWTs, Juiser, and Okta</a>.</p>
 
+<p><strong>Changelog:</strong></p>
+
+<ul>
+  <li>Jan 17, 2018: Updated to use latest client from <a href="/blog/2017/05/09/progressive-web-applications-with-angular-and-spring-boot">Build Your First Progressive Web Application with Angular and Spring Boot</a>. See the code changes in the <a href="https://github.com/oktadeveloper/spring-boot-microservices-example/pull/6">example app on GitHub</a>. Changes to this article can be viewed <a href="https://github.com/okta/okta.github.io/pull/1637">in this pull request</a>.</li>
+</ul>
 
 
     </div>

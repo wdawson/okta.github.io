@@ -365,25 +365,24 @@
 
 <h3 id="create-a-token">Create a token</h3>
 
-<p>Okta has granted access to a system account (system user) in <span class="okta-preview-domain">https://{yourOktaDomain}.com</span>.  You must create an API token for this user, follow the steps in <a href="https://developer.okta.com/docs/api/getting_started/getting_a_token.html" title="Getting a token">Getting a token</a> to perform this action.</p>
+<p>Okta has granted access to a system account (system user) in <span class="okta-preview-domain">https://{yourOktaDomain}.com</span>.  You must create an API token for this user, follow the steps in <a href="/docs/api/getting_started/getting_a_token" title="Getting a token">Getting a token</a> to perform this action.</p>
 
 <h3 id="test-the-token">Test the Token</h3>
 
 <p>To test if the token is valid, you can try the following curl command:</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -v -H <span class="s2">"Authorization:SSWS &lt;API token&gt;"</span> -H <span class="s2">"Accept:application/json"</span> -H <span class="s2">"Content-type:application/json"</span> -X GET https://<span class="o">{</span>yourOktaDomain<span class="o">}</span>.com/api/v1/users/me
-</code></pre>
-</div>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-H</span> <span class="s2">"Authorization:SSWS &lt;API token&gt;"</span> <span class="nt">-H</span> <span class="s2">"Accept:application/json"</span> <span class="nt">-H</span> <span class="s2">"Content-type:application/json"</span> <span class="nt">-X</span> GET https://<span class="o">{</span>yourOktaDomain<span class="o">}</span>.com/api/v1/users/me
+</code></pre></div></div>
 
 <h3 id="create-an-okta-tenant">Create an Okta Tenant</h3>
 
 <p>The following curl command will create a new Okta tenant.  <em>If you use a *.okta.com token, the tenant will be created under *.okta.com.</em></p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -v -H <span class="s2">"Authorization:SSWS &lt;API token&gt;"</span> <span class="se">\</span>
- -H <span class="s2">"Accept:application/json"</span> <span class="se">\</span>
- -H <span class="s2">"Content-type:application/json"</span> <span class="se">\</span>
- -X POST https://<span class="o">{</span>yourOktaDomain<span class="o">}</span>.com/api/v1/orgs <span class="se">\</span>
- -d ‘<span class="o">{</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-H</span> <span class="s2">"Authorization:SSWS &lt;API token&gt;"</span> <span class="se">\</span>
+ <span class="nt">-H</span> <span class="s2">"Accept:application/json"</span> <span class="se">\</span>
+ <span class="nt">-H</span> <span class="s2">"Content-type:application/json"</span> <span class="se">\</span>
+ <span class="nt">-X</span> POST https://<span class="o">{</span>yourOktaDomain<span class="o">}</span>.com/api/v1/orgs <span class="se">\</span>
+ <span class="nt">-d</span> ‘<span class="o">{</span>
         <span class="s2">"subdomain"</span>: <span class="s2">"mycompany"</span>,
         <span class="s2">"name"</span>: <span class="s2">"MyCompany Inc"</span>,
         <span class="s2">"website"</span>: <span class="s2">"https://www.mycompany.com"</span>,
@@ -410,8 +409,7 @@
             <span class="o">}</span>
         <span class="o">}</span>
     <span class="o">}</span>’
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Some additional parameters are needed in the request beyond the input from your UI discussed earlier.</p>
 
@@ -431,55 +429,54 @@
 
 <p>Here is a sample response from a successful call.</p>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00o8abcd3myfI6FM1234"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"subdomain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mycompany"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MyCompany Inc"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"website"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.mycompany.com"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"edition"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DIRECTORY"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-11-08T15:16:01.000Z"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"lastUpdated"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-11-08T15:16:01.000Z"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"licensing"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"apps"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"boxnet"</span><span class="p">]</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00o8abcd3myfI6FM1234"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"subdomain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mycompany"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MyCompany Inc"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"website"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.mycompany.com"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"edition"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DIRECTORY"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-11-08T15:16:01.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"lastUpdated"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-11-08T15:16:01.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"licensing"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"apps"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"boxnet"</span><span class="p">]</span><span class="w">
     </span><span class="p">},</span><span class="w">
-    </span><span class="nt">"settings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"app"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"errorRedirectUrl"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"interstitialUrl"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"interstitialMinWaitTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1200</span><span class="w">
+    </span><span class="s2">"settings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"app"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"errorRedirectUrl"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"interstitialUrl"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"interstitialMinWaitTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1200</span><span class="w">
         </span><span class="p">},</span><span class="w">
-        </span><span class="nt">"userAccount"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-                </span><span class="nt">"secondaryEmail"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-                </span><span class="nt">"secondaryImage"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+        </span><span class="s2">"userAccount"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"secondaryEmail"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"secondaryImage"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
             </span><span class="p">}</span><span class="w">
         </span><span class="p">},</span><span class="w">
-        </span><span class="nt">"portal"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"errorRedirectUrl"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"signOutUrl"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+        </span><span class="s2">"portal"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"errorRedirectUrl"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"signOutUrl"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
         </span><span class="p">}</span><span class="w">
     </span><span class="p">},</span><span class="w">
-    </span><span class="nt">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00AbCdefghPijn7s7sue77oi7zz7zzZZxyzOHa7XyZ"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"tokenType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SSWS"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"organization"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/orgs/sleedemo1"</span><span class="w">
+    </span><span class="s2">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00AbCdefghPijn7s7sue77oi7zz7zzZZxyzOHa7XyZ"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"tokenType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SSWS"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"organization"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/orgs/sleedemo1"</span><span class="w">
         </span><span class="p">},</span><span class="w">
-        </span><span class="nt">"administrator"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u1abcd1Abcd11a1a1"</span><span class="w">
+        </span><span class="s2">"administrator"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u1abcd1Abcd11a1a1"</span><span class="w">
         </span><span class="p">},</span><span class="w">
-        </span><span class="nt">"policy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/orgs/sleedemo1/policy"</span><span class="w">
+        </span><span class="s2">"policy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/orgs/sleedemo1/policy"</span><span class="w">
         </span><span class="p">},</span><span class="w">
-        </span><span class="nt">"contacts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/orgs/sleedemo1/contacts"</span><span class="w">
+        </span><span class="s2">"contacts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/orgs/sleedemo1/contacts"</span><span class="w">
         </span><span class="p">}</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h3 id="create-an-app-in-the-okta-tenant">Create an app in the Okta Tenant</h3>
 
@@ -496,10 +493,10 @@
 
 <p>Depending on the set of inputs required to set up SAML for your app in Okta, the input parameters.  An example here is the “servicenow_app2” SAML app instantiation.  The only parameter needed is “loginURL” which is set to the SAML endpoint on the ServiceNow side.</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -v -H <span class="s2">"Authorization:SSWS &lt;API token&gt;"</span> <span class="se">\</span>
- -H <span class="s2">"Accept:application/json"</span> -H <span class="s2">"Content-type:application/json"</span> <span class="se">\</span>
- -X POST https://<span class="o">{</span>yourOktaDomain<span class="o">}</span>.com/api/v1/apps <span class="se">\</span>
- -d  <span class="s1">'{
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-H</span> <span class="s2">"Authorization:SSWS &lt;API token&gt;"</span> <span class="se">\</span>
+ <span class="nt">-H</span> <span class="s2">"Accept:application/json"</span> <span class="nt">-H</span> <span class="s2">"Content-type:application/json"</span> <span class="se">\</span>
+ <span class="nt">-X</span> POST https://<span class="o">{</span>yourOktaDomain<span class="o">}</span>.com/api/v1/apps <span class="se">\</span>
+ <span class="nt">-d</span>  <span class="s1">'{
         "name": "servicenow_app2",
         "status": "ACTIVE",
         "signOnMode": "SAML_2_0",
@@ -509,14 +506,13 @@
             }
         }
     }'</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <blockquote>
   <p>The name parameter value above is to be replaced with the name of your application</p>
 </blockquote>
 
-<p>Refer to the <a href="https://developer.okta.com/docs/api/resources/apps.html#response-example-6">apps api</a> documentation for details about responses and error codes.</p>
+<p>Refer to the <a href="/docs/api/resources/apps#response-example-6">apps api</a> documentation for details about responses and error codes.</p>
 
 <p>At this point, the app instance in Okta is created and Okta is now aware of the SAML SP information based on your input in the app instantiation API call.  Now you need to get the SAML IDP Metadata from Okta to complete the SAML configuration in your environment. The response property <code class="highlighter-rouge">_links.metadata.href</code> is the endpoint to be used to fetch the IDP metadata.  The response will be returned in XML format.</p>
 
@@ -526,16 +522,15 @@
   <p>Note the “application/xml” value for both “Accept” and “Content-type”</p>
 </blockquote>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -v -H <span class="s2">"Authorization:SSWS &lt;API Token&gt;"</span> <span class="se">\</span>
- -H <span class="s2">"Accept:application/xml"</span> <span class="se">\</span>
- -H <span class="s2">"Content-type:application/xml"</span> <span class="se">\</span>
- -X GET https://<span class="o">{</span>yourOktaDomain<span class="o">}</span>.com/api/v1/apps/0oa19jdq4ytHHtfgk1d8/sso/saml/metadata
-</code></pre>
-</div>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-H</span> <span class="s2">"Authorization:SSWS &lt;API Token&gt;"</span> <span class="se">\</span>
+ <span class="nt">-H</span> <span class="s2">"Accept:application/xml"</span> <span class="se">\</span>
+ <span class="nt">-H</span> <span class="s2">"Content-type:application/xml"</span> <span class="se">\</span>
+ <span class="nt">-X</span> GET https://<span class="o">{</span>yourOktaDomain<span class="o">}</span>.com/api/v1/apps/0oa19jdq4ytHHtfgk1d8/sso/saml/metadata
+</code></pre></div></div>
 
 <p>Here is a sample response from a successful call:</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code>  <span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
   <span class="nt">&lt;md:EntityDescriptor</span> <span class="na">xmlns:md=</span><span class="s">"urn:oasis:names:tc:SAML:2.0:metadata"</span> <span class="na">entityID=</span><span class="s">"exk19jdq4yshW8Ru71d8"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;md:IDPSSODescriptor</span> <span class="na">WantAuthnRequestsSigned=</span><span class="s">"false"</span> <span class="na">protocolSupportEnumeration=</span><span class="s">"urn:oasis:names:tc:SAML:2.0:protocol"</span><span class="nt">&gt;</span>
         <span class="nt">&lt;md:KeyDescriptor</span> <span class="na">use=</span><span class="s">"signing"</span><span class="nt">&gt;</span>
@@ -553,164 +548,153 @@
         <span class="nt">&lt;md:SingleSignOnService</span> <span class="na">Binding=</span><span class="s">"urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"</span> <span class="na">Location=</span><span class="s">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/app/servicenow_app2/exk19jdq4yshW8Ru71d8/sso/saml"</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;/md:IDPSSODescriptor&gt;</span>
 <span class="nt">&lt;/md:EntityDescriptor&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="error-codes">Error Codes</h3>
 
-<p>Below we provide a list of error codes that could be encountered, for more details on error codes and http response codes from Okta please refer to our <a href="../../reference/error_codes/index">Error Codes</a></p>
+<p>Below we provide a list of error codes that could be encountered, for more details on error codes and http response codes from Okta please refer to our <a href="/docs/api/getting_started/error_codes">Error Codes</a></p>
 
 <h4 id="duplicate-subdomain">Duplicate Subdomain</h4>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-   </span><span class="nt">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000088"</span><span class="p">,</span><span class="w">
-   </span><span class="nt">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Api validation failed: subDomain"</span><span class="p">,</span><span class="w">
-   </span><span class="nt">"errorLink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000088"</span><span class="p">,</span><span class="w">
-   </span><span class="nt">"errorId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"08ab79d407eafb1c"</span><span class="p">,</span><span class="w">
-   </span><span class="nt">"errorCauses"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+   </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000088"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Api validation failed: subDomain"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"errorLink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000088"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"errorId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"08ab79d407eafb1c"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"errorCauses"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"subDomain: An object with this field already exists"</span><span class="w">
+            </span><span class="s2">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"subDomain: An object with this field already exists"</span><span class="w">
         </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h4 id="invalid-token">Invalid Token</h4>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000011"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Invalid token provided"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorLink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000011"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oaetOwX4JU-TD2EJUf2Vh9H1Q"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorCauses"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000011"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Invalid token provided"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorLink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000011"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oaetOwX4JU-TD2EJUf2Vh9H1Q"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorCauses"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h4 id="invalid-app-name">Invalid App Name</h4>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000007"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Not found: Resource not found: badappname (App)"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorLink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000007"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oaeqE8V21bkSfy50jiJPgF1Zg"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorCauses"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000007"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Not found: Resource not found: badappname (App)"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorLink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000007"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oaeqE8V21bkSfy50jiJPgF1Zg"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorCauses"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h4 id="password-requirements-not-met">Password Requirements Not Met</h4>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Api validation failed: admin.password"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorLink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oaeE4lry9XFR_aZq6yJ-3uGsw"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorCauses"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Api validation failed: admin.password"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorLink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oaeE4lry9XFR_aZq6yJ-3uGsw"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorCauses"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"admin.password: Password requirements were not met. Your password must have at least 8 characters, a lowercase letter, an uppercase letter, a number, no parts of your username."</span><span class="w">
+            </span><span class="s2">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"admin.password: Password requirements were not met. Your password must have at least 8 characters, a lowercase letter, an uppercase letter, a number, no parts of your username."</span><span class="w">
         </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h4 id="website-value-is-blank">Website value is blank</h4>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Api validation failed: website"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorLink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oaeswACavHpT3KAfRv8RwqrAw"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorCauses"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Api validation failed: website"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorLink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oaeswACavHpT3KAfRv8RwqrAw"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorCauses"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"website: The field cannot be left blank"</span><span class="w">
+            </span><span class="s2">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"website: The field cannot be left blank"</span><span class="w">
         </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h4 id="blank-security-question">Blank Security Question</h4>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Api validation failed: admin.customSecurityQuestion"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorLink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oaebCAc-TxcT8y2fzG_vfvZgA"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorCauses"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Api validation failed: admin.customSecurityQuestion"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorLink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oaebCAc-TxcT8y2fzG_vfvZgA"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorCauses"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"admin.customSecurityQuestion: The field cannot be left blank"</span><span class="w">
+            </span><span class="s2">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"admin.customSecurityQuestion: The field cannot be left blank"</span><span class="w">
         </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h4 id="blank-security-answer">Blank Security Answer</h4>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Api validation failed: admin.securityQuestion"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorLink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oaeuVq3ykU8RmK-0GQoHkAVBg"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorCauses"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Api validation failed: admin.securityQuestion"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorLink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oaeuVq3ykU8RmK-0GQoHkAVBg"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorCauses"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"admin.securityQuestion: Fields must both be empty, or both non-empty"</span><span class="w">
+            </span><span class="s2">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"admin.securityQuestion: Fields must both be empty, or both non-empty"</span><span class="w">
         </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h4 id="errors---app-instantiation-api-invalid-name-ie-invalid-okta-app-id-being-used">Errors - App Instantiation API Invalid name (ie. Invalid Okta App ID being used)</h4>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000007"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Not found: Resource not found: bad_okta_app_id (App)"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorLink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000007"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oae8P1iYH1pQw-_3NKOsMhqXg"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorCauses"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000007"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Not found: Resource not found: bad_okta_app_id (App)"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorLink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000007"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oae8P1iYH1pQw-_3NKOsMhqXg"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorCauses"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h4 id="label-already-exists">Label already exists</h4>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Api validation failed: label"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorLink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oae_cM34bW6TVOgQuxb2B94GA"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorCauses"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Api validation failed: label"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorLink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oae_cM34bW6TVOgQuxb2B94GA"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorCauses"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"label: An active ServiceNow - Eureka and later releases instance with the label \"SLEE Test\" already exists."</span><span class="w">
+            </span><span class="s2">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"label: An active ServiceNow - Eureka and later releases instance with the label </span><span class="se">\"</span><span class="s2">SLEE Test</span><span class="se">\"</span><span class="s2"> already exists."</span><span class="w">
         </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h4 id="invalid-session">Invalid Session</h4>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"errorCode"</span><span class="p">:</span><span class="s2">"E0000005"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorSummary"</span><span class="p">:</span><span class="s2">"Invalid session"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorLink"</span><span class="p">:</span><span class="s2">"E0000005"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorId"</span><span class="p">:</span><span class="s2">"oae1_E9HWBkQn-EcYT828MzKg"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"errorCauses"</span><span class="p">:[]</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="s2">"E0000005"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorSummary"</span><span class="p">:</span><span class="s2">"Invalid session"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorLink"</span><span class="p">:</span><span class="s2">"E0000005"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorId"</span><span class="p">:</span><span class="s2">"oae1_E9HWBkQn-EcYT828MzKg"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorCauses"</span><span class="p">:[]</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h2 id="related-articles">Related articles</h2>
 
 <ul>
-  <li><a href="./security-analytics.html" title="Security Analytics">Security Analytics</a></li>
-  <li><a href="./security-enforcement.html" title="Security Enforcement">Security Enforcement</a></li>
-  <li><a href="./isv-syslog-references.html" title="ISV Syslog References">ISV Syslog References</a></li>
-  <li><a href="./embedded-occ.html" title="Embedded OCC">Embedded OCC</a></li>
+  <li><a href="security-analytics" title="Security Analytics">Security Analytics</a></li>
+  <li><a href="security-enforcement" title="Security Enforcement">Security Enforcement</a></li>
+  <li><a href="isv-syslog-references" title="ISV Syslog References">ISV Syslog References</a></li>
+  <li><a href="embedded-occ" title="Embedded OCC">Embedded OCC</a></li>
 </ul>
 
 

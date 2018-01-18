@@ -327,12 +327,6 @@ Learn more about the overall use case in <a href="https://help.okta.com/en/prod/
 
 <h4 id="profile-mastering-users">Profile Mastering Users</h4>
 
-<blockquote>
-  <p>Profile Mastering Users is currently a  <a href="/docs/api/getting_started/releases-at-okta.html#beta"> <span class="api-label api-label-beta "> <i class="fa fa-warning"></i> Beta </span> </a>  feature for Okta’s SCIM-Based Provisioning option.
-<a href="/docs/api/getting_started/releases-at-okta.html#beta">Beta features</a> are made available to a small set of customers for testing and feedback.
-While in Beta, Okta may make breaking changes, so the integration with the feature can’t be published in the Okta Integration Network or used by customers in production environments.</p>
-</blockquote>
-
 <p>Mastering is a more sophisticated version of read (import) Users.
 Mastering defines the flow and maintenance of user-object attributes and their lifecycle state.
 When a profile is mastered from a given resource (application or directory),
@@ -367,12 +361,6 @@ Similarly, removing or deactivating an employee from Active Directory triggers d
 </ul>
 
 <h4 id="app-as-master">App-as-Master</h4>
-
-<blockquote>
-  <p>App-as-Master is currently a  <a href="/docs/api/getting_started/releases-at-okta.html#beta"> <span class="api-label api-label-beta "> <i class="fa fa-warning"></i> Beta </span> </a>  feature for Okta’s SCIM-Based Provisioning option.
-<a href="/docs/api/getting_started/releases-at-okta.html#beta">Beta features</a> are made available to a small set of customers for testing and feedback.
-While in Beta, Okta may make breaking changes, so the integration with the feature can’t be published in the Okta Integration Network or used by customers in production environments.</p>
-</blockquote>
 
 <p>While most apps fit the category of a downstream app in the directory-as-master use case, some apps can be the master. This is the App-as-Master use case.</p>
 
@@ -589,15 +577,14 @@ profile for your application.</p>
 Python/Flask, this sample application implements SCIM 2.0. Below is
 how this sample application defines these attributes:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>userName = db.Column(db.String(250),
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>userName = db.Column(db.String(250),
                      unique=True,
                      nullable=False,
                      index=True)
 familyName = db.Column(db.String(250))
 middleName = db.Column(db.String(250))
 givenName = db.Column(db.String(250))
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>In addition to the basic user schema user attributes described
 above, your SCIM API must also have a unique identifier for each
@@ -627,9 +614,8 @@ mutability of “readOnly”, and a “returned” characteristic of
 <a href="https://tools.ietf.org/html/rfc7643">RFC 7643</a> requires that “this identifier MUST be unique across the
 SCIM service provider’s entire set of resources.”</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>id = db.Column(db.String(36), primary_key=True)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>id = db.Column(db.String(36), primary_key=True)
+</code></pre></div></div>
 
 <p><strong>Note:</strong> Your SCIM API can use anything as an <code class="highlighter-rouge">id</code>, provided that the <code class="highlighter-rouge">id</code>
 uniquely identifies reach resource, as described in <a href="https://tools.ietf.org/html/rfc7643#section-3.1">section 3.1</a> of
@@ -642,9 +628,8 @@ uniquely identifies reach resource, as described in <a href="https://tools.ietf.
 “active” attribute which is used to mark a user resource as
 “active” or “inactive”:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>active = db.Column(db.Boolean, default=False)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>active = db.Column(db.Boolean, default=False)
+</code></pre></div></div>
 
 <h4 id="functionality">Functionality</h4>
 
@@ -687,7 +672,7 @@ application when a user is added or removed from that group.</p>
 <p>Below is an example demonstrating how the sample application handles account
 creation:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>@app.route("/scim/v2/Users", methods=['POST'])
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@app.route("/scim/v2/Users", methods=['POST'])
 def users_post():
     user_resource = request.get_json(force=True)
     user = User(user_resource)
@@ -701,8 +686,7 @@ def users_post():
                                        user_id=user.userName,
                                        _external=True)
     return resp, 201
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Note: <code class="highlighter-rouge">force=True</code> is set because Okta sends
 <code class="highlighter-rouge">application/scim+json</code> as the <code class="highlighter-rouge">Content-Type</code> and the <code class="highlighter-rouge">.get_json()</code>
@@ -721,14 +705,13 @@ get all users from your app into the system).</p>
 
 <p>Here is an example using <code class="highlighter-rouge">curl</code> to make a GET request to <code class="highlighter-rouge">/Users</code>:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>curl https://joel-scim.herokuapp.com/scim/v2/Users
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl https://joel-scim.herokuapp.com/scim/v2/Users
+</code></pre></div></div>
 
 <p>Below is how the sample application handles listing user resources,
 with support for filtering and pagination:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>@app.route("/scim/v2/Users", methods=['GET'])
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@app.route("/scim/v2/Users", methods=['GET'])
 def users_get():
     query = User.query
     request_filter = request.args.get('filter')
@@ -752,8 +735,7 @@ def users_get():
                       count=count,
                       total_results=total_results)
     return flask.jsonify(rv.to_scim_resource())
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <blockquote>
   <p>If you want to see the SQL query that SQLAlchemy is using for
@@ -771,15 +753,14 @@ of the <a href="https://tools.ietf.org/html/rfc7644">SCIM 2.0 Protocol Specifica
 <p>Below is how the sample application handles returning a user resource
 by <code class="highlighter-rouge">user_id</code>:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>@app.route("/scim/v2/Users/&lt;user_id&gt;", methods=['GET'])
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@app.route("/scim/v2/Users/&lt;user_id&gt;", methods=['GET'])
 def user_get(user_id):
     try:
         user = User.query.filter_by(id=user_id).one()
     except:
         return scim_error("User not found", 404)
     return render_json(user)
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>If we don’t find a user, we return a HTTP status 404 (“Not found”)
 with SCIM error message.</p>
@@ -812,7 +793,7 @@ Management Software system.</li>
 
 <p>Below is how the sample application handles account profile updates:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>@app.route("/scim/v2/Users/&lt;user_id&gt;", methods=['PUT'])
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@app.route("/scim/v2/Users/&lt;user_id&gt;", methods=['PUT'])
 def users_put(user_id):
     user_resource = request.get_json(force=True)
     user = User.query.filter_by(id=user_id).one()
@@ -820,8 +801,7 @@ def users_put(user_id):
     db.session.add(user)
     db.session.commit()
     return render_json(user)
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>For more details on updates to the <code class="highlighter-rouge">/Users/{id}</code> SCIM endpoint, see <a href="https://tools.ietf.org/html/rfc7644#section-3.5.1">section 3.5.1</a>
 of the <a href="https://tools.ietf.org/html/rfc7644">SCIM 2.0 Protocol Specification</a>.</p>
@@ -853,7 +833,7 @@ Resource Management Software system.</li>
 
 <p>Below is how the sample application handles account deactivation:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>@app.route("/scim/v2/Users/&lt;user_id&gt;", methods=['PATCH'])
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@app.route("/scim/v2/Users/&lt;user_id&gt;", methods=['PATCH'])
 def users_patch(user_id):
     patch_resource = request.get_json(force=True)
     for attribute in ['schemas', 'Operations']:
@@ -873,8 +853,7 @@ def users_patch(user_id):
     db.session.add(user)
     db.session.commit()
     return render_json(user)
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>For more details on user attribute updates to <code class="highlighter-rouge">/Users/{id}</code> SCIM endpoint, see <a href="https://tools.ietf.org/html/rfc7644#section-3.5.2">section 3.5.2</a>
 of the <a href="https://tools.ietf.org/html/rfc7644">SCIM 2.0 Protocol Specification</a>.</p>
@@ -895,15 +874,14 @@ system.</p>
 <p>Examples of filters that Okta might send to your SCIM API are as
 follows:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>userName eq "jane.doe"
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>userName eq "jane.doe"
 
 userName eq "jane.doe@example.com"
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Here is an example of how to implement SCIM filtering in Python:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>request_filter = request.args.get('filter')
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>request_filter = request.args.get('filter')
 match = None
 if request_filter:
     match = re.match('(\w+) eq "([^"]*)"', request_filter)
@@ -911,8 +889,7 @@ if match:
     (search_key_name, search_value) = match.groups()
     search_key = getattr(User, search_key_name)
     query = query.filter(search_key == search_value)
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>For more details on filtering in SCIM 2.0, see <a href="https://tools.ietf.org/html/rfc7644#section-3.4.2.2">section 3.4.2.2</a>
 of the <a href="https://tools.ietf.org/html/rfc7644">SCIM 2.0 Protocol Specification</a>.</p>
@@ -935,9 +912,8 @@ example:</p>
 <p>Here is an example of an <code class="highlighter-rouge">externalId</code> filter that might be sent to
 your application:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>externalId eq "00u1abcdefGHIJKLMNOP"
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>externalId eq "00u1abcdefGHIJKLMNOP"
+</code></pre></div></div>
 
 <p>For details about supporting <code class="highlighter-rouge">externalId</code>, see
 <a href="https://tools.ietf.org/html/rfc7643#section-3.1">section 3.1</a> of <a href="https://tools.ietf.org/html/rfc7643">RFC 7643</a>, excerpted below.
@@ -977,7 +953,7 @@ must support pagination using a <em>limit</em> (<code class="highlighter-rouge">
 <p>Below is an example of a <code class="highlighter-rouge">curl</code> command that makes a request to the
 <code class="highlighter-rouge">/Users/</code> SCIM endpoint with <code class="highlighter-rouge">count</code> and <code class="highlighter-rouge">startIndex</code> set:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ curl 'https://scim-server.example.com/scim/v2/Users?count=1&amp;startIndex=1'
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ curl 'https://scim-server.example.com/scim/v2/Users?count=1&amp;startIndex=1'
 {
   "Resources": [
     {
@@ -1005,8 +981,7 @@ must support pagination using a <em>limit</em> (<code class="highlighter-rouge">
   "startIndex": 0,
   "totalResults": 1
 }
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <blockquote>
   <p>Note: When returning a paged resource, your API should return a
@@ -1020,14 +995,13 @@ lowercase JSON strings for the keys of child nodes inside
 paging for you. Here is how the sample application handles
 pagination with SQLAlchemy:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>count = int(request.args.get('count', 100))
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>count = int(request.args.get('count', 100))
 start_index = int(request.args.get('startIndex', 1))
 if start_index &lt; 1:
     start_index = 1
 start_index -= 1
 query = query.offset(start_index).limit(count)
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Note: This code subtracts “1” from the
 <code class="highlighter-rouge">startIndex</code>, because <code class="highlighter-rouge">startIndex</code> is <a href="https://tools.ietf.org/html/rfc7644#section-3.4.2">1-indexed</a> and
@@ -1054,7 +1028,7 @@ status code, see <a href="https://tools.ietf.org/html/rfc6585#section-4">section
 
 <p>Example:</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">{</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">{</span>
   <span class="s2">"schemas"</span>: <span class="o">[</span>
     <span class="s2">"urn:ietf:params:scim:api:messages:2.0:ListResponse"</span>
   <span class="o">]</span>,
@@ -1083,8 +1057,7 @@ status code, see <a href="https://tools.ietf.org/html/rfc6585#section-4">section
     <span class="o">}</span>
   <span class="o">]</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h5 id="create-group-post-groups">Create Group: POST /Groups</h5>
 
@@ -1220,11 +1193,11 @@ you’ll need to get your app published in <a href="https://www.okta.com/resourc
 <p>Follow the steps below to test and submit your application for Okta review:</p>
 
 <ol>
-  <li>Review Okta’s SCIM Docs &amp; Prepare Your App</li>
-  <li>Test Your SCIM Server</li>
-  <li>Submit for Okta Review</li>
-  <li>Test with Customers</li>
-  <li>Publish to Okta Integration Network (OIN)</li>
+  <li><a href="#review-oktas-scim-docs-and-prepare-your-app">Review Okta’s SCIM Docs and Prepare Your App</a></li>
+  <li><a href="#test-your-scim-server">Test Your SCIM Server</a></li>
+  <li><a href="#submit-for-okta-review-and-testing">Submit for Okta Review and Testing</a></li>
+  <li><a href="#publish-to-okta-integration-network-oin-in-beta">Publish to Okta Integration Network (OIN) in Beta</a></li>
+  <li><a href="#become-okta-verified-in-the-oin">Become Okta-Verified in the OIN</a></li>
 </ol>
 
 <blockquote>
@@ -1240,7 +1213,7 @@ If this is the case, follow steps 1-3 and you will be able to indicate in step 3
 Okta will create the submitted integration per usual and assign it to Orgs that you specify as a private app.
 Note that you cannot use the SCIM template app used for prototyping, as it has limitations that prevent it from being used in production.</p>
 
-<h4 id="review-oktas-scim-docs--prepare-your-app">Review Okta’s SCIM Docs &amp; Prepare Your App</h4>
+<h4 id="review-oktas-scim-docs-and-prepare-your-app">Review Okta’s SCIM Docs and Prepare Your App</h4>
 
 <p>The first step is to build a compliant SCIM server.
 Even if you already support SCIM, it is important that you review Okta’s SCIM docs above,
@@ -1432,7 +1405,7 @@ Please request this in your email to <a href="mailto:developers@okta.com">develo
   </li>
 </ol>
 
-<h4 id="submit-for-okta-review">Submit for Okta Review</h4>
+<h4 id="submit-for-okta-review-and-testing">Submit for Okta Review and Testing</h4>
 
 <p>Once you have a functioning SCIM app integration in your developer org, there are a few steps to submit it for Okta review via the OIN Manager.</p>
 
@@ -1552,25 +1525,14 @@ For more details, see the <a href="http://saml-doc.okta.com/Provisioning_Docs/SC
 
 <p>Note: When you are ready, use <a href="https://oanmanager.okta.com/">this form</a> to submit for Okta review.</p>
 
-<h4 id="test-with-customers">Test with Customers</h4>
+<h4 id="publish-to-okta-integration-network-oin-in-beta">Publish to Okta Integration Network (OIN) in Beta</h4>
 
-<p>We require that one joint customer successfully validate that the integration is working as expected from their perspective before making it publicly available in the Okta Integration Network for any customer to use without assistance.</p>
+<p>Okta recently changed the process by which an ISV can publish their integration into the Okta Integration Network (OIN). Now, before becoming Okta-verified, publish to the OIN in Beta. Publishing in Beta allows customer to more easily see and test your newly submitted SCIM-enabled integration while it undergoes customer validation.</p>
 
-<p>Here’s the process for getting joint customers involved in testing a newly developed SCIM integration:</p>
-
-<ol>
-  <li>Identify joint customers interested in piloting the integration.</li>
-  <li>Once identified, an Okta admin from the joint customer emails <a href="mailto:developers@okta.com">developers@okta.com</a> and asks for this integration to be assigned to their Okta org (be sure to specify the org subdomain in the request). Okta assigns the app.</li>
-  <li>Integration and configuration review with the joint customer. Partners are responsible for managing the customer identification and testing process, but Okta can support as needed. Please coordinate by emailing <a href="mailto:developers@okta.com">developers@okta.com</a>.</li>
-  <li>The Okta admin emails <a href="mailto:developers@okta.com">developers@okta.com</a> directly stating that the integration is working as expected.</li>
-</ol>
-
-<h4 id="publish-to-okta-integration-network">Publish to Okta Integration Network</h4>
-
-<p>In order for an app to be published in the Okta Integration Network, it must meet the following criteria:</p>
+<p>In order for an app to be published in the Okta Integration Network in Beta, it must meet the following criteria:</p>
 
 <ul>
-  <li>ISV configuration guide explaining:
+  <li>Include an ISV configuration guide explaining:
     <ul>
       <li>The supported features</li>
       <li>Step-by-step instructions for setting up the integration</li>
@@ -1583,8 +1545,28 @@ For more details, see the <a href="http://saml-doc.okta.com/Provisioning_Docs/SC
   <li>Full, permanent test tenant provided to Okta</li>
   <li>RunScope Test Suite</li>
   <li>Final Full QA by Okta</li>
-  <li>Customer validation</li>
 </ul>
+
+<p>Once Okta completes the QA process and the requisite changes are made (all issues are closed), Okta allows the provisioning integration to enter the Okta Integration Network in Beta.</p>
+
+<p><img src="/assets/scim-beta-a11472592babe1fe5023e23f238872bf7baf8e78cdc83c46c7e676d81083d971.png" alt="User interface shows an integration in Beta" /></p>
+
+<h4 id="become-okta-verified-in-the-oin">Become Okta-Verified in the OIN</h4>
+
+<p>We require that one joint customer successfully validates the integration is working as expected from their perspective before we make it Okta-Verified in the OIN. The integration needs to be used and validated in production (not preview).</p>
+
+<p>Use this process to involve joint customers in testing a newly developed SCIM integration:</p>
+
+<ol>
+  <li>Identify joint customers interested in piloting the integration.</li>
+  <li>Integration and configuration review with the joint customer. Partners are responsible for managing the customer identification and testing process. This customer must be live with this integration in production, not preview.</li>
+  <li>The Okta admin for the customer who is live with the integration sends an email to <a href="mailto:oktascimfeedback@okta.com">oktascimfeedback@okta.com</a> stating that the integration is working as expected.</li>
+  <li>Once the above steps are complete, Okta changes the status of the integration in OIN to Okta-Verified.</li>
+</ol>
+
+<p>Whether Beta or Okta-Verified, when issues arise related to the SCIM integration, the ISV acts as the first point of contact.</p>
+
+<p><img src="/assets/scim-config-guide-d58b8639273e64a760cb406ec73a416f6c84fd78157b6789215ddbe12300089b.png" alt="User interface shows an integration in Beta" /></p>
 
 <h2 id="provisioning-faqs">Provisioning FAQs</h2>
 
@@ -1828,38 +1810,33 @@ currently work with Python 3.</p>
   <li>
     <p><code class="highlighter-rouge">cd</code> to the directory you just checked out:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>$ cd okta-scim-beta
-</code></pre>
-    </div>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cd okta-scim-beta
+</code></pre></div>    </div>
   </li>
   <li>
     <p>Create an isolated Python environment named <code class="highlighter-rouge">venv</code> using <a href="http://docs.python-guide.org/en/latest/dev/virtualenvs/">virtualenv</a>:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>$ virtualenv venv
-</code></pre>
-    </div>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ virtualenv venv
+</code></pre></div>    </div>
   </li>
   <li>
     <p>Next, activate the newly created virtual environment:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>$ source venv/bin/activate
-</code></pre>
-    </div>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ source venv/bin/activate
+</code></pre></div>    </div>
   </li>
   <li>
     <p>Then, install the dependencies for the sample SCIM server using
 Python’s <a href="https://en.wikipedia.org/wiki/Pip_%28package_manager%29">“pip” package manager</a>:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>$ pip install -r requirements.txt
-</code></pre>
-    </div>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ pip install -r requirements.txt
+</code></pre></div>    </div>
   </li>
   <li>
     <p>Finally, start the example SCIM server using this command:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>$ python scim-server.py
-</code></pre>
-    </div>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ python scim-server.py
+</code></pre></div>    </div>
   </li>
 </ol>
 
@@ -1876,7 +1853,7 @@ repository in the file named <code class="highlighter-rouge">scim-server.py</cod
 <p>We start by importing the Python packages that the SCIM server will
 use:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>import os
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import os
 import re
 import uuid
 
@@ -1888,8 +1865,7 @@ from flask_socketio import SocketIO
 from flask_socketio import emit
 from flask_sqlalchemy import SQLAlchemy
 import flask
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="setup">Setup</h3>
 
@@ -1899,13 +1875,12 @@ their respective technologies to Flask.</p>
 
 <p>Next we initialize Flask, SQLAlchemy, and SocketIO:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>app = Flask(__name__)
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>app = Flask(__name__)
 database_url = os.getenv('DATABASE_URL', 'sqlite:///test-users.db')
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 db = SQLAlchemy(app)
 socketio = SocketIO(app)
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="sqlalchemy-support-for-the-users-table">SQLAlchemy support for the “users” table:</h3>
 
@@ -1919,7 +1894,7 @@ the code that handles PUT calls to <code class="highlighter-rouge">/Users/{id}</
 <p>The <code class="highlighter-rouge">to_scim_resource</code> method is used to turn a User object into
 a <a href="https://tools.ietf.org/html/rfc7643#section-4.1">SCIM “User” resource schema</a>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>class User(db.Model):
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.String(36), primary_key=True)
     active = db.Column(db.Boolean, default=False)
@@ -1963,8 +1938,7 @@ a <a href="https://tools.ietf.org/html/rfc7643#section-4.1">SCIM “User” reso
             }
         }
         return rv
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="support-for-scim-query-resources">Support for SCIM Query resources</h3>
 
@@ -1972,7 +1946,7 @@ a <a href="https://tools.ietf.org/html/rfc7643#section-4.1">SCIM “User” reso
 array of SCIM resources into a
 <a href="https://tools.ietf.org/html/rfc7644#section-3.4.2">Query Resource</a>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>class ListResponse():
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class ListResponse():
     def __init__(self, list, start_index=1, count=None, total_results=0):
         self.list = list
         self.start_index = start_index
@@ -1993,8 +1967,7 @@ array of SCIM resources into a
             rv['itemsPerPage'] = self.count
         rv['Resources'] = resources
         return rv
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="support-for-scim-error-messages">Support for SCIM error messages</h3>
 
@@ -2007,15 +1980,14 @@ Internal Server Error</a>”. However you should return a more specific
 
 <p>See <a href="https://tools.ietf.org/html/rfc7644#section-3.12">section 3.12</a> of <a href="https://tools.ietf.org/html/rfc7644">RFC 7644</a> for details.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>def scim_error(message, status_code=500):
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def scim_error(message, status_code=500):
     rv = {
         "schemas": ["urn:ietf:params:scim:api:messages:2.0:Error"],
         "detail": message,
         "status": str(status_code)
     }
     return flask.jsonify(rv), status_code
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="socketio-support">Socket.IO support</h3>
 
@@ -2027,11 +1999,10 @@ application.</p>
 will be sent a web application that uses Socket.IO to display
 updates without the need for you to reload the page:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>@app.route('/')
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@app.route('/')
 def hello():
     return render_template('base.html')
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>This page is updated using the functions below:</p>
 
@@ -2051,7 +2022,7 @@ browser via Socket.IO.</li>
 
 <p>The code described above is as follows:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>def send_to_browser(obj):
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def send_to_browser(obj):
     socketio.emit('user',
                   {'data': obj},
                   broadcast=True,
@@ -2073,8 +2044,7 @@ def test_connect():
 @socketio.on('disconnect', namespace='/test')
 def test_disconnect():
     print('Client disconnected')
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="socketio-application">Socket.IO application</h3>
 
@@ -2083,7 +2053,7 @@ described above. For the full contents of the HTML that this
 JavaScript is part of, see the <code class="highlighter-rouge">base.html</code> file in the <code class="highlighter-rouge">templates</code>
 directory of this project.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$(document).ready(function () {
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$(document).ready(function () {
     namespace = '/test'; // change to an empty string to use the global namespace
     var uri = 'https://' + document.domain  + namespace;
     console.log(uri);
@@ -2108,8 +2078,7 @@ directory of this project.</p>
         }
     });
 });
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="support-for-running-from-the-command-line">Support for running from the command line</h3>
 
@@ -2120,15 +2089,14 @@ directory of this project.</p>
 of the <code class="highlighter-rouge">User.query.one()</code> function throws an error (which should
 only happen if the User table isn’t defined.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>if __name__ == "__main__":
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if __name__ == "__main__":
     try:
         User.query.one()
     except:
         db.create_all()
     app.debug = True
     socketio.run(app)
-</code></pre>
-</div>
+</code></pre></div></div>
 
       </div>
       <div class="TableOfContents TableOfContentsPreload">

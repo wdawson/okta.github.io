@@ -442,14 +442,12 @@
 
 <h2 id="install-dependencies">Install Dependencies</h2>
 <p>A simple way to add authentication into a React app is using the <a href="/code/javascript/okta_sign-in_widget">Okta Sign-In Widget</a> library. We can install it via <code class="highlighter-rouge">npm</code>:</p>
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="nb">cd </span>okta-app <span class="o">&amp;&amp;</span> npm install @okta/okta-signin-widget --save
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>okta-app <span class="o">&amp;&amp;</span> npm install @okta/okta-signin-widget <span class="nt">--save</span>
+</code></pre></div></div>
 
 <p>We’ll also need <code class="highlighter-rouge">@okta/okta-react</code> and <code class="highlighter-rouge">react-router-dom</code> to manage our routes:</p>
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>npm install @okta/okta-react react-router-dom --save
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install @okta/okta-react react-router-dom <span class="nt">--save</span>
+</code></pre></div></div>
 
 <h2 id="create-a-widget-wrapper">Create a Widget Wrapper</h2>
 
@@ -457,7 +455,7 @@
 
 <p>Create a <code class="highlighter-rouge">src/OktaSignInWidget.js</code> file:</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="c1">// src/OktaSignInWidget.js</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// src/OktaSignInWidget.js</span>
 
 <span class="k">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'react'</span><span class="p">;</span>
 <span class="k">import</span> <span class="nx">ReactDOM</span> <span class="k">from</span> <span class="s1">'react-dom'</span><span class="p">;</span>
@@ -465,7 +463,7 @@
 <span class="k">import</span> <span class="s1">'@okta/okta-signin-widget/dist/css/okta-sign-in.min.css'</span><span class="p">;</span>
 <span class="k">import</span> <span class="s1">'@okta/okta-signin-widget/dist/css/okta-theme.css'</span><span class="p">;</span>
 
-<span class="k">export</span> <span class="k">default</span> <span class="kr">class</span> <span class="nx">OktaSignInWidget</span> <span class="k">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+<span class="k">export</span> <span class="k">default</span> <span class="kd">class</span> <span class="nx">OktaSignInWidget</span> <span class="kd">extends</span> <span class="nx">Component</span> <span class="p">{</span>
   <span class="nx">componentDidMount</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">ReactDOM</span><span class="p">.</span><span class="nx">findDOMNode</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">widget</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OktaSignIn</span><span class="p">({</span>
@@ -482,8 +480,7 @@
     <span class="k">return</span> <span class="o">&lt;</span><span class="nx">div</span> <span class="o">/&gt;</span><span class="p">;</span>
   <span class="p">}</span>
 <span class="p">};</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="create-routes">Create Routes</h2>
 <p>Some routes require authentication in order to render. Defining those routes is easy using <code class="highlighter-rouge">SecureRoute</code> from <code class="highlighter-rouge">@okta/okta-react</code>. Lets take a look at what routes are needed for this example:</p>
@@ -498,13 +495,13 @@
 <h3><code class="highlighter-rouge">/</code></h3>
 <p>First, create <code class="highlighter-rouge">src/Home.js</code> to provide links to navigate our app:</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="c1">// src/Home.js</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// src/Home.js</span>
 
 <span class="k">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'react'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">Link</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'react-router-dom'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">withAuth</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@okta/okta-react'</span><span class="p">;</span>
 
-<span class="k">export</span> <span class="k">default</span> <span class="nx">withAuth</span><span class="p">(</span><span class="kr">class</span> <span class="nx">Home</span> <span class="k">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+<span class="k">export</span> <span class="k">default</span> <span class="nx">withAuth</span><span class="p">(</span><span class="kd">class</span> <span class="nx">Home</span> <span class="kd">extends</span> <span class="nx">Component</span> <span class="p">{</span>
   <span class="kd">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span> <span class="na">authenticated</span><span class="p">:</span> <span class="kc">null</span> <span class="p">};</span>
@@ -513,7 +510,7 @@
   <span class="p">}</span>
 
   <span class="k">async</span> <span class="nx">checkAuthentication</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">authenticated</span> <span class="o">=</span> <span class="k">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">isAuthenticated</span><span class="p">();</span>
+    <span class="kd">const</span> <span class="nx">authenticated</span> <span class="o">=</span> <span class="kr">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">isAuthenticated</span><span class="p">();</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">authenticated</span> <span class="o">!==</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">authenticated</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="nx">authenticated</span> <span class="p">});</span>
     <span class="p">}</span>
@@ -539,35 +536,33 @@
 </span>    <span class="p">);</span>
   <span class="p">}</span>
 <span class="p">});</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="protected"><code class="highlighter-rouge">/protected</code></h3>
 <p>This route will only be visible to users with a valid <code class="highlighter-rouge">accessToken</code>.</p>
 
 <p>Create a new component <code class="highlighter-rouge">src/Protected.js</code>:</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="c1">// src/Protected.js</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// src/Protected.js</span>
 
 <span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="s1">'react'</span><span class="p">;</span>
 
 <span class="k">export</span> <span class="k">default</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="o">&lt;</span><span class="nx">h3</span><span class="o">&gt;</span><span class="nx">Protected</span><span class="o">&lt;</span><span class="sr">/h3&gt;</span><span class="err">;
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h3 id="login"><code class="highlighter-rouge">/login</code></h3>
 <p>This route hosts the Sign-In Widget and redirects if the user is already logged in. If the user is coming from a protected page, they’ll be redirected back to the page upon login.</p>
 
 <p>Create a new component <code class="highlighter-rouge">src/Login.js</code>:</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="c1">// src/Login.js</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// src/Login.js</span>
 
 <span class="k">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'react'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">Redirect</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'react-router-dom'</span><span class="p">;</span>
 <span class="k">import</span> <span class="nx">OktaSignInWidget</span> <span class="k">from</span> <span class="s1">'./OktaSignInWidget'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">withAuth</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@okta/okta-react'</span><span class="p">;</span>
 
-<span class="k">export</span> <span class="k">default</span> <span class="nx">withAuth</span><span class="p">(</span><span class="kr">class</span> <span class="nx">Login</span> <span class="k">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+<span class="k">export</span> <span class="k">default</span> <span class="nx">withAuth</span><span class="p">(</span><span class="kd">class</span> <span class="nx">Login</span> <span class="kd">extends</span> <span class="nx">Component</span> <span class="p">{</span>
   <span class="kd">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">onSuccess</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">onSuccess</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
@@ -579,7 +574,7 @@
   <span class="p">}</span>
 
   <span class="k">async</span> <span class="nx">checkAuthentication</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">authenticated</span> <span class="o">=</span> <span class="k">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">isAuthenticated</span><span class="p">();</span>
+    <span class="kd">const</span> <span class="nx">authenticated</span> <span class="o">=</span> <span class="kr">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">isAuthenticated</span><span class="p">();</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">authenticated</span> <span class="o">!==</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">authenticated</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="nx">authenticated</span> <span class="p">});</span>
     <span class="p">}</span>
@@ -609,8 +604,7 @@
         <span class="nx">onError</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">onError</span><span class="p">}</span><span class="sr">/&gt;</span><span class="err">;
 </span>  <span class="p">}</span>
 <span class="p">});</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="implicitcallback"><code class="highlighter-rouge">/implicit/callback</code></h3>
 <p>The component for this route (ImplicitCallback) comes with <code class="highlighter-rouge">@okta/okta-react</code>. It handles token parsing, token storage, and redirecting to a protected page if one triggered the login.</p>
@@ -618,7 +612,7 @@
 <h3 id="connect-the-routes">Connect the Routes</h3>
 <p>Update <code class="highlighter-rouge">src/App.js</code> to include your project components and routes. <code class="highlighter-rouge">Security</code> is the component that controls the authentication flows, so it requires your OpenId Connect configuration. By default, <code class="highlighter-rouge">@okta/okta-react</code> redirects to Okta’s login page when the user isn’t authenticated. In this example, <code class="highlighter-rouge">onAuthRequired</code> is overridden to redirect to the custom login route instead:</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="c1">// src/App.js</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// src/App.js</span>
 
 <span class="k">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'react'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">BrowserRouter</span> <span class="k">as</span> <span class="nx">Router</span><span class="p">,</span> <span class="nx">Route</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'react-router-dom'</span><span class="p">;</span>
@@ -631,7 +625,7 @@
   <span class="nx">history</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">'/login'</span><span class="p">);</span>
 <span class="p">}</span>
 
-<span class="kr">class</span> <span class="nx">App</span> <span class="k">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+<span class="kd">class</span> <span class="nx">App</span> <span class="kd">extends</span> <span class="nx">Component</span> <span class="p">{</span>
   <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">return</span> <span class="p">(</span>
       <span class="o">&lt;</span><span class="nx">Router</span><span class="o">&gt;</span>
@@ -650,18 +644,16 @@
 <span class="p">}</span>
 
 <span class="k">export</span> <span class="k">default</span> <span class="nx">App</span><span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="start-your-app">Start your app</h2>
 <p>Finally, start your app:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>npm start
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm start
+</code></pre></div></div>
 
 <h2 id="conclusion">Conclusion</h2>
-<p>You have now successfully authenticated with Okta! Now what? With a user’s <code class="highlighter-rouge">id_token</code>, you have basic claims for the user’s identity. You can extend the set of claims by modifying the <code class="highlighter-rouge">scopes</code> to retrieve custom information about the user. This includes <code class="highlighter-rouge">locale</code>, <code class="highlighter-rouge">address</code>, <code class="highlighter-rouge">groups</code>, and <a href="../../docs/api/resources/oidc.html">more</a>.</p>
+<p>You have now successfully authenticated with Okta! Now what? With a user’s <code class="highlighter-rouge">id_token</code>, you have basic claims for the user’s identity. You can extend the set of claims by modifying the <code class="highlighter-rouge">scopes</code> to retrieve custom information about the user. This includes <code class="highlighter-rouge">locale</code>, <code class="highlighter-rouge">address</code>, <code class="highlighter-rouge">groups</code>, and <a href="/docs/api/resources/oidc">more</a>.</p>
 
 <p>Want to learn how to use the user’s <code class="highlighter-rouge">access_token</code>? Check out our <a href="/quickstart/#/react/nodejs/generic" data-proofer-ignore="">React Quickstart integrations</a> to learn about protecting routes on your server, validating the <code class="highlighter-rouge">access_token</code>, and more!</p>
 

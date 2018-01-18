@@ -226,26 +226,24 @@ my summary is below:</p>
 
     <p>Add the following code under the dependency section:</p>
 
-    <div class="language-conf highlighter-rouge"><pre class="highlight"><code><span class="n">compile</span> <span class="s1">'com.squareup.dagger:dagger:1.2.1'</span>
+    <div class="language-conf highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">compile</span> <span class="s1">'com.squareup.dagger:dagger:1.2.1'</span>
 <span class="n">provided</span> <span class="s1">'com.squareup.dagger:dagger-compiler:1.2.1'</span>
-</code></pre>
-    </div>
+</code></pre></div>    </div>
   </li>
   <li>
     <p>Modify the manifest</p>
 
     <p>Add the following code to the Application tags:</p>
 
-    <div class="language-conf highlighter-rouge"><pre class="highlight"><code><span class="n">android</span>:<span class="n">name</span>=<span class="s2">".MyApplication"</span>
-</code></pre>
-    </div>
+    <div class="language-conf highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">android</span>:<span class="n">name</span>=<span class="s2">".MyApplication"</span>
+</code></pre></div>    </div>
   </li>
   <li>
     <p>Create the classes</p>
 
     <p>Add the <code class="highlighter-rouge">MyApplication</code> class.</p>
 
-    <div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyApplication</span> <span class="kd">extends</span> <span class="n">Application</span> <span class="o">{</span>
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyApplication</span> <span class="kd">extends</span> <span class="n">Application</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="n">ObjectGraph</span> <span class="n">applicationGraph</span><span class="o">;</span>
 
     <span class="nd">@Override</span>
@@ -264,13 +262,12 @@ my summary is below:</p>
         <span class="n">applicationGraph</span><span class="o">.</span><span class="na">inject</span><span class="o">(</span><span class="n">object</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-    </div>
+</code></pre></div>    </div>
   </li>
   <li>
     <p>Add the <code class="highlighter-rouge">MyModule</code> class.</p>
 
-    <div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">myapplication</span><span class="o">;</span>
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">myapplication</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">dagger.Module</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">dagger.Provides</span><span class="o">;</span>
@@ -287,41 +284,36 @@ my summary is below:</p>
         <span class="k">this</span><span class="o">.</span><span class="na">application</span> <span class="o">=</span> <span class="n">application</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-    </div>
+</code></pre></div>    </div>
   </li>
   <li>
     <p>Modify <code class="highlighter-rouge">MainActivity</code> and replace code <code class="highlighter-rouge">private Foo
 foo = new Foo();</code> with:</p>
 
-    <div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@Inject</span>
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Inject</span>
 <span class="n">Foo</span> <span class="n">foo</span><span class="o">;</span>
-</code></pre>
-    </div>
+</code></pre></div>    </div>
 
     <p>and add following code to <code class="highlighter-rouge">onCreate()</code>:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>// This will inject all @Inject members
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// This will inject all @Inject members
 // recursively for everything what is marked as @Inject
 ((MyApplication)getApplicationContext()).inject(this);
-</code></pre>
-    </div>
+</code></pre></div>    </div>
   </li>
   <li>
     <p>Modify the <code class="highlighter-rouge">Foo</code> class and replace code <code class="highlighter-rouge">Bar bar = new Bar();</code> with:</p>
 
-    <div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@Inject</span>
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Inject</span>
 <span class="n">Bar</span> <span class="n">bar</span><span class="o">;</span>
-</code></pre>
-    </div>
+</code></pre></div>    </div>
 
     <p>Modify Bar class and add</p>
 
-    <div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@Inject</span>
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Inject</span>
 <span class="n">Bar</span><span class="o">()</span> <span class="o">{</span>
 <span class="o">}</span>
-</code></pre>
-    </div>
+</code></pre></div>    </div>
   </li>
 </ul>
 

@@ -338,9 +338,8 @@
 
 <p>Clone the <a href="https://github.com/oktadeveloper/okta-spring-security-roles-example">GitHub repo</a>.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>git clone https://github.com/okta/okta.github.io.git
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/okta/okta.github.io.git
+</code></pre></div></div>
 
 <p>Open up the project in your favorite IDE or editor. The screenshots below are from <a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a>.</p>
 
@@ -387,9 +386,8 @@
 
 <p>You can run this from the command line:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>mvn spring-boot:run
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mvn spring-boot:run
+</code></pre></div></div>
 
 <h2 id="exercise-the-app">Exercise the App</h2>
 
@@ -434,15 +432,14 @@
 
 <p>The “behind the scenes magic” happens by virtue of the fact that we depend on the <code class="highlighter-rouge">okta-spring-security-starter</code> (from pom.xml):</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code>...
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>...
 <span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>com.okta.spring<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>okta-spring-security-starter<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;version&gt;</span>0.1.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 ...
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Let’s start at the beginning and take a look at how the Okta Sign-In Widget bridges the gap from the client side to Spring Boot.</p>
 
@@ -450,7 +447,7 @@
 
 <p>In the <code class="highlighter-rouge">login.html</code> Thymeleaf template, we set up the login widget like so:</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span> <span class="nb">document</span> <span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span> <span class="nb">document</span> <span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
         <span class="na">baseUrl</span><span class="p">:</span> <span class="p">[[</span><span class="nx">$</span><span class="p">{</span><span class="nx">appProperties</span><span class="p">.</span><span class="nx">baseUrl</span><span class="p">}]],</span>
         <span class="na">clientId</span><span class="p">:</span> <span class="p">[[</span><span class="nx">$</span><span class="p">{</span><span class="nx">appProperties</span><span class="p">.</span><span class="nx">clientId</span><span class="p">}]],</span>
@@ -463,15 +460,14 @@
     <span class="nb">window</span><span class="p">.</span><span class="nx">oktaSignIn</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OktaSignIn</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
 
     <span class="c1">// Check if we already have an access token</span>
-    <span class="kd">var</span> <span class="nx">token</span> <span class="o">=</span> <span class="nx">oktaSignIn</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'token'</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">token</span> <span class="o">=</span> <span class="nx">oktaSignIn</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'token'</span><span class="p">);</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">token</span><span class="p">)</span> <span class="p">{</span>
         <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="s2">"/authenticated"</span><span class="p">;</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
         <span class="nx">renderWidget</span><span class="p">();</span>
     <span class="p">}</span>
 <span class="p">});</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Notice that we’ve embedded all the settings to connect to our Okta tenant as inline Thymeleaf Template variables (lines 3 - 8). These values are passed in from the Spring Boot controller as part of the model. This is powerful because you only have to specify these settings in one place. Both server side and client side make use of them. You’ll see how these settings are managed below. For now, just know that they all come from the <code class="highlighter-rouge">application.yml</code> file.</p>
 
@@ -479,7 +475,7 @@
 
 <p>Here’s the <code class="highlighter-rouge">renderWidget</code> function:</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">renderWidget</span><span class="p">()</span> <span class="p">{</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">renderWidget</span><span class="p">()</span> <span class="p">{</span>
     <span class="nx">oktaSignIn</span><span class="p">.</span><span class="nx">renderEl</span><span class="p">(</span>
         <span class="p">{</span><span class="na">el</span><span class="p">:</span> <span class="s1">'#okta-login-container'</span><span class="p">},</span>
         <span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
@@ -492,12 +488,12 @@
 
                 <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">protocol</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="s1">'https'</span><span class="p">))</span> <span class="p">{</span>
                     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
-                        <span class="s1">'WARNING: You are about to pass a bearer token in a cookie over an insecure\n'</span> <span class="o">+</span>
-                        <span class="s1">'connection. This should *NEVER* be done in a production environment per\n'</span> <span class="o">+</span>
+                        <span class="s1">'WARNING: You are about to pass a bearer token in a cookie over an insecure</span><span class="err">\</span><span class="s1">n'</span> <span class="o">+</span>
+                        <span class="s1">'connection. This should *NEVER* be done in a production environment per</span><span class="err">\</span><span class="s1">n'</span> <span class="o">+</span>
                         <span class="s1">'https://tools.ietf.org/html/rfc6750'</span>
                     <span class="p">);</span>
                 <span class="p">}</span>
-                <span class="nb">document</span><span class="p">.</span><span class="nx">cookie</span> <span class="o">=</span> <span class="s1">'access_token='</span> <span class="o">+</span> <span class="nx">oktaSignIn</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'token'</span><span class="p">).</span><span class="nx">accessToken</span><span class="p">;</span>
+                <span class="nb">document</span><span class="p">.</span><span class="nx">cookie</span> <span class="o">=</span> <span class="s1">'access_token='</span> <span class="o">+</span> <span class="nx">oktaSignIn</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'token'</span><span class="p">).</span><span class="nx">accessToken</span><span class="p">;</span>
                 <span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="s2">"/authenticated"</span><span class="p">;</span>
             <span class="p">}</span>
         <span class="p">},</span>
@@ -507,8 +503,7 @@
         <span class="p">}</span>
     <span class="p">);</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Once the widget is rendered on the page, the internal logic takes over based on your settings when the user logs in. In this case, you are using the <a href="https://tools.ietf.org/html/rfc6749#section-1.3.2">implicit</a> flow and will get back only an access token as specified by the <code class="highlighter-rouge">responseType</code> parameter of the configuration.</p>
 
@@ -528,7 +523,7 @@
 
 <p>Fortunately, Spring Security makes it pretty easy to override the default behavior by setting a <code class="highlighter-rouge">TokenExtractor</code>. Here’s the code that makes this happen from <code class="highlighter-rouge">OktaSpringSecurityRolesExampleApplication</code>:</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@Bean</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Bean</span>
 <span class="kd">protected</span> <span class="n">ResourceServerConfigurerAdapter</span> <span class="nf">resourceServerConfigurerAdapter</span><span class="o">()</span> <span class="o">{</span>
     <span class="k">return</span> <span class="k">new</span> <span class="nf">ResourceServerConfigurerAdapter</span><span class="o">()</span> <span class="o">{</span>
         <span class="o">...</span>
@@ -548,8 +543,7 @@
         <span class="o">}</span>
     <span class="o">};</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>All this is doing is pulling the access token from the list of cookies on the incoming request, if it can. The parsing and validation is handled automatically. Pretty neat, eh?</p>
 
@@ -559,7 +553,7 @@
 
 <p>Here’s another excerpt from <code class="highlighter-rouge">OktaSpringSecurityRolesExampleApplication</code>:</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@Bean</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Bean</span>
 <span class="kd">protected</span> <span class="n">ResourceServerConfigurerAdapter</span> <span class="nf">resourceServerConfigurerAdapter</span><span class="o">()</span> <span class="o">{</span>
     <span class="k">return</span> <span class="k">new</span> <span class="nf">ResourceServerConfigurerAdapter</span><span class="o">()</span> <span class="o">{</span>
 
@@ -573,8 +567,7 @@
         <span class="o">...</span>
     <span class="o">};</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Here, you are telling Spring Security to let any unauthenticated user access the home page (<code class="highlighter-rouge">/</code>), the login page (<code class="highlighter-rouge">/login</code>), and anything that comes from our static images folder.</p>
 
@@ -582,7 +575,7 @@
 
 <p>Here’s the <code class="highlighter-rouge">SecureController</code>:</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@Controller</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">SecureController</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="n">AppProperties</span> <span class="n">appProperties</span><span class="o">;</span>
@@ -614,8 +607,7 @@
         <span class="k">return</span> <span class="s">"403"</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>There are four paths defined in this controller and all require an authenticated user at a minimum. The real value comes in with the <code class="highlighter-rouge">/users</code> and <code class="highlighter-rouge">/admins</code> paths.</p>
 
@@ -631,7 +623,7 @@
 
 <p>Here’s the <code class="highlighter-rouge">AppProperties</code> class:</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@Component</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Component</span>
 <span class="nd">@ConfigurationProperties</span><span class="o">(</span><span class="s">"okta.oauth"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">AppProperties</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="n">String</span> <span class="n">issuer</span><span class="o">;</span>
@@ -643,8 +635,7 @@
 
     <span class="c1">// getters and setters</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>The <code class="highlighter-rouge">@ConfigurationProperties</code> tells Spring to pull in all the properties from the <code class="highlighter-rouge">application.yml</code> file that belong to the <code class="highlighter-rouge">okta.oauth</code> key.</p>
 
@@ -652,7 +643,7 @@
 
 <p>Here’s a snippet from the the <code class="highlighter-rouge">HomeController</code>:</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@Controller</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">HomeController</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="n">AppProperties</span> <span class="n">appProperties</span><span class="o">;</span>
@@ -667,14 +658,13 @@
         <span class="k">return</span> <span class="s">"login"</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Before returning the <code class="highlighter-rouge">login</code> view when the <code class="highlighter-rouge">/login</code> endpoint is hit, the <code class="highlighter-rouge">AppProperties</code> object (autowired in on lines 4 &amp; 5) is added to the model.</p>
 
 <p>This is what makes it available to the Thymeleaf template as you saw before:</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">th</span><span class="err">:</span><span class="nx">inline</span><span class="o">=</span><span class="s2">"javascript"</span><span class="o">&gt;</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">th</span><span class="p">:</span><span class="nx">inline</span><span class="o">=</span><span class="s2">"javascript"</span><span class="o">&gt;</span>
     <span class="cm">/*&lt;![CDATA[*/</span>
     <span class="nx">$</span><span class="p">(</span> <span class="nb">document</span> <span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
@@ -692,8 +682,7 @@
     <span class="p">...</span>
     <span class="cm">/*]]&gt;*/</span>
 <span class="o">&lt;</span><span class="sr">/script</span><span class="err">&gt;
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h2 id="get-coding">Get Coding!</h2>
 

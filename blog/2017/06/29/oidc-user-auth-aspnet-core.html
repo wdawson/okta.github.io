@@ -254,34 +254,31 @@
 <h2 id="add-authentication">Add Authentication</h2>
 <p>When you open your application in Visual Studio or Visual Studio Code, you’ll notice that there’s a <code class="highlighter-rouge">&lt;ProjectName&gt;.csproj</code> file. You’ll need to make some quick changes to that to get some dependencies you’ll need to make this work. In the <code class="highlighter-rouge">ItemGroup</code> section of the <code class="highlighter-rouge">csproj</code> document add:</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;PackageReference</span> <span class="na">Include=</span><span class="s">"Microsoft.AspNetCore.Authentication.JwtBearer"</span> <span class="na">Version=</span><span class="s">"1.1.2"</span><span class="nt">/&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;PackageReference</span> <span class="na">Include=</span><span class="s">"Microsoft.AspNetCore.Authentication.JwtBearer"</span> <span class="na">Version=</span><span class="s">"1.1.2"</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;PackageReference</span> <span class="na">Include=</span><span class="s">"Microsoft.AspNetCore.Authentication.OpenIdConnect"</span> <span class="na">Version=</span><span class="s">"1.1.2"</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;PackageReference</span> <span class="na">Include=</span><span class="s">"Microsoft.AspNetCore.Authentication.Cookies"</span> <span class="na">Version=</span><span class="s">"1.1.2"</span><span class="nt">/&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>This will allow you to use <a href="https://www.jsonwebtoken.io/">JSON Web Tokens</a> for authorization information, get the tokens from the OpenID Connect provider (Okta in this case) and store them in cookies for session management. You’ll need to run a quick <code class="highlighter-rouge">dotnet restore</code> command, but don’t worry, once you save the file, VS Code will give you an option to return to the command line.</p>
 
 <p>Now, open the <code class="highlighter-rouge">Startup.cs</code> file, and on the first line of the Configure method add:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="nn">Microsoft.IdentityModel.Protocols.OpenIdConnect</span><span class="p">;</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">Microsoft.IdentityModel.Protocols.OpenIdConnect</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">System.IdentityModel.Tokens.Jwt</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">Microsoft.IdentityModel.Tokens</span><span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Then, between the <code class="highlighter-rouge">app.UseStaticFiles();</code> and <code class="highlighter-rouge">app.UseMvc(…);</code> add:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="n">app</span><span class="p">.</span><span class="nf">UseCookieAuthentication</span><span class="p">(</span><span class="k">new</span> <span class="nf">CookieAuthenticationOptions</span><span class="p">(){</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">app</span><span class="p">.</span><span class="nf">UseCookieAuthentication</span><span class="p">(</span><span class="k">new</span> <span class="nf">CookieAuthenticationOptions</span><span class="p">(){</span>
   <span class="n">AuthenticationScheme</span> <span class="p">=</span> <span class="s">"Cookies"</span><span class="p">,</span>
   <span class="n">AutomaticAuthenticate</span> <span class="p">=</span> <span class="k">true</span>
 <span class="p">});</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>This tells the application that you want to store your session tokens in cookies. Then, you just need to add the authentication instructions.</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="n">app</span><span class="p">.</span><span class="nf">UseOpenIdConnectAuthentication</span><span class="p">(</span><span class="k">new</span> <span class="nf">OpenIdConnectOptions</span><span class="p">()</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">app</span><span class="p">.</span><span class="nf">UseOpenIdConnectAuthentication</span><span class="p">(</span><span class="k">new</span> <span class="nf">OpenIdConnectOptions</span><span class="p">()</span>
 <span class="p">{</span>
   <span class="n">AuthenticationScheme</span> <span class="p">=</span> <span class="s">"oidc"</span><span class="p">,</span>
   <span class="n">SignInScheme</span> <span class="p">=</span> <span class="s">"Cookies"</span><span class="p">,</span>
@@ -296,8 +293,7 @@
   <span class="p">},</span>
   <span class="n">SaveTokens</span> <span class="p">=</span> <span class="k">true</span>  
 <span class="p">});</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>This is the important part, so let’s go through it line by line:</p>
 
 <ul>
@@ -318,23 +314,21 @@
 
 <p>First, add a using statement to the <code class="highlighter-rouge">HomeController.cs</code> for the <code class="highlighter-rouge">Authorize</code> attribute.</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="nn">Microsoft.AspNetCore.Authorization</span><span class="p">;</span>
-</code></pre>
-</div>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">Microsoft.AspNetCore.Authorization</span><span class="p">;</span>
+</code></pre></div></div>
 
 <p>Then add a “Secure” method to the <code class="highlighter-rouge">HomeController.cs</code> controller.</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="na">[Authorize]</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[Authorize]</span>
 <span class="k">public</span> <span class="n">IActionResult</span> <span class="nf">Secure</span><span class="p">()</span>
 <span class="p">{</span>
     <span class="k">return</span> <span class="nf">View</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Then create a view to return in <code class="highlighter-rouge">~/Views/Home</code> called <code class="highlighter-rouge">Security.cshtml</code>.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>@{
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@{
     ViewData["Title"] = "Security";
 }
 <span class="nt">&lt;h2&gt;</span>Secure<span class="nt">&lt;/h2&gt;</span>
@@ -346,8 +340,7 @@
         <span class="nt">&lt;dd&gt;</span>@claim.Value<span class="nt">&lt;/dd&gt;</span>
     }
 <span class="nt">&lt;/dl&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>This will just loop through the claims and output them. When you navigate to <code class="highlighter-rouge">http://localhost:5000/Home/Secure</code>, you should be redirected to a login page. Once you’re logged in (with a user that is assigned to your app), you should now see a list of the claims on the secure page.
 If you do, congratulations! You just set up OpenID Connect for authenticating in your ASP.NET Core app!</p>
 

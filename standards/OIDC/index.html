@@ -275,7 +275,7 @@ The <a href="http://openid.net/connect/">specification suite</a> is extensible, 
 OpenID Connect extends OAuth 2.0:</p>
 
 <ul>
-  <li>Provides a signed <a href="#id-token"><em>id_token</em></a> for the client and <a href="/docs/api/resources/oidc.html#openid-connect-discovery-document">a UserInfo endpoint</a> from which you can retrieve user attributes.</li>
+  <li>Provides a signed <a href="#id-token"><em>id_token</em></a> for the client and <a href="/docs/api/resources/oidc#openid-connect-discovery-document">a UserInfo endpoint</a> from which you can retrieve user attributes.</li>
   <li>Provides access to the <a href="#authorization-servers">Okta Authorization Server</a>.</li>
   <li>Provides a standard set of scopes and claims for identities including profile, email, address, and phone.</li>
 </ul>
@@ -293,12 +293,12 @@ and issuing ID Tokens upon successful authentication of those users and applicat
   <li>Okta authenticates the user.</li>
   <li>Okta approves or denies the requested scopes.</li>
   <li>Okta mints a token and sends it in the response.</li>
-  <li>The application validates the ID Token’s integrity. For more information, see <a href="/docs/api/resources/oidc.html#validating-id-tokens">Validating ID Tokens</a>.</li>
+  <li>The application validates the ID Token’s integrity. For more information, see <a href="/docs/api/resources/oidc#validating-id-tokens">Validating ID Tokens</a>.</li>
 </ol>
 
 <blockquote>
   <p>Important: Okta uses public key cryptography to sign tokens and verify that they are valid.
-See the last section of <a href="/docs/api/resources/oidc.html#validating-id-tokens">Validating ID Tokens</a> for more information on the necessary logic
+See the last section of <a href="/docs/api/resources/oidc#validating-id-tokens">Validating ID Tokens</a> for more information on the necessary logic
 you must have in your application to ensure it’s always updated with the latest keys.</p>
 </blockquote>
 
@@ -314,9 +314,9 @@ an Okta feature that helps you secure access to your API.</li>
 
 <h2 id="dynamic-client-registration">Dynamic Client Registration</h2>
 
-<p>Okta provides <a href="/docs/api/resources/oauth-clients.html">dynamic client registration</a>, operations to register and manage
+<p>Okta provides <a href="/docs/api/resources/oauth-clients">dynamic client registration</a>, operations to register and manage
 client applications for use with Okta’s OAuth 2.0 and OpenID Connect endpoints.
-You can also perform these operations in the <a href="/docs/api/resources/apps.html">Apps API</a>.</p>
+You can also perform these operations in the <a href="/docs/api/resources/apps">Apps API</a>.</p>
 
 <h2 id="claims">Claims</h2>
 
@@ -330,7 +330,7 @@ The claims in a security token are dependent upon the type of token, the type of
 
 <p>OpenID Connect uses scope values to specify what access privileges are being requested for Access Tokens.
 The scopes associated with Access Tokens determine which claims are available when they are used
-to access <a href="/docs/api/resources/oidc.html#get-user-information">the OIDC <code class="highlighter-rouge">userinfo</code> endpoint</a>. The following scopes are supported:</p>
+to access <a href="/docs/api/resources/oidc#get-user-information">the OIDC <code class="highlighter-rouge">userinfo</code> endpoint</a>. The following scopes are supported:</p>
 
 <table>
   <thead>
@@ -407,61 +407,59 @@ token and optionally an Access Token directly from the authorization server’s 
 two flows.</li>
 </ul>
 
-<p>Clients should always <a href="/docs/api/resources/oidc.html#validating-id-tokens">validate ID Tokens</a> to ensure their integrity.</p>
+<p>Clients should always <a href="/docs/api/resources/oidc#validating-id-tokens">validate ID Tokens</a> to ensure their integrity.</p>
 
 <p>The ID Tokens returned by the authentication endpoint (implicit flow) or the Token endpoint (authorization code flow)
 are identical, except that in the implicit flow, the <em>nonce</em> parameter is required (and hence must have been included
-in the request), and the <em>at_hash</em> parameter is required if the response includes <a href="/standards/OAuth/index.html#access-token">an Access Token</a> but prohibited if the
+in the request), and the <em>at_hash</em> parameter is required if the response includes <a href="/standards/OAuth/#access-token">an Access Token</a> but prohibited if the
 response does not include an Access Token.</p>
 
 <p>The ID Token (<em>id_token</em>) consists of three period-separated, base64URL-encoded JSON segments: <a href="#id-token-header">a header</a>, <a href="#id-token-payload">the payload</a>, and <a href="#id-token-signature">the signature</a>.</p>
 
 <h3 id="id-token-header">ID Token Header</h3>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"alg"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RS256"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"kid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"45js03w0djwedsw"</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"alg"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RS256"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"kid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"45js03w0djwedsw"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h3 id="id-token-payload">ID Token Payload</h3>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"ver"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"sub"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00uid4BxXw6I6TV4m0g3"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"iss"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https:{myOktaDomain.com}"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"aud"</span><span class="p">:</span><span class="w"> </span><span class="s2">"uAaunofWkaDJxukCFeBx"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"iat"</span><span class="p">:</span><span class="w"> </span><span class="mi">1449624026</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"exp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1449627626</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"amr"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"ver"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"sub"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00uid4BxXw6I6TV4m0g3"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"iss"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https:{myOktaDomain.com}"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"aud"</span><span class="p">:</span><span class="w"> </span><span class="s2">"uAaunofWkaDJxukCFeBx"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"iat"</span><span class="p">:</span><span class="w"> </span><span class="mi">1449624026</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"exp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1449627626</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"amr"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="s2">"pwd"</span><span class="w">
   </span><span class="p">],</span><span class="w">
-  </span><span class="nt">"jti"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ID.4eAWJOCMB3SX8XewDfVR"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"auth_time"</span><span class="p">:</span><span class="w"> </span><span class="mi">1449624026</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"at_hash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cpqKfdQA5eH891Ff5oJr_Q"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"name"</span><span class="w"> </span><span class="p">:</span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"nickname"</span><span class="p">:</span><span class="s2">"Jimmy"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"preferred_username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"john.doe@example.com"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"given_name"</span><span class="p">:</span><span class="s2">"John"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"middle_name"</span><span class="p">:</span><span class="s2">"James"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"family_name"</span><span class="p">:</span><span class="s2">"Doe"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"profile"</span><span class="p">:</span><span class="s2">"https://profile.wordpress.com/john.doe"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"zoneinfo"</span><span class="p">:</span><span class="s2">"America/Los_Angeles"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"locale"</span><span class="p">:</span><span class="s2">"en-US"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"updated_at"</span><span class="p">:</span><span class="mi">1311280970</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"email"</span><span class="p">:</span><span class="s2">"john.doe@example.com"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"email_verified"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"address"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"street_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123 Hollywood Blvd."</span><span class="p">,</span><span class="w">
-  		</span><span class="nt">"locality"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Los Angeles"</span><span class="p">,</span><span class="w">
-  		</span><span class="nt">"region"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="p">,</span><span class="w">
-  		</span><span class="nt">"postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"90210"</span><span class="p">,</span><span class="w">
-  		</span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="w">
+  </span><span class="s2">"jti"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ID.4eAWJOCMB3SX8XewDfVR"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"auth_time"</span><span class="p">:</span><span class="w"> </span><span class="mi">1449624026</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"at_hash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cpqKfdQA5eH891Ff5oJr_Q"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"nickname"</span><span class="p">:</span><span class="s2">"Jimmy"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"preferred_username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"john.doe@example.com"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"given_name"</span><span class="p">:</span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"middle_name"</span><span class="p">:</span><span class="s2">"James"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"family_name"</span><span class="p">:</span><span class="s2">"Doe"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"profile"</span><span class="p">:</span><span class="s2">"https://profile.wordpress.com/john.doe"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"zoneinfo"</span><span class="p">:</span><span class="s2">"America/Los_Angeles"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"locale"</span><span class="p">:</span><span class="s2">"en-US"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"updated_at"</span><span class="p">:</span><span class="mi">1311280970</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"email"</span><span class="p">:</span><span class="s2">"john.doe@example.com"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"email_verified"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"address"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"street_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123 Hollywood Blvd."</span><span class="p">,</span><span class="w">
+  		</span><span class="s2">"locality"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Los Angeles"</span><span class="p">,</span><span class="w">
+  		</span><span class="s2">"region"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="p">,</span><span class="w">
+  		</span><span class="s2">"postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"90210"</span><span class="p">,</span><span class="w">
+  		</span><span class="s2">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="w">
   	</span><span class="p">},</span><span class="w">
-  </span><span class="nt">"phone_number"</span><span class="p">:</span><span class="s2">"+1 (425) 555-1212"</span><span class="w">
+  </span><span class="s2">"phone_number"</span><span class="p">:</span><span class="s2">"+1 (425) 555-1212"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h3 id="id-token-signature">ID Token Signature</h3>
 
@@ -493,7 +491,7 @@ response does not include an Access Token.</p>
     </tr>
     <tr>
       <td style="text-align: left">kid</td>
-      <td style="text-align: left">Identifies the <em>public-key</em> used to verify the <em>id_token</em>. The corresponding <em>public-key</em> can be found as a part of the   <a href="/docs/api/resources/oidc.html#openid-connect-discovery-document">well-known configuration’s</a> <em>jwks_uri</em> value.</td>
+      <td style="text-align: left">Identifies the <em>public-key</em> used to verify the <em>id_token</em>. The corresponding <em>public-key</em> can be found as a part of the   <a href="/docs/api/resources/oidc#openid-connect-discovery-document">well-known configuration’s</a> <em>jwks_uri</em> value.</td>
       <td style="text-align: left">String</td>
       <td style="text-align: left">“a5dfwef1a-0ead3f5223_w1e”</td>
     </tr>
@@ -776,7 +774,7 @@ For more information about configuring an app for OpenID Connect, including grou
       </tbody>
     </table>
   </li>
-  <li>The full set of claims for the requested scopes is available via the <a href="/docs/api/resources/oidc.html#get-user-information">/oauth2/v1/userinfo</a> endpoint. Call this endpoint using the Access Token.</li>
+  <li>The full set of claims for the requested scopes is available via the <a href="/docs/api/resources/oidc#get-user-information">/oauth2/v1/userinfo</a> endpoint. Call this endpoint using the Access Token.</li>
 </ul>
 
 <h2 id="more-information">More Information</h2>
@@ -785,7 +783,7 @@ For more information about configuring an app for OpenID Connect, including grou
 
 <ul>
   <li><a href="/use_cases/api_security/">Okta’s API Access Management Introduction</a></li>
-  <li><a href="/docs/api/resources/oidc.html">API for OpenID Connect</a></li>
+  <li><a href="/docs/api/resources/oidc">API for OpenID Connect</a></li>
 </ul>
 
       </div>

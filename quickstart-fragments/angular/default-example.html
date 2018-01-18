@@ -84,16 +84,15 @@
 
 <p>You will need to use the <a href="https://github.com/okta/okta-oidc-js/tree/master/packages/okta-angular">Okta Angular SDK</a> library to sign in the user by redirecting to the authorization endpoint on your Okta Org. You can install it via npm:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>npm install @okta/okta-angular --save
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install @okta/okta-angular <span class="nt">--save</span>
+</code></pre></div></div>
 
 <h3 id="configuration">Configuration</h3>
 <p>You will need the values from the OIDC client that you created in the previous step to instantiate the middleware. You will also need to know your Okta Org URL, which you can see on the home page of the Okta Developer console.</p>
 
 <p>In your application’s <code class="highlighter-rouge">module.ts</code> file, import the following objects and create a configuration object:</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="c1">// myApp.module.ts</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// myApp.module.ts</span>
 
 <span class="k">import</span> <span class="p">{</span>
   <span class="nx">OktaAuthModule</span><span class="p">,</span>
@@ -105,8 +104,7 @@
   <span class="na">redirectUri</span><span class="p">:</span> <span class="s1">'http://localhost:{port}/implicit/callback'</span><span class="p">,</span>
   <span class="na">clientId</span><span class="p">:</span> <span class="s1">'{clientId}'</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="attach-components-to-routes">Attach Components to Routes</h2>
 
@@ -120,51 +118,48 @@
 <h3 id="provide-the-login-and-logout-buttons">Provide the Login and Logout Buttons</h3>
 <p>In the relevant location in your application, you will want to provide <code class="highlighter-rouge">Login</code> and <code class="highlighter-rouge">Logout</code> buttons for the user. You can show/hide the correct button by using the <code class="highlighter-rouge">oktaAuth.isAuthenticated()</code> method. For example:</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">OktaAuthService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@okta/okta-angular'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">Component</span><span class="p">({</span>
+<span class="p">@</span><span class="nd">Component</span><span class="p">({</span>
   <span class="na">selector</span><span class="p">:</span> <span class="s1">'app-root'</span><span class="p">,</span>
-  <span class="na">template</span><span class="p">:</span> <span class="err">`</span>
-    <span class="o">&lt;</span><span class="nx">button</span> <span class="o">*</span><span class="nx">ngIf</span><span class="o">=</span><span class="s2">"!oktaAuth.isAuthenticated()"</span> <span class="p">(</span><span class="nx">click</span><span class="p">)</span><span class="o">=</span><span class="s2">"oktaAuth.loginRedirect()"</span><span class="o">&gt;</span> <span class="nx">Login</span> <span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
-</span>    <span class="o">&lt;</span><span class="nx">button</span> <span class="o">*</span><span class="nx">ngIf</span><span class="o">=</span><span class="s2">"oktaAuth.isAuthenticated()"</span> <span class="p">(</span><span class="nx">click</span><span class="p">)</span><span class="o">=</span><span class="s2">"oktaAuth.logout()"</span><span class="o">&gt;</span> <span class="nx">Logout</span> <span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
-</span>    <span class="o">&lt;</span><span class="nx">router</span><span class="o">-</span><span class="nx">outlet</span><span class="o">&gt;&lt;</span><span class="sr">/router-outlet</span><span class="err">&gt;
-</span>  <span class="err">`</span><span class="p">,</span>
+  <span class="na">template</span><span class="p">:</span> <span class="s2">`
+    &lt;button *ngIf="!oktaAuth.isAuthenticated()" (click)="oktaAuth.loginRedirect()"&gt; Login &lt;/button&gt;
+    &lt;button *ngIf="oktaAuth.isAuthenticated()" (click)="oktaAuth.logout()"&gt; Logout &lt;/button&gt;
+    &lt;router-outlet&gt;&lt;/router-outlet&gt;
+  `</span><span class="p">,</span>
 <span class="p">})</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">AppComponent</span> <span class="p">{</span>
-  <span class="kd">constructor</span><span class="p">(</span><span class="k">public</span> <span class="nx">oktaAuth</span><span class="err">:</span> <span class="nx">OktaAuthService</span><span class="p">)</span> <span class="p">{}</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">AppComponent</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">public</span> <span class="nx">oktaAuth</span><span class="p">:</span> <span class="nx">OktaAuthService</span><span class="p">)</span> <span class="p">{}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="create-the-callback-handler">Create the Callback Handler</h3>
 <p>In order to handle the redirect back from Okta, you need to capture the token values from the URL. You’ll use <code class="highlighter-rouge">/implicit/callback</code> as the callback URL, and specify the default <code class="highlighter-rouge">OktaCallbackComponent</code> and declare it in your <code class="highlighter-rouge">NgModule</code>.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Routes</span><span class="p">,</span> <span class="nx">RouterModule</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/router'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Routes</span><span class="p">,</span> <span class="nx">RouterModule</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/router'</span><span class="p">;</span>
 
-<span class="kd">const</span> <span class="nx">appRoutes</span><span class="err">:</span> <span class="nx">Routes</span> <span class="o">=</span> <span class="p">[</span>
+<span class="kd">const</span> <span class="nx">appRoutes</span><span class="p">:</span> <span class="nx">Routes</span> <span class="o">=</span> <span class="p">[</span>
   <span class="p">{</span>
     <span class="na">path</span><span class="p">:</span> <span class="s1">'implicit/callback'</span><span class="p">,</span>
     <span class="na">component</span><span class="p">:</span> <span class="nx">OktaCallbackComponent</span>
   <span class="p">},</span>
   <span class="p">...</span>
 <span class="p">]</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="update-your-ngmodule">Update your <code class="highlighter-rouge">NgModule</code></h3>
 <p>Finally, import the <code class="highlighter-rouge">OktaAuthModule</code> into your <code class="highlighter-rouge">NgModule</code>, and instantiate it by passing in your configuration object:</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="err">@</span><span class="nx">NgModule</span><span class="p">({</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">@</span><span class="nd">NgModule</span><span class="p">({</span>
   <span class="na">imports</span><span class="p">:</span> <span class="p">[</span>
     <span class="p">...</span>
     <span class="nx">RouterModule</span><span class="p">.</span><span class="nx">forRoot</span><span class="p">(</span><span class="nx">appRoutes</span><span class="p">),</span>
     <span class="nx">OktaAuthModule</span><span class="p">.</span><span class="nx">initAuth</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span>
   <span class="p">],</span>
 <span class="p">})</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">MyAppModule</span> <span class="p">{</span> <span class="p">}</span>
-</code></pre>
-</div>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">MyAppModule</span> <span class="p">{</span> <span class="p">}</span>
+</code></pre></div></div>
 
 <h2 id="use-the-access-token">Use the Access Token</h2>
 
@@ -172,35 +167,34 @@
 
 <p>Here is what the Angular component could look like for this hypothetical example:</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="c1">// messagelist.component.ts</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// messagelist.component.ts</span>
 
 <span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">Http</span><span class="p">,</span> <span class="nx">Headers</span><span class="p">,</span> <span class="nx">RequestOptions</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/http'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">OktaAuthService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@okta/okta-angular'</span><span class="p">;</span>
 <span class="k">import</span> <span class="s1">'rxjs/Rx'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">Component</span><span class="p">({</span>
-  <span class="na">template</span><span class="p">:</span> <span class="err">`</span>
-    <span class="o">&lt;</span><span class="nx">div</span> <span class="o">*</span><span class="nx">ngIf</span><span class="o">=</span><span class="s2">"messages.length"</span><span class="o">&gt;</span>
-      <span class="o">&lt;</span><span class="nx">li</span> <span class="o">*</span><span class="nx">ngFor</span><span class="o">=</span><span class="s2">"let message of messages"</span><span class="o">&gt;&lt;</span><span class="sr">/li</span><span class="err">&gt;
-</span>    <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
-</span>  <span class="err">`</span>
+<span class="p">@</span><span class="nd">Component</span><span class="p">({</span>
+  <span class="na">template</span><span class="p">:</span> <span class="s2">`
+    &lt;div *ngIf="messages.length"&gt;
+      &lt;li *ngFor="let message of messages"&gt;&lt;/li&gt;
+    &lt;/div&gt;
+  `</span>
 <span class="p">})</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">MessageListComponent</span> <span class="p">{</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">MessageListComponent</span> <span class="p">{</span>
   <span class="nx">messages</span> <span class="o">=</span> <span class="p">[];</span>
-  <span class="kd">constructor</span><span class="p">(</span><span class="k">private</span> <span class="nx">oktaAuth</span><span class="err">:</span> <span class="nx">OktaAuthService</span><span class="p">,</span> <span class="k">private</span> <span class="nx">http</span><span class="err">:</span> <span class="nx">Http</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">oktaAuth</span><span class="p">:</span> <span class="nx">OktaAuthService</span><span class="p">,</span> <span class="kr">private</span> <span class="nx">http</span><span class="p">:</span> <span class="nx">Http</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="nx">headers</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Headers</span><span class="p">({</span> <span class="na">Authorization</span><span class="p">:</span> <span class="s1">'Bearer '</span> <span class="o">+</span> <span class="nx">oktaAuth</span><span class="p">.</span><span class="nx">getAccessToken</span><span class="p">().</span><span class="nx">accessToken</span> <span class="p">});</span>
     <span class="c1">// Make request</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span>
       <span class="s1">'http://localhost:{serverPort}/api/messages'</span><span class="p">,</span>
       <span class="k">new</span> <span class="nx">RequestOptions</span><span class="p">({</span> <span class="na">headers</span><span class="p">:</span> <span class="nx">headers</span> <span class="p">})</span>
     <span class="p">)</span>
     <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
-    <span class="p">.</span><span class="nx">subscribe</span><span class="p">((</span><span class="nx">messages</span><span class="err">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="nb">Object</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">messages</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">message</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">messages</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">message</span><span class="p">)));</span>
+    <span class="p">.</span><span class="nx">subscribe</span><span class="p">((</span><span class="nx">messages</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="nb">Object</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">messages</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">message</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">messages</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">message</span><span class="p">)));</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>In the next section you can select your server technology to see how your server can read this incoming token and validate it.</p>
 

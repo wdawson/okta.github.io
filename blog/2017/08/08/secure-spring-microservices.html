@@ -208,17 +208,15 @@
 
 <p>To begin, you’ll need to clone the aforementioned article’s completed project.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>git clone https://github.com/oktadeveloper/spring-boot-microservices-example.git
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/oktadeveloper/spring-boot-microservices-example.git
+</code></pre></div></div>
 
 <p><a href="https://github.com/stormpath/stormpath-sdk-java/blob/okta/OktaGettingStarted.md">Create an Okta Developer account</a>. After completing these steps, you should have the information you need to set the following environment variables.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="nb">export </span><span class="nv">STORMPATH_CLIENT_BASEURL</span><span class="o">=[</span>base-url]
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">STORMPATH_CLIENT_BASEURL</span><span class="o">=[</span>base-url]
 <span class="nb">export </span><span class="nv">OKTA_APPLICATION_ID</span><span class="o">=[</span>application-id]
 <span class="nb">export </span><span class="nv">OKTA_API_TOKEN</span><span class="o">=[</span>api-token]
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="add-stormpaths-zuul-support-to-the-edge-service">Add Stormpath’s Zuul Support to the Edge Service</h2>
 
@@ -230,31 +228,29 @@ been released.</p>
 
 <p>The <strong>edge-service</strong> application handles the routing to the backend <code class="highlighter-rouge">beer-catalog-service</code>, so it’s the best place to start securing things. Add the Stormpath BOM (Bill Of Materials) in the <code class="highlighter-rouge">dependencyManagement</code> section of <code class="highlighter-rouge">edge-service/pom.xml</code>.</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>com.stormpath.sdk<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>stormpath-bom<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;version&gt;</span>2.0.0-okta-rc3<span class="nt">&lt;/version&gt;</span>
     <span class="nt">&lt;type&gt;</span>pom<span class="nt">&lt;/type&gt;</span>
     <span class="nt">&lt;scope&gt;</span>import<span class="nt">&lt;/scope&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Then add a dependency for Stormpath’s Zuul integration.</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>com.stormpath.spring<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>stormpath-zuul-spring-cloud-starter<span class="nt">&lt;/artifactId&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Add the following properties and values to the project’s <code class="highlighter-rouge">application.properties</code>.</p>
 
-<div class="language-properties highlighter-rouge"><pre class="highlight"><code><span class="err">server.use-forward-</span><span class="py">headers</span><span class="p">=</span><span class="s">true</span>
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">server.use-forward-headers</span><span class="p">=</span><span class="s">true</span>
 
-<span class="err">zuul.routes.beer-catalog-</span><span class="py">service.path</span><span class="p">=</span><span class="s">/beers</span>
-<span class="err">zuul.routes.beer-catalog-</span><span class="py">service.url</span><span class="p">=</span><span class="s">http://localhost:8080</span>
+<span class="py">zuul.routes.beer-catalog-service.path</span><span class="p">=</span><span class="s">/beers</span>
+<span class="py">zuul.routes.beer-catalog-service.url</span><span class="p">=</span><span class="s">http://localhost:8080</span>
 
 <span class="py">zuul.routes.home.path</span><span class="p">=</span><span class="s">/home</span>
 <span class="py">zuul.routes.home.url</span><span class="p">=</span><span class="s">http://localhost:8080</span>
@@ -265,20 +261,17 @@ been released.</p>
 <span class="c"># This is just one example of a key ID - anything that the origin server can make sense of to lookup
 # the corresponding public key is fine. Here we use the public key file name.
 </span><span class="py">stormpath.zuul.account.header.jwt.key.id</span><span class="p">=</span><span class="s">rsatest.pub.pem</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Copy the <code class="highlighter-rouge">rsatest.*</code> files from the <a href="https://github.com/stormpath/stormpath-sdk-java/tree/master/examples/zuul-spring-cloud-starter/src/main/resources">Stormpath Zuul example project</a>, or create new ones using the following command:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>openssl genrsa -out rsatest.priv.pem 2048
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>openssl genrsa <span class="nt">-out</span> rsatest.priv.pem 2048
+</code></pre></div></div>
 
 <p>Generate the private key’s corresponding <code class="highlighter-rouge">rsatest.pub.pem</code> public key with:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>openssl rsa -in rsatest.priv.pem -pubout &gt; rsatest.pub.pem
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>openssl rsa <span class="nt">-in</span> rsatest.priv.pem <span class="nt">-pubout</span> <span class="o">&gt;</span> rsatest.pub.pem
+</code></pre></div></div>
 
 <p>After copying (or generating), both <code class="highlighter-rouge">rsatest.priv.pem</code> and <code class="highlighter-rouge">rsatest.pub.pem</code> files should be in 
 <code class="highlighter-rouge">edge-service/src/main/resources</code>.</p>
@@ -289,7 +282,7 @@ been released.</p>
 
 <p>For Juiser to read the JWT sent by Stormpath’s Zuul support, you need to copy the public key (<code class="highlighter-rouge">rsatest.pub.pem</code>) from <code class="highlighter-rouge">edge-service/src/main/resources</code> to <code class="highlighter-rouge">beer-catalog-service/src/main/resources</code>. Then add the following dependencies to the Beer Catalog Service’s <code class="highlighter-rouge">pom.xml</code>.</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;properties&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;properties&gt;</span>
     ...
     <span class="nt">&lt;bouncycastle.version&gt;</span>1.56<span class="nt">&lt;/bouncycastle.version&gt;</span>
     <span class="nt">&lt;juiser.version&gt;</span>1.0.0<span class="nt">&lt;/juiser.version&gt;</span>
@@ -328,12 +321,11 @@ been released.</p>
     <span class="nt">&lt;/dependency&gt;</span>
     ...
 <span class="nt">&lt;/dependencies&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Create a <code class="highlighter-rouge">HomeController</code> in <code class="highlighter-rouge">src/main/java/com/example/HomeController.java</code> to render the user’s information so you can verify authentication is working.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">org.juiser.model.User</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.springframework.stereotype.Controller</span><span class="o">;</span>
@@ -355,14 +347,13 @@ been released.</p>
         <span class="k">return</span> <span class="s">"home"</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><strong>NOTE:</strong> There is an issue with Juiser 1.0.0 that it won’t initialize if you don’t have at least one <code class="highlighter-rouge">@Controller</code> in your project.</p>
 
 <p>Create a <code class="highlighter-rouge">home.html</code> template in <code class="highlighter-rouge">src/main/resources/templates/home.html</code> and populate it with the following code.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE HTML&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE HTML&gt;</span>
 <span class="nt">&lt;html</span> <span class="na">xmlns:th=</span><span class="s">"http://www.thymeleaf.org"</span><span class="nt">&gt;</span>
 <span class="nt">&lt;head&gt;</span>
     <span class="nt">&lt;style&gt;</span>
@@ -491,19 +482,17 @@ been released.</p>
 <span class="nt">&lt;/table&gt;</span>
 <span class="nt">&lt;/body&gt;</span>
 <span class="nt">&lt;/html&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Add the following properties to <code class="highlighter-rouge">src/main/resources/application.properties</code> to configure Juiser.</p>
 
-<div class="language-properties highlighter-rouge"><pre class="highlight"><code><span class="err">server.use-forward-</span><span class="py">headers</span><span class="p">=</span><span class="s">true</span>
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">server.use-forward-headers</span><span class="p">=</span><span class="s">true</span>
 <span class="py">juiser.header.jwt.key.resource</span><span class="p">=</span><span class="s">classpath:rsatest.pub.pem</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Create a <code class="highlighter-rouge">SecurityConfig.java</code> class in the same package as <code class="highlighter-rouge">HomeController</code>. This class configures Spring Security so it secures all endpoints.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Configuration</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.springframework.security.config.annotation.web.builders.HttpSecurity</span><span class="o">;</span>
@@ -517,14 +506,13 @@ been released.</p>
         <span class="n">http</span><span class="o">.</span><span class="na">authorizeRequests</span><span class="o">().</span><span class="na">anyRequest</span><span class="o">().</span><span class="na">fullyAuthenticated</span><span class="o">();</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="add-requestinterceptor-for-feign">Add RequestInterceptor for Feign</h3>
 
 <p>The <code class="highlighter-rouge">@FeignClient</code> used to talk to <code class="highlighter-rouge">beer-catalog-service</code> is not aware of the <code class="highlighter-rouge">X-Forwarded-User</code> header. To make it aware, create a <code class="highlighter-rouge">ForwardedAccountRequestInterceptor</code> class in the same directory as <code class="highlighter-rouge">EdgeServiceApplication</code>.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">com.stormpath.sdk.servlet.http.Resolver</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">com.stormpath.zuul.account.ForwardedAccountHeaderFilter</span><span class="o">;</span>
@@ -560,49 +548,43 @@ been released.</p>
         <span class="o">}</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Register it as a <code class="highlighter-rouge">@Bean</code> in <code class="highlighter-rouge">EdgeServiceApplication</code>.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@Bean</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Bean</span>
 <span class="kd">public</span> <span class="n">RequestInterceptor</span> <span class="nf">forwardedAccountRequestInterceptor</span><span class="o">(</span>
         <span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"stormpathForwardedAccountHeaderValueResolver"</span><span class="o">)</span> <span class="n">Resolver</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">accountStringResolver</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">return</span> <span class="k">new</span> <span class="nf">ForwardedAccountRequestInterceptor</span><span class="o">(</span><span class="n">accountStringResolver</span><span class="o">);</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>While you’re modifying <code class="highlighter-rouge">EdgeServiceApplication</code>, change the <code class="highlighter-rouge">HystrixCommand</code> in <code class="highlighter-rouge">BeerController</code> to make Hystrix <a href="http://stackoverflow.com/q/29566777/65681">execute on the calling thread</a> (so it’s aware of the security context).</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@HystrixCommand</span><span class="o">(</span><span class="n">fallbackMethod</span> <span class="o">=</span> <span class="s">"fallback"</span><span class="o">,</span> <span class="n">commandProperties</span> <span class="o">=</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@HystrixCommand</span><span class="o">(</span><span class="n">fallbackMethod</span> <span class="o">=</span> <span class="s">"fallback"</span><span class="o">,</span> <span class="n">commandProperties</span> <span class="o">=</span> <span class="o">{</span>
         <span class="nd">@HystrixProperty</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"execution.isolation.strategy"</span><span class="o">,</span> <span class="n">value</span><span class="o">=</span><span class="s">"SEMAPHORE"</span><span class="o">)</span>
 <span class="o">})</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="verify-secure-communication">Verify Secure Communication</h3>
 
 <p>Verify communication between the <code class="highlighter-rouge">edge-service</code> and <code class="highlighter-rouge">beer-catalog-service</code> works by starting all the Spring Boot applications. First, start <code class="highlighter-rouge">eureka-service</code>:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="nb">cd </span>eureka-service
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>eureka-service
 ./mvnw spring-boot:run
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>In a new terminal window, start <code class="highlighter-rouge">beer-catalog-service</code>:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="nb">cd </span>beer-catalog-service
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>beer-catalog-service
 ./mvnw spring-boot:run
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>In another terminal window, start <code class="highlighter-rouge">edge-service</code>:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="nb">cd </span>edge-service
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>edge-service
 ./mvnw spring-boot:run
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Open your browser and navigate to <code class="highlighter-rouge">http://localhost:8081/home</code>. You should see a login page, prompting for your credentials.</p>
 
@@ -619,20 +601,19 @@ been released.</p>
 
 <p>Install <a href="https://developer.okta.com/code/javascript/okta_sign-in_widget">Okta’s Sign-In Widget</a> to make it possible to communicate with the secured server.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="nb">cd </span>client
-npm install @okta/okta-signin-widget --save
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>client
+npm install @okta/okta-signin-widget <span class="nt">--save</span>
+</code></pre></div></div>
 
 <p>Create <code class="highlighter-rouge">client/src/app/shared/okta/okta.service.ts</code> and use it to configure the widget to talk to your Okta instance.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Injectable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Injectable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">OktaSignIn</span> <span class="k">from</span> <span class="s1">'@okta/okta-signin-widget/dist/js/okta-sign-in.min.js'</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">ReplaySubject</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'rxjs/ReplaySubject'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'rxjs/Observable'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">Injectable</span><span class="p">()</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">OktaAuthService</span> <span class="p">{</span>
+<span class="p">@</span><span class="nd">Injectable</span><span class="p">()</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">OktaAuthService</span> <span class="p">{</span>
 
   <span class="nx">signIn</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OktaSignIn</span><span class="p">({</span>
     <span class="na">baseUrl</span><span class="p">:</span> <span class="s1">'<span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>'</span><span class="p">,</span>
@@ -644,18 +625,18 @@ npm install @okta/okta-signin-widget --save
     <span class="p">}</span>
   <span class="p">});</span>
 
-  <span class="k">public</span> <span class="nx">user</span><span class="na">$</span><span class="p">:</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="kr">any</span><span class="o">&gt;</span><span class="p">;</span>
-  <span class="k">public</span> <span class="na">userSource</span><span class="p">:</span> <span class="nx">ReplaySubject</span><span class="o">&lt;</span><span class="kr">any</span><span class="o">&gt;</span><span class="p">;</span>
+  <span class="kr">public</span> <span class="nx">user</span><span class="na">$</span><span class="p">:</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span><span class="p">;</span>
+  <span class="kr">public</span> <span class="na">userSource</span><span class="p">:</span> <span class="nx">ReplaySubject</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span><span class="p">;</span>
 
   <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">userSource</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ReplaySubject</span><span class="o">&lt;</span><span class="kr">any</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">userSource</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ReplaySubject</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
     <span class="c1">// create an observable that can be subscribed to for user events</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">user$</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">userSource</span><span class="p">.</span><span class="nx">asObservable</span><span class="p">();</span>
   <span class="p">}</span>
 
   <span class="nx">isAuthenticated</span><span class="p">()</span> <span class="p">{</span>
     <span class="c1">// Checks if there is a current accessToken in the TokenManger.</span>
-    <span class="k">return</span> <span class="o">!!</span><span class="k">this</span><span class="p">.</span><span class="nx">signIn</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'accessToken'</span><span class="p">);</span>
+    <span class="k">return</span> <span class="o">!!</span><span class="k">this</span><span class="p">.</span><span class="nx">signIn</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'accessToken'</span><span class="p">);</span>
   <span class="p">}</span>
 
   <span class="nx">login</span><span class="p">()</span> <span class="p">{</span>
@@ -678,8 +659,8 @@ npm install @okta/okta-signin-widget --save
     <span class="p">});</span>
   <span class="p">}</span>
 
-  <span class="nx">get</span> <span class="nx">idTokenAsUser</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">token</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">signIn</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'idToken'</span><span class="p">);</span>
+  <span class="kd">get</span> <span class="nx">idTokenAsUser</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">token</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">signIn</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'idToken'</span><span class="p">);</span>
     <span class="k">return</span> <span class="p">{</span>
       <span class="na">name</span><span class="p">:</span> <span class="nx">token</span><span class="p">.</span><span class="nx">claims</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
       <span class="na">email</span><span class="p">:</span> <span class="nx">token</span><span class="p">.</span><span class="nx">claims</span><span class="p">.</span><span class="nx">email</span><span class="p">,</span>
@@ -690,63 +671,60 @@ npm install @okta/okta-signin-widget --save
   <span class="k">async</span> <span class="nx">logout</span><span class="p">()</span> <span class="p">{</span>
     <span class="c1">// Terminates the session with Okta and removes current tokens.</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">signIn</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="nx">clear</span><span class="p">();</span>
-    <span class="k">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">signIn</span><span class="p">.</span><span class="nx">signOut</span><span class="p">();</span>
+    <span class="kr">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">signIn</span><span class="p">.</span><span class="nx">signOut</span><span class="p">();</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">signIn</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">userSource</span><span class="p">.</span><span class="nx">next</span><span class="p">(</span><span class="kc">undefined</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<p>Make sure to replace <code class="highlighter-rouge"><span class="p">{</span><span class="err">yourOktaDomain</span><span class="p">}</span></code> and <code class="highlighter-rouge"><span class="p">{</span><span class="err">clientId</span><span class="p">}</span></code> in the above code.</p>
+<p>Make sure to replace <code class="highlighter-rouge">{yourOktaDomain}</code> and <code class="highlighter-rouge">{clientId}</code> in the above code.</p>
 
 <p>Add <code class="highlighter-rouge">OktaAuthService</code> as a provider to <code class="highlighter-rouge">client/src/app/app.module.ts</code>.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">OktaAuthService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'./shared/okta/okta.service'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">OktaAuthService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'./shared/okta/okta.service'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">NgModule</span><span class="p">({</span>
+<span class="p">@</span><span class="nd">NgModule</span><span class="p">({</span>
   <span class="p">...</span>
   <span class="na">providers</span><span class="p">:</span> <span class="p">[</span>
     <span class="nx">BeerService</span><span class="p">,</span> <span class="nx">GiphyService</span><span class="p">,</span> <span class="nx">OktaAuthService</span>
   <span class="p">],</span>
   <span class="na">bootstrap</span><span class="p">:</span> <span class="p">[</span><span class="nx">AppComponent</span><span class="p">]</span>
 <span class="p">})</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">AppModule</span> <span class="p">{</span> <span class="p">}</span>
-</code></pre>
-</div>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">AppModule</span> <span class="p">{</span> <span class="p">}</span>
+</code></pre></div></div>
 
 <p>Modify <code class="highlighter-rouge">client/src/app/shared/beer/beer.service.ts</code> to read the access token and set it in an <code class="highlighter-rouge">Authorization</code> header when 
 it exists.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Injectable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Injectable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">Http</span><span class="p">,</span> <span class="nx">Headers</span><span class="p">,</span> <span class="nx">RequestOptions</span><span class="p">,</span> <span class="nx">Response</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/http'</span><span class="p">;</span>
 <span class="k">import</span> <span class="s1">'rxjs/add/operator/map'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'rxjs'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">OktaAuthService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../okta/okta.service'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">Injectable</span><span class="p">()</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">BeerService</span> <span class="p">{</span>
+<span class="p">@</span><span class="nd">Injectable</span><span class="p">()</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">BeerService</span> <span class="p">{</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="k">private</span> <span class="nx">http</span><span class="err">:</span> <span class="nx">Http</span><span class="p">,</span> <span class="k">private</span> <span class="nx">oktaService</span><span class="err">:</span> <span class="nx">OktaAuthService</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">http</span><span class="p">:</span> <span class="nx">Http</span><span class="p">,</span> <span class="kr">private</span> <span class="nx">oktaService</span><span class="p">:</span> <span class="nx">OktaAuthService</span><span class="p">)</span> <span class="p">{</span>
   <span class="p">}</span>
 
-  <span class="nx">getAll</span><span class="p">()</span><span class="err">:</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="kr">any</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="nx">getAll</span><span class="p">():</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="na">headers</span><span class="p">:</span> <span class="nx">Headers</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Headers</span><span class="p">();</span>
     <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">oktaService</span><span class="p">.</span><span class="nx">isAuthenticated</span><span class="p">())</span> <span class="p">{</span>
-      <span class="kd">const</span> <span class="nx">accessToken</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">oktaService</span><span class="p">.</span><span class="nx">signIn</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'accessToken'</span><span class="p">);</span>
+      <span class="kd">const</span> <span class="nx">accessToken</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">oktaService</span><span class="p">.</span><span class="nx">signIn</span><span class="p">.</span><span class="nx">tokenManager</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'accessToken'</span><span class="p">);</span>
       <span class="nx">headers</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">'Authorization'</span><span class="p">,</span> <span class="nx">accessToken</span><span class="p">.</span><span class="nx">tokenType</span> <span class="o">+</span> <span class="s1">' '</span> <span class="o">+</span> <span class="nx">accessToken</span><span class="p">.</span><span class="nx">accessToken</span><span class="p">);</span>
     <span class="p">}</span>
     <span class="kd">const</span> <span class="nx">options</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RequestOptions</span><span class="p">({</span> <span class="na">headers</span><span class="p">:</span> <span class="nx">headers</span> <span class="p">});</span>
-    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'http://localhost:8081/good-beers'</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'http://localhost:8081/good-beers'</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span>
       <span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="na">response</span><span class="p">:</span> <span class="nx">Response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Modify <code class="highlighter-rouge">app.component.html</code> to add a placeholder for the widget and a section to show the user’s name and a logout button.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;md-toolbar</span> <span class="na">color=</span><span class="s">"primary"</span><span class="nt">&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;md-toolbar</span> <span class="na">color=</span><span class="s">"primary"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;span&gt;</span>{{title}}<span class="nt">&lt;/span&gt;</span>
 <span class="nt">&lt;/md-toolbar&gt;</span>
 
@@ -764,25 +742,24 @@ it exists.</p>
 <span class="nt">&lt;div</span> <span class="err">[</span><span class="na">hidden</span><span class="err">]="!</span><span class="na">user</span><span class="err">"</span> <span class="err">*</span><span class="na">shellNoRender</span><span class="nt">&gt;</span>
   <span class="nt">&lt;app-beer-list&gt;&lt;/app-beer-list&gt;</span>
 <span class="nt">&lt;/div&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You’ll notice the <code class="highlighter-rouge">user</code> variable in the HTML. To resolve this, you need to change your <code class="highlighter-rouge">AppComponent</code>, so it 1) shows
 the login or converts the token on initial load and 2) subscribes to changes in the <code class="highlighter-rouge">user$</code> observable from <code class="highlighter-rouge">OktaAuthService</code>.</p>
 
-<div class="language-typescript highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">ChangeDetectorRef</span><span class="p">,</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">OnInit</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">ChangeDetectorRef</span><span class="p">,</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">OnInit</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">OktaAuthService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'./shared/okta/okta.service'</span><span class="p">;</span>
 
-<span class="err">@</span><span class="nx">Component</span><span class="p">({</span>
+<span class="p">@</span><span class="nd">Component</span><span class="p">({</span>
   <span class="na">selector</span><span class="p">:</span> <span class="s1">'app-root'</span><span class="p">,</span>
   <span class="na">templateUrl</span><span class="p">:</span> <span class="s1">'./app.component.html'</span><span class="p">,</span>
   <span class="na">styleUrls</span><span class="p">:</span> <span class="p">[</span><span class="s1">'./app.component.css'</span><span class="p">],</span>
 <span class="p">})</span>
-<span class="k">export</span> <span class="kr">class</span> <span class="nx">AppComponent</span> <span class="k">implements</span> <span class="nx">OnInit</span> <span class="p">{</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">AppComponent</span> <span class="kr">implements</span> <span class="nx">OnInit</span> <span class="p">{</span>
   <span class="nx">title</span> <span class="o">=</span> <span class="s1">'app works!'</span><span class="p">;</span>
   <span class="nx">user</span><span class="p">;</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="k">public</span> <span class="nx">oktaService</span><span class="err">:</span> <span class="nx">OktaAuthService</span><span class="p">,</span> <span class="k">private</span> <span class="nx">changeDetectorRef</span><span class="err">:</span> <span class="nx">ChangeDetectorRef</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">public</span> <span class="nx">oktaService</span><span class="p">:</span> <span class="nx">OktaAuthService</span><span class="p">,</span> <span class="kr">private</span> <span class="nx">changeDetectorRef</span><span class="p">:</span> <span class="nx">ChangeDetectorRef</span><span class="p">)</span> <span class="p">{</span>
   <span class="p">}</span>
 
   <span class="nx">ngOnInit</span><span class="p">()</span> <span class="p">{</span>
@@ -805,16 +782,14 @@ the login or converts the token on initial load and 2) subscribes to changes in 
     <span class="p">});</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Okta’s Sign-In Widget ships with CSS that make it looks good out-of-the-box. To use them in your application, modify 
  <code class="highlighter-rouge">client/src/styles.css</code> to have the following two imports.</p>
 
-<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="k">@import</span> <span class="s2">'~https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/2.1.0/css/okta-sign-in.min.css'</span><span class="p">;</span>
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">@import</span> <span class="s2">'~https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/2.1.0/css/okta-sign-in.min.css'</span><span class="p">;</span>
 <span class="k">@import</span> <span class="s2">'~https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/2.1.0/css/okta-theme.css'</span><span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="verify-authentication-works">Verify Authentication Works</h3>
 
@@ -827,11 +802,10 @@ your browser. Clear your cookies, or try an incognito window.</p>
 
 <p>If you want to adjust the style of the form, so it isn’t right up against the top toolbar, add the following to <code class="highlighter-rouge">styles.css</code>.</p>
 
-<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="nf">#okta-signin-container</span> <span class="p">{</span>
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">#okta-signin-container</span> <span class="p">{</span>
   <span class="nl">margin-top</span><span class="p">:</span> <span class="m">25px</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><img src="/assets/blog/microservices-spring-secure/angular-login-top-margin-ccb5bbecb9f8c8ff71fba24d0f2a742ee11fcf72960a181c7bde9bd39d8e0aea.png" alt="Angular Login Styled" width="800" /></p>
 
@@ -845,10 +819,9 @@ your browser. Clear your cookies, or try an incognito window.</p>
 
 <p>The source code for this tutorial is <a href="https://github.com/oktadeveloper/spring-boot-microservices-example/">available on GitHub</a>, in the <a href="https://github.com/oktadeveloper/spring-boot-microservices-example/tree/okta">“okta” branch</a>.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>git clone https://github.com/oktadeveloper/spring-boot-microservices-example.git
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/oktadeveloper/spring-boot-microservices-example.git
 git checkout okta
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Learn more about Okta and its APIs at <a href="http://developer.okta.com">developer.okta.com</a>. If you have questions about this tutorial, please hit me up on Twitter <a href="https://twitter.com/mraible">@mraible</a> or post a question to <a href="https://stackoverflow.com/questions/tagged/okta">Stack Overflow with an “okta” tag</a>.</p>
 

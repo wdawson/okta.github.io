@@ -391,7 +391,7 @@
       <div class="PageContent-main">
         <h1 id="overview">Overview</h1>
 
-<p>When you use the Okta API to <a href="/docs/api/resources/oauth2.html#obtain-an-authorization-grant-from-a-user">obtain an authorization grant for a user</a>, the response contains a signed JWT (<code class="highlighter-rouge">id_token</code> and/or <code class="highlighter-rouge">access_token</code>).</p>
+<p>When you use the Okta API to <a href="/docs/api/resources/oauth2#obtain-an-authorization-grant-from-a-user">obtain an authorization grant for a user</a>, the response contains a signed JWT (<code class="highlighter-rouge">id_token</code> and/or <code class="highlighter-rouge">access_token</code>).</p>
 
 <p>A common practice is to send one of these tokens in the <code class="highlighter-rouge">Bearer</code> header of future requests, to authorize the request for that user. Your server must then validate the token to make sure it’s authentic and hasn’t expired.</p>
 
@@ -405,7 +405,7 @@
 
 <ul>
   <li>You are using <a href="/quickstart/#/widget/dotnet/aspnet4" data-proofer-ignore="">ASP.NET</a> or <a href="/quickstart/#/widget/dotnet/aspnetcore" data-proofer-ignore="">ASP.NET Core</a> with the <code class="highlighter-rouge">JwtBearer</code> or <code class="highlighter-rouge">OpenIdConnect</code> middleware</li>
-  <li>You want to send tokens to Okta to be validated (this is called <a href="/docs/api/resources/oauth2.html#introspection-request">token introspection</a>)</li>
+  <li>You want to send tokens to Okta to be validated (this is called <a href="/docs/api/resources/oauth2#introspection-request">token introspection</a>)</li>
 </ul>
 
 <p>If you need to validate a token manually, and don’t want to make a network call to Okta, this guide will help you validate tokens locally.</p>
@@ -428,16 +428,15 @@
 
 <p>The <code class="highlighter-rouge">OpenIdConnectConfigurationRetriever</code> class in the <a href="https://www.nuget.org/packages/Microsoft.IdentityModel.Protocols.OpenIdConnect/">Microsoft.IdentityModel.Protocols.OpenIdConnect</a> package will download and parse the discovery document to get the key set. You can use it in conjunction with the <code class="highlighter-rouge">ConfigurationManager</code> class, which will handle caching the response and refreshing it regularly:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="c1">// Replace with your authorization server URL:
-</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Replace with your authorization server URL:</span>
+
 <span class="kt">var</span> <span class="n">issuer</span> <span class="p">=</span> <span class="s">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default"</span><span class="p">;</span>
 
 <span class="kt">var</span> <span class="n">configurationManager</span> <span class="p">=</span> <span class="k">new</span> <span class="n">ConfigurationManager</span><span class="p">&lt;</span><span class="n">OpenIdConnectConfiguration</span><span class="p">&gt;(</span>
     <span class="n">issuer</span> <span class="p">+</span> <span class="s">"/.well-known/oauth-authorization-server"</span><span class="p">,</span>
     <span class="k">new</span> <span class="nf">OpenIdConnectConfigurationRetriever</span><span class="p">(),</span>
     <span class="k">new</span> <span class="nf">HttpDocumentRetriever</span><span class="p">());</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Once you’ve instantiated the <code class="highlighter-rouge">configurationManager</code>, keep it around as a singleton. You only need to set it up once.</p>
 
@@ -447,14 +446,14 @@
 
 <p>You can write a method that takes the token, the issuer, and the <code class="highlighter-rouge">configurationManager</code> you created. The method is <code class="highlighter-rouge">async</code> because the <code class="highlighter-rouge">configurationManager</code> may need to make an HTTP call to get the signing keys (if they aren’t already cached):</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">private</span> <span class="k">static</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">JwtSecurityToken</span><span class="p">&gt;</span> <span class="nf">ValidateToken</span><span class="p">(</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="k">static</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">JwtSecurityToken</span><span class="p">&gt;</span> <span class="nf">ValidateToken</span><span class="p">(</span>
     <span class="kt">string</span> <span class="n">token</span><span class="p">,</span>
     <span class="kt">string</span> <span class="n">issuer</span><span class="p">,</span>
     <span class="n">IConfigurationManager</span><span class="p">&lt;</span><span class="n">OpenIdConnectConfiguration</span><span class="p">&gt;</span> <span class="n">configurationManager</span><span class="p">,</span>
     <span class="n">CancellationToken</span> <span class="n">ct</span> <span class="p">=</span> <span class="k">default</span><span class="p">(</span><span class="n">CancellationToken</span><span class="p">))</span>
 <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span><span class="p">(</span><span class="n">token</span><span class="p">))</span> <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">token</span><span class="p">));</span>
-    <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span><span class="p">(</span><span class="n">issuer</span><span class="p">))</span> <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">issuer</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span><span class="p">(</span><span class="n">token</span><span class="p">))</span> <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="k">nameof</span><span class="p">(</span><span class="n">token</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span><span class="p">(</span><span class="n">issuer</span><span class="p">))</span> <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="k">nameof</span><span class="p">(</span><span class="n">issuer</span><span class="p">));</span>
 
     <span class="kt">var</span> <span class="n">discoveryDocument</span> <span class="p">=</span> <span class="k">await</span> <span class="n">configurationManager</span><span class="p">.</span><span class="nf">GetConfigurationAsync</span><span class="p">(</span><span class="n">ct</span><span class="p">);</span>
     <span class="kt">var</span> <span class="n">signingKeys</span> <span class="p">=</span> <span class="n">discoveryDocument</span><span class="p">.</span><span class="n">SigningKeys</span><span class="p">;</span>
@@ -466,11 +465,11 @@
         <span class="n">ValidateIssuerSigningKey</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
         <span class="n">IssuerSigningKeys</span> <span class="p">=</span> <span class="n">signingKeys</span><span class="p">,</span>
         <span class="n">ValidateLifetime</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
-        <span class="c1">// Allow for some drift in server time
-</span>        <span class="c1">// (a lower value is better; we recommend five minutes or less)
-</span>        <span class="n">ClockSkew</span> <span class="p">=</span> <span class="n">TimeSpan</span><span class="p">.</span><span class="nf">FromMinutes</span><span class="p">(</span><span class="m">5</span><span class="p">),</span>
-        <span class="c1">// See additional validation for aud below
-</span>        <span class="n">ValidateAudience</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span>
+        <span class="c1">// Allow for some drift in server time</span>
+        <span class="c1">// (a lower value is better; we recommend five minutes or less)</span>
+        <span class="n">ClockSkew</span> <span class="p">=</span> <span class="n">TimeSpan</span><span class="p">.</span><span class="nf">FromMinutes</span><span class="p">(</span><span class="m">5</span><span class="p">),</span>
+        <span class="c1">// See additional validation for aud below</span>
+        <span class="n">ValidateAudience</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span>
     <span class="p">};</span>
 
     <span class="k">try</span>
@@ -482,17 +481,16 @@
     <span class="p">}</span>
     <span class="k">catch</span> <span class="p">(</span><span class="n">SecurityTokenValidationException</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="c1">// Logging, etc.
-</span>
+        <span class="c1">// Logging, etc.</span>
+
         <span class="k">return</span> <span class="k">null</span><span class="p">;</span>
     <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>To use the method, pass it a token, and the issuer and <code class="highlighter-rouge">configurationManager</code> you declared earlier:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="kt">var</span> <span class="n">accessToken</span> <span class="p">=</span> <span class="s">"eyJh..."</span><span class="p">;</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">accessToken</span> <span class="p">=</span> <span class="s">"eyJh..."</span><span class="p">;</span>
 
 <span class="kt">var</span> <span class="n">validatedToken</span> <span class="p">=</span> <span class="k">await</span> <span class="nf">ValidateToken</span><span class="p">(</span><span class="n">accessToken</span><span class="p">,</span> <span class="n">issuer</span><span class="p">,</span> <span class="n">configurationManager</span><span class="p">);</span>
 
@@ -502,12 +500,11 @@
 <span class="p">}</span>
 <span class="k">else</span>
 <span class="p">{</span>
-    <span class="c1">// Additional validation...
-</span>
+    <span class="c1">// Additional validation...</span>
+
     <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Token is valid!"</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>This method will return an instance of <code class="highlighter-rouge">JwtSecurityToken</code> if the token is valid, or <code class="highlighter-rouge">null</code> if it is invalid. Returning <code class="highlighter-rouge">JwtSecurityToken</code> makes it possible to retrieve claims from the token later.</p>
 
@@ -517,51 +514,47 @@
 
 <p>If you are validating access tokens, you should verify that the <code class="highlighter-rouge">aud</code> (Audience) claim equals the Audience that is configured for your Authorization Server in the Okta Developer Dashboard. For example, if your Authorization Server Audience is set to <code class="highlighter-rouge">MyAwesomeApi</code>, add this to the validation parameters:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="n">ValidateAudience</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ValidateAudience</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
 <span class="n">ValidAudience</span> <span class="p">=</span> <span class="s">"MyAwesomeApi"</span><span class="p">,</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You can also optionally verify that the <code class="highlighter-rouge">cid</code> claim matches the expected Client ID of the current application. You’ll have to perform this check after the <code class="highlighter-rouge">ValidateToken</code> method returns a validated token:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="kt">var</span> <span class="n">validatedToken</span> <span class="p">=</span> <span class="k">await</span> <span class="nf">ValidateToken</span><span class="p">(</span><span class="n">accessToken</span><span class="p">,</span> <span class="n">issuer</span><span class="p">,</span> <span class="n">configurationManager</span><span class="p">);</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">validatedToken</span> <span class="p">=</span> <span class="k">await</span> <span class="nf">ValidateToken</span><span class="p">(</span><span class="n">accessToken</span><span class="p">,</span> <span class="n">issuer</span><span class="p">,</span> <span class="n">configurationManager</span><span class="p">);</span>
 
-<span class="c1">// Validate client ID
-</span><span class="kt">var</span> <span class="n">expectedClientId</span> <span class="p">=</span> <span class="s">"xyz123"</span><span class="p">;</span> <span class="c1">// This Application's Client ID
-</span><span class="kt">var</span> <span class="n">clientIdMatches</span> <span class="p">=</span> <span class="n">validatedToken</span><span class="p">.</span><span class="n">Payload</span><span class="p">.</span><span class="nf">TryGetValue</span><span class="p">(</span><span class="s">"cid"</span><span class="p">,</span> <span class="k">out</span> <span class="kt">var</span> <span class="n">rawCid</span><span class="p">)</span>
+<span class="c1">// Validate client ID</span>
+<span class="kt">var</span> <span class="n">expectedClientId</span> <span class="p">=</span> <span class="s">"xyz123"</span><span class="p">;</span> <span class="c1">// This Application's Client ID</span>
+<span class="kt">var</span> <span class="n">clientIdMatches</span> <span class="p">=</span> <span class="n">validatedToken</span><span class="p">.</span><span class="n">Payload</span><span class="p">.</span><span class="nf">TryGetValue</span><span class="p">(</span><span class="s">"cid"</span><span class="p">,</span> <span class="k">out</span> <span class="kt">var</span> <span class="n">rawCid</span><span class="p">)</span>
     <span class="p">&amp;&amp;</span> <span class="n">rawCid</span><span class="p">.</span><span class="nf">ToString</span><span class="p">()</span> <span class="p">==</span> <span class="n">expectedClientId</span><span class="p">;</span>
 
 <span class="k">if</span> <span class="p">(!</span><span class="n">clientIdMatches</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="k">throw</span> <span class="k">new</span> <span class="nf">SecurityTokenValidationException</span><span class="p">(</span><span class="s">"The cid claim was invalid."</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="additional-validation-for-id-tokens">Additional validation for ID tokens</h3>
 
 <p>When validating an ID token, you should verify that the <code class="highlighter-rouge">aud</code> (Audience) claim equals the Client ID of the current application. Add this to the validation parameters:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="n">ValidateAudience</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
-<span class="n">ValidAudience</span> <span class="p">=</span> <span class="s">"xyz123"</span><span class="p">,</span> <span class="c1">// This Application's Client ID
-</span></code></pre>
-</div>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ValidateAudience</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+<span class="n">ValidAudience</span> <span class="p">=</span> <span class="s">"xyz123"</span><span class="p">,</span> <span class="c1">// This Application's Client ID</span>
+</code></pre></div></div>
 
 <p>If you specified a nonce during the initial code exchange when your application retrieved the ID token, you can verify that the nonce matches:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="kt">var</span> <span class="n">validatedToken</span> <span class="p">=</span> <span class="k">await</span> <span class="nf">ValidateToken</span><span class="p">(</span><span class="n">accessToken</span><span class="p">,</span> <span class="n">issuer</span><span class="p">,</span> <span class="n">configurationManager</span><span class="p">);</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">validatedToken</span> <span class="p">=</span> <span class="k">await</span> <span class="nf">ValidateToken</span><span class="p">(</span><span class="n">accessToken</span><span class="p">,</span> <span class="n">issuer</span><span class="p">,</span> <span class="n">configurationManager</span><span class="p">);</span>
 
-<span class="c1">// Validate nonce
-</span><span class="kt">var</span> <span class="n">expectedNonce</span> <span class="p">=</span> <span class="s">"foobar"</span><span class="p">;</span> <span class="c1">// Retrieve this from a saved cookie or other mechanism
-</span><span class="kt">var</span> <span class="n">nonceMatches</span> <span class="p">=</span> <span class="n">validatedToken</span><span class="p">.</span><span class="n">Payload</span><span class="p">.</span><span class="nf">TryGetValue</span><span class="p">(</span><span class="s">"nonce"</span><span class="p">,</span> <span class="k">out</span> <span class="kt">var</span> <span class="n">rawNonce</span><span class="p">)</span>
+<span class="c1">// Validate nonce</span>
+<span class="kt">var</span> <span class="n">expectedNonce</span> <span class="p">=</span> <span class="s">"foobar"</span><span class="p">;</span> <span class="c1">// Retrieve this from a saved cookie or other mechanism</span>
+<span class="kt">var</span> <span class="n">nonceMatches</span> <span class="p">=</span> <span class="n">validatedToken</span><span class="p">.</span><span class="n">Payload</span><span class="p">.</span><span class="nf">TryGetValue</span><span class="p">(</span><span class="s">"nonce"</span><span class="p">,</span> <span class="k">out</span> <span class="kt">var</span> <span class="n">rawNonce</span><span class="p">)</span>
     <span class="p">&amp;&amp;</span> <span class="n">rawNonce</span><span class="p">.</span><span class="nf">ToString</span><span class="p">()</span> <span class="p">==</span> <span class="n">expectedNonce</span><span class="p">;</span>
 
 <span class="k">if</span> <span class="p">(!</span><span class="n">nonceMatches</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="k">throw</span> <span class="k">new</span> <span class="nf">SecurityTokenValidationException</span><span class="p">(</span><span class="s">"The nonce was invalid."</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="decode-token-claims">Decode token claims</h2>
 
@@ -569,20 +562,18 @@
 
 <p>For example, you can get the <code class="highlighter-rouge">sub</code> (Subject) claim with the <code class="highlighter-rouge">Subject</code> property:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="err">$</span><span class="s">"Token subject: {validatedToken.Subject}"</span><span class="p">);</span>
-</code></pre>
-</div>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Token subject: </span><span class="p">{</span><span class="n">validatedToken</span><span class="p">.</span><span class="n">Subject</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+</code></pre></div></div>
 
 <p>You can access more claims with the <code class="highlighter-rouge">Payload</code> property, or loop over the entire <code class="highlighter-rouge">Claims</code> collection:</p>
 
-<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"All claims:"</span><span class="p">);</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"All claims:"</span><span class="p">);</span>
 
 <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">claim</span> <span class="k">in</span> <span class="n">validatedToken</span><span class="p">.</span><span class="n">Claims</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="err">$</span><span class="s">"{claim.Type}\t{claim.Value}"</span><span class="p">);</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"</span><span class="p">{</span><span class="n">claim</span><span class="p">.</span><span class="n">Type</span><span class="p">}</span><span class="s">\t</span><span class="p">{</span><span class="n">claim</span><span class="p">.</span><span class="n">Value</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="conclusion">Conclusion</h2>
 

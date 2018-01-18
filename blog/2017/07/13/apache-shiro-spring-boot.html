@@ -209,17 +209,16 @@
 
 <p>Using the Apache Shiro Spring Boot starter is all you need, just add the dependency to your pom. (where <code class="highlighter-rouge">${shiro.version}</code> is at least 1.4.0):</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.apache.shiro<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>shiro-spring-boot-web-starter<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;version&gt;</span>${shiro.version}<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Jumping into the code we will start with our <code class="highlighter-rouge">StormtrooperController</code>, and simply add annotations:</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@RestController</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RestController</span>
 <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">path</span> <span class="o">=</span> <span class="s">"/troopers"</span><span class="o">,</span>
                 <span class="n">produces</span> <span class="o">=</span> <span class="n">MediaType</span><span class="o">.</span><span class="na">APPLICATION_JSON_UTF8_VALUE</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">StormtrooperController</span> <span class="o">{</span>
@@ -269,8 +268,7 @@
         <span class="n">trooperDao</span><span class="o">.</span><span class="na">deleteStormtrooper</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>In the code block above you’re using Shiro’s <code class="highlighter-rouge">@RequiresRoles</code> annotation to describe your use-case.  You’ll notice the logical <code class="highlighter-rouge">OR</code> to allow any of these roles access.  This is great, your code is done, it was pretty easy to add, just a single line.</p>
 
@@ -287,7 +285,7 @@
 
 <p>Fine, you say, easy enough, you can just make a few small changes to the method signatures:</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@GetMapping</span><span class="o">()</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@GetMapping</span><span class="o">()</span>
 <span class="nd">@RequiresRoles</span><span class="o">(</span><span class="n">logical</span> <span class="o">=</span> <span class="n">Logical</span><span class="o">.</span><span class="na">OR</span><span class="o">,</span> <span class="n">value</span> <span class="o">=</span> <span class="o">{</span><span class="s">"emperor"</span><span class="o">,</span> <span class="s">"admin"</span><span class="o">,</span> <span class="s">"emperor"</span><span class="o">,</span> <span class="s">"officer"</span><span class="o">,</span> <span class="s">"underling"</span><span class="o">})</span>
 <span class="kd">public</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Stormtrooper</span><span class="o">&gt;</span> <span class="nf">listTroopers</span><span class="o">()</span>
 
@@ -307,14 +305,13 @@
 <span class="nd">@ResponseStatus</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="n">HttpStatus</span><span class="o">.</span><span class="na">NO_CONTENT</span><span class="o">)</span>
 <span class="nd">@RequiresRoles</span><span class="o">(</span><span class="n">logical</span> <span class="o">=</span> <span class="n">Logical</span><span class="o">.</span><span class="na">OR</span><span class="o">,</span> <span class="n">value</span> <span class="o">=</span> <span class="o">{</span><span class="s">"emperor"</span><span class="o">,</span> <span class="s">"admin"</span><span class="o">})</span>
 <span class="kd">public</span> <span class="kt">void</span> <span class="nf">deleteTrooper</span><span class="o">(</span><span class="nd">@PathVariable</span><span class="o">(</span><span class="s">"id"</span><span class="o">)</span> <span class="n">String</span> <span class="n">id</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>After another round of testing the deployment and you’re back in action!</p>
 
 <p>Wait, take a step back. Roles are great for simple use cases and making a change like this would work fine, but you know this will be changed again. Instead of changing your code every time the requirements change slightly, let’s decouple the roles and what they represent from your code. Instead, use permissions. Your method signatures will look like this:</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@GetMapping</span><span class="o">()</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@GetMapping</span><span class="o">()</span>
 <span class="nd">@RequiresPermissions</span><span class="o">(</span><span class="s">"troopers:read"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Stormtrooper</span><span class="o">&gt;</span> <span class="nf">listTroopers</span><span class="o">()</span>
 
@@ -333,8 +330,7 @@
 <span class="nd">@ResponseStatus</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="n">HttpStatus</span><span class="o">.</span><span class="na">NO_CONTENT</span><span class="o">)</span>
 <span class="nd">@RequiresPermissions</span><span class="o">(</span><span class="s">"troopers:delete"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kt">void</span> <span class="nf">deleteTrooper</span><span class="o">(</span><span class="nd">@PathVariable</span><span class="o">(</span><span class="s">"id"</span><span class="o">)</span> <span class="n">String</span> <span class="n">id</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>By using Shiro’s <code class="highlighter-rouge">@RequiresPermissions</code> annotation, this code would work with the original requirements and the new requirements without modification. The only thing that changes is how you map those permissions to roles, and in turn, to users. This could be done externally from your application in a database, or for this example a simple properties file.</p>
 
@@ -342,20 +338,18 @@
 
 <p>To meet the original requirements, the role-to-permission mapping would look like this:</p>
 
-<div class="language-properties highlighter-rouge"><pre class="highlight"><code><span class="py">role.admin</span> <span class="p">=</span> <span class="s">troopers:*</span>
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">role.admin</span> <span class="p">=</span> <span class="s">troopers:*</span>
 <span class="py">role.officer</span> <span class="p">=</span> <span class="s">troopers:create, troopers:read</span>
 <span class="py">role.underling</span> <span class="p">=</span> <span class="s">troopers:read</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>For the updated requirements, you would just change the file slightly to add the new ‘emperor’ role, and grant officers the ‘update’ permission:</p>
 
-<div class="language-properties highlighter-rouge"><pre class="highlight"><code><span class="py">role.emperor</span> <span class="p">=</span> <span class="s">*</span>
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">role.emperor</span> <span class="p">=</span> <span class="s">*</span>
 <span class="py">role.admin</span> <span class="p">=</span> <span class="s">troopers:*</span>
 <span class="py">role.officer</span> <span class="p">=</span> <span class="s">troopers:create, troopers:read, troopers:update</span>
 <span class="py">role.underling</span> <span class="p">=</span> <span class="s">troopers:read</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>If the permission syntax looks a little funny to you, take a look at <a href="https://shiro.apache.org/permissions.html">Apache Shiro’s Wildcard Permission</a> documentation for an in depth explanation.</p>
 
@@ -365,7 +359,7 @@
 
 <p>If you take a look at the <code class="highlighter-rouge">SpringBootApp</code> class you will notice a few things that were NOT in the <a href="https://github.com/stormpath/jaxrs-spring-blog-example/blob/master/spring-boot/src/main/java/com/stormpath/example/springboot/SpringBootApp.java">original example</a>.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@Bean</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Bean</span>
 <span class="kd">public</span> <span class="n">Realm</span> <span class="nf">realm</span><span class="o">()</span> <span class="o">{</span>
     <span class="c1">// uses 'classpath:shiro-users.properties' by default</span>
     <span class="n">PropertiesRealm</span> <span class="n">realm</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PropertiesRealm</span><span class="o">();</span>
@@ -388,16 +382,14 @@
     <span class="c1">// Caching isn't needed in this example, but we will use the MemoryConstrainedCacheManager for this example.</span>
     <span class="k">return</span> <span class="k">new</span> <span class="nf">MemoryConstrainedCacheManager</span><span class="o">();</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>First you have defined a Shiro <code class="highlighter-rouge">Realm</code>, a realm  is simply a user-store specific DAO. Shiro supports many different types of Realms out of the box (Active Directory, LDAP, Database, file, etc.).</p>
 
 <p>Next up you have the <code class="highlighter-rouge">ShiroFilterChainDefinition</code> which you’ve configured to allow BASIC authentication but NOT required it by using the ‘permissive’ option. This way your annotations configure everything. Instead of using annotations (or in addition to using them) you could define your <a href="https://shiro.apache.org/web.html#default-filters">permission to URL mappings</a> with Ant-style paths. This example would look something like:</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">chainDefinition</span><span class="o">.</span><span class="na">addPathDefinition</span><span class="o">(</span><span class="s">"/troopers/**"</span><span class="o">,</span> <span class="s">"authcBasic, rest[troopers]"</span><span class="o">);</span>
-</code></pre>
-</div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">chainDefinition</span><span class="o">.</span><span class="na">addPathDefinition</span><span class="o">(</span><span class="s">"/troopers/**"</span><span class="o">,</span> <span class="s">"authcBasic, rest[troopers]"</span><span class="o">);</span>
+</code></pre></div></div>
 
 <p>This would map any resource starting with the path <code class="highlighter-rouge">/troopers</code> to require BASIC authentication, and use the <a href="https://shiro.apache.org/static/current/apidocs/org/apache/shiro/web/filter/authz/HttpMethodPermissionFilter.html">‘rest’ filter</a> which based on the HTTP request method, appends a CRUD action to the permission string. For example an HTTP <code class="highlighter-rouge">GET</code> would map to ‘read’ so the full permission string for a ‘GET’ request would be <code class="highlighter-rouge">troopers:read</code> (just like you did with your annotations).</p>
 
@@ -405,7 +397,7 @@
 
 <p>The last bit of code you have handles exceptions.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@ExceptionHandler</span><span class="o">(</span><span class="n">UnauthenticatedException</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@ExceptionHandler</span><span class="o">(</span><span class="n">UnauthenticatedException</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="nd">@ResponseStatus</span><span class="o">(</span><span class="n">HttpStatus</span><span class="o">.</span><span class="na">UNAUTHORIZED</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handleException</span><span class="o">(</span><span class="n">UnauthenticatedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
     <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"{} was thrown"</span><span class="o">,</span> <span class="n">e</span><span class="o">.</span><span class="na">getClass</span><span class="o">(),</span> <span class="n">e</span><span class="o">);</span>
@@ -423,8 +415,7 @@
     <span class="n">String</span> <span class="n">id</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">();</span>
     <span class="k">return</span> <span class="k">new</span> <span class="nf">ErrorMessage</span><span class="o">(</span><span class="s">"Trooper Not Found: "</span><span class="o">+</span> <span class="n">id</span> <span class="o">+</span><span class="s">", why aren't you at your post? "</span><span class="o">+</span> <span class="n">id</span> <span class="o">+</span><span class="s">", do you copy?"</span><span class="o">);</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>The first two handle Shiro exceptions and simply set the status to 401 or 403. A 401 for invalid or missing user/passwords, and a 403 for any valid logged in user that does NOT have access to the resource. Lastly, you’ll want to handle any <code class="highlighter-rouge">NotFoundException</code> with a 404 and return a JSON serialized <code class="highlighter-rouge">ErrorMessage</code> object.</p>
 
@@ -432,13 +423,12 @@
 
 <p>If you put all of this together, or you just grab the code from <a href="https://github.com/oktadeveloper/shiro-spring-boot-example">Github</a>, you can start the application using <code class="highlighter-rouge">mvn spring-boot:run</code>.  Once you have everything running you can start making requests!</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl http://localhost:8080/troopers
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl http://localhost:8080/troopers
 HTTP/1.1 401
 Content-Length: 0
 Date: Thu, 26 Jan 2017 21:12:41 GMT
 WWW-Authenticate: BASIC <span class="nv">realm</span><span class="o">=</span><span class="s2">"application"</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Don’t forget, you need to authenticate!</p>
 
@@ -471,17 +461,16 @@ Transfer-Encoding: chunked
 </code></pre>
 
 <p>A <code class="highlighter-rouge">404</code> looks would look like this:</p>
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl --user emperor:secret http://localhost:8080/troopers/TK-421
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">--user</span> emperor:secret http://localhost:8080/troopers/TK-421
 HTTP/1.1 404
-Content-Type: application/json;charset<span class="o">=</span>UTF-8
+Content-Type: application/json<span class="p">;</span><span class="nv">charset</span><span class="o">=</span>UTF-8
 Date: Thu, 26 Jan 2017 21:15:54 GMT
 Transfer-Encoding: chunked
 
 <span class="o">{</span>
     <span class="s2">"error"</span>: <span class="s2">"Trooper Not Found: TK-421, why aren't you at your post? TK-421, do you copy?"</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="learn-more-about-apache-shiro">Learn More About Apache Shiro</h2>
 

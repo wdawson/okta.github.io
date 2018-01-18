@@ -199,13 +199,12 @@
 <p>I found a great <a href="https://daveceddia.com/create-react-app-express-backend/">couple</a> of <a href="https://daveceddia.com/create-react-app-express-production/">articles</a> on setting up React and Node to run together by <a href="https://daveceddia.com/">Dave Ceddia</a> who writes a <strong>lot</strong> about React.
 The first tutorial is fine for setting up the development environment, but it doesn’t talk much about how to get things ready to deploy. I deploy most of my personal stuff on <a href="https://heroku.com">Heroku</a>, so the second article was just what the doctor ordered for me.
 The tl;dr is to start with <code class="highlighter-rouge">create-react-app</code> to generate the base React application, then add the Express application around it. The biggest trick is in the <code class="highlighter-rouge">scripts</code> section of the server’s <code class="highlighter-rouge">package.json</code> file. Here’s what I did by following David’s tutorial and then adding a little magic of my own.</p>
-<div class="language-js highlighter-rouge"><pre class="highlight"><code>  <span class="s2">"scripts"</span><span class="err">:</span> <span class="p">{</span>
-    <span class="s2">"start"</span><span class="err">:</span> <span class="s2">"forever -m 5 bin/www"</span><span class="p">,</span>
-    <span class="s2">"heroku-postbuild"</span><span class="err">:</span> <span class="s2">"cd client &amp;&amp; yarn --production=false &amp;&amp; yarn run build"</span><span class="p">,</span>
-    <span class="s2">"dev"</span><span class="err">:</span> <span class="s2">"concurrently \"forever -m 5 -w bin/www\" \"cd client &amp;&amp; yarn start\""</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="s2">"scripts"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"start"</span><span class="p">:</span> <span class="s2">"forever -m 5 bin/www"</span><span class="p">,</span>
+    <span class="s2">"heroku-postbuild"</span><span class="p">:</span> <span class="s2">"cd client &amp;&amp; yarn --production=false &amp;&amp; yarn run build"</span><span class="p">,</span>
+    <span class="s2">"dev"</span><span class="p">:</span> <span class="s2">"concurrently </span><span class="se">\"</span><span class="s2">forever -m 5 -w bin/www</span><span class="se">\"</span><span class="s2"> </span><span class="se">\"</span><span class="s2">cd client &amp;&amp; yarn start</span><span class="se">\"</span><span class="s2">"</span>
   <span class="p">},</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>The <code class="highlighter-rouge">heroku-postbuild</code> script is straight from David’s article, and it tells Heroku to make a production build of the React app. The fact that it says <code class="highlighter-rouge">--production=false</code> just means that Heroku will install the React scripts that the package needs to compile the React app and put it into the <code class="highlighter-rouge">client/build</code> folder for the Node application to access it.
 My own piece was adding the <code class="highlighter-rouge">dev</code> script. It uses <a href="https://www.npmjs.com/package/concurrently">concurrently</a> to run the Node API and the React client app all at once. This way, I can just run <code class="highlighter-rouge">yarn dev</code> to run my development version of the application with one command, instead of having to do them manually from the command line.</p>
 

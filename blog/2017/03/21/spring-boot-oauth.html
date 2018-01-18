@@ -216,20 +216,18 @@
 
 <p>Creating a Spring Boot application is dirt simple if you use the Spring CLI. It allows you to write Groovy scripts that get rid of the boilerplate Java and build file configuration. This allows you, the developer, to focus on the necessary code. Refer to the project’s <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/getting-started-installing-spring-boot.html#getting-started-installing-the-cli">official documentation for installation instructions</a>. To install Spring CLI, I recommend using <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/getting-started-installing-spring-boot.html#getting-started-sdkman-cli-installation">SDKMAN!</a>:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>sdk install springboot
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sdk install springboot
+</code></pre></div></div>
 
 <p>Or <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/getting-started-installing-spring-boot.html#getting-started-homebrew-cli-installation">Homebrew</a> if you’re on a Mac.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>brew tap pivotal/tap
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew tap pivotal/tap
 brew install springboot
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Create a <code class="highlighter-rouge">helloWorld.groovy</code> file that has a Controller in it.</p>
 
-<div class="language-groovy highlighter-rouge"><pre class="highlight"><code><span class="nd">@Grab</span><span class="o">(</span><span class="s1">'spring-boot-starter-security'</span><span class="o">)</span>
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Grab</span><span class="o">(</span><span class="s1">'spring-boot-starter-security'</span><span class="o">)</span>
 <span class="nd">@RestController</span>
 <span class="kd">class</span> <span class="nc">Application</span> <span class="o">{</span>
 
@@ -238,16 +236,14 @@ brew install springboot
     <span class="s1">'Hello World'</span>
   <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>The <code class="highlighter-rouge">@Grab</code> annotation invokes <a href="http://docs.groovy-lang.org/latest/html/documentation/grape.html">Grape</a> to download dependencies and having Spring Security in the classpath causes its default security rules to be used. That is, protect everything, allow a user with the username <code class="highlighter-rouge">user</code>, and generate a random password on startup for said user.</p>
 
 <p>Run this app with the following command:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>spring run helloGroovy.groovy
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spring run helloGroovy.groovy
+</code></pre></div></div>
 
 <p>Navigate to <code class="highlighter-rouge">http://localhost:8080</code> and you’ll be prompted to login with your browser’s basic authentication dialog. Enter <code class="highlighter-rouge">user</code> for the username and copy/paste the generated password from your console. If you copied and pasted the password successfully, you’ll see <code class="highlighter-rouge">Hello World</code> in your browser.</p>
 
@@ -273,7 +269,7 @@ brew install springboot
 
 <p>Create a <code class="highlighter-rouge">helloOAuth.groovy</code> file that uses Spring Security and its <a href="https://spring.io/guides/tutorials/spring-boot-oauth2/">OAuth 2.0 support</a>.</p>
 
-<div class="language-groovy highlighter-rouge"><pre class="highlight"><code><span class="nd">@Grab</span><span class="o">(</span><span class="s1">'spring-boot-starter-security'</span><span class="o">)</span>
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Grab</span><span class="o">(</span><span class="s1">'spring-boot-starter-security'</span><span class="o">)</span>
 <span class="nd">@RestController</span>
 <span class="nd">@EnableOAuth2Sso</span>
 <span class="kd">class</span> <span class="nc">Application</span> <span class="o">{</span>
@@ -283,28 +279,26 @@ brew install springboot
     <span class="s1">'Hello World'</span>
   <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Adding the <code class="highlighter-rouge">@EnableOAuth2Sso</code> annotation causes Spring Security to look for a number of properties. Create <code class="highlighter-rouge">application.yml</code> in the same directory and specify the following key/value pairs.</p>
 
-<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">security</span><span class="pi">:</span>
-  <span class="s">oauth2</span><span class="pi">:</span>
-    <span class="s">client</span><span class="pi">:</span>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">security</span><span class="pi">:</span>
+  <span class="na">oauth2</span><span class="pi">:</span>
+    <span class="na">client</span><span class="pi">:</span>
       <span class="c1"># From OIDC app</span>
-      <span class="s">clientId</span><span class="pi">:</span> <span class="c1"># clientId</span>
-      <span class="s">clientSecret</span><span class="pi">:</span> <span class="c1"># clientSecret</span>
+      <span class="na">clientId</span><span class="pi">:</span> <span class="c1"># clientId</span>
+      <span class="na">clientSecret</span><span class="pi">:</span> <span class="c1"># clientSecret</span>
       <span class="c1"># From Authorization Server's metadata</span>
-      <span class="s">accessTokenUri</span><span class="pi">:</span> <span class="c1"># token_endpoint</span>
-      <span class="s">userAuthorizationUri</span><span class="pi">:</span> <span class="c1"># authorization_endpoint</span>
-      <span class="s">clientAuthenticationScheme</span><span class="pi">:</span> <span class="s">form</span>
-      <span class="s">scope</span><span class="pi">:</span> <span class="s">openid profile email</span>
-    <span class="s">resource</span><span class="pi">:</span>
+      <span class="na">accessTokenUri</span><span class="pi">:</span> <span class="c1"># token_endpoint</span>
+      <span class="na">userAuthorizationUri</span><span class="pi">:</span> <span class="c1"># authorization_endpoint</span>
+      <span class="na">clientAuthenticationScheme</span><span class="pi">:</span> <span class="s">form</span>
+      <span class="na">scope</span><span class="pi">:</span> <span class="s">openid profile email</span>
+    <span class="na">resource</span><span class="pi">:</span>
       <span class="c1"># from your Auth Server's metadata, check .well-known/openid-configuration</span>
       <span class="c1"># if not in .well-known/oauth-authorization-server</span>
-      <span class="s">userInfoUri</span><span class="pi">:</span> <span class="c1"># userinfo_endpoint</span>
-</code></pre>
-</div>
+      <span class="na">userInfoUri</span><span class="pi">:</span> <span class="c1"># userinfo_endpoint</span>
+</code></pre></div></div>
 
 <p>Start your app with <code class="highlighter-rouge">spring run helloOAuth.groovy</code> and navigate to <code class="highlighter-rouge">http://localhost:8080</code>. You’ll be redirected to Okta to login.</p>
 
@@ -314,12 +308,11 @@ brew install springboot
 
 <p>You can make one additional change to the <code class="highlighter-rouge">helloOAuth.groovy</code> file to prove it’s really working: change the <code class="highlighter-rouge">home()</code> method to return <code class="highlighter-rouge">Hello $name</code> where <code class="highlighter-rouge">$name</code> is from <code class="highlighter-rouge">javax.security.Principal</code>.</p>
 
-<div class="language-groovy highlighter-rouge"><pre class="highlight"><code><span class="nd">@GetMapping</span><span class="o">(</span><span class="s1">'/'</span><span class="o">)</span>
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@GetMapping</span><span class="o">(</span><span class="s1">'/'</span><span class="o">)</span>
 <span class="n">String</span> <span class="nf">home</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">Principal</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
   <span class="s1">'Hello '</span> <span class="o">+</span> <span class="n">user</span><span class="o">.</span><span class="na">name</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>This should result in your app showing a result like the following.</p>
 

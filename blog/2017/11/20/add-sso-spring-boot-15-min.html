@@ -220,7 +220,7 @@
 
 <p>Those of you familiar with <a href="http://maven.apache.org">Maven</a> will recognize the <strong>pom.xml</strong> file. Just four little dependencies pull in an enormous amount of functionality from Spring:</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-security<span class="nt">&lt;/artifactId&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
@@ -238,28 +238,24 @@
     <span class="nt">&lt;artifactId&gt;</span>spring-security-test<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Before getting to the fun stuff, make sure everything is kosher by running the server via:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>./mvnw spring-boot:run
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./mvnw spring-boot:run
+</code></pre></div></div>
 
 <p>Amid all the colorful log statements, the one to look for is likely second to the last:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Tomcat started on port(s): 8080 (http)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Tomcat started on port(s): 8080 (http)
+</code></pre></div></div>
 
 <p><img src="/assets/blog/add-sso-spring-boot-15-min/spring-boot-run-40ad38158686f1225e3f9a448698ef5b75d386823aa0c8eb7d89a2334f197a01.png" width="600" alt="blog/add-sso-spring-boot-15-min/spring-boot-run.png" class="center-image" /></p>
 
 <p>Because you requested the Spring Security Starter package when you created the project, the server is protected by default using <a href="https://www.httpwatch.com/httpgallery/authentication/">Basic Authentication</a>.  This can be verified by opening a browser and visiting:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>http://localhost:8080
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://localhost:8080
+</code></pre></div></div>
 
 <p>A browser dialog should appear asking for your username and password (which you haven’t set up yet):</p>
 
@@ -285,9 +281,8 @@
 
 <p>In the settings page that follows, there is one default value to change. In the <strong>Login Redirect URIs</strong> field, replace the default value with:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>http://localhost:8080/login
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://localhost:8080/login
+</code></pre></div></div>
 
 <p><img src="/assets/blog/add-sso-spring-boot-15-min/app-settings-screen-a96e2ba5c3574250549c0326777773cdbc13d7006bec2771fdc7dc1eea84c213.png" alt="Screen Shot of Okta application settings" width="600" class="center-image" /></p>
 
@@ -303,7 +298,7 @@
 
 <p>Now that your <strong>Client ID</strong>, <strong>Client Secret</strong>, and <strong>Issuer URI</strong> are stashed somewhere safely; it’s time to plug Okta into your server. Add the Okta and Spring OAuth dependencies along with the others in the <strong>pom.xml</strong> file:</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>com.okta.spring<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>okta-spring-boot-starter<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;version&gt;</span>0.2.0<span class="nt">&lt;/version&gt;</span>
@@ -313,49 +308,43 @@
     <span class="nt">&lt;artifactId&gt;</span>spring-security-oauth2<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;version&gt;</span>2.2.0.RELEASE<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Next you’ll add three values to: <code class="highlighter-rouge">src/main/resources/application.properties</code></p>
 
-<div class="language-properties highlighter-rouge"><pre class="highlight"><code><span class="py">okta.oauth2.issuer</span><span class="p">=</span><span class="s">(your **Issuer URI**)</span>
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">okta.oauth2.issuer</span><span class="p">=</span><span class="s">(your **Issuer URI**)</span>
 <span class="py">okta.oauth2.clientId</span><span class="p">=</span><span class="s">(your **Client ID**)</span>
 <span class="py">okta.oauth2.clientSecret</span><span class="p">=</span><span class="s">(your **Client Secret**)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>Like so:</p>
 
-<div class="language-properties highlighter-rouge"><pre class="highlight"><code><span class="py">okta.oauth2.issuer</span><span class="p">=</span><span class="s">https://dev-279161.oktapreview.com/oauth2/default</span>
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">okta.oauth2.issuer</span><span class="p">=</span><span class="s">https://dev-279161.oktapreview.com/oauth2/default</span>
 <span class="py">okta.oauth2.clientId</span><span class="p">=</span><span class="s">0oacqif7do3e0hD0h7</span>
 <span class="py">okta.oauth2.clientSecret</span><span class="p">=</span><span class="s">(your **Client Secret**)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>One last bit to do before reaping all that Okta can offer – use it on your server! For this post, the goal is to add single sign-on authentication, so that only users that have registered with you will be able to log into your server and interact with it. The main application class needs to tell the Okta client library to enable single sign-on, and that’s done by adding the following annotation to the main application class at: <code class="highlighter-rouge">src/main/java/com/example/demo/DemoApplication.java</code></p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@EnableOAuth2Sso</span>
-</code></pre>
-</div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@EnableOAuth2Sso</span>
+</code></pre></div></div>
 
 <p>While you’re at it, might as well add an endpoint that does something with the new user information we’re about to get. You can give the main Application class the ability to handle requests by decorating it with:</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@RestController</span>
-</code></pre>
-</div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RestController</span>
+</code></pre></div></div>
 
 <p>Okta provides the user ID of the caller via the <code class="highlighter-rouge">java.security.Principal</code> interface. By default, this is the user’s email address. You can add a request handler that echoes the user’s email address like so:</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="n">String</span> <span class="nf">echoTheUsersEmailAddress</span><span class="o">(</span><span class="n">Principal</span> <span class="n">principal</span><span class="o">)</span> <span class="o">{</span>
    <span class="k">return</span> <span class="s">"Hey there! Your email address is: "</span> <span class="o">+</span> <span class="n">principal</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
 <span class="o">}</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>With the new imports, annotations, and request handler, the main <code class="highlighter-rouge">DemoApplication.java</code> should look like this:</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">demo</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">demo</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">org.springframework.boot.SpringApplication</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.SpringBootApplication</span><span class="o">;</span>
@@ -378,8 +367,7 @@
         <span class="k">return</span> <span class="s">"Hey there! Your email address is: "</span> <span class="o">+</span> <span class="n">principal</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>When you restart the server via <code class="highlighter-rouge">./mvnw spring-boot:run</code> and visit <code class="highlighter-rouge">http://localhost:8080</code> in your browser, you’ll be taken to your personal Okta subdomain to log in:</p>
 

@@ -213,32 +213,28 @@
 <p>Making your application require TLS (HTTPS/SSL) is usually a one liner, so everybody should be doing it!</p>
 
 <p>For Apache Shiro, it is just property:</p>
-<div class="language-ini highlighter-rouge"><pre class="highlight"><code><span class="nn">[urls]</span>
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[urls]</span>
 <span class="err">/**</span> <span class="err">=</span> <span class="err">ssl</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>And Spring Security, a single method call when configuring an HttpSecurity:</p>
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">http</span><span class="o">.</span><span class="na">requiresChannel</span><span class="o">()</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">http</span><span class="o">.</span><span class="na">requiresChannel</span><span class="o">()</span>
     <span class="o">.</span><span class="na">anyRequest</span><span class="o">().</span><span class="na">requiresSecure</span><span class="o">();</span> 
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Or just use a <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/howto-embedded-servlet-containers.html#howto-configure-ssl">few properties</a> with Spring Boot:</p>
 
-<div class="language-properties highlighter-rouge"><pre class="highlight"><code><span class="py">server.port</span><span class="p">=</span><span class="s">8443</span>
-<span class="err">server.ssl.key-</span><span class="py">store</span><span class="p">=</span><span class="s">classpath:keystore.jks</span>
-<span class="err">server.ssl.key-store-</span><span class="py">password</span><span class="p">=</span><span class="s">secret</span>
-<span class="err">server.ssl.key-</span><span class="py">password</span><span class="p">=</span><span class="s">another-secret</span>
-</code></pre>
-</div>
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">server.port</span><span class="p">=</span><span class="s">8443</span>
+<span class="py">server.ssl.key-store</span><span class="p">=</span><span class="s">classpath:keystore.jks</span>
+<span class="py">server.ssl.key-store-password</span><span class="p">=</span><span class="s">secret</span>
+<span class="py">server.ssl.key-password</span><span class="p">=</span><span class="s">another-secret</span>
+</code></pre></div></div>
 
 <h2 id="3-build-your-java-web-service-with-spring-boot">3. Build your Java web service with Spring Boot</h2>
 
 <p>Spring Boot is an opinionated view of the Spring platform which makes it dead simple to write <a href="https://12factor.net/">twelve-factor apps</a> in <a href="https://virtualjug.com/building-robust-apis-and-apps-with-spring-boot-and-angular/">very few lines</a>. If you’re still building WAR files you owe it to yourself to check this out. You can create complicated, application wide functions like setting up an OAuth resource server by using a single annotation (<code class="highlighter-rouge">@EnableResourceServer</code>) or change the server’s port with a single property:</p>
-<div class="language-ini highlighter-rouge"><pre class="highlight"><code><span class="py">server.port</span> <span class="p">=</span> <span class="s">8090</span>
-</code></pre>
-</div>
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">server.port</span> <span class="p">=</span> <span class="s">8090</span>
+</code></pre></div></div>
 
 <p>If Spring is not your bag, take a look at <a href="http://www.dropwizard.io/1.1.2/docs/">Dropwizard</a> for an opinionated JAX-RS stack.</p>
 
@@ -246,59 +242,56 @@
 
 <p>It’s pretty difficult to pinpoint errors without any data. Spring Boot makes gathering metrics easy with <a href="https://spring.io/blog/2017/08/22/introducing-actuator-endpoints-in-spring-boot-2-0">Actuator</a>, just add a single dependency to your application.</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
   <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
   <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-actuator<span class="nt">&lt;/artifactId&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Then browse to <code class="highlighter-rouge">/health</code> or <code class="highlighter-rouge">/metrics</code> to view health checks or application metrics respectively. Dropwizard does the same thing with <code class="highlighter-rouge">/healthcheck</code> and <code class="highlighter-rouge">/metrics</code>.</p>
 
 <p>Here’s an output from a Spring Boot application’s <code class="highlighter-rouge">/metrics</code> endpoint, out of the box:</p>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"classes"</span><span class="p">:</span><span class="w"> </span><span class="mi">7704</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"classes.loaded"</span><span class="p">:</span><span class="w"> </span><span class="mi">7704</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"classes.unloaded"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"counter.status.200.metrics"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"gauge.response.metrics"</span><span class="p">:</span><span class="w"> </span><span class="mf">99.0</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"gc.ps_marksweep.count"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"gc.ps_marksweep.time"</span><span class="p">:</span><span class="w"> </span><span class="mi">272</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"gc.ps_scavenge.count"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"gc.ps_scavenge.time"</span><span class="p">:</span><span class="w"> </span><span class="mi">136</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"heap"</span><span class="p">:</span><span class="w"> </span><span class="mi">3728384</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"heap.committed"</span><span class="p">:</span><span class="w"> </span><span class="mi">470016</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"heap.init"</span><span class="p">:</span><span class="w"> </span><span class="mi">262144</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"heap.used"</span><span class="p">:</span><span class="w"> </span><span class="mi">207793</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"httpsessions.active"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"httpsessions.max"</span><span class="p">:</span><span class="w"> </span><span class="mi">-1</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"instance.uptime"</span><span class="p">:</span><span class="w"> </span><span class="mi">25020</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"mem"</span><span class="p">:</span><span class="w"> </span><span class="mi">529086</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"mem.free"</span><span class="p">:</span><span class="w"> </span><span class="mi">262222</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"nonheap"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"nonheap.committed"</span><span class="p">:</span><span class="w"> </span><span class="mi">60608</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"nonheap.init"</span><span class="p">:</span><span class="w"> </span><span class="mi">2496</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"nonheap.used"</span><span class="p">:</span><span class="w"> </span><span class="mi">59067</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"processors"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"systemload.average"</span><span class="p">:</span><span class="w"> </span><span class="mf">5.56103515625</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"threads"</span><span class="p">:</span><span class="w"> </span><span class="mi">24</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"threads.daemon"</span><span class="p">:</span><span class="w"> </span><span class="mi">22</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"threads.peak"</span><span class="p">:</span><span class="w"> </span><span class="mi">28</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"threads.totalStarted"</span><span class="p">:</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"uptime"</span><span class="p">:</span><span class="w"> </span><span class="mi">37182</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"classes"</span><span class="p">:</span><span class="w"> </span><span class="mi">7704</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"classes.loaded"</span><span class="p">:</span><span class="w"> </span><span class="mi">7704</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"classes.unloaded"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"counter.status.200.metrics"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"gauge.response.metrics"</span><span class="p">:</span><span class="w"> </span><span class="mf">99.0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"gc.ps_marksweep.count"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"gc.ps_marksweep.time"</span><span class="p">:</span><span class="w"> </span><span class="mi">272</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"gc.ps_scavenge.count"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"gc.ps_scavenge.time"</span><span class="p">:</span><span class="w"> </span><span class="mi">136</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"heap"</span><span class="p">:</span><span class="w"> </span><span class="mi">3728384</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"heap.committed"</span><span class="p">:</span><span class="w"> </span><span class="mi">470016</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"heap.init"</span><span class="p">:</span><span class="w"> </span><span class="mi">262144</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"heap.used"</span><span class="p">:</span><span class="w"> </span><span class="mi">207793</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"httpsessions.active"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"httpsessions.max"</span><span class="p">:</span><span class="w"> </span><span class="mi">-1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"instance.uptime"</span><span class="p">:</span><span class="w"> </span><span class="mi">25020</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"mem"</span><span class="p">:</span><span class="w"> </span><span class="mi">529086</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"mem.free"</span><span class="p">:</span><span class="w"> </span><span class="mi">262222</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"nonheap"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"nonheap.committed"</span><span class="p">:</span><span class="w"> </span><span class="mi">60608</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"nonheap.init"</span><span class="p">:</span><span class="w"> </span><span class="mi">2496</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"nonheap.used"</span><span class="p">:</span><span class="w"> </span><span class="mi">59067</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"processors"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"systemload.average"</span><span class="p">:</span><span class="w"> </span><span class="mf">5.56103515625</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"threads"</span><span class="p">:</span><span class="w"> </span><span class="mi">24</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"threads.daemon"</span><span class="p">:</span><span class="w"> </span><span class="mi">22</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"threads.peak"</span><span class="p">:</span><span class="w"> </span><span class="mi">28</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"threads.totalStarted"</span><span class="p">:</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"uptime"</span><span class="p">:</span><span class="w"> </span><span class="mi">37182</span><span class="w">
 </span><span class="p">}</span><span class="w">
 
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <h2 id="5-protect-your-sensitive-bits">5. Protect your sensitive bits</h2>
 
 <p>People treat API keys insecurely, it’s a fact of life. Keys get emailed around or checked into source control. Maybe this is because they seem more opaque than a password, I don’t know, but they’re just as sensitive, if not more so. If you need to store your API keys in a file, make sure there is limited access to that file. For example, we recommend storing our Okta yaml file in private directory <code class="highlighter-rouge">~/.okta/okta.yaml</code> and setting the file permissions to allow only the owner to read:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>chmod <span class="nv">u</span><span class="o">=</span>r,go-rwx ~/.okta/okta.yaml
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>chmod <span class="nv">u</span><span class="o">=</span>r,go-rwx ~/.okta/okta.yaml
+</code></pre></div></div>
 
 <p>If you are creating API keys for users of your applications, plan to warn them. SSH ignores files in your <code class="highlighter-rouge">~/.ssh</code> directory if the permissions are not set correctly. Github does a great job of warning users by marking items in the UI with ‘Danger Zone’ marking.</p>
 

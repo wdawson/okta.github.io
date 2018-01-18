@@ -241,29 +241,27 @@
 
 <p>Vert.x offers a versatile config library, albeit a little more work to set up than in Spring. This example will make use of a handful of config values, so you can take this opportunity to add Vert.x Config to your project. The dependency should already be present in your <code class="highlighter-rouge">pom.xml</code> if you specified Vert.x Config when creating the starter project.</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
    <span class="nt">&lt;groupId&gt;</span>io.vertx<span class="nt">&lt;/groupId&gt;</span>
    <span class="nt">&lt;artifactId&gt;</span>vertx-config<span class="nt">&lt;/artifactId&gt;</span>
    <span class="nt">&lt;version&gt;</span>${vertx.version}<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Create a file called <code class="highlighter-rouge">src/main/application.json</code> and add the following content:</p>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-   </span><span class="nt">"clientId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{okta-client-id}"</span><span class="p">,</span><span class="w">
-   </span><span class="nt">"clientSecret"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{okta-client-secret}"</span><span class="p">,</span><span class="w">
-   </span><span class="nt">"issuer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://{yourOktaDomain}/oauth2/default"</span><span class="p">,</span><span class="w">
-   </span><span class="nt">"callbackUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/login"</span><span class="p">,</span><span class="w">
-   </span><span class="nt">"port"</span><span class="p">:</span><span class="w"> </span><span class="mi">8080</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+   </span><span class="s2">"clientId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{okta-client-id}"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"clientSecret"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{okta-client-secret}"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"issuer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://{yourOktaDomain}/oauth2/default"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"callbackUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/login"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"port"</span><span class="p">:</span><span class="w"> </span><span class="mi">8080</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>You’ll be updating those values shortly. Now in <code class="highlighter-rouge">src/main/java/com/example/demo/MainVerticle.java</code>, replace the contents of the <code class="highlighter-rouge">start()</code> method with the following, which will load the config. Notice that when it completes, it calls a method called <code class="highlighter-rouge">startServer()</code> that doesn’t exist yet. You will add that in the next section.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@Override</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Override</span>
 <span class="kd">public</span> <span class="kt">void</span> <span class="nf">start</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
    <span class="n">ConfigStoreOptions</span> <span class="n">fileStore</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ConfigStoreOptions</span><span class="o">()</span>
        <span class="o">.</span><span class="na">setType</span><span class="o">(</span><span class="s">"file"</span><span class="o">)</span>
@@ -280,14 +278,13 @@
        <span class="o">}</span>
    <span class="o">});</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="incorporate-the-vertx-router">Incorporate the Vert.x Router</h2>
 
 <p>By leveraging the <a href="http://vertx.io/docs/apidocs/io/vertx/ext/web/Router.html">Vert.x Router</a>, you will be able to easily intercept calls to sensitive endpoints and enforce preauthentication. To do this, you’ll now implement  the <code class="highlighter-rouge">startServer()</code> method in <code class="highlighter-rouge">src/main/java/com/example/demo/MainVerticle.java</code>:</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">startServer</span><span class="o">()</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">startServer</span><span class="o">()</span> <span class="o">{</span>
 
     <span class="n">Router</span> <span class="n">router</span> <span class="o">=</span> <span class="n">Router</span><span class="o">.</span><span class="na">router</span><span class="o">(</span><span class="n">vertx</span><span class="o">);</span>
 
@@ -300,8 +297,7 @@
 		<span class="o">.</span><span class="na">requestHandler</span><span class="o">(</span><span class="nl">router:</span><span class="o">:</span><span class="n">accept</span><span class="o">)</span>
 		<span class="o">.</span><span class="na">listen</span><span class="o">(</span><span class="n">config</span><span class="o">().</span><span class="na">getInteger</span><span class="o">(</span><span class="s">"port"</span><span class="o">));</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>In the example above, you have created a new endpoint at <code class="highlighter-rouge">/private/secret</code> with the intent of soon protecting every endpoint under the <code class="highlighter-rouge">/private</code> path. But first, the Vert.x OAuth handler needs to be set up.</p>
 
@@ -322,7 +318,7 @@
 
 <p>Vert.x comes with an out-of-the-box OAuth manager that integrates nicely with Okta as an identity provider.  To keep things tidy, you’ll create a separate factory method in <code class="highlighter-rouge">src/main/java/com/example/demo/MainVerticle.java</code>that produces a configured OAuth handler.  Add the following to the <code class="highlighter-rouge">MainVerticle</code> class, replacing the client info below with your account details obtained from the Okta developer dashboard:</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">AuthHandler</span> <span class="nf">getOAuthHandler</span><span class="o">(</span><span class="n">Router</span> <span class="n">router</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">AuthHandler</span> <span class="nf">getOAuthHandler</span><span class="o">(</span><span class="n">Router</span> <span class="n">router</span><span class="o">)</span> <span class="o">{</span>
     <span class="n">OAuth2Auth</span> <span class="n">oauth2</span> <span class="o">=</span> <span class="n">OAuth2Auth</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">vertx</span><span class="o">,</span> <span class="n">OAuth2FlowType</span><span class="o">.</span><span class="na">AUTH_CODE</span><span class="o">,</span> <span class="k">new</span> <span class="n">OAuth2ClientOptions</span><span class="o">()</span>
         <span class="o">.</span><span class="na">setClientID</span><span class="o">(</span><span class="n">config</span><span class="o">().</span><span class="na">getString</span><span class="o">(</span><span class="s">"clientId"</span><span class="o">))</span>
         <span class="o">.</span><span class="na">setClientSecret</span><span class="o">(</span><span class="n">config</span><span class="o">().</span><span class="na">getString</span><span class="o">(</span><span class="s">"clientSecret"</span><span class="o">))</span>
@@ -338,8 +334,7 @@
     <span class="n">authHandler</span><span class="o">.</span><span class="na">setupCallback</span><span class="o">(</span><span class="n">router</span><span class="o">.</span><span class="na">route</span><span class="o">());</span>
     <span class="k">return</span> <span class="n">authHandler</span><span class="o">;</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>In the above example, note the three requested scopes: <strong>openid</strong>, <strong>profile</strong>, and  <strong>email</strong>. Future posts will explore additional scopes and authorization levels, but for now, these three will provide the absolute essentials (such as the user’s name and email address). Using the email address, you can also directly query Okta’s API for additional information about the user, and to perform account management tasks.</p>
 
@@ -349,7 +344,7 @@
 
 <p>Alter the <code class="highlighter-rouge">startServer()</code> method of the <code class="highlighter-rouge">MainVerticle</code> class as indicated below to generate and register the handler:</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">void</span> <span class="nf">startServer</span><span class="o">()</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">void</span> <span class="nf">startServer</span><span class="o">()</span> <span class="o">{</span>
 
     <span class="n">Router</span> <span class="n">router</span> <span class="o">=</span> <span class="n">Router</span><span class="o">.</span><span class="na">router</span><span class="o">(</span><span class="n">vertx</span><span class="o">);</span>
 
@@ -367,8 +362,7 @@
 		<span class="o">.</span><span class="na">requestHandler</span><span class="o">(</span><span class="nl">router:</span><span class="o">:</span><span class="n">accept</span><span class="o">)</span>
 		<span class="o">.</span><span class="na">listen</span><span class="o">(</span><span class="n">config</span><span class="o">().</span><span class="na">getString</span><span class="o">(</span><span class="err">“</span><span class="n">port</span><span class="err">”</span><span class="o">));</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>This would be an excellent time to start up the server again and make sure everything is running as expected. By running <code class="highlighter-rouge">mvn compile java:exec</code> again and hitting <code class="highlighter-rouge">http://localhost:8080/private/secret</code> from your browser, you should now be automatically redirected to Okta’s login page. After logging in, you should then be redirected back to your site to continue responding to the original <code class="highlighter-rouge">/private/secret</code> request.</p>
 
@@ -378,16 +372,15 @@
 
 <p>Both the <code class="highlighter-rouge">access_token</code> and <code class="highlighter-rouge">id_token</code> are available, but this tutorial will only decode the <code class="highlighter-rouge">id_token</code>. There is a similar function to decode the <code class="highlighter-rouge">access_token</code> if needed.  To accomplish this, include the Okta JWT lib dependency in your <code class="highlighter-rouge">pom.xml</code>:</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>com.okta.jwt<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>okta-jwt-verifier<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;version&gt;</span>0.2.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>…and add the following new function to the <code class="highlighter-rouge">MainVertical</code> class:</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="nf">getIdClaims</span><span class="o">(</span><span class="n">RoutingContext</span> <span class="n">ctx</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="nf">getIdClaims</span><span class="o">(</span><span class="n">RoutingContext</span> <span class="n">ctx</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">try</span> <span class="o">{</span>
         <span class="n">JwtVerifier</span> <span class="n">jwtVerifier</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JwtHelper</span><span class="o">()</span>
             <span class="o">.</span><span class="na">setIssuerUrl</span><span class="o">(</span><span class="n">config</span><span class="o">().</span><span class="na">getString</span><span class="o">(</span><span class="err">“</span><span class="n">issuer</span><span class="err">”</span><span class="o">))</span>
@@ -402,12 +395,11 @@
         <span class="k">return</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>And that’s it! You can now access user information in your request handler. To demonstrate, the <code class="highlighter-rouge">/private/secret</code> handler can be updated to retrieve claims from the JWT as shown below:</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">startServer</span><span class="o">()</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">startServer</span><span class="o">()</span> <span class="o">{</span>
 
     <span class="n">Router</span> <span class="n">router</span> <span class="o">=</span> <span class="n">Router</span><span class="o">.</span><span class="na">router</span><span class="o">(</span><span class="n">vertx</span><span class="o">);</span>
     <span class="n">AuthHandler</span> <span class="n">authHandler</span> <span class="o">=</span> <span class="n">getOAuthHandler</span><span class="o">(</span><span class="n">router</span><span class="o">);</span>
@@ -423,8 +415,7 @@
 
     <span class="n">vertx</span><span class="o">.</span><span class="na">createHttpServer</span><span class="o">().</span><span class="na">requestHandler</span><span class="o">(</span><span class="nl">router:</span><span class="o">:</span><span class="n">accept</span><span class="o">).</span><span class="na">listen</span><span class="o">(</span><span class="n">config</span><span class="o">().</span><span class="na">getString</span><span class="o">(</span><span class="err">“</span><span class="n">port</span><span class="err">”</span><span class="o">));</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>With this final change, restarting your server and once again hitting <code class="highlighter-rouge">http://localhost:8080/private/secret</code>, your browser should now display a message with your authenticated user’s information!</p>
 

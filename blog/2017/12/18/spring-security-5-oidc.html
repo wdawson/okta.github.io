@@ -245,9 +245,8 @@ If you’re not familiar with OAuth or OIDC, I recommend you read <a href="/blog
 
 <p>The Spring Security starter creates a default user with username “user” and a password that changes every time you start the application. You can find this password in your terminal, similar to the one below.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Using default security password: 103c55b4-2760-4830-9bca-a06a87d384f9
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Using default security password: 103c55b4-2760-4830-9bca-a06a87d384f9
+</code></pre></div></div>
 
 <p>In the form, enter “user” for the User and the generated password for Password. The next screen will be a 404 since your app doesn’t have a default route configured for the <code class="highlighter-rouge">/</code> path.</p>
 
@@ -255,44 +254,41 @@ If you’re not familiar with OAuth or OIDC, I recommend you read <a href="/blog
 
 <p>In Spring Boot 1.x, you could change the user’s password, so it’s the same every time by adding the following to <code class="highlighter-rouge">src/main/resources/application.properties</code>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>security.user.password=spring security is ph@!
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>security.user.password=spring security is ph@!
+</code></pre></div></div>
 
 <p>However, this is a deprecated feature in Spring Boot 2.0. The good news is this change will <a href="https://github.com/spring-projects/spring-boot/issues/10963">likely be reverted before a GA release</a>.</p>
 
 <p>In the meantime, you can copy the password that’s printed to your console and use it with <a href="https://httpie.org/">HTTPie</a>.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>http --auth user:<span class="s1">'bf91316f-f894-453a-9268-4826cdd7e151'</span> localhost:8080
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>http <span class="nt">--auth</span> user:<span class="s1">'bf91316f-f894-453a-9268-4826cdd7e151'</span> localhost:8080
 HTTP/1.1 404
 Cache-Control: no-cache, no-store, max-age<span class="o">=</span>0, must-revalidate
-Content-Type: application/json;charset<span class="o">=</span>UTF-8
+Content-Type: application/json<span class="p">;</span><span class="nv">charset</span><span class="o">=</span>UTF-8
 Date: Sun, 03 Dec 2017 19:11:50 GMT
 Expires: 0
 Pragma: no-cache
-Set-Cookie: <span class="nv">JSESSIONID</span><span class="o">=</span>65283FCBDB9E6EF1C0679290AA994B0D; <span class="nv">Path</span><span class="o">=</span>/; HttpOnly
+Set-Cookie: <span class="nv">JSESSIONID</span><span class="o">=</span>65283FCBDB9E6EF1C0679290AA994B0D<span class="p">;</span> <span class="nv">Path</span><span class="o">=</span>/<span class="p">;</span> HttpOnly
 Transfer-Encoding: chunked
 X-Content-Type-Options: nosniff
 X-Frame-Options: DENY
-X-XSS-Protection: 1; <span class="nv">mode</span><span class="o">=</span>block
-</code></pre>
-</div>
+X-XSS-Protection: 1<span class="p">;</span> <span class="nv">mode</span><span class="o">=</span>block
+</code></pre></div></div>
 
 <p>The response will be a 404 as well.</p>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-   </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Not Found"</span><span class="p">,</span><span class="w">
-   </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"No message available"</span><span class="p">,</span><span class="w">
-   </span><span class="nt">"path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/"</span><span class="p">,</span><span class="w">
-   </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">404</span><span class="p">,</span><span class="w">
-   </span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-12-03T19:11:50.846+0000"</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+   </span><span class="s2">"error"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Not Found"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"No message available"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">404</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-12-03T19:11:50.846+0000"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>You can get rid of the 404 by creating a <code class="highlighter-rouge">MainController.java</code> in the same directory as <code class="highlighter-rouge">OidcApplication.java</code> (<code class="highlighter-rouge">src/main/java/com/okta/developer/oidc</code>). Create a <code class="highlighter-rouge">home()</code> method that maps to <code class="highlighter-rouge">/</code> and returns the user’s name.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">okta</span><span class="o">.</span><span class="na">developer</span><span class="o">.</span><span class="na">oidc</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">okta</span><span class="o">.</span><span class="na">developer</span><span class="o">.</span><span class="na">oidc</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.GetMapping</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="o">;</span>
@@ -307,27 +303,25 @@ X-XSS-Protection: 1; <span class="nv">mode</span><span class="o">=</span>block
        <span class="k">return</span> <span class="s">"Hello "</span> <span class="o">+</span> <span class="n">user</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
    <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Restart your server, log in with <code class="highlighter-rouge">user</code> and the generated password and you should see <code class="highlighter-rouge">Hello user</code>.</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>http --auth user:<span class="s1">'d7c4138d-a1cc-4cc9-8975-97f37567594a'</span> localhost:8080
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>http <span class="nt">--auth</span> user:<span class="s1">'d7c4138d-a1cc-4cc9-8975-97f37567594a'</span> localhost:8080
 HTTP/1.1 200
 Cache-Control: no-cache, no-store, max-age<span class="o">=</span>0, must-revalidate
 Content-Length: 10
-Content-Type: text/plain;charset<span class="o">=</span>UTF-8
+Content-Type: text/plain<span class="p">;</span><span class="nv">charset</span><span class="o">=</span>UTF-8
 Date: Sun, 03 Dec 2017 19:26:54 GMT
 Expires: 0
 Pragma: no-cache
-Set-Cookie: <span class="nv">JSESSIONID</span><span class="o">=</span>22A5A91051B7AFBA1DC8BD30C0B53365; <span class="nv">Path</span><span class="o">=</span>/; HttpOnly
+Set-Cookie: <span class="nv">JSESSIONID</span><span class="o">=</span>22A5A91051B7AFBA1DC8BD30C0B53365<span class="p">;</span> <span class="nv">Path</span><span class="o">=</span>/<span class="p">;</span> HttpOnly
 X-Content-Type-Options: nosniff
 X-Frame-Options: DENY
-X-XSS-Protection: 1; <span class="nv">mode</span><span class="o">=</span>block
+X-XSS-Protection: 1<span class="p">;</span> <span class="nv">mode</span><span class="o">=</span>block
 
 Hello user
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="add-authentication-with-okta">Add Authentication with Okta</h2>
 
@@ -339,30 +333,29 @@ Hello user
 
 <p>Rename <code class="highlighter-rouge">src/main/resources/application.properties</code> to <code class="highlighter-rouge">src/main/resources/application.yml</code> and populate it with the following.</p>
 
-<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">spring</span><span class="pi">:</span>
- <span class="s">thymeleaf</span><span class="pi">:</span>
-   <span class="s">cache</span><span class="pi">:</span> <span class="s">false</span>
- <span class="s">security</span><span class="pi">:</span>
-   <span class="s">oauth2</span><span class="pi">:</span>
-     <span class="s">client</span><span class="pi">:</span>
-       <span class="s">registration</span><span class="pi">:</span>
-         <span class="s">okta</span><span class="pi">:</span>
-           <span class="s">client-id</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">clientId</span><span class="pi">}</span>
-           <span class="s">client-secret</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">clientSecret</span><span class="pi">}</span>
-       <span class="s">provider</span><span class="pi">:</span>
-         <span class="s">okta</span><span class="pi">:</span>
-           <span class="s">authorization-uri</span><span class="pi">:</span> <span class="s"><span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>/oauth2/default/v1/authorize</span>
-           <span class="s">token-uri</span><span class="pi">:</span> <span class="s"><span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>/oauth2/default/v1/token</span>
-           <span class="s">user-info-uri</span><span class="pi">:</span> <span class="s"><span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>/oauth2/default/v1/userinfo</span>
-           <span class="s">jwk-set-uri</span><span class="pi">:</span> <span class="s"><span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>/oauth2/default/v1/keys</span>
-</code></pre>
-</div>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">spring</span><span class="pi">:</span>
+ <span class="na">thymeleaf</span><span class="pi">:</span>
+   <span class="na">cache</span><span class="pi">:</span> <span class="no">false</span>
+ <span class="na">security</span><span class="pi">:</span>
+   <span class="na">oauth2</span><span class="pi">:</span>
+     <span class="na">client</span><span class="pi">:</span>
+       <span class="na">registration</span><span class="pi">:</span>
+         <span class="na">okta</span><span class="pi">:</span>
+           <span class="na">client-id</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">clientId</span><span class="pi">}</span>
+           <span class="na">client-secret</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">clientSecret</span><span class="pi">}</span>
+       <span class="na">provider</span><span class="pi">:</span>
+         <span class="na">okta</span><span class="pi">:</span>
+           <span class="na">authorization-uri</span><span class="pi">:</span> <span class="s"><span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>/oauth2/default/v1/authorize</span>
+           <span class="na">token-uri</span><span class="pi">:</span> <span class="s"><span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>/oauth2/default/v1/token</span>
+           <span class="na">user-info-uri</span><span class="pi">:</span> <span class="s"><span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>/oauth2/default/v1/userinfo</span>
+           <span class="na">jwk-set-uri</span><span class="pi">:</span> <span class="s"><span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>/oauth2/default/v1/keys</span>
+</code></pre></div></div>
 
-<p>Copy the client ID and secret from your OIDC app into your <code class="highlighter-rouge">application.yml</code> file. For <code class="highlighter-rouge"><span class="p">{</span><span class="err">yourOktaDomain</span><span class="p">}</span></code>, use the value of your domain (e.g. <code class="highlighter-rouge">dev-158606.oktapreview.com</code>). Make sure it does <em>not</em> include <code class="highlighter-rouge">-admin</code> in it.</p>
+<p>Copy the client ID and secret from your OIDC app into your <code class="highlighter-rouge">application.yml</code> file. For <code class="highlighter-rouge">{yourOktaDomain}</code>, use the value of your domain (e.g. <code class="highlighter-rouge">dev-158606.oktapreview.com</code>). Make sure it does <em>not</em> include <code class="highlighter-rouge">-admin</code> in it.</p>
 
 <p>You’ll need to add some dependencies to your <code class="highlighter-rouge">pom.xml</code> for Spring Security 5’s OAuth configuration to initialize correctly.</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
    <span class="nt">&lt;groupId&gt;</span>org.springframework.security<span class="nt">&lt;/groupId&gt;</span>
    <span class="nt">&lt;artifactId&gt;</span>spring-security-config<span class="nt">&lt;/artifactId&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
@@ -378,8 +371,7 @@ Hello user
    <span class="nt">&lt;groupId&gt;</span>org.thymeleaf.extras<span class="nt">&lt;/groupId&gt;</span>
    <span class="nt">&lt;artifactId&gt;</span>thymeleaf-extras-springsecurity4<span class="nt">&lt;/artifactId&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Restart your app and navigate to <code class="highlighter-rouge">http://localhost:8080</code> again. You’ll see a link to click on to log in with Okta.</p>
 
@@ -401,7 +393,7 @@ Hello user
 
 <p>Change your <code class="highlighter-rouge">MainController.java</code> to have the code below. This code adds a <code class="highlighter-rouge">/userinfo</code> mapping that uses Spring WebFlux’s <code class="highlighter-rouge">WebClient</code> to get the user’s information from the user info endpoint. I copied the code below from Spring Security 5’s <a href="https://github.com/spring-projects/spring-security/tree/5.0.0.RELEASE/samples/boot/oauth2login">OAuth 2.0 Login sample</a>.</p>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="cm">/*
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*
 * Copyright 2002-2017 the original author or authors.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
@@ -488,12 +480,11 @@ Hello user
                <span class="o">});</span>
    <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Create a Thymeleaf index page at <code class="highlighter-rouge">src/main/resources/templates/index.html</code>. You can use Thymeleaf’s support for Spring Security to show/hide different parts of the page based on the user’s authenticated status.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="nt">&lt;html</span> <span class="na">xmlns=</span><span class="s">"http://www.w3.org/1999/xhtml"</span> <span class="na">xmlns:th=</span><span class="s">"http://www.thymeleaf.org"</span>
      <span class="na">xmlns:sec=</span><span class="s">"http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"</span><span class="nt">&gt;</span>
 <span class="nt">&lt;head&gt;</span>
@@ -523,12 +514,11 @@ Hello user
 <span class="nt">&lt;/div&gt;</span>
 <span class="nt">&lt;/body&gt;</span>
 <span class="nt">&lt;/html&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Create another template at <code class="highlighter-rouge">src/main/resources/userinfo.html</code> to display the user’s attributes.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="nt">&lt;html</span> <span class="na">xmlns=</span><span class="s">"http://www.w3.org/1999/xhtml"</span> <span class="na">xmlns:th=</span><span class="s">"http://www.thymeleaf.org"</span><span class="nt">&gt;</span>
 <span class="nt">&lt;head&gt;</span>
    <span class="nt">&lt;title&gt;</span>Spring Security - OAuth 2.0 User Info<span class="nt">&lt;/title&gt;</span>
@@ -547,8 +537,7 @@ Hello user
 <span class="nt">&lt;/div&gt;</span>
 <span class="nt">&lt;/body&gt;</span>
 <span class="nt">&lt;/html&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Now, when you’re logged in, you’ll see a link to display user info.</p>
 
@@ -565,7 +554,7 @@ Hello user
 <p>These resources provide additional information about Okta and OIDC:</p>
 
 <ul>
-  <li><a href="/documentation/">Okta Developer Documentation</a> and its <a href="/docs/api/resources/oidc.html">OpenID Connect API</a></li>
+  <li><a href="/documentation/">Okta Developer Documentation</a> and its <a href="/docs/api/resources/oidc">OpenID Connect API</a></li>
   <li><a href="/blog/2017/07/25/oidc-primer-part-1">Identity, Claims, &amp; Tokens – An OpenID Connect Primer, Part 1 of 3</a></li>
   <li><a href="/blog/2017/07/25/oidc-primer-part-2">OIDC in Action – An OpenID Connect Primer, Part 2 of 3</a></li>
   <li><a href="/blog/2017/08/01/oidc-primer-part-3">What’s in a Token? – An OpenID Connect Primer, Part 3 of 3</a></li>

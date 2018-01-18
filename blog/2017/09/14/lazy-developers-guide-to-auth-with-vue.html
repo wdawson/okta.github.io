@@ -202,12 +202,11 @@
 
 <p>I installed <a href="https://github.com/vuejs/vue-cli">Vue CLI</a> and went to work.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>npm install -g vue-cli
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install -g vue-cli
 vue init pwa okta-vue-auth-example
 cd okta-vue-auth-example
 npm i
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><img src="/assets/blog/vue-auth-sdk/vue-init-b68441585a73522592020e6fdb58e0e527a5c82d541a3c0852fcdb60f111fce5.png" alt="Vue Init" class="center-image" /></p>
 
@@ -221,28 +220,26 @@ npm i
 
 <p>If you’d like to follow along, create the project using <code class="highlighter-rouge">vue init</code> as I did above, then create <code class="highlighter-rouge">src/components/About.vue</code> with the following HTML.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;template&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;template&gt;</span>
   <span class="nt">&lt;div&gt;</span>
     <span class="nt">&lt;h2&gt;</span>About<span class="nt">&lt;/h2&gt;</span>
   <span class="nt">&lt;/div&gt;</span>
 <span class="nt">&lt;/template&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Create <code class="highlighter-rouge">src/components/Dashboard.vue</code>. This page will only be viewable to authenticated folks.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;template&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;template&gt;</span>
   <span class="nt">&lt;div&gt;</span>
     <span class="nt">&lt;h2&gt;</span>Dashboard<span class="nt">&lt;/h2&gt;</span>
     <span class="nt">&lt;p&gt;</span>Yay you made it!<span class="nt">&lt;/p&gt;</span>
   <span class="nt">&lt;/div&gt;</span>
 <span class="nt">&lt;/template&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Copy the <a href="https://github.com/vuejs/vue-router/blob/dev/examples/auth-flow/components/Login.vue"><code class="highlighter-rouge">Login.vue</code></a> from <code class="highlighter-rouge">auth-flow</code> to <code class="highlighter-rouge">src/components/Login.vue</code>.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;template&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;template&gt;</span>
   <span class="nt">&lt;div&gt;</span>
     <span class="nt">&lt;h2&gt;</span>Login<span class="nt">&lt;/h2&gt;</span>
     <span class="nt">&lt;p</span> <span class="na">v-if=</span><span class="s">"$route.query.redirect"</span><span class="nt">&gt;</span>
@@ -258,8 +255,8 @@ npm i
 <span class="nt">&lt;/template&gt;</span>
 
 <span class="nt">&lt;script&gt;</span>
-  <span class="kr">import</span> <span class="nx">auth</span> <span class="nx">from</span> <span class="s1">'../auth'</span>
-  <span class="kr">export</span> <span class="k">default</span> <span class="p">{</span>
+  <span class="k">import</span> <span class="nx">auth</span> <span class="k">from</span> <span class="s1">'../auth'</span>
+  <span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
     <span class="nx">data</span> <span class="p">()</span> <span class="p">{</span>
       <span class="k">return</span> <span class="p">{</span>
         <span class="na">email</span><span class="p">:</span> <span class="s1">'joe@example.com'</span><span class="p">,</span>
@@ -286,16 +283,15 @@ npm i
     <span class="nl">color</span><span class="p">:</span> <span class="no">red</span><span class="p">;</span>
   <span class="p">}</span>
 <span class="nt">&lt;/style&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>This component depends on <a href="https://github.com/vuejs/vue-router/blob/dev/examples/auth-flow/auth.js"><code class="highlighter-rouge">auth.js</code></a>, which fakes authentication. Create <code class="highlighter-rouge">src/auth.js</code> and paste in the fake auth implementation (for now).</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="cm">/* globals localStorage */</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* globals localStorage */</span>
 
-<span class="kr">export</span> <span class="k">default</span> <span class="p">{</span>
+<span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
   <span class="nx">login</span> <span class="p">(</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">cb</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">[</span><span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="nx">cb</span> <span class="o">=</span> <span class="kr">arguments</span><span class="p">[</span><span class="kr">arguments</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">token</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">onChange</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
@@ -342,12 +338,11 @@ npm i
     <span class="p">}</span>
   <span class="p">},</span> <span class="mi">0</span><span class="p">)</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Copy <a href="https://github.com/vuejs/vue-router/blob/dev/examples/auth-flow/components/App.vue"><code class="highlighter-rouge">App.vue</code></a> (or the code below) from <code class="highlighter-rouge">auth-flow</code> to <code class="highlighter-rouge">src/App.vue</code>:</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;template&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;template&gt;</span>
   <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"app"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;h1&gt;</span>Auth Flow<span class="nt">&lt;/h1&gt;</span>
     <span class="nt">&lt;ul&gt;</span>
@@ -373,8 +368,8 @@ npm i
 <span class="nt">&lt;/template&gt;</span>
 
 <span class="nt">&lt;script&gt;</span>
-<span class="kr">import</span> <span class="nx">auth</span> <span class="nx">from</span> <span class="s1">'./auth'</span>
-<span class="kr">export</span> <span class="k">default</span> <span class="p">{</span>
+<span class="k">import</span> <span class="nx">auth</span> <span class="k">from</span> <span class="s1">'./auth'</span>
+<span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
   <span class="nx">data</span> <span class="p">()</span> <span class="p">{</span>
     <span class="k">return</span> <span class="p">{</span>
       <span class="na">loggedIn</span><span class="p">:</span> <span class="nx">auth</span><span class="p">.</span><span class="nx">loggedIn</span><span class="p">()</span>
@@ -387,12 +382,11 @@ npm i
   <span class="p">}</span>
 <span class="p">}</span>
 <span class="nt">&lt;/script&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Add the following HTML/CSS to the bottom of <code class="highlighter-rouge">src/App.vue</code> to give it the same styling that the <code class="highlighter-rouge">auth-flow</code> project has.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;style&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;style&gt;</span>
   <span class="nt">html</span><span class="o">,</span> <span class="nt">body</span> <span class="p">{</span>
     <span class="nl">font-family</span><span class="p">:</span> <span class="n">-apple-system</span><span class="p">,</span> <span class="n">BlinkMacSystemFont</span><span class="p">,</span> <span class="s1">"Segoe UI"</span><span class="p">,</span> <span class="n">Roboto</span><span class="p">,</span> <span class="n">Helvetica</span><span class="p">,</span> <span class="n">Arial</span><span class="p">,</span> <span class="nb">sans-serif</span><span class="p">,</span> <span class="s1">"Apple Color Emoji"</span><span class="p">,</span> <span class="s1">"Segoe UI Emoji"</span><span class="p">,</span> <span class="s1">"Segoe UI Symbol"</span><span class="p">;</span>
     <span class="nl">color</span><span class="p">:</span> <span class="m">#2c3e50</span><span class="p">;</span>
@@ -416,21 +410,20 @@ npm i
     <span class="nl">color</span><span class="p">:</span> <span class="m">#4fc08d</span><span class="p">;</span>
   <span class="p">}</span>
 <span class="nt">&lt;/style&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Replace <code class="highlighter-rouge">src/router/index.js</code> with the following code. This sets up routing for the application, protects the dashboard, and looks intuitive doing it!</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="nx">Vue</span> <span class="nx">from</span> <span class="s1">'vue'</span>
-<span class="kr">import</span> <span class="nx">Router</span> <span class="nx">from</span> <span class="s1">'vue-router'</span>
-<span class="kr">import</span> <span class="nx">auth</span> <span class="nx">from</span> <span class="s1">'@/auth'</span>
-<span class="kr">import</span> <span class="nx">About</span> <span class="nx">from</span> <span class="s1">'@/components/About.vue'</span>
-<span class="kr">import</span> <span class="nx">Dashboard</span> <span class="nx">from</span> <span class="s1">'@/components/Dashboard.vue'</span>
-<span class="kr">import</span> <span class="nx">Login</span> <span class="nx">from</span> <span class="s1">'@/components/Login.vue'</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">Vue</span> <span class="k">from</span> <span class="s1">'vue'</span>
+<span class="k">import</span> <span class="nx">Router</span> <span class="k">from</span> <span class="s1">'vue-router'</span>
+<span class="k">import</span> <span class="nx">auth</span> <span class="k">from</span> <span class="s1">'@/auth'</span>
+<span class="k">import</span> <span class="nx">About</span> <span class="k">from</span> <span class="s1">'@/components/About.vue'</span>
+<span class="k">import</span> <span class="nx">Dashboard</span> <span class="k">from</span> <span class="s1">'@/components/Dashboard.vue'</span>
+<span class="k">import</span> <span class="nx">Login</span> <span class="k">from</span> <span class="s1">'@/components/Login.vue'</span>
 
 <span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Router</span><span class="p">)</span>
 
-<span class="kr">export</span> <span class="k">default</span> <span class="k">new</span> <span class="nx">Router</span><span class="p">({</span>
+<span class="k">export</span> <span class="k">default</span> <span class="k">new</span> <span class="nx">Router</span><span class="p">({</span>
   <span class="na">mode</span><span class="p">:</span> <span class="s1">'history'</span><span class="p">,</span>
   <span class="na">base</span><span class="p">:</span> <span class="nx">__dirname</span><span class="p">,</span>
   <span class="na">routes</span><span class="p">:</span> <span class="p">[</span>
@@ -438,7 +431,7 @@ npm i
     <span class="p">{</span> <span class="na">path</span><span class="p">:</span> <span class="s1">'/dashboard'</span><span class="p">,</span> <span class="na">component</span><span class="p">:</span> <span class="nx">Dashboard</span><span class="p">,</span> <span class="na">beforeEnter</span><span class="p">:</span> <span class="nx">requireAuth</span> <span class="p">},</span>
     <span class="p">{</span> <span class="na">path</span><span class="p">:</span> <span class="s1">'/login'</span><span class="p">,</span> <span class="na">component</span><span class="p">:</span> <span class="nx">Login</span> <span class="p">},</span>
     <span class="p">{</span> <span class="na">path</span><span class="p">:</span> <span class="s1">'/logout'</span><span class="p">,</span>
-      <span class="nx">beforeEnter</span> <span class="p">(</span><span class="nx">to</span><span class="p">,</span> <span class="nx">from</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">beforeEnter</span> <span class="p">(</span><span class="nx">to</span><span class="p">,</span> <span class="k">from</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">auth</span><span class="p">.</span><span class="nx">logout</span><span class="p">()</span>
         <span class="nx">next</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)</span>
       <span class="p">}</span>
@@ -446,7 +439,7 @@ npm i
   <span class="p">]</span>
 <span class="p">})</span>
 
-<span class="kd">function</span> <span class="nx">requireAuth</span> <span class="p">(</span><span class="nx">to</span><span class="p">,</span> <span class="nx">from</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">function</span> <span class="nx">requireAuth</span> <span class="p">(</span><span class="nx">to</span><span class="p">,</span> <span class="k">from</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">auth</span><span class="p">.</span><span class="nx">loggedIn</span><span class="p">())</span> <span class="p">{</span>
     <span class="nx">next</span><span class="p">({</span>
       <span class="na">path</span><span class="p">:</span> <span class="s1">'/login'</span><span class="p">,</span>
@@ -456,8 +449,7 @@ npm i
     <span class="nx">next</span><span class="p">()</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>After making these changes, you should be able to run <code class="highlighter-rouge">npm start</code> and authenticate with the hard coded values from <code class="highlighter-rouge">auth.js</code> (joe@example.com / password1).</p>
 
@@ -479,19 +471,18 @@ npm i
 
 <p>To replace the fake, hard-coded authentication in <code class="highlighter-rouge">src/auth.js</code>, start by installing the <a href="https://developer.okta.com/code/javascript/okta_auth_sdk">Okta Auth SDK</a></p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>npm install @okta/okta-auth-js --save
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install @okta/okta-auth-js <span class="nt">--save</span>
+</code></pre></div></div>
 
-<p>Replace the code in <code class="highlighter-rouge">auth.js</code> with the following code that uses the Auth SDK to log in and save a session token as the token. If you don’t have an Okta Developer account, <a href="https://developer.okta.com/signup/">create one</a>. Then replace <code class="highlighter-rouge"><span class="p">{</span><span class="err">yourOktaDomain</span><span class="p">}</span></code> in the code below with your information (for example, <code class="highlighter-rouge">dev-123456.oktapreview</code>).</p>
+<p>Replace the code in <code class="highlighter-rouge">auth.js</code> with the following code that uses the Auth SDK to log in and save a session token as the token. If you don’t have an Okta Developer account, <a href="https://developer.okta.com/signup/">create one</a>. Then replace <code class="highlighter-rouge">{yourOktaDomain}</code> in the code below with your information (for example, <code class="highlighter-rouge">dev-123456.oktapreview</code>).</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="cm">/* globals localStorage */</span>
-<span class="kr">const</span> <span class="nx">OktaAuth</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'@okta/okta-auth-js'</span><span class="p">)</span>
-<span class="kr">const</span> <span class="nx">authClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OktaAuth</span><span class="p">({</span><span class="na">url</span><span class="p">:</span> <span class="s1">'<span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>'</span><span class="p">,</span> <span class="na">issuer</span><span class="p">:</span> <span class="s1">'default'</span><span class="p">})</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* globals localStorage */</span>
+<span class="kd">const</span> <span class="nx">OktaAuth</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'@okta/okta-auth-js'</span><span class="p">)</span>
+<span class="kd">const</span> <span class="nx">authClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OktaAuth</span><span class="p">({</span><span class="na">url</span><span class="p">:</span> <span class="s1">'<span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>'</span><span class="p">,</span> <span class="na">issuer</span><span class="p">:</span> <span class="s1">'default'</span><span class="p">})</span>
 
-<span class="kr">export</span> <span class="k">default</span> <span class="p">{</span>
+<span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
   <span class="nx">login</span> <span class="p">(</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">cb</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">[</span><span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="nx">cb</span> <span class="o">=</span> <span class="kr">arguments</span><span class="p">[</span><span class="kr">arguments</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">token</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">onChange</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
@@ -531,8 +522,7 @@ npm i
   <span class="nx">onChange</span> <span class="p">()</span> <span class="p">{</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>To make it possible to talk to Okta from http://localhost:8080, you’ll need to add it as a trusted origin. You can do this by signing in to your Okta dashboard and navigating to <strong>API</strong> &gt; <strong>Trusted Origins</strong>. Add <code class="highlighter-rouge">http://localhost:8080</code> and select the CORS and Redirect checkboxes.</p>
 
@@ -544,7 +534,7 @@ npm i
 
 <p>You can improve the security of your application by turning off autocomplete in <code class="highlighter-rouge">src/components/Login.vue</code>, adding focus to the <code class="highlighter-rouge">email</code> field, and initializing its default value to being empty. Replace your current <code class="highlighter-rouge">Login.vue</code> with the following.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;template&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;template&gt;</span>
   <span class="nt">&lt;div&gt;</span>
     <span class="nt">&lt;h2&gt;</span>Login<span class="nt">&lt;/h2&gt;</span>
     <span class="nt">&lt;p</span> <span class="na">v-if=</span><span class="s">"$route.query.redirect"</span><span class="nt">&gt;</span>
@@ -560,8 +550,8 @@ npm i
 <span class="nt">&lt;/template&gt;</span>
 
 <span class="nt">&lt;script&gt;</span>
-  <span class="kr">import</span> <span class="nx">auth</span> <span class="nx">from</span> <span class="s1">'../auth'</span>
-  <span class="kr">export</span> <span class="k">default</span> <span class="p">{</span>
+  <span class="k">import</span> <span class="nx">auth</span> <span class="k">from</span> <span class="s1">'../auth'</span>
+  <span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
     <span class="nx">data</span> <span class="p">()</span> <span class="p">{</span>
       <span class="k">return</span> <span class="p">{</span>
         <span class="na">email</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
@@ -588,20 +578,18 @@ npm i
     <span class="nl">color</span><span class="p">:</span> <span class="no">red</span><span class="p">;</span>
   <span class="p">}</span>
 <span class="nt">&lt;/style&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>To make the <code class="highlighter-rouge">v-focus</code> directive on the email field work, add the following to <code class="highlighter-rouge">src/main.js</code> (before <code class="highlighter-rouge">new Vue({...})</code>).</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">Vue</span><span class="p">.</span><span class="nx">directive</span><span class="p">(</span><span class="s1">'focus'</span><span class="p">,</span> <span class="p">{</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">Vue</span><span class="p">.</span><span class="nx">directive</span><span class="p">(</span><span class="s1">'focus'</span><span class="p">,</span> <span class="p">{</span>
   <span class="c1">// When the bound element is inserted into the DOM...</span>
   <span class="na">inserted</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Focus the element</span>
     <span class="nx">el</span><span class="p">.</span><span class="nx">focus</span><span class="p">()</span>
   <span class="p">}</span>
 <span class="p">})</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="display-user-information">Display User Information</h2>
 
@@ -613,13 +601,13 @@ npm i
 
 <p>The Okta Auth SDK supports exchanging your session token for an access token. Replace the success callback on <code class="highlighter-rouge">authClient.signIn()</code> (in <code class="highlighter-rouge">src/auth.js</code>) with the following.</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="k">return</span> <span class="nx">authClient</span><span class="p">.</span><span class="nx">signIn</span><span class="p">({</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">return</span> <span class="nx">authClient</span><span class="p">.</span><span class="nx">signIn</span><span class="p">({</span>
   <span class="na">username</span><span class="p">:</span> <span class="nx">email</span><span class="p">,</span>
   <span class="na">password</span><span class="p">:</span> <span class="nx">pass</span>
 <span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="nx">response</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">'SUCCESS'</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nx">authClient</span><span class="p">.</span><span class="nx">token</span><span class="p">.</span><span class="nx">getWithoutPrompt</span><span class="p">({</span>
-      <span class="na">clientId</span><span class="p">:</span> <span class="err">`</span><span class="p">{</span><span class="nx">clientId</span><span class="p">}</span><span class="err">`</span><span class="p">,</span>
+      <span class="na">clientId</span><span class="p">:</span> <span class="s2">`{clientId}`</span><span class="p">,</span>
       <span class="na">responseType</span><span class="p">:</span> <span class="p">[</span><span class="s1">'id_token'</span><span class="p">,</span> <span class="s1">'token'</span><span class="p">],</span>
       <span class="na">scopes</span><span class="p">:</span> <span class="p">[</span><span class="s1">'openid'</span><span class="p">,</span> <span class="s1">'email'</span><span class="p">,</span> <span class="s1">'profile'</span><span class="p">],</span>
       <span class="na">sessionToken</span><span class="p">:</span> <span class="nx">response</span><span class="p">.</span><span class="nx">sessionToken</span><span class="p">,</span>
@@ -631,10 +619,9 @@ npm i
       <span class="k">this</span><span class="p">.</span><span class="nx">onChange</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
     <span class="p">})</span>
   <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<p>You’ll need to create an OIDC App in Okta to get a <code class="highlighter-rouge"><span class="p">{</span><span class="err">clientId</span><span class="p">}</span></code>. To do this, log in to your Okta Developer account and navigate to <strong>Applications</strong> &gt; <strong>Add Application</strong>. Click <strong>SPA</strong> and click the <strong>Next</strong> button. Give the app a name you’ll remember, and specify <code class="highlighter-rouge">http://localhost:8080</code> as a Base URI and Login Redirect URI.</p>
+<p>You’ll need to create an OIDC App in Okta to get a <code class="highlighter-rouge">{clientId}</code>. To do this, log in to your Okta Developer account and navigate to <strong>Applications</strong> &gt; <strong>Add Application</strong>. Click <strong>SPA</strong> and click the <strong>Next</strong> button. Give the app a name you’ll remember, and specify <code class="highlighter-rouge">http://localhost:8080</code> as a Base URI and Login Redirect URI.</p>
 
 <p><img src="/assets/blog/vue-auth-sdk/oidc-settings-d4d35063103b8a2f5dff3290a8b7bc6190854f07c78b192019b9ca1143c25e98.png" alt="OIDC Settings" width="700" class="center-image" /></p>
 
@@ -646,33 +633,32 @@ npm i
 
 <p>To see this in action, add the following two methods to <code class="highlighter-rouge">src/auth.js</code> to get a person’s name from a decoded JWT. Thanks to Stack Overflow for the <a href="https://stackoverflow.com/a/38552302/65681">decoding JWTs in JavaScript code</a>.</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">getName</span> <span class="p">()</span> <span class="p">{</span>
-  <span class="kr">const</span> <span class="nx">claims</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">parseJwt</span><span class="p">(</span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">idToken</span><span class="p">)</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">getName</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">claims</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">parseJwt</span><span class="p">(</span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">idToken</span><span class="p">)</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">jwt</span><span class="p">(</span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">idToken</span><span class="p">)</span>
   <span class="k">return</span> <span class="nx">claims</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span>
  <span class="p">},</span>
 
 <span class="nx">parseJwt</span> <span class="p">(</span><span class="nx">token</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kr">const</span> <span class="nx">base64Url</span> <span class="o">=</span> <span class="nx">token</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">'.'</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-  <span class="kr">const</span> <span class="nx">base64</span> <span class="o">=</span> <span class="nx">base64Url</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s1">'-'</span><span class="p">,</span> <span class="s1">'+'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="s1">'_'</span><span class="p">,</span> <span class="s1">'/'</span><span class="p">)</span>
+  <span class="kd">const</span> <span class="nx">base64Url</span> <span class="o">=</span> <span class="nx">token</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">'.'</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+  <span class="kd">const</span> <span class="nx">base64</span> <span class="o">=</span> <span class="nx">base64Url</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s1">'-'</span><span class="p">,</span> <span class="s1">'+'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="s1">'_'</span><span class="p">,</span> <span class="s1">'/'</span><span class="p">)</span>
   <span class="k">return</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">atob</span><span class="p">(</span><span class="nx">base64</span><span class="p">))</span>
 <span class="p">},</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><strong>WARNING:</strong> The code above uses <code class="highlighter-rouge">console.jwt()</code>. This only works when you have JWT Inspector installed. Remove or comment this line out when you’re done debugging your code.</p>
 
 <p>Now the ID token will provide you with the user’s name, and you can show it on the dashboard! Modify <code class="highlighter-rouge">src/components/Dashboard.vue</code> to have the following code.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;template&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;template&gt;</span>
   <span class="nt">&lt;div&gt;</span>
     <span class="nt">&lt;h2&gt;</span>Dashboard<span class="nt">&lt;/h2&gt;</span>
     <span class="nt">&lt;p&gt;</span>Yay you made it <span class="nt">&lt;b&gt;</span>{{name}}<span class="nt">&lt;/b&gt;</span>!<span class="nt">&lt;/p&gt;</span>
   <span class="nt">&lt;/div&gt;</span>
 <span class="nt">&lt;/template&gt;</span>
 <span class="nt">&lt;script&gt;</span>
-  <span class="kr">import</span> <span class="nx">auth</span> <span class="nx">from</span> <span class="s1">'../auth'</span>
-  <span class="kr">export</span> <span class="k">default</span> <span class="p">{</span>
+  <span class="k">import</span> <span class="nx">auth</span> <span class="k">from</span> <span class="s1">'../auth'</span>
+  <span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
     <span class="nx">data</span> <span class="p">()</span> <span class="p">{</span>
       <span class="k">return</span> <span class="p">{</span>
         <span class="na">name</span><span class="p">:</span> <span class="nx">auth</span><span class="p">.</span><span class="nx">getName</span><span class="p">()</span>
@@ -680,8 +666,7 @@ npm i
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="nt">&lt;/script&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>If your project is not running, start it with <code class="highlighter-rouge">npm start</code> and navigate to <code class="highlighter-rouge">http://localhost:8080</code>. Rejoice if it works!</p>
 
@@ -691,11 +676,10 @@ npm i
 
 <p>You can use <a href="https://developers.google.com/web/tools/lighthouse/">Lighthouse</a> to audit your application and see if it has all the elements needed for a PWA. To do this, you have to build your project and then run a web server from the <code class="highlighter-rouge">dist</code> directory. For example:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>npm run build
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm run build
 <span class="nb">cd </span>dist
-python -m SimpleHTTPServer 8080
-</code></pre>
-</div>
+python <span class="nt">-m</span> SimpleHTTPServer 8080
+</code></pre></div></div>
 
 <p>If you run Lighthouse on your app at <code class="highlighter-rouge">http://localhost:8080</code>, you should see similar results to the screenshot below.</p>
 
@@ -705,16 +689,15 @@ python -m SimpleHTTPServer 8080
 
 <p>For this to work, you will have to update Okta to add <code class="highlighter-rouge">https://vue-auth-pwa.cfapps.io</code> as a Login Redirect URI (in your OIDC app) and as a Trusted Origin (<strong>API</strong> &gt; <strong>Trusted Origins</strong>).</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>sed -i -e <span class="s2">"s|http://localhost:8080|https://vue-auth-pwa.cfapps.io|g"</span> src/auth.js
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sed <span class="nt">-i</span> <span class="nt">-e</span> <span class="s2">"s|http://localhost:8080|https://vue-auth-pwa.cfapps.io|g"</span> src/auth.js
 npm run build
 <span class="nb">cd </span>dist
 touch Staticfile
-<span class="nb">echo</span> <span class="s1">'pushstate: enabled'</span> &gt; Staticfile
-cf push vue-auth-pwa --no-start
-cf <span class="nb">set</span>-env vue-auth-pwa FORCE_HTTPS <span class="nb">true
+<span class="nb">echo</span> <span class="s1">'pushstate: enabled'</span> <span class="o">&gt;</span> Staticfile
+cf push vue-auth-pwa <span class="nt">--no-start</span>
+cf set-env vue-auth-pwa FORCE_HTTPS <span class="nb">true
 </span>cf start vue-auth-pwa
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Running Lighthouse on https://vue-auth-pwa.cfapps.io yields some pretty good numbers across the board!</p>
 

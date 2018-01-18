@@ -206,9 +206,8 @@
 
 <p>Here’s an example of how this flow gets started using Okta:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>https://micah.okta.com/oauth2/aus2yrcz7aMrmDAKZ1t7/v1/authorize?client_id=0oa2yrbf35Vcbom491t7&amp;response_type=code&amp;scope=openid&amp;state=little-room-greasy-pie&amp;nonce=b1e7b75d-6248-4fc7-bad0-ac5ae0f2e581&amp;redirect_uri=https%3A%2F%2Fokta-oidc-fun.herokuapp.com%2Fflow_result
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://micah.okta.com/oauth2/aus2yrcz7aMrmDAKZ1t7/v1/authorize?client_id=0oa2yrbf35Vcbom491t7&amp;response_type=code&amp;scope=openid&amp;state=little-room-greasy-pie&amp;nonce=b1e7b75d-6248-4fc7-bad0-ac5ae0f2e581&amp;redirect_uri=https%3A%2F%2Fokta-oidc-fun.herokuapp.com%2Fflow_result
+</code></pre></div></div>
 <p>Let’s break that down:</p>
 
 <table>
@@ -285,9 +284,8 @@
 
 <p>Here’s an example of how this flow gets started using Okta:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>https://micah.okta.com/oauth2/aus2yrcz7aMrmDAKZ1t7/v1/authorize?client_id=0oa2yrbf35Vcbom491t7&amp;response_type=id_token+token&amp;scope=openid&amp;state=shrill-word-accessible-iron&amp;nonce=f8c658f0-1eb9-4f8d-8692-5da4e2f24cf0&amp;redirect_uri=https%3A%2F%2Fokta-oidc-fun.herokuapp.com%2Fflow_result
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://micah.okta.com/oauth2/aus2yrcz7aMrmDAKZ1t7/v1/authorize?client_id=0oa2yrbf35Vcbom491t7&amp;response_type=id_token+token&amp;scope=openid&amp;state=shrill-word-accessible-iron&amp;nonce=f8c658f0-1eb9-4f8d-8692-5da4e2f24cf0&amp;redirect_uri=https%3A%2F%2Fokta-oidc-fun.herokuapp.com%2Fflow_result
+</code></pre></div></div>
 
 <p>It’s almost identical to the authorization code flow, except that the <code class="highlighter-rouge">response_type</code> is either <code class="highlighter-rouge">id_token</code>, <code class="highlighter-rouge">token</code> or <code class="highlighter-rouge">id_token+token</code>. Below, we cover exactly what’s in these tokens and how it’s driven, but remember: an <code class="highlighter-rouge">id_token</code> encodes identity information and an <code class="highlighter-rouge">access_token</code> (returned if <code class="highlighter-rouge">token</code> is specified) is a bearer token used to access resources. Okta also uses JWT for an <code class="highlighter-rouge">access_token</code>, which enables additional information to be encoded into it.</p>
 
@@ -309,9 +307,8 @@
 
 <p>It’s a combination of the authorization code and implicit code flows. You can spot it by looking at the <code class="highlighter-rouge">response_type</code> it <em>must</em> contain <code class="highlighter-rouge">code</code> and one or both of <code class="highlighter-rouge">id_token</code> and <code class="highlighter-rouge">token</code>:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>https://micah.okta.com/oauth2/aus2yrcz7aMrmDAKZ1t7/v1/authorize?client_id=0oa2yrbf35Vcbom491t7&amp;response_type=code+id_token+token&amp;scope=openid&amp;state=shrill-word-accessible-iron&amp;nonce=f8c658f0-1eb9-4f8d-8692-5da4e2f24cf0&amp;redirect_uri=https%3A%2F%2Fokta-oidc-fun.herokuapp.com%2Fflow_result
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://micah.okta.com/oauth2/aus2yrcz7aMrmDAKZ1t7/v1/authorize?client_id=0oa2yrbf35Vcbom491t7&amp;response_type=code+id_token+token&amp;scope=openid&amp;state=shrill-word-accessible-iron&amp;nonce=f8c658f0-1eb9-4f8d-8692-5da4e2f24cf0&amp;redirect_uri=https%3A%2F%2Fokta-oidc-fun.herokuapp.com%2Fflow_result
+</code></pre></div></div>
 
 <p>Here it is in the browser:</p>
 
@@ -329,20 +326,19 @@
 
 <p>Here’s the response from the <code class="highlighter-rouge">/userinfo</code> endpoint using the <code class="highlighter-rouge">access_token</code> as a bearer token:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-	</span><span class="nt">"sub"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00u2yulup4eWbOttd1t7"</span><span class="p">,</span><span class="w">
-	</span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Okta OIDC Fun"</span><span class="p">,</span><span class="w">
-	</span><span class="nt">"locale"</span><span class="p">:</span><span class="w"> </span><span class="s2">"en-US"</span><span class="p">,</span><span class="w">
-	</span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"okta_oidc_fun@okta.com"</span><span class="p">,</span><span class="w">
-	</span><span class="nt">"preferred_username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"okta_oidc_fun@okta.com"</span><span class="p">,</span><span class="w">
-	</span><span class="nt">"given_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Okta OIDC"</span><span class="p">,</span><span class="w">
-	</span><span class="nt">"family_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fun"</span><span class="p">,</span><span class="w">
-	</span><span class="nt">"zoneinfo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"America/Los_Angeles"</span><span class="p">,</span><span class="w">
-	</span><span class="nt">"updated_at"</span><span class="p">:</span><span class="w"> </span><span class="mi">1499922371</span><span class="p">,</span><span class="w">
-	</span><span class="nt">"email_verified"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+	"sub": "00u2yulup4eWbOttd1t7",
+	"name": "Okta OIDC Fun",
+	"locale": "en-US",
+	"email": "okta_oidc_fun@okta.com",
+	"preferred_username": "okta_oidc_fun@okta.com",
+	"given_name": "Okta OIDC",
+	"family_name": "Fun",
+	"zoneinfo": "America/Los_Angeles",
+	"updated_at": 1499922371,
+	"email_verified": true
+}
+</code></pre></div></div>
 
 <h2 id="other-oidc-flows">Other OIDC Flows</h2>
 
