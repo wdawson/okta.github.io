@@ -200,22 +200,57 @@
 
 <p>This tutorial builds off <a href="/blog/2017/06/15/build-microservices-architecture-spring-boot">Build a Microservices Architecture for Microbrews with Spring Boot</a>. A simple microservices architecture with Spring Boot and Spring Cloud looks as follows. It uses Stormpath’s Spring Boot Starter (it’s been modified to work with Okta while we work on building up Okta’s Java support) and Juiser, a library created by <a href="https://twitter.com/lhazlewood">Les Hazlewood</a>. Juiser is independent and open source, and is not tied to a particular identity provider.</p>
 
-<p><img src="/assets/blog/microservices-spring-secure/spring-microservices-diagram-4ab97ef8fd57e8c120dfcda47985d571070bfe39df2cbf1b582fb05ab524d96b.png" alt="Spring Boot + Cloud Microservices Architecture" width="800" /></p>
+<p><img src="/assets/blog/microservices-spring-secure/spring-microservices-diagram-4ab97ef8fd57e8c120dfcda47985d571070bfe39df2cbf1b582fb05ab524d96b.png" alt="Spring Boot + Cloud Microservices Architecture" width="800" class="center-image" /></p>
 
 <p>Once you’ve completed this tutorial, you’ll have Spring Security locking things down, and Okta providing authentication and JWT validation.</p>
 
-<p><img src="/assets/blog/microservices-spring-secure/spring-secure-microservices-diagram-f94c76eebed54e7e070d97adad7987c4e2ccfd95c478a330b334de16fefd840a.png" alt="Secure Spring Microservices" width="800" /></p>
+<p><img src="/assets/blog/microservices-spring-secure/spring-secure-microservices-diagram-f94c76eebed54e7e070d97adad7987c4e2ccfd95c478a330b334de16fefd840a.png" alt="Secure Spring Microservices" width="800" class="center-image" /></p>
+
+<p>In this tutorial, you’ll build a microservices architecture with Spring Boot and related projects. To add security with Okta, you’ll have to create two applications in your developer console. The first will be a “Native” application that supports the Stormpath Java SDK, and OAuth grant types authorization code, refresh token, and resource owner password. This type of application is typically reserved for native mobile applications, but it also includes the Stormpath Java SDK. This is because the Stormpath SDK was retrofitted to work with Okta, and not built specifically for the Okta API, per se. For the Angular client, you’ll need a second “SPA” application.</p>
 
 <p>To begin, you’ll need to clone the aforementioned article’s completed project.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/oktadeveloper/spring-boot-microservices-example.git
 </code></pre></div></div>
 
-<p><a href="https://github.com/stormpath/stormpath-sdk-java/blob/okta/OktaGettingStarted.md">Create an Okta Developer account</a>. After completing these steps, you should have the information you need to set the following environment variables.</p>
+<p><a href="https://developer.okta.com/signup/">Create an Okta Developer account</a>, and <a href="https://github.com/stormpath/stormpath-sdk-java/blob/okta/OktaGettingStarted.md">create a “Native” application that works with the Stormpath Spring Boot Starter</a>. Here’s an abbreviated list of steps:</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">STORMPATH_CLIENT_BASEURL</span><span class="o">=[</span>base-url]
-<span class="nb">export </span><span class="nv">OKTA_APPLICATION_ID</span><span class="o">=[</span>application-id]
-<span class="nb">export </span><span class="nv">OKTA_API_TOKEN</span><span class="o">=[</span>api-token]
+<ul>
+  <li>In the developer console, navigate to <strong>Applications</strong> &gt; <strong>Add Application</strong></li>
+  <li>Click <strong>Native</strong> and <strong>Next</strong></li>
+  <li>On the next page, enter the following values and click <strong>Done</strong>
+** Application Name: <code class="highlighter-rouge">My Test App</code>
+** Login redirect URIs: <code class="highlighter-rouge">http://localhost:8080/client/callback</code></li>
+</ul>
+
+<p>After your application has been created, you still have a few settings you need to change:</p>
+
+<ul>
+  <li>On the <strong>General</strong> tab, click <strong>Edit</strong> on the <em>General Settings</em> panel</li>
+  <li>Select <strong>Refresh Token</strong> and <strong>Resource Owner Password</strong> and click <strong>Save</strong></li>
+  <li>Click <strong>Edit</strong> on the <em>Client Credentials</em> panel
+** Select <strong>Use Client Authentication</strong> and click <strong>Save</strong>
+** Copy and save the Client ID for your application</li>
+</ul>
+
+<p>At this point, your application’s settings should look as follows:</p>
+
+<p><img src="/assets/blog/microservices-spring-secure/native-app-settings-00f620cbd955c2a3b9d1c0521050fca34b56664dec58cd94cf491e466349de5e.png" alt="Native App Settings" width="700" class="center-image" /></p>
+
+<p>You’ll also need to create an API token:</p>
+
+<ul>
+  <li>On the top menu, click on <strong>API</strong> &gt; <strong>Tokens</strong></li>
+  <li>Click <strong>Create Token</strong></li>
+  <li>On the modal, give your new token a name, for example: <code class="highlighter-rouge">Microservices</code>, and click <strong>Create Token</strong></li>
+  <li><strong>Important:</strong> You will need to remember this token value, so copy/paste it somewhere safe.</li>
+</ul>
+
+<p>After completing these steps, you should have the information you need to set the following environment variables.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">STORMPATH_CLIENT_BASEURL</span><span class="o">=</span>https://<span class="o">{</span>yourOktaDomain.com<span class="o">}</span>
+<span class="nb">export </span><span class="nv">OKTA_APPLICATION_ID</span><span class="o">={</span>clientId<span class="o">}</span>
+<span class="nb">export </span><span class="nv">OKTA_API_TOKEN</span><span class="o">={</span>apiToken<span class="o">}</span>
 <span class="nb">export </span><span class="nv">OKTA_AUTHORIZATIONSERVER_ID</span><span class="o">=</span>default
 </code></pre></div></div>
 
@@ -589,17 +624,23 @@ been released.</p>
 
 <p>Open your browser and navigate to <code class="highlighter-rouge">http://localhost:8081/home</code>. You should see a login page, prompting for your credentials.</p>
 
-<p><img src="/assets/blog/microservices-spring-secure/zuul-login-27417121eb49acb2bf1e659e6b760a7586129d21031917a419c3cddb1cc4236a.png" alt="Stormpath Zuul Login" width="800" /></p>
+<p><img src="/assets/blog/microservices-spring-secure/zuul-login-27417121eb49acb2bf1e659e6b760a7586129d21031917a419c3cddb1cc4236a.png" alt="Stormpath Zuul Login" width="800" class="center-image" /></p>
 
 <p>This page is served up from the <code class="highlighter-rouge">stormpath-zuul-spring-cloud-starter</code> using <a href="http://www.thymeleaf.org/">Thymeleaf</a>. Spring Boot auto-activates Thymeleaf when it finds it in the classpath.</p>
 
 <p>After logging in, you should see a page displaying your user’s information.</p>
 
-<p><img src="/assets/blog/microservices-spring-secure/zuul-home-e50e722717c7924beb4cb1b267de314f7223ba987f5408c33a9dd71da2ccbf12.png" alt="Stormpath Zuul Home" width="800" /></p>
+<p><img src="/assets/blog/microservices-spring-secure/zuul-home-e50e722717c7924beb4cb1b267de314f7223ba987f5408c33a9dd71da2ccbf12.png" alt="Stormpath Zuul Home" width="800" class="center-image" /></p>
 
 <p>Click the <strong>Logout</strong> button to delete the cookies in your browser and end your session.</p>
 
 <h2 id="add-oktas-sign-in-widget-to-the-client">Add Okta’s Sign-In Widget to the Client</h2>
+
+<p>To use Okta’s Sign-In Widget, you’ll need to create an additional app in Okta, this time for a SPA (Single-Page Application).</p>
+
+<p>Create an OIDC app in Okta by going to the Developer Console and navigating to <strong>Applications</strong> and click on the <strong>Add Application</strong> button. Select <strong>SPA</strong> and click <strong>Next</strong>. On the next page, specify <code class="highlighter-rouge">http://localhost:4200</code> as a Base URI, Login redirect URI, and Logout redirect URI. Click <strong>Done</strong> and you should see settings like the following.</p>
+
+<p><img src="/assets/blog/angular-sign-in-widget/oidc-settings-7bb741af9e0dc958b4d89818157b1a347c14c17c8e927efd45bf40c164a97490.png" alt="OIDC App Settings" width="700" class="center-image" /></p>
 
 <p>Install <a href="https://developer.okta.com/code/javascript/okta_sign-in_widget">Okta’s Sign-In Widget</a> to make it possible to communicate with the secured server.</p>
 
@@ -708,7 +749,7 @@ it exists.</p>
 <span class="nt">&lt;/div&gt;</span>
 </code></pre></div></div>
 
-<p>You’ll notice the <code class="highlighter-rouge">user</code> variable in the HTML. To resolve this, you need to change your <code class="highlighter-rouge">AppComponent</code> so it renders the Sign-In Widget. Angular’s <code class="highlighter-rouge">ChangeDetectorRef</code> is used to notify Angular when things have changed and rendering needs to process changed variables.</p>
+<p>You’ll notice the <code class="highlighter-rouge">user</code> variable in the HTML. To resolve this, you need to change your <code class="highlighter-rouge">src/app/app.component.ts</code> so it renders the Sign-In Widget. Angular’s <code class="highlighter-rouge">ChangeDetectorRef</code> is used to notify Angular when things have changed and rendering needs to process changed variables.</p>
 
 <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">ChangeDetectorRef</span><span class="p">,</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">OnInit</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">OktaService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'./shared/okta/okta.service'</span><span class="p">;</span>
@@ -776,7 +817,7 @@ it exists.</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>In order for the <code class="highlighter-rouge">BeerListComponent</code> to detect that you’ve logged in, you need to use add a constructor dependency on <code class="highlighter-rouge">ChangeDetectorRef</code> and invoke its <code class="highlighter-rouge">detectChanges()</code> method when you set the <code class="highlighter-rouge">giphyUrl</code> property on each <code class="highlighter-rouge">beer</code>.</p>
+<p>In order for the <code class="highlighter-rouge">BeerListComponent</code> (at <code class="highlighter-rouge">src/app/beer-list/beer-list.component.ts</code>) to detect that you’ve logged in, you need to use add a constructor dependency on <code class="highlighter-rouge">ChangeDetectorRef</code> and invoke its <code class="highlighter-rouge">detectChanges()</code> method when you set the <code class="highlighter-rouge">giphyUrl</code> property on each <code class="highlighter-rouge">beer</code>.</p>
 
 <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">ChangeDetectorRef</span><span class="p">,</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">OnInit</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">BeerService</span><span class="p">,</span> <span class="nx">GiphyService</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../shared'</span><span class="p">;</span>
@@ -830,7 +871,7 @@ it exists.</p>
 
 <p>You should be able to log in, see a welcome message, as well as a logout button.</p>
 
-<p><img src="/assets/blog/microservices-spring-secure/angular-welcome-b735b67b696573dad476bc876cc5ec1f6470d02fb6567c57a3f1bd6278ca30ee.png" alt="Angular Welcome" width="800" /></p>
+<p><img src="/assets/blog/microservices-spring-secure/angular-welcome-b735b67b696573dad476bc876cc5ec1f6470d02fb6567c57a3f1bd6278ca30ee.png" alt="Angular Welcome" width="800" class="center-image" /></p>
 
 <h2 id="learn-more">Learn More</h2>
 

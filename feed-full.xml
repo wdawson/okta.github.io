@@ -12621,22 +12621,57 @@ Server: Jetty&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;9.3.12.v20160915&lt;s
 
 &lt;p&gt;This tutorial builds off &lt;a href=&quot;/blog/2017/06/15/build-microservices-architecture-spring-boot&quot;&gt;Build a Microservices Architecture for Microbrews with Spring Boot&lt;/a&gt;. A simple microservices architecture with Spring Boot and Spring Cloud looks as follows. It uses Stormpath’s Spring Boot Starter (it’s been modified to work with Okta while we work on building up Okta’s Java support) and Juiser, a library created by &lt;a href=&quot;https://twitter.com/lhazlewood&quot;&gt;Les Hazlewood&lt;/a&gt;. Juiser is independent and open source, and is not tied to a particular identity provider.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-spring-secure/spring-microservices-diagram-4ab97ef8fd57e8c120dfcda47985d571070bfe39df2cbf1b582fb05ab524d96b.png&quot; alt=&quot;Spring Boot + Cloud Microservices Architecture&quot; width=&quot;800&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-spring-secure/spring-microservices-diagram-4ab97ef8fd57e8c120dfcda47985d571070bfe39df2cbf1b582fb05ab524d96b.png&quot; alt=&quot;Spring Boot + Cloud Microservices Architecture&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Once you’ve completed this tutorial, you’ll have Spring Security locking things down, and Okta providing authentication and JWT validation.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-spring-secure/spring-secure-microservices-diagram-f94c76eebed54e7e070d97adad7987c4e2ccfd95c478a330b334de16fefd840a.png&quot; alt=&quot;Secure Spring Microservices&quot; width=&quot;800&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-spring-secure/spring-secure-microservices-diagram-f94c76eebed54e7e070d97adad7987c4e2ccfd95c478a330b334de16fefd840a.png&quot; alt=&quot;Secure Spring Microservices&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In this tutorial, you’ll build a microservices architecture with Spring Boot and related projects. To add security with Okta, you’ll have to create two applications in your developer console. The first will be a “Native” application that supports the Stormpath Java SDK, and OAuth grant types authorization code, refresh token, and resource owner password. This type of application is typically reserved for native mobile applications, but it also includes the Stormpath Java SDK. This is because the Stormpath SDK was retrofitted to work with Okta, and not built specifically for the Okta API, per se. For the Angular client, you’ll need a second “SPA” application.&lt;/p&gt;
 
 &lt;p&gt;To begin, you’ll need to clone the aforementioned article’s completed project.&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/oktadeveloper/spring-boot-microservices-example.git
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://github.com/stormpath/stormpath-sdk-java/blob/okta/OktaGettingStarted.md&quot;&gt;Create an Okta Developer account&lt;/a&gt;. After completing these steps, you should have the information you need to set the following environment variables.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://developer.okta.com/signup/&quot;&gt;Create an Okta Developer account&lt;/a&gt;, and &lt;a href=&quot;https://github.com/stormpath/stormpath-sdk-java/blob/okta/OktaGettingStarted.md&quot;&gt;create a “Native” application that works with the Stormpath Spring Boot Starter&lt;/a&gt;. Here’s an abbreviated list of steps:&lt;/p&gt;
 
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;STORMPATH_CLIENT_BASEURL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=[&lt;/span&gt;base-url]
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;OKTA_APPLICATION_ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=[&lt;/span&gt;application-id]
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;OKTA_API_TOKEN&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=[&lt;/span&gt;api-token]
+&lt;ul&gt;
+  &lt;li&gt;In the developer console, navigate to &lt;strong&gt;Applications&lt;/strong&gt; &amp;gt; &lt;strong&gt;Add Application&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;Click &lt;strong&gt;Native&lt;/strong&gt; and &lt;strong&gt;Next&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;On the next page, enter the following values and click &lt;strong&gt;Done&lt;/strong&gt;
+** Application Name: &lt;code class=&quot;highlighter-rouge&quot;&gt;My Test App&lt;/code&gt;
+** Login redirect URIs: &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080/client/callback&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;After your application has been created, you still have a few settings you need to change:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;On the &lt;strong&gt;General&lt;/strong&gt; tab, click &lt;strong&gt;Edit&lt;/strong&gt; on the &lt;em&gt;General Settings&lt;/em&gt; panel&lt;/li&gt;
+  &lt;li&gt;Select &lt;strong&gt;Refresh Token&lt;/strong&gt; and &lt;strong&gt;Resource Owner Password&lt;/strong&gt; and click &lt;strong&gt;Save&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;Click &lt;strong&gt;Edit&lt;/strong&gt; on the &lt;em&gt;Client Credentials&lt;/em&gt; panel
+** Select &lt;strong&gt;Use Client Authentication&lt;/strong&gt; and click &lt;strong&gt;Save&lt;/strong&gt;
+** Copy and save the Client ID for your application&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;At this point, your application’s settings should look as follows:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-spring-secure/native-app-settings-00f620cbd955c2a3b9d1c0521050fca34b56664dec58cd94cf491e466349de5e.png&quot; alt=&quot;Native App Settings&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You’ll also need to create an API token:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;On the top menu, click on &lt;strong&gt;API&lt;/strong&gt; &amp;gt; &lt;strong&gt;Tokens&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;Click &lt;strong&gt;Create Token&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;On the modal, give your new token a name, for example: &lt;code class=&quot;highlighter-rouge&quot;&gt;Microservices&lt;/code&gt;, and click &lt;strong&gt;Create Token&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Important:&lt;/strong&gt; You will need to remember this token value, so copy/paste it somewhere safe.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;After completing these steps, you should have the information you need to set the following environment variables.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;STORMPATH_CLIENT_BASEURL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;https://&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;yourOktaDomain.com&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;OKTA_APPLICATION_ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;clientId&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;OKTA_API_TOKEN&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;apiToken&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;OKTA_AUTHORIZATIONSERVER_ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;default
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
@@ -13010,17 +13045,23 @@ been released.&lt;/p&gt;
 
 &lt;p&gt;Open your browser and navigate to &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8081/home&lt;/code&gt;. You should see a login page, prompting for your credentials.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-spring-secure/zuul-login-27417121eb49acb2bf1e659e6b760a7586129d21031917a419c3cddb1cc4236a.png&quot; alt=&quot;Stormpath Zuul Login&quot; width=&quot;800&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-spring-secure/zuul-login-27417121eb49acb2bf1e659e6b760a7586129d21031917a419c3cddb1cc4236a.png&quot; alt=&quot;Stormpath Zuul Login&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;This page is served up from the &lt;code class=&quot;highlighter-rouge&quot;&gt;stormpath-zuul-spring-cloud-starter&lt;/code&gt; using &lt;a href=&quot;http://www.thymeleaf.org/&quot;&gt;Thymeleaf&lt;/a&gt;. Spring Boot auto-activates Thymeleaf when it finds it in the classpath.&lt;/p&gt;
 
 &lt;p&gt;After logging in, you should see a page displaying your user’s information.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-spring-secure/zuul-home-e50e722717c7924beb4cb1b267de314f7223ba987f5408c33a9dd71da2ccbf12.png&quot; alt=&quot;Stormpath Zuul Home&quot; width=&quot;800&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-spring-secure/zuul-home-e50e722717c7924beb4cb1b267de314f7223ba987f5408c33a9dd71da2ccbf12.png&quot; alt=&quot;Stormpath Zuul Home&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Click the &lt;strong&gt;Logout&lt;/strong&gt; button to delete the cookies in your browser and end your session.&lt;/p&gt;
 
 &lt;h2 id=&quot;add-oktas-sign-in-widget-to-the-client&quot;&gt;Add Okta’s Sign-In Widget to the Client&lt;/h2&gt;
+
+&lt;p&gt;To use Okta’s Sign-In Widget, you’ll need to create an additional app in Okta, this time for a SPA (Single-Page Application).&lt;/p&gt;
+
+&lt;p&gt;Create an OIDC app in Okta by going to the Developer Console and navigating to &lt;strong&gt;Applications&lt;/strong&gt; and click on the &lt;strong&gt;Add Application&lt;/strong&gt; button. Select &lt;strong&gt;SPA&lt;/strong&gt; and click &lt;strong&gt;Next&lt;/strong&gt;. On the next page, specify &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:4200&lt;/code&gt; as a Base URI, Login redirect URI, and Logout redirect URI. Click &lt;strong&gt;Done&lt;/strong&gt; and you should see settings like the following.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/angular-sign-in-widget/oidc-settings-7bb741af9e0dc958b4d89818157b1a347c14c17c8e927efd45bf40c164a97490.png&quot; alt=&quot;OIDC App Settings&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Install &lt;a href=&quot;https://developer.okta.com/code/javascript/okta_sign-in_widget&quot;&gt;Okta’s Sign-In Widget&lt;/a&gt; to make it possible to communicate with the secured server.&lt;/p&gt;
 
@@ -13129,7 +13170,7 @@ it exists.&lt;/p&gt;
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;You’ll notice the &lt;code class=&quot;highlighter-rouge&quot;&gt;user&lt;/code&gt; variable in the HTML. To resolve this, you need to change your &lt;code class=&quot;highlighter-rouge&quot;&gt;AppComponent&lt;/code&gt; so it renders the Sign-In Widget. Angular’s &lt;code class=&quot;highlighter-rouge&quot;&gt;ChangeDetectorRef&lt;/code&gt; is used to notify Angular when things have changed and rendering needs to process changed variables.&lt;/p&gt;
+&lt;p&gt;You’ll notice the &lt;code class=&quot;highlighter-rouge&quot;&gt;user&lt;/code&gt; variable in the HTML. To resolve this, you need to change your &lt;code class=&quot;highlighter-rouge&quot;&gt;src/app/app.component.ts&lt;/code&gt; so it renders the Sign-In Widget. Angular’s &lt;code class=&quot;highlighter-rouge&quot;&gt;ChangeDetectorRef&lt;/code&gt; is used to notify Angular when things have changed and rendering needs to process changed variables.&lt;/p&gt;
 
 &lt;div class=&quot;language-typescript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ChangeDetectorRef&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Component&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;OnInit&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'@angular/core'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;OktaService&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'./shared/okta/okta.service'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -13197,7 +13238,7 @@ it exists.&lt;/p&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;In order for the &lt;code class=&quot;highlighter-rouge&quot;&gt;BeerListComponent&lt;/code&gt; to detect that you’ve logged in, you need to use add a constructor dependency on &lt;code class=&quot;highlighter-rouge&quot;&gt;ChangeDetectorRef&lt;/code&gt; and invoke its &lt;code class=&quot;highlighter-rouge&quot;&gt;detectChanges()&lt;/code&gt; method when you set the &lt;code class=&quot;highlighter-rouge&quot;&gt;giphyUrl&lt;/code&gt; property on each &lt;code class=&quot;highlighter-rouge&quot;&gt;beer&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;In order for the &lt;code class=&quot;highlighter-rouge&quot;&gt;BeerListComponent&lt;/code&gt; (at &lt;code class=&quot;highlighter-rouge&quot;&gt;src/app/beer-list/beer-list.component.ts&lt;/code&gt;) to detect that you’ve logged in, you need to use add a constructor dependency on &lt;code class=&quot;highlighter-rouge&quot;&gt;ChangeDetectorRef&lt;/code&gt; and invoke its &lt;code class=&quot;highlighter-rouge&quot;&gt;detectChanges()&lt;/code&gt; method when you set the &lt;code class=&quot;highlighter-rouge&quot;&gt;giphyUrl&lt;/code&gt; property on each &lt;code class=&quot;highlighter-rouge&quot;&gt;beer&lt;/code&gt;.&lt;/p&gt;
 
 &lt;div class=&quot;language-typescript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ChangeDetectorRef&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Component&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;OnInit&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'@angular/core'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;BeerService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;GiphyService&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'../shared'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -13251,7 +13292,7 @@ it exists.&lt;/p&gt;
 
 &lt;p&gt;You should be able to log in, see a welcome message, as well as a logout button.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-spring-secure/angular-welcome-b735b67b696573dad476bc876cc5ec1f6470d02fb6567c57a3f1bd6278ca30ee.png&quot; alt=&quot;Angular Welcome&quot; width=&quot;800&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-spring-secure/angular-welcome-b735b67b696573dad476bc876cc5ec1f6470d02fb6567c57a3f1bd6278ca30ee.png&quot; alt=&quot;Angular Welcome&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;learn-more&quot;&gt;Learn More&lt;/h2&gt;
 
@@ -16564,10 +16605,23 @@ port. Modify &lt;code class=&quot;highlighter-rouge&quot;&gt;edge-service/src/ma
 &lt;p&gt;To enable Feign, Hystrix, and registration with the Eureka server, add the appropriate annotations to 
 &lt;code class=&quot;highlighter-rouge&quot;&gt;EdgeServiceApplication.java&lt;/code&gt;:&lt;/p&gt;
 
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;com&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;example&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;lombok.Data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.boot.SpringApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.boot.autoconfigure.SpringBootApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.cloud.client.discovery.EnableDiscoveryClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.cloud.netflix.feign.EnableFeignClients&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.cloud.netflix.feign.FeignClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.cloud.netflix.zuul.EnableZuulProxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.hateoas.Resources&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.web.bind.annotation.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.Collection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.stream.Collectors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
 &lt;span class=&quot;nd&quot;&gt;@EnableFeignClients&lt;/span&gt;
 &lt;span class=&quot;nd&quot;&gt;@EnableCircuitBreaker&lt;/span&gt;
@@ -16592,9 +16646,21 @@ appropriate constructors.&lt;/p&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Create a &lt;code class=&quot;highlighter-rouge&quot;&gt;BeerClient&lt;/code&gt; that uses Feign to talk to the &lt;code class=&quot;highlighter-rouge&quot;&gt;beer-catalog-service&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Create a &lt;code class=&quot;highlighter-rouge&quot;&gt;BeerClient&lt;/code&gt; interface that uses Feign to talk to the &lt;code class=&quot;highlighter-rouge&quot;&gt;beer-catalog-service&lt;/code&gt;.&lt;/p&gt;
 
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@FeignClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;beer-catalog-service&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;EdgeServiceApplication&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;SpringApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EdgeServiceApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nd&quot;&gt;@Data&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Beer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nd&quot;&gt;@FeignClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;beer-catalog-service&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BeerClient&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
 
     &lt;span class=&quot;nd&quot;&gt;@GetMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/beers&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
@@ -16602,7 +16668,7 @@ appropriate constructors.&lt;/p&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Create a &lt;code class=&quot;highlighter-rouge&quot;&gt;RestController&lt;/code&gt; that filters out less-than-great beers and exposes a &lt;code class=&quot;highlighter-rouge&quot;&gt;/good-beers&lt;/code&gt; endpoint.&lt;/p&gt;
+&lt;p&gt;Create a &lt;code class=&quot;highlighter-rouge&quot;&gt;RestController&lt;/code&gt; below the &lt;code class=&quot;highlighter-rouge&quot;&gt;BeerClient&lt;/code&gt; that filters out less-than-great beers and exposes a &lt;code class=&quot;highlighter-rouge&quot;&gt;/good-beers&lt;/code&gt; endpoint.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; To get &lt;code class=&quot;highlighter-rouge&quot;&gt;beer.getName()&lt;/code&gt; to work in your IDE, you may need to install the Lombok plugin. In Intellij, you can 
 install it by going to Preferences -&amp;gt; Plugins -&amp;gt; Browse Plugins. Search for “lombok plugin” and click to install it. 
@@ -16714,7 +16780,7 @@ X-Application-Context: edge-service:8081
 
 &lt;p&gt;You can copy the Angular PWA client I created in a &lt;a href=&quot;/blog/2017/05/09/progressive-web-applications-with-angular-and-spring-boot&quot;&gt;previous tutorial&lt;/a&gt; and install its dependencies.&lt;/p&gt;
 
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone git@github.com:oktadeveloper/spring-boot-angular-pwa-example.git
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/oktadeveloper/spring-boot-angular-pwa-example.git
 cp &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; spring-boot-angular-pwa-example/client ~/spring-boot-microservices-example/.
 &lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; ~/spring-boot-microservices-example/client
 npm install
@@ -16779,6 +16845,8 @@ download/install the &lt;a href=&quot;https://github.com/cloudfoundry/cli#downlo
 &lt;p&gt;There are quite a few steps involved to deploy all the services and the Angular client for production. For that reason, 
 I wrote a &lt;a href=&quot;https://github.com/oktadeveloper/spring-boot-microservices-example/blob/master/deploy.sh&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;deploy.sh&lt;/code&gt;&lt;/a&gt; script 
 that automates everything.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;TIP:&lt;/strong&gt; If you receive an error stating that you’re using too much memory, you may have to upgrade your Cloud Foundry subscription.&lt;/p&gt;
 
 &lt;h2 id=&quot;when-to-use-microservices&quot;&gt;When to Use Microservices&lt;/h2&gt;
 

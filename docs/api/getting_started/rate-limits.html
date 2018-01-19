@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en" dir="ltr">
+<head>
+  <script>
+    var searchDomain = 'https://developer.okta.com';
+    var isProduction = window.location.hostname === 'developer.okta.com';
+    if (isProduction) {
+      // TypeKit
+      (function(d) {
+        var config = {
+          kitId: 'jff5neq',
+          scriptTimeout: 3000,
+          async: true
+        },
+        h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/bwf-loadingb/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+      })(document);
+
+      // Google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-15777010-3', 'auto');
+      ga('send', 'pageview');
+
+      // START Google Tag Manager
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-TJ45R6');
+      // END Google Tag Manager
+    }
+	</script>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+ 	
+
+  <link type="text/css" rel="stylesheet" href="https://developer.okta.com/sites/all/themes/developer/css/master.css" media="all" />
+  <meta class="swiftype" name="title" data-type="string" content="Rate Limiting at Okta | Okta Developer" />
+  <meta class="swiftype" name="summary" data-type="string" content="Understand rate limits at Okta and learn how to design for efficient use of resources" />
+
+  <link type="text/css" rel="stylesheet" href="/assets/animate-ec43d72c3ed45e08a460b8a2966d8dba6006aebfa0530935c3973fa493a8771f.css">
+  <link type="text/css" rel="stylesheet" href="/assets/okta-43dc5927557b8154c15ef656cdd0486491b6492bc32fff1149c297de0f054cbe.css">
+  
+  
+  <title>Rate Limiting at Okta | Okta Developer</title>
+  <meta name="description" content="Understand rate limits at Okta and learn how to design for efficient use of resources">
+  <link rel="canonical" href="https://developer.okta.com/docs/api/getting_started/rate-limits"  data-proofer-ignore>
+  <link rel="alternate" type="application/rss+xml" title="Okta Developer" href="https://developer.okta.com/feed.xml"><!-- GA -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/assets/favicon/manifest.json">
+  <link rel="mask-icon" href="/assets/favicon/safari-pinned-tab.svg" color="#21313a">
+  <meta name="msapplication-config" content="/assets/favicon/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+<body>
+  <div class="Page rate-limiting-at-okta Page--docs-page">
+    <!-- START Header -->
+    
+
+
+
+
+<header class="Header is-fixed">
+
+  <div class="Wrap">
+
+    <a class="Logo" href="https://developer.okta.com">
+      <svg version="1.1" id="OktaLogo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 431.9 151.4" style="enable-background:new 0 0 431.9 151.4;" xml:space="preserve"><g><g><g><path d="M102.2,41.4c-21,0-38.1,17.1-38.1,38.1s17.1,38.1,38.1,38.1s38.1-17.1,38.1-38.1l0,0C140.3,58.5,123.2,41.4,102.2,41.4z M102.2,98.5c-10.5,0-19-8.5-19-19s8.5-19,19-19s19,8.5,19,19c0.1,10.5-8.4,19-18.9,19.1C102.3,98.6,102.2,98.6,102.2,98.5L102.2,98.5z"/><path d="M169.1,92.3c0-1.9,1.5-3.4,3.4-3.4c0.9,0,1.8,0.4,2.4,1c9.5,9.7,25.3,26.3,25.4,26.4c0.4,0.5,0.8,0.8,1.4,0.9l1.6,0.2h17.2c1.8,0,3.3-1.4,3.4-3.2c0-0.8-0.3-1.5-0.8-2.2l-28.6-29.2l-1.5-1.5c-3.2-3.9-2.9-5.4,0.8-9.3l22.6-25.1c1.1-1.4,0.8-3.5-0.6-4.6c-0.6-0.4-1.3-0.7-2-0.7h-17c-0.6,0.2-1.1,0.5-1.5,0.9L175,64.4c-1.3,1.4-3.4,1.5-4.8,0.2c-0.7-0.6-1.1-1.5-1.1-2.5V18.9c0-1.7-1.3-3-3-3c-0.1,0-0.2,0-0.3,0h-12.7c-2.2,0-3.3,1.5-3.3,2.8v95.8c0,2.2,1.8,2.8,3.3,2.8h12.7c1.7,0.1,3.2-1.2,3.3-2.9c0,0,0,0,0,0V92.3z"/><path d="M273,114l-1.4-12.8c-0.2-1.7-1.7-2.9-3.4-2.7c0,0,0,0-0.1,0l-2.9,0.2c-10.1,0-18.5-7.9-19-18c0-0.3,0-0.7,0-1V64.2c-0.1-2,1.5-3.6,3.5-3.7c0,0,0,0,0,0h17c1.7-0.1,3.1-1.5,3-3.2c0,0,0-0.1,0-0.1v-12c0-2.3-1.5-3.6-2.8-3.6h-17.1c-1.9,0.1-3.5-1.5-3.6-3.4c0,0,0,0,0,0V18.9c-0.1-1.7-1.5-3.1-3.2-3c0,0-0.1,0-0.1,0h-12.7c-1.6-0.1-3,1.1-3.1,2.7c0,0.1,0,0.1,0,0.2c0,0,0,61.7,0,62c0.5,21,17.9,37.6,38.9,37c1.4,0,2.9-0.2,4.3-0.3C272,117.2,273.2,115.7,273,114z"/></g><path d="M364.7,98c-10.8,0-12.4-3.8-12.4-18.3l0,0V44.8c0-1.8-1.4-3.2-3.2-3.2c0,0-0.1,0-0.1,0h-12.8c-1.8,0-3.2,1.4-3.3,3.2v1.6C314.6,36,291.3,42.5,281,60.8c-10.4,18.3-3.9,41.6,14.4,51.9c14,7.9,31.4,6.2,43.5-4.2c3.6,5.5,9.3,9.1,18.3,9.1c1.5,0,9.7,0.3,9.7-3.5v-13.6C367,99.2,366,98.1,364.7,98z M314.2,98.6c-10.5,0-19-8.5-19-19s8.5-19,19-19s19,8.5,19,19l0,0C333.2,90.1,324.7,98.6,314.2,98.6z"/></g><path d="M19.4,74c2.2-1.9,4.1-4.1,5.7-6.6c3.5-5.3,5.4-11.5,5.2-17.9V27c0-4.9,0.9-8.4,2.7-10.5c1.8-2.1,4.8-3,9.2-3h12.6c1.2,0,2.1-0.9,2.2-2.1l0,0V2.2C57,1,56,0,54.8,0c0,0,0,0,0,0H41.5c-7.8,0-12.9,2.1-18,7.6s-7.1,12.3-7.1,21.7v14.2c0,2.2-0.1,4-0.2,5.7v2.2c-0.5,3.2-1.8,6.2-3.6,8.9C9.4,64.7,5.1,70.9,0.9,74l0,0l-0.3,0.3l0,0l-0.2,0.3H0.2v0.3l0,0c-0.1,0.3-0.1,0.7,0,1l0,0v0.3h0.1l0.2,0.3l0,0l0.3,0.3l0,0c4.2,3.1,8.5,9.3,11.3,13.7c1.8,2.7,3.1,5.7,3.6,8.9v2.2c0.1,1.6,0.2,3.5,0.2,5.7v14.3c0,9.4,2.4,16.7,7.1,21.7s10.2,7.6,18,7.6h13.8c1.2,0,2.2-1,2.2-2.2V140l0,0c0-1.2-1-2.2-2.2-2.2H42.2c-4.4,0-7.5-1-9.2-3s-2.7-5.6-2.7-10.5v-22.4c0.2-6.4-1.7-12.6-5.2-17.9c-1.6-2.5-3.5-4.7-5.7-6.6l0,0c-0.9-0.7-1.1-2-0.4-2.9C19.2,74.3,19.3,74.2,19.4,74L19.4,74z"/><path d="M412.5,74c-2.2-1.9-4.1-4.1-5.7-6.6c-3.5-5.3-5.4-11.5-5.2-17.9V27c0-4.9-0.9-8.4-2.7-10.5s-4.8-3-9.2-3h-12.6c-1.2,0-2.2-1-2.2-2.2c0,0,0,0,0,0l0,0V2.2c0-1.2,1-2.2,2.2-2.2c0,0,0,0,0,0h13.4c7.8,0,12.9,2.1,18,7.6s7.1,12.3,7.1,21.7v14.2c0,2.2,0.1,4,0.2,5.7v2.2c0.5,3.2,1.8,6.2,3.6,8.9c2.8,4.5,7.1,10.7,11.3,13.7l0,0l0.3,0.3l0,0l0.2,0.3h0.1v0.3l0,0c0.1,0.3,0.1,0.7,0,1l0,0v0.3h-0.1l-0.2,0.3l0,0l-0.3,0.3l0,0c-4.2,3.1-8.5,9.3-11.3,13.7c-1.8,2.7-3.1,5.7-3.6,8.9v2.2c-0.1,1.6-0.2,3.5-0.2,5.7v14.3c0,9.4-2.4,16.7-7.1,21.7s-10.2,7.6-18,7.6h-13.4c-1.2,0-2.2-1-2.2-2.2c0,0,0,0,0,0V140l0,0c0-1.2,1-2.2,2.2-2.2l0,0h12.7c4.4,0,7.5-1,9.2-3s2.7-5.6,2.7-10.5v-22.4c-0.2-6.3,1.6-12.6,5.1-17.9c1.6-2.5,3.5-4.7,5.7-6.6l0,0c0.9-0.7,1.1-2,0.4-2.9C412.7,74.3,412.6,74.2,412.5,74L412.5,74z"/></g></svg>
+    </a>
+
+    <nav class="Header-nav PrimaryNav">
+      <ul class="menu">
+        <li class="first expanded">
+          <a href="https://developer.okta.com/product/">Product</a>
+          <ul class="menu">
+            <li class="first leaf"><a href="https://developer.okta.com/product/">Overview</a></li>
+            <li class="leaf"><a href="https://developer.okta.com/product/authentication/">Authentication</a></li>
+            <li class="leaf"><a href="https://developer.okta.com/product/authorization/">Authorization</a></li>
+            <li class="last leaf"><a href="https://developer.okta.com/product/user-management/">User Management</a></li>
+          </ul>
+        </li>
+        <li class="leaf">
+          <a href="https://developer.okta.com/pricing/">Pricing</a>
+        </li>
+        <li class="leaf">
+          <a href="/blog/">Blog</a>
+        </li>
+        <li class="leaf">
+          <a href="/documentation/" class="active">Docs</a>
+        </li>
+        <li class="last expanded">
+          <span class="nolink">Support</span>
+          <ul class="menu">
+            <li class="first leaf"><a href="https://devforum.okta.com/">Okta Developer Forums</a></li>
+            <li class="last leaf"><a href="mailto:developers@okta.com">developers@okta.com</a></li>
+          </ul>
+        </li>
+      </ul>
+      <a class="PrimaryNav-toggle" href="#">
+        <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g class="MenuIcon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+                <path d="M1,16 L19,16" class="MenuIcon-line1" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,4 L19,4" class="MenuIcon-line2" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,10 L19,10" class="MenuIcon-line3" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,10 L19,10" class="MenuIcon-line4" stroke="#FFFFFF" stroke-width="2"></path>
+            </g>
+        </svg>
+        <svg class="CloseIcon" width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <g id="ALl-Boards" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="Desktop" transform="translate(-915.000000, -235.000000)" fill="#FFFFFF">
+              <g id="Search-bar-Active" transform="translate(30.000000, 26.000000)">
+                <polygon id="Icon/Cross" points="901 210.6 899.4 209 893 215.4 886.6 209 885 210.6 891.4 217 885 223.4 886.6 225 893 218.6 899.4 225 901 223.4 894.6 217"></polygon>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </a>
+
+      <div class="PrimaryNav-cta">
+        <a target="_blank" rel="noopener noreferrer" href="https://login.okta.com/?SAMLRequest=fc%2B7CsJAEAXQXvAflu1NNJUMeZBGELTx1a%2FrYILJTtyZGD%2FfSBRiYzlw77lMnD3rSj3Qc0ku0YtgrhU6S5fSXRN9PKxmS52l00nMpq6iBvJWCrfDe4ss6vStRe9aDzmGIZfo1jsgwyWDMzUyiIV9vt1AH4XGk5ClSvewUgMNa%2BYW%2FVj5jxhm9NLP67QQaSAMu64L6CYmsFSHlnzT4ZlLwTgcL6Sf8%2FeX9AU%3Dhttps://login.okta.com/?SAMLRequest=fc%2B7CsJAEAXQXvAflu1NNJUMeZBGELTx1a%2FrYILJTtyZGD%2FfSBRiYzlw77lMnD3rSj3Qc0ku0YtgrhU6S5fSXRN9PKxmS52l00nMpq6iBvJWCrfDe4ss6vStRe9aDzmGIZfo1jsgwyWDMzUyiIV9vt1AH4XGk5ClSvewUgMNa%2BYW%2FVj5jxhm9NLP67QQaSAMu64L6CYmsFSHlnzT4ZlLwTgcL6Sf8%2FeX9AU%3D" class="Button--redOutline">Login</a>
+        <a href="https://developer.okta.com/signup/" class="Button--red">Sign up</a>
+      </div>
+
+      <a class="SearchIcon" href="#"></a>
+      <form id="form_search" class="SearchBar Formisimo_clocked_69929" method="get" action="https://developer.okta.com/search/" name="form_search" __bizdiag="-784164280" __biza="WJ__">
+        <input type="text" name="stq" autocomplete="off" id="st-search-input-auto" class="st-search-input" placeholder="Search">
+        <input type="submit" name="submit" value="GO">
+      </form>
+
+    </nav>
+
+  </div>
+
+</header>
+
+    <!-- END Header -->
+     <!-- START Page Center w/Sub Nav & Content -->
+    <section class="PageContent DynamicSidebar has-tableOfContents">
+      <!-- START Fixed sidebar --><aside class="Sidebar">
+  <h2 class="Sidebar-location Sidebar-toggle h6">Navigation</h2>
+  <div class="Sidebar-close Sidebar-toggle"></div>
+  <div>
+    <h3 class="Sidebar-title"><a href = "/authentication-guide/">Authentication Guide</a></h3>
+    <ul class="Sidebar-nav">
+      <li>
+        <a href = "/authentication-guide/auth-overview/">OAuth 2.0 Overview</a>
+        
+      </li>
+      <li>
+        <a href = "/authentication-guide/implementing-authentication/">Implementing OAuth 2.0</a>
+        
+      </li>
+      <li>
+      <a href = "/authentication-guide/social-login/">Social Login</a>
+      
+      </li>
+      <li>
+      <a href = "/authentication-guide/saml-login/">SAML Login</a>
+      
+      </li>
+      <li>
+      <a href = "/authentication-guide/tokens/">Working With Tokens</a>
+      
+      </li>
+      <!--
+      <li>
+      <a href = "/authentication-guide/custom-login/">Customizing Login</a>
+      
+      </li>
+    -->
+    </ul>
+
+    <h3 class="Sidebar-title">Use Cases</h3>
+    <ul class="Sidebar-nav">
+      <li>
+        <a href="/use_cases/authentication/">Authentication</a>
+      </li>
+      <li>
+        <a href="/use_cases/mfa/">Multi-Factor Authentication</a>
+      </li>
+      <li>
+        <a href="/use_cases/api_access_management/">API Access Management</a>
+      </li>
+      <li>
+        <a href="/use_cases/integrate_with_okta/">Integrate with Okta</a>
+      </li>
+    </ul>
+
+    <h3 class="Sidebar-title">Reference</h3>
+    <ul class="Sidebar-nav">
+      <li>
+        <a href="/docs/api/getting_started/api_test_client">Getting Started</a>
+        <ul>
+          <li>
+            <a href="/docs/api/getting_started/api_test_client">Getting Started With the Okta APIs</a>
+          </li>
+          <li>
+            <a href="/docs/api/getting_started/getting_a_token">Getting a Token</a>
+          </li>
+          <li>
+            <a href="/docs/api/getting_started/enabling_cors">Enabling CORS</a>
+          </li>
+          <li class="is-active">
+            <a href="/docs/api/getting_started/rate-limits">Rate Limiting at Okta</a>
+          </li>
+          <li>
+            <a href="/docs/api/getting_started/design_principles">Design Principles</a>
+          </li>
+          <li>
+            <a href="/docs/api/getting_started/releases-at-okta">Okta Release Lifecycle</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="/docs/api/resources/authn">Authentication API</a>
+      </li>
+      <li>
+        <a href="/docs/api/resources/apps">Management API</a>
+      </li>
+      <li>
+        <a href="/reference/error_codes/">Error Codes</a>
+      </li>
+      <li>
+        <a href="/reference/okta_expression_language/">Okta Expression Language</a>
+      </li>
+      <li>
+        <a href="/docs/change-log/index.html">Change Log</a>
+      </li>
+    </ul>
+
+    <h3 class="Sidebar-title">Standards</h3>
+    <ul class="Sidebar-nav">
+      
+      
+      
+      <li>
+        <a href="/standards/OAuth/">OAuth 2.0 and Okta</a>
+      </li>
+      
+      
+      <li>
+        <a href="/standards/OIDC/">OpenID Connect and Okta</a>
+      </li>
+      
+      
+      <li>
+        <a href="/standards/SAML/">SAML</a>
+      </li>
+      
+      
+      
+      
+      <li>
+        <a href="/standards/SCIM/">SCIM Provisioning with Lifecycle Management</a>
+      </li>
+      
+    </ul>
+
+    <script>
+      if (document.querySelectorAll("#Sidebar_Resources .is-active").length) {
+        document.getElementById('Sidebar_Resources').classList.remove('Sidebar-hide');
+      }
+
+      if (document.querySelectorAll("#Sidebar_References .is-active").length) {
+        document.getElementById('Sidebar_References').classList.remove('Sidebar-hide');
+      }
+    </script>
+  </div>
+</aside>
+<!-- END Fixed sidebar -->
+      <!-- START Page Content -->
+      <div class="PageContent-main" id="docs-body">
+        <a id="edit-link" href="https://github.com/okta/okta.github.io/edit/source/_source/_docs/api/getting_started/rate-limits.md" data-proofer-ignore>Edit Page</a>
+      <h1 id="rate-limiting-at-okta">Rate Limiting at Okta</h1>
+
+<p>The number of API requests for an organization is limited for all APIs in order to protect the service for all users.</p>
+
+<p>Okta has two types of rate limits:</p>
+
+<ul>
+  <li><a href="#org-wide-rate-limits">Org-wide rate limits</a> that vary by API endpoint</li>
+  <li><a href="#concurrent-rate-limits">Concurrent rate limits</a> on the number of simultaneous transactions regardless of endpoint</li>
+</ul>
+
+<p>Rate limits may be changed to protect customers. We provide advance warning of changes when possible.</p>
+
+<h2 id="org-wide-rate-limits">Org-Wide Rate Limits</h2>
+
+<p>API rate limits apply per minute or per second to the endpoints in an org.</p>
+
+<p>If an org-wide rate limit is exceeded, an HTTP 429 Status Code is returned.
+You can anticipate hitting the rate limit by checking <a href="#check-your-rate-limits-with-oktas-rate-limit-headers">Okta’s rate limiting headers</a>.</p>
+
+<p>When reading the following tables, remember that a more specific limit is considered separately from a more general limit on the same base URI. For example, when you are updating an application, the rate limit for creating or listing an application is not also applied.</p>
+
+<h3 id="okta-api-endpoints-and-per-minute-limits">Okta API Endpoints and Per Minute Limits</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Action</th>
+      <th style="text-align: left">Okta API Endpoint</th>
+      <th style="text-align: right">Per Minute Limit</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Create or list applications</td>
+      <td style="text-align: left"><code class="highlighter-rouge">/api/v1/apps</code></td>
+      <td style="text-align: right">100</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Get, update, or delete an application</td>
+      <td style="text-align: left"><code class="highlighter-rouge">/api/v1/apps/{id}</code></td>
+      <td style="text-align: right">500</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Authenticate different end users</td>
+      <td style="text-align: left"><code class="highlighter-rouge">/api/v1/authn</code></td>
+      <td style="text-align: right">500</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Creating or listing groups</td>
+      <td style="text-align: left"><code class="highlighter-rouge">/api/v1/groups</code></td>
+      <td style="text-align: right">500</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Get, update, or delete a group</td>
+      <td style="text-align: left"><code class="highlighter-rouge">/api/v1/groups/{id}</code></td>
+      <td style="text-align: right">1000</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Get System Log data</td>
+      <td style="text-align: left"><code class="highlighter-rouge">/api/v1/logs</code></td>
+      <td style="text-align: right">60</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Get session information</td>
+      <td style="text-align: left"><code class="highlighter-rouge">/api/v1/sessions</code></td>
+      <td style="text-align: right">750</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Create or list users</td>
+      <td style="text-align: left"><code class="highlighter-rouge">/api/v1/users</code></td>
+      <td style="text-align: right">600</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Get a user by user ID</td>
+      <td style="text-align: left"><code class="highlighter-rouge">/api/v1/users/{id}</code></td>
+      <td style="text-align: right">2000</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Get a user by user login name</td>
+      <td style="text-align: left"><code class="highlighter-rouge">/api/v1/users/{login}</code></td>
+      <td style="text-align: right">2000</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Create, update, or delete a user by ID</td>
+      <td style="text-align: left"><code class="highlighter-rouge">/api/v1/users/{id}</code></td>
+      <td style="text-align: right">600</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Create an org (ISVs only)</td>
+      <td style="text-align: left"><code class="highlighter-rouge">/api/v1/orgs</code></td>
+      <td style="text-align: right">50</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">All other actions</td>
+      <td style="text-align: left"><code class="highlighter-rouge">/api/v1/</code></td>
+      <td style="text-align: right">1200</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="okta-api-endpoints-and-per-user-limits">Okta API Endpoints and Per-User Limits</h3>
+<p>Two org-wide rate limits for API endpoints are on a per user, per-second basis to prevent brute force attacks:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Action</th>
+      <th style="text-align: left">Okta API Endpoint</th>
+      <th style="text-align: right">Per Second Limit</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Generate or refresh an OAuth 2.0 token</td>
+      <td style="text-align: left"><code class="highlighter-rouge">/oauth2/v1/token</code></td>
+      <td style="text-align: right">4</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Authenticate the same user</td>
+      <td style="text-align: left"><code class="highlighter-rouge">/api/v1/authn/</code></td>
+      <td style="text-align: right">4</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="okta-rate-limits-for-all-other-endpoints">Okta Rate Limits for All Other Endpoints</h3>
+<p>Finally, for all endpoints not listed in the tables above, the API rate limit is a combined 10,000 requests per minute.</p>
+
+<h3 id="okta-home-page-endpoints-and-per-minute-limits">Okta Home Page Endpoints and Per-Minute Limits</h3>
+
+<p>The following endpoints are used by the Okta home page for authentication and sign on, and have org-wide rate limits:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Okta Home Page Endpoints</th>
+      <th style="text-align: right">Per-Minute Limit</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">/app/{app}/{key}/sso/saml</code></td>
+      <td style="text-align: right">750</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">/app/office365/{key}/sso/wsfed/active</code></td>
+      <td style="text-align: right">2000</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">/app/office365/{key}/sso/wsfed/passive</code></td>
+      <td style="text-align: right">250</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">/app/template_saml_2_0/{key}/sso/saml</code></td>
+      <td style="text-align: right">2500</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">/login/do-login</code></td>
+      <td style="text-align: right">200</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">/login/login.htm</code></td>
+      <td style="text-align: right">850</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">/login/sso_iwa_auth</code></td>
+      <td style="text-align: right">500</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">/api/plugin/{protocol version}/form-cred/{app user IDs}/{form site option}</code></td>
+      <td style="text-align: right">650</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">/api/plugin/{protocol version}/sites</code></td>
+      <td style="text-align: right">150</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">/bc/fileStoreRecord</code></td>
+      <td style="text-align: right">500</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">/bc/globalFileStoreRecord</code></td>
+      <td style="text-align: right">500</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="end-user-rate-limit">End-User Rate Limit</h3>
+
+<p>Okta limits the number of requests from the Okta user interface to 40 requests per user per 10 seconds per endpoint. This rate limit protects users from each other, and from other API requests in the system.</p>
+
+<p>If a user is able to exceed this limit, they are locked out until the rate limit passes, and a message is written to the user interface and the System Log.</p>
+
+<h2 id="concurrent-rate-limits">Concurrent Rate Limits</h2>
+
+<p>Okta also enforces concurrent rate limits, which are distinct from <a href="#org-wide-rate-limits">the org-wide, per-minute API rate limits</a>.</p>
+
+<p>For concurrent rate limits, traffic is measured in three different areas. Counts in one area aren’t included in counts for the other two:</p>
+
+<ul>
+  <li>For agent traffic, Okta has set the limit based on typical org usage. This limit varies from agent to agent.</li>
+  <li>For Office365 traffic, the limit is 75 concurrent transactions per org.</li>
+  <li>For all other traffic including API requests, the limit is 75 concurrent transactions per org.</li>
+</ul>
+
+<p>Any request that would cause Okta to exceed the concurrent limit returns an HTTP 429 error, and the first error every 60 seconds is written to the log.
+Reporting concurrent rate limits once a minute keeps log volume manageable.</p>
+
+<blockquote>
+  <p>Important: Operations rarely hit the concurrent rate limit: even very large bulk loads rarely use more than 10 threads at a time.</p>
+</blockquote>
+
+<h2 id="check-your-rate-limits-with-oktas-rate-limit-headers">Check Your Rate Limits with Okta’s Rate Limit Headers</h2>
+
+<p>Okta provides three headers in each response to report on both concurrent and org-wide rate limits.</p>
+
+<p>For org-wide rate limits, the three headers show the limit that is being enforced, when it resets, and how close you are to hitting the limit:</p>
+<ul>
+  <li><code class="highlighter-rouge">X-Rate-Limit-Limit</code> - the rate limit ceiling that is applicable for the current request.</li>
+  <li><code class="highlighter-rouge">X-Rate-Limit-Remaining</code> - the number of requests left for the current rate-limit window.</li>
+  <li><code class="highlighter-rouge">X-Rate-Limit-Reset</code> - the time at which the rate limit will reset, specified in UTC epoch time.</li>
+</ul>
+
+<p>For example:</p>
+
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="s">X-Rate-Limit-Limit  10000</span>
+<span class="s">X-Rate-Limit-Remaining  9999</span>
+<span class="s">X-Rate-Limit-Reset  1516307596</span>
+</code></pre></div></div>
+
+<p>The best way to be sure about org-wide rate limits is to check the relevant headers in the response. The System Log doesn’t report every
+API request. Rather, it typically reports completed or attempted real-world events such as configuration changes, user logins, or user lockouts.
+The System Log doesn’t report the rate at which you’ve been calling the API.</p>
+
+<p>Instead of the accumulated counts for time-based rate limits, when a request exceeds the limit for concurrent requests,
+<code class="highlighter-rouge">X-Rate-Limit-Limit</code>, <code class="highlighter-rouge">X-Rate-Limit-Remaining</code>, and <code class="highlighter-rouge">X-Rate-Limit-Reset</code> report the concurrent values.</p>
+
+<p>The three headers behave a little differently for concurrent rate limits: when the number of unfinished requests is below the concurrent rate limit, request headers only report org-wide rate limits.
+When you exceed a concurrent rate limit threshold, the headers report that the limit has been exceeded. When you drop back down below the concurrent rate limit, the headers  switch back to reporting the time-based rate limits.
+Additionally, the <code class="highlighter-rouge">X-Rate-Limit-Reset</code> time for concurrent rate limits is only a suggestion. There’s no guarantee that enough requests will complete to stop exceeding the concurrent rate limit at the time indicated.</p>
+
+<h3 id="example-rate-limit-header-with-org-wide-rate-limit">Example Rate Limit Header with Org-Wide Rate Limit</h3>
+
+<p>This example shows the relevant portion of a rate limit header being returned with  for a request that hasn’t exceeded the org-wide rate limit for the <code class="highlighter-rouge">/api/v1/users</code> endpoint:</p>
+
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">HTTP/1.1 200 
+Date: Tue, 27 Jan 2018 21:33:25 GMT
+X-Rate-Limit-Limit: 600
+X-Rate-Limit-Remaining: 598
+X-Rate-Limit-Reset: 1516308901
+</span></code></pre></div></div>
+
+<p>The following example show a rate limit header being returned for a request that has exceeded the rate limit for the <code class="highlighter-rouge">/api/v1/users</code> endpoint:</p>
+
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">HTTP/1.1 200 
+Date: Tue, 27 Jan 2018 21:33:25 GMT
+X-Rate-Limit-Limit: 600
+X-Rate-Limit-Remaining: 0
+X-Rate-Limit-Reset: 1516308966
+</span></code></pre></div></div>
+
+<h3 id="example-rate-limit-header-with-concurrent-rate-limit">Example Rate Limit Header with Concurrent Rate Limit</h3>
+
+<p>This example shows the relevant portion of a rate limit header being returned with the error for a request that exceeded the concurrent rate limit. If the rate limit wasn’t being exceeded, the headers would contain information about the org-wide rate limit. You won’t ever see non-error concurrent rate limits in the headers.</p>
+
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">HTTP/1.1 429 
+Date: Tue, 26 Jan 2018 21:33:25 GMT
+X-Rate-Limit-Limit: 0
+X-Rate-Limit-Remaining: 0
+X-Rate-Limit-Reset: 1506461721
+</span></code></pre></div></div>
+
+<p>The first two header values are always <code class="highlighter-rouge">0</code> for concurrent rate limit errors.
+The third header reports an estimated time interval when the concurrent rate limit may be resolved. It is not a guarantee.</p>
+
+<p>The error condition resolves itself as soon as there is another concurrent thread available. No intervention is required.</p>
+
+<h3 id="example-error-response-events-for-concurrent-rate-limit">Example Error Response Events for Concurrent Rate Limit</h3>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"eventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tevEVgTHo-aQjOhd1OZ7QS3uQ1506395956000"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"sessionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"102oMlafQxwTUGJMLL8FhVNZA"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"reqIUuPHG7ZSEuHGUXBZxUXEw"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"published"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-01-26T03:19:16.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"action"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Too many concurrent requests in flight"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"categories"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+      </span><span class="s2">"objectType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"core.concurrency.org.limit.violation"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"requestUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/report/system_log"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"actors"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00uo7fD8dXTeWU3g70g3"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"displayName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Test User"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"login"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-user@test.net"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"objectType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"User"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"displayName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CHROME"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"ipAddress"</span><span class="p">:</span><span class="w"> </span><span class="s2">"127.0.0.1"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"objectType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Client"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"targets"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="example-error-response-in-system-log-api-beta-for-concurrent-rate-limit">Example Error Response in System Log API (Beta) for Concurrent Rate Limit</h3>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+        </span><span class="s2">"actor"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"alternateId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test.user@test.com"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"detailEntry"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"displayName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Test User"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00u1qqxig80SMWArY0g7"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"User"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"authenticationContext"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"authenticationProvider"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"authenticationStep"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"credentialProvider"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"credentialType"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"externalSessionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trs2TSSLkgWR5iDuebwuH9Vsw"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"interface"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"issuer"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"client"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"device"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Unknown"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"geographicalContext"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"ipAddress"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4.15.16.10"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"userAgent"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"browser"</span><span class="p">:</span><span class="w"> </span><span class="s2">"UNKNOWN"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"os"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Unknown"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"rawUserAgent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Apache-HttpClient/4.5.2 (Java/1.7.0_76)"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"zone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"null"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"debugContext"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"debugData"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"requestUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/api/v1/users"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"displayMessage"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Too many requests in flight"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"core.concurrency.org.limit.violation"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"legacyEventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"core.concurrency.org.limit.violation"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"outcome"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"published"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-01-26T20:21:32.783Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"request"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"ipChain"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="s2">"geographicalContext"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"ip"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4.15.16.10"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"source"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"V4"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="s2">"geographicalContext"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"ip"</span><span class="p">:</span><span class="w"> </span><span class="s2">"52.22.142.162"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"source"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"V4"</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"securityContext"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"asNumber"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"asOrg"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"domain"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"isProxy"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"isp"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"severity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"INFO"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"target"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"transaction"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"detail"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Wcq2zDtj7xjvEu-gRMigPwAACYM"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"WEB"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dc7e2385-74ba-4b77-827f-fb84b37a4b3b"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="requesting-exceptions">Requesting Exceptions</h2>
+
+<p>You can request a temporary rate limit increase. For example, if you are importing a large number of users and groups you may need a temporary rate limit increase.</p>
+
+<p>To request an exception, open a case 10 days before you need the increase, with Okta Support and provide the following details:</p>
+
+<ul>
+  <li>Your Org Name: the entire URL, for example https://cloudcompany.okta.com or https://unicorn.oktapreview.com</li>
+  <li>Endpoints and Rates: the URI that need to have their limits increased and how much of an increase is required</li>
+  <li>Start date and time</li>
+  <li>End date and time</li>
+  <li>Business Justification: why you need the temporary increase</li>
+</ul>
+
+      </div>
+      <div class="TableOfContents TableOfContentsPreload">
+        <div class="TableOfContents-item is-level1">
+          <script>
+                  document.write(document.title.split('|')[0].trim());
+          </script>
+        </div>
+        <div class="TableOfContentsLoader"></div>
+      </div><!-- END Page Content -->
+    </section><!-- END Page Center w/Sub Nav & Content -->
+
+    <!-- START Footer -->
+    <footer class="Footer">
+    <div class="Wrap">
+
+        <div class="Row">
+
+            <div class="Column--3 Column--medium-6 Column--xSmall-12">
+
+                <a class="Logo" href="https://www.okta.com/" target="_blank" rel="noopener noreferrer">
+                    <img src="https://developer.okta.com/sites/all/themes/developer/images/logo-footer.png" alt="Okta">
+                    Visit okta.com
+                </a>
+
+            </div>
+
+            <div class="Column--3 Column--medium-12 Column--xSmall-12">
+
+                <h4>Social</h4>
+                <ul class="Footer-links Footer-links--social">
+                    <li><a class="Footer-links--github" target="_blank" rel="noopener noreferrer" href="http://github.com/oktadeveloper">Github</a></li>
+                    <li><a class="Footer-links--twitter" target="_blank" rel="noopener noreferrer" href="http://twitter.com/OktaDev">Twitter</a></li>
+                    <li><a class="Footer-links--forum" target="_blank" rel="noopener noreferrer" href="https://devforum.okta.com/">Forum</a></li>
+                    <li><a class="Footer-links--rss" target="_blank" rel="noopener noreferrer" href="http://feeds.feedburner.com/OktaBlog">RSS Blog</a></li>
+                </ul>
+            </div>
+
+            <div class="Column--3 Column--medium-6 Column--small-12">
+                <h4>More Info</h4>
+                <ul class="Footer-links">
+                    <li><a target="_blank" href="https://developer.okta.com/integrate-with-okta/">Integrate with Okta</a></li>
+                    <li><a href="/blog/">Blog</a></li>
+                    <li><a href="/docs/change-log/">Change Log</a></li>
+                    <li><a href="/3rd_party_notices/">3rd Party Notices</a></li>
+                </ul>
+            </div>
+
+            <div class="Column--3 Column--medium-6 Column--small-12">
+                <h4>Contact &amp; Legal</h4>
+                <ul class="Footer-links">
+                    <li><a href="https://developer.okta.com/contact/">Contact Sales</a></li>
+                    <li><a target="_blank" rel="noopener noreferrer" href="mailto:developers@okta.com">Contact Support</a></li>
+                    <li><a href="https://developer.okta.com/terms/">Terms &amp; Conditions</a></li>
+                    <li><a href="https://developer.okta.com/privacy/">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script type="text/javascript" src="/assets/master-36874fb206f812b2e337a93ccfa9c4872940f73b7c070bba28ed2ed9dfccc380.js"></script>
+    <script type="text/javascript" src="/assets/myOkta-911cbafbbe079b7a5522d9cbe15bd2a5f44e1582531e88393934bec69f97696b.js"></script>
+    
+    
+    
+    
+      <script type="text/javascript" src="/assets/docs-0af8e0751a2375ff1b4d8e8ddf6a1b7ffd864bd473116861d71f541c4859329e.js"></script>
+    
+
+    <!-- END Footer -->
+  </div>
+  <!-- START Post Footer -->
+  
+  <!-- START Google Tag Manager -->
+  <!-- https://support.google.com/tagmanager/answer/6103696?hl=en -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TJ45R6" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- END Google Tag Manager -->
+  <!-- START Google Remarketing Tag -->
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var google_conversion_id = 1006913831;
+    var google_custom_params = window.google_tag_params;
+    var google_remarketing_only = true;
+    /* ]]> */
+  </script>
+  <div style="display:none;"><script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script></div>
+  <noscript><div style="display:inline;"><img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1006913831/?value=0&amp;guid=ON&amp;script=0"></div></noscript>
+  <!-- END Google Remarketing Tag -->
+  <!-- START Crazy Egg Tracking -->
+  <script type="text/javascript">
+    setTimeout(function(){var a=document.createElement("script");
+    var b=document.getElementsByTagName("script")[0];
+    a.src=document.location.protocol+"//script.crazyegg.com/pages/scripts/0021/9333.js?"+Math.floor(new Date().getTime()/3600000);
+    a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+  </script>
+  <!-- END Crazy Egg Tracking -->
+
+  <!-- END Post Footer -->
+</body>
+</html>
