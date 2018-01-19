@@ -42,7 +42,7 @@ and budget.
 A smart team will optimize around this and choose the lesser of two evils; forcing the logic into whichever application 
 they have access to. This is an example of [Conway's Law](http://www.melconway.com/Home/Committees_Paper.html) in action.
 
-{% img blog/microservices-spring-boot/conways-law.png alt:"Conway's Law" width:"560" %}
+{% img blog/microservices-spring-boot/conways-law.png alt:"Conway's Law" width:"560" %}{: .center-image }
 
 > Any organization that designs a system (defined broadly) will produce a design whose structure is a copy of the 
 > organization's communication structure.
@@ -114,7 +114,7 @@ To learn more about service discovery and resolution with Eureka, watch Josh Lon
 To begin, create a `spring-boot-microservices-example` directory. Navigate to [start.spring.io](https://start.spring.io). 
 Enter `eureka-service` as an artifact name and select `Eureka Server` as a dependency. 
 
-{% img blog/microservices-spring-boot/eureka-service.png alt:"Eureka Server" width:"800" %}
+{% img blog/microservices-spring-boot/eureka-service.png alt:"Eureka Server" width:"800" %}{: .center-image }
 
 Click the **Generate Project** button and expand `eureka-service.zip` into the `spring-boot-microservices-example` directory.
 
@@ -255,7 +255,7 @@ At this point, you should be able to use [HTTPie](https://httpie.org/) to see th
 http localhost:8080/beers
 ```
 
-{% img blog/microservices-spring-boot/httpie-beers.png alt:"HTTPie Beers" width:"800" %}
+{% img blog/microservices-spring-boot/httpie-beers.png alt:"HTTPie Beers" width:"800" %}{: .center-image }
 
 However, if you open the Eureka Service at `http://localhost:8761`, you will not see the service registered. To register 
 the beer-catalog-service, you need to add `@EnableDiscoveryClient` to `BeerCatalogServiceApplication.java`.
@@ -276,10 +276,10 @@ public class BeerCatalogServiceApplication {
 Re-compile this class, watch devtools restart your application, and return to `http://localhost:8761`. If you’re not 
 using an IDE, it might be easiest to cancel and restart `mvn spring-boot:run`. Now the service should show up.
 
-{% img blog/microservices-spring-boot/eureka-instances-registered.png alt:"Eureka instances registered" width:"800" %}
+{% img blog/microservices-spring-boot/eureka-instances-registered.png alt:"Eureka instances registered" width:"800" %}{: .center-image }
 
 <a name="intellij-auto-compile"></a>
-<div style="padding: 12px 12px 2px 25px; border: 1px solid silver; border-left: 5px solid #ddd">
+<div style="padding: 12px 12px 12px 25px; border: 1px solid silver; border-left: 5px solid #ddd">
 <strong>Compile on Save in IntelliJ</strong><br>
 
 <p>By default IntelliJ IDEA does not automatically compile files when the application is running. 
@@ -316,7 +316,7 @@ Navigate to [start.spring.io](https://start.spring.io) and create an "edge-servi
 * Hystrix: a circuit breaker to stop cascading failure and enable resilience
 * Lombok: to reduce boilerplate code
 
-{% img blog/microservices-spring-boot/edge-service.png alt:"Edge Service" width:"800" %}
+{% img blog/microservices-spring-boot/edge-service.png alt:"Edge Service" width:"800" %}{: .center-image }
 
 Click the **Generate Project** button and expand `edge-service.zip` into `spring-boot-microservices-example` and open 
 the project in your favorite IDE. 
@@ -333,10 +333,23 @@ To enable Feign, Hystrix, and registration with the Eureka server, add the appro
 `EdgeServiceApplication.java`:
 
 ```java
+package com.example;
+
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import lombok.Data;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
+import org.springframework.hateoas.Resources;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 @EnableFeignClients
 @EnableCircuitBreaker
@@ -362,9 +375,21 @@ class Beer {
 }
 ```
 
-Create a `BeerClient` that uses Feign to talk to the `beer-catalog-service`.
+Create a `BeerClient` interface that uses Feign to talk to the `beer-catalog-service`.
 
 ```java
+public class EdgeServiceApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(EdgeServiceApplication.class, args);
+    }
+}
+
+@Data
+class Beer {
+    private String name;
+}
+
 @FeignClient("beer-catalog-service")
 interface BeerClient {
 
@@ -373,7 +398,7 @@ interface BeerClient {
 }
 ```
 
-Create a `RestController` that filters out less-than-great beers and exposes a `/good-beers` endpoint.
+Create a `RestController` below the `BeerClient` that filters out less-than-great beers and exposes a `/good-beers` endpoint.
 
 **NOTE:** To get `beer.getName()` to work in your IDE, you may need to install the Lombok plugin. In Intellij, you can 
 install it by going to Preferences -> Plugins -> Browse Plugins. Search for "lombok plugin" and click to install it. 
@@ -494,7 +519,7 @@ Start the `beer-catalog-service` again and this list should eventually return th
 You can copy the Angular PWA client I created in a [previous tutorial](/blog/2017/05/09/progressive-web-applications-with-angular-and-spring-boot) and install its dependencies.
 
 ```bash
-git clone git@github.com:oktadeveloper/spring-boot-angular-pwa-example.git
+git clone https://github.com/oktadeveloper/spring-boot-angular-pwa-example.git
 cp -r spring-boot-angular-pwa-example/client ~/spring-boot-microservices-example/.
 cd ~/spring-boot-microservices-example/client
 npm install
@@ -504,8 +529,7 @@ Then modify the `BeerService` in `client/src/app/shared/beer/beer.service.ts` to
 
 ```typescript
 getAll(): Observable<any> {
-  return this.http.get('http://localhost:8081/good-beers')
-    .map((response: Response) => response.json());
+  return this.http.get('http://localhost:8081/good-beers');
 }
 ```
 
@@ -521,7 +545,7 @@ Restart the `edge-service` and start the Angular client by running `npm start` i
 
 Open `http://localhost:4200` in your browser and verify that network calls to `/good-beers` go over port `8081`.
 
-{% img blog/microservices-spring-boot/angular-pwa.png alt:"Angular PWA Client" width:"800" %}
+{% img blog/microservices-spring-boot/angular-pwa.png alt:"Angular PWA Client" width:"800" %}{: .center-image }
 
 ### Deploy to Cloud Foundry
 
@@ -563,9 +587,9 @@ download/install the [Cloud Foundry CLI](https://github.com/cloudfoundry/cli#dow
  
 There are quite a few steps involved to deploy all the services and the Angular client for production. For that reason, 
 I wrote a [`deploy.sh`](https://github.com/oktadeveloper/spring-boot-microservices-example/blob/master/deploy.sh) script 
-that automates everything. Note that it uses a 
-[`sw.py`](https://github.com/oktadeveloper/spring-boot-microservices-example/blob/master/sw.py) Python script to change 
-the names of Angular's generated JavaScript files.
+that automates everything. 
+
+**TIP:** If you receive an error stating that you're using too much memory, you may have to upgrade your Cloud Foundry subscription.
  
 ## When to Use Microservices
 
@@ -607,3 +631,6 @@ or [create an issue on GitHub](https://github.com/oktadeveloper/spring-boot-micr
 
 **Update:** To learn about how security fits into all this, see [Secure a Spring Microservices Architecture with Spring Security, JWTs, Juiser, and Okta](/blog/2017/08/08/secure-spring-microservices.html).
  
+**Changelog:**
+
+* Jan 17, 2018: Updated to use latest client from [Build Your First Progressive Web Application with Angular and Spring Boot](/blog/2017/05/09/progressive-web-applications-with-angular-and-spring-boot). See the code changes in the [example app on GitHub](https://github.com/oktadeveloper/spring-boot-microservices-example/pull/6). Changes to this article can be viewed [in this pull request](https://github.com/okta/okta.github.io/pull/1637).
