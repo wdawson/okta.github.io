@@ -752,7 +752,7 @@
 
 <h3 id="client-object">Client Object</h3>
 
-<p>Describes the client performing the action.</p>
+<p>When an event is triggered by an HTTP request, the Client object describes the <a href="https://en.wikipedia.org/wiki/Category:Hypertext_Transfer_Protocol_clients">client</a> that issues that HTTP request. For instance, the web browser is the client when a user accesses Okta. When this request is received and processed, a login event is fired. When the event is not sourced to an HTTP request, such as in the case of an automatic update, the Client Object field is blank.</p>
 
 <table>
   <thead>
@@ -766,43 +766,91 @@
   <tbody>
     <tr>
       <td>userAgent</td>
-      <td>The user agent used by an actor to perform an action</td>
-      <td>String</td>
+      <td>The <a href="https://en.wikipedia.org/wiki/User_agent">user agent</a> used by an actor to perform an action</td>
+      <td><a href="#useragent-object">UserAgent Object</a></td>
       <td>TRUE</td>
     </tr>
     <tr>
       <td>geographicalContext</td>
-      <td>Geographical context data of the event</td>
+      <td>The physical location where the client made its request from</td>
       <td><a href="#geographicalcontext-object">GeographicalContext Object</a></td>
       <td>TRUE</td>
     </tr>
     <tr>
       <td>zone</td>
-      <td>Zone where the client is located</td>
+      <td>The <strong>name</strong> of the <a href="/docs/api/resources/zones.html#ZoneModel">Zone</a> that the client’s location is mapped to</td>
       <td>String</td>
       <td>TRUE</td>
     </tr>
     <tr>
       <td>ipAddress</td>
-      <td>Ip address of the client</td>
+      <td>Ip address that the client made its request from</td>
       <td>String</td>
       <td>TRUE</td>
     </tr>
     <tr>
       <td>device</td>
-      <td>Device that the client operated from</td>
+      <td>Type of device that the client operated from (e.g. Computer)</td>
+      <td>String</td>
+      <td>TRUE</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="useragent-object">UserAgent Object</h3>
+
+<p>“A user agent is software (a software agent) that is acting on behalf of a user.” (<a href="https://en.wikipedia.org/wiki/User_agent">Wikipedia</a>)</p>
+
+<p>In the Okta event data model, the UserAgent object provides specifications about the client software that makes event-triggering HTTP requests. User agent identification is often useful for identifying interoperability problems between servers and clients, and also for browser and operating system usage analytics.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Description</th>
+      <th>DataType</th>
+      <th>Nullable</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Browser</td>
+      <td>If the client is a web browser, this field identifies the type of web browser (e.g. CHROME, FIREFOX)</td>
       <td>String</td>
       <td>TRUE</td>
     </tr>
     <tr>
-      <td>id</td>
-      <td>ID of the client</td>
+      <td>OS</td>
+      <td>The <a href="https://en.wikipedia.org/wiki/Operating_system">Operating System</a> the client runs on (e.g. Windows 10)</td>
       <td>String</td>
       <td>TRUE</td>
     </tr>
+    <tr>
+      <td>RawUserAgent</td>
+      <td>A raw string representation of the user agent, formatted according to <a href="https://tools.ietf.org/html/rfc7231#section-5.5.3">section 5.5.3 of HTTP/1.1 Semantics and Content</a>. Both the <strong>browser</strong> and the <strong>OS</strong> fields can be derived from this field.</td>
+      <td>String</td>
+      <td>TRUE</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="request-object">Request Object</h3>
+
+<p>The request object describes details related to the HTTP request that triggers this event, if available. When the event is not sourced to an http request, such as in the case of an automatic update on the Okta servers, the Request object will still exist, but the <strong>ipChain</strong> field will be empty.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Description</th>
+      <th>DataType</th>
+      <th>Nullable</th>
+    </tr>
+  </thead>
+  <tbody>
     <tr>
       <td>ipChain</td>
-      <td>Describes IP addresses used to perform an action</td>
+      <td>If the incoming request passes through any proxies, the IP addresses of those proxies will be stored here in the format (clientIp, proxy1, proxy2, …). This field is useful when working with trusted proxies.</td>
       <td>Array of <a href="#ipaddress-object">IpAddress</a></td>
       <td>TRUE</td>
     </tr>
@@ -858,7 +906,7 @@
 
 <h3 id="geolocation-object">Geolocation Object</h3>
 
-<p>Latitude and longitude of the geolocation where an action was performed, formatted according to the <a href="https://en.wikipedia.org/wiki/ISO_6709">ISO-6709</a> standard. The latitude uses 2 digits for its integer part and the longitude uses 3 digits for its integer part.</p>
+<p>Latitude and longitude of the geolocation where an action was performed, formatted according to the <a href="https://en.wikipedia.org/wiki/ISO_6709">ISO-6709</a> standard.</p>
 
 <table>
   <thead>
@@ -872,13 +920,13 @@
   <tbody>
     <tr>
       <td>lat</td>
-      <td>Latitude</td>
+      <td>Latitude. Uses 2 digits for the <a href="https://en.wikipedia.org/wiki/ISO_6709#Latitude">integer part</a></td>
       <td>Double</td>
       <td>FALSE</td>
     </tr>
     <tr>
       <td>lon</td>
-      <td>Longitude</td>
+      <td>Longitude. Uses 3 digits for the <a href="https://en.wikipedia.org/wiki/ISO_6709#Longitude">integer part</a></td>
       <td>Double</td>
       <td>FALSE</td>
     </tr>
