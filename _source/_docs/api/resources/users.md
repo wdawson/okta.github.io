@@ -3818,7 +3818,7 @@ A hashed password may be specified in a Password Object when creating or updatin
 
 
 ##### Hashing Algorithm
-Currently the only supported hashing algorithim is the bcrypt algorithm.
+Currently the only supported hashing function for user object import is the bcrypt algorithm.
 
 ##### Default Password Policy
 
