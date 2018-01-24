@@ -1,6 +1,6 @@
 d--
 layout: blog_post
-title: 'Build Your Own Invoicing Service with Node, Coinbase, Bitcoin, and Okta'
+title: "Build Your Own Invoicing Service with Node, Coinbase, Bitcoin, and Okta"
 author: rdegges
 tags: [cryptocurrency, bitcoin, coinbase, okta, node]
 tweets:
