@@ -4,8 +4,8 @@ title: 'Build Your Own Invoicing Service with Node, Coinbase, Bitcoin, and Okta'
 author: rdegges
 tags: [cryptocurrency, bitcoin, coinbase, okta, node]
 tweets:
-  - "Interested in freelancing for Bitcoin? @rdegges will show you how to build your own invoicing tool using @coinbase! →"
-  - "Stop scrolling through your feed and build something fun! We'll show you how to build a cryptocurrency invoicing service using @coinbase and Node >:)"
+  - "Interested in freelancing for Bitcoin? @rdegges will show you how to build your own invoicing tool using @coinbase! → "
+  - "Stop scrolling through your feed and build something fun! We'll show you how to build a cryptocurrency invoicing service using @coinbase and Node.js >:) "
 ---
 
 
@@ -17,20 +17,20 @@ Today, I thought it'd be fun to build a small web invoicing portal (something si
 
 The client can then pay their invoices using their local currency or Bitcoin (if they have it). In the end: you'll be able to manage and bill your clients and receive payment in Bitcoin.
 
-I do a bit of consulting work myself and will be using this in the future =)
+I do a bit of consulting work myself and will be using this in the future. =)
 
 **PS**: If you want to skip the article and go [straight to the code](https://github.com/rdegges/crypto-invoicer), go for it! I'm using Node.js, Express.js, and [Coinbase](https://www.coinbase.com) to power the application.
 
 {% img blog/node-invoicing-service/crypto-invoicer.png alt:"Crypto Invoicer" width:"620" %}{: .center-image }
 
 
-## Get Started with Coinbase, Okta, and Node
+## Get Started with Coinbase, Okta, and Node.js
 
 Before I walk you through building the application, there are a few things you'll need to do.
 
 You'll need to go create an account with [Coinbase](https://www.coinbase.com/join/51660a68c08669f6b8000046). Coinbase is the largest and most popular Bitcoin exchange in the US. It allows you to easily get started using Bitcoin without needing to install software, learn a lot, etc.
 
-You'll also need to create an [Okta developer account](http://synd.co/2zVDRxo). Okta is an API service that allows you to create user accounts, and perform simple authentication and authorization for your web apps, mobile apps, and API services.
+You'll also need to create an [Okta developer account](https://developer.okta.com/signup/). Okta is an API service that allows you to create user accounts, and perform simple authentication and authorization for your web apps, mobile apps, and API services.
 
 Finally, you'll need to have Node.js setup on your computer and be ready to do some coding! >:)
 
@@ -65,7 +65,7 @@ Log into your Okta dashboard and copy down the **Org URL** value you see at the 
 
 You next need to create a new Okta Application. Using Okta, you can manage users for many applications you might have.
 
-To do this, click the large Applications menu item and click Add Application. Then when you are prompted, select the "Web" application option. This tells Okta that you are building a web application (not an API service, for instance). Behind the scenes, Okta uses this information to set your app up with the proper types of OAuth 2.0 and OpenID Connect.
+To do this, click the large Applications menu item and click Add Application. Then when you are prompted, select the **Web** application option. This tells Okta that you are building a web application (not an API service, for instance). Behind the scenes, Okta uses this information to set your app up with the proper types of OAuth 2.0 and OpenID Connect.
 
 Now you'll see a page asking you to define your Application settings. Use the values below:
 
@@ -83,13 +83,13 @@ These credentials will be used to communicate securely with Okta in order to aut
 
 Now that we've done the boring stuff, let's take a look at some code.
 
-You can either clone the project locally from my Github repository:
+You can either clone the project locally from my GitHub repository:
 
 ```
 $ git clone https://github.com/rdegges/crypto-invoicer
 ```
 
-Or you can [fork the project](https://github.com/rdegges/crypto-invoicer) to your own Github account and then clone that locally. This might make it easier to make changes and play around with the code as you follow along below.
+Or you can [fork the project](https://github.com/rdegges/crypto-invoicer) to your own GitHub account and then clone that locally. This might make it easier to make changes and play around with the code as you follow along below.
 
 Through the rest of this article, I'll assume that you're working inside of the cloned/forked project directory.
 
@@ -134,7 +134,7 @@ If you're using Windows, you'll need to [do something different](https://technet
 
 ## Install Dependencies
 
-Now that the setup is completely finished, install all of the project dependencies using `npm`, the Node package manager:
+Now that the setup is completely finished, install all of the project dependencies using `npm`, the Node.js package manager:
 
 ```
 $ npm install
@@ -146,7 +146,7 @@ Among these dependencies, there are a few interesting ones:
 
 * [express](http://expressjs.com/) is the web framework you'll use to build the app
 * [coinbase-node](https://github.com/coinbase/coinbase-node) is the officially supported Coinbase developer library you'll be using to interact with the Coinbase API
-* [oidc-middleware](https://github.com/okta/okta-oidc-js/tree/master/packages/oidc-middleware) is a popular OpenID Connect middleware maintained by Okta that handles user authentication and authorization for Node apps
+* [oidc-middleware](https://github.com/okta/okta-oidc-js/tree/master/packages/oidc-middleware) is a popular OpenID Connect middleware maintained by Okta that handles user authentication and authorization for Node.js apps
 
 
 ## Build the Frontend
@@ -406,15 +406,15 @@ This might be a good time to inspect the `static` folder and see what's in it. T
 
 Next you'll see the express-session middleware defined. What this middleware does is configure Express to store sensitive user information in cookies (which are the safest way to store authentication data). When you are logged into the website via Okta later on, your authentication information will be stored in these cookies that are managed by this library.
 
-**NOTE**: The `SECRET` variable that's used when initializing the session library is incredibly important. This long, random string that you previously defined is what keeps your cookies safe from tampering. If this value is ever leaked publicly (on Github, etc.) it would be a security catastrophe. All cookie-based systems require a secret key to be used to cryptographically validate the cookie.
+**NOTE**: The `SECRET` variable that's used when initializing the session library is incredibly important. This long, random string that you previously defined is what keeps your cookies safe from tampering. If this value is ever leaked publicly (on GitHub, etc.) it would be a security catastrophe. All cookie-based systems require a secret key to be used to cryptographically validate the cookie.
 
-The last middleware you'll see is the oidc-middleware. This is a little more complex, as it handles a lot of magic behind the scenes, and makes all the authentication logic in the application work.
+The last middleware you'll see is the [oidc-middleware](https://github.com/okta/okta-oidc-js/tree/master/packages/oidc-middleware). This is a little more complex, as it handles a lot of magic behind the scenes, and makes all the authentication logic in the application work.
 
 The way this middleware works is by fully enabling your app to use OpenID Connect (OIDC) for authentication. When you define the new `ExpressOIDC` and give it your Okta configuration information, it builds an OIDC object that remembers all your application rules: what URL your application runs one, where to redirect the user after they've logged in, what your secret application keys are, etc.
 
 Once this new object is created, it contains an Express router object that is then enabled below with the `app.use(oidc.router);` call. This line registers some magical routes behind the scenes: the main one of which is `/login`.
 
-When this line of code is executed any requests to `/login` will redirect you to your dedicated login page (hosted by Okta), and prompt you to log into the application. Once the user has been logged in, they will then be redirected BACK to your Node application, where they will be logged in and able to access the dashboard page.
+When this line of code is executed any requests to `/login` will redirect you to your dedicated login page (hosted by Okta), and prompt you to log into the application. Once the user has been logged in, they will then be redirected BACK to your Node.js application, where they will be logged in and able to access the dashboard page.
 
 ### Define Helpers
 
@@ -473,7 +473,7 @@ In this function I'm using the [async](http://caolan.github.io/async/) library t
 
 ### Define Startup Jobs
 
-The next thing you'll do is define the jobs that need to run each time this Node server starts up.
+The next thing you'll do is define the jobs that need to run each time this Node.js server starts up.
 
 If you take a look at the startup jobs code block, you'll see what I mean:
 
@@ -534,7 +534,7 @@ oidc.on("error", err => {
 });
 ```
 
-The `setInterval()` call essentially tells this Node process to update the cache of transaction data once per hour (in milliseconds). This way, all transaction information will be at most one hour old.
+The `setInterval()` call essentially tells this Node.js process to update the cache of transaction data once per hour (in milliseconds). This way, all transaction information will be at most one hour old.
 
 Finally, the Express app itself will be launched once the authentication library has finished preparing itself.
 
@@ -611,6 +611,13 @@ The Coinbase API provides a lot of rich functionality. Paired with Okta for auth
 
 If you're interested in building cryptocurrency apps of your own, I highly recommend you create a [Coinbase account](https://www.coinbase.com/join/51660a68c08669f6b8000046) and check out their fantastic [API documentation](https://developers.coinbase.com/). They have a good number of libraries and tools available to help you build your applications in a fun and fast way.
 
-I'd also recommend creating an [Okta developer account](https://developer.okta.com/signup/) which you can use to store users for your web apps, mobile apps, and API services, as well as handle authentication, authorization, OAuth2, OpenID Connect, Single Sign-On, etc.
+I'd also recommend creating an [Okta developer account](https://developer.okta.com/signup/) which you can use to store users for your web apps, mobile apps, and API services, as well as handle authentication, authorization, OAuth 2.0, OpenID Connect, Single Sign-On, etc.
 
-Finally, if you'd like to see more articles like this, tweet [@oktadev](https://twitter.com/oktadev) and let me know! &lt;3
+Finally, if you'd like to see more articles like this, tweet [@oktadev](https://twitter.com/oktadev) and let me know! &lt;3 You can also look at some similar articles we've written recently:
+
+- [Protect Your Cryptocurrency Wealth Tracking PWA with
+  Okta](https://developer.okta.com/blog/2018/01/18/cryptocurrency-pwa-secured-by-okta)
+  written by my colleague [@mraible](https://twitter.com/mraible)
+- [Build a Cryptocurrency Comparison Site with
+  Vue.js](https://developer.okta.com/blog/2017/09/06/build-a-cryptocurrency-comparison-site-with-vuejs)
+  by yours truly
