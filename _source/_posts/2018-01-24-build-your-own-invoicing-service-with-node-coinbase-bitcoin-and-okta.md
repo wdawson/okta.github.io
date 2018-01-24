@@ -1,4 +1,4 @@
----
+d--
 layout: blog_post
 title: 'Build Your Own Invoicing Service with Node, Coinbase, Bitcoin, and Okta'
 author: rdegges
@@ -19,7 +19,7 @@ The client can then pay their invoices using their local currency or Bitcoin (if
 
 I do a bit of consulting work myself and will be using this in the future. =)
 
-**PS**: If you want to skip the article and go [straight to the code](https://github.com/rdegges/crypto-invoicer), go for it! I'm using Node.js, Express.js, and [Coinbase](https://www.coinbase.com) to power the application.
+**PS**: If you want to skip the article and go [straight to the code](https://github.com/oktadeveloper/crypto-invoicer), go for it! I'm using Node.js, Express.js, and [Coinbase](https://www.coinbase.com) to power the application.
 
 {% img blog/node-invoicing-service/crypto-invoicer.png alt:"Crypto Invoicer" width:"620" %}{: .center-image }
 
@@ -86,10 +86,10 @@ Now that we've done the boring stuff, let's take a look at some code.
 You can either clone the project locally from my GitHub repository:
 
 ```
-$ git clone https://github.com/rdegges/crypto-invoicer
+$ git clone https://github.com/oktadeveloper/crypto-invoicer
 ```
 
-Or you can [fork the project](https://github.com/rdegges/crypto-invoicer) to your own GitHub account and then clone that locally. This might make it easier to make changes and play around with the code as you follow along below.
+Or you can [fork the project](https://github.com/oktadeveloper/crypto-invoicer) to your own GitHub account and then clone that locally. This might make it easier to make changes and play around with the code as you follow along below.
 
 Through the rest of this article, I'll assume that you're working inside of the cloned/forked project directory.
 
