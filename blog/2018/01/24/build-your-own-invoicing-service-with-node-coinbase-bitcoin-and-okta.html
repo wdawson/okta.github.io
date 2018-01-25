@@ -1,0 +1,923 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html class="ie6 no-flexbox"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie7 no-flexbox"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie8 no-flexbox"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie9 no-flexbox"> <![endif]-->
+<!--[if IE 10 ]>    <html class="ie10 no-flexbox"> <![endif]-->
+<!--[if (gt IE 10)|!(IE)]><!--> <html class="modern wf-loading" lang="en"> <!--<![endif]-->
+  <head>
+  <script>
+    var searchDomain = 'https://developer.okta.com';
+    var isProduction = window.location.hostname === 'developer.okta.com';
+    if (isProduction) {
+      // TypeKit
+      (function(d) {
+        var config = {
+          kitId: 'jff5neq',
+          scriptTimeout: 3000,
+          async: true
+        },
+        h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/bwf-loadingb/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+      })(document);
+
+      // Google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-15777010-3', 'auto');
+      ga('send', 'pageview');
+
+      // START Google Tag Manager
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-TJ45R6');
+      // END Google Tag Manager
+    }
+	</script>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+ 	
+
+  <link type="text/css" rel="stylesheet" href="https://developer.okta.com/sites/all/themes/developer/css/master.css" media="all" />
+  <meta class="swiftype" name="title" data-type="string" content="Build Your Own Invoicing Service with Node, Coinbase, Bitcoin, and Okta | Okta Developer" />
+  <meta class="swiftype" name="summary" data-type="string" content="I got into Bitcoin back in 2011. Since then, I’ve been a fan of cryptocurrencies and have always had an interest in them. I’ve also built several Bitcoin pro..." />
+
+  <link type="text/css" rel="stylesheet" href="/assets/animate-ec43d72c3ed45e08a460b8a2966d8dba6006aebfa0530935c3973fa493a8771f.css">
+  <link type="text/css" rel="stylesheet" href="/assets/okta-77ed9f9378ee6c3c73bbc2c72fd0f30b5b26c68e4b873863a0d7aaf514ef4bfc.css">
+  
+  
+  <title>Build Your Own Invoicing Service with Node, Coinbase, Bitcoin, and Okta | Okta Developer</title>
+  <meta name="description" content="I got into Bitcoin back in 2011. Since then, I’ve been a fan of cryptocurrencies and have always had an interest in them. I’ve also built several Bitcoin pro...">
+  <link rel="canonical" href="https://developer.okta.com/blog/2018/01/24/build-your-own-invoicing-service-with-node-coinbase-bitcoin-and-okta"  data-proofer-ignore>
+  <link rel="alternate" type="application/rss+xml" title="Okta Developer" href="https://developer.okta.com/feed.xml"><!-- GA -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/assets/favicon/manifest.json">
+  <link rel="mask-icon" href="/assets/favicon/safari-pinned-tab.svg" color="#21313a">
+  <meta name="msapplication-config" content="/assets/favicon/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  
+    <body id="blog">
+	
+
+
+
+
+<header class="Header is-fixed">
+
+  <div class="Wrap">
+
+    <a class="Logo" href="https://developer.okta.com">
+      <svg version="1.1" id="OktaLogo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 431.9 151.4" style="enable-background:new 0 0 431.9 151.4;" xml:space="preserve"><g><g><g><path d="M102.2,41.4c-21,0-38.1,17.1-38.1,38.1s17.1,38.1,38.1,38.1s38.1-17.1,38.1-38.1l0,0C140.3,58.5,123.2,41.4,102.2,41.4z M102.2,98.5c-10.5,0-19-8.5-19-19s8.5-19,19-19s19,8.5,19,19c0.1,10.5-8.4,19-18.9,19.1C102.3,98.6,102.2,98.6,102.2,98.5L102.2,98.5z"/><path d="M169.1,92.3c0-1.9,1.5-3.4,3.4-3.4c0.9,0,1.8,0.4,2.4,1c9.5,9.7,25.3,26.3,25.4,26.4c0.4,0.5,0.8,0.8,1.4,0.9l1.6,0.2h17.2c1.8,0,3.3-1.4,3.4-3.2c0-0.8-0.3-1.5-0.8-2.2l-28.6-29.2l-1.5-1.5c-3.2-3.9-2.9-5.4,0.8-9.3l22.6-25.1c1.1-1.4,0.8-3.5-0.6-4.6c-0.6-0.4-1.3-0.7-2-0.7h-17c-0.6,0.2-1.1,0.5-1.5,0.9L175,64.4c-1.3,1.4-3.4,1.5-4.8,0.2c-0.7-0.6-1.1-1.5-1.1-2.5V18.9c0-1.7-1.3-3-3-3c-0.1,0-0.2,0-0.3,0h-12.7c-2.2,0-3.3,1.5-3.3,2.8v95.8c0,2.2,1.8,2.8,3.3,2.8h12.7c1.7,0.1,3.2-1.2,3.3-2.9c0,0,0,0,0,0V92.3z"/><path d="M273,114l-1.4-12.8c-0.2-1.7-1.7-2.9-3.4-2.7c0,0,0,0-0.1,0l-2.9,0.2c-10.1,0-18.5-7.9-19-18c0-0.3,0-0.7,0-1V64.2c-0.1-2,1.5-3.6,3.5-3.7c0,0,0,0,0,0h17c1.7-0.1,3.1-1.5,3-3.2c0,0,0-0.1,0-0.1v-12c0-2.3-1.5-3.6-2.8-3.6h-17.1c-1.9,0.1-3.5-1.5-3.6-3.4c0,0,0,0,0,0V18.9c-0.1-1.7-1.5-3.1-3.2-3c0,0-0.1,0-0.1,0h-12.7c-1.6-0.1-3,1.1-3.1,2.7c0,0.1,0,0.1,0,0.2c0,0,0,61.7,0,62c0.5,21,17.9,37.6,38.9,37c1.4,0,2.9-0.2,4.3-0.3C272,117.2,273.2,115.7,273,114z"/></g><path d="M364.7,98c-10.8,0-12.4-3.8-12.4-18.3l0,0V44.8c0-1.8-1.4-3.2-3.2-3.2c0,0-0.1,0-0.1,0h-12.8c-1.8,0-3.2,1.4-3.3,3.2v1.6C314.6,36,291.3,42.5,281,60.8c-10.4,18.3-3.9,41.6,14.4,51.9c14,7.9,31.4,6.2,43.5-4.2c3.6,5.5,9.3,9.1,18.3,9.1c1.5,0,9.7,0.3,9.7-3.5v-13.6C367,99.2,366,98.1,364.7,98z M314.2,98.6c-10.5,0-19-8.5-19-19s8.5-19,19-19s19,8.5,19,19l0,0C333.2,90.1,324.7,98.6,314.2,98.6z"/></g><path d="M19.4,74c2.2-1.9,4.1-4.1,5.7-6.6c3.5-5.3,5.4-11.5,5.2-17.9V27c0-4.9,0.9-8.4,2.7-10.5c1.8-2.1,4.8-3,9.2-3h12.6c1.2,0,2.1-0.9,2.2-2.1l0,0V2.2C57,1,56,0,54.8,0c0,0,0,0,0,0H41.5c-7.8,0-12.9,2.1-18,7.6s-7.1,12.3-7.1,21.7v14.2c0,2.2-0.1,4-0.2,5.7v2.2c-0.5,3.2-1.8,6.2-3.6,8.9C9.4,64.7,5.1,70.9,0.9,74l0,0l-0.3,0.3l0,0l-0.2,0.3H0.2v0.3l0,0c-0.1,0.3-0.1,0.7,0,1l0,0v0.3h0.1l0.2,0.3l0,0l0.3,0.3l0,0c4.2,3.1,8.5,9.3,11.3,13.7c1.8,2.7,3.1,5.7,3.6,8.9v2.2c0.1,1.6,0.2,3.5,0.2,5.7v14.3c0,9.4,2.4,16.7,7.1,21.7s10.2,7.6,18,7.6h13.8c1.2,0,2.2-1,2.2-2.2V140l0,0c0-1.2-1-2.2-2.2-2.2H42.2c-4.4,0-7.5-1-9.2-3s-2.7-5.6-2.7-10.5v-22.4c0.2-6.4-1.7-12.6-5.2-17.9c-1.6-2.5-3.5-4.7-5.7-6.6l0,0c-0.9-0.7-1.1-2-0.4-2.9C19.2,74.3,19.3,74.2,19.4,74L19.4,74z"/><path d="M412.5,74c-2.2-1.9-4.1-4.1-5.7-6.6c-3.5-5.3-5.4-11.5-5.2-17.9V27c0-4.9-0.9-8.4-2.7-10.5s-4.8-3-9.2-3h-12.6c-1.2,0-2.2-1-2.2-2.2c0,0,0,0,0,0l0,0V2.2c0-1.2,1-2.2,2.2-2.2c0,0,0,0,0,0h13.4c7.8,0,12.9,2.1,18,7.6s7.1,12.3,7.1,21.7v14.2c0,2.2,0.1,4,0.2,5.7v2.2c0.5,3.2,1.8,6.2,3.6,8.9c2.8,4.5,7.1,10.7,11.3,13.7l0,0l0.3,0.3l0,0l0.2,0.3h0.1v0.3l0,0c0.1,0.3,0.1,0.7,0,1l0,0v0.3h-0.1l-0.2,0.3l0,0l-0.3,0.3l0,0c-4.2,3.1-8.5,9.3-11.3,13.7c-1.8,2.7-3.1,5.7-3.6,8.9v2.2c-0.1,1.6-0.2,3.5-0.2,5.7v14.3c0,9.4-2.4,16.7-7.1,21.7s-10.2,7.6-18,7.6h-13.4c-1.2,0-2.2-1-2.2-2.2c0,0,0,0,0,0V140l0,0c0-1.2,1-2.2,2.2-2.2l0,0h12.7c4.4,0,7.5-1,9.2-3s2.7-5.6,2.7-10.5v-22.4c-0.2-6.3,1.6-12.6,5.1-17.9c1.6-2.5,3.5-4.7,5.7-6.6l0,0c0.9-0.7,1.1-2,0.4-2.9C412.7,74.3,412.6,74.2,412.5,74L412.5,74z"/></g></svg>
+    </a>
+
+    <nav class="Header-nav PrimaryNav">
+      <ul class="menu">
+        <li class="first expanded">
+          <a href="https://developer.okta.com/product/">Product</a>
+          <ul class="menu">
+            <li class="first leaf"><a href="https://developer.okta.com/product/">Overview</a></li>
+            <li class="leaf"><a href="https://developer.okta.com/product/authentication/">Authentication</a></li>
+            <li class="leaf"><a href="https://developer.okta.com/product/authorization/">Authorization</a></li>
+            <li class="last leaf"><a href="https://developer.okta.com/product/user-management/">User Management</a></li>
+          </ul>
+        </li>
+        <li class="leaf">
+          <a href="https://developer.okta.com/pricing/">Pricing</a>
+        </li>
+        <li class="leaf">
+          <a href="/blog/" class="active">Blog</a>
+        </li>
+        <li class="leaf">
+          <a href="/documentation/">Docs</a>
+        </li>
+        <li class="last expanded">
+          <span class="nolink">Support</span>
+          <ul class="menu">
+            <li class="first leaf"><a href="https://devforum.okta.com/">Okta Developer Forums</a></li>
+            <li class="last leaf"><a href="mailto:developers@okta.com">developers@okta.com</a></li>
+          </ul>
+        </li>
+      </ul>
+      <a class="PrimaryNav-toggle" href="#">
+        <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g class="MenuIcon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+                <path d="M1,16 L19,16" class="MenuIcon-line1" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,4 L19,4" class="MenuIcon-line2" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,10 L19,10" class="MenuIcon-line3" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,10 L19,10" class="MenuIcon-line4" stroke="#FFFFFF" stroke-width="2"></path>
+            </g>
+        </svg>
+        <svg class="CloseIcon" width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <g id="ALl-Boards" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="Desktop" transform="translate(-915.000000, -235.000000)" fill="#FFFFFF">
+              <g id="Search-bar-Active" transform="translate(30.000000, 26.000000)">
+                <polygon id="Icon/Cross" points="901 210.6 899.4 209 893 215.4 886.6 209 885 210.6 891.4 217 885 223.4 886.6 225 893 218.6 899.4 225 901 223.4 894.6 217"></polygon>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </a>
+
+      <div class="PrimaryNav-cta">
+        <a target="_blank" rel="noopener noreferrer" href="https://login.okta.com/?SAMLRequest=fc%2B7CsJAEAXQXvAflu1NNJUMeZBGELTx1a%2FrYILJTtyZGD%2FfSBRiYzlw77lMnD3rSj3Qc0ku0YtgrhU6S5fSXRN9PKxmS52l00nMpq6iBvJWCrfDe4ss6vStRe9aDzmGIZfo1jsgwyWDMzUyiIV9vt1AH4XGk5ClSvewUgMNa%2BYW%2FVj5jxhm9NLP67QQaSAMu64L6CYmsFSHlnzT4ZlLwTgcL6Sf8%2FeX9AU%3Dhttps://login.okta.com/?SAMLRequest=fc%2B7CsJAEAXQXvAflu1NNJUMeZBGELTx1a%2FrYILJTtyZGD%2FfSBRiYzlw77lMnD3rSj3Qc0ku0YtgrhU6S5fSXRN9PKxmS52l00nMpq6iBvJWCrfDe4ss6vStRe9aDzmGIZfo1jsgwyWDMzUyiIV9vt1AH4XGk5ClSvewUgMNa%2BYW%2FVj5jxhm9NLP67QQaSAMu64L6CYmsFSHlnzT4ZlLwTgcL6Sf8%2FeX9AU%3D" class="Button--redOutline">Login</a>
+        <a href="https://developer.okta.com/signup/" class="Button--red">Sign up</a>
+      </div>
+
+      <a class="SearchIcon" href="#"></a>
+      <form id="form_search" class="SearchBar Formisimo_clocked_69929" method="get" action="https://developer.okta.com/search/" name="form_search" __bizdiag="-784164280" __biza="WJ__">
+        <input type="text" name="stq" autocomplete="off" id="st-search-input-auto" class="st-search-input" placeholder="Search">
+        <input type="submit" name="submit" value="GO">
+      </form>
+
+    </nav>
+
+  </div>
+
+</header>
+
+	<div class="page-content">
+		
+
+
+
+
+
+
+<section class="Blog is-single">
+		
+	<div class="Blog-social">
+		
+		<a href="https://github.com/rdegges" target="_blank"><i class="fa fa-github"></i></a>
+		
+		
+		<a href="https://twitter.com/rdegges" target="_blank"><i class="fa fa-twitter"></i></a>
+		
+		
+		
+		<a href="https://www.rdegges.com" target="_blank"><i class="fa fa-external-link"></i></a>
+		
+	</div>
+	
+	
+
+<article class="BlogPost">
+
+    <header class="BlogPost-header">
+
+        <time class="BlogPost-date" datetime="2018-01-24">January 24, 2018</time>
+
+        <h1 class="BlogPost-title">
+            
+            Build Your Own Invoicing Service with Node, Coinbase, Bitcoin, and Okta
+            
+        </h1>
+
+        <div class="BlogPost-attribution">
+            
+            <img src="/assets/avatar-rdegges-9fb23ebb06890fb7924b8ceb3a28d666ae4ae1a297a3cddf517e549547e5dfe3.jpg" alt="avatar-rdegges.jpg" class="BlogPost-avatar">
+            
+            <span class="BlogPost-author">Randall Degges</span>
+        </div>
+
+    </header>
+
+    <div class="BlogPost-content">
+        
+	<p>I got into Bitcoin back in 2011. Since then, I’ve been a fan of cryptocurrencies and have always had an interest in them. I’ve also built several Bitcoin projects over the years (an information website, an ecommerce site, and several others) to help promote the usage of the cryptocurrency (while having some fun).</p>
+
+<p>The idea of being able to send and receive money almost instantly from anywhere in the world with no middleman is really appealing to a lot of people.</p>
+
+<p>Today, I thought it’d be fun to build a small web invoicing portal (something similar to <a href="https://www.freshbooks.com/">FreshBooks</a>, but much less sophisticated) that allows you to easily invoice your clients over email and collect payment in Bitcoin.</p>
+
+<p>The client can then pay their invoices using their local currency or Bitcoin (if they have it). In the end: you’ll be able to manage and bill your clients and receive payment in Bitcoin.</p>
+
+<p>I do a bit of consulting work myself and will be using this in the future. =)</p>
+
+<p><strong>PS</strong>: If you want to skip the article and go <a href="https://github.com/oktadeveloper/crypto-invoicer">straight to the code</a>, go for it! I’m using Node.js, Express.js, and <a href="https://www.coinbase.com">Coinbase</a> to power the application.</p>
+
+<p><img src="/assets/blog/node-invoicing-service/crypto-invoicer-49b8c1a6bbe7aa721359471b79f90c2f9929860c64a8691ed82b6c51b48ecdef.png" alt="Crypto Invoicer" width="620" class="center-image" /></p>
+
+<h2 id="get-started-with-coinbase-okta-and-nodejs">Get Started with Coinbase, Okta, and Node.js</h2>
+
+<p>Before I walk you through building the application, there are a few things you’ll need to do.</p>
+
+<p>You’ll need to go create an account with <a href="https://www.coinbase.com/join/51660a68c08669f6b8000046">Coinbase</a>. Coinbase is the largest and most popular Bitcoin exchange in the US. It allows you to easily get started using Bitcoin without needing to install software, learn a lot, etc.</p>
+
+<p>You’ll also need to create an <a href="https://developer.okta.com/signup/">Okta developer account</a>. Okta is an API service that allows you to create user accounts, and perform simple authentication and authorization for your web apps, mobile apps, and API services.</p>
+
+<p>Finally, you’ll need to have Node.js setup on your computer and be ready to do some coding! &gt;:)</p>
+
+<h3 id="set-up-coinbase">Set Up Coinbase</h3>
+
+<p>To send invoices and request money from different clients you might be consulting for, you’ll need to first generate a Coinbase API key with the proper permissions.</p>
+
+<p>Coinbase has an expansive API that you can use to do a number of things: one of which is <a href="https://developers.coinbase.com/api/v2#request-bitcoin">send invoices requesting money</a>.
+To do this, you’ll need to visit the Coinbase <a href="https://www.coinbase.com/settings/api">API management page</a>, then click the button to create a new API key.</p>
+
+<p>When you see the popup modal that prompts you for permissions, use the settings below:</p>
+
+<p><img src="/assets/blog/node-invoicing-service/coinbase-api-key-options-6f5a49644eb9eb8aca13bad03ef092ca1b3023c1bd971a5d50aa2957805ca00c.png" alt="Coinbase API Key Options" width="620" class="center-image" /></p>
+
+<p>What you’re doing here is requesting API permission to:</p>
+
+<ul>
+  <li>View your different Coinbase accounts (wallet:accounts:read)</li>
+  <li>View any past transactions you’ve made (wallet:transactions:read)</li>
+  <li>Create new transactions to request money (wallet:transactions:request)</li>
+</ul>
+
+<p>Once you’ve finished creating the key, you’ll be able to see an API key and API secret value. <strong>Copy these down, you’ll need them later.</strong></p>
+
+<h3 id="set-up-okta">Set Up Okta</h3>
+
+<p>Now that your Coinbase account is ready for usage, you need to set up your Okta account. This is what you’ll be using to protect your portal so only you can access it.</p>
+
+<p>Log into your Okta dashboard and copy down the <strong>Org URL</strong> value you see at the top right of the page. <strong>You will need this value later.</strong> It looks something like this:</p>
+
+<p><img src="/assets/blog/node-invoicing-service/okta-org-url-286259323ae3fabdab7677ef98fbb040bed1cbdb7c2e09b8c8e579b5b2fcbe50.png" alt="Okta Org URL" width="620" class="center-image" /></p>
+
+<p>You next need to create a new Okta Application. Using Okta, you can manage users for many applications you might have.</p>
+
+<p>To do this, click the large Applications menu item and click Add Application. Then when you are prompted, select the <strong>Web</strong> application option. This tells Okta that you are building a web application (not an API service, for instance). Behind the scenes, Okta uses this information to set your app up with the proper types of OAuth 2.0 and OpenID Connect.</p>
+
+<p>Now you’ll see a page asking you to define your Application settings. Use the values below:</p>
+
+<p><img src="/assets/blog/node-invoicing-service/okta-create-app-42b2dbe604752a37cf36e50ac195c414ec8708ee237616fa32ec0a76e729c757.png" alt="Okta Create App" width="620" class="center-image" /></p>
+
+<p>These settings basically tell Okta where your web app will be running (locally in this example) and what sort of security rules to apply.</p>
+
+<p>Once you’ve finished creating the Application, you’ll then be taken to your settings page for this newly created Application. You’ll want to copy down two values, your <strong>Client ID</strong> and <strong>Client Secret</strong>. <strong>These will be needed later.</strong></p>
+
+<p><img src="/assets/blog/node-invoicing-service/okta-app-credentials-a5e4559d121b774536a82ebc847b0e5c07076995fc0548762e87aa1a2964d1c7.png" alt="Okta App Credentials" width="620" class="center-image" /></p>
+
+<p>These credentials will be used to communicate securely with Okta in order to authenticate yourself into the web portal later.</p>
+
+<h2 id="clone-the-project">Clone the Project</h2>
+
+<p>Now that we’ve done the boring stuff, let’s take a look at some code.</p>
+
+<p>You can either clone the project locally from my GitHub repository:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git clone https://github.com/oktadeveloper/crypto-invoicer
+</code></pre></div></div>
+
+<p>Or you can <a href="https://github.com/oktadeveloper/crypto-invoicer">fork the project</a> to your own GitHub account and then clone that locally. This might make it easier to make changes and play around with the code as you follow along below.</p>
+
+<p>Through the rest of this article, I’ll assume that you’re working inside of the cloned/forked project directory.</p>
+
+<h2 id="set-up-your-credentials">Set Up Your Credentials</h2>
+
+<p>Now let’s take the credentials you gathered earlier and define them as environment variables that you’ll use to store these sensitive values.</p>
+
+<p>To do this, you’ll want to create a file named <code class="highlighter-rouge">.env</code> which looks like the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># .env
+export OKTA_ISSUER_URI=https://xxx/oauth2/default
+export OKTA_CLIENT_ID=xxx
+export OKTA_CLIENT_SECRET=xxx
+export REDIRECT_URI=http://localhost:3000/authorization-code/callback
+export PORT=3000
+export SECRET=xxx
+export COINBASE_APIKEY_ID=xxx
+export COINBASE_APIKEY_SECRET=xxx
+</code></pre></div></div>
+
+<p>Substitute your credentials where you see the <code class="highlighter-rouge">xxx</code> placeholder:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">OKTA_ISSUER_URI</code> should be set to the value of the <strong>Org URL</strong> value you copied down earlier, and placed into the URL. The final URL should look something like <code class="highlighter-rouge">https://dev-111464.oktapreview.com/oauth2/default</code>.</li>
+  <li><code class="highlighter-rouge">OKTA_CLIENT_ID</code> and <code class="highlighter-rouge">OKTA_CLIENT_SECRET</code> are the Application credentials you generated when you created your Okta Application previously</li>
+  <li><code class="highlighter-rouge">REDIRECT_URI</code> is a hard-coded URL that will be used as part of the authentication flow. More on this later.</li>
+  <li><code class="highlighter-rouge">PORT</code> is the HTTP port you’ll be running your webserver on. <code class="highlighter-rouge">3000</code> is standard for Node.js apps</li>
+  <li><code class="highlighter-rouge">SECRET</code> should be a long, random string you define. This is used to secure your HTTP sessions and keep your authentication data safe. I like to generate these by bashing my hands on the keyboard for a second or two.</li>
+  <li><code class="highlighter-rouge">COINBASE_APIKEY_ID</code> and <code class="highlighter-rouge">COINBASE_APIKEY_SECRET</code> are your Coinbase API credentials</li>
+</ul>
+
+<p>Once you have these settings defined, you’ll need to tell your terminal to <em>use</em> these variables. To do this, if you’re using a standard Linux/Mac/BSD terminal, you can run the command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ source .env
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">source</code> command will tell your shell to take the variables defined in this file and make them available to the terminal for usage in your programs later on.</p>
+
+<p>If you’re using Windows, you’ll need to <a href="https://technet.microsoft.com/en-us/library/ff730964.aspx">do something different</a>. Sorry!</p>
+
+<h2 id="install-dependencies">Install Dependencies</h2>
+
+<p>Now that the setup is completely finished, install all of the project dependencies using <code class="highlighter-rouge">npm</code>, the Node.js package manager:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ npm install
+</code></pre></div></div>
+
+<p>This command will install all of the dependent packages by analyzing the <code class="highlighter-rouge">package.json</code> and <code class="highlighter-rouge">package-lock.json</code> file in the project directory.</p>
+
+<p>Among these dependencies, there are a few interesting ones:</p>
+
+<ul>
+  <li><a href="http://expressjs.com/">express</a> is the web framework you’ll use to build the app</li>
+  <li><a href="https://github.com/coinbase/coinbase-node">coinbase-node</a> is the officially supported Coinbase developer library you’ll be using to interact with the Coinbase API</li>
+  <li><a href="https://github.com/okta/okta-oidc-js/tree/master/packages/oidc-middleware">oidc-middleware</a> is a popular OpenID Connect middleware maintained by Okta that handles user authentication and authorization for Node.js apps</li>
+</ul>
+
+<h2 id="build-the-frontend">Build the Frontend</h2>
+
+<p>Fair warning: I’m not a great frontend developer. I’m more of a server-side developer.</p>
+
+<p>The first thing I like to do when starting new projects is quickly define the frontend views. This part is more difficult for me, so I like to get it out of the way upfront.</p>
+
+<p>If you take a look at the <code class="highlighter-rouge">views</code> directory, you’ll notice that there are only three files: <code class="highlighter-rouge">base.pug</code>, <code class="highlighter-rouge">index.pug</code>, and <code class="highlighter-rouge">dashboard.pug</code>. These three views render the entire website.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">base.pug</code> is a shared base template that the other two templates extend. More on this in a moment.</li>
+  <li><code class="highlighter-rouge">index.html</code> is the home page of the site</li>
+  <li><code class="highlighter-rouge">dashboard.pug</code> is the site’s dashboard view</li>
+</ul>
+
+<p>I’ve defined these HTML views using the <a href="https://pugjs.org/api/getting-started.html">pug</a> templating language. This lets you write HTML without all the closing tags and allows you to use whitespace to infer structure.</p>
+
+<p>The <code class="highlighter-rouge">base.pug</code> template provides some common HTML that the other two views extend. This prevents you from needing to duplicate HTML that is shared between one or more pages.</p>
+
+<p>Here’s what the <code class="highlighter-rouge">base.pug</code> template looks like:</p>
+
+<pre><code class="language-jade">doctype html
+html(lang="en")
+  head
+    &lt;!-- Required meta tags --&gt;
+    meta(charset="utf-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
+
+    &lt;!-- Bootstrap CSS --&gt;
+    link(rel="stylesheet", href="https://bootswatch.com/4/sketchy/bootstrap.min.css")
+    link(rel="stylesheet", href="/static/css/style.css")
+
+  body
+    .container
+      block body
+
+    &lt;!-- Optional JavaScript --&gt;
+    &lt;!-- jQuery first, then Popper.js, then Bootstrap JS --&gt;
+    script(src="https://code.jquery.com/jquery-3.2.1.slim.min.js", integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN", crossorigin="anonymous")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js", integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh", crossorigin="anonymous")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js", integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ", crossorigin="anonymous")
+</code></pre>
+
+<p>This is a pretty standard HTML page that uses the <a href="http://getbootstrap.com/">Bootstrap</a> CSS library with the <a href="https://bootswatch.com/sketchy/">Sketchy</a> Bootswatch theme. This theme makes the entire site look like a mockup. Since this is an example application, I thought the theme was fitting.</p>
+
+<p>The <code class="highlighter-rouge">index.pug</code> view is also quite simple:</p>
+
+<pre><code class="language-jade">extends base.pug
+
+block body
+  h1.text-center.head Crypto Invoicer
+
+  .row.intro
+    .col
+    .col-8
+      .jumbotron
+        h2.text-center A Personal Invoicing Portal
+
+        p.
+          This is a personal invoicing portal. Use this portal to bill your clients
+          for work done using #[a(href="https://www.coinbase.com/") Coinbase]:
+          accept money in USD or Bitcoin.
+
+        p.
+          If you're performing work for clients and need a simple way to bill
+              them, give Crypto Invoicer a try!
+
+        p.
+          Please #[a.btn.btn-primary(href="/login") login] to continue.
+    .col
+</code></pre>
+
+<p>This template simply displays a basic home page that prompts the user to log into their account to continue:</p>
+
+<p><img src="/assets/blog/node-invoicing-service/crypto-invoicer-2-49b8c1a6bbe7aa721359471b79f90c2f9929860c64a8691ed82b6c51b48ecdef.png" alt="Crypto Invoicer" width="620" class="center-image" /></p>
+
+<p>The last view you need to inspect is the <code class="highlighter-rouge">dashboard.pug</code> view. This view renders the dashboard page that allows a user to create and view their invoices.</p>
+
+<pre><code class="language-jade">extends base.pug
+
+block body
+  script(src="/static/js/sorttable.js")
+
+  ul.nav.nav-pills.justify-content-end
+    li.nav-item
+      a.nav-link.active(href="/") Home
+      li.nav-item
+        a.nav-link.active(href="/logout") Logout
+
+  h1.text-center Dashboard
+
+  h2.create-invoice Create Invoice
+  .row
+    .col
+    .col-6
+      .jumbotron
+        if error
+          p.error #{error}
+
+        form.form(method="post")
+          .form-group
+            label(for="email") To
+            input#email.form-control(type="email", placeholder="Client Email", name="email", required=true)
+          .form-group
+            label(for="description") Description
+            input#description.form-control(type="text", placeholder="Description", name="description", required=true)
+          .form-group
+            label(for="amount") Amount (USD)
+            input#amount.form-control(type="number", min="1", step="any", name="amount", required=true)
+          button.btn.btn-primary(type="submit") Create Invoice
+
+    .col
+
+  if transactions
+    h2 Invoices
+    table.table.sortable
+      thead.thead-dark
+        tr
+          td Invoice #
+          td Date Created
+          td Completed?
+          td Client Email
+          td Description
+          td Amount (USD)
+      tbody
+        each transaction in transactions
+          tr
+            td #{transaction.id}
+            td #{new Date(transaction.created_at).toLocaleDateString("en-US", { hour12: false, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+            td #{transaction.status}
+            td #{transaction.to.email}
+            td #{transaction.description}
+            td $#{transaction.native_amount.amount}
+</code></pre>
+
+<p>This page is a bit more complex. It does a few key things:</p>
+
+<ul>
+  <li>It creates a form that allows the user to send a client an invoice. This form takes a few input parameters: the client’s email address, a description of what is being billed, and finally an amount (in USD) to bill the client.</li>
+  <li>It lists all past invoices in an HTML table that can be sorted with JavaScript. To do this, you’ll use pug to loop through all past transaction objects, and display their data as appropriate.</li>
+</ul>
+
+<p>When you render this page, you’ll see the invoice creation form:</p>
+
+<p><img src="/assets/blog/node-invoicing-service/crypto-invoicer-form-96ca35e7ebbf71a1dc72baf3dc71de05b4b437baf0c84788ad21a12feb74d404.png" alt="Crypto Invoicer Form" width="620" class="center-image" /></p>
+
+<p>And… If you’ve generated any past invoices, you’ll see them listed below:</p>
+
+<p><img src="/assets/blog/node-invoicing-service/crypto-invoicer-list-c050fcbb0e48cd6381967833d6feabeca1fd7d6cfc8534ec366edbddae855608.png" alt="Crypto Invoicer List" width="620" class="center-image" /></p>
+
+<p>You’ll also notice that if you click one of the table headers, you’re able to sort all of the invoices by any column you want.</p>
+
+<p>If you take a look at the <code class="highlighter-rouge">dashboard.pug</code> template code above, you can see how this works:</p>
+
+<ul>
+  <li>The <a href="https://kryogenix.org/code/browser/sorttable/">sorttable</a> JavaScript library is used to provide automatic table sorting in the browser</li>
+  <li>Pug is being used to display transaction details</li>
+</ul>
+
+<p>Other than these two things, the rest of the page is plain old HTML. Nothing fancy!</p>
+
+<h2 id="build-the-server">Build the Server</h2>
+
+<p>Now that you’ve seen how the frontend code works, let’s take a look at the server-side codebase.</p>
+
+<p>Open up the <code class="highlighter-rouge">server.js</code> file found in the root of the project folder and follow along below.</p>
+
+<h3 id="import-dependencies">Import Dependencies</h3>
+
+<p>The first thing I do in the <code class="highlighter-rouge">server.js</code> is import all the Node.js dependencies needed to run the app:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"use strict"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">Client</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"coinbase"</span><span class="p">).</span><span class="nx">Client</span><span class="p">;</span>
+<span class="kd">const</span> <span class="k">async</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"async"</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">bodyParser</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"body-parser"</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"express"</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">session</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"express-session"</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">ExpressOIDC</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"@okta/oidc-middleware"</span><span class="p">).</span><span class="nx">ExpressOIDC</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Nothing special here! Importing dependencies is standard in just about every app.</p>
+
+<h3 id="define-globals">Define Globals</h3>
+
+<p>The next thing you’ll notice in <code class="highlighter-rouge">server.js</code> is a section of code that defines a number of global variables:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Globals</span>
+<span class="kd">const</span> <span class="nx">OKTA_ISSUER_URI</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">OKTA_ISSUER_URI</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">OKTA_CLIENT_ID</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">OKTA_CLIENT_ID</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">OKTA_CLIENT_SECRET</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">OKTA_CLIENT_SECRET</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">REDIRECT_URI</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">REDIRECT_URI</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">PORT</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span> <span class="o">||</span> <span class="s2">"3000"</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">SECRET</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">SECRET</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Client</span><span class="p">({</span>
+  <span class="na">apiKey</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">COINBASE_APIKEY_ID</span><span class="p">,</span>
+  <span class="na">apiSecret</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">COINBASE_APIKEY_SECRET</span>
+<span class="p">});</span>
+
+<span class="kd">let</span> <span class="nx">account</span><span class="p">;</span>
+<span class="kd">let</span> <span class="nx">transactions</span><span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>All the <code class="highlighter-rouge">const</code> definitions are fairly straightforward: they pull in the environment variable values that were set previously, and store them as JavaScript variables so they can be easily referenced.</p>
+
+<p>The <code class="highlighter-rouge">client</code> variable defines a new Coinbase API client (which is later used to talk to the Coinbase API).</p>
+
+<p>The <code class="highlighter-rouge">account</code> variable represents a Coinbase Account object. In Coinbase you can have any number of “Accounts”: Bitcoin wallets, USD wallets, etc. You can move money between these much like checking accounts at a normal bank. When implementing the invoicing later, you’ll need to know which Coinbase Account you want to issue the request for, this determines how you receive the money.</p>
+
+<p>The <code class="highlighter-rouge">transactions</code> variable will be our own in-memory cache of all recent invoice transactions available to us via the Coinbase API. This is what we’ll use when rendering our dashboard page later on: we’ll store a cache of the transactions to avoid making API calls to Coinbase on each page load.</p>
+
+<p>Finally, you’ll notice the <code class="highlighter-rouge">app</code> variable. This is a standard Express.js convention: create an <code class="highlighter-rouge">app</code> object and use that to start up the web server later on.</p>
+
+<h3 id="configure-app-settings-and-middleware">Configure App Settings and Middleware</h3>
+
+<p>Once the globals have been defined, the next thing you need to do is define the app settings and middleware.</p>
+
+<p>There’s a section of code commented that contains these two blocks of functionality:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// App settings</span>
+<span class="nx">app</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="s2">"view engine"</span><span class="p">,</span> <span class="s2">"pug"</span><span class="p">);</span>
+
+<span class="c1">// App middleware</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">"/static"</span><span class="p">,</span> <span class="nx">express</span><span class="p">.</span><span class="kr">static</span><span class="p">(</span><span class="s2">"static"</span><span class="p">));</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">session</span><span class="p">({</span>
+  <span class="na">cookie</span><span class="p">:</span> <span class="p">{</span> <span class="na">httpOnly</span><span class="p">:</span> <span class="kc">true</span> <span class="p">},</span>
+  <span class="na">secret</span><span class="p">:</span> <span class="nx">SECRET</span>
+<span class="p">}));</span>
+
+<span class="c1">// Authentication</span>
+<span class="kd">let</span> <span class="nx">oidc</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ExpressOIDC</span><span class="p">({</span>
+  <span class="na">issuer</span><span class="p">:</span> <span class="nx">OKTA_ISSUER_URI</span><span class="p">,</span>
+  <span class="na">client_id</span><span class="p">:</span> <span class="nx">OKTA_CLIENT_ID</span><span class="p">,</span>
+  <span class="na">client_secret</span><span class="p">:</span> <span class="nx">OKTA_CLIENT_SECRET</span><span class="p">,</span>
+  <span class="na">redirect_uri</span><span class="p">:</span> <span class="nx">REDIRECT_URI</span><span class="p">,</span>
+  <span class="na">routes</span><span class="p">:</span> <span class="p">{</span> <span class="na">callback</span><span class="p">:</span> <span class="p">{</span> <span class="na">defaultRedirect</span><span class="p">:</span> <span class="s2">"/dashboard"</span> <span class="p">}</span> <span class="p">},</span>
+  <span class="na">scope</span><span class="p">:</span> <span class="s2">"openid profile"</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">oidc</span><span class="p">.</span><span class="nx">router</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>There’s only one actual app setting here: <code class="highlighter-rouge">app.set("view engine", "pug");</code>, and all it does is tell Express to use the pug templating engine when rendering views.</p>
+
+<p>Below that are the middleware definitions.</p>
+
+<p>The first middleware defined is <code class="highlighter-rouge">express.static</code>. This middleware is configured to serve static assets (css, images, javascript) from the <code class="highlighter-rouge">static</code> directory in the root of the project folder. This definition tells Express that any requests that start with <code class="highlighter-rouge">/static</code> should be routed to that folder, and automatically return whatever files exist there.</p>
+
+<p>This might be a good time to inspect the <code class="highlighter-rouge">static</code> folder and see what’s in it. There are only two files:</p>
+
+<ul>
+  <li>A <code class="highlighter-rouge">style.css</code> file which holds some custom styling, and</li>
+  <li>A <code class="highlighter-rouge">sorttable.js</code> script which is used in our frontend to make our HTML table sortable</li>
+</ul>
+
+<p>Next you’ll see the express-session middleware defined. What this middleware does is configure Express to store sensitive user information in cookies (which are the safest way to store authentication data). When you are logged into the website via Okta later on, your authentication information will be stored in these cookies that are managed by this library.</p>
+
+<p><strong>NOTE</strong>: The <code class="highlighter-rouge">SECRET</code> variable that’s used when initializing the session library is incredibly important. This long, random string that you previously defined is what keeps your cookies safe from tampering. If this value is ever leaked publicly (on GitHub, etc.) it would be a security catastrophe. All cookie-based systems require a secret key to be used to cryptographically validate the cookie.</p>
+
+<p>The last middleware you’ll see is the <a href="https://github.com/okta/okta-oidc-js/tree/master/packages/oidc-middleware">oidc-middleware</a>. This is a little more complex, as it handles a lot of magic behind the scenes, and makes all the authentication logic in the application work.</p>
+
+<p>The way this middleware works is by fully enabling your app to use OpenID Connect (OIDC) for authentication. When you define the new <code class="highlighter-rouge">ExpressOIDC</code> and give it your Okta configuration information, it builds an OIDC object that remembers all your application rules: what URL your application runs one, where to redirect the user after they’ve logged in, what your secret application keys are, etc.</p>
+
+<p>Once this new object is created, it contains an Express router object that is then enabled below with the <code class="highlighter-rouge">app.use(oidc.router);</code> call. This line registers some magical routes behind the scenes: the main one of which is <code class="highlighter-rouge">/login</code>.</p>
+
+<p>When this line of code is executed any requests to <code class="highlighter-rouge">/login</code> will redirect you to your dedicated login page (hosted by Okta), and prompt you to log into the application. Once the user has been logged in, they will then be redirected BACK to your Node.js application, where they will be logged in and able to access the dashboard page.</p>
+
+<h3 id="define-helpers">Define Helpers</h3>
+
+<p>Let’s skip towards the bottom of the <code class="highlighter-rouge">server.js</code> file now and take a look at the <code class="highlighter-rouge">updateTransactions</code> function:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Helpers</span>
+<span class="kd">function</span> <span class="nx">updateTransactions</span><span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">transactions</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="kd">let</span> <span class="nx">pagination</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+  <span class="k">async</span><span class="p">.</span><span class="nx">doWhilst</span><span class="p">(</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">account</span><span class="p">.</span><span class="nx">getTransactions</span><span class="p">(</span><span class="nx">pagination</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">txns</span><span class="p">,</span> <span class="nx">page</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="nx">pagination</span> <span class="o">=</span> <span class="nx">page</span><span class="p">.</span><span class="nx">next_uri</span> <span class="p">?</span> <span class="nx">page</span> <span class="p">:</span> <span class="kc">false</span><span class="p">;</span>
+
+        <span class="nx">txns</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">txn</span> <span class="o">=&gt;</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">txn</span><span class="p">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s2">"request"</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">transactions</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">txn</span><span class="p">);</span>
+          <span class="p">}</span>
+        <span class="p">});</span>
+
+        <span class="nx">callback</span><span class="p">();</span>
+      <span class="p">});</span>
+    <span class="p">},</span>
+    <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">pagination</span> <span class="p">?</span> <span class="kc">true</span><span class="p">:</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+      <span class="p">}</span>
+
+      <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">transactions</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The purpose of this helper function is to build an in-memory cache of Coinbase transactions.</p>
+
+<p>Each time you request money from a client and send them an invoice, Coinbase creates a transactional record. There are many different types of transactions that Coinbase logs, so what this function does is iterate through <em>all</em> available transactions, pruning out just the ones relevant to invoicing, then stores them in the global <code class="highlighter-rouge">transactions</code> array variable for later usage.</p>
+
+<p>The idea here is that each time the dashboard is displayed, instead of talking to the Coinbase API and performing this logic in real-time, the app will simply pull the latest list of transactions out of the cache instead.</p>
+
+<p>In this function I’m using the <a href="http://caolan.github.io/async/">async</a> library to perform a do-while loop that:</p>
+
+<ul>
+  <li>Talks to the Coinbase API and requests a list of transactions</li>
+  <li>Tries to determine whether there are any more “pages” of transactions left to iterate through (because there may be many transactions, it might require many requests to the Coinbase API to retrieve them all)</li>
+  <li>Filters out only the transactions that are of the type “request”, as these are the “request” money transactions that this app generates</li>
+  <li>Stores them in the global <code class="highlighter-rouge">transactions</code> array for later usage</li>
+</ul>
+
+<h3 id="define-startup-jobs">Define Startup Jobs</h3>
+
+<p>The next thing you’ll do is define the jobs that need to run each time this Node.js server starts up.</p>
+
+<p>If you take a look at the startup jobs code block, you’ll see what I mean:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Startup jobs</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">getAccounts</span><span class="p">({},</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">accounts</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nx">accounts</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">acct</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">acct</span><span class="p">.</span><span class="nx">primary</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">account</span> <span class="o">=</span> <span class="nx">acct</span><span class="p">;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Found primary account: "</span> <span class="o">+</span> <span class="nx">account</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s2">". Current balance: "</span> <span class="o">+</span> <span class="nx">account</span><span class="p">.</span><span class="nx">balance</span><span class="p">.</span><span class="nx">amount</span> <span class="o">+</span> <span class="s2">" "</span> <span class="o">+</span> <span class="nx">account</span><span class="p">.</span><span class="nx">currency</span> <span class="o">+</span> <span class="s2">"."</span><span class="p">);</span>
+
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Downloading initial list of transactions."</span><span class="p">);</span>
+      <span class="nx">updateTransactions</span><span class="p">(</span><span class="nx">err</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>What this code does is:</p>
+
+<ul>
+  <li>Use the Coinbase API to list all Accounts (these are the places you can store money in Coinbase)</li>
+  <li>Look through each Account until it finds the primary (this is usually your Bitcoin wallet used to store Bitcoin)</li>
+  <li>Sets the global <code class="highlighter-rouge">account</code> variable to this value</li>
+</ul>
+
+<p>Then, once the proper Account object has been found, this code will execute the <code class="highlighter-rouge">updateTransactions</code> helper function defined earlier, to build the initial in-memory cache of transactions.</p>
+
+<p>This way, shortly after the web server starts running all transaction data will be available for querying.</p>
+
+<h3 id="define-server-management-code">Define Server Management Code</h3>
+
+<p>Towards the bottom of the <code class="highlighter-rouge">server.js</code> file you’ll see a few things:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Cron jobs</span>
+<span class="nx">setInterval</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">updateTransactions</span><span class="p">(</span><span class="nx">err</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">})</span>
+<span class="p">},</span> <span class="mi">1000</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span><span class="p">);</span>
+
+<span class="c1">// Server management</span>
+<span class="nx">oidc</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"ready"</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">PORT</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">oidc</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"error"</span><span class="p">,</span> <span class="nx">err</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">setInterval()</code> call essentially tells this Node.js process to update the cache of transaction data once per hour (in milliseconds). This way, all transaction information will be at most one hour old.</p>
+
+<p>Finally, the Express app itself will be launched once the authentication library has finished preparing itself.</p>
+
+<p><strong>NOTE</strong>: It’s important not to run the web server (<code class="highlighter-rouge">app.listen(PORT);</code>) until the OIDC library emits the “ready” event. This could result in odd security edge cases where a user making requests to protected pages on your website runs into errors if they make a request before the OIDC library has finished configuring itself.</p>
+
+<h3 id="create-routes">Create Routes</h3>
+
+<p>Now that we’ve gone through the rest of the <code class="highlighter-rouge">server.js</code> code, let’s look at the final section we skipped from earlier (the routes):</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// App routes</span>
+<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">"/"</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s2">"index"</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">"/dashboard"</span><span class="p">,</span> <span class="nx">oidc</span><span class="p">.</span><span class="nx">ensureAuthenticated</span><span class="p">(),</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s2">"dashboard"</span><span class="p">,</span> <span class="p">{</span> <span class="na">transactions</span><span class="p">:</span> <span class="nx">transactions</span> <span class="p">});</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s2">"/dashboard"</span><span class="p">,</span> <span class="nx">oidc</span><span class="p">.</span><span class="nx">ensureAuthenticated</span><span class="p">(),</span> <span class="nx">bodyParser</span><span class="p">.</span><span class="nx">urlencoded</span><span class="p">(),</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">account</span><span class="p">.</span><span class="nx">requestMoney</span><span class="p">({</span>
+    <span class="na">to</span><span class="p">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">email</span><span class="p">,</span>
+    <span class="na">amount</span><span class="p">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">amount</span><span class="p">,</span>
+    <span class="na">currency</span><span class="p">:</span> <span class="s2">"USD"</span><span class="p">,</span>
+    <span class="na">description</span><span class="p">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">description</span>
+  <span class="p">},</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">txn</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+      <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s2">"dashboard"</span><span class="p">,</span> <span class="p">{</span> <span class="na">error</span><span class="p">:</span> <span class="nx">err</span> <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="nx">updateTransactions</span><span class="p">((</span><span class="nx">err</span><span class="p">,</span> <span class="nx">transactions</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s2">"dashboard"</span><span class="p">,</span> <span class="p">{</span> <span class="na">error</span><span class="p">:</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span> <span class="p">});</span>
+      <span class="p">}</span>
+
+      <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s2">"dashboard"</span><span class="p">,</span> <span class="p">{</span> <span class="na">transactions</span><span class="p">:</span> <span class="nx">transactions</span> <span class="p">})</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">"/logout"</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">req</span><span class="p">.</span><span class="nx">logout</span><span class="p">();</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s2">"/"</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>The first route just displays the home page of the site. Since all we need here is to show a simple template, there’s nothing special we need to do other than render the page.</p>
+
+<p>The <code class="highlighter-rouge">app.get("/dashboard")</code> route is what displays the dashboard page when requested. What’s important to note here is the additional middleware it uses: <code class="highlighter-rouge">oidc.ensureAuthenticated()</code>. This middleware <em>forces</em> the user to log in before being able to access this page.</p>
+
+<p>If you try to visit the <code class="highlighter-rouge">/dashboard</code> page before logging in, for instance, you’ll be redirected to the login page and forced to authenticate.</p>
+
+<p>Once the user has authenticated, however, they’ll be allowed into the dashboard page, which simply renders itself using the in-memory cache of transaction data.</p>
+
+<p>The <code class="highlighter-rouge">app.post("/dashboard")</code> route is what handles the invoicing.</p>
+
+<p>When a user fills out the invoice form and clicks “submit”, this route is processed and receives the invoicing data. It then talks to Coinbase using the Coinbase API and generates a proper money request (and email). Finally, before refreshing the page and showing the new list of transactions, this code will force a refresh of the transaction data cache.</p>
+
+<p>By forcing the cache refresh after each new invoice is created, this prevents an issue where after creating an invoice you would not see it appear in the list below.</p>
+
+<p>When invoices are generated and Coinbase sends out an email, the client receives an email that looks something like this:</p>
+
+<p><img src="/assets/blog/node-invoicing-service/crypto-invoicer-email-0c00e4dafa0dfd484b937e23c796ed1c320512e8010dfd22bacd521158921f86.png" alt="Crypto Invoicer Email" width="620" class="center-image" /></p>
+
+<p>This is quite nice, because then a click can simply click the “Complete this payment.” button, and be redirected to Coinbase where they can complete the transaction using either Bitcoin or their local currency (USD) to pay.</p>
+
+<h2 id="piece-it-together">Piece It Together</h2>
+
+<p>As I’ve hopefully shown you, building Bitcoin invoicing software using Node.js can be fairly straightforward.</p>
+
+<p>The Coinbase API provides a lot of rich functionality. Paired with Okta for authentication and several open source Node.js libraries, you can quickly throw together complicated applications in a small amount of time.</p>
+
+<p>If you’re interested in building cryptocurrency apps of your own, I highly recommend you create a <a href="https://www.coinbase.com/join/51660a68c08669f6b8000046">Coinbase account</a> and check out their fantastic <a href="https://developers.coinbase.com/">API documentation</a>. They have a good number of libraries and tools available to help you build your applications in a fun and fast way.</p>
+
+<p>I’d also recommend creating an <a href="https://developer.okta.com/signup/">Okta developer account</a> which you can use to store users for your web apps, mobile apps, and API services, as well as handle authentication, authorization, OAuth 2.0, OpenID Connect, Single Sign-On, etc.</p>
+
+<p>Finally, if you’d like to see more articles like this, tweet <a href="https://twitter.com/oktadev">@oktadev</a> and let me know! &lt;3 You can also look at some similar articles we’ve written recently:</p>
+
+<ul>
+  <li><a href="https://developer.okta.com/blog/2018/01/18/cryptocurrency-pwa-secured-by-okta">Protect Your Cryptocurrency Wealth Tracking PWA with
+Okta</a>
+written by my colleague <a href="https://twitter.com/mraible">@mraible</a></li>
+  <li><a href="https://developer.okta.com/blog/2017/09/06/build-a-cryptocurrency-comparison-site-with-vuejs">Build a Cryptocurrency Comparison Site with
+Vue.js</a>
+by yours truly</li>
+</ul>
+
+
+    </div>
+
+    
+    <div id="disqus">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_title = 'Build Your Own Invoicing Service with Node, Coinbase, Bitcoin, and Okta';
+            var disqus_url = 'https://developer.okta.com/blog/2018/01/24/build-your-own-invoicing-service-with-node-coinbase-bitcoin-and-okta';
+
+            (function () {
+                var dsq = document.createElement('script');
+                dsq.async = true;
+                dsq.type = 'text/javascript';
+                dsq.src = '//oktadevblog.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+          </script>
+          <noscript>
+              Please enable JavaScript to view the
+              <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus</a>.
+         </noscript>
+    </div>
+    
+</article>
+
+		
+</section>
+
+		
+	</div><footer class="Footer">
+    <div class="Wrap">
+
+        <div class="Row">
+
+            <div class="Column--3 Column--medium-6 Column--xSmall-12">
+
+                <a class="Logo" href="https://www.okta.com/" target="_blank" rel="noopener noreferrer">
+                    <img src="https://developer.okta.com/sites/all/themes/developer/images/logo-footer.png" alt="Okta">
+                    Visit okta.com
+                </a>
+
+            </div>
+
+            <div class="Column--3 Column--medium-12 Column--xSmall-12">
+
+                <h4>Social</h4>
+                <ul class="Footer-links Footer-links--social">
+                    <li><a class="Footer-links--github" target="_blank" rel="noopener noreferrer" href="http://github.com/oktadeveloper">Github</a></li>
+                    <li><a class="Footer-links--twitter" target="_blank" rel="noopener noreferrer" href="http://twitter.com/OktaDev">Twitter</a></li>
+                    <li><a class="Footer-links--forum" target="_blank" rel="noopener noreferrer" href="https://devforum.okta.com/">Forum</a></li>
+                    <li><a class="Footer-links--rss" target="_blank" rel="noopener noreferrer" href="http://feeds.feedburner.com/OktaBlog">RSS Blog</a></li>
+                </ul>
+            </div>
+
+            <div class="Column--3 Column--medium-6 Column--small-12">
+                <h4>More Info</h4>
+                <ul class="Footer-links">
+                    <li><a target="_blank" href="https://developer.okta.com/integrate-with-okta/">Integrate with Okta</a></li>
+                    <li><a href="/blog/">Blog</a></li>
+                    <li><a href="/docs/change-log/">Change Log</a></li>
+                    <li><a href="/3rd_party_notices/">3rd Party Notices</a></li>
+                </ul>
+            </div>
+
+            <div class="Column--3 Column--medium-6 Column--small-12">
+                <h4>Contact &amp; Legal</h4>
+                <ul class="Footer-links">
+                    <li><a href="https://developer.okta.com/contact/">Contact Sales</a></li>
+                    <li><a target="_blank" rel="noopener noreferrer" href="mailto:developers@okta.com">Contact Support</a></li>
+                    <li><a href="https://developer.okta.com/terms/">Terms &amp; Conditions</a></li>
+                    <li><a href="https://developer.okta.com/privacy/">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script type="text/javascript" src="/assets/master-36874fb206f812b2e337a93ccfa9c4872940f73b7c070bba28ed2ed9dfccc380.js"></script>
+    <script type="text/javascript" src="/assets/myOkta-911cbafbbe079b7a5522d9cbe15bd2a5f44e1582531e88393934bec69f97696b.js"></script>
+    
+    
+    
+    
+      <script type="text/javascript" src="/assets/blog-6e32dad27404131cc8630a5282264bed2ab4c08c91ac86fa496b75c53aa4f681.js"></script>
+    
+
+  <!-- START Post Footer -->
+  
+  <!-- START Google Tag Manager -->
+  <!-- https://support.google.com/tagmanager/answer/6103696?hl=en -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TJ45R6" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- END Google Tag Manager -->
+  <!-- START Google Remarketing Tag -->
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var google_conversion_id = 1006913831;
+    var google_custom_params = window.google_tag_params;
+    var google_remarketing_only = true;
+    /* ]]> */
+  </script>
+  <div style="display:none;"><script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script></div>
+  <noscript><div style="display:inline;"><img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1006913831/?value=0&amp;guid=ON&amp;script=0"></div></noscript>
+  <!-- END Google Remarketing Tag -->
+  <!-- START Crazy Egg Tracking -->
+  <script type="text/javascript">
+    setTimeout(function(){var a=document.createElement("script");
+    var b=document.getElementsByTagName("script")[0];
+    a.src=document.location.protocol+"//script.crazyegg.com/pages/scripts/0021/9333.js?"+Math.floor(new Date().getTime()/3600000);
+    a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+  </script>
+  <!-- END Crazy Egg Tracking -->
+
+  <!-- END Post Footer -->
+</body>
+</html>
