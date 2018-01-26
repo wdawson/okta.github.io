@@ -117,7 +117,6 @@ Okta provides the API Access Management Administrator role to make managing auth
 * Create and edit authorization servers, scopes, custom claims, and access policies
 * Create and edit  OAuth and OIDC client apps
 * Assign users and groups to OAuth/OIDC client apps
-* View user profiles so that you can assign users or clients in the Token Preview dialog
 
 #### OAuth Client
 
