@@ -284,10 +284,10 @@
 <p>The Okta Templates API provides operations to manage custom templates.</p>
 
 <blockquote>
-  <p>Currently, only the SMS custom templates are implemented.</p>
+  <p>Currently, only SMS custom templates are available via the API.</p>
 </blockquote>
 
-<p>SMS templates customize the SMS message sent to users. One default SMS template is provided. All custom templates must have the variable <strong>${code}</strong> as part of the text. The <strong>${code}</strong> variable is replaced with the actual SMS code when the message is sent. Optionally, you can use the variable <strong>${org.name}</strong>. If a template contains <strong>${org.name}</strong>, it is replaced with organization name before the SMS message is sent.</p>
+<p>SMS templates customize the SMS message sent to users. One default SMS template is provided. All custom templates must have the variable <code class="highlighter-rouge">${code}</code> as part of the text. The <code class="highlighter-rouge">${code}</code> variable is replaced with the actual SMS code when the message is sent. Optionally, you can also use the variable <code class="highlighter-rouge">${org.name}</code>. If a template contains <code class="highlighter-rouge">${org.name}</code>, it is replaced with organization name before the SMS message is sent.</p>
 
 <h2 id="getting-started-with-custom-templates">Getting Started with Custom Templates</h2>
 
@@ -311,7 +311,6 @@
       <th>ParamType</th>
       <th>DataType</th>
       <th>Required</th>
-      <th>Default</th>
     </tr>
   </thead>
   <tbody>
@@ -319,9 +318,8 @@
       <td> </td>
       <td>Definition of the new custom SMS template</td>
       <td>Body</td>
-      <td>(#template-object)</td>
+      <td><a href="#sms-template-model">SMS Template</a></td>
       <td>TRUE</td>
-      <td> </td>
     </tr>
   </tbody>
 </table>
@@ -382,7 +380,6 @@
       <th>ParamType</th>
       <th>DataType</th>
       <th>Required</th>
-      <th>Default</th>
     </tr>
   </thead>
   <tbody>
@@ -392,7 +389,6 @@
       <td>URL</td>
       <td>String</td>
       <td>TRUE</td>
-      <td> </td>
     </tr>
   </tbody>
 </table>
@@ -431,12 +427,7 @@
 
 <p><span class="api-uri-template api-uri-get"><span class="api-label">GET</span> /api/v1/templates/sms</span></p>
 
-<p>Enumerates custom SMS templates in your organization. A subset of templates can be returned that match a template type.</p>
-
-<ul>
-  <li><a href="#list-sms-templates-with-defaults">List SMS Templates with Defaults</a></li>
-  <li><a href="#list-sms-templates-with-type">List SMS Templates with Type</a></li>
-</ul>
+<p>Enumerates custom SMS templates in your organization. Optionally, a subset of templates can be returned that match a template type.</p>
 
 <h5 class="api api-request api-request-params" id="request-parameters-2">Request Parameters</h5>
 
@@ -454,11 +445,11 @@
   <tbody>
     <tr>
       <td>templateType</td>
-      <td>Searches the <code class="highlighter-rouge">type</code> property of templates for matching value</td>
+      <td>The type of template that you are searching for. Valid value: <code class="highlighter-rouge">SMS_VERIFY_CODE</code></td>
       <td>Query</td>
       <td>String</td>
       <td>FALSE</td>
-      <td> </td>
+      <td>N/A</td>
     </tr>
   </tbody>
 </table>
@@ -469,11 +460,7 @@
 
 <h5 class="api api-response api-response-params" id="response-parameters-2">Response Parameters</h5>
 
-<p>Array of <a href="#sms-template-model">SMS Template</a></p>
-
-<h4 class="api api-operation" id="list-sms-templates-with-defaults">List SMS Templates with Defaults</h4>
-
-<p>Enumerates all SMS templates.</p>
+<p>Array of <a href="#sms-template-model">SMS Templates</a> of matching type.</p>
 
 <h5 class="api api-request api-request-example" id="request-example-2">Request Example</h5>
 
@@ -488,62 +475,9 @@
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"default"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Default"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SMS_VERIFY_CODE"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"template"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Your verification code is ${code}."</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-06-23T17:41:13.000Z"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"lastUpdated"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-06-23T17:41:13.000Z"</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">
     </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cstkdgSQOUacCuF750g3"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Custom"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SMS_ENROLLMENT_CODE"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"template"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${org.name}: your enrollment code is ${code}"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-06-23T17:41:07.000Z"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"lastUpdated"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-06-23T17:41:07.000Z"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"translations"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"it"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${org.name}: il codice di iscrizione è ${code}"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"fr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${org.name}: votre code d'inscription est ${code}"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"es"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${org.name}: su código de inscripción es ${code}"</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cstkd89Qu2ypkxNQv0g3"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Custom"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SMS_VERIFY_CODE"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"template"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${org.name}: your verification code is ${code}"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-06-23T17:20:22.000Z"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"lastUpdated"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-06-23T17:20:22.000Z"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"translations"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"it"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${org.name}: il codice di verifica è ${code}"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"fr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${org.name}: votre code de vérification est ${code}"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"es"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${org.name}: el código de verificación es ${code}"</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">]</span><span class="w">
-</span></code></pre></div></div>
-
-<h4 class="api api-operation" id="list-sms-templates-with-type">List SMS Templates with Type</h4>
-
-<p>Enumerates all SMS templates of particular type</p>
-
-<h5 class="api api-request api-request-example" id="request-example-3">Request Example</h5>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> GET <span class="se">\</span>
-<span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
-<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-<span class="nt">-H</span> <span class="s2">"Authorization: SSWS </span><span class="k">${</span><span class="nv">api_token</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
-<span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/templates/sms?templateType=SMS_ENROLLMENT_CODE"</span>
-</code></pre></div></div>
-
-<h5 class="api api-response api-response-example" id="response-example-3">Response Example</h5>
-
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cstkdgSQOUacCuF750g3"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Custom"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SMS_ENROLLMENT_CODE"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"template"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${org.name}: your enrollment code is ${code}"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-06-23T17:41:07.000Z"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"lastUpdated"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-06-23T17:41:07.000Z"</span><span class="p">,</span><span class="w">
@@ -563,7 +497,7 @@
 <p>Updates the SMS template.</p>
 
 <blockquote>
-  <p>The default SMS template can’t be updated.</p>
+  <p>NOTE: The default SMS template can’t be updated.</p>
 </blockquote>
 
 <h5 class="api api-request api-request-params" id="request-parameters-3">Request Parameters</h5>
@@ -576,25 +510,22 @@
       <th>ParamType</th>
       <th>DataType</th>
       <th>Required</th>
-      <th>Default</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>id</td>
-      <td>id of the sms template to update</td>
+      <td><code class="highlighter-rouge">id</code> of the SMS template to update</td>
       <td>URL</td>
       <td>String</td>
       <td>TRUE</td>
-      <td> </td>
     </tr>
     <tr>
       <td> </td>
-      <td>full description of the custom sms template</td>
+      <td>Full description of the custom SMS template</td>
       <td>Body</td>
-      <td><a href="#sms-template-model">Sms Template</a></td>
+      <td><a href="#sms-template-model">SMS Template</a></td>
       <td>TRUE</td>
-      <td> </td>
     </tr>
   </tbody>
 </table>
@@ -607,7 +538,7 @@
 
 <p>Updated <a href="#sms-template-model">SMS Template</a></p>
 
-<h5 class="api api-request api-request-example" id="request-example-4">Request Example</h5>
+<h5 class="api api-request api-request-example" id="request-example-3">Request Example</h5>
 
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> PUT <span class="se">\</span>
 <span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
@@ -619,14 +550,13 @@
     "template": "${org.name}: your enrollment code is ${code}",
     "translations": {
       "it": "${org.name}: il codice di iscrizione è ${code}",
-      "fr": "${org.name}: votre code d'</span>inscription est <span class="k">${</span><span class="nv">code</span><span class="k">}</span><span class="s2">",
-      "</span>es<span class="s2">": "</span><span class="k">${</span><span class="nv">org</span><span class="p">.name</span><span class="k">}</span>: su código de inscripción es <span class="k">${</span><span class="nv">code</span><span class="k">}</span><span class="s2">",
-      "</span>de<span class="s2">": "</span><span class="k">${</span><span class="nv">org</span><span class="p">.name</span><span class="k">}</span>: ihre anmeldung code ist <span class="k">${</span><span class="nv">code</span><span class="k">}</span><span class="s2">"
+      "es": "${org.name}: su código de inscripción es ${code}",
+      "de": "${org.name}: ihre anmeldung code ist ${code}"
     }
-}' "</span>https://<span class="o">{</span>yourOktaDomain<span class="o">}</span>.com/api/v1/templates/sms/<span class="k">${</span><span class="nv">templateId</span><span class="k">}</span><span class="s2">"
-</span></code></pre></div></div>
+}'</span> <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/templates/sms/</span><span class="k">${</span><span class="nv">templateId</span><span class="k">}</span><span class="s2">"</span>
+</code></pre></div></div>
 
-<h5 class="api api-response api-response-example" id="response-example-4">Response Example</h5>
+<h5 class="api api-response api-response-example" id="response-example-3">Response Example</h5>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
   </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cstkdgSQOUacCuF750g3"</span><span class="p">,</span><span class="w">
@@ -648,7 +578,7 @@
   <li>All properties with the custom SMS template with values are updated.</li>
   <li>Any translation that doesn’t exist is added.</li>
   <li>Any translation with a null or empty value is removed.</li>
-  <li>Any translation with non empty/null value is updated.</li>
+  <li>Any translation with non-empty/null value is updated.</li>
 </ul>
 
 <blockquote>
@@ -665,25 +595,22 @@
       <th>ParamType</th>
       <th>DataType</th>
       <th>Required</th>
-      <th>Default</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>id</td>
-      <td>id of the sms template to update</td>
+      <td><code class="highlighter-rouge">id</code> of the SMS template to update</td>
       <td>URL</td>
       <td>String</td>
       <td>TRUE</td>
-      <td> </td>
     </tr>
     <tr>
       <td> </td>
-      <td>attributes that we want to change</td>
+      <td>Attributes that we want to change</td>
       <td>Body</td>
-      <td><a href="#sms-template-model">Sms Template</a></td>
+      <td><a href="#sms-template-model">SMS Template</a></td>
       <td>TRUE</td>
-      <td> </td>
     </tr>
   </tbody>
 </table>
@@ -694,9 +621,9 @@
 
 <h5 class="api api-response api-response-params" id="response-parameters-4">Response Parameters</h5>
 
-<p>Updated <a href="#sms-template-model">Sms Template</a></p>
+<p>Updated <a href="#sms-template-model">SMS Template</a></p>
 
-<h5 class="api api-request api-request-example" id="request-example-5">Request Example</h5>
+<h5 class="api api-request api-request-example" id="request-example-4">Request Example</h5>
 
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> POST <span class="se">\</span>
 <span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
@@ -710,7 +637,7 @@
 }'</span> <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/templates/sms/</span><span class="k">${</span><span class="nv">templateId</span><span class="k">}</span><span class="s2">"</span>
 </code></pre></div></div>
 
-<h5 class="api api-response api-response-example" id="response-example-5">Response Example</h5>
+<h5 class="api api-response api-response-example" id="response-example-4">Response Example</h5>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
   </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cstkd89Qu2ypkxNQv0g3"</span><span class="p">,</span><span class="w">
@@ -748,7 +675,6 @@
       <th>ParamType</th>
       <th>DataType</th>
       <th>Required</th>
-      <th>Default</th>
     </tr>
   </thead>
   <tbody>
@@ -758,7 +684,6 @@
       <td>URL</td>
       <td>String</td>
       <td>TRUE</td>
-      <td> </td>
     </tr>
   </tbody>
 </table>
@@ -767,7 +692,7 @@
 
 <p>There is no content in the response.</p>
 
-<h5 class="api api-request api-request-example" id="request-example-6">Request Example</h5>
+<h5 class="api api-request api-request-example" id="request-example-5">Request Example</h5>
 
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> DELETE <span class="se">\</span>
 <span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
@@ -776,7 +701,7 @@
 <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/templates/sms/</span><span class="k">${</span><span class="nv">templateId</span><span class="k">}</span><span class="s2">"</span>
 </code></pre></div></div>
 
-<h5 class="api api-response api-response-example" id="response-example-6">Response Example</h5>
+<h5 class="api api-response api-response-example" id="response-example-5">Response Example</h5>
 
 <div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">204</span> <span class="ne">No Content</span>
 </code></pre></div></div>
@@ -793,7 +718,7 @@
   </span><span class="s2">"lastUpdated"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-06-21T20:49:52.000Z"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"translations"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="s2">"it"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Il codice ${org.name} è: ${code}."</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"fr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Votre code ${org.name} : ${code}."</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"fr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Votre code ${org.name}: ${code}."</span><span class="p">,</span><span class="w">
     </span><span class="s2">"es"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tu código de ${org.name} es: ${code}."</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -809,120 +734,93 @@
       <th>Property</th>
       <th>Description</th>
       <th>DataType</th>
-      <th>Nullable</th>
-      <th>Unique</th>
       <th>Readonly</th>
       <th>MinLength</th>
       <th>MaxLength</th>
-      <th>Validation</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>id</td>
-      <td>unique key for template</td>
+      <td>Unique key for template</td>
       <td>String</td>
-      <td>FALSE</td>
       <td>TRUE</td>
-      <td>TRUE</td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
+      <td>20</td>
+      <td>20</td>
     </tr>
     <tr>
       <td>name</td>
-      <td>human readable name of the template</td>
+      <td>Human-readable name of the template</td>
       <td>String</td>
       <td>FALSE</td>
-      <td>FALSE</td>
-      <td>FALSE</td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
+      <td>1</td>
+      <td>50</td>
     </tr>
     <tr>
       <td>type</td>
-      <td>type of the template</td>
+      <td>Type of the template</td>
       <td>String</td>
       <td>FALSE</td>
-      <td>FALSE</td>
-      <td>FALSE</td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
+      <td>1</td>
+      <td>50</td>
     </tr>
     <tr>
       <td>template</td>
-      <td>text of the template</td>
-      <td>String</td>
+      <td>Text of the template, including any <a href="#sms-template-macros">macros</a>.</td>
+      <td>String (See note blow)</td>
       <td>FALSE</td>
-      <td>FALSE</td>
-      <td>FALSE</td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
+      <td>1</td>
+      <td>161</td>
     </tr>
     <tr>
       <td>created</td>
-      <td>timestamp when template was created</td>
-      <td>Date</td>
-      <td>FALSE</td>
-      <td>FALSE</td>
+      <td>Timestamp when template was created</td>
+      <td>String (ISO-8601)</td>
       <td>TRUE</td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
+      <td>N/A</td>
+      <td>N/A</td>
     </tr>
     <tr>
       <td>lastUpdated</td>
-      <td>timestamp when template was last updated</td>
-      <td>Date</td>
-      <td>FALSE</td>
-      <td>FALSE</td>
+      <td>Timestamp when template was last updated</td>
+      <td>String (ISO-8601)</td>
       <td>TRUE</td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
+      <td>N/A</td>
+      <td>N/A</td>
     </tr>
     <tr>
       <td>translations</td>
-      <td>list of translations</td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td><language></language></td>
-      <td>language that was used for translation</td>
-      <td>String</td>
-      <td>FALSE</td>
-      <td>FALSE</td>
-      <td>FALSE</td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td><translated_template></translated_template></td>
-      <td>translated text of the template</td>
-      <td>String</td>
-      <td>FALSE</td>
-      <td>FALSE</td>
-      <td>FALSE</td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
+      <td>Array of <a href="#translation-attributes">translations</a></td>
+      <td>Array</td>
+      <td>N/A</td>
+      <td>N/A</td>
+      <td>N/A</td>
     </tr>
   </tbody>
 </table>
 
-<h3 id="sms-template-types">SMS Template Types</h3>
+<blockquote>
+  <p>NOTE: The final length of your SMS message cannot exceed 160 characters. If the verification code portion of the message falls outside of the 160-character limit, your message will not be sent.</p>
+</blockquote>
 
-<p>Select a fallback template based on the workflow.</p>
+<h4 id="translation-attributes">Translation Attributes</h4>
+
+<p>Template translations are optionally provided when you want to localize the SMS messages. Translations are provided as key:value pairs: the language and translated template text.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"translations"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"it"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Il codice ${org.name} è: ${code}."</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"fr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Votre code ${org.name}: ${code}."</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"es"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tu código de ${org.name} es: ${code}."</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>The key portion is a two-letter country code conforming to <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes">ISO 639-1</a>, and the value is the translated SMS template.</p>
+
+<blockquote>
+  <p>NOTE: Just like with regular SMS templates, the final processed SMS message cannot exceed 160 characters.</p>
+</blockquote>
+
+<h3 id="sms-template-types">SMS Template Types</h3>
 
 <table>
   <thead>
@@ -939,10 +837,28 @@
   </tbody>
 </table>
 
-<h3 id="sms-template-translations">SMS Template Translations</h3>
+<h3 id="sms-template-macros">SMS Template Macros</h3>
 
-<p>Template translations are optionally provided when we want to be able to localize the SMS messages. Translations are
-provided in pairs: the language and translated template text.</p>
+<p>Currently only two macros are supported for SMS templates.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">${code}</code></td>
+      <td>The one-time verification code that is required for login.</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">${org.name}</code></td>
+      <td>The name of the Okta organization that the user is trying to authenticate into.</td>
+    </tr>
+  </tbody>
+</table>
 
       </div>
       <div class="TableOfContents TableOfContentsPreload">
