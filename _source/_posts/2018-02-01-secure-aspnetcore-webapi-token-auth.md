@@ -214,7 +214,7 @@ You'll notice the `JsonProperty` attributes on several of the properties here. T
 
 >You could just always make the API called and if it comes back with a `401 Unauthorized` response, go and get a new access token then. The approach of checking to see if it's expiring soon is simple and cuts down on failed calls in the logs.
 
-Finally, the `OktaTokenService` class needs the `GetNewAccessToken()` method, in case it either doesn't currently have an access token, or it is expired or expiring soon. This method will call your Authorization Server's `token` endpoint to get a new access token..
+Finally, the `OktaTokenService` class needs the `GetNewAccessToken()` method, in case it either doesn't currently have an access token, or it is expired or expiring soon. This method will call your Authorization Server's `token` endpoint to get a new access token.
 
 ```cs
 private async Task<OktaToken> GetNewAccessToken()
@@ -512,8 +512,8 @@ That's it! If you run your app you will see the application displaying the value
 
 ## Learn More
 
-Interested in learning more about API access management or building secure applications with Okta? Check out our [Product Documentation\](https://developer.okta.com/use_cases/api_access_management/) or any of these great resources:
+Interested in learning more about API access management or building secure applications with Okta? Check out our [Product Documentation](https://developer.okta.com/use_cases/api_access_management/) or any of these great resources:
 * Discover how the .NET Authentication middleware [has changed from Core 1.0 to Core 2.0](https://docs.microsoft.com/en-us/aspnet/core/migration/1x-to-2x/identity-2x)
 * Learn about the [.NET JwtBearer Namespace](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.authentication.jwtbearer?view=aspnetcore-2.0)
-* Read about [Angular Authentication with OIDC](https://developer.okta.com/blog/2017/04/17/angular-authentication-with-oidc)
-* And how to [Build a React Application With Authentication](https://developer.okta.com/blog/2017/03/30/react-okta-sign-in-widget)
+* Read about [Angular Authentication with OIDC](/blog/2017/04/17/angular-authentication-with-oidc)
+* And how to [Build a React Application With Authentication](/blog/2017/03/30/react-okta-sign-in-widget)
