@@ -9,7 +9,7 @@ tweets:
   - "Don't forget to secure your #aspnetcore #api using token authentication"
 ---
 
-API security can be complex. In many cases, just because you've built an API that you want to make public, it doesn’t mean that you want just anybody accessing it. In most cases, you want fine-grained control overwho can access the API, but setting up that kind of user management can be a daunting task: You'd have to create your own authorization service that can create API credentials for your users and have the ability to exchange those API credentials for an access token using OAuth 2.0. I’ve got good news! With just a few lines of code, Okta can handle all the complicated and time-consuming security elements and let you concentrate on creating a stellar API. =)
+API security can be complex. In many cases, just because you've built an API that you want to make public, it doesn’t mean that you want just anybody accessing it. In most cases, you want fine-grained control over who can access the API, but setting up that kind of user management can be a daunting task: you'd have to create your own authorization service that can create API credentials for your users and have the ability to exchange those API credentials for an access token using OAuth 2.0. I’ve got good news! With just a few lines of code, Okta can handle all the complicated and time-consuming security elements and let you concentrate on creating a stellar API. =)
 
 ## Understand the Basic Flow
 
@@ -17,7 +17,7 @@ When handling authentication for a server-to-server API, you really only have tw
 
 Because OAuth 2.0 is the most popular way to secure API services like the one we’ll be building today (and the only one that uses token authentication), we’ll be using that.
 
-With OAuth 2.0 client credentials, authenticating a client app is two-step process: First, the client sends its API credentials (a client ID and secret) to an authorization server that returns an access token. Second, the client sends a request to the API with that access token and the API verifies it and either authorizes the call or rejects it with a `401 Unauthorized` response. In this tutorial, you'll use Okta to manage your OAuth 2.0 server and rely on Okta’s default authorization server to create access tokens using API credentials (aka: client credentials) also created by Okta.
+With OAuth 2.0 client credentials, authenticating a client app is two-step process: first, the client sends its API credentials (a client ID and secret) to an authorization server that returns an access token. Second, the client sends a request to the API with that access token and the API verifies it and either authorizes the call or rejects it with a `401 Unauthorized` response. In this tutorial, you'll use Okta to manage your OAuth 2.0 server and rely on Okta’s default authorization server to create access tokens using API credentials (aka: client credentials) also created by Okta.
 
 ## Install .NET Core 2.0
 For this tutorial, you'll be using version 2.0 of the .NET Core framework to create a .NET Core MVC application that will be the client, and a .NET core Web API that the client will call. To make sure you have .NET Core 2.0 installed, you can open a command window and run:
@@ -71,21 +71,19 @@ Now, you should be able to fire them both up (with `dotnet run` from the command
 
 If you don't already have an account with Okta, set up your free-forever developer account at <https://developer.okta.com/signup/>. Once you've logged into the dashboard, click on the **Applications** menu item, then click **Add Application**.
 
-{% img blog/webapi-token-auth/AddApplication.png alt:"Add Application Screen" width:"800" %}
+{% img blog/webapi-token-auth/AddApplication.png alt:"Add Application Screen" width:"800" %}{: .center-image }
 
 From the Create New Application screen choose **Service**, and click **Next**.
 
-{% img blog/webapi-token-auth/CreateServiceScreen.png alt:"Create Service Screen" width:"800" %}
-
+{% img blog/webapi-token-auth/CreateServiceScreen.png alt:"Create Service Screen" width:"800" %}{: .center-image }
 
 Name the application "API Sample App", and click **Done**.
 
-{% img blog/webapi-token-auth/NameServiceScreen.png alt:"Name Service Screen" width:"800" %}
+{% img blog/webapi-token-auth/NameServiceScreen.png alt:"Name Service Screen" width:"800" %}{: .center-image }
 
+On the API Sample App's general settings, you will see the Client Credentials box with the client ID and client secret in it. You will use these to authenticate a client wishing to call your API.
 
-On the API Sample App's general settings, you will see the Client Credentials box with the Client ID and Client secret in it. You will use these to authenticate a client wishing to call your API.
-
-{% img blog/webapi-token-auth/ApplicationGeneralSettings.png alt:"General Settings Screen" width:"800" %}
+{% img blog/webapi-token-auth/ApplicationGeneralSettings.png alt:"General Settings Screen" width:"800" %}{: .center-image }
 
 >For each client that you’ll want to have access to the API, you’ll need to create an Okta application for it, and give it the Client ID and Client Secret.
 
@@ -104,9 +102,9 @@ In this case, the client of the API is the ASP.NET MVC application. Open the `ap
     }
   },
   "Okta": { 
-    "TokenUrl": "https://{{YOUR OKTA DOMAIN}}/oauth2/default/v1/token", 
-    "ClientId": "{{YOUR CLIENT ID}}", 
-    "ClientSecret": "{{YOUR CLIENT SECRET}}" 
+    "TokenUrl": "https://{yourOktaDomain}/oauth2/default/v1/token", 
+    "ClientId": "{yourClientId}", 
+    "ClientSecret": "{yourClientSecret}" 
   }
 }
 ```
@@ -126,6 +124,7 @@ namespace app.Models
     }
 }
 ```
+
 This will allow you to read those configuration values into a C# object, making it easier to use in your application. To make it even easier, add this new object to the services that can be injected by adding it to the `ConfigureServices()` method in the `Startup.cs` file.
 
 ```cs
@@ -482,7 +481,7 @@ services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-	options.Authority = "https://{{YOUR OKTA DOMAIN}}/oauth2/default";
+	options.Authority = "https://{yourOktaDomain}/oauth2/default";
 	options.Audience = "api://default";
 	options.RequireHttpsMetadata = false;
 });
@@ -504,12 +503,12 @@ public class ValuesController : Controller
 
 You can now run the API and try to hit it with a browser. You'll see a screen that says the page isn't working with an HTTP error of 401.
 
-{% img blog/webapi-token-auth/RunningApiWithValidation.png alt:"API failing in Browser" width:"800" %}
+{% img blog/webapi-token-auth/RunningApiWithValidation.png alt:"API failing in Browser" width:"800" %}{: .center-image }
 
 
 That's it! If you run your app you will see the application displaying the values as before. You now have an API that is protected with access tokens provided by Okta, and only the worthy shall pass.
 
-{% img blog/webapi-token-auth/ProtectedService.png alt:"App calling protected API" width:"800" %}
+{% img blog/webapi-token-auth/ProtectedService.png alt:"App calling protected API" width:"800" %}{: .center-image }
 
 ## Learn More
 
