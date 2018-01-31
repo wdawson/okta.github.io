@@ -749,66 +749,140 @@ integer type range limitations when converting from a number to an integer with 
 
 <h3 id="group-functions">Group Functions</h3>
 
+<p>Group functions return either an array of groups or <strong>True</strong> or <strong>False</strong>.</p>
+
 <table>
   <thead>
     <tr>
       <th>Function</th>
       <th>Return Type</th>
       <th>Example</th>
-      <th>Output</th>
     </tr>
   </thead>
   <tbody>
     <tr>
+      <td><code class="highlighter-rouge">getFilteredGroups</code></td>
+      <td>Array</td>
+      <td><code class="highlighter-rouge">getFilteredGroups({"00gml2xHE3RYRx7cM0g3"}, "group.name", 40)</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Groups.contains</code></td>
+      <td>Array</td>
+      <td><code class="highlighter-rouge">contains(app_type/app_instance_id, pattern, limit)</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Groups.startsWith</code></td>
+      <td>Array</td>
+      <td><code class="highlighter-rouge">startsWith(app_type/app_instance_id, pattern, limit)</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Groups.endsWith</code></td>
+      <td>Array</td>
+      <td><code class="highlighter-rouge">endsWith(app_type/app_instance_id, pattern, limit)</code></td>
+    </tr>
+    <tr>
       <td><code class="highlighter-rouge">isMemberOfGroupName</code></td>
       <td>Boolean</td>
       <td><code class="highlighter-rouge">isMemberOfGroupName("group1")</code></td>
-      <td><strong>True</strong>, if the user under consideration is a member of *group1’; otherwise, <strong>False</strong>.</td>
     </tr>
     <tr>
       <td><code class="highlighter-rouge">isMemberOfGroup</code></td>
       <td>Boolean</td>
       <td><code class="highlighter-rouge">isMemberOfGroup("groupId")</code></td>
-      <td><strong>True</strong>, if the user under consideration is a member of group with id <em>groupId</em>; otherwise,  <strong>False</strong>.</td>
     </tr>
     <tr>
       <td><code class="highlighter-rouge">isMemberOfAnyGroup</code></td>
       <td>Boolean</td>
       <td><code class="highlighter-rouge">isMemberOfAnyGroup("groupId1", "groupId2", "groupId3")</code></td>
-      <td><strong>True</strong>, if the user under consideration is a member of any groups with ids <em>groupId1</em>, <em>groupId2</em> or <em>groupId3</em>; otherwise <strong>False</strong>.</td>
     </tr>
     <tr>
       <td><code class="highlighter-rouge">isMemberOfGroupNameStartsWith</code></td>
       <td>Boolean</td>
       <td><code class="highlighter-rouge">isMemberOfGroupNameStartsWith("San Fr")</code></td>
-      <td><strong>True</strong>, if the user under consideration is a member of any groups with names that starts with <em>San Fr</em>; otherwise,  <strong>False</strong>.</td>
     </tr>
     <tr>
       <td><code class="highlighter-rouge">isMemberOfGroupNameContains</code></td>
       <td>Boolean</td>
       <td><code class="highlighter-rouge">isMemberOfGroupNameContains("admin")</code></td>
-      <td><strong>True</strong>, if the user under consideration is a member of any groups with names that contains <em>admin</em>; otherwise,  <strong>False</strong>.</td>
     </tr>
     <tr>
       <td><code class="highlighter-rouge">isMemberOfGroupNameRegex</code></td>
       <td>Boolean</td>
       <td><code class="highlighter-rouge">isMemberOfGroupNameRegex("/.*admin.*")</code></td>
-      <td><strong>True</strong>, if the user under consideration is a member of any groups with names that contain <em>admin</em>; otherwise,  <strong>False</strong>.</td>
-    </tr>
-    <tr>
-      <td><code class="highlighter-rouge">getFilteredGroups</code></td>
-      <td>Array</td>
-      <td><code class="highlighter-rouge">getFilteredGroups({"00gml2xHE3RYRx7cM0g3"}, "group.name", 40)</code></td>
-      <td>Array of groups</td>
     </tr>
   </tbody>
 </table>
 
-<h5 id="getfilteredgroups-details">getFilteredGroups Details</h5>
+<h5 id="using-group-functions-for-dynamic-group-whitelists">Using Group Functions for Dynamic Group Whitelists</h5>
+<p>Three Group functions help you use dynamic group whitelists:  <code class="highlighter-rouge">contains</code>, <code class="highlighter-rouge">startsWith</code>, and <code class="highlighter-rouge">endsWith</code>.</p>
+
+<p>These functions return all the groups that match the specified criteria. Use this function to get a list of groups that include the current user is as a member.</p>
+
+<p>You can use this function anywhere to get a list of groups of which the current user is a member, including both user groups and app groups that originate from sources outside Okta, such as from Active Directory and Workday. Additionally, you can use this combined, custom-formatted list for customizable claims into Access and ID Tokens that drive authorization flows. All three functions have the same parameters:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Parameter</th>
+      <th style="text-align: left">Description</th>
+      <th style="text-align: left">Nullable</th>
+      <th style="text-align: left">Example Values</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">app</td>
+      <td style="text-align: left">Application type or App ID</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left"><code class="highlighter-rouge">"OKTA"</code>, <code class="highlighter-rouge">"0oa13c5hnZFqZsoS00g4"</code>, <code class="highlighter-rouge">"active_directory"</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">pattern</td>
+      <td style="text-align: left">Search term</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left"><code class="highlighter-rouge">"Eastern-Region"</code>, <code class="highlighter-rouge">"Eastern"</code>, <code class="highlighter-rouge">"-Region"</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">limit</td>
+      <td style="text-align: left">Maximum number of groups returned. Must be a valid EL expression and evaluate to a value from 1 to 100.</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left"><code class="highlighter-rouge">1</code>, <code class="highlighter-rouge">50</code>, <code class="highlighter-rouge">100</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>To use these functions to create a token using a dynamic group whitelist, create a Groups claim on an app:</p>
+
+<ol>
+  <li>
+    <p>In the Okta user interface, navigate to the Sign On tab of the client application you are configuring, and click  <strong>Edit</strong> in the Open ID Connect ID Token section.</p>
+  </li>
+  <li>
+    <p>In <strong>Groups claim type</strong>, choose <strong>Expression</strong>.</p>
+  </li>
+  <li>
+    <p>In <strong>Group claims filter</strong>, leave the default name <strong>groups</strong> or change it if you wish.</p>
+  </li>
+  <li>
+    <p>In Groups claim expression, add one of the three functions with the criteria for your dynamic group whitelist:</p>
+
+    <p><code class="highlighter-rouge">Groups.startsWith("active.directory", "myGroup", 10)</code></p>
+  </li>
+</ol>
+
+<p>Notes:</p>
+<ul>
+  <li>The syntax for these three functions is different from <code class="highlighter-rouge">getFilteredGroups</code>.</li>
+  <li>You can also create a claim directly in a Custom Authorization Server instead of on the OpenID Connect or OAuth 2.0 app.</li>
+</ul>
+
+<h5 id="using-groups-functions-for-static-group-whitelists">Using Groups Functions for Static Group Whitelists</h5>
+
+<p>The <code class="highlighter-rouge">getFilteredGroups</code> group function helps you use a static group whitelist.</p>
 
 <p><code class="highlighter-rouge">getFilteredGroups</code> returns all groups contained in a specified list, the whitelist, of which the user is a member. The groups are returned in a format specified by the <code class="highlighter-rouge">group_expression</code> parameter. You must specify the maximum number of groups to return. The format of this EL function is <code class="highlighter-rouge">getFilteredGroups( whitelist, group_expression, limit)</code>.</p>
 
-<p>You can use this function anywhere to get a list of groups of which the current user is a member, incuding both user groups and app groups that originate from sources outside Okta, such as from Active Directory and Workday. Additionally, you can use this combined, custom-formatted list for customizable claims into Access and ID Tokens that drive authorization flows.</p>
+<p>You can use this function anywhere to get a list of groups of which the current user is a member, including both user groups and app groups that originate from sources outside Okta, such as from Active Directory and Workday. Additionally, you can use this combined, custom-formatted list for customizable claims into Access and ID Tokens that drive authorization flows.</p>
 
 <p>This function takes Okta EL expressions for all parameters that evaluate to the correct data type. With these expressions you can create complex definitions for the whitelist, the group format, and for the number of groups to return that can include <code class="highlighter-rouge">if</code> logic and customized formatting.</p>
 
@@ -848,16 +922,27 @@ integer type range limitations when converting from a number to an integer with 
 <p><strong>Parameter Examples</strong></p>
 
 <ul>
-  <li>whitelist<br />
-Array: <code class="highlighter-rouge">{"00gn335BVurvavwEEL0g3", "00gnfg5BVurvavAAEL0g3"}</code><br />
-Array variable: <code class="highlighter-rouge">app.profile.groups.whitelist</code></li>
-  <li>group_expression<br />
-Attribute name: <code class="highlighter-rouge">"group.id"</code><br />
-Okta EL string containing an if condition: <code class="highlighter-rouge">"(group.objectClass[0] == 'okta:windows_security_principal') ? 'AD: ' + group.profile.windowsDomainQualifiedName : 'Okta: ' + group.name"</code><br /><br />If <em>okta:windows_security_principal</em> is true for
-a group, the function returns the <code class="highlighter-rouge">windowsDomainQualifiedName</code> prefixed with <code class="highlighter-rouge">AD:</code>; otherwise, the function returns the group name prefixed with <code class="highlighter-rouge">Okta:</code>.</li>
-  <li>limit<br />
- Integer between 1 and 100, inclusive; for example: <code class="highlighter-rouge">50</code>.<br />
- Okta EL expression containing a condition that evaluates to an integer: <code class="highlighter-rouge">app.profile.maxLimit &lt; 100 ? app.profile.maxLimit : 100</code>.<br /><br /> If the maximum group limit in the profile is less than 100, return that number of groups; otherwise, return a maximum of 100 groups. <code class="highlighter-rouge">Note:</code> If there are more groups returned than the specified limit, an error is returned.</li>
+  <li>whitelist
+    <ul>
+      <li>Array: <code class="highlighter-rouge">{"00gn335BVurvavwEEL0g3", "00gnfg5BVurvavAAEL0g3"}</code><br /></li>
+      <li>Array variable: <code class="highlighter-rouge">app.profile.groups.whitelist</code></li>
+    </ul>
+  </li>
+  <li>group_expression
+    <ul>
+      <li>Attribute name: <code class="highlighter-rouge">"group.id"</code></li>
+      <li>Okta EL string containing an if condition: <code class="highlighter-rouge">"(group.objectClass[0] == 'okta:windows_security_principal') ? 'AD: ' + group.profile.windowsDomainQualifiedName : 'Okta: ' + group.name"</code>
+  If <em>okta:windows_security_principal</em> is true for
+  a group, the function returns the <code class="highlighter-rouge">windowsDomainQualifiedName</code> prefixed with <code class="highlighter-rouge">AD:</code>; otherwise, the function returns the group name prefixed with <code class="highlighter-rouge">Okta:</code>.</li>
+    </ul>
+  </li>
+  <li>limit
+    <ul>
+      <li>Integer between 1 and 100, inclusive; for example: <code class="highlighter-rouge">50</code>.</li>
+      <li>Okta EL expression containing a condition that evaluates to an integer: <code class="highlighter-rouge">app.profile.maxLimit &lt; 100 ? app.profile.maxLimit : 100</code>.
+  If the maximum group limit in the profile is less than 100, return that number of groups; otherwise, return a maximum of 100 groups. If there are more groups returned than the specified limit, an error is returned.</li>
+    </ul>
+  </li>
 </ul>
 
 <h3 id="time-functions">Time Functions</h3>
