@@ -24,10 +24,12 @@ require_env_var "OKTA_HOME"
 require_env_var "BRANCH"
 require_env_var "REPO"
 
-export TEST_SUITE_TYPE="build"
+# Get the Runscope trigger ID
+get_secret prod/tokens/runscope_trigger_id RUNSCOPE_TRIGGER_ID
 
-npm install -g @okta/ci-update-package
-npm install -g @okta/ci-pkginfo
+STAGING_BASE_URL_RUNSCOPE="https://dq3iyfxeowfmd.cloudfront.net"
+
+export TEST_SUITE_TYPE="build"
 
 # `cd` to the path where Okta's build system has this repository
 cd ${OKTA_HOME}/${REPO}
@@ -39,10 +41,36 @@ then
     exit ${BUILD_FAILURE};
 fi
 
+# Copy assets and previous history into dist
+if ! npm run postbuild-prod;
+then
+    exit ${BUILD_FAILURE};
+fi
+
 if ! removeHTMLExtensions;
 then
     echo "Failed removing .html extensions"
     exit ${BUILD_FAILURE};
+fi
+
+# Run Lint checker
+if ! npm run post-build-lint;
+then
+    exit ${BUILD_FAILURE}
+fi
+
+# Run find-missing-slashes to find links that will redirect to okta.github.io
+if ! npm run find-missing-slashes;
+then
+    exit ${BUILD_FAILURE}
+fi
+
+# Run htmlproofer to validate links, scripts, and images
+#   -  Passing in the argument 'false' to prevent adding an '.html' extension to
+#      extension-less files. 
+if ! bundle exec ./scripts/htmlproofer.rb false;
+then
+    exit ${BUILD_FAILURE}
 fi
 
 interject "Generating conductor file in $(pwd)"
@@ -99,5 +127,8 @@ if ! send_promotion_message "${DEPLOY_ENVIRONMENT}" "${ARTIFACT}" "${DEPLOY_VERS
   echo "Error sending promotion event to aperture"
   exit ${BUILD_FAILURE};
 fi
+
+# Trigger Runscope tests
+curl -I -X GET "https://api.runscope.com/radar/bucket/$RUNSCOPE_TRIGGER_ID/trigger?base_url=$STAGING_BASE_URL_RUNSCOPE"
 
 exit $SUCCESS
