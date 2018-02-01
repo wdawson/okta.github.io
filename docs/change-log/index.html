@@ -329,12 +329,12 @@ a release, usually due to holiday schedules or other special events. We release 
 <h4 id="special-html-characters-in-state-for-okta_post_message">Special HTML Characters in <code class="highlighter-rouge">state</code> for <code class="highlighter-rouge">okta_post_message</code></h4>
 
 <p>You can include HTML special characters in the <code class="highlighter-rouge">state</code> parameter for <code class="highlighter-rouge">okta_post_message</code>.
-Note that <a href="/docs/api/resources/oauth2.html#request-parameters"><code class="highlighter-rouge">state</code> in the main request body</a> already allows these characters. <!-- OKTA-91165 --></p>
+Note that <a href="/docs/api/resources/oauth2#request-parameters"><code class="highlighter-rouge">state</code> in the main request body</a> already allows these characters. <!-- OKTA-91165 --></p>
 
 <h4 id="custom-scopes-in-metadata-endpoints">Custom Scopes in Metadata Endpoints</h4>
 
-<p>You can specify whether or not to include custom scopes in the metadata endpoints for <a href="/docs/api/resources/oauth2.html#retrieve-authorization-server-metadata">OAuth 2.0</a> and <a href="/docs/api/resources/oauth2.html#retrieve-authorization-server-openid-connect-metadata">OpenID Connect</a>.
-Existing custom scopes are not exposed by default. Set the <a href="/docs/api/resources/oauth2.html#scopes-properties"><code class="highlighter-rouge">metadataPublish</code> attribute to <code class="highlighter-rouge">ALL_CLIENTS</code></a> to change the behavior. <!-- OKTA-106548 --></p>
+<p>You can specify whether or not to include custom scopes in the metadata endpoints for <a href="/docs/api/resources/oauth2#retrieve-authorization-server-metadata">OAuth 2.0</a> and <a href="/docs/api/resources/oauth2#retrieve-authorization-server-openid-connect-metadata">OpenID Connect</a>.
+Existing custom scopes are not exposed by default. Set the <a href="/docs/api/resources/oauth2#scopes-properties"><code class="highlighter-rouge">metadataPublish</code> attribute to <code class="highlighter-rouge">ALL_CLIENTS</code></a> to change the behavior. <!-- OKTA-106548 --></p>
 
 <h4 id="improved-enforcement-of-authorization-server-policies">Improved Enforcement of Authorization Server Policies</h4>
 
@@ -344,7 +344,7 @@ Existing custom scopes are not exposed by default. Set the <a href="/docs/api/re
 
 <p>Use <a href="/reference/okta_expression_language#group-functions">the new EL functions <code class="highlighter-rouge">Group.contains</code>, <code class="highlighter-rouge">Group.startsWith</code>, and <code class="highlighter-rouge">Group.endsWith</code></a> to define a set of dynamic groups to be included in tokens minted from Okta’s authorization servers. <!-- OKTA-142824 --></p>
 
-<p>These functions complement <a href="/docs/how-to/creating-token-with-groups-claim.html">the existing EL function <code class="highlighter-rouge">getFilteredGroups</code></a> which helps you create a static list of groups for inclusion in a token.</p>
+<p>These functions complement <a href="/docs/how-to/creating-token-with-groups-claim">the existing EL function <code class="highlighter-rouge">getFilteredGroups</code></a> which helps you create a static list of groups for inclusion in a token.</p>
 
 <h4 id="new-system-log-messages">New System Log Messages</h4>
 
@@ -355,11 +355,19 @@ Existing custom scopes are not exposed by default. Set the <a href="/docs/api/re
   <li>The <code class="highlighter-rouge">user.account.update_primary_email</code> event is triggered only when a primary email is updated. It’s not triggered by profile sync or other automated processes. <!-- OKTA-154452 --></li>
 </ul>
 
-<h3 id="bug-fixed">Bug Fixed</h3>
+<h3 id="bugs-fixed">Bugs Fixed</h3>
+
+<p>The following bugs have been fixed and are expected in preview orgs January 31, 2018 and production orgs starting February 7, 2018.</p>
 
 <ul>
   <li>The exception thrown when creating a zone without the correct features enabled was incorrect <code class="highlighter-rouge">501: unsupported operation</code>.
   Now the correct exception is thrown: <code class="highlighter-rouge">401: You do not have permission to access the feature you are requesting.</code> (OKTA-154940)</li>
+  <li>Requests to <code class="highlighter-rouge">/api/v1/authn</code> with <code class="highlighter-rouge">deviceToken</code> in the body of the request incorrectly prompted the user for MFA, even after successfully verifying the factor the first time, if:
+    <ul>
+      <li>The org had MFA enabled.</li>
+      <li>The user was assigned to an app that had password sync enabled. (OKTA-156826)</li>
+    </ul>
+  </li>
 </ul>
 
 
