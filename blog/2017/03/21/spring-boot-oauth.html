@@ -242,7 +242,7 @@ brew install springboot
 
 <p>Run this app with the following command:</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spring run helloGroovy.groovy
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spring run helloWorld.groovy
 </code></pre></div></div>
 
 <p>Navigate to <code class="highlighter-rouge">http://localhost:8080</code> and you’ll be prompted to login with your browser’s basic authentication dialog. Enter <code class="highlighter-rouge">user</code> for the username and copy/paste the generated password from your console. If you copied and pasted the password successfully, you’ll see <code class="highlighter-rouge">Hello World</code> in your browser.</p>
@@ -287,17 +287,16 @@ brew install springboot
   <span class="na">oauth2</span><span class="pi">:</span>
     <span class="na">client</span><span class="pi">:</span>
       <span class="c1"># From OIDC app</span>
-      <span class="na">clientId</span><span class="pi">:</span> <span class="c1"># clientId</span>
-      <span class="na">clientSecret</span><span class="pi">:</span> <span class="c1"># clientSecret</span>
+      <span class="na">clientId</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">yourClientId</span><span class="pi">}</span>
+      <span class="na">clientSecret</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">yourClientSecret</span><span class="pi">}</span>
       <span class="c1"># From Authorization Server's metadata</span>
-      <span class="na">accessTokenUri</span><span class="pi">:</span> <span class="c1"># token_endpoint</span>
-      <span class="na">userAuthorizationUri</span><span class="pi">:</span> <span class="c1"># authorization_endpoint</span>
+      <span class="na">accessTokenUri</span><span class="pi">:</span> <span class="s"><span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>/oauth2/default/v1/token</span><span class="err">	</span>
+      <span class="na">userAuthorizationUri</span><span class="pi">:</span> <span class="s"><span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>/oauth2/default/v1/authorize</span> 
       <span class="na">clientAuthenticationScheme</span><span class="pi">:</span> <span class="s">form</span>
       <span class="na">scope</span><span class="pi">:</span> <span class="s">openid profile email</span>
     <span class="na">resource</span><span class="pi">:</span>
-      <span class="c1"># from your Auth Server's metadata, check .well-known/openid-configuration</span>
-      <span class="c1"># if not in .well-known/oauth-authorization-server</span>
-      <span class="na">userInfoUri</span><span class="pi">:</span> <span class="c1"># userinfo_endpoint</span>
+      <span class="c1"># from your Auth Server's metadata, check .well-known/openid-configuration if not in .well-known/oauth-authorization-server</span>
+      <span class="na">userInfoUri</span><span class="pi">:</span> <span class="s"><span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>/oauth2/default/v1/userinfo</span>
 </code></pre></div></div>
 
 <p>Start your app with <code class="highlighter-rouge">spring run helloOAuth.groovy</code> and navigate to <code class="highlighter-rouge">http://localhost:8080</code>. You’ll be redirected to Okta to login.</p>
@@ -331,6 +330,7 @@ brew install springboot
 <p><strong>Changelog:</strong></p>
 
 <ul>
+  <li>Feb 2, 2018: Added more information to <code class="highlighter-rouge">application.yml</code> so it’s easier to copy and paste.</li>
   <li>Oct 20, 2017: Added missing <code class="highlighter-rouge">scope: openid profile email</code> to <code class="highlighter-rouge">application.yaml</code>.</li>
   <li>Oct 11, 2017: Updated instructions for the <a href="/blog/2017/09/25/all-new-developer-console">Okta Developer Console</a>.</li>
 </ul>

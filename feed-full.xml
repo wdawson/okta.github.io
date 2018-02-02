@@ -24471,7 +24471,7 @@ brew install springboot
 
 &lt;p&gt;Run this app with the following command:&lt;/p&gt;
 
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;spring run helloGroovy.groovy
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;spring run helloWorld.groovy
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Navigate to &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt; and you’ll be prompted to login with your browser’s basic authentication dialog. Enter &lt;code class=&quot;highlighter-rouge&quot;&gt;user&lt;/code&gt; for the username and copy/paste the generated password from your console. If you copied and pasted the password successfully, you’ll see &lt;code class=&quot;highlighter-rouge&quot;&gt;Hello World&lt;/code&gt; in your browser.&lt;/p&gt;
@@ -24516,17 +24516,16 @@ brew install springboot
   &lt;span class=&quot;na&quot;&gt;oauth2&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
     &lt;span class=&quot;na&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
       &lt;span class=&quot;c1&quot;&gt;# From OIDC app&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;clientId&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# clientId&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;clientSecret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# clientSecret&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;clientId&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;yourClientId&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;clientSecret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;yourClientSecret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
       &lt;span class=&quot;c1&quot;&gt;# From Authorization Server's metadata&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;accessTokenUri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# token_endpoint&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;userAuthorizationUri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# authorization_endpoint&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;accessTokenUri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/token&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;	&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;userAuthorizationUri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/authorize&lt;/span&gt; 
       &lt;span class=&quot;na&quot;&gt;clientAuthenticationScheme&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;form&lt;/span&gt;
       &lt;span class=&quot;na&quot;&gt;scope&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;openid profile email&lt;/span&gt;
     &lt;span class=&quot;na&quot;&gt;resource&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;c1&quot;&gt;# from your Auth Server's metadata, check .well-known/openid-configuration&lt;/span&gt;
-      &lt;span class=&quot;c1&quot;&gt;# if not in .well-known/oauth-authorization-server&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;userInfoUri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# userinfo_endpoint&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;# from your Auth Server's metadata, check .well-known/openid-configuration if not in .well-known/oauth-authorization-server&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;userInfoUri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/userinfo&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Start your app with &lt;code class=&quot;highlighter-rouge&quot;&gt;spring run helloOAuth.groovy&lt;/code&gt; and navigate to &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt;. You’ll be redirected to Okta to login.&lt;/p&gt;
@@ -24560,6 +24559,7 @@ brew install springboot
 &lt;p&gt;&lt;strong&gt;Changelog:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
+  &lt;li&gt;Feb 2, 2018: Added more information to &lt;code class=&quot;highlighter-rouge&quot;&gt;application.yml&lt;/code&gt; so it’s easier to copy and paste.&lt;/li&gt;
   &lt;li&gt;Oct 20, 2017: Added missing &lt;code class=&quot;highlighter-rouge&quot;&gt;scope: openid profile email&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;application.yaml&lt;/code&gt;.&lt;/li&gt;
   &lt;li&gt;Oct 11, 2017: Updated instructions for the &lt;a href=&quot;/blog/2017/09/25/all-new-developer-console&quot;&gt;Okta Developer Console&lt;/a&gt;.&lt;/li&gt;
 &lt;/ul&gt;
