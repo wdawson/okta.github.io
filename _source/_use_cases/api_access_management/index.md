@@ -15,8 +15,6 @@ API Access Management is integrated with Okta's implementation of OpenID Connect
 OpenID Connect is also available separately. Similarly, Okta provides a client management API
 for onboarding, monitoring, and deprovisioning client apps.
 
-API Access Management is an {% api_lifecycle ea %} feature.
-
 ## OAuth 2.0 and OpenID Connect
  
 When do you use API Access Management and when do you use OpenID Connect?
@@ -115,8 +113,8 @@ Okta API Products refers to all the resources and tools that Okta makes availabl
 Okta provides the API Access Management Administrator role to make managing authorization servers. A user with this role can perform the following tasks:
 
 * Create and edit authorization servers, scopes, custom claims, and access policies
-* Create and edit  OAuth and OIDC client apps
-* Assign users and groups to OAuth/OIDC client apps
+* Create and edit  OAuth 2.0 and OpenID Connect client apps
+* Assign users and groups to OAuth 2.0 and OpenID Connect client apps
 
 #### OAuth Client
 
