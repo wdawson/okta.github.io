@@ -105,13 +105,13 @@ At the bottom, you will see a **Client ID** setting (yours won't be blurred out,
 Now that the application is created, add authentication using Okta by adding a couple of npm dependencies. From the `client` folder run:
 
 ```bash
-npm install @okta/okta-auth-js @okta/okta-react react-router-dom --save
+npm install @okta/okta-react react-router-dom --save
 ```
 
 Or, if you're using the [yarn](https://yarnpkg.com) package manager:
 
 ```bash
-yarn add @okta/okta-auth-js @okta/okta-react react-router-dom
+yarn add @okta/okta-react react-router-dom
 ```
 
 Add a file to the `client/src’ folder called `app.config.js`. The contents of the file are:
