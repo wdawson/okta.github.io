@@ -47,8 +47,8 @@ create-react-app client
 This will create two folders in the `MembershipSample` folder called `api` and `client`, with a NodeJS and Express application in the `api` folder and a base React application in the `client` folder. So your folder structure will look like:
 
 * MembershipSample
-* * api
-* * client
+  * api
+  * client
 
 To make this next part easier, open two terminals or terminal tabs; one to the express app folder `api` and the other to the React app folder `client`.
 
