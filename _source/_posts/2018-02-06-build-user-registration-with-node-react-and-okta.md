@@ -80,11 +80,11 @@ You can now run both applications by running `npm start` or `yarn start` in the 
 
 If you haven't already done so, create a free forever developer account at <https://developer.okta.com/signup/>.
 
-Once you've registered, click on `Applications` in the top menu. Then click the `Add Application` button.
+Once you've registered, click on **Applications** in the top menu. Then click the **Add Application** button.
 
 {% img blog/build-user-registration-with-node-react-and-okta/application-listing-screen.png alt:"application listing screen" %}{: .center-image }
 
-You will then be taken to the application creation wizard. Choose the `Single-Page App` button and click `Next` at the bottom.
+You will then be taken to the application creation wizard. Choose the **Single-Page App** button and click **Next** at the bottom.
 
 {% img blog/build-user-registration-with-node-react-and-okta/single-page-app-screen.png alt:"single page app screen" %}{: .center-image }
 
@@ -92,13 +92,13 @@ On the next screen, you will see the default settings provided by the single-pag
 
 {% img blog/build-user-registration-with-node-react-and-okta/single-page-app-settings-screen.png alt:"single page app settings screen" %}{: .center-image }
 
-Then click the `Done` button at the bottom.
+Then click the **Done** button at the bottom.
 
 Once the application has been created, select it from the applications listing, and click on the general tab to view the general settings for your application.
 
 {% img blog/build-user-registration-with-node-react-and-okta/general-settings-tab.png alt:"general settings tab" %}{: .center-image }
 
-At the bottom, you will see a “Client ID” setting (yours won't be blurred out, obviously). Copy this to use in your React application. You will also need your Okta organization URL, which you can find at the top left of the dashboard page. It will probably look something like “https://dev-XXXXXX.oktapreview.com”.
+At the bottom, you will see a **Client ID** setting (yours won't be blurred out, obviously). Copy this to use in your React application. You will also need your Okta organization URL, which you can find at the top left of the dashboard page. It will probably look something like “https://dev-XXXXXX.oktapreview.com”.
 
 ## Add Authentication to the ReactJS Application
 
