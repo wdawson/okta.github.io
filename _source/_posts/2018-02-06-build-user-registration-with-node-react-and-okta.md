@@ -94,7 +94,7 @@ On the next screen, you will see the default settings provided by the single-pag
 
 Then click the **Done** button at the bottom.
 
-Once the application has been created, select it from the applications listing, and click on the general tab to view the general settings for your application.
+Once the application has been created, select it from the applications listing, and click on the **General** tab to view the general settings for your application.
 
 {% img blog/build-user-registration-with-node-react-and-okta/general-settings-tab.png alt:"general settings tab" %}{: .center-image }
 
@@ -118,7 +118,7 @@ Add a file to the `client/src’ folder called `app.config.js`. The contents of 
 
 ```js
 export default {
-  url: '{yourOktaOrgUrl}',
+  url: '{yourOktaDomain}',
   issuer: '{yourOktaOrgUrl}/oauth2/default',
   redirect_uri: window.location.origin + '/implicit/callback',
   client_id: '{yourClientID}'
@@ -623,7 +623,7 @@ Create a file called `oktaClient.js` in a new folder called `lib` in the Node ap
 const okta = require('@okta/okta-sdk-nodejs');
 
 const client = new okta.Client({
-  orgUrl: '{yourOktaOrgUrl}',
+  orgUrl: '{yourOktaDomain}',
   token: '{yourApiToken}'
 });
 
