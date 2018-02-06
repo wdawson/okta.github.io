@@ -22,9 +22,9 @@ To set up the base application, make sure you have these basic tools installed:
 * create-react-app (npm package)
 * express-generator (npm package)
 
-You’ll also need an [Okta developer account](http://synd.co/2CIXYja).
+You’ll also need an [Okta developer account](https://developer.okta.com/signup/).
 
-To install Node and npm, you can follow the instructions for your operating system at <http://nodejs.org>.
+To install Node and npm, you can follow the instructions for your operating system at <https://nodejs.org/en/>.
 
 Then just install the two npm packages with the npm command line:
 
@@ -605,7 +605,7 @@ router.post('/', (req, res, next) => {
 module.exports = router;
 ```
 
-The biggest things of note here are the importing of the `lib/oktaClient` (which you'll add in a moment), the call to the `createUser` function on  `oktaClient`, and the shape of the `newUser` object. The shape of the `newUser` object is documented [in Okta's API documentation](http://synd.co/2EdvkUt).
+The biggest things of note here are the importing of the `lib/oktaClient` (which you'll add in a moment), the call to the `createUser` function on  `oktaClient`, and the shape of the `newUser` object. The shape of the `newUser` object is documented [in Okta's API documentation](https://developer.okta.com/docs/api/resources/users).
 
 For your Node application to make calls to your Okta application, it will need an API token. To create one, go into your Okta developer dashboard, hover over the API menu option and click on Tokens.
 
@@ -650,8 +650,8 @@ If you want to learn more about the technologies used in this articles, you can 
 * Okta’s [React SDK](https://developer.okta.com/code/react).
 
 Also, check out other articles using Okta for authentication:
-* Randall Degges’s article on Okta in a [Simple Node Website](http://synd.co/2CGKHrA)
-* My article using the [Okta Sign-In Widget in React](http://synd.co/2qtOZxB)
-* Matt Raible’s Article on [Progressive Web Apps](http://synd.co/2CYuNq6)
+* Randall Degges’s article on Okta in a [Simple Node Website](https://developer.okta.com/blog/2017/10/19/use-openid-connect-to-build-a-simple-node-website)
+* My article using the [Okta Sign-In Widget in React](https://developer.okta.com/blog/2017/03/30/react-okta-sign-in-widget)
+* Matt Raible’s Article on [Progressive Web Apps](https://developer.okta.com/blog/2017/07/20/the-ultimate-guide-to-progressive-web-applications)
 
-As always, if you have questions, comments, or concerns about the article you can post a comment below, email me at <lee.brandt@okta.com> or post your questions to the [developer forums](http://synd.co/2F2MoxV). For more articles and tutorials, follow us on Twitter [@OktaDev](https://twitter.com/oktadev).
+As always, if you have questions, comments, or concerns about the article you can post a comment below, email me at <lee.brandt@okta.com> or post your questions to the [developer forums](https://devforum.okta.com). For more articles and tutorials, follow us on Twitter [@OktaDev](https://twitter.com/oktadev).
