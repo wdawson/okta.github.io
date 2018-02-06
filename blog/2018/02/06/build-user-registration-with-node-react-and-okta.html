@@ -1,0 +1,947 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html class="ie6 no-flexbox"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie7 no-flexbox"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie8 no-flexbox"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie9 no-flexbox"> <![endif]-->
+<!--[if IE 10 ]>    <html class="ie10 no-flexbox"> <![endif]-->
+<!--[if (gt IE 10)|!(IE)]><!--> <html class="modern wf-loading" lang="en"> <!--<![endif]-->
+  <head>
+  <script>
+    var searchDomain = 'https://developer.okta.com';
+    var isProduction = window.location.hostname === 'developer.okta.com';
+    if (isProduction) {
+      // TypeKit
+      (function(d) {
+        var config = {
+          kitId: 'jff5neq',
+          scriptTimeout: 3000,
+          async: true
+        },
+        h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/bwf-loadingb/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+      })(document);
+
+      // Google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-15777010-3', 'auto');
+      ga('send', 'pageview');
+
+      // START Google Tag Manager
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-TJ45R6');
+      // END Google Tag Manager
+    }
+  </script>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+
+  <link type="text/css" rel="stylesheet" href="https://developer.okta.com/sites/all/themes/developer/css/master.css" media="all" />
+  <meta class="swiftype" name="title" data-type="string" content="Build User Registration with Node, React, and Okta | Okta Developer">
+  <meta class="swiftype" name="summary" data-type="string" content="Today’s internet users expect a personalized ex..." />
+
+  <link type="text/css" rel="stylesheet" href="/assets/animate-ec43d72c3ed45e08a460b8a2966d8dba6006aebfa0530935c3973fa493a8771f.css">
+  <link type="text/css" rel="stylesheet" href="/assets/okta-943074870de1efc80ec41db55bc8633148bcc085ddebad595e019ddc461dca51.css">
+  
+  
+  <title>Build User Registration with Node, React, and Okta | Okta Developer</title>
+  <meta name="description" content="Today’s internet users expect a personalized ex...">
+  <link rel="alternate" type="application/rss+xml" title="Okta Developer" href="https://developer.okta.com/feed.xml"><!-- GA -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/assets/favicon/manifest.json">
+  <link rel="mask-icon" href="/assets/favicon/safari-pinned-tab.svg" color="#21313a">
+  <meta name="msapplication-config" content="/assets/favicon/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  
+    <body id="blog">
+	
+
+
+
+
+<header class="Header is-fixed">
+
+  <div class="Wrap">
+
+    <a class="Logo" href="https://developer.okta.com">
+      <svg version="1.1" id="OktaLogo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 431.9 151.4" style="enable-background:new 0 0 431.9 151.4;" xml:space="preserve"><g><g><g><path d="M102.2,41.4c-21,0-38.1,17.1-38.1,38.1s17.1,38.1,38.1,38.1s38.1-17.1,38.1-38.1l0,0C140.3,58.5,123.2,41.4,102.2,41.4z M102.2,98.5c-10.5,0-19-8.5-19-19s8.5-19,19-19s19,8.5,19,19c0.1,10.5-8.4,19-18.9,19.1C102.3,98.6,102.2,98.6,102.2,98.5L102.2,98.5z"/><path d="M169.1,92.3c0-1.9,1.5-3.4,3.4-3.4c0.9,0,1.8,0.4,2.4,1c9.5,9.7,25.3,26.3,25.4,26.4c0.4,0.5,0.8,0.8,1.4,0.9l1.6,0.2h17.2c1.8,0,3.3-1.4,3.4-3.2c0-0.8-0.3-1.5-0.8-2.2l-28.6-29.2l-1.5-1.5c-3.2-3.9-2.9-5.4,0.8-9.3l22.6-25.1c1.1-1.4,0.8-3.5-0.6-4.6c-0.6-0.4-1.3-0.7-2-0.7h-17c-0.6,0.2-1.1,0.5-1.5,0.9L175,64.4c-1.3,1.4-3.4,1.5-4.8,0.2c-0.7-0.6-1.1-1.5-1.1-2.5V18.9c0-1.7-1.3-3-3-3c-0.1,0-0.2,0-0.3,0h-12.7c-2.2,0-3.3,1.5-3.3,2.8v95.8c0,2.2,1.8,2.8,3.3,2.8h12.7c1.7,0.1,3.2-1.2,3.3-2.9c0,0,0,0,0,0V92.3z"/><path d="M273,114l-1.4-12.8c-0.2-1.7-1.7-2.9-3.4-2.7c0,0,0,0-0.1,0l-2.9,0.2c-10.1,0-18.5-7.9-19-18c0-0.3,0-0.7,0-1V64.2c-0.1-2,1.5-3.6,3.5-3.7c0,0,0,0,0,0h17c1.7-0.1,3.1-1.5,3-3.2c0,0,0-0.1,0-0.1v-12c0-2.3-1.5-3.6-2.8-3.6h-17.1c-1.9,0.1-3.5-1.5-3.6-3.4c0,0,0,0,0,0V18.9c-0.1-1.7-1.5-3.1-3.2-3c0,0-0.1,0-0.1,0h-12.7c-1.6-0.1-3,1.1-3.1,2.7c0,0.1,0,0.1,0,0.2c0,0,0,61.7,0,62c0.5,21,17.9,37.6,38.9,37c1.4,0,2.9-0.2,4.3-0.3C272,117.2,273.2,115.7,273,114z"/></g><path d="M364.7,98c-10.8,0-12.4-3.8-12.4-18.3l0,0V44.8c0-1.8-1.4-3.2-3.2-3.2c0,0-0.1,0-0.1,0h-12.8c-1.8,0-3.2,1.4-3.3,3.2v1.6C314.6,36,291.3,42.5,281,60.8c-10.4,18.3-3.9,41.6,14.4,51.9c14,7.9,31.4,6.2,43.5-4.2c3.6,5.5,9.3,9.1,18.3,9.1c1.5,0,9.7,0.3,9.7-3.5v-13.6C367,99.2,366,98.1,364.7,98z M314.2,98.6c-10.5,0-19-8.5-19-19s8.5-19,19-19s19,8.5,19,19l0,0C333.2,90.1,324.7,98.6,314.2,98.6z"/></g><path d="M19.4,74c2.2-1.9,4.1-4.1,5.7-6.6c3.5-5.3,5.4-11.5,5.2-17.9V27c0-4.9,0.9-8.4,2.7-10.5c1.8-2.1,4.8-3,9.2-3h12.6c1.2,0,2.1-0.9,2.2-2.1l0,0V2.2C57,1,56,0,54.8,0c0,0,0,0,0,0H41.5c-7.8,0-12.9,2.1-18,7.6s-7.1,12.3-7.1,21.7v14.2c0,2.2-0.1,4-0.2,5.7v2.2c-0.5,3.2-1.8,6.2-3.6,8.9C9.4,64.7,5.1,70.9,0.9,74l0,0l-0.3,0.3l0,0l-0.2,0.3H0.2v0.3l0,0c-0.1,0.3-0.1,0.7,0,1l0,0v0.3h0.1l0.2,0.3l0,0l0.3,0.3l0,0c4.2,3.1,8.5,9.3,11.3,13.7c1.8,2.7,3.1,5.7,3.6,8.9v2.2c0.1,1.6,0.2,3.5,0.2,5.7v14.3c0,9.4,2.4,16.7,7.1,21.7s10.2,7.6,18,7.6h13.8c1.2,0,2.2-1,2.2-2.2V140l0,0c0-1.2-1-2.2-2.2-2.2H42.2c-4.4,0-7.5-1-9.2-3s-2.7-5.6-2.7-10.5v-22.4c0.2-6.4-1.7-12.6-5.2-17.9c-1.6-2.5-3.5-4.7-5.7-6.6l0,0c-0.9-0.7-1.1-2-0.4-2.9C19.2,74.3,19.3,74.2,19.4,74L19.4,74z"/><path d="M412.5,74c-2.2-1.9-4.1-4.1-5.7-6.6c-3.5-5.3-5.4-11.5-5.2-17.9V27c0-4.9-0.9-8.4-2.7-10.5s-4.8-3-9.2-3h-12.6c-1.2,0-2.2-1-2.2-2.2c0,0,0,0,0,0l0,0V2.2c0-1.2,1-2.2,2.2-2.2c0,0,0,0,0,0h13.4c7.8,0,12.9,2.1,18,7.6s7.1,12.3,7.1,21.7v14.2c0,2.2,0.1,4,0.2,5.7v2.2c0.5,3.2,1.8,6.2,3.6,8.9c2.8,4.5,7.1,10.7,11.3,13.7l0,0l0.3,0.3l0,0l0.2,0.3h0.1v0.3l0,0c0.1,0.3,0.1,0.7,0,1l0,0v0.3h-0.1l-0.2,0.3l0,0l-0.3,0.3l0,0c-4.2,3.1-8.5,9.3-11.3,13.7c-1.8,2.7-3.1,5.7-3.6,8.9v2.2c-0.1,1.6-0.2,3.5-0.2,5.7v14.3c0,9.4-2.4,16.7-7.1,21.7s-10.2,7.6-18,7.6h-13.4c-1.2,0-2.2-1-2.2-2.2c0,0,0,0,0,0V140l0,0c0-1.2,1-2.2,2.2-2.2l0,0h12.7c4.4,0,7.5-1,9.2-3s2.7-5.6,2.7-10.5v-22.4c-0.2-6.3,1.6-12.6,5.1-17.9c1.6-2.5,3.5-4.7,5.7-6.6l0,0c0.9-0.7,1.1-2,0.4-2.9C412.7,74.3,412.6,74.2,412.5,74L412.5,74z"/></g></svg>
+    </a>
+
+    <nav class="Header-nav PrimaryNav">
+      <ul class="menu">
+        <li class="first expanded">
+          <a href="https://developer.okta.com/product/">Product</a>
+          <ul class="menu">
+            <li class="first leaf"><a href="https://developer.okta.com/product/">Overview</a></li>
+            <li class="leaf"><a href="https://developer.okta.com/product/authentication/">Authentication</a></li>
+            <li class="leaf"><a href="https://developer.okta.com/product/authorization/">Authorization</a></li>
+            <li class="last leaf"><a href="https://developer.okta.com/product/user-management/">User Management</a></li>
+          </ul>
+        </li>
+        <li class="leaf">
+          <a href="https://developer.okta.com/pricing/">Pricing</a>
+        </li>
+        <li class="leaf">
+          <a href="/blog/" class="active">Blog</a>
+        </li>
+        <li class="leaf">
+          <a href="/documentation/">Docs</a>
+        </li>
+        <li class="last expanded">
+          <span class="nolink">Support</span>
+          <ul class="menu">
+            <li class="first leaf"><a href="https://devforum.okta.com/">Okta Developer Forums</a></li>
+            <li class="last leaf"><a href="mailto:developers@okta.com">developers@okta.com</a></li>
+          </ul>
+        </li>
+      </ul>
+      <a class="PrimaryNav-toggle" href="#">
+        <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g class="MenuIcon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+                <path d="M1,16 L19,16" class="MenuIcon-line1" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,4 L19,4" class="MenuIcon-line2" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,10 L19,10" class="MenuIcon-line3" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,10 L19,10" class="MenuIcon-line4" stroke="#FFFFFF" stroke-width="2"></path>
+            </g>
+        </svg>
+        <svg class="CloseIcon" width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <g id="ALl-Boards" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="Desktop" transform="translate(-915.000000, -235.000000)" fill="#FFFFFF">
+              <g id="Search-bar-Active" transform="translate(30.000000, 26.000000)">
+                <polygon id="Icon/Cross" points="901 210.6 899.4 209 893 215.4 886.6 209 885 210.6 891.4 217 885 223.4 886.6 225 893 218.6 899.4 225 901 223.4 894.6 217"></polygon>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </a>
+
+      <div class="PrimaryNav-cta">
+        <a target="_blank" rel="noopener noreferrer" href="https://login.okta.com/?SAMLRequest=fc%2B7CsJAEAXQXvAflu1NNJUMeZBGELTx1a%2FrYILJTtyZGD%2FfSBRiYzlw77lMnD3rSj3Qc0ku0YtgrhU6S5fSXRN9PKxmS52l00nMpq6iBvJWCrfDe4ss6vStRe9aDzmGIZfo1jsgwyWDMzUyiIV9vt1AH4XGk5ClSvewUgMNa%2BYW%2FVj5jxhm9NLP67QQaSAMu64L6CYmsFSHlnzT4ZlLwTgcL6Sf8%2FeX9AU%3Dhttps://login.okta.com/?SAMLRequest=fc%2B7CsJAEAXQXvAflu1NNJUMeZBGELTx1a%2FrYILJTtyZGD%2FfSBRiYzlw77lMnD3rSj3Qc0ku0YtgrhU6S5fSXRN9PKxmS52l00nMpq6iBvJWCrfDe4ss6vStRe9aDzmGIZfo1jsgwyWDMzUyiIV9vt1AH4XGk5ClSvewUgMNa%2BYW%2FVj5jxhm9NLP67QQaSAMu64L6CYmsFSHlnzT4ZlLwTgcL6Sf8%2FeX9AU%3D" class="Button--redOutline">Login</a>
+        <a href="https://developer.okta.com/signup/" class="Button--red">Sign up</a>
+      </div>
+
+      <a class="SearchIcon" href="#"></a>
+      <form id="form_search" class="SearchBar Formisimo_clocked_69929" method="get" action="https://developer.okta.com/search/" name="form_search" __bizdiag="-784164280" __biza="WJ__">
+        <input type="text" name="stq" autocomplete="off" id="st-search-input-auto" class="st-search-input" placeholder="Search">
+        <input type="submit" name="submit" value="GO">
+      </form>
+
+    </nav>
+
+  </div>
+
+</header>
+
+	<div class="page-content">
+		
+
+
+
+
+
+
+<section class="Blog is-single">
+		
+	<div class="Blog-social">
+		
+		<a href="https://github.com/leebrandt" target="_blank"><i class="fa fa-github"></i></a>
+		
+		
+		<a href="https://twitter.com/leebrandt" target="_blank"><i class="fa fa-twitter"></i></a>
+		
+		
+		
+		<a href="http://leebrandt.me" target="_blank"><i class="fa fa-external-link"></i></a>
+		
+	</div>
+	
+	
+
+<article class="BlogPost">
+
+    <header class="BlogPost-header">
+
+        <time class="BlogPost-date" datetime="2018-02-06">February 6, 2018</time>
+
+        <h1 class="BlogPost-title">
+            
+            Build User Registration with Node, React, and Okta
+            
+        </h1>
+
+        <div class="BlogPost-attribution">
+            
+            <img src="/assets/avatar-leebrandt-23a647548f26433d031856dcef1df5204763b94283cd68c397d816a61363a94d.jpg" alt="avatar-leebrandt.jpg" class="BlogPost-avatar">
+            
+            <span class="BlogPost-author">Lee Brandt</span>
+        </div>
+
+    </header>
+
+    <div class="BlogPost-content">
+        
+	<p>Today’s internet users expect a personalized experience. Developers must learn to develop websites that provide that personalized experience while keeping their user’s information private. Modern web applications also tend to have a server-side API and a client-side user interface. it can be challenging to get make both ends aware of the currently logged in user. In this tutorial, I will walk you through setting up a Node API that feeds a React UI, and build a user registration that keeps the user’s information private and personal.</p>
+
+<p>In this tutorial, I won’t use any state management libraries like Redux or ReduxThunk. In a more robust application, you’ll probably want to do that, but it will be easy to wire up Redux and ReduxThunk and then add the <code class="highlighter-rouge">fetch</code> statements used here as your thunks. For the sake of simplicity, and to keep this article focused on adding user management, I’ll be adding fetch statements into <code class="highlighter-rouge">componentDidMount</code> functions.</p>
+
+<h2 id="install-the-node-and-react-prerequisites">Install the Node and React Prerequisites</h2>
+
+<p>To set up the base application, make sure you have these basic tools installed:</p>
+
+<ul>
+  <li>Node (8+)</li>
+  <li>npm (5+)</li>
+  <li>create-react-app (npm package)</li>
+  <li>express-generator (npm package)</li>
+</ul>
+
+<p>You’ll also need an <a href="https://developer.okta.com/signup/">Okta developer account</a>.</p>
+
+<p>To install Node and npm, you can follow the instructions for your operating system at <a href="https://nodejs.org/en/">https://nodejs.org/en/</a>.</p>
+
+<p>Then just install the two npm packages with the npm command line:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm i <span class="nt">-g</span> create-react-app express-generator
+</code></pre></div></div>
+
+<p>Now you’re ready to set up the basic application structure.</p>
+
+<h2 id="scaffold-the-base-application">Scaffold the Base Application</h2>
+<p>Go to the folder where you want your application to live and create a new folder for it:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir MembershipSample
+<span class="nb">cd </span>MembershipSample
+express api
+create-react-app client
+</code></pre></div></div>
+
+<p>This will create two folders in the <code class="highlighter-rouge">MembershipSample</code> folder called <code class="highlighter-rouge">api</code> and <code class="highlighter-rouge">client</code>, with a NodeJS and Express application in the <code class="highlighter-rouge">api</code> folder and a base React application in the <code class="highlighter-rouge">client</code> folder. So your folder structure will look like:</p>
+
+<ul>
+  <li>MembershipSample
+    <ul>
+      <li>api</li>
+      <li>client</li>
+    </ul>
+  </li>
+</ul>
+
+<p>To make this next part easier, open two terminals or terminal tabs; one to the express app folder <code class="highlighter-rouge">api</code> and the other to the React app folder <code class="highlighter-rouge">client</code>.</p>
+
+<p>By default, the React app and the Node app will both run on port 3000 in development, so you’ll need to get the API to run on a different port and then proxy it in the client app.</p>
+
+<p>In the <code class="highlighter-rouge">api</code> folder, open the <code class="highlighter-rouge">/bin/www</code> file and change the port the API will be running on to <code class="highlighter-rouge">3001</code>.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Get port from environment and store in Express.
+ */</span>
+
+<span class="kd">var</span> <span class="nx">port</span> <span class="o">=</span> <span class="nx">normalizePort</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span> <span class="o">||</span> <span class="s1">'3001'</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="s1">'port'</span><span class="p">,</span> <span class="nx">port</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Then set up the proxy for the API in the client application so that you can still call <code class="highlighter-rouge">/api/{resource}</code> and have it proxied from port 3000 to port 3001. In the <code class="highlighter-rouge">client/package.json</code> file, add the <code class="highlighter-rouge">proxy</code> setting below <code class="highlighter-rouge">name</code>:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"client"</span><span class="p">,</span>
+<span class="s2">"proxy"</span><span class="p">:</span> <span class="s2">"http://localhost:3001"</span>
+</code></pre></div></div>
+
+<p>Lastly, don’t forget to run <code class="highlighter-rouge">npm install</code> or <code class="highlighter-rouge">yarn install</code> for each subfolder (<code class="highlighter-rouge">api</code> and <code class="highlighter-rouge">client</code>) to ensure that the dependencies are installed.</p>
+
+<p>You can now run both applications by running <code class="highlighter-rouge">npm start</code> or <code class="highlighter-rouge">yarn start</code> in the appropriate folders for the API and the client application.</p>
+
+<h2 id="add-an-okta-application">Add an Okta Application</h2>
+
+<p>If you haven’t already done so, create a free forever developer account at <a href="https://developer.okta.com/signup/">https://developer.okta.com/signup/</a>.</p>
+
+<p>Once you’ve registered, click on <strong>Applications</strong> in the top menu. Then click the <strong>Add Application</strong> button.</p>
+
+<p><img src="/assets/blog/build-user-registration-with-node-react-and-okta/application-listing-screen-f3b24ceb3f5996ce5fa88a38ecff8a895ca5b1d89b2b4dc0f14afd8dbd9ec719.png" alt="application listing screen" class="center-image" /></p>
+
+<p>You will then be taken to the application creation wizard. Choose the <strong>Single-Page App</strong> button and click <strong>Next</strong> at the bottom.</p>
+
+<p><img src="/assets/blog/build-user-registration-with-node-react-and-okta/single-page-app-screen-b3db67592af949c86b029240aa19d4412f77e09266932a199b301a7d8289a967.png" alt="single page app screen" class="center-image" /></p>
+
+<p>On the next screen, you will see the default settings provided by the single-page application template. Change the name of the application to something more descriptive, like “Membership Application”. Also, change the base URIs and the login redirect URIs settings to use port 3000 because that is where your application will be running. The rest of the default settings are fine.</p>
+
+<p><img src="/assets/blog/build-user-registration-with-node-react-and-okta/single-page-app-settings-screen-3776ff1430e2213735f75d65dfc815552fe261ea68da122a9e9040a620d5b594.png" alt="single page app settings screen" class="center-image" /></p>
+
+<p>Then click the <strong>Done</strong> button at the bottom.</p>
+
+<p>Once the application has been created, select it from the applications listing, and click on the <strong>General</strong> tab to view the general settings for your application.</p>
+
+<p><img src="/assets/blog/build-user-registration-with-node-react-and-okta/general-settings-tab-5f55b9f66f1db85559e475adbc76aadfaceea6b3c0313395aa785e7f07c23ee4.png" alt="general settings tab" class="center-image" /></p>
+
+<p>At the bottom, you will see a <strong>Client ID</strong> setting (yours won’t be blurred out, obviously). Copy this to use in your React application. You will also need your Okta organization URL, which you can find at the top left of the dashboard page. It will probably look something like “https://dev-XXXXXX.oktapreview.com”.</p>
+
+<h2 id="add-authentication-to-the-reactjs-application">Add Authentication to the ReactJS Application</h2>
+
+<p>Now that the application is created, add authentication using Okta by adding a couple of npm dependencies. From the <code class="highlighter-rouge">client</code> folder run:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install @okta/okta-react react-router-dom <span class="nt">--save</span>
+</code></pre></div></div>
+
+<p>Or, if you’re using the <a href="https://yarnpkg.com">yarn</a> package manager:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yarn add @okta/okta-react react-router-dom
+</code></pre></div></div>
+
+<p>Add a file to the <code class="highlighter-rouge">client/src’ folder called </code>app.config.js`. The contents of the file are:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s1">'{yourOktaDomain}'</span><span class="p">,</span>
+  <span class="na">issuer</span><span class="p">:</span> <span class="s1">'{yourOktaOrgUrl}/oauth2/default'</span><span class="p">,</span>
+  <span class="na">redirect_uri</span><span class="p">:</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">origin</span> <span class="o">+</span> <span class="s1">'/implicit/callback'</span><span class="p">,</span>
+  <span class="na">client_id</span><span class="p">:</span> <span class="s1">'{yourClientID}'</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Then, setup the <code class="highlighter-rouge">index.js</code> file to use the React Router and Okta’s React SDK. When the <code class="highlighter-rouge">index.js</code> file is complete, it will look like this:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="s1">'react'</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">ReactDOM</span> <span class="k">from</span> <span class="s1">'react-dom'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">BrowserRouter</span> <span class="k">as</span> <span class="nx">Router</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'react-router-dom'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Security</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@okta/okta-react'</span><span class="p">;</span>
+
+<span class="k">import</span> <span class="s1">'./index.css'</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">config</span> <span class="k">from</span> <span class="s1">'./app.config'</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">App</span> <span class="k">from</span> <span class="s1">'./App'</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">registerServiceWorker</span> <span class="k">from</span> <span class="s1">'./registerServiceWorker'</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">onAuthRequired</span><span class="p">({</span> <span class="nx">history</span> <span class="p">})</span> <span class="p">{</span>
+  <span class="nx">history</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">'/login'</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">ReactDOM</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span>
+  <span class="o">&lt;</span><span class="nx">Router</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">Security</span> <span class="nx">issuer</span><span class="o">=</span><span class="p">{</span><span class="nx">config</span><span class="p">.</span><span class="nx">issuer</span><span class="p">}</span>
+      <span class="nx">client_id</span><span class="o">=</span><span class="p">{</span><span class="nx">config</span><span class="p">.</span><span class="nx">client_id</span><span class="p">}</span>
+      <span class="nx">redirect_uri</span><span class="o">=</span><span class="p">{</span><span class="nx">config</span><span class="p">.</span><span class="nx">redirect_uri</span><span class="p">}</span>
+      <span class="nx">onAuthRequired</span><span class="o">=</span><span class="p">{</span><span class="nx">onAuthRequired</span><span class="p">}</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nx">App</span> <span class="o">/&gt;</span>
+    <span class="o">&lt;</span><span class="sr">/Security</span><span class="err">&gt;
+</span>  <span class="o">&lt;</span><span class="sr">/Router&gt;</span><span class="err">,
+</span>  <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'root'</span><span class="p">)</span>
+<span class="p">);</span>
+<span class="nx">registerServiceWorker</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>Once complete, you will have added the <code class="highlighter-rouge">BrowserRouter</code> component (aliased as “Router”) from the React Router, and the <code class="highlighter-rouge">Security</code> component from Okta’s React SDK. Also that the <code class="highlighter-rouge">app.config.js</code> file is imported as “config” so that you can use the config values in the properties required by the <code class="highlighter-rouge">Security</code> component.</p>
+
+<p>You will also have surrounded the <code class="highlighter-rouge">App</code> component with the <code class="highlighter-rouge">Router</code> and <code class="highlighter-rouge">Security</code> components, passing in the values specified. The <code class="highlighter-rouge">onAuthRequired</code> method, simply tells Okta’s React SDK that when somebody tries to access a secure route and they are not logged in, redirect them to the login page.</p>
+
+<p>Everything else will have come from the <code class="highlighter-rouge">create-react-app</code> command you ran previously.</p>
+
+<h2 id="add-pages-to-the-reactjs-app">Add Pages to the ReactJS App</h2>
+
+<p>Before adding any routes to the React app, create some components to handle the routes you want to add.</p>
+
+<p>Add a <code class="highlighter-rouge">components</code> folder to the <code class="highlighter-rouge">client/src</code> folder. This is where all your components will live and the easiest way to organize them. Then create a <code class="highlighter-rouge">home</code> folder for your home page components. For now there will be just one, but there may be more components used only for the home page later. Add a <code class="highlighter-rouge">HomePage.js</code> file to the folder with the following contents:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="s1">'react'</span><span class="p">;</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="kd">class</span> <span class="nx">HomePage</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span><span class="p">{</span>
+  <span class="nx">render</span><span class="p">(){</span>
+    <span class="k">return</span><span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">h1</span><span class="o">&gt;</span><span class="nx">Home</span> <span class="nx">Page</span><span class="o">&lt;</span><span class="sr">/h1</span><span class="err">&gt;
+</span>    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This is all you really need for the home page at the moment. The most important point is to make the HomePage component a class type. Even though right now it only contains a single <code class="highlighter-rouge">h1</code> tag, it is meant to be a “page”, meaning it will likely contain other components, so it’s important that it be a container component.</p>
+
+<p>Next, create an <code class="highlighter-rouge">auth</code> folder in <code class="highlighter-rouge">components</code>. This is where all components that have to do with authentication will live. In that folder, create a <code class="highlighter-rouge">LoginForm.js</code> file.</p>
+
+<p>The first thing to note is that you’ll be using the <code class="highlighter-rouge">withAuth</code> higher-order component from Okta’s React SDK to wrap the entire login form. This adds a prop to the component called <code class="highlighter-rouge">auth</code>, making it possible to access things like the <code class="highlighter-rouge">isAuthenticated</code> and <code class="highlighter-rouge">redirect</code> functions on that higher-order component.</p>
+
+<p>The code for the <code class="highlighter-rouge">LoginForm</code> component is as follows:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="s1">'react'</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">OktaAuth</span> <span class="k">from</span> <span class="s1">'@okta/okta-auth-js'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">withAuth</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@okta/okta-react'</span><span class="p">;</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">withAuth</span><span class="p">(</span><span class="kd">class</span> <span class="nx">LoginForm</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">sessionToken</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+      <span class="na">error</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+      <span class="na">username</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
+      <span class="na">password</span><span class="p">:</span> <span class="s1">''</span>
+    <span class="p">}</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">oktaAuth</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OktaAuth</span><span class="p">({</span> <span class="na">url</span><span class="p">:</span> <span class="nx">props</span><span class="p">.</span><span class="nx">baseUrl</span> <span class="p">});</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">handleSubmit</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">handleSubmit</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">handleUsernameChange</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">handleUsernameChange</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">handlePasswordChange</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">handlePasswordChange</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nx">handleSubmit</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">oktaAuth</span><span class="p">.</span><span class="nx">signIn</span><span class="p">({</span>
+      <span class="na">username</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">username</span><span class="p">,</span>
+      <span class="na">password</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">password</span>
+    <span class="p">})</span>
+      <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span>
+        <span class="na">sessionToken</span><span class="p">:</span> <span class="nx">res</span><span class="p">.</span><span class="nx">sessionToken</span>
+      <span class="p">}))</span>
+      <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">err</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span><span class="na">error</span><span class="p">:</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">});</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">statusCode</span> <span class="o">+</span> <span class="s1">' error'</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+      <span class="p">});</span>
+  <span class="p">}</span>
+
+  <span class="nx">handleUsernameChange</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">username</span><span class="p">:</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span> <span class="p">});</span>
+  <span class="p">}</span>
+
+  <span class="nx">handlePasswordChange</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">password</span><span class="p">:</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span> <span class="p">});</span>
+  <span class="p">}</span>
+
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">sessionToken</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">redirect</span><span class="p">({</span> <span class="na">sessionToken</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">sessionToken</span> <span class="p">});</span>
+      <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">const</span> <span class="nx">errorMessage</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">error</span> <span class="p">?</span> 
+	<span class="o">&lt;</span><span class="nx">span</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"error-message"</span><span class="o">&gt;</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">error</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/span&gt; :</span><span class="err"> 
+</span>	<span class="kc">null</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">form</span> <span class="nx">onSubmit</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">handleSubmit</span><span class="p">}</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="nx">errorMessage</span><span class="p">}</span>
+        <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"form-element"</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span><span class="nx">Username</span><span class="p">:</span><span class="o">&lt;</span><span class="sr">/label</span><span class="err">&gt;
+</span>          <span class="o">&lt;</span><span class="nx">input</span>
+            <span class="nx">id</span><span class="o">=</span><span class="s2">"username"</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"text"</span>
+            <span class="nx">value</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">username</span><span class="p">}</span>
+            <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">handleUsernameChange</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
+</span>        <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>
+        <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"form-element"</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span><span class="nx">Password</span><span class="p">:</span><span class="o">&lt;</span><span class="sr">/label</span><span class="err">&gt;
+</span>          <span class="o">&lt;</span><span class="nx">input</span>
+            <span class="nx">id</span><span class="o">=</span><span class="s2">"password"</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"password"</span>
+            <span class="nx">value</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">password</span><span class="p">}</span>
+            <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">handlePasswordChange</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
+</span>        <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>        <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"submit"</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"submit"</span> <span class="nx">value</span><span class="o">=</span><span class="s2">"Submit"</span> <span class="o">/&gt;</span>
+      <span class="o">&lt;</span><span class="sr">/form</span><span class="err">&gt;
+</span>    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>The other thing of note here is the <code class="highlighter-rouge">OktaAuth</code> library being imported. This is the base library for doing things like signing in using the Okta application you created previously. You’ll notice an <code class="highlighter-rouge">OktaAuth</code> object being created in the constructor that gets a property of <code class="highlighter-rouge">baseUrl</code> passed to it. This is the URL for the issuer that is in your <code class="highlighter-rouge">app.config.js</code> file. The <code class="highlighter-rouge">LoginForm</code> component is meant to be contained in another component, so you’ll have to create a <code class="highlighter-rouge">LoginPage.js</code> file to contain this component. You’ll use the <code class="highlighter-rouge">withAuth</code> higher-order component again, to get access to the <code class="highlighter-rouge">isAuthenticated</code> function. The contents of <code class="highlighter-rouge">LoginPage.js</code> will be:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'react'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Redirect</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'react-router-dom'</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">LoginForm</span> <span class="k">from</span> <span class="s1">'./LoginForm'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">withAuth</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@okta/okta-react'</span><span class="p">;</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">withAuth</span><span class="p">(</span><span class="kd">class</span> <span class="nx">Login</span> <span class="kd">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span> <span class="na">authenticated</span><span class="p">:</span> <span class="kc">null</span> <span class="p">};</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">async</span> <span class="nx">checkAuthentication</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">authenticated</span> <span class="o">=</span> <span class="kr">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">isAuthenticated</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">authenticated</span> <span class="o">!==</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">authenticated</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="nx">authenticated</span> <span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">componentDidUpdate</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">authenticated</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">authenticated</span> <span class="p">?</span>
+      
+      <span class="o">&lt;</span><span class="nx">Redirect</span> <span class="nx">to</span><span class="o">=</span><span class="p">{{</span> <span class="na">pathname</span><span class="p">:</span> <span class="s1">'/profile'</span> <span class="p">}}</span> <span class="sr">/&gt; </span><span class="err">:
+</span>      <span class="o">&lt;</span><span class="nx">LoginForm</span> <span class="nx">baseUrl</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">baseUrl</span><span class="p">}</span> <span class="sr">/&gt;</span><span class="err">;
+</span>      
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Although it’s a bit less than what’s in the login form component, there are still some important pieces to point out here.</p>
+
+<p>Again, you’re using the <code class="highlighter-rouge">withAuth</code> higher-order component. This will be a recurring theme for every component that needs to use Okta’s authentication or authorization process. In this case, it’s primarily used to get the <code class="highlighter-rouge">isAuthenticated</code> function. The <code class="highlighter-rouge">checkAuthentication()</code> method is executed in the constructor and in the <code class="highlighter-rouge">componentDidUpdate</code> lifecycle method to ensure that when the component is created it is checked and every subsequent change to the component checks again.</p>
+
+<p>When <code class="highlighter-rouge">isAuthenticated</code> returns true, then it is set in the component’s state. It is then checked in the render method to decide whether to show the <code class="highlighter-rouge">LoginForm</code> component, or to redirect to the user’s profile page, a component you’ll create next.</p>
+
+<p>Now create the <code class="highlighter-rouge">ProfilePage.js</code> component inside the <code class="highlighter-rouge">auth</code> folder. The contents of the component are:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="s1">'react'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">withAuth</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@okta/okta-react'</span><span class="p">;</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">withAuth</span><span class="p">(</span><span class="kd">class</span> <span class="nx">ProfilePage</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">){</span>
+    <span class="k">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span> <span class="na">user</span><span class="p">:</span> <span class="kc">null</span> <span class="p">};</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">getCurrentUser</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getCurrentUser</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">async</span> <span class="nx">getCurrentUser</span><span class="p">(){</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">getUser</span><span class="p">()</span>
+      <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">user</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span><span class="nx">user</span><span class="p">}));</span>
+  <span class="p">}</span>
+
+  <span class="nx">componentDidMount</span><span class="p">(){</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">getCurrentUser</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">user</span><span class="p">)</span> <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">section</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"user-profile"</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">h1</span><span class="o">&gt;</span><span class="nx">User</span> <span class="nx">Profile</span><span class="o">&lt;</span><span class="sr">/h1</span><span class="err">&gt;
+</span>        <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span><span class="nx">Name</span><span class="p">:</span><span class="o">&lt;</span><span class="sr">/label</span><span class="err">&gt;
+</span>          <span class="o">&lt;</span><span class="nx">span</span><span class="o">&gt;</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">name</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/span</span><span class="err">&gt;
+</span>        <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="sr">/section</span><span class="err">&gt;
+</span>
+    <span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">withAuth</code> component here gives you access to the <code class="highlighter-rouge">getUser</code> function. Here, it’s been called from <code class="highlighter-rouge">componentDidMount</code> which is a common place for pulling data that will be used in the <code class="highlighter-rouge">render</code> method. The only odd thing you might see is the first line of the <code class="highlighter-rouge">render</code> method that renders nothing until there is actually a user returned from the <code class="highlighter-rouge">getUser</code> asynchronous call. Once there is a user in the state, it then renders the profile content, which in this case is just displaying the currently logged in user’s name.</p>
+
+<p>Next, you’ll add a registration component. This could be done just like the login form, where there is a <code class="highlighter-rouge">LoginForm</code> component that is contained in a <code class="highlighter-rouge">LoginPage</code> component. In order to demonstrate another way to display this, you’ll just create a <code class="highlighter-rouge">RegistrationForm</code> component that will be the main container component. Create a <code class="highlighter-rouge">RegistrationForm.js</code> file in the <code class="highlighter-rouge">auth</code> folder with the following content:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="s1">'react'</span><span class="p">;</span> 
+<span class="k">import</span> <span class="nx">OktaAuth</span> <span class="k">from</span> <span class="s1">'@okta/okta-auth-js'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">withAuth</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@okta/okta-react'</span><span class="p">;</span>
+
+<span class="k">import</span> <span class="nx">config</span> <span class="k">from</span> <span class="s1">'../../app.config'</span><span class="p">;</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">withAuth</span><span class="p">(</span><span class="kd">class</span> <span class="nx">RegistrationForm</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span><span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">){</span>
+    <span class="k">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">firstName</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
+      <span class="na">lastName</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
+      <span class="na">email</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
+      <span class="na">password</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
+      <span class="na">sessionToken</span><span class="p">:</span> <span class="kc">null</span>
+    <span class="p">};</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">oktaAuth</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OktaAuth</span><span class="p">({</span> <span class="na">url</span><span class="p">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">url</span> <span class="p">});</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span><span class="p">();</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">handleSubmit</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">handleSubmit</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">handleFirstNameChange</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">handleFirstNameChange</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">handleLastNameChange</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">handleLastNameChange</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">handleEmailChange</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">handleEmailChange</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">handlePasswordChange</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">handlePasswordChange</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>    
+  <span class="p">}</span>
+
+  <span class="k">async</span> <span class="nx">checkAuthentication</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">sessionToken</span> <span class="o">=</span> <span class="kr">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">getIdToken</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">sessionToken</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="nx">sessionToken</span> <span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">componentDidUpdate</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="nx">handleFirstNameChange</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span><span class="na">firstName</span><span class="p">:</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">});</span>
+  <span class="p">}</span>
+  <span class="nx">handleLastNameChange</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">lastName</span><span class="p">:</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span> <span class="p">});</span>
+  <span class="p">}</span>
+  <span class="nx">handleEmailChange</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">email</span><span class="p">:</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span> <span class="p">});</span>
+  <span class="p">}</span>
+  <span class="nx">handlePasswordChange</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">password</span><span class="p">:</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span> <span class="p">});</span>
+  <span class="p">}</span>
+
+  <span class="nx">handleSubmit</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+    <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+    <span class="nx">fetch</span><span class="p">(</span><span class="s1">'/api/users'</span><span class="p">,</span> <span class="p">{</span> 
+      <span class="na">method</span><span class="p">:</span> <span class="s1">'POST'</span><span class="p">,</span> 
+      <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">'Accept'</span><span class="p">:</span> <span class="s1">'application/json'</span><span class="p">,</span>
+        <span class="s1">'Content-Type'</span><span class="p">:</span> <span class="s1">'application/json'</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">)</span>
+    <span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="nx">user</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">oktaAuth</span><span class="p">.</span><span class="nx">signIn</span><span class="p">({</span>
+        <span class="na">username</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">email</span><span class="p">,</span>
+        <span class="na">password</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">password</span>
+      <span class="p">})</span>
+      <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span>
+        <span class="na">sessionToken</span><span class="p">:</span> <span class="nx">res</span><span class="p">.</span><span class="nx">sessionToken</span>
+      <span class="p">}));</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">err</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nx">render</span><span class="p">(){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">sessionToken</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">redirect</span><span class="p">({</span> <span class="na">sessionToken</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">sessionToken</span> <span class="p">});</span>
+      <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span><span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">form</span> <span class="nx">onSubmit</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">handleSubmit</span><span class="p">}</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"form-element"</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span><span class="na">Email</span><span class="p">:</span><span class="o">&lt;</span><span class="sr">/label</span><span class="err">&gt;
+</span>          <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"email"</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"email"</span> <span class="nx">value</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">email</span><span class="p">}</span> 
+		  <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">handleEmailChange</span><span class="p">}</span><span class="sr">/</span><span class="err">&gt;
+</span>        <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>        <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"form-element"</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span><span class="nx">First</span> <span class="na">Name</span><span class="p">:</span><span class="o">&lt;</span><span class="sr">/label</span><span class="err">&gt;
+</span>          <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"text"</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"firstName"</span> <span class="nx">value</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">firstName</span><span class="p">}</span> 
+		  <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">handleFirstNameChange</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
+</span>        <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>        <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"form-element"</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span><span class="nx">Last</span> <span class="na">Name</span><span class="p">:</span><span class="o">&lt;</span><span class="sr">/label</span><span class="err">&gt;
+</span>          <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"text"</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"lastName"</span> <span class="nx">value</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">lastName</span><span class="p">}</span> 
+		  <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">handleLastNameChange</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
+</span>        <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>        <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"form-element"</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span><span class="na">Password</span><span class="p">:</span><span class="o">&lt;</span><span class="sr">/label</span><span class="err">&gt;
+</span>          <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"password"</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"password"</span> <span class="nx">value</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">password</span><span class="p">}</span> 
+		  <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">handlePasswordChange</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
+</span>        <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>        <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"submit"</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"submit"</span> <span class="nx">value</span><span class="o">=</span><span class="s2">"Register"</span><span class="o">/&gt;</span>
+      <span class="o">&lt;</span><span class="sr">/form</span><span class="err">&gt;
+</span>    <span class="p">);</span>
+  <span class="p">}</span>
+
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>This component looks a lot like the <code class="highlighter-rouge">LoginForm</code> component with the exception that it calls the Node API (that you’ll build in a moment) that will handle doing the registration. Once the registration is completed by the Node API, the component logs the newly created user in, and the render method (when it sees a session token in the state) redirects the user to the home page of the application.</p>
+
+<p>You may also notice the <code class="highlighter-rouge">sessionToken</code> property on the component’s state. This is set by the <code class="highlighter-rouge">handleSubmit()</code> function for the purpose of handling the login if the registration is successful. Then it is also used by the <code class="highlighter-rouge">render()</code> method to do the redirect once the login has completed, and a token has been received.</p>
+
+<h2 id="add-routes-to-the-react-app">Add Routes to the React App</h2>
+
+<p>First, add a navigation component for the routes you’ll be adding. In the <code class="highlighter-rouge">client/src/components</code> folder, add a folder called <code class="highlighter-rouge">shared</code>. This will be the place where all components that are used in several places in the application will be located. In that new folder, add a file called <code class="highlighter-rouge">Navigation.js</code>. The file contains a basic component with links to all the pages in the app.</p>
+
+<p>You’ll need to wrap the navigation component in the <code class="highlighter-rouge">withAuth</code> higher-order component. That way, you can check to see if there is an authenticated user and display the login or logout button as appropriate.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="s1">'react'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Link</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'react-router-dom'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">withAuth</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@okta/okta-react'</span><span class="p">;</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">withAuth</span><span class="p">(</span><span class="kd">class</span> <span class="nx">Navigation</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span> <span class="na">authenticated</span><span class="p">:</span> <span class="kc">null</span> <span class="p">};</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">async</span> <span class="nx">checkAuthentication</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">authenticated</span> <span class="o">=</span> <span class="kr">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">isAuthenticated</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">authenticated</span> <span class="o">!==</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">authenticated</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="nx">authenticated</span> <span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">componentDidUpdate</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">authenticated</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">authNav</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">authenticated</span> <span class="p">?</span>
+      <span class="o">&lt;</span><span class="nx">ul</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"auth-nav"</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">li</span><span class="o">&gt;&lt;</span><span class="nx">a</span> <span class="nx">href</span><span class="o">=</span><span class="s2">"javascript:void(0)"</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">logout</span><span class="p">}</span><span class="o">&gt;</span><span class="nx">Logout</span><span class="o">&lt;</span><span class="sr">/a&gt;&lt;/</span><span class="nx">li</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">li</span><span class="o">&gt;&lt;</span><span class="nx">Link</span> <span class="nx">to</span><span class="o">=</span><span class="s2">"/profile"</span><span class="o">&gt;</span><span class="nx">Profile</span><span class="o">&lt;</span><span class="sr">/Link&gt;&lt;/</span><span class="nx">li</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="sr">/ul&gt; </span><span class="err">:
+</span>      <span class="o">&lt;</span><span class="nx">ul</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"auth-nav"</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">li</span><span class="o">&gt;&lt;</span><span class="nx">a</span> <span class="nx">href</span><span class="o">=</span><span class="s2">"javascript:void(0)"</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">login</span><span class="p">}</span><span class="o">&gt;</span><span class="nx">Login</span><span class="o">&lt;</span><span class="sr">/a&gt;&lt;/</span><span class="nx">li</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">li</span><span class="o">&gt;&lt;</span><span class="nx">Link</span> <span class="nx">to</span><span class="o">=</span><span class="s2">"/register"</span><span class="o">&gt;</span><span class="nx">Register</span><span class="o">&lt;</span><span class="sr">/Link&gt;&lt;/</span><span class="nx">li</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="sr">/ul&gt;</span><span class="err">;
+</span>    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">nav</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">ul</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">li</span><span class="o">&gt;&lt;</span><span class="nx">Link</span> <span class="nx">to</span><span class="o">=</span><span class="s2">"/"</span><span class="o">&gt;</span><span class="nx">Home</span><span class="o">&lt;</span><span class="sr">/Link&gt;&lt;/</span><span class="nx">li</span><span class="o">&gt;</span>
+          <span class="p">{</span><span class="nx">authNav</span><span class="p">}</span>
+        <span class="o">&lt;</span><span class="sr">/ul</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="sr">/nav</span><span class="err">&gt;
+</span>    <span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Now that you have components available to handle all the routes, create the routes to go with them. Update the <code class="highlighter-rouge">App.js</code> file so that the final version looks like:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'react'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Route</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'react-router-dom'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">SecureRoute</span><span class="p">,</span> <span class="nx">ImplicitCallback</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@okta/okta-react'</span><span class="p">;</span>
+
+<span class="k">import</span> <span class="nx">Navigation</span> <span class="k">from</span> <span class="s1">'./components/shared/Navigation'</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">HomePage</span> <span class="k">from</span> <span class="s1">'./components/home/HomePage'</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">RegistrationForm</span> <span class="k">from</span> <span class="s1">'./components/auth/RegistrationForm'</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">config</span> <span class="k">from</span> <span class="s1">'./app.config'</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">LoginPage</span> <span class="k">from</span> <span class="s1">'./components/auth/LoginPage'</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">ProfilePage</span> <span class="k">from</span> <span class="s1">'./components/auth/ProfilePage'</span><span class="p">;</span>
+<span class="k">import</span> <span class="s1">'./App.css'</span><span class="p">;</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="kd">class</span> <span class="nx">App</span> <span class="kd">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"App"</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">Navigation</span> <span class="o">/&gt;</span>
+        <span class="o">&lt;</span><span class="nx">main</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">Route</span> <span class="nx">path</span><span class="o">=</span><span class="s2">"/"</span> <span class="nx">exact</span> <span class="nx">component</span><span class="o">=</span><span class="p">{</span><span class="nx">HomePage</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
+</span>          <span class="o">&lt;</span><span class="nx">Route</span> <span class="nx">path</span><span class="o">=</span><span class="s2">"/login"</span> <span class="nx">render</span><span class="o">=</span><span class="p">{()</span> <span class="o">=&gt;</span> <span class="o">&lt;</span><span class="nx">LoginPage</span> <span class="nx">baseUrl</span><span class="o">=</span><span class="p">{</span><span class="nx">config</span><span class="p">.</span><span class="nx">url</span><span class="p">}</span> <span class="sr">/&gt;} /</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">Route</span> <span class="nx">path</span><span class="o">=</span><span class="s2">"/implicit/callback"</span> <span class="nx">component</span><span class="o">=</span><span class="p">{</span><span class="nx">ImplicitCallback</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
+</span>          <span class="o">&lt;</span><span class="nx">Route</span> <span class="nx">path</span><span class="o">=</span><span class="s2">"/register"</span> <span class="nx">component</span><span class="o">=</span><span class="p">{</span><span class="nx">RegistrationForm</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
+</span>          <span class="o">&lt;</span><span class="nx">SecureRoute</span> <span class="nx">path</span><span class="o">=</span><span class="s2">"/profile"</span> <span class="nx">component</span><span class="o">=</span><span class="p">{</span><span class="nx">ProfilePage</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
+</span>        <span class="o">&lt;</span><span class="sr">/main</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>There are a couple of things of note here. The import of the <code class="highlighter-rouge">SecureRoute</code> and <code class="highlighter-rouge">ImplicitCallback</code> components from Okta’s React SDK. The <code class="highlighter-rouge">ImplicitCallback</code> component handles the callback from the authentication flow to ensure there is an endpoint within the React application to catch the return call from Okta. The <code class="highlighter-rouge">SecureRoute</code> component allows you to secure any route and redirect unauthenticated users to the login page.</p>
+
+<p>The <code class="highlighter-rouge">Route</code> component from React Router does exactly what you’d expect: it takes a path that the user has navigated to and sets a component to handle that route. The <code class="highlighter-rouge">SecureRoute</code> component does an extra check to ensure the user is logged in before allowing access to that route. If they are not then the <code class="highlighter-rouge">onAuthRequired</code> function in <code class="highlighter-rouge">index.js</code> will be called to force the user to the login page.</p>
+
+<p>The only other really odd-looking thing here is the route for the login path. Instead of simply setting a component to handle the path, it runs a <code class="highlighter-rouge">render</code> method that renders the <code class="highlighter-rouge">LoginPage</code> component and sets the baseUrl from the configuration.</p>
+
+<h2 id="add-api-endpoints-to-the-node-app">Add API Endpoints to the Node App</h2>
+
+<p>You may remember that the Node API is doing the registration, so you’ll need to add the endpoint to the Node app to handle that call. To do that, you’ll need to add Okta’s Node SDK. From the ‘api’ folder run:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install @okta/okta-sdk-nodejs <span class="nt">--save</span>
+</code></pre></div></div>
+
+<p>Then, you’ll change the <code class="highlighter-rouge">users.js</code> file in <code class="highlighter-rouge">api/routes</code>. The file will look like:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">router</span> <span class="o">=</span> <span class="nx">express</span><span class="p">.</span><span class="nx">Router</span><span class="p">();</span>
+<span class="kd">const</span> <span class="nx">oktaClient</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'../lib/oktaClient'</span><span class="p">);</span>
+
+<span class="cm">/* Create a new User (register). */</span>
+<span class="nx">router</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">)</span> <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">sendStatus</span><span class="p">(</span><span class="mi">400</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">newUser</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">profile</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">firstName</span><span class="p">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">firstName</span><span class="p">,</span>
+      <span class="na">lastName</span><span class="p">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">lastName</span><span class="p">,</span>
+      <span class="na">email</span><span class="p">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">email</span><span class="p">,</span>
+      <span class="na">login</span><span class="p">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">email</span>
+    <span class="p">},</span>
+    <span class="na">credentials</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">password</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">value</span><span class="p">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">password</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+  <span class="nx">oktaClient</span><span class="p">.</span><span class="nx">createUser</span><span class="p">(</span><span class="nx">newUser</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">user</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">201</span><span class="p">);</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">err</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">400</span><span class="p">);</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">})</span>
+<span class="p">});</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">router</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>The biggest things of note here are the importing of the <code class="highlighter-rouge">lib/oktaClient</code> (which you’ll add in a moment), the call to the <code class="highlighter-rouge">createUser</code> function on  <code class="highlighter-rouge">oktaClient</code>, and the shape of the <code class="highlighter-rouge">newUser</code> object. The shape of the <code class="highlighter-rouge">newUser</code> object is documented <a href="https://developer.okta.com/docs/api/resources/users">in Okta’s API documentation</a>.</p>
+
+<p>For your Node application to make calls to your Okta application, it will need an API token. To create one, go into your Okta developer dashboard, hover over the API menu option and click on Tokens.</p>
+
+<p><img src="/assets/blog/build-user-registration-with-node-react-and-okta/okta-api-tokens-screen-4848b8370cf3c733157ff73ba58a3782d209f2bc7dcbfb10071deed037639d7d.png" alt="okta api tokens screen" class="center-image" /></p>
+
+<p>From there click Create Token. Give the token a name like “Membership” and click Create Token.</p>
+
+<p><img src="/assets/blog/build-user-registration-with-node-react-and-okta/create-token-screen-f7e9a30d2d17eeb89166a038a70279af1051d7db4f239ec7581c8cedaa14a1a9.png" alt="create token screen" class="center-image" /></p>
+
+<p>Copy the token to a safe location for use later.</p>
+
+<p>Create a file called <code class="highlighter-rouge">oktaClient.js</code> in a new folder called <code class="highlighter-rouge">lib</code> in the Node application. The file will configure a <code class="highlighter-rouge">Client</code> object from Okta’s Node SDK using the API token you just created like this:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">okta</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'@okta/okta-sdk-nodejs'</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">okta</span><span class="p">.</span><span class="nx">Client</span><span class="p">({</span>
+  <span class="na">orgUrl</span><span class="p">:</span> <span class="s1">'{yourOktaDomain}'</span><span class="p">,</span>
+  <span class="na">token</span><span class="p">:</span> <span class="s1">'{yourApiToken}'</span>
+<span class="p">});</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">client</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>In the <code class="highlighter-rouge">app.js</code> file at the root of the Node app, update the file to have all calls route to <code class="highlighter-rouge">/api/&lt;something&gt;</code>. You’ll see a section below the block of <code class="highlighter-rouge">app.use</code> statements. Change the route set up so that it looks like this:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">'/api'</span><span class="p">,</span> <span class="nx">index</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">'/api/users'</span><span class="p">,</span> <span class="nx">users</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>If your Node app is still running, you will need to stop the app (with CTRL+C) and rerun it (with <code class="highlighter-rouge">npm start</code>) for the updates to take effect.</p>
+
+<p>Even though the site still needs some serious style love, you will now be able to register users, log in with the newly created user and get the logged in user’s profile for display on the profile page!</p>
+
+<p><img src="/assets/blog/build-user-registration-with-node-react-and-okta/user-profile-page-aea5259fa9066be2be7c36fa33aaf79eaccf57f8e6d0e11b5a0611d170037f04.png" alt="user profile page" class="center-image" /></p>
+
+<h2 id="learn-more">Learn More</h2>
+
+<p>If you want to learn more about the technologies used in this articles, you can check out the documentation for:</p>
+<ul>
+  <li>Okta’s <a href="https://developer.okta.com/okta-sdk-nodejs/jsdocs/index.html">Node SDK</a></li>
+  <li>Okta’s <a href="https://developer.okta.com/code/react">React SDK</a>.</li>
+</ul>
+
+<p>Also, check out other articles using Okta for authentication:</p>
+<ul>
+  <li>Randall Degges’s article on Okta in a <a href="https://developer.okta.com/blog/2017/10/19/use-openid-connect-to-build-a-simple-node-website">Simple Node Website</a></li>
+  <li>My article using the <a href="https://developer.okta.com/blog/2017/03/30/react-okta-sign-in-widget">Okta Sign-In Widget in React</a></li>
+  <li>Matt Raible’s Article on <a href="https://developer.okta.com/blog/2017/07/20/the-ultimate-guide-to-progressive-web-applications">Progressive Web Apps</a></li>
+</ul>
+
+<p>As always, if you have questions, comments, or concerns about the article you can post a comment below, email me at <a href="mailto:lee.brandt@okta.com">lee.brandt@okta.com</a> or post your questions to the <a href="https://devforum.okta.com">developer forums</a>. For more articles and tutorials, follow us on Twitter <a href="https://twitter.com/oktadev">@OktaDev</a>.</p>
+
+
+    </div>
+
+    
+    <div id="disqus">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_title = 'Build User Registration with Node, React, and Okta';
+            var disqus_url = 'https://developer.okta.com/blog/2018/02/06/build-user-registration-with-node-react-and-okta';
+
+            (function () {
+                var dsq = document.createElement('script');
+                dsq.async = true;
+                dsq.type = 'text/javascript';
+                dsq.src = '//oktadevblog.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+          </script>
+          <noscript>
+              Please enable JavaScript to view the
+              <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus</a>.
+         </noscript>
+    </div>
+    
+</article>
+
+		
+</section>
+
+		
+	</div><footer class="Footer">
+    <div class="Wrap">
+
+        <div class="Row">
+
+            <div class="Column--3 Column--medium-6 Column--xSmall-12">
+
+                <a class="Logo" href="https://www.okta.com/" target="_blank" rel="noopener noreferrer">
+                    <img src="https://developer.okta.com/sites/all/themes/developer/images/logo-footer.png" alt="Okta">
+                    Visit okta.com
+                </a>
+
+            </div>
+
+            <div class="Column--3 Column--medium-12 Column--xSmall-12">
+
+                <h4>Social</h4>
+                <ul class="Footer-links Footer-links--social">
+                    <li><a class="Footer-links--github" target="_blank" rel="noopener noreferrer" href="http://github.com/oktadeveloper">Github</a></li>
+                    <li><a class="Footer-links--twitter" target="_blank" rel="noopener noreferrer" href="http://twitter.com/OktaDev">Twitter</a></li>
+                    <li><a class="Footer-links--forum" target="_blank" rel="noopener noreferrer" href="https://devforum.okta.com/">Forum</a></li>
+                    <li><a class="Footer-links--rss" target="_blank" rel="noopener noreferrer" href="http://feeds.feedburner.com/OktaBlog">RSS Blog</a></li>
+                </ul>
+            </div>
+
+            <div class="Column--3 Column--medium-6 Column--small-12">
+                <h4>More Info</h4>
+                <ul class="Footer-links">
+                    <li><a target="_blank" href="https://developer.okta.com/integrate-with-okta/">Integrate with Okta</a></li>
+                    <li><a href="/blog/">Blog</a></li>
+                    <li><a href="/docs/change-log/">Change Log</a></li>
+                    <li><a href="/3rd_party_notices/">3rd Party Notices</a></li>
+                </ul>
+            </div>
+
+            <div class="Column--3 Column--medium-6 Column--small-12">
+                <h4>Contact &amp; Legal</h4>
+                <ul class="Footer-links">
+                    <li><a href="https://developer.okta.com/contact/">Contact Sales</a></li>
+                    <li><a target="_blank" rel="noopener noreferrer" href="mailto:developers@okta.com">Contact Support</a></li>
+                    <li><a href="https://developer.okta.com/terms/">Terms &amp; Conditions</a></li>
+                    <li><a href="https://developer.okta.com/privacy/">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script type="text/javascript" src="/assets/master-36874fb206f812b2e337a93ccfa9c4872940f73b7c070bba28ed2ed9dfccc380.js"></script>
+    <script type="text/javascript" src="/assets/myOkta-911cbafbbe079b7a5522d9cbe15bd2a5f44e1582531e88393934bec69f97696b.js"></script>
+    
+    
+    
+    
+      <script type="text/javascript" src="/assets/blog-6e32dad27404131cc8630a5282264bed2ab4c08c91ac86fa496b75c53aa4f681.js"></script>
+    
+
+  <!-- START Post Footer -->
+  
+  <!-- START Google Tag Manager -->
+  <!-- https://support.google.com/tagmanager/answer/6103696?hl=en -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TJ45R6" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- END Google Tag Manager -->
+  <!-- START Google Remarketing Tag -->
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var google_conversion_id = 1006913831;
+    var google_custom_params = window.google_tag_params;
+    var google_remarketing_only = true;
+    /* ]]> */
+  </script>
+  <div style="display:none;"><script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script></div>
+  <noscript><div style="display:inline;"><img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1006913831/?value=0&amp;guid=ON&amp;script=0"></div></noscript>
+  <!-- END Google Remarketing Tag -->
+  <!-- START Crazy Egg Tracking -->
+  <script type="text/javascript">
+    setTimeout(function(){var a=document.createElement("script");
+    var b=document.getElementsByTagName("script")[0];
+    a.src=document.location.protocol+"//script.crazyegg.com/pages/scripts/0021/9333.js?"+Math.floor(new Date().getTime()/3600000);
+    a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+  </script>
+  <!-- END Crazy Egg Tracking -->
+
+  <!-- END Post Footer -->
+</body>
+</html>
