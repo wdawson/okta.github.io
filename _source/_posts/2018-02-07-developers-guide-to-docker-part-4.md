@@ -2,7 +2,7 @@
 layout: blog_post
 title: "A Developer's Guide To Docker - Docker Swarm"
 author: leebrandt
-description: "In this article, you'll learn how to set up a cluster of containers using Docker Swarm, and how to use Docker Machine to create VMs that have Docker already installed."
+description: "In this article, you'll learn how to set up a cluster of containers using Docker Swarm and how to use Docker Machine to create VMs that have Docker already installed."
 tags: [docker, docker swarm, container, containerization]
 tweets:
     - "Learn how to cluster your containers with Docker Swarm"
@@ -29,8 +29,6 @@ Docker Machine is an easy way to create virtual Docker hosts, aka virtual machin
 
 ```bash
 NAME   ACTIVE   DRIVER   STATE   URL   SWARM   DOCKER   ERRORS
-
-
 ```
 
 To create your first virtual host, run the command:
@@ -65,9 +63,7 @@ docker-machine ssh m1
 
 This should drop you into a command line on the virtual machine.
 
-![docker-machine-ssh.png](Docker Machine SSH)
 {% img blog/docker-swarm/docker-machine-ssh.png alt:"docker machine command line" %}{: .center-image }
-
 
 You can now initialize the swarm:
 
@@ -114,7 +110,6 @@ Swarm: active
  Manager Addresses:
   192.168.99.100:2377
 ...
-
 ```
 
 On the manager node it will be only slightly different:
@@ -195,8 +190,8 @@ You are now ready to go conquer some of your own Docker Swarms now!
 
 If you enjoyed this post, I’d encourage you to learn more about  learn more about [Docker Machine](https://docs.docker.com/machine). You can specify other spreading techniques for the swarm, and even specify that Docker only deploy these services to specific nodes in the cluster based on labels. Learn more about Swarm from its [Product Documentation](https://docs.docker.com/swarm). Or, if you’d like to learn more about what you can do with Docker, check out the other posts in this series:
 
-	* [A Gentle Introduction](https://developer.okta.com/blog/2017/05/10/developers-guide-to-docker-part-1)
-	* [The Dockerfile](https://developer.okta.com/blog/2017/08/28/developers-guide-to-docker-part-2)
-	* [Docker Compose](https://developer.okta.com/blog/2017/10/11/developers-guide-to-docker-part-3)
+  * [A Gentle Introduction](https://developer.okta.com/blog/2017/05/10/developers-guide-to-docker-part-1)
+  * [The Dockerfile](https://developer.okta.com/blog/2017/08/28/developers-guide-to-docker-part-2)
+  * [Docker Compose](https://developer.okta.com/blog/2017/10/11/developers-guide-to-docker-part-3)
 
 As always, hit me up in the comments with any questions, and follow [@oktadev](https://twitter.com/OktaDev) on Twitter for more awesome content from the team at Okta.
