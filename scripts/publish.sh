@@ -33,12 +33,6 @@ then
     exit ${BUILD_FAILURE};
 fi
 
-# Copy assets and previous history into dist
-if ! npm run postbuild-prod;
-then
-    exit ${BUILD_FAILURE};
-fi
-
 if ! removeHTMLExtensions;
 then
     echo "Failed removing .html extensions"
@@ -59,7 +53,7 @@ fi
 
 # Run htmlproofer to validate links, scripts, and images
 #   -  Passing in the argument 'false' to prevent adding an '.html' extension to
-#      extension-less files. 
+#      extension-less files.
 if ! bundle exec ./scripts/htmlproofer.rb false;
 then
     exit ${BUILD_FAILURE}
