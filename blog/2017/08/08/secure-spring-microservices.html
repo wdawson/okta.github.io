@@ -240,7 +240,7 @@
 
 <p>At this point, your application’s settings should look as follows:</p>
 
-<p><img src="/assets/blog/microservices-spring-secure/native-app-settings-00f620cbd955c2a3b9d1c0521050fca34b56664dec58cd94cf491e466349de5e.png" alt="Native App Settings" width="700" class="center-image" /></p>
+<p><img src="/assets/blog/microservices-spring-secure/native-app-settings-94c64c4aa7f958ee1e0bfda1d0661c652aa3b5b6d8189b20d0b82d59fbd649a9.png" alt="Native App Settings" width="700" class="center-image" /></p>
 
 <p>You’ll also need to create an API token:</p>
 
@@ -253,7 +253,7 @@
 
 <p>After completing these steps, you should have the information you need to set the following environment variables.</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">STORMPATH_CLIENT_BASEURL</span><span class="o">=</span>https://<span class="o">{</span>yourOktaDomain.com<span class="o">}</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">STORMPATH_CLIENT_BASEURL</span><span class="o">=</span>https://<span class="o">{</span>yourOktaDomain<span class="o">}</span>.com
 <span class="nb">export </span><span class="nv">OKTA_APPLICATION_ID</span><span class="o">={</span>clientId<span class="o">}</span>
 <span class="nb">export </span><span class="nv">OKTA_API_TOKEN</span><span class="o">={</span>apiToken<span class="o">}</span>
 <span class="nb">export </span><span class="nv">OKTA_AUTHORIZATIONSERVER_ID</span><span class="o">=</span>default
@@ -286,7 +286,7 @@ been released.</p>
 <span class="nt">&lt;/dependency&gt;</span>
 </code></pre></div></div>
 
-<p>Add the following properties and values to the project’s <code class="highlighter-rouge">application.properties</code>.</p>
+<p>Add the following properties and values to <code class="highlighter-rouge">edge-server/src/main/resources/application.properties</code>.</p>
 
 <div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">server.use-forward-headers</span><span class="p">=</span><span class="s">true</span>
 
@@ -364,9 +364,9 @@ been released.</p>
 <span class="nt">&lt;/dependencies&gt;</span>
 </code></pre></div></div>
 
-<p>Create a <code class="highlighter-rouge">HomeController</code> in <code class="highlighter-rouge">src/main/java/com/example/HomeController.java</code> to render the user’s information so you can verify authentication is working.</p>
+<p>Create a <code class="highlighter-rouge">HomeController</code> in <code class="highlighter-rouge">src/main/java/com/example/beercatalogservice/HomeController.java</code> to render the user’s information so you can verify authentication is working.</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">beercatalogservice</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">org.juiser.model.User</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.springframework.stereotype.Controller</span><span class="o">;</span>
@@ -392,7 +392,7 @@ been released.</p>
 
 <p><strong>NOTE:</strong> There is an issue with Juiser 1.0.0 that it won’t initialize if you don’t have at least one <code class="highlighter-rouge">@Controller</code> in your project.</p>
 
-<p>Create a <code class="highlighter-rouge">home.html</code> template in <code class="highlighter-rouge">src/main/resources/templates/home.html</code> and populate it with the following code.</p>
+<p>Create a <code class="highlighter-rouge">home.html</code> template in <code class="highlighter-rouge">beer-catalog-service/src/main/resources/templates/home.html</code> and populate it with the following code.</p>
 
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE HTML&gt;</span>
 <span class="nt">&lt;html</span> <span class="na">xmlns:th=</span><span class="s">"http://www.thymeleaf.org"</span><span class="nt">&gt;</span>
@@ -525,7 +525,7 @@ been released.</p>
 <span class="nt">&lt;/html&gt;</span>
 </code></pre></div></div>
 
-<p>Add the following properties to <code class="highlighter-rouge">src/main/resources/application.properties</code> to configure Juiser.</p>
+<p>Add the following properties to <code class="highlighter-rouge">beer-catalog-service/src/main/resources/application.properties</code> to configure Juiser.</p>
 
 <div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">server.use-forward-headers</span><span class="p">=</span><span class="s">true</span>
 <span class="py">juiser.header.jwt.key.resource</span><span class="p">=</span><span class="s">classpath:rsatest.pub.pem</span>
@@ -533,7 +533,7 @@ been released.</p>
 
 <p>Create a <code class="highlighter-rouge">SecurityConfig.java</code> class in the same package as <code class="highlighter-rouge">HomeController</code>. This class configures Spring Security so it secures all endpoints.</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">beercatalogservice</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Configuration</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.springframework.security.config.annotation.web.builders.HttpSecurity</span><span class="o">;</span>
@@ -553,7 +553,7 @@ been released.</p>
 
 <p>The <code class="highlighter-rouge">@FeignClient</code> used to talk to <code class="highlighter-rouge">beer-catalog-service</code> is not aware of the <code class="highlighter-rouge">X-Forwarded-User</code> header. To make it aware, create a <code class="highlighter-rouge">ForwardedAccountRequestInterceptor</code> class in the same directory as <code class="highlighter-rouge">EdgeServiceApplication</code>.</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">edgeservice</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">com.stormpath.sdk.servlet.http.Resolver</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">com.stormpath.zuul.account.ForwardedAccountHeaderFilter</span><span class="o">;</span>
@@ -593,19 +593,35 @@ been released.</p>
 
 <p>Register it as a <code class="highlighter-rouge">@Bean</code> in <code class="highlighter-rouge">EdgeServiceApplication</code>.</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Bean</span>
-<span class="kd">public</span> <span class="n">RequestInterceptor</span> <span class="nf">forwardedAccountRequestInterceptor</span><span class="o">(</span>
-        <span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"stormpathForwardedAccountHeaderValueResolver"</span><span class="o">)</span> <span class="n">Resolver</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">accountStringResolver</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="k">new</span> <span class="nf">ForwardedAccountRequestInterceptor</span><span class="o">(</span><span class="n">accountStringResolver</span><span class="o">);</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Bean</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">feign.RequestInterceptor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Qualifier</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.stormpath.sdk.servlet.http.Resolver</span><span class="o">;</span>
+<span class="o">...</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">EdgeServiceApplication</span> <span class="o">{</span>
+    
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">EdgeServiceApplication</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+    <span class="o">}</span>
+    	
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">RequestInterceptor</span> <span class="nf">forwardedAccountRequestInterceptor</span><span class="o">(</span>
+            <span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"stormpathForwardedAccountHeaderValueResolver"</span><span class="o">)</span> <span class="n">Resolver</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">accountStringResolver</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">ForwardedAccountRequestInterceptor</span><span class="o">(</span><span class="n">accountStringResolver</span><span class="o">);</span>
+    <span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div></div>
 
 <p>While you’re modifying <code class="highlighter-rouge">EdgeServiceApplication</code>, change the <code class="highlighter-rouge">HystrixCommand</code> in <code class="highlighter-rouge">BeerController</code> to make Hystrix <a href="http://stackoverflow.com/q/29566777/65681">execute on the calling thread</a> (so it’s aware of the security context).</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@HystrixCommand</span><span class="o">(</span><span class="n">fallbackMethod</span> <span class="o">=</span> <span class="s">"fallback"</span><span class="o">,</span> <span class="n">commandProperties</span> <span class="o">=</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty</span><span class="o">;</span>
+<span class="o">...</span>
+<span class="nd">@HystrixCommand</span><span class="o">(</span><span class="n">fallbackMethod</span> <span class="o">=</span> <span class="s">"fallback"</span><span class="o">,</span> <span class="n">commandProperties</span> <span class="o">=</span> <span class="o">{</span>
         <span class="nd">@HystrixProperty</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"execution.isolation.strategy"</span><span class="o">,</span> <span class="n">value</span><span class="o">=</span><span class="s">"SEMAPHORE"</span><span class="o">)</span>
 <span class="o">})</span>
 </code></pre></div></div>
+
+<p><strong>NOTE:</strong> There is <a href="https://github.com/stormpath/stormpath-sdk-java/issues/1364">an issue</a> with the Stormpath Zuul Starter where it doesn’t work with Spring Cloud <code class="highlighter-rouge">Edgeware.SR1</code>. Change <code class="highlighter-rouge">edge-service/pom.xml</code> to have <code class="highlighter-rouge">&lt;spring-cloud.version&gt;Dalston.RELEASE&lt;/spring-cloud.version&gt;</code> to workaround this issue.</p>
 
 <h3 id="verify-secure-communication">Verify Secure Communication</h3>
 
@@ -629,13 +645,13 @@ been released.</p>
 
 <p>Open your browser and navigate to <code class="highlighter-rouge">http://localhost:8081/home</code>. You should see a login page, prompting for your credentials.</p>
 
-<p><img src="/assets/blog/microservices-spring-secure/zuul-login-27417121eb49acb2bf1e659e6b760a7586129d21031917a419c3cddb1cc4236a.png" alt="Stormpath Zuul Login" width="800" class="center-image" /></p>
+<p><img src="/assets/blog/microservices-spring-secure/zuul-login-c9117b612a78246b04857498a49482b3fb52274c13637a8e9578cbe880ee8d61.png" alt="Stormpath Zuul Login" width="800" class="center-image" /></p>
 
 <p>This page is served up from the <code class="highlighter-rouge">stormpath-zuul-spring-cloud-starter</code> using <a href="http://www.thymeleaf.org/">Thymeleaf</a>. Spring Boot auto-activates Thymeleaf when it finds it in the classpath.</p>
 
 <p>After logging in, you should see a page displaying your user’s information.</p>
 
-<p><img src="/assets/blog/microservices-spring-secure/zuul-home-e50e722717c7924beb4cb1b267de314f7223ba987f5408c33a9dd71da2ccbf12.png" alt="Stormpath Zuul Home" width="800" class="center-image" /></p>
+<p><img src="/assets/blog/microservices-spring-secure/zuul-home-c16073ed5bf6c1a38773371c612a96d32a2df31ff6a85d7014cd2c1f18eedd6d.png" alt="Stormpath Zuul Home" width="800" class="center-image" /></p>
 
 <p>Click the <strong>Logout</strong> button to delete the cookies in your browser and end your session.</p>
 
@@ -645,11 +661,12 @@ been released.</p>
 
 <p>Create an OIDC app in Okta by going to the Developer Console and navigating to <strong>Applications</strong> and click on the <strong>Add Application</strong> button. Select <strong>SPA</strong> and click <strong>Next</strong>. On the next page, specify <code class="highlighter-rouge">http://localhost:4200</code> as a Base URI, Login redirect URI, and Logout redirect URI. Click <strong>Done</strong> and you should see settings like the following.</p>
 
-<p><img src="/assets/blog/angular-sign-in-widget/oidc-settings-7bb741af9e0dc958b4d89818157b1a347c14c17c8e927efd45bf40c164a97490.png" alt="OIDC App Settings" width="700" class="center-image" /></p>
+<p><img src="/assets/blog/microservices-spring-secure/oidc-settings-8be2b988459b1077e978d8941efae430594eac0df750e3c6fac1420bf92b8b87.png" alt="OIDC App Settings" width="700" class="center-image" /></p>
 
 <p>Install <a href="https://developer.okta.com/code/javascript/okta_sign-in_widget">Okta’s Sign-In Widget</a> to make it possible to communicate with the secured server.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>client
+npm install
 npm install @okta/okta-signin-widget <span class="nt">--save</span>
 </code></pre></div></div>
 
@@ -769,8 +786,7 @@ it exists.</p>
   <span class="nx">user</span><span class="p">;</span>
   <span class="nx">signIn</span><span class="p">;</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">oktaService</span><span class="p">:</span> <span class="nx">OktaService</span><span class="p">,</span>
-              <span class="kr">private</span> <span class="nx">changeDetectorRef</span><span class="p">:</span> <span class="nx">ChangeDetectorRef</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">oktaService</span><span class="p">:</span> <span class="nx">OktaService</span><span class="p">,</span> <span class="kr">private</span> <span class="nx">changeDetectorRef</span><span class="p">:</span> <span class="nx">ChangeDetectorRef</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">signIn</span> <span class="o">=</span> <span class="nx">oktaService</span><span class="p">.</span><span class="nx">getWidget</span><span class="p">();</span>
   <span class="p">}</span>
 
@@ -836,8 +852,7 @@ it exists.</p>
 <span class="k">export</span> <span class="kd">class</span> <span class="nx">BeerListComponent</span> <span class="kr">implements</span> <span class="nx">OnInit</span> <span class="p">{</span>
   <span class="nl">beers</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span><span class="p">;</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">beerService</span><span class="p">:</span> <span class="nx">BeerService</span><span class="p">,</span>
-              <span class="kr">private</span> <span class="nx">giphyService</span><span class="p">:</span> <span class="nx">GiphyService</span><span class="p">,</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">beerService</span><span class="p">:</span> <span class="nx">BeerService</span><span class="p">,</span> <span class="kr">private</span> <span class="nx">giphyService</span><span class="p">:</span> <span class="nx">GiphyService</span><span class="p">,</span>
               <span class="kr">private</span> <span class="nx">changeDetectorRef</span><span class="p">:</span> <span class="nx">ChangeDetectorRef</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
 
   <span class="nx">ngOnInit</span><span class="p">()</span> <span class="p">{</span>
@@ -859,13 +874,13 @@ it exists.</p>
 
 <h3 id="verify-authentication-works">Verify Authentication Works</h3>
 
-<p>Navigate to <code class="highlighter-rouge">http://localhost:4200</code>, and you should see a login form like the following.</p>
+<p>Start the client with <code class="highlighter-rouge">npm start</code>, navigate to <code class="highlighter-rouge">http://localhost:4200</code>, and you should see a login form like the following.</p>
 
 <p><img src="/assets/blog/microservices-spring-secure/angular-login-8caa17d0db5a326717d0dd90a2f877ff767884bea9afe74237675f6ab7a561c4.png" alt="Angular Login" width="800" class="center-image" /></p>
 
 <p><strong>NOTE:</strong> If it logs you in automatically, this is likely because you have cookies for <code class="highlighter-rouge">http://localhost:8080</code> still in your browser. Clear your cookies, or try an incognito window.</p>
 
-<p>If you want to adjust the style of the form, so it isn’t right up against the top toolbar, add the following to <code class="highlighter-rouge">styles.css</code>.</p>
+<p>If you want to adjust the style of the form, so it isn’t right up against the top toolbar, add the following to <code class="highlighter-rouge">client/src/styles.css</code>.</p>
 
 <div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">#okta-signin-container</span> <span class="p">{</span>
   <span class="nl">margin-top</span><span class="p">:</span> <span class="m">25px</span><span class="p">;</span>
@@ -893,6 +908,7 @@ git checkout okta
 <p><strong>Changelog:</strong></p>
 
 <ul>
+  <li>Feb 8, 2018: Updated to use Spring Boot 1.5.10, Angular 5.2.0, and the Okta Sign-In Widget v2.6.0. See the code changes in the <a href="https://github.com/oktadeveloper/spring-boot-microservices-example/pull/11">example app on GitHub</a>. Changes to this article can be viewed <a href="https://github.com/okta/okta.github.io/pull/1741">in this pull request</a>.</li>
   <li>Jan 18, 2018: Updated to use latest client from <a href="/blog/2017/05/09/progressive-web-applications-with-angular-and-spring-boot">Build Your First Progressive Web Application with Angular and Spring Boot</a> and the Okta Sign-In Widget v2.5.0. See the code changes in the <a href="https://github.com/oktadeveloper/spring-boot-microservices-example/pull/7">example app on GitHub</a>. Changes to this article can be viewed <a href="https://github.com/okta/okta.github.io/pull/1649">in this pull request</a>.</li>
 </ul>
 
