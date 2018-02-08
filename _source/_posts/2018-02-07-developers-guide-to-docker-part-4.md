@@ -7,6 +7,8 @@ tags: [docker, docker swarm, container, containerization]
 tweets:
     - "Learn how to cluster your containers with Docker Swarm"
     - "Easily scale your containers using with Docker swarm"
+redirect_from:
+  - "/blog/2018/02/07/developers-guide-to-docker-part-4"
 ---
 
 Redundancy is a big deal when scaling websites. However, deploying and managing clusters of containers can quickly become untenable. While there are a few container orchestration tools out there like Kubernetes and Mesosphere (DC/OS), Docker has its own called Docker Swarm Mode. Swarm Mode allows you to deploy, scale, and manage clusters of Docker containers from a single command window.
@@ -190,8 +192,8 @@ You are now ready to go conquer some of your own Docker Swarms now!
 
 If you enjoyed this post, I’d encourage you to learn more about  learn more about [Docker Machine](https://docs.docker.com/machine). You can specify other spreading techniques for the swarm, and even specify that Docker only deploy these services to specific nodes in the cluster based on labels. Learn more about Swarm from its [Product Documentation](https://docs.docker.com/swarm). Or, if you’d like to learn more about what you can do with Docker, check out the other posts in this series:
 
-  * [A Gentle Introduction](https://developer.okta.com/blog/2017/05/10/developers-guide-to-docker-part-1)
-  * [The Dockerfile](https://developer.okta.com/blog/2017/08/28/developers-guide-to-docker-part-2)
-  * [Docker Compose](https://developer.okta.com/blog/2017/10/11/developers-guide-to-docker-part-3)
+  * [A Gentle Introduction](/blog/2017/05/10/developers-guide-to-docker-part-1)
+  * [The Dockerfile](/blog/2017/08/28/developers-guide-to-docker-part-2)
+  * [Docker Compose](/blog/2017/10/11/developers-guide-to-docker-part-3)
 
 As always, hit me up in the comments with any questions, and follow [@oktadev](https://twitter.com/OktaDev) on Twitter for more awesome content from the team at Okta.
