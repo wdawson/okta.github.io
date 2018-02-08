@@ -546,8 +546,6 @@ public Collection<Beer> goodBeers() {
 
 Restart the `edge-service` and start the Angular client by running `npm start` in the client directory.
 
-> If you get an error `Error: Cannot find module '@angular-devkit/core'`, run `npm install @angular-devkit/core --save` and run `npm start` again. 
-
 Open `http://localhost:4200` in your browser and verify that network calls to `/good-beers` go over port `8081`.
 
 {% img blog/microservices-spring-boot/angular-pwa.png alt:"Angular PWA Client" width:"800" %}{: .center-image }
@@ -639,4 +637,4 @@ or [create an issue on GitHub](https://github.com/oktadeveloper/spring-boot-micr
 **Changelog:**
 
 * Jan 17, 2018: Updated to use latest client from [Build Your First Progressive Web Application with Angular and Spring Boot](/blog/2017/05/09/progressive-web-applications-with-angular-and-spring-boot). See the code changes in the [example app on GitHub](https://github.com/oktadeveloper/spring-boot-microservices-example/pull/6). Changes to this article can be viewed [in this pull request](https://github.com/okta/okta.github.io/pull/1637).
-* Feb 13, 2018: Updated to use use Spring Boot 1.5.10 and the latest Angular client from [Build Your First Progressive Web Application with Angular and Spring Boot](/blog/2017/05/09/progressive-web-applications-with-angular-and-spring-boot). See the code changes in the [example app on GitHub](https://github.com/oktadeveloper/spring-boot-microservices-example/pull/6). Changes to this article can be viewed [in this pull request](https://github.com/okta/okta.github.io/pull/1637).
+* Feb 8, 2018: Updated to use use Spring Boot 1.5.10 and the latest Angular client from [Build Your First Progressive Web Application with Angular and Spring Boot](/blog/2017/05/09/progressive-web-applications-with-angular-and-spring-boot). See the code changes in the [example app on GitHub](https://github.com/oktadeveloper/spring-boot-microservices-example/pull/10). Changes to this article can be viewed [in this pull request](https://github.com/okta/okta.github.io/pull/1637).
