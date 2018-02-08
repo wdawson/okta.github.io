@@ -45,14 +45,14 @@
 
   <link type="text/css" rel="stylesheet" href="https://developer.okta.com/sites/all/themes/developer/css/master.css" media="all" />
   <meta class="swiftype" name="title" data-type="string" content="Build a Microservices Architecture for Microbrews with Spring Boot | Okta Developer">
-  <meta class="swiftype" name="summary" data-type="string" content="Adopting a microservice architecture provides u..." />
+  <meta class="swiftype" name="summary" data-type="string" content="This article shows you how to build a microservices architecture with Spring Boot, Netflix Eureka, Feign, and Hystrix." />
 
   <link type="text/css" rel="stylesheet" href="/assets/animate-ec43d72c3ed45e08a460b8a2966d8dba6006aebfa0530935c3973fa493a8771f.css">
   <link type="text/css" rel="stylesheet" href="/assets/okta-943074870de1efc80ec41db55bc8633148bcc085ddebad595e019ddc461dca51.css">
   
   
   <title>Build a Microservices Architecture for Microbrews with Spring Boot | Okta Developer</title>
-  <meta name="description" content="Adopting a microservice architecture provides u...">
+  <meta name="description" content="This article shows you how to build a microservices architecture with Spring Boot, Netflix Eureka, Feign, and Hystrix.">
   <link rel="alternate" type="application/rss+xml" title="Okta Developer" href="https://developer.okta.com/feed.xml"><!-- GA -->
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
@@ -306,20 +306,20 @@ and Client Side Load Balancing (Ribbon).</p>
 
 <h3 id="create-a-eureka-service">Create a Eureka Service</h3>
 
-<p>To begin, create a <code class="highlighter-rouge">spring-boot-microservices-example</code> directory. Navigate to <a href="https://start.spring.io">start.spring.io</a>. 
+<p>To begin, create a <code class="highlighter-rouge">spring-boot-microservices-example</code> directory on your hard drive. Navigate to <a href="https://start.spring.io">start.spring.io</a>. 
 Enter <code class="highlighter-rouge">eureka-service</code> as an artifact name and select <code class="highlighter-rouge">Eureka Server</code> as a dependency.</p>
 
-<p><img src="/assets/blog/microservices-spring-boot/eureka-service-a4a7139d34d39919709bfdbf50bd2d1f173282aa29061c9f3bf06fcd79119e2b.png" alt="Eureka Server" width="800" class="center-image" /></p>
+<p><img src="/assets/blog/microservices-spring-boot/eureka-service-7020dc13267e25aa5c0b37496b39687bb942508b1cd5ed5cd579d0ce5607500b.png" alt="Eureka Server" width="800" class="center-image" /></p>
 
 <p>Click the <strong>Generate Project</strong> button and expand <code class="highlighter-rouge">eureka-service.zip</code> into the <code class="highlighter-rouge">spring-boot-microservices-example</code> directory.</p>
 
-<p>Modify <code class="highlighter-rouge">src/main/resources/application.properties</code> to add a port number and disable registration.</p>
+<p>Modify <code class="highlighter-rouge">eureka-service/src/main/resources/application.properties</code> to add a port number and disable registration.</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>server.port=8761
 eureka.client.register-with-eureka=false
 </code></pre></div></div>
 
-<p>Open <code class="highlighter-rouge">src/main/java/com/example/EurekaServiceApplication.java</code> and add <code class="highlighter-rouge">@EnableEurekaServer</code> above <code class="highlighter-rouge">@SpringBootApplication</code>.</p>
+<p>Open <code class="highlighter-rouge">eureka-service/src/main/java/com/example/EurekaServiceApplication.java</code> and add <code class="highlighter-rouge">@EnableEurekaServer</code> above <code class="highlighter-rouge">@SpringBootApplication</code>.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.springframework.cloud.netflix.eureka.server.EnableEurekaServer</span><span class="o">;</span>
 
@@ -341,7 +341,7 @@ eureka.client.register-with-eureka=false
 
 <p>After it starts, you should be able to open <code class="highlighter-rouge">http://localhost:8761</code> and see there are no services available.</p>
 
-<p><img src="/assets/blog/microservices-spring-boot/eureka-service-ui-4227ed9e91b45dffccc3c4820a31932d68d1d503a8f16e06f412796ac2852615.png" alt="Eureka Server" width="800" /></p>
+<p><img src="/assets/blog/microservices-spring-boot/eureka-service-ui-df8640a820cc8b270209eca8254573ec06237785c2a767549bb96a04148f2444.png" alt="Eureka Server" width="800" /></p>
 
 <h3 id="create-a-beer-catalog-service">Create a Beer Catalog Service</h3>
 
@@ -359,7 +359,7 @@ artifact name and add the following dependencies:</p>
   <li>Lombok: to reduce boilerplate code</li>
 </ul>
 
-<p><img src="/assets/blog/microservices-spring-boot/beer-catalog-service-c6d487b9ff257b82a5e8683e4400b0b577653c013a1648b7007db2fc12095e4e.png" alt="Beer Catalog Service" width="800" /></p>
+<p><img src="/assets/blog/microservices-spring-boot/beer-catalog-service-f5017d9637188babf4275dd9206e8e78a8a2ce8038baf313a3ef114db4fc1d51.png" alt="Beer Catalog Service" width="800" /></p>
 
 <p>Click the <strong>Generate Project</strong> button and expand <code class="highlighter-rouge">beer-catalog-service.zip</code> into <code class="highlighter-rouge">spring-boot-microservices-example</code> and 
 open the project in your favorite IDE. I recommend <a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a> because it’s great for 
@@ -444,7 +444,7 @@ service, and set the port to 8080.</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http localhost:8080/beers
 </code></pre></div></div>
 
-<p><img src="/assets/blog/microservices-spring-boot/httpie-beers-55c9dd1ccc635e94d87126b68e1c6c7d2842922bada596895d6366b372b1af77.png" alt="HTTPie Beers" width="800" class="center-image" /></p>
+<p><img src="/assets/blog/microservices-spring-boot/httpie-beers-9a7b6c8b2f77cb474e93a837c8ba87ec5715afe4bc421014824154c8113f90bf.png" alt="HTTPie Beers" width="800" class="center-image" /></p>
 
 <p>However, if you open the Eureka Service at <code class="highlighter-rouge">http://localhost:8761</code>, you will not see the service registered. To register 
 the beer-catalog-service, you need to add <code class="highlighter-rouge">@EnableDiscoveryClient</code> to <code class="highlighter-rouge">BeerCatalogServiceApplication.java</code>.</p>
@@ -464,7 +464,7 @@ the beer-catalog-service, you need to add <code class="highlighter-rouge">@Enabl
 <p>Re-compile this class, watch devtools restart your application, and return to <code class="highlighter-rouge">http://localhost:8761</code>. If you’re not 
 using an IDE, it might be easiest to cancel and restart <code class="highlighter-rouge">mvn spring-boot:run</code>. Now the service should show up.</p>
 
-<p><img src="/assets/blog/microservices-spring-boot/eureka-instances-registered-bec9bf9b85ba26b71cc28298fe1965a17bd615e5b78977ee435d36e3d89172a7.png" alt="Eureka instances registered" width="800" class="center-image" /></p>
+<p><img src="/assets/blog/microservices-spring-boot/eureka-instances-registered-f00fb3b1dc62334d553f8bab0928e3e7cf6c5a7d94b7cf467febc7b70743a6fe.png" alt="Eureka instances registered" width="800" class="center-image" /></p>
 
 <p><a name="intellij-auto-compile"></a></p>
 <div style="padding: 12px 12px 12px 25px; border: 1px solid silver; border-left: 5px solid #ddd">
@@ -494,7 +494,7 @@ To enable the "Compile on save" feature:</p>
 However, it will have fallback capabilities which prevent the client from receiving an HTTP error when the service is 
 not available.</p>
 
-<p>Navigate to <a href="https://start.spring.io">start.spring.io</a> and create an “edge-service” application with the following dependencies:</p>
+<p>Navigate to <a href="https://start.spring.io">start.spring.io</a> and create an <code class="highlighter-rouge">edge-service</code> application with the following dependencies:</p>
 
 <ul>
   <li>Eureka Discovery: for service registration</li>
@@ -506,7 +506,7 @@ not available.</p>
   <li>Lombok: to reduce boilerplate code</li>
 </ul>
 
-<p><img src="/assets/blog/microservices-spring-boot/edge-service-c7e8714c119427b1c95b0264182bf4b964d8b023b49f5bd008f1e6a3086c79c0.png" alt="Edge Service" width="800" class="center-image" /></p>
+<p><img src="/assets/blog/microservices-spring-boot/edge-service-dd1bd271ce9137a94b6da5ea13b3ed7bbeb68cd48efef090afcd481500fbe532.png" alt="Edge Service" width="800" class="center-image" /></p>
 
 <p>Click the <strong>Generate Project</strong> button and expand <code class="highlighter-rouge">edge-service.zip</code> into <code class="highlighter-rouge">spring-boot-microservices-example</code> and open 
 the project in your favorite IDE.</p>
@@ -521,7 +521,7 @@ port. Modify <code class="highlighter-rouge">edge-service/src/main/resources/app
 <p>To enable Feign, Hystrix, and registration with the Eureka server, add the appropriate annotations to 
 <code class="highlighter-rouge">EdgeServiceApplication.java</code>:</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">edgeservice</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">lombok.Data</span><span class="o">;</span>
@@ -618,14 +618,14 @@ Restart Intellij for the changes to take effect.</p>
 
 <p>Start the <code class="highlighter-rouge">edge-service</code> application with Maven or your IDE and verify it registers successfully with the Eureka server.</p>
 
-<p><img src="/assets/blog/microservices-spring-boot/edge-service-registered-95cc2264a08cfce06dc2e700178c2b54885d59b7f9966c8a6de67ec72a65de56.png" alt="Edge Service Registered" width="800" /></p>
+<p><img src="/assets/blog/microservices-spring-boot/edge-service-registered-0d2b586621ba113379f90d3d05e34e3a69fef080913b85d3dab2032178d3393d.png" alt="Edge Service Registered" width="800" /></p>
 
 <p>You should be able to invoke the <code class="highlighter-rouge">/good-beers</code> endpoint as well.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>http localhost:8081/good-beers
 HTTP/1.1 200
 Content-Type: application/json<span class="p">;</span><span class="nv">charset</span><span class="o">=</span>UTF-8
-Date: Tue, 25 Apr 2017 17:37:50 GMT
+Date: Wed, 07 Feb 2018 16:50:51 GMT
 Transfer-Encoding: chunked
 X-Application-Context: edge-service:8081
 </code></pre></div></div>
@@ -651,19 +651,19 @@ X-Application-Context: edge-service:8081
 HTTP/1.1 500
 Connection: close
 Content-Type: application/json<span class="p">;</span><span class="nv">charset</span><span class="o">=</span>UTF-8
-Date: Tue, 25 Apr 2017 17:40:32 GMT
+Date: Wed, 07 Feb 2018 16:51:38 GMT
 Transfer-Encoding: chunked
 X-Application-Context: edge-service:8081
+
+<span class="o">{</span>
+    <span class="s2">"error"</span>: <span class="s2">"Internal Server Error"</span>,
+    <span class="s2">"exception"</span>: <span class="s2">"feign.RetryableException"</span>,
+    <span class="s2">"message"</span>: <span class="s2">"connect timed out executing GET http://beer-catalog-service/beers"</span>,
+    <span class="s2">"path"</span>: <span class="s2">"/good-beers"</span>,
+    <span class="s2">"status"</span>: 500,
+    <span class="s2">"timestamp"</span>: 1518022298072
+<span class="o">}</span>
 </code></pre></div></div>
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"error"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Internal Server Error"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"exception"</span><span class="p">:</span><span class="w"> </span><span class="s2">"java.lang.RuntimeException"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"com.netflix.client.ClientException: Load balancer does not have available server for client: beer-catalog-service"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/good-beers"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1493142032310</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div></div>
 
 <p>To fix this, you can use Hystrix to create a fallback method and tell the <code class="highlighter-rouge">goodBeers()</code> method to use it.</p>
 
@@ -683,7 +683,7 @@ X-Application-Context: edge-service:8081
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>http localhost:8081/good-beers
 HTTP/1.1 200
 Content-Type: application/json<span class="p">;</span><span class="nv">charset</span><span class="o">=</span>UTF-8
-Date: Tue, 25 Apr 2017 17:44:18 GMT
+Date: Wed, 07 Feb 2018 16:52:59 GMT
 Transfer-Encoding: chunked
 X-Application-Context: edge-service:8081
 </code></pre></div></div>
@@ -720,7 +720,7 @@ npm install
 
 <p>Open <code class="highlighter-rouge">http://localhost:4200</code> in your browser and verify that network calls to <code class="highlighter-rouge">/good-beers</code> go over port <code class="highlighter-rouge">8081</code>.</p>
 
-<p><img src="/assets/blog/microservices-spring-boot/angular-pwa-5067abc4ca3f07b1064888fbb803eddbe579510e00cedc7624e3a0df38185ad6.png" alt="Angular PWA Client" width="800" class="center-image" /></p>
+<p><img src="/assets/blog/microservices-spring-boot/angular-pwa-b3e8fdfdd8253647bf650e87361bbab316759b1658b6893669e581e2cf4ff396.png" alt="Angular PWA Client" width="800" class="center-image" /></p>
 
 <h3 id="deploy-to-cloud-foundry">Deploy to Cloud Foundry</h3>
 
@@ -801,11 +801,12 @@ In Javaland, there’s <a href="http://www.dropwizard.io/">Dropwizard</a>, <a hr
 <a href="http://stackoverflow.com/questions/tagged/okta">with the Okta tag</a>, post to our <a href="https://devforum.okta.com/">Developer Forums</a>, 
 or <a href="https://github.com/oktadeveloper/spring-boot-microservices-example/issues/new">create an issue on GitHub</a>.</p>
 
-<p><strong>Update:</strong> To learn about how security fits into all this, see <a href="/blog/2017/08/08/secure-spring-microservices.html">Secure a Spring Microservices Architecture with Spring Security, JWTs, Juiser, and Okta</a>.</p>
+<p><strong>Update:</strong> To learn about how security fits into all this, see <a href="/blog/2017/08/08/secure-spring-microservices">Secure a Spring Microservices Architecture with Spring Security, JWTs, Juiser, and Okta</a>.</p>
 
 <p><strong>Changelog:</strong></p>
 
 <ul>
+  <li>Feb 8, 2018: Updated to use use Spring Boot 1.5.10, Angular CLI 1.6.7, and Angular 5.2.0. See the code changes in the <a href="https://github.com/oktadeveloper/spring-boot-microservices-example/pull/10">example app on GitHub</a>. Changes to this article can be viewed <a href="https://github.com/okta/okta.github.io/pull/1739">in this pull request</a>.</li>
   <li>Jan 17, 2018: Updated to use latest client from <a href="/blog/2017/05/09/progressive-web-applications-with-angular-and-spring-boot">Build Your First Progressive Web Application with Angular and Spring Boot</a>. See the code changes in the <a href="https://github.com/oktadeveloper/spring-boot-microservices-example/pull/6">example app on GitHub</a>. Changes to this article can be viewed <a href="https://github.com/okta/okta.github.io/pull/1637">in this pull request</a>.</li>
 </ul>
 
