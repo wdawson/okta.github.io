@@ -1,7 +1,7 @@
 ---
 layout: docs_page
 title: OpenID Connect & OAuth 2.0 API
-redirect_from: "/docs/api/resources/oauth2.html"
+redirect_from: "/docs/api/resources/oauth2"
 ---
 
 # OpenID Connect & OAuth 2.0 API
@@ -712,9 +712,9 @@ WWW-Authenticate: Bearer error="insufficient_scope", error_description="The acce
 ### /.well-known/oauth-authorization-server
 {:.api .api-operation}
 
-{% api_operation get https://{yourOktaDomain}/oauth2/${authorizationServerId}/.well-known/oauth-authorization-server %}
+{% api_operation get /oauth2/${authorizationServerId}/.well-known/oauth-authorization-server %}
 
-> This endpoint is only available on custom authorization servers.
+> This endpoint is only available on custom authorization servers, so there are no distinct [base URLs](#composing-your-base-url).
 
 Returns OAuth 2.0 metadata related to your custom authorization server. This information can be used by clients to programmatically configure their interactions with Okta. Custom scopes and custom claims aren't returned.
 
