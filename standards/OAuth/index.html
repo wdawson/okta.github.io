@@ -277,13 +277,13 @@ Other documents are still being worked on within the OAuth working group.</p>
 </ul>
 
 <p>It’s important to understand which use case you are targeting and build your application according to the correct patterns for that use case.
-The OAuth 2.0 APIs each have several different <a href="/docs/api/resources/oauth2#obtain-an-authorization-grant-from-a-user">query params</a> which dictate which type of flow you are using and the mechanics of that flow.</p>
+The OAuth 2.0 APIs each have several different <a href="/docs/api/resources/oidc#authorize">query params</a> which dictate which type of flow you are using and the mechanics of that flow.</p>
 
 <p>At the very basic level, the main API endpoints are:</p>
 
 <ul>
-  <li><a href="/docs/api/resources/oauth2#obtain-an-authorization-grant-from-a-user">Authorize</a> endpoint initiates an OAuth 2.0 request.</li>
-  <li><a href="/docs/api/resources/oauth2#revoke-a-token">Token</a> endpoint redeems an authorization grant (returned by the <a href="/docs/api/resources/oauth2#obtain-an-authorization-grant-from-a-user">Authorize</a> endpoint) for an access token.</li>
+  <li><a href="/docs/api/resources/oidc#authorize">Authorize</a> endpoint initiates an OAuth 2.0 request.</li>
+  <li><a href="/docs/api/resources/oidc#revoke">Token</a> endpoint redeems an authorization grant (returned by the <a href="/docs/api/resources/oidc#authorize">Authorize</a> endpoint) for an access token.</li>
 </ul>
 
 <h2 id="getting-started">Getting Started</h2>
@@ -297,7 +297,7 @@ flows defined by <a href="http://oauth.net/documentation">the OAuth 2.0 spec</a>
 
 <ul>
   <li><a href="/use_cases/api_security/">Okta’s API Access Management Introduction</a></li>
-  <li><a href="/docs/api/resources/oauth2">OAuth 2.0 API</a></li>
+  <li><a href="/docs/api/resources/oidc">OAuth 2.0/OIDC API</a></li>
   <li><a href="/docs/how-to/set-up-auth-server">Help for configuring API Access Management in the Okta UI</a></li>
 </ul>
 
@@ -329,9 +329,9 @@ flows defined by <a href="http://oauth.net/documentation">the OAuth 2.0 spec</a>
     <p><img src="/assets/native_auth_flow-09c52618479d441df093e9024346a46069e5b7cbd0260290e35dd471fd29c9f0.png" alt="Native Application Flow" /></p>
 
     <blockquote>
-      <p>Note: For native applications, the client_id and client_secret are embedded in the source code of the application; in this context, the client secret isn’t treated as a secret.
+      <p>Note: For native applications, the <code class="highlighter-rouge">client_id</code> and <code class="highlighter-rouge">client_secret</code> are embedded in the source code of the application; in this context, the client secret isn’t treated as a secret.
  Therefore native apps should make use of Proof Key for Code Exchange (PKCE) to mitigate authorization code interception.
- For more information, see the PKCE note in <a href="/docs/api/resources/oauth2#request-parameter-details">Parameter Details</a>.</p>
+ For more information, see <a href="/authentication-guide/implementing-authentication/auth-code-pkce">Implementing the Authorization Code Flow with PKCE</a>.</p>
     </blockquote>
 
     <p> </p>
@@ -467,7 +467,7 @@ All of these scopes except <code class="highlighter-rouge">groups</code> and <co
     </tr>
     <tr>
       <td style="text-align: left">kid</td>
-      <td style="text-align: left">Identifies the <code class="highlighter-rouge">public-key</code> used to sign the <code class="highlighter-rouge">access_token</code>. The corresponding <code class="highlighter-rouge">public-key</code> can be found as a part of the <a href="/docs/api/resources/oauth2#retrieve-authorization-server-metadata">metadata</a> <code class="highlighter-rouge">jwks_uri</code> value.</td>
+      <td style="text-align: left">Identifies the <code class="highlighter-rouge">public-key</code> used to sign the <code class="highlighter-rouge">access_token</code>. The corresponding <code class="highlighter-rouge">public-key</code> can be found as a part of the <a href="/docs/api/resources/oidc#well-knownoauth-authorization-server">metadata</a> <code class="highlighter-rouge">jwks_uri</code> value.</td>
       <td style="text-align: left">String</td>
       <td style="text-align: left">“a5dfwef1a-0ead3f5223_w1e”</td>
     </tr>
@@ -565,13 +565,13 @@ All of these scopes except <code class="highlighter-rouge">groups</code> and <co
 
 <h4 id="custom-claims">Custom claims</h4>
 
-<p>Custom claims are associated with scopes. In general, if one of the associated scopes is granted to a token, the custom claim is added into it. 
+<p>Custom claims are associated with scopes. In general, if one of the associated scopes is granted to a token, the custom claim is added into it.
 However, the specifics depend on which claims are requested, whether the request is to the Okta Authorization Server or a Custom Authorization Server, and some configuration choices.</p>
 
 <h5 id="quick-reference-which-token-has-which-claims">Quick reference: which token has which claims?</h5>
 
 <p>Okta defines two types of reserved (non-custom) claims, <a href="/standards/OIDC/#base-claims-always-present">base</a> and <a href="/standards/OIDC/#scope-dependent-claims-not-always-returned">scope-dependent claims</a>.
-Base claims are always returned, and scope-dependent claims are returned depending on the scope requested. 
+Base claims are always returned, and scope-dependent claims are returned depending on the scope requested.
 Custom claims are configured in the Custom Authorization Server, and returned depending on whether it matches a scope in the request, and also depending on the token type, authorization server type, and the token and claim configuration set in the authorization server:</p>
 
 <ul>
@@ -585,7 +585,7 @@ Custom claims are configured in the Custom Authorization Server, and returned de
 
 <h5 id="custom-claim-configuration">Custom claim configuration</h5>
 
-<p>Define custom claims in <a href="https://help.okta.com/en/prod/Content/Topics/Security/API_Access.htm?Highlight=custom%20claim">the Okta user interface</a> or using <a href="/docs/api/resources/oauth2#create-a-claim">the OAuth 2.0 API</a>.</p>
+<p>Define custom claims in <a href="https://help.okta.com/en/prod/Content/Topics/Security/API_Access.htm?Highlight=custom%20claim">the Okta user interface</a> or using <a href="/docs/api/resources/authorization-servers#create-a-claim">the OAuth 2.0 API</a>.</p>
 
 <p>A custom claim can be configured in the following ways:</p>
 
@@ -597,7 +597,7 @@ Custom claims are configured in the Custom Authorization Server, and returned de
   <li>Define the claim value, using <a href="/reference/okta_expression_language/">Okta’s Expression Language</a> or a group filter.
     <ul>
       <li>Example of expressions: <code class="highlighter-rouge">"user.region"</code>, the value of the custom field “region” on the user’s profile. You can create expressions to reference application groups.</li>
-      <li>Example of a set of Okta groups specified by <code class="highlighter-rouge">groupFilterType</code>: If the token recipient wanted to display a badge for all current customers, you could specify a <code class="highlighter-rouge">groupFilterType</code> that start with “Customer” (<code class="highlighter-rouge">STARTS_WITH=Customer</code>). See <a href="/docs/api/resources/oauth2#details-for-groupfiltertype"><code class="highlighter-rouge">groupFilterType</code></a> for details.
+      <li>Example of a set of Okta groups specified by <code class="highlighter-rouge">groupFilterType</code>: If the token recipient wanted to display a badge for all current customers, you could specify a <code class="highlighter-rouge">groupFilterType</code> that start with “Customer” (<code class="highlighter-rouge">STARTS_WITH=Customer</code>). See <a href="/docs/api/resources/authorization-servers#details-for-groupfiltertype"><code class="highlighter-rouge">groupFilterType</code></a> for details.
   Notice that you can use the group filter (<code class="highlighter-rouge">valueType</code> is <code class="highlighter-rouge">GROUP</code>) for Okta groups. For application groups, <code class="highlighter-rouge">valueType</code> must be <code class="highlighter-rouge">EXPRESSION</code>.</li>
     </ul>
 
@@ -627,7 +627,7 @@ A Refresh Token will be returned if ‘offline_access’ scope is requested usin
 
 <h3 id="refresh-token-revocation">Refresh Token Revocation</h3>
 
-<p>Refresh Tokens can be revoked explicitly by making a <a href="/docs/api/resources/oauth2#revoke-a-token">Revocation Request</a>. Additionally, all Refresh Tokens associated with an entity are revoked when the entity is deactivated, deleted, or otherwise modified in a way that invalidates the associated Refresh Tokens. Such ways includes:</p>
+<p>Refresh Tokens can be revoked explicitly by making a <a href="/docs/api/resources/oidc#revoke">Revocation Request</a>. Additionally, all Refresh Tokens associated with an entity are revoked when the entity is deactivated, deleted, or otherwise modified in a way that invalidates the associated Refresh Tokens. Such ways includes:</p>
 
 <ul>
   <li>The User is Suspended or Deactivated</li>
@@ -649,15 +649,15 @@ A Refresh Token will be returned if ‘offline_access’ scope is requested usin
 <p>The lifetime of an ID token is one hour. If the client that issued the token is deactivated, the token is
 immediately and permanently invalidated. Reactivating the client does not make the token valid again.</p>
 
-<p>The validation steps for <a href="/docs/api/resources/oidc#validating-id-tokens">OpenID Connect with the Okta Authorization Server</a> can also be applied to ID tokens for
-OAuth 2.0 (Custom Authorization Server), except the public keys should be retrieved via the <a href="/docs/api/resources/oauth2#get-keys">Get Keys endpoint</a>.</p>
+<p>The validation steps for <a href="/authentication-guide/tokens/validating-id-tokens">OpenID Connect with the Okta Authorization Server</a> can also be applied to ID tokens for
+OAuth 2.0 (Custom Authorization Server), except the public keys should be retrieved via the <a href="/docs/api/resources/oidc#keys">Get Keys endpoint</a>.</p>
 
 <h2 id="requesting-a-token">Requesting a Token</h2>
 
-<p>You can request a token with the endpoint <a href="/docs/api/resources/oauth2#request-a-token"><code class="highlighter-rouge">/oauth2/:authorizationServerId/v1/token</code></a>.</p>
+<p>You can request a token with the endpoint <a href="/docs/api/resources/oidc#token"><code class="highlighter-rouge">/oauth2/:authorizationServerId/v1/token</code></a>.</p>
 
 <p>The grant type and scope in your request, as well as configurations set in the Custom Authorization Server, determine which
-tokens are returned and what they contain. For details, see <a href="/docs/api/resources/oauth2#response-parameters-1">Response Parameters</a> and <a href="#custom-claim-configuration">Custom claim configuration</a>.</p>
+tokens are returned and what they contain. For details, see <a href="/docs/api/resources/oidc#response-properties">Response Parameters</a> and <a href="#custom-claim-configuration">Custom claim configuration</a>.</p>
 
 <h2 id="access-policies">Access Policies</h2>
 
@@ -687,7 +687,7 @@ Scopes are not ordered.</p>
 
 <h4 id="grant-type-condition">Grant type condition</h4>
 
-<p>The grant type condition identifies how the authorization grant is presented to Okta: 
+<p>The grant type condition identifies how the authorization grant is presented to Okta:
 via an authorization code, password credentials, refresh token, or client credentials.</p>
 
 <h4 id="people-condition">People condition</h4>
@@ -730,8 +730,8 @@ The Access Token minted by the Okta Authorization Server is consumed by Okta API
     <p>Custom Authorization Server:
 Use a Custom Authorization Server to secure your APIs.
 Custom Authorization Servers are hosted on Okta, and created and configured by an org administrator.
-You can create and configure Custom Authorization Servers using the Okta Admin UI or the <a href="/docs/api/resources/oauth2#authorization-server-operations">Custom Authorization Server API</a>.
-The Access Token minted by a Custom Authorization Server is consumed by your APIs. 
+You can create and configure Custom Authorization Servers using the Okta Admin UI or the <a href="/docs/api/resources/authorization-servers#authorization-server-operations">Custom Authorization Server API</a>.
+The Access Token minted by a Custom Authorization Server is consumed by your APIs.
 You can specify the audience to make sure that the Access Token is for your APIs.
 Also, custom scopes can be configured to support the authorization for your APIs.</p>
 
@@ -803,14 +803,14 @@ Also, custom scopes can be configured to support the authorization for your APIs
   </tbody>
 </table>
 
-<p>To configure a Custom Authorization Server, sign in to your org and navigate to <strong>API</strong> &gt; <strong>Authorization Servers</strong> &gt; <strong>Add Authorization Server</strong> or use the <a href="/docs/api/resources/oauth2#authorization-server-operations">Custom Authorization Server API</a>.</p>
+<p>To configure a Custom Authorization Server, sign in to your org and navigate to <strong>API</strong> &gt; <strong>Authorization Servers</strong> &gt; <strong>Add Authorization Server</strong> or use the <a href="/docs/api/resources/authorization-servers#authorization-server-operations">Custom Authorization Server API</a>.</p>
 
-<p>If you use a Custom Authorization Server, we recommend that you use it instead of the Okta Authorization Server for 
+<p>If you use a Custom Authorization Server, we recommend that you use it instead of the Okta Authorization Server for
 any platform use cases (perform SSO or secure your API access).
 Doing so will make it easier to consume enhancements to the API Access Management product and features.</p>
 
 <p>Okta provides a pre-configured Custom Authorization Server with the name <code class="highlighter-rouge">default</code>.
-This default authorization server includes a basic access policy and rule, which you can edit to control access. 
+This default authorization server includes a basic access policy and rule, which you can edit to control access.
 It allows you to specify <code class="highlighter-rouge">default</code> instead of the <code class="highlighter-rouge">authorizationServerId</code> in requests to it:</p>
 
 <ul>

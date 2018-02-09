@@ -274,7 +274,7 @@ The <a href="http://openid.net/connect/">specification suite</a> is extensible, 
 OpenID Connect extends OAuth 2.0:</p>
 
 <ul>
-  <li>Provides a signed <a href="#id-token"><em>id_token</em></a> for the client and <a href="/docs/api/resources/oidc#openid-connect-discovery-document">a UserInfo endpoint</a> from which you can retrieve user attributes.</li>
+  <li>Provides a signed <a href="#id-token"><em>id_token</em></a> for the client and <a href="/docs/api/resources/oidc#well-knownopenid-configuration">a UserInfo endpoint</a> from which you can retrieve user attributes.</li>
   <li>Provides access to the <a href="#authorization-servers">Okta Authorization Server</a>.</li>
   <li>Provides a standard set of scopes and claims for identities including profile, email, address, and phone.</li>
 </ul>
@@ -292,12 +292,12 @@ and issuing ID Tokens upon successful authentication of those users and applicat
   <li>Okta authenticates the user.</li>
   <li>Okta approves or denies the requested scopes.</li>
   <li>Okta mints a token and sends it in the response.</li>
-  <li>The application validates the ID Token’s integrity. For more information, see <a href="/docs/api/resources/oidc#validating-id-tokens">Validating ID Tokens</a>.</li>
+  <li>The application validates the ID Token’s integrity. For more information, see <a href="/authentication-guide/tokens/validating-id-tokens">Validating ID Tokens</a>.</li>
 </ol>
 
 <blockquote>
   <p>Important: Okta uses public key cryptography to sign tokens and verify that they are valid.
-See the last section of <a href="/docs/api/resources/oidc#validating-id-tokens">Validating ID Tokens</a> for more information on the necessary logic
+See the last section of <a href="/authentication-guide/tokens/validating-id-tokens">Validating ID Tokens</a> for more information on the necessary logic
 you must have in your application to ensure it’s always updated with the latest keys.</p>
 </blockquote>
 
@@ -329,7 +329,7 @@ The claims in a security token are dependent upon the type of token, the type of
 
 <p>OpenID Connect uses scope values to specify what access privileges are being requested for Access Tokens.
 The scopes associated with Access Tokens determine which claims are available when they are used
-to access <a href="/docs/api/resources/oidc#get-user-information">the OIDC <code class="highlighter-rouge">userinfo</code> endpoint</a>. The following scopes are supported:</p>
+to access <a href="/docs/api/resources/oidc#userinfo">the OIDC <code class="highlighter-rouge">userinfo</code> endpoint</a>. The following scopes are supported:</p>
 
 <table>
   <thead>
@@ -406,7 +406,7 @@ token and optionally an Access Token directly from the authorization server’s 
 two flows.</li>
 </ul>
 
-<p>Clients should always <a href="/docs/api/resources/oidc#validating-id-tokens">validate ID Tokens</a> to ensure their integrity.</p>
+<p>Clients should always <a href="/authentication-guide/tokens/validating-id-tokens">validate ID Tokens</a> to ensure their integrity.</p>
 
 <p>The ID Tokens returned by the authentication endpoint (implicit flow) or the Token endpoint (authorization code flow)
 are identical, except that in the implicit flow, the <em>nonce</em> parameter is required (and hence must have been included
@@ -490,7 +490,7 @@ response does not include an Access Token.</p>
     </tr>
     <tr>
       <td style="text-align: left">kid</td>
-      <td style="text-align: left">Identifies the <em>public-key</em> used to verify the <em>id_token</em>. The corresponding <em>public-key</em> can be found as a part of the   <a href="/docs/api/resources/oidc#openid-connect-discovery-document">well-known configuration’s</a> <em>jwks_uri</em> value.</td>
+      <td style="text-align: left">Identifies the <em>public-key</em> used to verify the <em>id_token</em>. The corresponding <em>public-key</em> can be found as a part of the <a href="/docs/api/resources/oidc#well-knownopenid-configuration">well-known configuration’s</a> <em>jwks_uri</em> value.</td>
       <td style="text-align: left">String</td>
       <td style="text-align: left">“a5dfwef1a-0ead3f5223_w1e”</td>
     </tr>
@@ -563,7 +563,7 @@ response does not include an Access Token.</p>
     </tr>
     <tr>
       <td style="text-align: left">amr</td>
-      <td style="text-align: left">JSON array of strings that are identifiers for     <a href="http://self-issued.info/docs/draft-jones-oauth-amr-values-00.html">authentication methods</a> used in the authentication.</td>
+      <td style="text-align: left">JSON array of strings that are identifiers for <a href="http://self-issued.info/docs/draft-jones-oauth-amr-values-00.html">authentication methods</a> used in the authentication.</td>
       <td style="text-align: left">Array</td>
       <td style="text-align: left">[ “pwd”, “mfa”, “otp”, “kba”, “sms”, “swk”, “hwk”, “mca” ]</td>
     </tr>
@@ -673,7 +673,7 @@ response does not include an Access Token.</p>
     <tr>
       <td style="text-align: left">locale</td>
       <td style="text-align: left">profile</td>
-      <td style="text-align: left">Language and   <a href="http://www.iso.org/iso/country_codes">ISO3166‑1</a> country code in uppercase, separated by a dash.</td>
+      <td style="text-align: left">Language and <a href="http://www.iso.org/iso/country_codes">ISO3166‑1</a> country code in uppercase, separated by a dash.</td>
       <td style="text-align: left">String</td>
       <td style="text-align: left">“en-US”</td>
     </tr>
@@ -773,7 +773,7 @@ For more information about configuring an app for OpenID Connect, including grou
       </tbody>
     </table>
   </li>
-  <li>The full set of claims for the requested scopes is available via the <a href="/docs/api/resources/oidc#get-user-information">/oauth2/v1/userinfo</a> endpoint. Call this endpoint using the Access Token.</li>
+  <li>The full set of claims for the requested scopes is available via the <a href="/docs/api/resources/oidc#userinfo">/oauth2/v1/userinfo</a> endpoint. Call this endpoint using the Access Token.</li>
 </ul>
 
 <h2 id="more-information">More Information</h2>

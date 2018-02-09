@@ -402,12 +402,12 @@ a release, usually due to holiday schedules or other special events. We release 
 <h4 id="special-html-characters-in-state-for-okta_post_message">Special HTML Characters in <code class="highlighter-rouge">state</code> for <code class="highlighter-rouge">okta_post_message</code></h4>
 
 <p>You can include HTML special characters in the <code class="highlighter-rouge">state</code> parameter for <code class="highlighter-rouge">okta_post_message</code>.
-Note that <a href="/docs/api/resources/oauth2#request-parameters"><code class="highlighter-rouge">state</code> in the main request body</a> already allows these characters. <!-- OKTA-91165 --></p>
+Note that <a href="/docs/api/resources/oidc#request-parameters-1"><code class="highlighter-rouge">state</code> in the main request body</a> already allows these characters. <!-- OKTA-91165 --></p>
 
 <h4 id="custom-scopes-in-metadata-endpoints">Custom Scopes in Metadata Endpoints</h4>
 
-<p>You can specify whether or not to include custom scopes in the metadata endpoints for <a href="/docs/api/resources/oauth2#retrieve-authorization-server-metadata">OAuth 2.0</a> and <a href="/docs/api/resources/oauth2#retrieve-authorization-server-openid-connect-metadata">OpenID Connect</a>.
-Existing custom scopes are not exposed by default. Set the <a href="/docs/api/resources/oauth2#scopes-properties"><code class="highlighter-rouge">metadataPublish</code> attribute to <code class="highlighter-rouge">ALL_CLIENTS</code></a> to change the behavior. <!-- OKTA-106548 --></p>
+<p>You can specify whether or not to include custom scopes in the metadata endpoints for <a href="/docs/api/resources/oidc#well-knownoauth-authorization-server">OAuth 2.0</a> and <a href="/docs/api/resources/oidc#well-knownopenid-configuration">OpenID Connect</a>.
+Existing custom scopes are not exposed by default. Set the <a href="/docs/api/resources/authorization-servers#scope-properties"><code class="highlighter-rouge">metadataPublish</code> attribute to <code class="highlighter-rouge">ALL_CLIENTS</code></a> to change the behavior. <!-- OKTA-106548 --></p>
 
 <h4 id="improved-enforcement-of-authorization-server-policies">Improved Enforcement of Authorization Server Policies</h4>
 
@@ -672,7 +672,7 @@ Some orgs did not receive this functionality because they were identified as pos
 
 <p>A new parameter, <code class="highlighter-rouge">request</code> is available for all <code class="highlighter-rouge">/authorize</code> endpoints. The parameter contains a JWT created by the client, enabling requests to be passed in a single, self-contained parameter. This JWT must be signed.</p>
 
-<p>For details about using <code class="highlighter-rouge">request</code>, see <a href="/docs/api/resources/oauth2#request-parameters">Oauth 2.0</a> or <a href="/docs/api/resources/oidc#request-parameters-3">OpenID Connect</a> documentation. <!-- OKTA-78476 --></p>
+<p>For details about using <code class="highlighter-rouge">request</code>, see <a href="/docs/api/resources/oidc#request-parameters-1">Oauth 2.0</a> or <a href="/docs/api/resources/oidc#request-parameters-3">OpenID Connect</a> documentation. <!-- OKTA-78476 --></p>
 
 <h3 id="api-bug-fixes">API Bug Fixes</h3>
 
@@ -885,27 +885,27 @@ The user has to change his or her password the next time they log in. This new q
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: left">       <a href="#concurrent-rate-limits">Concurrent Rate Limits</a></td>
+      <td style="text-align: left"><a href="#concurrent-rate-limits">Concurrent Rate Limits</a></td>
       <td style="text-align: left">October 4, 2017</td>
       <td style="text-align: left">October 9, 2017</td>
     </tr>
     <tr>
-      <td style="text-align: left">  <a href="#openid-connect-scope-change">OpenID Connect Scope Change</a></td>
+      <td style="text-align: left"><a href="#openid-connect-scope-change">OpenID Connect Scope Change</a></td>
       <td style="text-align: left">October 4, 2017</td>
       <td style="text-align: left">October 9, 2017</td>
     </tr>
     <tr>
-      <td style="text-align: left">    <a href="#help-desk-admin-role-generally-available">Help Desk Admin Role Generally Available</a></td>
+      <td style="text-align: left"><a href="#help-desk-admin-role-generally-available">Help Desk Admin Role Generally Available</a></td>
       <td style="text-align: left">October 4, 2017</td>
       <td style="text-align: left">October 9, 2017</td>
     </tr>
     <tr>
-      <td style="text-align: left">              <a href="#policy-api"> Policy API</a></td>
+      <td style="text-align: left"><a href="#policy-api">Policy API</a></td>
       <td style="text-align: left">September 7, 2017</td>
       <td style="text-align: left">October 9, 2017</td>
     </tr>
     <tr>
-      <td style="text-align: left">               <a href="#password-policy-api">Password Policy API</a></td>
+      <td style="text-align: left"><a href="#password-policy-api">Password Policy API</a></td>
       <td style="text-align: left">September 7, 2017</td>
       <td style="text-align: left">October 9, 2017</td>
     </tr>
@@ -1040,7 +1040,7 @@ Reporting concurrent rate limits once a minute keeps log volume manageable.</p>
 
 <p>This example shows the relevant portion of a rate limit header being returned with the error for a request that exceeded the concurrent rate limit.</p>
 <div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">
-HTTP/1.1 429 
+HTTP/1.1 429
 Date: Tue, 26 Sep 2017 21:33:25 GMT
 X-Rate-Limit-Limit: 0
 X-Rate-Limit-Remaining: 0
@@ -1049,7 +1049,7 @@ X-Rate-Limit-Reset: 1506461721
 </span></code></pre></div></div>
 
 <p>Notice that instead of the typical counts for time-based rate limits, when a request exceeds the limit for concurrent requests,
-<code class="highlighter-rouge">X-Rate-Limit-Limit</code>, <code class="highlighter-rouge">X-Rate-Limit-Remaining</code>, and <code class="highlighter-rouge">X-Rate-Limit-Reset</code> report the concurrent values instead. 
+<code class="highlighter-rouge">X-Rate-Limit-Limit</code>, <code class="highlighter-rouge">X-Rate-Limit-Remaining</code>, and <code class="highlighter-rouge">X-Rate-Limit-Reset</code> report the concurrent values instead.
 When the number of unfinished requests is below the concurrent rate limit, request headers will switch back to reporting the time-based rate limits.</p>
 
 <p>The <code class="highlighter-rouge">X-Rate-Limit-Reset</code> time for concurrent rate limits is only a suggestion. There’s no guarantee that enough requests will complete to stop exceeding the concurrent rate limit at the time indicated.</p>
@@ -1067,7 +1067,7 @@ When the number of unfinished requests is below the concurrent rate limit, reque
 
 <h4 id="help-desk-admin-role-generally-available">Help Desk Admin Role Generally Available</h4>
 
-<p>The Help Desk Admin Role (<code class="highlighter-rouge">HELP_DESK_ADMIN</code>) is generally available via the <a href="/docs/api/resources/roles#role-properties">Roles API</a>. 
+<p>The Help Desk Admin Role (<code class="highlighter-rouge">HELP_DESK_ADMIN</code>) is generally available via the <a href="/docs/api/resources/roles#role-properties">Roles API</a>.
 For information about this role, see the <a href="https://help.okta.com/en/prod/Content/Topics/Security/The_Help_Desk_Admin_Role.htm">in-app help</a>. <!-- OKTA-141867 --></p>
 
 <h4 id="policy-api">Policy API</h4>
@@ -1448,7 +1448,7 @@ Previously, application groups could only be retrieved with the Custom Authoriza
     <p><a href="/docs/api/resources/oauth-clients#register-new-client"><code class="highlighter-rouge">/oauth2/v1/clients</code></a> returned HTTP status code 200 rather than 201 when creating a client successfully.  (OKTA-128839)</p>
   </li>
   <li>
-    <p><a href="/docs/api/resources/oauth2#create-authorization-server"><code class="highlighter-rouge">/api/v1/authorizationServers</code></a> returned HTTP status code 200 rather than 201 when creating an Authorization Server successfully.  (OKTA-128839)</p>
+    <p><a href="/docs/api/resources/authorization-servers#create-authorization-server"><code class="highlighter-rouge">/api/v1/authorizationServers</code></a> returned HTTP status code 200 rather than 201 when creating an Authorization Server successfully.  (OKTA-128839)</p>
   </li>
   <li>
     <p><a href="/docs/api/resources/oauth-clients#get-oauth-client"><code class="highlighter-rouge">/oauth2/v1/clients/{clientId}</code></a> returned HTTP status code 404 rather than 401 when it did not find the specified client.  (OKTA-130804, OKTA-130848)</p>
@@ -1624,7 +1624,7 @@ Okta SDK <code class="highlighter-rouge">EventsAPIClient</code>.</p>
 
 <h4 id="additional-scopes-available-for-social-authentication">Additional Scopes Available for Social Authentication</h4>
 
-<p>When using a Social Identity Provider, you can request information in stages. The initial request to <code class="highlighter-rouge">/oauth2/v1/authorize</code> can ask for a minimal set of scopes, and you can add scopes to collect additional user data in a subsequent request to the Social Identity Provider. This reduces friction during sign-in when users don’t yet trust your app. For more information, see the descriptions of <code class="highlighter-rouge">idp_scope</code> in the <a href="https://developer.okta.com/docs/api/resources/oauth2#request-parameters">OAuth 2.0 API</a> and <a href="https://developer.okta.com/docs/api/resources/oidc#request-parameters-3">OpenID Connect API</a> parameter tables.<!-- (OKTA-117521) --></p>
+<p>When using a Social Identity Provider, you can request information in stages. The initial request to <code class="highlighter-rouge">/oauth2/v1/authorize</code> can ask for a minimal set of scopes, and you can add scopes to collect additional user data in a subsequent request to the Social Identity Provider. This reduces friction during sign-in when users don’t yet trust your app. For more information, see the descriptions of <code class="highlighter-rouge">idp_scope</code> in the <a href="https://developer.okta.com/docs/api/resources/oidc#request-parameters-1">OAuth 2.0 API</a> and <a href="https://developer.okta.com/docs/api/resources/oidc#request-parameters-3">OpenID Connect API</a> parameter tables.<!-- (OKTA-117521) --></p>
 
 <h4 id="new-versions-of-sign-in-widget-and-auth-sdk-for-js">New Versions of Sign-In Widget and Auth SDK for JS</h4>
 
@@ -1671,7 +1671,7 @@ Okta SDK <code class="highlighter-rouge">EventsAPIClient</code>.</p>
 <h3 id="platform-enhancement-new-authentication-method-for-openid-connect-and-api-access-management">Platform Enhancement: New Authentication Method for OpenID Connect and API Access Management</h3>
 <p>For OpenID Connect and API Access Management, Okta supports the <code class="highlighter-rouge">client_secret_jwt</code> method for token endpoint authentication (<code class="highlighter-rouge">token_endpoint_auth_method</code>).
 This method is specified in the <a href="http://openid.net/specs/openid-connect-core-1_0.html#ClientAuthentication">OpenID Connect specification</a>
-and allows you to use JWT and HMAC to authenticate a client for <a href="https://developer.okta.com/docs/api/resources/oauth2#token-authentication-methods">OAuth 2.0</a> or <a href="https://developer.okta.com/docs/api/resources/oidc#token-authentication-methods">OpenID Connect</a> requests.<!-- (OKTA-101074) --></p>
+and allows you to use JWT and HMAC to authenticate a client for <a href="https://developer.okta.com/docs/api/resources/oidc#token-authentication-methods">OAuth 2.0 and OpenID Connect</a> requests.<!-- (OKTA-101074) --></p>
 
 <h3 id="platform-bugs-fixed">Platform Bugs Fixed</h3>
 
@@ -1837,7 +1837,7 @@ Okta returns all default scopes in the Access Token that are permitted by the ac
 
 <p><img src="/assets/release_notes/default-scope-ec7ebe52d591823bf7eaea76c9082558c682ffcbcaffe7147cb56f1e7a7e859f.png" alt="Default Scope Configuration UI" /></p>
 
-<p>For more information about setting default scopes in the API, see <a href="/docs/api/resources/oauth2#scopes-properties">OAuth 2.0 API</a>.
+<p>For more information about setting default scopes in the API, see <a href="/docs/api/resources/authorization-servers#scope-properties">OAuth 2.0 API</a>.
 <!-- OKTA-122185 OKTA-122072 --></p>
 
 <h4 id="improved-ui-for-creating-openid-connect-apps">Improved UI for Creating OpenID Connect Apps</h4>
@@ -1945,8 +1945,8 @@ Previously these notifications appeared only in the System Log (<code class="hig
   <li>
     <p>As of May 8, we have enabled a System Log alert which lets you know if you have exceeded any of the new API rate limits:</p>
 
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> Warning: requests for url pattern &lt;url-pattern&gt; have reached 
- a threshold of &lt;number&gt; requests per &lt;time-duration&gt;. Please 
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> Warning: requests for url pattern &lt;url-pattern&gt; have reached
+ a threshold of &lt;number&gt; requests per &lt;time-duration&gt;. Please
  be warned these rate limits will be enforced in the near future.
 </code></pre></div>    </div>
   </li>
@@ -1982,7 +1982,7 @@ With the following enhancements, the API Access Management Authorization Servers
   <li>Control which claims are returned in ID tokens with the <code class="highlighter-rouge">alwaysIncludeInToken</code> property. You can also configure this in the <a href="https://help.okta.com/en/prev/Content/Topics/Security/API_Access.htm#create_claims">Okta Admin UI</a>.</li>
 </ul>
 
-<p>For more information see the <a href="/docs/api/resources/oauth2#authorization-server-operations">Authorization Server API documentation</a>.
+<p>For more information see the <a href="/docs/api/resources/authorization-servers#authorization-server-operations">Authorization Server API documentation</a>.
 <!-- OKTA-127511, OKTA-123638 --></p>
 
 <h4 id="additional-logging-for-invalid-use-by-oauth-20-client">Additional Logging for Invalid Use by OAuth 2.0 Client</h4>
@@ -1998,7 +1998,7 @@ With the following enhancements, the API Access Management Authorization Servers
 
 <h4 id="restrictions-on-set-recovery-question-answer-and-set-password">Restrictions on Set Recovery Question Answer and Set Password</h4>
 
-<p>The API operations Set Recovery Question Answer and Set Password must be requested with an API token, not a session token. 
+<p>The API operations Set Recovery Question Answer and Set Password must be requested with an API token, not a session token.
 Additionally, the Set Recovery Question Answer operation doesn’t validate complexity policies or credential policies. <!-- OKTA-126826, OKTA-126824 --></p>
 
 <h4 id="step-up-authentication-for-saml-apps-is-an-early-access-feature">Step-up Authentication for SAML Apps is an Early Access Feature</h4>
@@ -3506,7 +3506,7 @@ Before the fix, the minimum security answer length was assumed to always be 4, r
 
 <h3 id="enhanced-well-known-endpoint-for-openid-connect">Enhanced Well-Known Endpoint for OpenID Connect</h3>
 
-<p>The <a href="/docs/api/resources/oidc#openid-connect-discovery-document">OpenID Connect discovery endpoint</a> <code class="highlighter-rouge">.well-known</code> includes the introspection and revocation endpoints.</p>
+<p>The <a href="/docs/api/resources/oidc#well-knownopenid-configuration">OpenID Connect discovery endpoint</a> <code class="highlighter-rouge">.well-known</code> includes the introspection and revocation endpoints.</p>
 
 <p>Request Example:</p>
 
@@ -3841,7 +3841,7 @@ and specify the value <code class="highlighter-rouge">CUSTOM_ATTRIBUTE</code> in
 <p>The <code class="highlighter-rouge">expires_in</code> response parameter tells you the number of seconds before a <code class="highlighter-rouge">token</code> (Access Token) expires. If your
 response from the <code class="highlighter-rouge">/oauth2/v1/authorize</code> endpoint includes an Access Token, <code class="highlighter-rouge">expires_in</code> is included in the response.</p>
 
-<p>For more information, see the <code class="highlighter-rouge">/oauth2/v1/authorize</code> <a href="/docs/api/resources/oauth2#response-parameters">Response Parameters</a>.</p>
+<p>For more information, see the <code class="highlighter-rouge">/oauth2/v1/authorize</code> <a href="/docs/api/resources/oidc#response-properties">Response Properties</a>.</p>
 
 <h4 id="sha256-certificate-for-new-saml-idp-instances">SHA256 Certificate for New SAML IdP Instances</h4>
 
@@ -3991,7 +3991,7 @@ after <a href="https://support.okta.com/help/articles/Knowledge_Article/Current-
 <p>You can send custom text as part of an SMS message request:</p>
 
 <ol>
-  <li>Use the <code class="highlighter-rouge">/api/v1/templates/sms</code> endpoint to create a custom SMS text template. </li>
+  <li>Use the <code class="highlighter-rouge">/api/v1/templates/sms</code> endpoint to create a custom SMS text template.</li>
   <li>Send a request to the Factors API specifying the template for verification. There is no change in the response.</li>
 </ol>
 
@@ -4002,8 +4002,8 @@ after <a href="https://support.okta.com/help/articles/Knowledge_Article/Current-
 <p>The <code class="highlighter-rouge">/oauth2/v1/token</code> endpoint includes a Refresh Token if:</p>
 
 <ul>
-  <li>The request contains a <code class="highlighter-rouge">grant_type</code> with the value <code class="highlighter-rouge">password</code> and your client supports the <code class="highlighter-rouge">grant_type</code> value <code class="highlighter-rouge">refresh_token</code>. For more information, see <a href="/docs/api/resources/oauth2#request-parameters-1">Token Request</a>.</li>
-  <li>You request the <code class="highlighter-rouge">offline_access</code> scope. For more information, see <a href="/docs/api/resources/oauth2#refresh-tokens-for-web-and-native-applications">Refresh Tokens for Web and Native Applications</a>.</li>
+  <li>The request contains a <code class="highlighter-rouge">grant_type</code> with the value <code class="highlighter-rouge">password</code> and your client supports the <code class="highlighter-rouge">grant_type</code> value <code class="highlighter-rouge">refresh_token</code>. For more information, see <a href="/docs/api/resources/oidc#request-parameters-1">Token Request</a>.</li>
+  <li>You request the <code class="highlighter-rouge">offline_access</code> scope. For more information, see <a href="/authentication-guide/tokens/refreshing-tokens">Refresh Tokens</a>.</li>
 </ul>
 
 <h3 id="bugs-fixed">Bugs Fixed</h3>
