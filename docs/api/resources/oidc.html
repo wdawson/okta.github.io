@@ -526,7 +526,7 @@ of the callback response.</p>
   <li>You must sign the JWT using the app’s client secret.</li>
   <li>The JWT can’t be encrypted.</li>
   <li>Okta supports these signing algorithms: <a href="https://tools.ietf.org/html/rfc7518#section-5.2.3">HS256</a>, <a href="https://tools.ietf.org/html/rfc7518#section-5.2.4">HS384</a>, and <a href="https://tools.ietf.org/html/rfc7518#section-5.2.5">HS512</a>.</li>
-  <li>We recommend you don’t duplicate any request parameters in both the JWT and the query URI itself. However, you can do so with <code class="highlighter-rouge">state</code>, <code class="highlighter-rouge">nonce</code>, <code class="highlighter-rouge">code_challenge</code>, and <code class="highlighter-rouge">code_challenge_method</code>.</li>
+  <li>We recommend you don’t duplicate any request parameters in both the JWT and the query URI itself. However, you can do so with <code class="highlighter-rouge">state</code>, <code class="highlighter-rouge">nonce</code>, <code class="highlighter-rouge">code_challenge</code>, and <code class="highlighter-rouge">code_challenge_method</code>. In those cases, the values in the query URI will override the JWT values.</li>
   <li>Okta validates the <code class="highlighter-rouge">request</code> parameter in the following ways:
     <ol>
       <li><code class="highlighter-rouge">iss</code> is required and must  be the <code class="highlighter-rouge">client_id</code>.</li>
@@ -539,16 +539,21 @@ of the callback response.</p>
 
 <p><code class="highlighter-rouge">response_mode</code>:</p>
 
-<p>Each value for <code class="highlighter-rouge">response_mode</code> delivers different behavior:
-    * <code class="highlighter-rouge">fragment</code> – Parameters are encoded in the URL fragment added to the <code class="highlighter-rouge">redirect_uri</code> when redirecting back to the client.
-    * <code class="highlighter-rouge">query</code> – Parameters are encoded in the query string added to the <code class="highlighter-rouge">redirect_uri</code> when redirecting back to the client.
-    * <code class="highlighter-rouge">form_post</code> – Parameters are encoded as HTML form values (<code class="highlighter-rouge">application/x-www-form-urlencoded</code> format) and are transmitted via the HTTP POST method to the client.
-    * <code class="highlighter-rouge">okta_post_message</code> – Uses <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage">HTML5 Web Messaging</a> (for example, window.postMessage()) instead of the redirect for the authorization response from the <code class="highlighter-rouge">/authorize</code> endpoint.
-      <code class="highlighter-rouge">okta_post_message</code> is an adaptation of the <a href="https://tools.ietf.org/html/draft-sakimura-oauth-wmrm-00#section-4.1">Web Message Response Mode</a>.
-      This value provides a secure way for a single-page application to perform a sign-in flow
-      in a popup window or an iFrame and receive the ID token and/or access token back in the parent page without leaving the context of that page.
-      The data model for the postMessage call is in the next section.
-    * The <code class="highlighter-rouge">Referrer-Policy</code> header is automatically included in the request for <code class="highlighter-rouge">fragment</code> or <code class="highlighter-rouge">query</code>, and is set to <code class="highlighter-rouge">Referrer-Policy: no-referrer</code>.</p>
+<p>Each value for <code class="highlighter-rouge">response_mode</code> delivers different behavior:</p>
+<ul>
+  <li><code class="highlighter-rouge">fragment</code> - Parameters are encoded in the URL fragment added to the <code class="highlighter-rouge">redirect_uri</code> when redirecting back to the client.</li>
+  <li><code class="highlighter-rouge">query</code> - Parameters are encoded in the query string added to the <code class="highlighter-rouge">redirect_uri</code> when redirecting back to the client.</li>
+  <li><code class="highlighter-rouge">form_post</code> - Parameters are encoded as HTML form values (<code class="highlighter-rouge">application/x-www-form-urlencoded</code> format) and are transmitted via the HTTP POST method to the client.</li>
+  <li>
+    <p><code class="highlighter-rouge">okta_post_message</code> - Uses <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage">HTML5 Web Messaging</a> (for example, window.postMessage()) instead of the redirect for the authorization response from the <code class="highlighter-rouge">/authorize</code> endpoint.</p>
+
+    <p><code class="highlighter-rouge">okta_post_message</code> is an adaptation of the <a href="https://tools.ietf.org/html/draft-sakimura-oauth-wmrm-00#section-4.1">Web Message Response Mode</a>.
+  This value provides a secure way for a single-page application to perform a sign-in flow
+  in a popup window or an iFrame and receive the ID token and/or access token back in the parent page without leaving the context of that page.
+  The data model for the postMessage call is in the next section.</p>
+  </li>
+  <li>The <code class="highlighter-rouge">Referrer-Policy</code> header is automatically included in the request for <code class="highlighter-rouge">fragment</code> or <code class="highlighter-rouge">query</code>, and is set to <code class="highlighter-rouge">Referrer-Policy: no-referrer</code>.</li>
+</ul>
 
 <p><code class="highlighter-rouge">state</code>:</p>
 
@@ -2168,61 +2173,61 @@ All of these scopes except <code class="highlighter-rouge">groups</code> are def
 <table>
   <thead>
     <tr>
-      <th>Property</th>
-      <th>Description</th>
-      <th>DataType</th>
+      <th style="text-align: left">Property</th>
+      <th style="text-align: left">Description</th>
+      <th style="text-align: left">DataType</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>aud</td>
-      <td>Identifies the audience (resource URI or server) that this access token is intended for.</td>
-      <td>String</td>
+      <td style="text-align: left">aud</td>
+      <td style="text-align: left">Identifies the audience (resource URI or server) that this access token is intended for.</td>
+      <td style="text-align: left">String</td>
     </tr>
     <tr>
-      <td>cid</td>
-      <td>Client ID of the client that requested the access token.</td>
-      <td>String</td>
+      <td style="text-align: left">cid</td>
+      <td style="text-align: left">Client ID of the client that requested the access token.</td>
+      <td style="text-align: left">String</td>
     </tr>
     <tr>
-      <td>exp</td>
-      <td>The time the access token expires, represented in Unix time (seconds).</td>
-      <td>Integer</td>
+      <td style="text-align: left">exp</td>
+      <td style="text-align: left">The time the access token expires, represented in Unix time (seconds).</td>
+      <td style="text-align: left">Integer</td>
     </tr>
     <tr>
-      <td>iat</td>
-      <td>The time the access token was issued, represented in Unix time (seconds).</td>
-      <td>Integer</td>
+      <td style="text-align: left">iat</td>
+      <td style="text-align: left">The time the access token was issued, represented in Unix time (seconds).</td>
+      <td style="text-align: left">Integer</td>
     </tr>
     <tr>
-      <td>iss</td>
-      <td>The Issuer Identifier of the response. This value will be the unique identifier for the Authorization Server instance.</td>
-      <td>String</td>
+      <td style="text-align: left">iss</td>
+      <td style="text-align: left">The Issuer Identifier of the response. This value will be the unique identifier for the Authorization Server instance.</td>
+      <td style="text-align: left">String</td>
     </tr>
     <tr>
-      <td>jti</td>
-      <td>A unique identifier for this access token for debugging and revocation purposes.</td>
-      <td>String</td>
+      <td style="text-align: left">jti</td>
+      <td style="text-align: left">A unique identifier for this access token for debugging and revocation purposes.</td>
+      <td style="text-align: left">String</td>
     </tr>
     <tr>
-      <td>scp</td>
-      <td>Array of scopes that are granted to this access token.</td>
-      <td>Array</td>
+      <td style="text-align: left">scp</td>
+      <td style="text-align: left">Array of scopes that are granted to this access token.</td>
+      <td style="text-align: left">Array</td>
     </tr>
     <tr>
-      <td>sub</td>
-      <td>The subject. A name for the user or a unique identifier for the client.</td>
-      <td>String</td>
+      <td style="text-align: left">sub</td>
+      <td style="text-align: left">The subject. A name for the user or a unique identifier for the client.</td>
+      <td style="text-align: left">String</td>
     </tr>
     <tr>
-      <td>uid</td>
-      <td>A unique identifier for the user. It will not be included in the access token if there is no user bound to it.</td>
-      <td>String</td>
+      <td style="text-align: left">uid</td>
+      <td style="text-align: left">A unique identifier for the user. It will not be included in the access token if there is no user bound to it.</td>
+      <td style="text-align: left">String</td>
     </tr>
     <tr>
-      <td>ver</td>
-      <td>The semantic version of the access token.</td>
-      <td>Integer</td>
+      <td style="text-align: left">ver</td>
+      <td style="text-align: left">The semantic version of the access token.</td>
+      <td style="text-align: left">Integer</td>
     </tr>
   </tbody>
 </table>
