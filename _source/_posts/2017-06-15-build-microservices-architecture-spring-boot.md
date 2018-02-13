@@ -476,7 +476,8 @@ Content-Type: application/json;charset=UTF-8
 Date: Wed, 07 Feb 2018 16:51:38 GMT
 Transfer-Encoding: chunked
 X-Application-Context: edge-service:8081
-
+```
+```json
 {
     "error": "Internal Server Error",
     "exception": "feign.RetryableException",
