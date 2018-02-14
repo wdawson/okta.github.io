@@ -270,7 +270,7 @@ cp <span class="nt">-r</span> spring-boot-angular-example/server ~/spring-boot-i
 
 <p>After the app has started, navigate to <code class="highlighter-rouge">http://localhost:8080/good-beers</code>. You should see the list of good beers in your browser.</p>
 
-<p><img src="/assets/blog/ionic-spring-boot/good-beers-json-e1d41f9859ef735fa60939aa8ceeffba8f73c26f3da69013fc69c6e2ad027d57.png" alt="Good Beers JSON" width="800" /></p>
+<p><img src="/assets/blog/ionic-spring-boot/good-beers-json-bee3c889004a8f18a55e72331cec1772f397366d2ed6a0197042ad4bf362474a.png" alt="Good Beers JSON" width="800" class="center-image" /></p>
 
 <h2 id="create-an-ionic-app">Create an Ionic App</h2>
 
@@ -281,12 +281,12 @@ cp <span class="nt">-r</span> spring-boot-angular-example/server ~/spring-boot-i
 
 <p>The <a href="http://ionicframework.com/docs/cli/">Ionic CLI</a> is a command-line tool that significantly reduces the time it takes to develop an Ionic app. It’s like a Swiss Army Knife: It brings together a bunch of miscellaneous tools under a single interface. The CLI contains a number of useful commands for Ionic development, such as <code class="highlighter-rouge">start</code>, <code class="highlighter-rouge">build</code>, <code class="highlighter-rouge">generate</code>, <code class="highlighter-rouge">serve</code>, and <code class="highlighter-rouge">run</code>.</p>
 
-<p>After installation completes, create a new application using the following command:</p>
+<p>After installation completes, cd into <code class="highlighter-rouge">spring-boot-ionic-example</code> and create a new application using the following command:</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ionic start ionic-beer <span class="nt">--type</span> ionic-angular
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ionic start ionic-beer
 </code></pre></div></div>
 
-<p>You will be prompted to select a starter project and optionally link your app to your Ionic Dashboard. For the purposes of this tutorial, choose the <strong>tabs</strong> starter project and do not link the app to your Ionic Dashboard.</p>
+<p>You will be prompted to select a starter project and optionally integrate with Cordova to target native iOS and Android. For the purposes of this tutorial, choose the <strong>tabs</strong> starter project and answer <code class="highlighter-rouge">Yes</code> to Cordova.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>ionic-beer
 ionic serve
@@ -294,7 +294,7 @@ ionic serve
 
 <p>This will open your default browser on <code class="highlighter-rouge">http://localhost:8100</code>. You can click through the tabbed interface to see the default structure of the app.</p>
 
-<p><img src="/assets/blog/ionic-spring-boot/ionic-tabs-a947a40668cf63af0155359e4c7c44c0b035ca171a6c2c8fd5235f47940caf96.png" alt="Ionic shell with tabs" width="800" /></p>
+<p><img src="/assets/blog/ionic-spring-boot/ionic-tabs-2663f82a9fdafa6835d78f3de472dd3b353058ad2e913e197658d09c62b1330c.png" alt="Ionic shell with tabs" width="800" class="center-image" /></p>
 
 <p>Open the <code class="highlighter-rouge">ionic-beer</code> project in your preferred IDEA to start creating your UI. I recommend using IntelliJ IDEA because it has good TypeScript support and can auto-import classes just like it does for Java project.</p>
 
@@ -326,26 +326,22 @@ beer.ts
 <p>Create <code class="highlighter-rouge">src/providers/beer-service.ts</code> to hold a <code class="highlighter-rouge">BeerService</code> that fetches the beer list from the Spring Boot API. Populate it with constants for the API path and add a <code class="highlighter-rouge">getGoodBeers()</code> method.</p>
 
 <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Injectable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
-<span class="k">import</span> <span class="p">{</span> <span class="nx">Http</span><span class="p">,</span> <span class="nx">Response</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/http'</span><span class="p">;</span>
-<span class="k">import</span> <span class="s1">'rxjs/add/operator/map'</span><span class="p">;</span>
-<span class="k">import</span> <span class="s1">'rxjs/add/operator/catch'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'rxjs'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">HttpClient</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/common/http'</span><span class="p">;</span>
 
 <span class="p">@</span><span class="nd">Injectable</span><span class="p">()</span>
 <span class="k">export</span> <span class="kd">class</span> <span class="nx">BeerService</span> <span class="p">{</span>
   <span class="kr">public</span> <span class="nx">API</span> <span class="o">=</span> <span class="s1">'http://localhost:8080'</span><span class="p">;</span>
   <span class="kr">public</span> <span class="nx">BEER_API</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">API</span> <span class="o">+</span> <span class="s1">'/beers'</span><span class="p">;</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="kr">public</span> <span class="nx">http</span><span class="p">:</span> <span class="nx">Http</span><span class="p">)</span> <span class="p">{}</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">public</span> <span class="nx">http</span><span class="p">:</span> <span class="nx">HttpClient</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">}</span>
 
   <span class="nx">getGoodBeers</span><span class="p">():</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">API</span> <span class="o">+</span> <span class="s1">'/good-beers'</span><span class="p">)</span>
-      <span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="na">response</span><span class="p">:</span> <span class="nx">Response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">API</span> <span class="o">+</span> <span class="s1">'/good-beers'</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
-
-<p><strong>NOTE:</strong> If you receive TypeScript errors with this code, make sure your imports match. In particular, <code class="highlighter-rouge">Response</code> needs to be imported for <code class="highlighter-rouge">getGoodBeers()</code> to compile.</p>
 
 <p>Replace the HTML in <code class="highlighter-rouge">src/pages/beer/beer.html</code> to show the list of beers.</p>
 
@@ -439,25 +435,23 @@ beer.ts
 <p>Create a <code class="highlighter-rouge">GiphyService</code> class in <code class="highlighter-rouge">src/providers/giphy-service.ts</code> with code that searches Giphy’s API.</p>
 
 <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Injectable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/core'</span><span class="p">;</span>
-<span class="k">import</span> <span class="p">{</span> <span class="nx">Http</span><span class="p">,</span> <span class="nx">Response</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/http'</span><span class="p">;</span>
-<span class="k">import</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'rxjs'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">HttpClient</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/common/http'</span><span class="p">;</span>
+<span class="k">import</span> <span class="s1">'rxjs/add/operator/map'</span><span class="p">;</span>
 
 <span class="p">@</span><span class="nd">Injectable</span><span class="p">()</span>
 <span class="c1">// http://tutorials.pluralsight.com/front-end-javascript/getting-started-with-angular-2-by-building-a-giphy-search-application</span>
 <span class="k">export</span> <span class="kd">class</span> <span class="nx">GiphyService</span> <span class="p">{</span>
 
-  <span class="c1">// Public beta key: https://github.com/Giphy/GiphyAPI#public-beta-key</span>
-  <span class="nx">giphyApi</span> <span class="o">=</span> <span class="s1">'https://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&amp;q='</span><span class="p">;</span>
+  <span class="nx">giphyApi</span> <span class="o">=</span> <span class="s1">'https://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&amp;limit=1&amp;q='</span><span class="p">;</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="kr">public</span> <span class="nx">http</span><span class="p">:</span> <span class="nx">Http</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">public</span> <span class="nx">http</span><span class="p">:</span> <span class="nx">HttpClient</span><span class="p">)</span> <span class="p">{</span>
   <span class="p">}</span>
 
-  <span class="kd">get</span><span class="p">(</span><span class="nx">searchTerm</span><span class="p">):</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span> <span class="p">{</span>
-    <span class="kd">let</span> <span class="nx">apiLink</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">giphyApi</span> <span class="o">+</span> <span class="nx">searchTerm</span><span class="p">;</span>
-    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">request</span><span class="p">(</span><span class="nx">apiLink</span><span class="p">).</span><span class="nx">map</span><span class="p">((</span><span class="na">res</span><span class="p">:</span> <span class="nx">Response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-      <span class="kd">let</span> <span class="nx">results</span> <span class="o">=</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">().</span><span class="nx">data</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">results</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nx">results</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">images</span><span class="p">.</span><span class="nx">original</span><span class="p">.</span><span class="nx">url</span><span class="p">;</span>
+  <span class="kd">get</span><span class="p">(</span><span class="nx">searchTerm</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">apiLink</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">giphyApi</span> <span class="o">+</span> <span class="nx">searchTerm</span><span class="p">;</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">apiLink</span><span class="p">).</span><span class="nx">map</span><span class="p">((</span><span class="nx">response</span><span class="p">:</span> <span class="nx">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">images</span><span class="p">.</span><span class="nx">original</span><span class="p">.</span><span class="nx">url</span><span class="p">;</span>
       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
         <span class="k">return</span> <span class="s1">'https://media.giphy.com/media/YaOxRsmrv9IeA/giphy.gif'</span><span class="p">;</span> <span class="c1">// dancing cat for 404</span>
       <span class="p">}</span>
@@ -523,20 +517,22 @@ beer.ts
 
 <p>Start the Spring Boot app in one terminal window and run <code class="highlighter-rouge">ionic serve</code> in another. Open <code class="highlighter-rouge">http://localhost:8100</code> in your browser. Click on the Beer icon, and you’ll likely see an error in your browser.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Uncaught (in promise): Error: No provider for Http!
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Error: Uncaught (in promise): Error: StaticInjectorError[HttpClient]: 
+  StaticInjectorError[HttpClient]: 
+    NullInjectorError: No provider for HttpClient!
 </code></pre></div></div>
 
-<p><img src="/assets/blog/ionic-spring-boot/no-http-provider-da85a2e1b4601e81e16697457b5923b7af4457881c52a6df8973a9e14e266a1d.png" alt="No provider for Http!" width="800" /></p>
+<p><img src="/assets/blog/ionic-spring-boot/no-http-provider-794549d4efc254345ad342e736961325e3618e5d1ad5f10e8536f2ff7489dd63.png" alt="No provider for HttpClient!" width="800" class="center-image" /></p>
 
-<p>This highlights one of the slick features of Ionic: errors display in your browser, not just the browser’s console. Add <code class="highlighter-rouge">HttpModule</code> to the list of imports in <code class="highlighter-rouge">src/app/app.module.ts</code> to solve this issue.</p>
+<p>This highlights one of the slick features of Ionic: errors display in your browser, not just the browser’s console. Add <code class="highlighter-rouge">HttpClientModule</code> to the list of imports in <code class="highlighter-rouge">src/app/app.module.ts</code> to solve this issue.</p>
 
-<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">HttpModule</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/http'</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">HttpClientModule</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@angular/common/http'</span><span class="p">;</span>
 
 <span class="p">@</span><span class="nd">NgModule</span><span class="p">({</span>
   <span class="p">...</span>
   <span class="na">imports</span><span class="p">:</span> <span class="p">[</span>
     <span class="nx">BrowserModule</span><span class="p">,</span>
-    <span class="nx">HttpModule</span><span class="p">,</span>
+    <span class="nx">HttpClientModule</span><span class="p">,</span>
     <span class="nx">IonicModule</span><span class="p">.</span><span class="nx">forRoot</span><span class="p">(</span><span class="nx">MyApp</span><span class="p">),</span>
     <span class="nx">BeerPageModule</span>
   <span class="p">],</span>
@@ -544,14 +540,12 @@ beer.ts
 
 <p>After making this change, you’ll likely see the following error in your browser’s console.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>XMLHttpRequest cannot load http://localhost:8080/good-beers. No 'Access-Control-Allow-Origin'
-header is present on the requested resource. Origin 'http://localhost:8100' is therefore
-not allowed access. The response had HTTP status code 401.
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>XMLHttpRequest cannot load http://localhost:8080/good-beers. No 'Access-Control-Allow-Origin' header is present on the requested resource. Origin 'http://localhost:8100' is therefore not allowed access. The response had HTTP status code 401.
 </code></pre></div></div>
 
-<p>To fix this, open your Spring Boot application’s <code class="highlighter-rouge">BeerController.java</code> class and change its <code class="highlighter-rouge">@CrossOrigin</code> annotation to allow <code class="highlighter-rouge">http://localhost:8100</code> and <code class="highlighter-rouge">file://</code>. This enables cross-origin resource sharing (CORS) from both the browser and the mobile client.</p>
+<p>To fix this, open your Spring Boot application’s <code class="highlighter-rouge">BeerController.java</code> class and change its <code class="highlighter-rouge">@CrossOrigin</code> annotation to allow <code class="highlighter-rouge">http://localhost:8100</code> and <code class="highlighter-rouge">http://localhost:8080</code>. This enables cross-origin resource sharing (CORS) from both the browser and the mobile client (<code class="highlighter-rouge">http://localhost:8080</code> is used by iOS Simulator).</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@CrossOrigin</span><span class="o">(</span><span class="n">origins</span> <span class="o">=</span> <span class="o">{</span><span class="s">"http://localhost:8100"</span><span class="o">,</span><span class="s">"file://"</span><span class="o">})</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@CrossOrigin</span><span class="o">(</span><span class="n">origins</span> <span class="o">=</span> <span class="o">{</span><span class="s">"http://localhost:8100"</span><span class="o">,</span><span class="s">"http://localhost:8080"</span><span class="o">})</span>
 <span class="kd">public</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Beer</span><span class="o">&gt;</span> <span class="nf">goodBeers</span><span class="o">()</span> <span class="o">{</span>
 </code></pre></div></div>
 
@@ -559,7 +553,7 @@ not allowed access. The response had HTTP status code 401.
 
 <p>If everything works as expected, you should see a page similar to the one below in your browser.</p>
 
-<p><img src="/assets/blog/ionic-spring-boot/good-beers-ui-0f728f4d0add9daa51b4cf14c61d49ef0f085efad12ca7ccd6b522d60ce0c5cf.png" alt="Good Beers UI" width="800" /></p>
+<p><img src="/assets/blog/ionic-spring-boot/good-beers-ui-3ec341de0cc6cdd925bb4d4584ffbb075b42a77bed0d798bfc1c1432e7d26b48.png" alt="Good Beers UI" width="800" class="center-image" /></p>
 
 <h3 id="add-a-modal-for-editing">Add a Modal for Editing</h3>
 
@@ -629,7 +623,7 @@ not allowed access. The response had HTTP status code 401.
               <span class="kr">public</span> <span class="nx">toastCtrl</span><span class="p">:</span> <span class="nx">ToastController</span><span class="p">,</span>
               <span class="kr">public</span> <span class="nx">navCtrl</span><span class="p">:</span> <span class="nx">NavController</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">beerService</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'id'</span><span class="p">)).</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">beer</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">beerService</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'id'</span><span class="p">)).</span><span class="nx">subscribe</span><span class="p">((</span><span class="nx">beer</span><span class="p">:</span> <span class="nx">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">beer</span> <span class="o">=</span> <span class="nx">beer</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">beer</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nx">beer</span><span class="p">.</span><span class="nx">_links</span><span class="p">.</span><span class="nb">self</span><span class="p">.</span><span class="nx">href</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">giphyService</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">beer</span><span class="p">.</span><span class="nx">name</span><span class="p">).</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">url</span> <span class="o">=&gt;</span> <span class="nx">beer</span><span class="p">.</span><span class="nx">giphyUrl</span> <span class="o">=</span> <span class="nx">url</span><span class="p">);</span>
@@ -708,19 +702,17 @@ not allowed access. The response had HTTP status code 401.
 <p>You’ll also need to modify <code class="highlighter-rouge">beer-service.ts</code> to have <code class="highlighter-rouge">get()</code> and <code class="highlighter-rouge">save()</code> methods.</p>
 
 <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">get</span><span class="p">(</span><span class="nx">id</span><span class="p">:</span> <span class="nx">string</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">BEER_API</span> <span class="o">+</span> <span class="s1">'/'</span> <span class="o">+</span> <span class="nx">id</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">response</span><span class="p">:</span> <span class="nx">Response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">BEER_API</span> <span class="o">+</span> <span class="s1">'/'</span> <span class="o">+</span> <span class="nx">id</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="nx">save</span><span class="p">(</span><span class="nx">beer</span><span class="p">:</span> <span class="nx">any</span><span class="p">):</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span> <span class="p">{</span>
-  <span class="kd">let</span> <span class="na">result</span><span class="p">:</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">Response</span><span class="o">&gt;</span><span class="p">;</span>
+  <span class="kd">let</span> <span class="na">result</span><span class="p">:</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nb">Object</span><span class="o">&gt;</span><span class="p">;</span>
   <span class="k">if</span> <span class="p">(</span><span class="nx">beer</span><span class="p">[</span><span class="s1">'href'</span><span class="p">])</span> <span class="p">{</span>
     <span class="nx">result</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="nx">beer</span><span class="p">.</span><span class="nx">href</span><span class="p">,</span> <span class="nx">beer</span><span class="p">);</span>
   <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
     <span class="nx">result</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">BEER_API</span><span class="p">,</span> <span class="nx">beer</span><span class="p">)</span>
   <span class="p">}</span>
-  <span class="k">return</span> <span class="nx">result</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="na">response</span><span class="p">:</span> <span class="nx">Response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
-    <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span> <span class="o">=&gt;</span> <span class="nx">Observable</span><span class="p">.</span><span class="k">throw</span><span class="p">(</span><span class="nx">error</span><span class="p">));</span>
+  <span class="k">return</span> <span class="nx">result</span><span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span> <span class="o">=&gt;</span> <span class="nx">Observable</span><span class="p">.</span><span class="k">throw</span><span class="p">(</span><span class="nx">error</span><span class="p">));</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
@@ -749,12 +741,12 @@ Did you add it to @NgModule.entryComponents?
 <p>Now if you try to edit a beer’s name, you’ll see another CORS in your browser’s console. Add a <code class="highlighter-rouge">@CrossOrigin</code> annotation to <code class="highlighter-rouge">BeerRepository.java</code> (in your Spring Boot project) that matches the one in <code class="highlighter-rouge">BeerController</code>.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RepositoryRestResource</span>
-<span class="nd">@CrossOrigin</span><span class="o">(</span><span class="n">origins</span> <span class="o">=</span> <span class="o">{</span><span class="s">"http://localhost:8100"</span><span class="o">,</span><span class="s">"file://"</span><span class="o">})</span>
+<span class="nd">@CrossOrigin</span><span class="o">(</span><span class="n">origins</span> <span class="o">=</span> <span class="o">{</span><span class="s">"http://localhost:8100"</span><span class="o">,</span><span class="s">"http://localhost:8080"</span><span class="o">})</span>
 </code></pre></div></div>
 
 <p>Re-compile and now everything should work as expected. For example, below is a screenshot that shows I added a new beer and what it looks like when editing it.</p>
 
-<p><img src="/assets/blog/ionic-spring-boot/beer-modal-eb516a421ed1335ce0a47d6f852fc5aa60806dd9a8f51f1f64babec0de07f240.png" alt="Mmmmm, Guinness" width="800" /></p>
+<p><img src="/assets/blog/ionic-spring-boot/beer-modal-84e675534ddb6d9dea07ba4010de55eecf838407f077f8a06785584c7e5c31b4.png" alt="Mmmmm, Guinness" width="800" class="center-image" /></p>
 
 <h3 id="add-swipe-to-delete">Add Swipe to Delete</h3>
 
@@ -809,22 +801,21 @@ Did you add it to @NgModule.entryComponents?
 <p>You’ll also need to modify <code class="highlighter-rouge">beer-service.ts</code> to have a <code class="highlighter-rouge">remove()</code> method.</p>
 
 <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">remove</span><span class="p">(</span><span class="nx">id</span><span class="p">:</span> <span class="nx">string</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">BEER_API</span> <span class="o">+</span> <span class="s1">'/'</span> <span class="o">+</span> <span class="nx">id</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">response</span><span class="p">:</span> <span class="nx">Response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">BEER_API</span> <span class="o">+</span> <span class="s1">'/'</span> <span class="o">+</span> <span class="nx">id</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
 <p>After making these additions, you should be able to delete beer names. To emulate a left swipe in your browser, click on the item and drag it to the left.</p>
 
-<p><img src="/assets/blog/ionic-spring-boot/beer-delete-47606c79fa81afbb866445c7cb2b1ca9c3074cbde87e44c4c5bd8560f7eee1d7.png" alt="Left swipe" width="512" /></p>
+<p><img src="/assets/blog/ionic-spring-boot/beer-delete-2f725481b1e0ed2632cde6b1b38c423319eef9f466a2641dbada5cfbed1435a0.png" alt="Left swipe" width="512" class="center-image" /></p>
 
 <h2 id="pwas-with-ionic">PWAs with Ionic</h2>
 
 <p>Ionic ships with support for creating progressive web apps (PWAs). If you’d like to learn more about what PWAs are, see <a href="http://blog.ionic.io/navigating-the-world-of-progressive-web-apps-with-ionic-2/">Navigating the World of Progressive Web Apps with Ionic 2</a>. This blog post is still relevant for Ionic 3.</p>
 
-<p>If you run the <a href="https://developers.google.com/web/tools/lighthouse/">Lighthouse Chrome extension</a> on this application, you’ll likely get a mediocre score in the 50s.</p>
+<p>If you run the <a href="https://developers.google.com/web/tools/lighthouse/">Lighthouse Chrome extension</a> on this application, you’ll likely get a mediocre score in the 40s.</p>
 
-<p><img src="/assets/blog/ionic-spring-boot/lighthouse-51-7f0306ed217ab55e97b818efd820da9ab6e00eaf0e7b21767dd20512d602081f.png" width="800" alt="blog/ionic-spring-boot/lighthouse-51.png" /></p>
+<p><img src="/assets/blog/ionic-spring-boot/lighthouse-45-134a18fbf199694719d13e565e75d025bdac31856601bc8a0691ed414c39f111.png" width="800" alt="blog/ionic-spring-boot/lighthouse-45.png" class="center-image" /></p>
 
 <p>To register a service worker, and improve the app’s score, uncomment the following block in <code class="highlighter-rouge">src/index.html</code>.</p>
 
@@ -838,21 +829,26 @@ if ('serviceWorker' in navigator) {
 &lt;/script&gt;--&gt;</span>
 </code></pre></div></div>
 
-<p>After making this change, the score should improve. In my tests, it increased to 75/100. The remaining issues were:</p>
+<p>After making this change, the score should improve. In my tests, it increased to 73/100. The remaining issues were:</p>
 
 <ul>
-  <li>A couple -1’s in performance for “Cannot read property ‘ts’ of undefined”</li>
-  <li>Site is not progressively enhanced (page should contain some content when JavaScript is not available). You could likely solve this with <a href="https://www.npmjs.com/package/@angular/app-shell">Angular’s app-shell directives</a></li>
-  <li>Site is not on HTTPS and does not redirect HTTP to HTTPS</li>
+  <li>Does not provide fallback content when JavaScript is not available.</li>
+  <li>Does not redirect HTTP traffic to HTTPS</li>
+  <li>Page load is not fast enough on 3G</li>
+  <li>Has a <meta name="viewport" /> tag with width or initial-scale</li>
 </ul>
 
-<p>If you refresh the app and Chrome doesn’t prompt you to install the app (a PWA feature), you probably need to turn on a couple of features. Copy and paste the following URLs into Chrome and enable each feature.</p>
+<p>To fix the first issue, add the following HTML in <code class="highlighter-rouge">src/index.html</code>, just after the <code class="highlighter-rouge">&lt;body&gt;</code> tag.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chrome://flags/#bypass-app-banner-engagement-checks
-chrome://flags/#enable-add-to-shelf
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;noscript&gt;</span>
+  <span class="nt">&lt;h1&gt;</span>You must enable JavaScript to view this page.<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;/noscript&gt;</span>
 </code></pre></div></div>
 
-<p>After enabling these flags, you’ll see an error in your browser’s console about <code class="highlighter-rouge">src/assets/imgs/logo.png</code> not being found. This file is referenced in <code class="highlighter-rouge">src/manifest.json</code>. You can fix this by copying a 512x512 PNG (<a href="http://www.iconsdb.com/orange-icons/beer-icon.html">like this one</a>) into this location or by modifying <code class="highlighter-rouge">src/manifest.json</code> accordingly. At the very least, you should modify <code class="highlighter-rouge">src/manifest.json</code> to have your app’s name.</p>
+<p>To fix the last issue, remove <code class="highlighter-rouge">viewport-fit=cover,</code> from the <code class="highlighter-rouge">&lt;meta name="viewport"&gt;</code> tag’s <code class="highlighter-rouge">content</code> attribute.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"</span><span class="nt">&gt;</span>
+</code></pre></div></div>
 
 <h2 id="deploy-to-a-mobile-device">Deploy to a Mobile Device</h2>
 
@@ -860,7 +856,7 @@ chrome://flags/#enable-add-to-shelf
 
 <p>To see how your application will look on different devices you can run <code class="highlighter-rouge">ionic serve --lab</code>. The <code class="highlighter-rouge">--lab</code> flag opens a page in your browser that lets you see how your app looks on different devices.</p>
 
-<p><img src="/assets/blog/ionic-spring-boot/ionic-labs-689702b85477e7e52dd00db24153418b70feb4ac562424d7231f30c38f000a99.png" alt="Ionic Labs" width="800" /></p>
+<p><img src="/assets/blog/ionic-spring-boot/ionic-labs-d383f4a7d8dd8110cd2587251799f1005dd9480b05c6052194b2f2a8c66e7397.png" alt="Ionic Labs" width="800" class="center-image" /></p>
 
 <h3 id="ios">iOS</h3>
 
@@ -886,16 +882,16 @@ cf login <span class="nt">-a</span> api.run.pivotal.io
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install -g ios-deploy ios-sim
 ionic cordova build ios --prod
-open platforms/ios/MyApp.xcodeproj
+open platforms/ios/ionic-beer.xcodeproj
 </code></pre></div></div>
 
 <p>Select your phone as the target in Xcode and click the play button to run your app. The first time you do this, Xcode may spin for a while with a “Processing symbol files” message at the top.</p>
 
 <p><strong>NOTE:</strong> If you run into code signing issues, see <a href="http://ionicframework.com/docs/intro/deploying/#ios-devices">Ionic’s deployment documentation</a> to see how to solve.</p>
 
-<p>Once you’ve configured your phone, computer, and Apple ID to work, you should be able to open the app and see the beer list you created. Below is how it looks on my iPhone 6s Plus.</p>
+<p>Once you’ve configured your phone, computer, and Apple ID to work, you should be able to open the app and see the beer list you created. Below is how it looks on my iPhone 7 Plus.</p>
 
-<p><img src="/assets/blog/ionic-spring-boot/iphone-beer-list-bc77d973cf975064c628d7c34b28d717f60a23b19757eae87e494f2bc9b2f95e.jpg" alt="Phone Beer List" width="500" /></p>
+<p><img src="/assets/blog/ionic-spring-boot/iphone-beer-list-a7856f096daf0844419541c463e57831ec9f9140689f739249463b89ca3b848d.png" alt="Phone Beer List" width="400" class="center-image" /></p>
 
 <h3 id="android">Android</h3>
 
@@ -903,45 +899,21 @@ open platforms/ios/MyApp.xcodeproj
 
 <p><strong>If you’ve just installed Android Studio, make sure to open it to complete the installation.</strong></p>
 
-<p>To deploy to the Android emulator, run <code class="highlighter-rouge">ionic cordova emulate android</code>. This will install Andorid support and print out instructions about how to create an emulator image.</p>
+<p>To deploy to the Android emulator, run <code class="highlighter-rouge">ionic cordova emulate android</code>. This will install Android support and display an error if you don’t have any AVD (Android Virtual Device) images.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Error: No emulator images (avds) found.
-1. Download desired System Image by running:
-/Users/mraible/Library/Android/sdk/tools/android sdk
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(node:9300) UnhandledPromiseRejectionWarning: CordovaError: No emulator images (avds) found.
+1. Download desired System Image by running: /Users/mraible/Library/Android/sdk/tools/android sdk
 2. Create an AVD by running: /Users/mraible/Library/Android/sdk/tools/android avd
 HINT: For a faster emulator, use an Intel System Image and install the HAXM device driver
 </code></pre></div></div>
 
-<p>Run the first suggestion and download your desired system image. Then run the second command and created an AVD (Android Virtual Device) with the following settings:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AVD Name: TestPhone
-Device: Nexus 5
-Target: Android 7.1.1
-CPU/ABI: Google APIs Intel Axom (x86_64)
-Skin: Skin with dynamic hardware controls
-</code></pre></div></div>
-
-<p><strong>WARNING:</strong> These instructions won’t work with version 2.3.2 of Android Studio on Mac. When you try to run the first command, it’ll say the following:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>*************************************************************************
-The "android" command is deprecated.
-For manual SDK, AVD, and project management, please use Android Studio.
-For command-line tools, use tools/bin/sdkmanager and tools/bin/avdmanager
-*************************************************************************
-</code></pre></div></div>
-
-<p>To solve this problem, open Android Studio, select “Open an existing Android Studio project” and select the <code class="highlighter-rouge">ionic-beer/platforms/android</code> directory. If prompted to upgrade, choose “OK”, then proceed to create a new AVD as <a href="https://developer.android.com/studio/run/managing-avds.html#createavd">described in Android Studio’s documentation</a>.</p>
+<p>To create a new AVD, open Android Studio and navigate to <strong>Tools</strong> &gt; <strong>Android</strong> &gt; <strong>AVD Manager</strong>. Create a new Virtual Device and click Play. I chose a Pixel 2.</p>
 
 <p>After performing these steps, you should be able to run <code class="highlighter-rouge">ionic cordova emulate android</code> and see your app running in the AVD.</p>
 
-<p><img src="/assets/blog/ionic-spring-boot/android-beer-list-89882cfa6fb9f2fc8b34b486be59cbfdac142c12fb3d3f8d691f97e6428060d5.png" alt="Android Beer List" width="540" /></p>
+<p><img src="/assets/blog/ionic-spring-boot/android-beer-list-0d1a6190f5b8beea83ffe59ab44dcabb9054d59b097cb0a6617e261f08336ab4.png" alt="Android Beer List" width="400" class="center-image" /></p>
 
-<p><strong>NOTE</strong>: If you get an application error that says “The connection to the server was unsuccessful. (<code class="highlighter-rouge">file:///android/www/index.html</code>)”, add the following line to <code class="highlighter-rouge">config.xml</code>. This sets the default timeout to 60 seconds (default is 20). Thanks to <a href="http://stackoverflow.com/a/31377846">Stack Overflow</a> for the answer.</p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;preference</span> <span class="na">name=</span><span class="s">"loadUrlTimeoutValue"</span> <span class="na">value=</span><span class="s">"60000"</span><span class="nt">/&gt;</span>
-</code></pre></div></div>
-
-<h2 id="learn-more">Learn More</h2>
+<h2 id="learn-more-about-ionic-and-angular">Learn More about Ionic and Angular</h2>
 
 <p>I hope you’ve enjoyed this tour of Ionic and Angular. I like how Ionic takes your web development skills up a notch and allows you to create mobile applications that look and behave natively.</p>
 
@@ -954,9 +926,16 @@ For command-line tools, use tools/bin/sdkmanager and tools/bin/avdmanager
   <li><a href="/blog/2017/05/09/progressive-web-applications-with-angular-and-spring-boot">Build Your First Progressive Web Application with Angular and Spring Boot</a></li>
   <li><a href="/blog/2017/04/26/bootiful-development-with-spring-boot-and-angular">Bootiful Development with Spring Boot and Angular</a></li>
   <li><a href="/blog/2017/04/17/angular-authentication-with-oidc">Angular Authentication with OpenID Connect and Okta in 20 Minutes</a></li>
+  <li><a href="/blog/2018/01/30/jhipster-ionic-with-oidc-authentication">Use Ionic for JHipster to Create Mobile Apps with OIDC Authentication</a></li>
 </ul>
 
 <p><strong>Update:</strong> To learn how to add authentication to an Ionic app, see <a href="/blog/2017/08/22/build-an-ionic-app-with-user-authentication">Build an Ionic App with User Authentication</a>.</p>
+
+<p><strong>Changelog:</strong></p>
+
+<ul>
+  <li>Feb 14, 2018: Updated to use the latest versions of Ionic (3.19.1 with Angular 5) and Spring Boot (1.5.10). See the code changes in <a href="https://github.com/oktadeveloper/spring-boot-ionic-example/pull/2">oktadeveloper/spring-boot-ionic-example#2</a>. Changes to this article can be viewed in <a href="https://github.com/okta/okta.github.io/pull/1759">okta/okta.github.io#1759</a>.</li>
+</ul>
 
 
 
