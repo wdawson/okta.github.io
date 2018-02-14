@@ -83,7 +83,7 @@ A message is written to the System Log indicating that the end-user rate limit w
 
 ## Concurrent Rate Limits
 
-In order to protect the service for all customers, Okta enforces concurrent rate limits, a limit on the number of simultaneous transactions. Concurrent rate limits are distinct from [the org-wide, per-minute API rate limits](#org-wide-rate-limits), which measure the total number of transactions per minute. Transactions are typically very short-lived. Even very large bulk loads rarely use more than 10 threads at a time.
+In order to protect the service for all customers, Okta enforces concurrent rate limits, a limit on the number of simultaneous transactions. Concurrent rate limits are distinct from [the org-wide, per-minute API rate limits](#org-wide-rate-limits), which measure the total number of transactions per minute. Transactions are typically very short-lived. Even very large bulk loads rarely use more than 10 simultaneous transactions at a time.
 
 For concurrent rate limits, traffic is measured in three different areas. Counts in one area aren't included in counts for the other two:
 
