@@ -91,11 +91,11 @@ For concurrent rate limits, traffic is measured in three different areas. Counts
 * For Office365 traffic, the limit is 75 concurrent transactions per org.
 * For all other traffic including API requests, the limit is 75 concurrent transactions per org.
 
-Okta has verified that these limits are sufficient based on current usage. As a result of verification, we increased the limit for some orgs to 150.
+Okta has verified that these limits are sufficient based on current usage. As a result of verification, we increased the limit for some orgs to 150 transactions.
 
 The first request to exceed the concurrent limit returns an HTTP 429 error, and the first error every sixty seconds is written to the log. Reporting concurrent rate limits once a minute keeps log volume manageable.
 
->Important: Under normal circumstances, customers don't exceed the concurrency limits. Exceeding them may be an indication of a problem which requires investigation.
+> Important: Under normal circumstances, customers don't exceed the concurrency limits. Exceeding them may be an indication of a problem which requires investigation.
 
 ## Check Your Rate Limits with Okta's Rate Limit Headers
 
