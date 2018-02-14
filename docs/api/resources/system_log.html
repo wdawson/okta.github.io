@@ -752,7 +752,7 @@
 
 <h3 id="client-object">Client Object</h3>
 
-<p>When an event is triggered by an HTTP request, the Client object describes the <a href="https://en.wikipedia.org/wiki/Category:Hypertext_Transfer_Protocol_clients">client</a> that issues that HTTP request. For instance, the web browser is the client when a user accesses Okta. When this request is received and processed, a login event is fired. When the event is not sourced to an HTTP request, such as in the case of an automatic update, the Client Object field is blank.</p>
+<p>When an event is triggered by an HTTP request, the <code class="highlighter-rouge">client</code> object describes the <a href="https://en.wikipedia.org/wiki/Category:Hypertext_Transfer_Protocol_clients">client</a> that issues that HTTP request. For instance, the web browser is the client when a user accesses Okta. When this request is received and processed, a login event is fired. When the event is not sourced to an HTTP request, such as in the case of an automatic update, the Client Object field is blank.</p>
 
 <table>
   <thead>
@@ -778,7 +778,7 @@
     </tr>
     <tr>
       <td>zone</td>
-      <td>The <strong>name</strong> of the <a href="/docs/api/resources/zones#ZoneModel">Zone</a> that the client’s location is mapped to</td>
+      <td>The <code class="highlighter-rouge">name</code> of the <a href="/docs/api/resources/zones#ZoneModel">Zone</a> that the client’s location is mapped to</td>
       <td>String</td>
       <td>TRUE</td>
     </tr>
@@ -827,7 +827,7 @@
     </tr>
     <tr>
       <td>RawUserAgent</td>
-      <td>A raw string representation of the user agent, formatted according to <a href="https://tools.ietf.org/html/rfc7231#section-5.5.3">section 5.5.3 of HTTP/1.1 Semantics and Content</a>. Both the <strong>browser</strong> and the <strong>OS</strong> fields can be derived from this field.</td>
+      <td>A raw string representation of the user agent, formatted according to <a href="https://tools.ietf.org/html/rfc7231#section-5.5.3">section 5.5.3 of HTTP/1.1 Semantics and Content</a>. Both the <code class="highlighter-rouge">browser</code> and the <code class="highlighter-rouge">OS</code> fields can be derived from this field.</td>
       <td>String</td>
       <td>TRUE</td>
     </tr>
@@ -836,7 +836,7 @@
 
 <h3 id="request-object">Request Object</h3>
 
-<p>The request object describes details related to the HTTP request that triggers this event, if available. When the event is not sourced to an http request, such as in the case of an automatic update on the Okta servers, the Request object will still exist, but the <strong>ipChain</strong> field will be empty.</p>
+<p>The request object describes details related to the HTTP request that triggers this event, if available. When the event is not sourced to an http request, such as in the case of an automatic update on the Okta servers, the Request object will still exist, but the <code class="highlighter-rouge">ipChain</code> field will be empty.</p>
 
 <table>
   <thead>
@@ -973,7 +973,7 @@
 
 <h3 id="transaction-object">Transaction Object</h3>
 
-<p>The <strong>Transaction</strong> object contains metadata associated with the event. This is useful for sourcing and identifying events. For example, a transaction object such as</p>
+<p>The <code class="highlighter-rouge">transaction</code> object contains metadata associated with the event. This is useful for sourcing and identifying events. For example, a transaction object such as</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Wn4f-0RQ8D8lTSLkAmkKdQAADqo"</span><span class="p">,</span><span class="w">
@@ -996,7 +996,7 @@
   <tbody>
     <tr>
       <td>id</td>
-      <td>Id of the transaction Object. When the <strong>type</strong> is <code class="highlighter-rouge">WEB</code>, this field will contain the requestId of the web request.</td>
+      <td>Id of the transaction Object. When the <code class="highlighter-rouge">type</code> is <code class="highlighter-rouge">WEB</code>, this field will contain the requestId of the web request.</td>
       <td>String</td>
       <td>TRUE</td>
     </tr>
@@ -1017,7 +1017,23 @@
 
 <h3 id="debugcontext-object">DebugContext Object</h3>
 
-<p>Describes additional context regarding an event.</p>
+<p>For some kinds of events (e.g. OMM provisioning, login, second factor SMS, etc.), the fields provided in other response objects will not be sufficient to adequately describe the operations the event has performed. In such cases, the <code class="highlighter-rouge">debugContext</code> object provides a way to store additional information.</p>
+
+<p>For example, an event where a second factor SMS token is sent to a user might have a <code class="highlighter-rouge">debugContext</code> that looks like:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"debugData"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"requestUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/api/v1/users/00u3gjksoiRGRAZHLSYV/factors/smsf8luacpZJAva10x45/verify"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"smsProvider"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TELESIGN"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"transactionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"268632458E3C100F5F5F594C6DC689D4"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre></div></div>
+
+<p>By inspection of the <code class="highlighter-rouge">debugData</code> field, one can find the URI used to trigger the second factor SMS (<code class="highlighter-rouge">/api/v1/users/00u3gjksoiRGRAZHLSYV/factors/smsf8luacpZJAva10x45/verify</code>), the SMS provider (<code class="highlighter-rouge">TELESIGN</code>) and the ID used by Telesign to identify this transaction (<code class="highlighter-rouge">268632458E3C100F5F5F594C6DC689D4</code>).</p>
+
+<p>If for some reason the information needed to implement a feature is not provided in other response objects, it is advised to scan the <code class="highlighter-rouge">debugContext.debugData</code> field for potentially useful fields.</p>
 
 <table>
   <thead>
@@ -1031,21 +1047,18 @@
   <tbody>
     <tr>
       <td>debugData</td>
-      <td>A map that goes from a String key to a value</td>
+      <td>Dynamic field containing miscellaneous information dependent on the event type.</td>
       <td>Map[String-&gt;Object]</td>
       <td>TRUE</td>
     </tr>
   </tbody>
 </table>
 
-<p>This object provides a way to store additional text about an event for debugging. For example, when you create an API token,
-<code class="highlighter-rouge">debugData</code> shows the <code class="highlighter-rouge">RequestUri</code> used to obtain the token, for example <code class="highlighter-rouge">/api/internal/tokens</code>.</p>
-
 <h3 id="authenticationcontext-object">AuthenticationContext Object</h3>
 
 <p>All authentication relies on validating one or more credentials that proves the authenticity of the actor’s identity. Credentials are sometimes provided by the actor, as is the case with passwords, and at other times provided by a third party, and validated by the authentication provider.</p>
 
-<p>The <strong>AuthenticationContext</strong> contains metadata about how the actor is authenticated. For example, an <strong>authenticationContext</strong> for an event in which a user authenticates with IWA will look something like:</p>
+<p>The <code class="highlighter-rouge">authenticationContext</code> contains metadata about how the actor is authenticated. For example, an <code class="highlighter-rouge">authenticationContext</code> for an event in which a user authenticates with IWA will look something like:</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"AuthenticationProvider"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE_DIRECTORY"</span><span class="p">,</span><span class="w">
@@ -1057,7 +1070,7 @@
     </span><span class="s2">"Issuer"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div></div>
-<p>In such a case, one can recognize that the user used an IWA credential to authenticate against an Active Directory instance. All of the user’s future generated events in this login session will share the same <strong>externalSessionId</strong>.</p>
+<p>In such a case, one can recognize that the user used an IWA credential to authenticate against an Active Directory instance. All of the user’s future generated events in this login session will share the same <code class="highlighter-rouge">externalSessionId</code>.</p>
 
 <p>Among other operations, this response object can be used to scan for suspicious login activity or perform analytics on user authentication habits (e.g. how often authentication scheme X is used versus authentication scheme Y).</p>
 
