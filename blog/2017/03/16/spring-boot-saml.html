@@ -215,7 +215,7 @@
 
 <p><img src="/assets/blog/spring-boot-saml/okta-dev-console-ae44457cfb33d302002f53ccdcdff88c3aa5f143b040a15b8f44c3f49d344a3e.png" alt="Okta Dev Console" width="800" class="center-image" /></p>
 
-<p>Click on <strong>&lt; &gt; Developer</strong> in the top-left corner and switch to the Classic UI. If you see a screen like the following, you’re good to go! The reason you need to use the Classic UI for this tutorial is because we haven’t yet added SAML support to the <a href="/blog/2017/09/25/all-new-developer-console">Developer Console</a>.</p>
+<p>Click on <strong>&lt; &gt; Developer Console</strong> in the top-left corner and switch to the Classic UI. If you see a screen like the following, you’re good to go! The reason you need to use the Classic UI for this tutorial is because we haven’t yet added SAML support to the <a href="/blog/2017/09/25/all-new-developer-console">Developer Console</a>.</p>
 
 <p><img src="/assets/blog/spring-boot-saml/okta-classic-ui-01a57606d8ff822ed58aa8aac97458fa941367a505bbe9aff669c4040957def4.png" alt="Okta Classic UI" width="800" class="center-image" /></p>
 
@@ -250,7 +250,7 @@
 
 <p>The final setup step you’ll need is to assign people to the application. Click on the <strong>Assignments</strong> tab and the <strong>Assign</strong> &gt; <strong>Assign to People</strong> button. You’ll see a list of people with your account in it.</p>
 
-<p><img src="/assets/blog/spring-boot-saml/assign-people-8cedc47512a2954f22f38fc79cf7fc659c07521e1c29bccfd73bbfc2fcc79ccb.png" alt="Assign People" width="600" class="center-image" /></p>
+<p><img src="/assets/blog/spring-boot-saml/assign-people-8cedc47512a2954f22f38fc79cf7fc659c07521e1c29bccfd73bbfc2fcc79ccb.png" alt="Assign People" width="500" class="center-image" /></p>
 
 <p>Click the <strong>Assign</strong> button, accept the default username (your email), and click the <strong>Done</strong> button.</p>
 
@@ -258,7 +258,7 @@
 
 <p>Navigate to <a href="https://start.spring.io">https://start.spring.io</a> in your favorite browser and select Security, Web, Thymeleaf, and DevTools as dependencies.</p>
 
-<p><img src="/assets/blog/spring-boot-saml/start.spring-b648c0569e39d61602171554753400f049eb95269d831361f1ae1a92d3d9179b.png" alt="start.spring.io" width="800" class="center-image" /></p>
+<p><img src="/assets/blog/spring-boot-saml/start.spring-abba87a679a5ce6aaa413003587455514fa9f51343de161ec946e6fa25416972.png" alt="start.spring.io" width="800" class="center-image" /></p>
 
 <p>Click <strong>Generate Project</strong>, download the generated ZIP file and open it in your favorite editor. Add the <code class="highlighter-rouge">spring-security-saml-dsl</code> dependency to your <code class="highlighter-rouge">pom.xml</code>.</p>
 
@@ -287,7 +287,7 @@
 <div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">server.port</span> <span class="p">=</span> <span class="s">8443</span>
 <span class="py">server.ssl.enabled</span> <span class="p">=</span> <span class="s">true</span>
 <span class="py">server.ssl.key-alias</span> <span class="p">=</span> <span class="s">spring</span>
-<span class="py">server.ssl.key-store</span> <span class="p">=</span> <span class="s">src/main/resources/saml/keystore.jks</span>
+<span class="py">server.ssl.key-store</span> <span class="p">=</span> <span class="s">classpath:saml/keystore.jks</span>
 <span class="py">server.ssl.key-store-password</span> <span class="p">=</span> <span class="s">secret</span>
 
 <span class="py">security.saml2.metadata-url</span> <span class="p">=</span> <span class="s">&lt;your metadata url&gt;</span>
@@ -304,9 +304,9 @@
   <span class="o">[</span>no]:
 </code></pre></div></div>
 
-<p>Create a <code class="highlighter-rouge">SecurityConfiguration.java</code> file in the <code class="highlighter-rouge">com.example</code> package.</p>
+<p>Create a <code class="highlighter-rouge">SecurityConfiguration.java</code> file in the <code class="highlighter-rouge">com.example.demo</code> package.</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">demo</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">extensions</span><span class="o">.</span><span class="na">saml2</span><span class="o">.</span><span class="na">config</span><span class="o">.</span><span class="na">SAMLConfigurer</span><span class="o">.</span><span class="na">saml</span><span class="o">;</span>
 
@@ -346,7 +346,7 @@
             <span class="o">.</span><span class="na">apply</span><span class="o">(</span><span class="n">saml</span><span class="o">())</span>
                 <span class="o">.</span><span class="na">serviceProvider</span><span class="o">()</span>
                     <span class="o">.</span><span class="na">keyStore</span><span class="o">()</span>
-                        <span class="o">.</span><span class="na">storeFilePath</span><span class="o">(</span><span class="s">"saml/keystore.jks"</span><span class="o">)</span>
+                        <span class="o">.</span><span class="na">storeFilePath</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">keyStoreFilePath</span><span class="o">)</span>
                         <span class="o">.</span><span class="na">password</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">password</span><span class="o">)</span>
                         <span class="o">.</span><span class="na">keyname</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">keyAlias</span><span class="o">)</span>
                         <span class="o">.</span><span class="na">keyPassword</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">password</span><span class="o">)</span>
@@ -363,7 +363,7 @@
 
 <p>Create an <code class="highlighter-rouge">IndexController.java</code> file in the same directory and use it to set the default view to <code class="highlighter-rouge">index</code>.</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">demo</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">org.springframework.stereotype.Controller</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RequestMapping</span><span class="o">;</span>
@@ -422,6 +422,7 @@ Hello SAML!
 <p><strong>Changelog:</strong></p>
 
 <ul>
+  <li>Feb  14, 2018: Updated to use Spring Boot 1.5.10 and <code class="highlighter-rouge">classpath:saml/keystore.jks</code> for the keystore path. See the code changes in <a href="https://github.com/oktadeveloper/okta-spring-boot-saml-example/pull/6">oktadeveloper/okta-spring-boot-saml-example#6</a>. Changes to this article can be viewed in <a href="https://github.com/okta/okta.github.io/pull/1760">okta/okta.github.io#1760</a>.</li>
   <li>Oct 10, 2017: Updated instructions for the <a href="/blog/2017/09/25/all-new-developer-console">Okta Developer Console</a>.</li>
   <li>Apr 20, 2017: Thanks to <a href="https://github.com/AlexeySoshin">Alexey Soshin</a> for contributing a <a href="https://github.com/oktadeveloper/okta-spring-boot-saml-example/pull/2">pull request</a> to make the code in this blog post more bootiful!</li>
 </ul>
