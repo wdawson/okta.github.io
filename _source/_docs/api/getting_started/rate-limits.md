@@ -163,7 +163,7 @@ X-Rate-Limit-Reset: 1506461721
 The first two header values are always `0` for concurrent rate limit errors.
 The third header reports an estimated time interval when the concurrent rate limit may be resolved. It is not a guarantee.
 
-The error condition resolves itself as soon as there is another concurrent thread available. Normaly, no intervention is required. However, if you notice frequent bursts of 429 errors, or if the concurrent rate limit isn't quickly resolved, you may be exceeding the concurrent rate limit. If you can't identify what is causing you to exceed the limit by examining activity in the log before the burst of 429 errors are logged, contact Okta Support.
+The error condition resolves itself as soon as there is another concurrent thread available. Normally, no intervention is required. However, if you notice frequent bursts of 429 errors, or if the concurrent rate limit isn't quickly resolved, you may be exceeding the concurrent rate limit. If you can't identify what is causing you to exceed the limit by examining activity in the log before the burst of 429 errors are logged, contact Okta Support.
 
 
 ### Example Error Response Events for Concurrent Rate Limit
