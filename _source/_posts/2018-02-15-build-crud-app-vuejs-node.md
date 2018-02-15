@@ -30,7 +30,7 @@ This tutorial covers two primary builds, a frontend web app and backend REST API
 
 The server will run [Express](https://www.express.com/) with [Sequelize](http://docs.sequelizejs.com/) and [Epilogue](https://github.com/dchester/epilogue). At a high level, with Sequelize and Epilogue you can quickly generate dynamic REST endpoints with just a few lines of code.
 
-You will use JWT-based authentication when making requests from the web app and [Okta's JWT Verifier](https://github.com/okta/okta-oidc-js/tree/master/packages/jwt-verifier) in an Express middleware to validate the token. Your app will expose the following endpoints which all require requests to have a valid access tokens.
+You will use JWT-based authentication when making requests from the web app and [Okta's JWT Verifier](https://github.com/okta/okta-oidc-js/tree/master/packages/jwt-verifier) in an Express middleware to validate the token. Your app will expose the following endpoints which all require requests to have a valid access token.
 
 ```
 - GET /posts
@@ -68,7 +68,7 @@ Point your favorite browser to [http://localhost:8080/](http://localhost:8080/) 
 **Extra Credit**: Check out the other [templates](https://github.com/vuejs-templates) available for `vue-cli`.
 
 ## Install Bootstrap
-Let's install [bootstrap-vue](https://github.com/bootstrap-vue/bootstrap-vue) so you can take advantage of the various premade [components](https://getbootstrap.com/docs/4.0/components/) (plus we can keep focus on functionality and not on custom CSS):
+Let's install [bootstrap-vue](https://github.com/bootstrap-vue/bootstrap-vue) so you can take advantage of the various premade [components](https://getbootstrap.com/docs/4.0/components/) (plus you can keep the focus on functionality and not on custom CSS):
 
 ```
 npm i --save bootstrap-vue bootstrap@4.0.0-beta.2
@@ -168,7 +168,7 @@ router.beforeEach(Vue.prototype.$auth.authRedirectGuard())
 export default router
 ```
 
-You'll need to replace `{yourOktaDomain}` and `{yourClientId}` which can be found on your application overview page on Okta Developer Console. This will inject an `authClient` object into your Vue instance which can be accessed by calling `this.$auth` anywhere inside your Vue instance.
+You'll need to replace `{yourOktaDomain}` and `{yourClientId}` which can be found on your application overview page in the Okta Developer Console. This will inject an `authClient` object into your Vue instance which can be accessed by calling `this.$auth` anywhere inside your Vue instance.
 
 ```javascript
 Vue.use(Auth, {
@@ -279,7 +279,7 @@ async logout () {
 }
 ```
 
-[Components](https://vuejs.org/v2/guide/components.html) are the building blocks within Vue.js.  Each of your pages will be defined in the app as a component. Since vue-cli webpack template utilizes [vue-loader](https://github.com/vuejs/vue-loader), your component source files have a convention that separates template, script, and style ([see here](https://github.com/vuejs/vue-loader)).
+[Components](https://vuejs.org/v2/guide/components.html) are the building blocks within Vue.js.  Each of your pages will be defined in the app as a component. Since the vue-cli webpack template utilizes [vue-loader](https://github.com/vuejs/vue-loader), your component source files have a convention that separates template, script, and style ([see here](https://github.com/vuejs/vue-loader)).
 
 Now that you've added vue-bootstrap, modify `./src/components/Hello.vue` to remove the boilerplate links vue-cli generates.
 
@@ -308,7 +308,7 @@ Now that you've added vue-bootstrap, modify `./src/components/Hello.vue` to remo
 </style>
 ```
 
-At this point you can stub out the Post Manager page to test your authentication flow. Once you confirm authentication works, you'll start to build out the API calls and components required to perform CRUD operations on our Posts model. 
+At this point you can stub out the Post Manager page to test your authentication flow. Once you confirm authentication works, you'll start to build out the API calls and components required to perform CRUD operations on your Posts model. 
 
 Create a new file `./src/components/PostsManager.vue` and paste the following code:
 
@@ -446,7 +446,7 @@ let Post = database.define('posts', {
 
 ## Add Epilogue
 
-[Epilogue](https://github.com/dchester/epilogue) creates flexible REST endpoints from Sequelize models within an Express app. If you ever coded REST endpoints you know how much repetition. D.R.Y. FTW!
+[Epilogue](https://github.com/dchester/epilogue) creates flexible REST endpoints from Sequelize models within an Express app. If you ever coded REST endpoints you know how much repetition there is. D.R.Y. FTW!
 
 ```javascript
 // Initialize epilogue
@@ -541,7 +541,7 @@ export default {
 }
 ```
 
-When you authenticated with OIDC, an access token is persisted locally in the browser.  Since each API request must have an access token, you can fetch it from the authentication client and set it in the request.
+When you authenticate with OIDC, an access token is persisted locally in the browser.  Since each API request must have an access token, you can fetch it from the authentication client and set it in the request.
 
 ```javascript
 let accessToken = await Vue.prototype.$auth.getAccessToken()
@@ -713,7 +713,7 @@ async populatePostToEdit (post) {
 }
 ```
 
-**Important:** The ```Object.assign()``` call copies the value of the post argument rather than the reference. When dealing with mutation of objects in Vue, you should always set to the value, not reference.
+**Important:** The `Object.assign()` call copies the value of the post argument rather than the reference. When dealing with mutation of objects in Vue, you should always set to the value, not reference.
 
 ### Deleting Posts
 
@@ -760,7 +760,7 @@ As I said at the top of this post, I think Vue stands head and shoulders above o
 - Massive community supported [resources, components, libraries, and projects](https://github.com/vuejs/awesome-vue)
 - Vue feels very similar to [React](https://github.com/facebook/react) (without the JSX!) which lowers the barrier to entry for those with React experience. Moving between React and Vue isn't very difficult.
 
-We covered a lot of material in this tutorial but don't feel bad if you didn't grasp everything the first time. The more you work with these technologies, the more familiar they will become.
+I covered a lot of material in this tutorial but don't feel bad if you didn't grasp everything the first time. The more you work with these technologies, the more familiar they will become.
 
 To learn more about Vue.js head over to [https://vuejs.org](https://vuejs.org/) or check out these other great resources from the [@oktadev team](https://twitter.com/OktaDev):
 - [The Ultimate Guide to Progressive Web Applications](https://developer.okta.com/blog/2017/07/20/the-ultimate-guide-to-progressive-web-applications)
