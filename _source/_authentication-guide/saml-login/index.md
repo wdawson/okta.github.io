@@ -16,28 +16,14 @@ The SAML flow is initiated with the Service Provider (SP), in this case Okta, wh
 
 ## Prerequisites
 
-1. You should have the following before you start this process:
 * A SAML IdP that supports SP-initiated SAML
 * Settings for the SAML IdP which you'll specify in Okta
 * An Okta org
 * An Okta OpenID Connect client application in the Okta org. If you don't have one already, you can add a client app using [the OpenID Connect Application Wizard](https://help.okta.com/en/prev/Content/Topics/Apps/Apps_App_Integration_Wizard.htm). 
 
-2. Verify that your SAML IdP uses a supported algorithm:
-    * Digest
-        * <http://www.w3.org/2000/09/xmldsig#sha1>
-        * <http://www.w3.org/2001/04/xmlenc#sha256>
-    * Signature
-        * <http://www.w3.org/2000/09/xmldsig#rsa-sha1>
-        * <http://www.w3.org/2001/04/xmldsig-more#rsa-sha256>
-    * Canonicalization
-        * <http://www.w3.org/2001/10/xml-exc-c14n#>
-    * Transform
-        * <http://www.w3.org/2000/09/xmldsig#enveloped-signature>
-        * <http://www.w3.org/2001/10/xml-exc-c14n#>
-
 ## Configuration Tasks
 
-Perform the following configuration tasks. The two steps can be completed in either order.
+Perform the following two configuration tasks.
 
 ### Create and Configure the SAML IdP in Okta
 
