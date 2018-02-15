@@ -12,7 +12,7 @@ tweets:
 
 I've danced the JavaScript framework shuffle for years starting with jQuery, then on to Angular. After being frustrated with Angular's complexity, I found React and thought I was in the clear. What seemed simple on the surface ended up being a frustrating mess. Then I found Vue.js.  It just felt right. It worked as expected. It was fast. The documentation was incredible. Templating was eloquent. There was a unanimous consensus around how to handle state management, conditional rendering, two-way binding, routing, and more.
 
-This tutorial will take you step by step through scaffolding a Vue.js project, offloading secure authentication to [Okta's OpenID Connect API (OIDC)](https://developer.okta.com/docs/api/resources/oidc), locking down protected routes, and performing CRUD operations through a backend REST API server. This tutorial uses the following technologies but doesn't require intimate knowledge to follow along:
+This tutorial will take you step by step through scaffolding a Vue.js project, offloading secure authentication to [Okta's OpenID Connect API (OIDC)](/docs/api/resources/oidc), locking down protected routes, and performing CRUD operations through a backend REST API server. This tutorial uses the following technologies but doesn't require intimate knowledge to follow along:
 
 - Vue.js with [vue-cli](https://github.com/vuejs/vue-cli), [vue-router](https://github.com/vuejs/vue-router), and [Okta Vue SDK](https://github.com/okta/okta-oidc-js/tree/master/packages/okta-vue)
 - Node with [Express](https://github.com/expressjs/express), [Okta JWT Verifier](https://github.com/okta/okta-auth-js), [Sequelize](https://github.com/sequelize/sequelize), and [Epiloge](https://github.com/dchester/epilogue)
@@ -26,7 +26,7 @@ Vue.js is a robust but simple Javascript framework. It has one of the lowest bar
 
 This tutorial covers two primary builds, a frontend web app and backend REST API server. The frontend will be a single page application (SPA) with a homepage, login and logout, and a posts manager.
 
-[Okta's OpenID Connect (OIDC)](https://developer.okta.com/docs/api/resources/oidc.html) will handle our web app's authentication through the use of [Okta's Vue SDK](https://github.com/okta/okta-oidc-js/tree/master/packages/okta-vue). If an unauthenticated user navigates to the posts manager, the web app should attempt to authenticate the user.
+[Okta's OpenID Connect (OIDC)](/docs/api/resources/oidc.html) will handle our web app's authentication through the use of [Okta's Vue SDK](https://github.com/okta/okta-oidc-js/tree/master/packages/okta-vue). If an unauthenticated user navigates to the posts manager, the web app should attempt to authenticate the user.
 
 The server will run [Express](https://www.express.com/) with [Sequelize](http://docs.sequelizejs.com/) and [Epilogue](https://github.com/dchester/epilogue). At a high level, with Sequelize and Epilogue you can quickly generate dynamic REST endpoints with just a few lines of code.
 
@@ -100,7 +100,7 @@ new Vue({
 
 ## Add Authentication with Okta
 
-Dealing with authentication in a web app is the bane of every developer's existence. That's where Okta comes in to secure your web applications with minimal code. To get started, you will need to create an OIDC application in Okta. [Sign up for a forever-free developer account](https://developer.okta.com/signup/) (or log in if you already have one).
+Dealing with authentication in a web app is the bane of every developer's existence. That's where Okta comes in to secure your web applications with minimal code. To get started, you will need to create an OIDC application in Okta. [Sign up for a forever-free developer account](/signup/) (or log in if you already have one).
 
 {% img blog/vue-crud-node/okta-developer-sign-up.png alt:"Okta Developer Sign Up" width:"800" %}{: .center-image }
 
@@ -216,6 +216,7 @@ You can toggle the visibility of these menu items using the `v-if` directive in 
 
 Open `./src/App.vue` and copy/paste the following code.
 
+{% raw %}
 ```html
 <template>
   <div id="app">
@@ -268,6 +269,7 @@ export default {
 }
 </script>
 ```
+{% endraw %}
 
 Every login must have a logout. The following snippet will logout your user, refresh the active user (which is now null), and then redirect the user to the homepage. This method is called when a user clicks on the logout link in the nav.
 
@@ -283,6 +285,7 @@ async logout () {
 
 Now that you've added vue-bootstrap, modify `./src/components/Hello.vue` to remove the boilerplate links vue-cli generates.
 
+{% raw %}
 ```html
 <template>
   <div class="hero">
@@ -307,11 +310,13 @@ Now that you've added vue-bootstrap, modify `./src/components/Hello.vue` to remo
   }
 </style>
 ```
+{% endraw %}
 
 At this point you can stub out the Post Manager page to test your authentication flow. Once you confirm authentication works, you'll start to build out the API calls and components required to perform CRUD operations on your Posts model. 
 
 Create a new file `./src/components/PostsManager.vue` and paste the following code:
 
+{% raw %}
 ```html
 <template>
   <div class="container-fluid mt-4">
@@ -320,6 +325,8 @@ Create a new file `./src/components/PostsManager.vue` and paste the following co
   </div>
 </template>
 ```
+{% endraw %}
+
 ## Take Your Vue.js Frontend and Auth Flows for a Test Drive
 
 In your terminal run `npm run dev` (if it's not already running). Navigate to `http://localhost:8080` and you should see the new homepage.
@@ -765,8 +772,8 @@ As I said at the top of this post, I think Vue stands head and shoulders above o
 I covered a lot of material in this tutorial but don't feel bad if you didn't grasp everything the first time. The more you work with these technologies, the more familiar they will become.
 
 To learn more about Vue.js head over to [https://vuejs.org](https://vuejs.org/) or check out these other great resources from the [@oktadev team](https://twitter.com/OktaDev):
-- [The Ultimate Guide to Progressive Web Applications](https://developer.okta.com/blog/2017/07/20/the-ultimate-guide-to-progressive-web-applications)
-- [The Lazy Developer's Guide to Authentication with Vue.js](https://developer.okta.com/blog/2017/09/14/lazy-developers-guide-to-auth-with-vue)
-- [Build a Cryptocurrency Comparison Site with Vue.js](https://developer.okta.com/blog/2017/09/06/build-a-cryptocurrency-comparison-site-with-vuejs)
+- [The Ultimate Guide to Progressive Web Applications](/blog/2017/07/20/the-ultimate-guide-to-progressive-web-applications)
+- [The Lazy Developer's Guide to Authentication with Vue.js](/blog/2017/09/14/lazy-developers-guide-to-auth-with-vue)
+- [Build a Cryptocurrency Comparison Site with Vue.js](/blog/2017/09/06/build-a-cryptocurrency-comparison-site-with-vuejs)
 
 Hit me up in the comments with any questions, and as always, follow [@oktadev](https://twitter.com/OktaDev) on Twitter to see all the cool content our dev team is creating.
