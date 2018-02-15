@@ -26,7 +26,7 @@ Vue.js is a robust but simple Javascript framework. It has one of the lowest bar
 
 This tutorial covers two primary builds, a frontend web app and backend REST API server. The frontend will be a single page application (SPA) with a homepage, login and logout, and a posts manager.
 
-[Okta's OpenID Connect (OIDC)](/docs/api/resources/oidc.html) will handle our web app's authentication through the use of [Okta's Vue SDK](https://github.com/okta/okta-oidc-js/tree/master/packages/okta-vue). If an unauthenticated user navigates to the posts manager, the web app should attempt to authenticate the user.
+[Okta's OpenID Connect (OIDC)](/docs/api/resources/oidc) will handle our web app's authentication through the use of [Okta's Vue SDK](https://github.com/okta/okta-oidc-js/tree/master/packages/okta-vue). If an unauthenticated user navigates to the posts manager, the web app should attempt to authenticate the user.
 
 The server will run [Express](https://www.express.com/) with [Sequelize](http://docs.sequelizejs.com/) and [Epilogue](https://github.com/dchester/epilogue). At a high level, with Sequelize and Epilogue you can quickly generate dynamic REST endpoints with just a few lines of code.
 
@@ -42,7 +42,7 @@ You will use JWT-based authentication when making requests from the web app and 
 
 ## Create Your Vue.js App
 
-To get your project off the ground quickly you can leverage the scaffolding functionality from [vue-cli](https://github.com/vuejs/vue-cli). For this tutorial, you are going to use the [progressive web app (PWA) template](https://github.com/vuejs-templates/pwa) that includes a handful of features including [webpack](https://github.com/webpack/webpack), [hot reloading](https://vue-loader.vuejs.org/en/features/hot-reload.html), CSS extraction, and unit testing.
+To get your project off the ground quickly you can leverage the scaffolding functionality from [vue-cli](https://github.com/vuejs/vue-cli). For this tutorial, you are going to use the [progressive web app (PWA) template](https://github.com/vuejs-templates/pwa) that includes a handful of features including [webpack](https://github.com/webpack/webpack), [hot reloading](https://vue-loader.vuejs.org/en/features/hot-reload), CSS extraction, and unit testing.
 
 > If you're not familiar with the tenets of PWA, check out our [ultimate guide to progressive web applications](/blog/2017/07/20/the-ultimate-guide-to-progressive-web-applications).
 
@@ -188,7 +188,7 @@ The final step of Okta's authentication flow is redirecting the user back to you
 }
 ```
 
-You also need to lock down protected routes from being access by unauthenticated users. This is accomplished by implementing a [navigation guard](https://router.vuejs.org/en/advanced/navigation-guards.html). As the name suggests, [navigation guards](https://router.vuejs.org/en/advanced/navigation-guards.html) are primarily used to guard navigations either by redirecting or canceling.
+You also need to lock down protected routes from being access by unauthenticated users. This is accomplished by implementing a [navigation guard](https://router.vuejs.org/en/advanced/navigation-guards). As the name suggests, [navigation guards](https://router.vuejs.org/en/advanced/navigation-guards) are primarily used to guard navigations either by redirecting or canceling.
 
 The SDK comes with the method `auth.authRedirectGuard()` that checks matched routes' metadata for the key `requiresAuth` and redirects the user to the authentication flow if they are not authenticated.
 
@@ -205,7 +205,7 @@ meta: {
 ```
 
 ## Customize Your App Layout in Vue
-The web app's layout is located in a component `./src/App.vue`.  You can use the [router-view](https://router.vuejs.org/en/api/router-view.html) component to render the matched component for the given path.
+The web app's layout is located in a component `./src/App.vue`.  You can use the [router-view](https://router.vuejs.org/en/api/router-view) component to render the matched component for the given path.
 
 For the main menu, you'll want to change the visibility of certain menu items based on the status of the `activeUser`:
 
@@ -281,7 +281,7 @@ async logout () {
 }
 ```
 
-[Components](https://vuejs.org/v2/guide/components.html) are the building blocks within Vue.js.  Each of your pages will be defined in the app as a component. Since the vue-cli webpack template utilizes [vue-loader](https://github.com/vuejs/vue-loader), your component source files have a convention that separates template, script, and style ([see here](https://github.com/vuejs/vue-loader)).
+[Components](https://vuejs.org/v2/guide/components) are the building blocks within Vue.js.  Each of your pages will be defined in the app as a component. Since the vue-cli webpack template utilizes [vue-loader](https://github.com/vuejs/vue-loader), your component source files have a convention that separates template, script, and style ([see here](https://github.com/vuejs/vue-loader)).
 
 Now that you've added vue-bootstrap, modify `./src/components/Hello.vue` to remove the boilerplate links vue-cli generates.
 
@@ -763,8 +763,8 @@ Navigate to `http://localhost:8080` and give it a whirl.
 
 As I said at the top of this post, I think Vue stands head and shoulders above other frameworks. Here are five quick reasons why:
 
-- [Simple component lifecycle](https://vuejs.org/v2/guide/instance.html#Lifecycle-Diagram)
-- [HTML-based templating](https://vuejs.org/v2/guide/syntax.html) and native [two-way binding](https://vuejs.org/v2/guide/forms.html)
+- [Simple component lifecycle](https://vuejs.org/v2/guide/instance#Lifecycle-Diagram)
+- [HTML-based templating](https://vuejs.org/v2/guide/syntax) and native [two-way binding](https://vuejs.org/v2/guide/forms)
 - Widely agreed upon ways to handle [routing](https://github.com/vuejs/vue-router), [state management](https://github.com/vuejs/vuex), [webpack configuration](https://github.com/vuejs/vue-loader), and [isomorphic web apps](https://nuxtjs.org/)
 - Massive community supported [resources, components, libraries, and projects](https://github.com/vuejs/awesome-vue)
 - Vue feels very similar to [React](https://github.com/facebook/react) (without the JSX!) which lowers the barrier to entry for those with React experience. Moving between React and Vue isn't very difficult.
