@@ -3604,11 +3604,12 @@ autoPush       | user&#8217;s decision to send push to device automatically | UR
 
 **Okta Verify Push Details Pertaining to Auto-Push**
 
-* If you pass the `autoPush` query param when verifying an Okta Verify Push factor, Okta will save this value as the user's preference to have the push notification sent automatically if the verification is successful (i.e. the user presses "Approve" on their phone).
-* If there is already a saved Auto-Push preference, the successful verify call will override the current preference if it is different from the value of `autoPush`.
-* This saved Auto-Push preference is always returned in the `/api/v1/authn/` response's `autoPushEnabled` field if the user is enrolled for the Okta Verify Push factor [example here](#response-example-for-factor-challenge-for-step-up-authentication-with-okta-session).  If the user's Auto-Push preference has not explicitly been set before, `autoPushEnabled` will have a value of false.
+* You don't need to pass the `autoPush` flag to Okta unless you have a custom sign-in flow that does not use the Okta sign-in widget, but want Okta to keep track of this preference.  The custom sign-in flow must still handle the logic to actually send the Auto-Push, since this param only deals with the Auto-Push setting.  
+* If you pass the `autoPush` query param when verifying an Okta Verify Push factor, Okta saves this value as the user's preference to have the push notification sent automatically if the verification is successful (the user presses "Approve" on their phone).
+* If there is already a saved Auto-Push preference, the successful verify call overrides the current preference if it is different from the value of `autoPush`.
+* This saved Auto-Push preference is always returned in the `/api/v1/authn/` response's `autoPushEnabled` field if the user is enrolled for the Okta Verify Push factor [example here](#response-example-for-factor-challenge-for-step-up-authentication-with-okta-session).  If the user's Auto-Push preference has not explicitly been set before, `autoPushEnabled` has a value of false.
+* The Auto-Push preference is stored in a cookie value and users that clear their cookies remove that preference. 
 * Please note, the `autoPush` flag will have no effect when trying to verify a factor other than Okta Verify Push (factorId prefix = "opf").
-* It is only necessary to pass the `autoPush` flag to Okta if you have a custom sign-in flow that does not use the Okta sign-in widget, but want Okta to keep track of this preference.  The custom sign-in flow must still handle the logic to actually send the Auto-Push.  
 
 
 ##### Request Example for Verify Push Factor
