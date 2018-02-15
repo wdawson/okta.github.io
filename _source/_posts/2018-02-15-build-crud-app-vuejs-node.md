@@ -61,7 +61,7 @@ npm install
 npm run dev
 ```
 
-Point your favorite browser to [http://localhost:8080/](http://localhost:8080/) and you should see the fruits of your labor:
+Point your favorite browser to `http://localhost:8080` and you should see the fruits of your labor:
 
 {% img blog/vue-crud-node/welcome-to-vue-pwa.png alt:"Welcome to Your Vue.js PWA" width:"800" %}{: .center-image }
 
@@ -322,7 +322,7 @@ Create a new file `./src/components/PostsManager.vue` and paste the following co
 ```
 ## Take Your Vue.js Frontend and Auth Flows for a Test Drive
 
-In your terminal run `npm run dev` (if it's not already running). Navigate to [http://localhost:8080/](http://localhost:8080/) and you should see the new homepage.
+In your terminal run `npm run dev` (if it's not already running). Navigate to `http://localhost:8080` and you should see the new homepage.
 
 {% img blog/vue-crud-node/new-homepage.png alt:"Hello World" width:"800" %}{: .center-image }
 
@@ -742,7 +742,7 @@ Terminal #2
 npm run dev
 ```
 
-Navigate to [http://localhost:8080/](http://localhost:8080/) and give it a whirl.
+Navigate to `http://localhost:8080` and give it a whirl.
 
 {% img blog/vue-crud-node/new-post.png alt:"New Post" width:"800" %}{: .center-image }
 
