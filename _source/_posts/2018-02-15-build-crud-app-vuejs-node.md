@@ -577,6 +577,7 @@ deletePost (id) {
 
 You now have all the components required to wire up your posts manager component to make CRUD operations via the REST API. Open `./src/components/PostsManager.vue` and copy/paste the following code.
 
+{% raw %}
 ```html
 <template>
   <div class="container-fluid mt-4">
@@ -670,6 +671,7 @@ export default {
 }
 </script>
 ```
+{% endraw %}
 
 ### Listing Posts
 
