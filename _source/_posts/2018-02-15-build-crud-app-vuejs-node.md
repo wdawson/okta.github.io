@@ -100,7 +100,7 @@ new Vue({
 
 ## Add Authentication with Okta
 
-Dealing with authentication in a web app is the bane of every developer's existence. That's where Okta comes in to secure your web applications with minimal code. To get started, you will need to create an OIDC application in Okta. [Sign up for a forever-free developer account](/signup/) (or log in if you already have one).
+Dealing with authentication in a web app is the bane of every developer's existence. That's where Okta comes in to secure your web applications with minimal code. To get started, you will need to create an OIDC application in Okta. [Sign up for a forever-free developer account](https://developer.okta.com/signup/) (or log in if you already have one).
 
 {% img blog/vue-crud-node/okta-developer-sign-up.png alt:"Okta Developer Sign Up" width:"800" %}{: .center-image }
 
