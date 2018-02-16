@@ -266,81 +266,104 @@
 
 <h2 id="overview">Overview</h2>
 
-<p>Okta supports authentication with an external SAML Identity Provider (IdP) that then redirects you to Okta and/or your application, which we call Inbound SAML. Additionally, it is possible to include an OpenID Connect (OIDC) ID token along with this redirect. This means that you can use Okta to proxy between SAML-only Identity Providers and OIDC-only applications that would normally be incompatible.</p>
+<p>Okta supports authentication with an external SAML Identity Provider (IdP). The SAML IdP redirects you to Okta or your application, also called Inbound SAML. You can also include an OpenID Connect ID token with this redirect. Thus, you can use Okta to proxy between SAML-only Identity Providers and OpenID Connect-only applications that normally are incompatible.</p>
 
-<p>The SAML flow is initiated with the Service Provider (SP), in this case Okta, who then redirects you to the IdP for authentication. On successful authentication, a user is created inside Okta, and you are redirected back to the URL you specified along with an ID token.</p>
+<p>The SAML flow is initiated with the Service Provider (SP), in this case Okta, who then redirects the user to the IdP for authentication. On successful authentication, a user is created inside Okta, and the user is redirected back to the URL you specified along with an ID token.</p>
 
-<p>For more high-level information, you can read about <a href="/standards/SAML/#understanding-sp-initiated-login-flow">Understanding SP-initiated Login Flow</a>.</p>
-
-<h2 id="set-up">Set-up</h2>
-
-<p>In addition to a SAML IdP that supports SP-initiated SAML, and an Okta org, this flow requires:</p>
+<h2 id="prerequisites">Prerequisites</h2>
 
 <ul>
-  <li>Your SAML IdP to be configured in Okta</li>
-  <li>An Okta OIDC Client Application</li>
+  <li>A SAML IdP that supports SP-initiated SAML</li>
+  <li>Settings for the SAML IdP which you’ll specify in Okta</li>
+  <li>An Okta org</li>
+  <li>An Okta OpenID Connect client application in the Okta org. If you don’t have one already, you can add a client app using <a href="https://help.okta.com/en/prev/Content/Topics/Apps/Apps_App_Integration_Wizard.htm">the OpenID Connect Application Wizard</a>.</li>
 </ul>
 
-<blockquote>
-  <p>Note: The actual order in which you create these is up to you.</p>
-</blockquote>
+<h2 id="configuration-tasks">Configuration Tasks</h2>
 
-<h3 id="1-configure-your-saml-identity-provider-inside-okta">1. Configure your SAML Identity Provider inside Okta</h3>
+<p>Perform the following two configuration tasks.</p>
 
-<p>The configuration information for your external Identity Provider is stored within an Identity Provider entity inside Okta. You can create a SAML Identity Provider from your Developer Console:</p>
+<h3 id="create-and-configure-the-saml-idp-in-okta">Create and Configure the SAML IdP in Okta</h3>
+
+<p>The configuration information for an external IdP is stored in Okta. Create the external IdP and configure it from the Developer Console:</p>
 
 <ol>
-  <li>Hover over Users in the top navigation bar, then select <strong>Social &amp; Identity Providers</strong>.</li>
-  <li>Click on <strong>Add Identity Provider</strong> &gt; <strong>Add SAML 2.0 IdP</strong>.</li>
-  <li>Fill in your SAML Identity Provider’s settings here. If you need more information about these values, you can find it in the <a href="https://support.okta.com/help/Documentation/Knowledge_Article/40561903-Configuring-Inbound-SAML#Part1">Okta Knowledge base</a>.</li>
+  <li>Hover over <strong>Users</strong> in the top navigation bar, and select <strong>Social &amp; Identity Providers</strong>.</li>
+  <li>Select <strong>Add Identity Provider</strong> &gt; <strong>Add SAML 2.0 IdP</strong>.</li>
+  <li>
+    <p>Fill in your SAML Identity Provider’s settings. <a href="https://support.okta.com/help/Documentation/Knowledge_Article/40561903-Configuring-Inbound-SAML#Part1">Help</a>.</p>
+
+    <blockquote>
+      <p>Hint: If you need a quick and easy SAML Identity Provider to use for testing purposes, you can try using <a href="https://github.com/mcguinness/saml-idp">https://github.com/mcguinness/saml-idp</a>.</p>
+    </blockquote>
+  </li>
+  <li>Save the IdP in Okta and note of the value at the end of the <strong>Assertion Consumer Service URL</strong> (ACS URL). The string after the last slash is the IdP’s <code class="highlighter-rouge">id</code> value. For example: If your ACS URL is <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/sso/saml2/0oab8rlfooi5Atqv60h7</code>, then your Okta IdP’s <code class="highlighter-rouge">id</code> is <code class="highlighter-rouge">0oab8rlfooi5Atqv60h7</code>.</li>
 </ol>
 
-<blockquote>
-  <p>If you need a quick and easy SAML Identity Provider to use for testing purposes, you can try using this one: <a href="https://github.com/mcguinness/saml-idp">https://github.com/mcguinness/saml-idp</a></p>
-</blockquote>
+<h3 id="configure-the-openid-connect-client-application">Configure the OpenID Connect Client Application</h3>
 
-<p>Once you are done with the configuration, take note of the value at the end of your Assertion Consumer Service (ACS) URL, this is your Okta SAML IdP’s <code class="highlighter-rouge">id</code> value. For example: If your ACS URL is <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/sso/saml2/0oab8rlfooi5Atqv60h7</code>, then your Okta IdP’s <code class="highlighter-rouge">id</code> is <code class="highlighter-rouge">0oab8rlfooi5Atqv60h7</code>.</p>
+<p>Look in your Okta org for the OpenID Connect client app you identified or created in the Prerequisites section. Users that sign in for the first time are created in Okta and associated with this application.</p>
 
-<h3 id="2-configure-an-openid-connect-client-application">2. Configure an OpenID Connect Client Application</h3>
+<ol>
+  <li>
+    <p>Assign the app to everyone (the default on creation) or a particular group that you’d like your new SAML users to be associated with. If you want to change the default assignment from <strong>Everyone</strong>, modify the app assignment from the Developer Console:</p>
 
-<p>You will also need to add an OIDC Client Application inside Okta. Users that are signing in for the first time will have <a href="/docs/api/resources/users">user entities</a> created for them and associated with this application. You can add an OIDC App using <a href="https://help.okta.com/en/prev/Content/Topics/Apps/Apps_App_Integration_Wizard.htm">the OpenID Connect Application Wizard</a>. You will also need to assign the application to either “Everyone” or a particular Group that you’d like your new SAML users to be associated with. For more information, see <a href="https://support.okta.com/help/Documentation/Knowledge_Article/27418177-Using-the-Okta-Applications-Page#Assigning">How to assign a User to an Application</a>.</p>
+    <ol>
+      <li>Select <strong>Applications</strong>.</li>
+      <li>Select the application you wish to modify.</li>
+      <li>Select <strong>Assign</strong> and choose  <strong>Assign to Groups</strong>.</li>
+      <li>Search for the appropriate group name. If this app is already assigned to the group, the name doesn’t appear in the search box.</li>
+    </ol>
+  </li>
+  <li>
+    <p>Select <strong>General</strong> and copy the <strong>Client ID</strong> (<code class="highlighter-rouge">client_id</code>) of the application for use in the next step.</p>
+  </li>
+</ol>
 
-<p>Once you are done setting this up, be sure to copy the Client ID for your new application.</p>
+<h2 id="create-the-authorization-url">Create the Authorization URL</h2>
 
-<h3 id="3-create-an-authorize-url">3. Create an Authorize URL</h3>
-
-<p>At this point you should have:</p>
+<p>In this step, create the authorization URL using the two elements you copied during configuration:</p>
 
 <ul>
-  <li>Your Okta SAML IdP <code class="highlighter-rouge">id</code> from your ACS URL</li>
-  <li>Your OIDC Client Application’s Client ID</li>
+  <li>The Okta SAML IdP <code class="highlighter-rouge">id</code> from your ACS URL</li>
+  <li>The OpenID Connect client cpplication’s client ID (<code class="highlighter-rouge">client_Id</code>)</li>
 </ul>
 
-<p>You will now input these into an Authorize URL in order to kick off the authentication flow.</p>
+<p>Add these two values to an authorization URL to start the authentication flow.</p>
 
-<p>The authorize URL looks like this:</p>
+<p>For example:</p>
 
 <p><code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/authorize?idp=0oab8rlwfoo5Atqv60h7&amp;client_id=0oab8om4bars6Y80Z0h7&amp;response_type=id_token&amp;response_mode=fragment&amp;scope=openid&amp;redirect_uri=http%3A%2F%2Flocalhost%3A8080&amp;state=WM6D&amp;nonce=YsG76j</code></p>
 
-<p>In this URL, replace <code class="highlighter-rouge">{yourOktaDomain}.com</code> with your org’s base URL, and then input the following:</p>
+<p>In this URL, replace <code class="highlighter-rouge">{yourOktaDomain}.com</code> with your org’s base URL, and replace the following values:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">idp</code> is the value of your SAML IdP’s <code class="highlighter-rouge">id</code></li>
-  <li><code class="highlighter-rouge">client_id</code> is your OIDC Client Application’s Client ID</li>
-  <li><code class="highlighter-rouge">redirect_uri</code> needs to be URL encoded and to match a redirect URI that you configured in your OIDC application</li>
-  <li><code class="highlighter-rouge">state</code> and <code class="highlighter-rouge">nonce</code> can have any value you want for the purposes of this example</li>
+  <li><code class="highlighter-rouge">idp</code>: the value of your SAML IdP’s <code class="highlighter-rouge">id</code> from Step 1.</li>
+  <li><code class="highlighter-rouge">client_id</code>: the OpenID Connect client App’s client ID (<code class="highlighter-rouge">client_id</code>) from Step 2.</li>
+  <li><code class="highlighter-rouge">redirect_uri</code>: the URL encoded redirect URI that you configured in your OpenID Connect application.</li>
+  <li><code class="highlighter-rouge">state</code> and <code class="highlighter-rouge">nonce</code>:  any value.</li>
 </ul>
 
-<p>For a full explanation of all these parameters, see here: <a href="/docs/api/resources/oidc#request-parameters-1">OAuth 2.0 Request parameters</a>.</p>
+<h2 id="test-the-authorization">Test the Authorization</h2>
 
-<h3 id="testing-the-flow">Testing the flow</h3>
+<p>To test your authorization, enter the complete authorization URL in a browser.
+Do this in your browser’s privacy or incognito mode to avoid false positive or negative results.</p>
 
-<p>To test the flow, you can enter the completed authorize URL into your browser. For testing purposes, make sure you do this in your browser’s privacy or incognito mode. If everything has been configured properly, you will see the following:</p>
+<p>If everything has been configured properly:</p>
 
 <ol>
-  <li>A redirect to your Identity Provider’s sign-in page</li>
-  <li>On successful authentication, you are redirected back to the redirect URI that you specified, along with an <code class="highlighter-rouge">#id_token=</code> fragment in the URL. The value of this parameter will be your Okta OpenID Connect ID Token.</li>
+  <li>The user is redirected to the IdP’s sign-in page.</li>
+  <li>After successful authentication, the user is redirected to the redirect URI that you specified, along with an <code class="highlighter-rouge">#id_token=</code> fragment in the URL. The value of this parameter is your Okta OpenID Connect ID token.</li>
 </ol>
+
+<p>If something is configured incorrectly, the authorization response contains error information to help you resolve the issue.</p>
+
+<h2 id="for-more-information">For More Information</h2>
+
+<ul>
+  <li><a href="/standards/SAML/#understanding-sp-initiated-login-flow">Understanding SP-initiated Login Flow</a> explains the basics of SP-initiated login flows in Okta.</li>
+  <li><a href="/docs/api/resources/oidc#request-parameters-1">OAuth 2.0 Request parameters</a> describes the parameters specified in Step 3.</li>
+</ul>
 
       </div>
       <div class="TableOfContents TableOfContentsPreload">
