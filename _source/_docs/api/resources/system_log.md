@@ -427,13 +427,13 @@ Some of the fields listed above have a finite set of possible values.
 
 ### Issuer Object
 
-Describes an issuer in the authentication context.
+Describes the `issuer` of the authorization server when the authentication is performed via OAuth. This is the location where well-known resources regarding details of the authorization servers are published.
 
 |------------+----------------------------------------------------------------+-----------------+----------|
 | Property   | Description                                                    | DataType        | Nullable |
 | ---------- | -------------------------------------------------------------- | --------------- | -------- |
-| id         | An ID for the issuer                                           | String          | TRUE     |
-| type       | The type of the issuer                                         | String          | TRUE     |
+| id         | Varies depending on the type of authentication. If authentication is SAML 2.0, `id` is the issuer in the SAML assertion. For social login, `id` is the issuer of the token.                                         | String          | TRUE     |
+| type       | Information regarding `issuer` and source of the SAML assertion or token.                                         | String          | TRUE     |
 |------------+----------------------------------------------------------------+-----------------+----------|
 
 ### SecurityContext Object
