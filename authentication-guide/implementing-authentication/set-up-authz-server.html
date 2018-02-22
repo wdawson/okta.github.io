@@ -43,7 +43,7 @@
   <meta class="swiftype" name="summary" data-type="string" content="How to set up a custom authorization server in ..." />
 
   <link type="text/css" rel="stylesheet" href="/assets/animate-ec43d72c3ed45e08a460b8a2966d8dba6006aebfa0530935c3973fa493a8771f.css">
-  <link type="text/css" rel="stylesheet" href="/assets/okta-c091452949c4482c10ed8588a1694c9d5a4abaf6be7a029294a28a91489036aa.css">
+  <link type="text/css" rel="stylesheet" href="/assets/okta-9cafcbcda0dfe686bf4c513405579bab5aeda9909c278a37b465dbc8bbfaac6d.css">
   
   
   <title>Customizing Your Authorization Server | Okta Developer</title>
@@ -506,7 +506,7 @@ Be sure to check that your expression returns the results expected–the express
 
 <h3 id="openid-connect-configuration">OpenID Connect Configuration</h3>
 
-<p>To verify that your server was created and has the expected configuration values, you can send an API request to the Server’s OpenID Connect Metadata URI: <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/{authorizationServerId}/.well-known/openid-configuration</code> using an HTTP client or by typing the URI inside of a browser. This will return information about the OpenID configuration of your Authorization Server, though it does not currently return any custom scopes or claims that you might have created.</p>
+<p>To verify that your server was created and has the expected configuration values, you can send an API request to the Server’s OpenID Connect Metadata URI: <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authorizationServerId}/.well-known/openid-configuration</code> using an HTTP client or by typing the URI inside of a browser. This will return information about the OpenID configuration of your Authorization Server, though it does not currently return any custom scopes or claims that you might have created.</p>
 
 <p>For more information on this endpoint, see here: <a href="/docs/api/resources/oidc#well-knownopenid-configuration">Retrieve Authorization Server OpenID Connect Metadata</a>.</p>
 
@@ -514,13 +514,13 @@ Be sure to check that your expression returns the results expected–the express
 
 <p>You can retrieve a list of all scopes for your Authorization Server, including custom ones, using this endpoint:</p>
 
-<p><code class="highlighter-rouge">/api/v1/authorizationServers/{authorizationServerId}/scopes</code></p>
+<p><code class="highlighter-rouge">/api/v1/authorizationServers/${authorizationServerId}/scopes</code></p>
 
 <p>For more information on this endpoint, see here: <a href="/docs/api/resources/authorization-servers#get-all-scopes">Get all scopes</a>.</p>
 
 <p>If you created any custom claims, the easiest way to confirm that they have been successfully added is to use this endpoint:</p>
 
-<p><code class="highlighter-rouge">/api/v1/authorizationServers/{authorizationServerId}/claims</code></p>
+<p><code class="highlighter-rouge">/api/v1/authorizationServers/${authorizationServerId}/claims</code></p>
 
 <p>For more information on this endpoint, see here: <a href="/docs/api/resources/authorization-servers#get-all-claims">Get all claims</a>.</p>
 
@@ -543,9 +543,9 @@ Be sure to check that your expression returns the results expected–the express
 
 <p>Once you have an OpenID Connect Application set-up, and a User assigned to it you can try the authentication flow.</p>
 
-<p>First, you will need your Authorization Server’s Authorization Endpoint, which you can retrieve using the Server’s Metadata URI: <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/:authorizationServerId/.well-known/openid-configuration</code>. It will look like this:</p>
+<p>First, you will need your Authorization Server’s Authorization Endpoint, which you can retrieve using the Server’s Metadata URI: <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authorizationServerId}/.well-known/openid-configuration</code>. It will look like this:</p>
 
-<p><code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/{authorizationServerId}/v1/authorize</code></p>
+<p><code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authorizationServerId}/v1/authorize</code></p>
 
 <p>To this you will need to add the following URL query parameters:</p>
 
@@ -560,7 +560,7 @@ Be sure to check that your expression returns the results expected–the express
 
 <p>The resulting URL would look like this:</p>
 
-<p><code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/{authorizationServerId}/v1/authorize?client_id=examplefa39J4jXdcCwWA&amp;response_type=id_token&amp;response_mode=fragment&amp;scope=openid%20profile&amp;redirect_uri=https%3A%2F%2FyourRedirectUriHere.com&amp;state=WM6D&amp;nonce=YsG76jo</code></p>
+<p><code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authorizationServerId}/v1/authorize?client_id=examplefa39J4jXdcCwWA&amp;response_type=id_token&amp;response_mode=fragment&amp;scope=openid%20profile&amp;redirect_uri=https%3A%2F%2FyourRedirectUriHere.com&amp;state=WM6D&amp;nonce=YsG76jo</code></p>
 
 <p>If you paste this into your browser you are redirected to the sign-in page for your Okta org, with a URL that looks like this:</p>
 

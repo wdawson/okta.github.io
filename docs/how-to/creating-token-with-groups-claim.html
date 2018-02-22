@@ -43,7 +43,7 @@
   <meta class="swiftype" name="summary" data-type="string" content="How to use the app profile to create an ID toke..." />
 
   <link type="text/css" rel="stylesheet" href="/assets/animate-ec43d72c3ed45e08a460b8a2966d8dba6006aebfa0530935c3973fa493a8771f.css">
-  <link type="text/css" rel="stylesheet" href="/assets/okta-c091452949c4482c10ed8588a1694c9d5a4abaf6be7a029294a28a91489036aa.css">
+  <link type="text/css" rel="stylesheet" href="/assets/okta-9cafcbcda0dfe686bf4c513405579bab5aeda9909c278a37b465dbc8bbfaac6d.css">
   
   
   <title>Create a Token with a Groups Claim Using the App Profile | Okta Developer</title>
@@ -342,7 +342,7 @@ need to set group whitelists on a per-application basis.</p>
 <h4 id="step-two-add-list-of-groups-to-profile-of-client-app">Step Two: Add List of Groups to Profile of Client App</h4>
 
 <p>If you only have one or two groups to specify, simply add the group IDs to the first parameter of the <code class="highlighter-rouge">getFilteredGroups</code> function described in the next step.
-However, if you have a lot of groups to whitelist, you can put the group IDs in the client app’s profile property bag: <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/apps/:aid</code>.
+However, if you have a lot of groups to whitelist, you can put the group IDs in the client app’s profile property bag: <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/apps/${applicationId}</code>.
 The following example names the group whitelist <code class="highlighter-rouge">groupwhitelist</code>, but you can name it anything.</p>
 
 <p>Request Example:</p>
@@ -520,7 +520,7 @@ The following example names the group whitelist <code class="highlighter-rouge">
 <h4 id="step-two--add-list-of-groups-to-profile-of-client-app">Step Two:  Add List of Groups to Profile of Client App</h4>
 
 <p>If you only have one or two groups to specify, simply add the group IDs to the first parameter of the <code class="highlighter-rouge">getFilteredGroups</code> function described in the next step.
-However, if you have a lot of groups to whitelist, you can put the group IDs in the client app’s profile property bag: <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/apps/:aid</code>.</p>
+However, if you have a lot of groups to whitelist, you can put the group IDs in the client app’s profile property bag: <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/apps/${applicationId}</code>.</p>
 
 <p>This example names the group whitelist <code class="highlighter-rouge">groupwhitelist</code>, but you can name it anything.</p>
 
@@ -578,8 +578,8 @@ However, if you have a lot of groups to whitelist, you can put the group IDs in 
 
 <p>Add a custom claim for the ID token or access token on a Custom Authorization Server with the following function:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> getFilteredGroups({app.profile.whitelist}, 
- "{value-to-represent-the-group-in-the-token}", 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> getFilteredGroups({app.profile.whitelist},
+ "{value-to-represent-the-group-in-the-token}",
  {maximum-number-of-groups-to-include-in-token})
 </code></pre></div></div>
 
@@ -635,7 +635,7 @@ However, if you have a lot of groups to whitelist, you can put the group IDs in 
 
 <h4 id="step-four-send-a-test-request-1">Step Four: Send a Test Request</h4>
 
-<p>To obtain a token with the configured groups claim, send a request for an ID token that includes one of the scopes that the claim is associated with: <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/:authorizationServerId/v1/authorize</code>.</p>
+<p>To obtain a token with the configured groups claim, send a request for an ID token that includes one of the scopes that the claim is associated with: <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authorizationServerId}/v1/authorize</code>.</p>
 
 <p>Request Example for Custom Authorization Server:</p>
 
@@ -705,7 +705,7 @@ However, if you have a lot of groups to whitelist, you can put the group IDs in 
 
 <p>The ID token or access token contains the group WestCoastDivision so the audience (<code class="highlighter-rouge">aud</code>) has access to the group information about the user.</p>
 
-<p>For flows other than implicit, post to the token endpoint <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/:authorizationServerId/v1/token</code> with the user or client you want. Make sure the user is assigned to the app and to one of the groups from your whitelist.</p>
+<p>For flows other than implicit, post to the token endpoint <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authorizationServerId}/v1/token</code> with the user or client you want. Make sure the user is assigned to the app and to one of the groups from your whitelist.</p>
 
 <p>If the results aren’t as expected, start your troubleshooting by inspecting the System Log to see what went wrong. Also, try requesting only an ID token instead of both and ID token and access token.</p>
 
