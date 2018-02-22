@@ -27,7 +27,7 @@ The policy API supports the following **rule operations**:
 ### Get a Policy
 {:.api .api-operation}
 
-{% api_operation get /api/v1/policies/*:policyId* %}
+{% api_operation get /api/v1/policies/${policyId} %}
 
 #### Request Parameters
 
@@ -53,7 +53,7 @@ HTTP 200:
 ### Get a Policy with Rules
 {:.api .api-operation}
 
-{% api_operation get /api/v1/policies/*:policyId*?expand=rules %}
+{% api_operation get /api/v1/policies/${policyId}?expand=rules %}
 
 #### Request Parameters
 
@@ -82,7 +82,7 @@ Included as embedded objects, one or more <a href="#rules">Policy Rules</a>.
 ### Get All Policies by Type
 {:.api .api-operation}
 
-{% api_operation get /api/v1/policies?type=*:type* %}
+{% api_operation get /api/v1/policies?type=${type} %}
 
 #### Request Parameters
 
@@ -110,7 +110,7 @@ HTTP 204:
 ### Delete Policy
 {:.api .api-operation}
 
-{% api_operation delete /api/v1/policies/*:policyId* %}
+{% api_operation delete /api/v1/policies/${policyId} %}
 
 #### Request Parameters
 
@@ -136,7 +136,7 @@ HTTP 204:
 ### Update a Policy
 {:.api .api-operation}
 
-{% api_operation put /api/v1/policies/*:policyId* %}
+{% api_operation put /api/v1/policies/${policyId} %}
 
 #### Request Parameters
 
@@ -218,7 +218,7 @@ HTTP 204:
 ### Activate a Policy
 {:.api .api-operation}
 
-{% api_operation post /api/v1/policies/*:policyId*/lifecycle/activate %}
+{% api_operation post /api/v1/policies/${policyId}/lifecycle/activate %}
 
 #### Request Parameters
 
@@ -244,7 +244,7 @@ HTTP 204:
 ### Deactivate a Policy
 {:.api .api-operation}
 
-{% api_operation post /api/v1/policies/*:policyId*/lifecycle/deactivate %}
+{% api_operation post /api/v1/policies/${policyId}/lifecycle/deactivate %}
 
 #### Request Parameters
 
@@ -272,7 +272,7 @@ HTTP 200:
 ### Get Policy Rules
 {:.api .api-operation}
 
-{% api_operation get /api/v1/policies/*:policyId*/rules %}
+{% api_operation get /api/v1/policies/${policyId}/rules %}
 
 #### Request Parameters
 
@@ -298,7 +298,7 @@ HTTP 200:
 ### Create a rule
 {:.api .api-operation}
 
-{% api_operation post /api/v1/policies/*:policyId*/rules %}
+{% api_operation post /api/v1/policies/${policyId}/rules %}
 
 #### Request Parameters
 
@@ -348,7 +348,7 @@ HTTP 200:
 ### Delete a rule
 {:.api .api-operation}
 
-{% api_operation delete /api/v1/policies/*:policyId*/rules/*:ruleId* %}
+{% api_operation delete /api/v1/policies/${policyId}/rules/${ruleId} %}
 
 #### Request Parameters
 
@@ -374,7 +374,7 @@ HTTP 204:
 ### Get a rule
 {:.api .api-operation}
 
-{% api_operation get /api/v1/policies/*:policyId*/rules/*:ruleId* %}
+{% api_operation get /api/v1/policies/${policyId}/rules/${ruleId} %}
 
 #### Request Parameters
 
@@ -400,7 +400,7 @@ HTTP 200:
 ### Update a rule
 {:.api .api-operation}
 
-{% api_operation put /api/v1/policies/*:policyId*/rules/*:ruleId* %}
+{% api_operation put /api/v1/policies/${policyId}/rules/${ruleId} %}
 
 #### Request Parameters
 
@@ -451,7 +451,7 @@ HTTP 200:
 ### Activate A Rule
 {:.api .api-operation}
 
-{% api_operation post /api/v1/policies/*:policyId*/rules/*:ruleId*/lifecycle/activate %}
+{% api_operation post /api/v1/policies/${policyId}/rules/${ruleId}/lifecycle/activate %}
 
 #### Request Parameters
 
@@ -477,7 +477,7 @@ HTTP 204:
 ### Deactivate A Rule
 {:.api .api-operation}
 
-{% api_operation post /api/v1/policies/*:policyId*/rules/*:ruleId*/lifecycle/deactivate %}
+{% api_operation post /api/v1/policies/${policyId}/rules/${ruleId}/lifecycle/deactivate %}
 
 #### Request Parameters
 

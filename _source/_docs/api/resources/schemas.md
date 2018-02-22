@@ -637,7 +637,7 @@ curl -v -X POST \
 ### Get App User Schema
 {:.api .api-operation}
 
-{% api_operation get /api/v1/meta/schemas/apps/*:instanceId*/default %}
+{% api_operation get /api/v1/meta/schemas/apps/${instanceId}/default %}
 
 Fetches the default schema for an App User
 
@@ -720,7 +720,7 @@ curl -v -X GET \
 ### Add Property to App User Profile Schema
 {:.api .api-operation}
 
-{% api_operation post /api/v1/meta/schemas/apps/*:instanceId*/default %}
+{% api_operation post /api/v1/meta/schemas/apps/${instanceId}/default %}
 
 Adds one or more [custom app user profile properties](#app-user-profile-schema-property-object) to the app user schema
 
@@ -831,7 +831,7 @@ curl -v -X POST \
 ### Update App User Profile Schema Property
 {:.api .api-operation}
 
-{% api_operation post /api/v1/meta/schemas/apps/*:instanceId*/default %}
+{% api_operation post /api/v1/meta/schemas/apps/${instanceId}/default %}
 
 Updates one or more [custom app user profile properties](#app-user-profile-schema-property-object) in the schema.
 
@@ -942,7 +942,7 @@ curl -v -X POST \
 ### Remove Property from App User Profile Schema
 {:.api .api-operation}
 
-{% api_operation post /api/v1/meta/schemas/apps/*:instanceId*/default %}
+{% api_operation post /api/v1/meta/schemas/apps/${instanceId}/default %}
 
 Removes one or more [custom app user profile properties](#app-user-profile-schema-property-object) from the user schema.
 
