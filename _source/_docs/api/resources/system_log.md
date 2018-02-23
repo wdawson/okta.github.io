@@ -218,7 +218,7 @@ LogEvent objects are read-only. The following properties are available:
 
 > The actor and/or target of an event is dependent on the action performed. All events have actors but not all have targets.
 
-> The `authenticationContext.externalSessionId` identifies events that occurred in the same session.  A single `transaction.id` identifies events that occurred together as part of an operation (e.g. a request to Okta's servers). Use `authenticationContext.externalSessionId` to link events that occurred in the same session, and the `transaction.id` to link events that occurred as part of the same operation.
+> The `authenticationContext.externalSessionId` identifies events that occurred in the same session. A single `transaction.id` identifies events that occurred together as part of an operation (e.g. a request to Okta's servers). Use `authenticationContext.externalSessionId` to link events that occurred in the same session, and the `transaction.id` to link events that occurred as part of the same operation.
 
 ### Actor Object
 
@@ -399,7 +399,7 @@ The `authenticationContext` contains metadata about how the actor is authenticat
 }
 ```
 In such a case, one can recognize that the user used an IWA credential to authenticate against an Active Directory instance. All of the user's future generated events in this login session will share the same `externalSessionId`.
- 
+
 Among other operations, this response object can be used to scan for suspicious login activity or perform analytics on user authentication habits (e.g. how often authentication scheme X is used versus authentication scheme Y).
 
 |------------+----------------------------------------------------------------+-----------------+----------+-----------+-----------|
@@ -438,7 +438,7 @@ Describes the `issuer` of the authorization server when the authentication is pe
 
 ### SecurityContext Object
 
-The `securityContext` object provides security information directly related to the evaluation of the event's IP reputation. IP reputation is a trustworthiness rating that evaluates how likely a sender is to be malicious based on the sender's IP address. As the name implies, the `securityContext` object is useful for security applications—flagging and inspecting suspicious events.
+The `securityContext` object provides security information directly related to the evaluation of the event's IP reputation. IP reputation is a trustworthiness rating that evaluates how likely a sender is to be malicious based on the sender's IP address. As the name implies, the `securityContext` object is useful for security applications-flagging and inspecting suspicious events.
 
 |----------+-------------------------------------------------------------------------------------------------+----------+----------|
 | Property | Description                                                                                     | DataType | Nullable |
@@ -458,7 +458,7 @@ Describes an IP address used in a request.
 | Property                                                                                                   | Description                            | DataType                                                    | Nullable |
 |:-----------------------------------------------------------------------------------------------------------|:---------------------------------------|:------------------------------------------------------------|:---------|
 | ip                                                                                                         | IP address                             | String                                                      | TRUE     |
-| geographicalContext                                                                                        | Geographical context of the IP address |   [GeographicalContext Object](#geographicalcontext-object) | TRUE     |
+| geographicalContext                                                                                        | Geographical context of the IP address | [GeographicalContext Object](#geographicalcontext-object) | TRUE     |
 | version                                                                                                    | IP address version                     | V4 or V6                                                    | TRUE     |
 | source                                                                                                     | Details regarding the source           | String                                                      | TRUE     |
 | ------------+----------------------------------------------------------------+-----------------+---------- |
@@ -599,8 +599,8 @@ filter=client.ipAddress eq "184.73.186.14"
 
 ###### Keyword Filter
 
-The query parameter `q` can be used to perform keyword matching against a LogEvents object's attribute values. In order to satisfy the constraint, all supplied keywords must be matched exactly. 
-Note that matching is case-insensitive. 
+The query parameter `q` can be used to perform keyword matching against a LogEvents object's attribute values. In order to satisfy the constraint, all supplied keywords must be matched exactly.
+Note that matching is case-insensitive.
 
 The following are some examples of common keyword filtering:
 
@@ -617,9 +617,9 @@ LogEvent objects can be filtered by [`published`](#attributes) attribute value w
 * `since` and `until`
 * `after`
 
-Note that `since` and `after` are mutually exclusive and cannot be specified simultaneously. 
+Note that `since` and `after` are mutually exclusive and cannot be specified simultaneously.
 
-The `after` parameter is system generated for use in ["next" links](#next-link-response-header). Users should not attemp to craft requests using this value and rely on the system generated links instead.  
+The `after` parameter is system generated for use in ["next" links](#next-link-response-header). Users should not attemp to craft requests using this value and rely on the system generated links instead.
 
 ##### Response
 {:.api .api-response .api-response-params}

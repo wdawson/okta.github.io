@@ -543,8 +543,8 @@ The role model defines several **read-only** properties:
 | status      | Status of role assignment                             | `ACTIVE`                                                                                                    | FALSE    | FALSE  | TRUE      |
 | created     | Timestamp when app user was created                   | Date                                                                                                        | FALSE    | FALSE  | TRUE      |
 | lastUpdated | Timestamp when app user was last updated              | Date                                                                                                        | FALSE    | FALSE  | TRUE      |
-| _embedded   | Embedded resources related to the role assignment     |          [JSON HAL](http://tools.ietf.org/html/draft-kelly-json-hal-06)                                              | TRUE     | FALSE  | TRUE      |
-| _links      | Discoverable resources related to the role assignment |          [JSON HAL](http://tools.ietf.org/html/draft-kelly-json-hal-06)                                              | TRUE     | FALSE  | TRUE      |
+| _embedded   | Embedded resources related to the role assignment     | [JSON HAL](http://tools.ietf.org/html/draft-kelly-json-hal-06)                                              | TRUE     | FALSE  | TRUE      |
+| _links      | Discoverable resources related to the role assignment | [JSON HAL](http://tools.ietf.org/html/draft-kelly-json-hal-06)                                              | TRUE     | FALSE  | TRUE      |
 
 #### Role Types
 

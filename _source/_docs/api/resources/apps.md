@@ -4530,20 +4530,20 @@ Applications have the following properties:
 | Property         | Description                                  | DataType                                                           | Nullable   | Unique   | Readonly   | MinLength   | MaxLength   |
 |:-----------------|:---------------------------------------------|:-------------------------------------------------------------------|:-----------|:---------|:-----------|:------------|:------------|
 | id               | unique key for app                           | String                                                             | FALSE      | TRUE     | TRUE       |             |             |
-| name             | unique key for app definition                | String ( [App Names & Settings](#app-names--settings))              | FALSE      | TRUE     | TRUE       | 1           | 255         |
+| name             | unique key for app definition                | String ([App Names & Settings](#app-names--settings))              | FALSE      | TRUE     | TRUE       | 1           | 255         |
 | label            | unique user-defined display name for app     | String                                                             | FALSE      | TRUE     | FALSE      | 1           | 100         |
 | created          | timestamp when app was created               | Date                                                               | FALSE      | FALSE    | TRUE       |             |             |
 | lastUpdated      | timestamp when app was last updated          | Date                                                               | FALSE      | FALSE    | TRUE       |             |             |
 | status           | status of app                                | `ACTIVE` or `INACTIVE`                                             | FALSE      | FALSE    | TRUE       |             |             |
-| features         | enabled app features                         |  [Features](#features)                                              | TRUE       | FALSE    | FALSE      |             |             |
-| signOnMode       | authentication mode of app                   |  [SignOn Mode](#signon-modes)                                       | FALSE      | FALSE    | FALSE      |             |             |
-| accessibility    | access settings for app                      |  [Accessibility Object](#accessibility-object)                      | TRUE       | FALSE    | FALSE      |             |             |
-| visibility       | visibility settings for app                  |  [Visibility Object](#visibility-object)                            | TRUE       | FALSE    | FALSE      |             |             |
-| credentials      | credentials for the specified `signOnMode`   |  [Application Credentials Object](#application-credentials-object)  | TRUE       | FALSE    | FALSE      |             |             |
-| settings         | settings for app                             | Object ( [App Names & Settings](#app-names--settings))              | TRUE       | FALSE    | FALSE      |             |             |
+| features         | enabled app features                         | [Features](#features)                                              | TRUE       | FALSE    | FALSE      |             |             |
+| signOnMode       | authentication mode of app                   | [SignOn Mode](#signon-modes)                                       | FALSE      | FALSE    | FALSE      |             |             |
+| accessibility    | access settings for app                      | [Accessibility Object](#accessibility-object)                      | TRUE       | FALSE    | FALSE      |             |             |
+| visibility       | visibility settings for app                  | [Visibility Object](#visibility-object)                            | TRUE       | FALSE    | FALSE      |             |             |
+| credentials      | credentials for the specified `signOnMode`   | [Application Credentials Object](#application-credentials-object)  | TRUE       | FALSE    | FALSE      |             |             |
+| settings         | settings for app                             | Object ([App Names & Settings](#app-names--settings))              | TRUE       | FALSE    | FALSE      |             |             |
 | profile          | Valid JSON schema for specifying properties  | [JSON](#profile-object)                                             | TRUE       | FALSE    | FALSE      |             |             |
-| _links           | discoverable resources related to the app    |  [JSON HAL](http://tools.ietf.org/html/draft-kelly-json-hal-06)     | TRUE       | FALSE    | TRUE       |             |             |
-| _embedded        | embedded resources related to the app        |  [JSON HAL](http://tools.ietf.org/html/draft-kelly-json-hal-06)     | TRUE       | FALSE    | TRUE       |             |             |
+| _links           | discoverable resources related to the app    | [JSON HAL](http://tools.ietf.org/html/draft-kelly-json-hal-06)     | TRUE       | FALSE    | TRUE       |             |             |
+| _embedded        | embedded resources related to the app        | [JSON HAL](http://tools.ietf.org/html/draft-kelly-json-hal-06)     | TRUE       | FALSE    | TRUE       |             |             |
 | ---------------- | -------------------------------------------- | ------------------------------------------------------------------ | ---------- | -------- | ---------- | ----------- | ----------- |
 
 Property details
