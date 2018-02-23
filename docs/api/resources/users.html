@@ -4180,9 +4180,10 @@ Consent grants remain valid until the user manually revokes them, or until the u
 
 <h4 class="api api-request api-request-example" id="request">Request</h4>
 
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET /api/v1/users/00uzjoiIBruZE06jj0g3/emails HTTP/1.1
-Accept: application/json
-Content-Type: application/json
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> GET <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+  <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/api/v1/users/00uzjoiIBruZE06jj0g3/emails"</span>
 </code></pre></div></div>
 
 <h4 class="api api-response api-response-example" id="response-verified-email">Response (Verified Email)</h4>
@@ -4281,9 +4282,10 @@ Content-Type: application/json
 
 <h4 class="api api-request api-request-example" id="request-1">Request</h4>
 
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET /api/v1/users/00uzjoiIBruZE06jj0g3/emails/00T196qTp3LIMZQ0L0g3 HTTP/1.1
-Accept: application/json
-Content-Type: application/json
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> GET <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+  <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00uzjoiIBruZE06jj0g3/emails/00T196qTp3LIMZQ0L0g3"</span>
 </code></pre></div></div>
 
 <h4 class="api api-response api-response-example" id="response">Response</h4>
@@ -4427,17 +4429,17 @@ Content-Type: application/json
 
 <h4 class="api api-request api-request-example" id="request-2">Request</h4>
 
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>POST /api/v1/users/00uzjoiIBruZE06jj0g3/emails/00T196qTp3LIMZQ0L0g3/verify HTTP/1.1
-Accept: application/json
-Content-Type: application/json
-
-<span class="o">{</span>
-  <span class="s2">"redirectUri"</span>: <span class="s2">"https://example.com/some/page?state=blah&amp;custom=true"</span>,
-  <span class="s2">"expiresAt"</span>: <span class="s2">"2017-06-14T00:17:57.000Z"</span>,
-  <span class="s2">"actions"</span>: <span class="o">{</span>
-    <span class="s2">"signOn"</span>: <span class="s2">"REQUIRED"</span>
-  <span class="o">}</span>
-<span class="o">}</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-X</span> POST <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'Accept: application/json'</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'content-type: application/json'</span> <span class="se">\</span>
+  <span class="nt">-d</span> <span class="s1">'{
+    "redirectUri": "https://example.com/some/page?state=blah&amp;custom=true",
+    "expiresAt": "2017-06-14T00:17:57.000Z",
+    "actions": {
+     "signOn": "REQUIRED"
+     }
+    }'</span> /
+    <span class="s1">'<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00uzjoiIBruZE06jj0g3/emails/00T196qTp3LIMZQ0L0g3/verify'</span>
 </code></pre></div></div>
 
 <h4 class="api api-response api-response-example" id="response-1">Response</h4>
@@ -4584,18 +4586,19 @@ Content-Type: application/json
 
 <h4 class="api api-request api-request-example" id="request-3">Request</h4>
 
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>POST /api/v1/users/00uzjoiIBruZE06jj0g3/emails/00T196qTp3LIMZQ0L0g3/change HTTP/1.1
-Accept: application/json
-Content-Type: application/json
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-X</span> POST <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'Accept: application/json'</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+  <span class="nt">-d</span> <span class="s1">'{
+    "redirectUri": "https://example.com/some/page?state=blah&amp;custom=true",
+    "expiresAt": "2017-06-14T00:17:57.000Z",
+    "value": "update@example.com",
+    "actions": {
+     "signOn": "REQUIRED"
+     }
+    }'</span> <span class="se">\</span>
+    <span class="s1">'<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/api/v1/users/00uzjoiIBruZE06jj0g3/emails/00T196qTp3LIMZQ0L0g3/change'</span> <span class="se">\</span>
 
-<span class="o">{</span>
-  <span class="s2">"redirectUri"</span>: <span class="s2">"https://example.com/some/page?state=blah&amp;custom=true"</span>,
-  <span class="s2">"expiresAt"</span>: <span class="s2">"2017-06-14T00:17:57.000Z"</span>,
-  <span class="s2">"value"</span>: <span class="s2">"update@example.com"</span>,
-  <span class="s2">"actions"</span>: <span class="o">{</span>
-    <span class="s2">"signOn"</span>: <span class="s2">"REQUIRED"</span>
-  <span class="o">}</span>
-<span class="o">}</span>
 </code></pre></div></div>
 
 <h4 class="api api-response api-response-example" id="response-2">Response</h4>
