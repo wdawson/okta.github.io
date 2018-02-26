@@ -9,7 +9,7 @@ title: System Log (Beta)
 
 The Okta System Log records system events related to your organization in order to provide an audit trail that can be used to understand platform activity and to diagnose problems.
 
-The Okta System Log API provides near real-time read-only access to your organization's system log and is the programmatic counterpart of the [System Log UI](https://support.okta.com/help/Documentation/Knowledge_Article/About-the-System-Log-651903282). 
+The Okta System Log API provides near real-time read-only access to your organization's system log and is the programmatic counterpart of the [System Log UI](https://help.okta.com/en/prod/Content/Topics/Reports/Reports_SysLog.htm). 
 
 Often the terms "event" and "log event" are used interchangeably. In the context of this API, an "event" is an occurrence of interest within the system and "log" or "log event" is the recorded fact.  
  
@@ -526,6 +526,35 @@ The following sections outline the major event types captured by the system log.
 #### User Event Details
 
 * `user.authentication.sso` doesn't capture whether the SSO attempt was successful or failed because Okta can't collect the subsequent authentication attempt status from the third-party service.
+
+
+## Event ID Correlation
+
+Throughout a user's session many requests (transactions) can occur, such as logging into Okta or opening an application. Within a given request many events may be logged. To illustrate this principle, the table below shows 18 events produced from 13 transactions over 6 different sessions, all performed by one user.
+
+| External Session ID       | Transaction ID              | Event ID                             | Event Type                                  | Display Message                   |
+|:--------------------------|:----------------------------|:-------------------------------------|:--------------------------------------------|:----------------------------------|
+| trs5JnlvlaIQTOqOj9imLy7lA | WcKPxq1f8QLfFvv3UPHhhgAACGM | f24790d0-d324-47f8-aac5-c27a31ab928d | user.session.access_admin_app               | User accessing Okta admin app     |
+|                           | WcKPxq1f8QLfFvv3UPHhhgAACGM | ed317758-8776-4240-a540-277c44dcb408 | application.lifecycle.update                | Update application                |
+|                           |                             | 421c1551-71b2-4ebe-a70d-b5f7d3698429 | application.lifecycle.update                | Update application                |
+|                           |                             | 06a50bbe-44fd-40de-83e6-2e4cc2a17d16 | application.lifecycle.update                | Update application                |
+| trsUz2TG3wKS6ar1lvWzHo71w | Wij-6q4YuniRd9yTmWHpfwAAADc | 3e240ff4-6af7-47f2-b107-a2ef661ffc01 | application.user_membership.change_username | Change users application username |
+|                           |                             | 572b05e9-b6be-4dfe-8bc3-01bb3a5a1af5 | application.user_membership.add            | Add user to application membership |
+|                           |                             | 30f29bbf-3218-429b-827a-0a93809591db | application.user_membership.remove        | Remove users application membership |
+|                           | Wij-964YuniRd9yTmWHu1AAAAEA | 5f98d062-05a9-4ede-89a0-8a2ce27efdd4 | user.session.access_admin_app               | User accessing Okta admin app     |
+|                           | Wij-95eCbHF7In2MKNavlgAAD9I | 45f71ac2-e8b2-4c19-b4cc-d2560108c889 | application.lifecycle.update                | Update application                |
+|                           |                             | 46b85d65-01c6-44d2-86d2-25704804b1c5 | application.lifecycle.update                | Update application                |
+| 102GALFw8CzRT2KXoqnca8Jdg | Wij-AJeCbHF7In2MKNaOpAAAEC4 | b9ab9263-a4ae-4780-9981-377ec8f2da86 | user.session.start                          | User login to Okta                |
+|                           | Wij-7q4YuniRd9yTmWHrBQAAAKQ | ff325685-0220-484c-82cf-5f8dc596acbe | user.authentication.sso                     | User single sign on to app        |
+| trsf8nlpDJZTZeFlcc8nszbjw | Wij-7a4YuniRd9yTmWHqqAAAAKY | 5526a4c4-7f68-4b2a-bab7-2d10ebaeeb1c | mim.checkOSXAccessEligibility.true          | *blank*                           |
+|                           | Wij-764YuniRd9yTmWHrkAAAAGw | 232774ba-8feb-4b00-a732-e0ec99a24434 | user.session.start                          | User login to Okta                |
+| trswPONv4wIRaKDNWVVcmtceg | Wij-6K4YuniRd9yTmWHo9wAAAAY | d31d819a-1427-45b0-a8b4-8a8fb40c72f1 | user.session.start                          | User login to Okta                |
+|                           | Wij-564YuniRd9yTmWHoaQAAAII | 0cc6f4c8-9b91-4a70-b5c4-09d6ad159d32 | mim.checkOSXAccessEligibility.true          | *blank*                           |
+|                           | Wij-2q4YuniRd9yTmWHjRAAAADA | 92606da8-7eeb-4ad7-8ffb-502dd0ec64cc | user.authentication.sso                     | User single sign on to app        |
+| *null*                    | Wm@-R2s5lEMbNIB03krtvAAACyo | 566671be-ec0b-400d-ad2e-6fc73ed12fb1 | user.session.start                          | User login to Okta                |
+{:.table .table-word-break}
+
+Note that, as evidenced by the `null` `External Session ID` field in the last row, neither `Transaction ID` nor `Event ID` maintain a many-to-one relationship with `External Session ID`. In this particular case, the `null` `External Session ID` field can be explained by a failed user login. Since the login failed, no session was granted back to the user's client.
 
 
 ## Operations
