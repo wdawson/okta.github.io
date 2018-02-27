@@ -996,7 +996,7 @@ Adds an OAuth 2.0 client application. This application is only available to the 
 | Parameter                                 | Description                                                                                 | DataType                                                                                     | Nullable | Unique | Validation | Default   |
 |:------------------------------------------|:--------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------|:---------|:-------|:-----------|:----------|
 | client_uri                                | URL string of a web page providing information about the client                             | String                                                                                       | TRUE     | FALSE  | FALSE      |           |
-| logo_uri                                  | URL string that references a logo for the client                                            | URL                                                                                          | TRUE     | FALSE  | FALSE      |           |
+| logo_uri                                  | URL string that references a logo for the client. This value is automatically copied from any logo you provide in the App Wizard for **Application logo** but can be changed to a different URI for consent.                                           | URL                                                                                          | TRUE     | FALSE  | FALSE      |           |
 | redirect_uris                             | Array of redirection URI strings for use in redirect-based flows                            | Array                                                                                        | TRUE     | FALSE  | TRUE       |           |
 | response_types                            | Array of OAuth 2.0 response type strings                                                    | Array of `code`, `token`, `id_token`                                                         | TRUE     | FALSE  | TRUE       |           |
 | grant_types                               | Array of OAuth 2.0 grant type strings                                                       | Array of `authorization_code`, `implicit`, `password`, `refresh_token`, `client_credentials` | FALSE    | FALSE  | TRUE       |           |
@@ -1045,6 +1045,7 @@ Adds an OAuth 2.0 client application. This application is only available to the 
 >Notes
   * Apps created on `/api/v1/apps` default to `consent_method=TRUSTED`, while those created on `/api/v1/clients` default to `consent_method=REQUIRED`.
   * If you request a scope that requires consent while using the `client_credentials` flow, an error is returned. Because there is no user, no consent can be given.
+  * These properties can be configured in the Okta user interface App Wizard, General tab: `tos_uri`, `policy_uri`, `logo_uri`, and `consent_method`. 
 
 ##### Request Example
 {:.api .api-request .api-request-example}
