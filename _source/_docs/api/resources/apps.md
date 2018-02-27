@@ -1045,7 +1045,7 @@ Adds an OAuth 2.0 client application. This application is only available to the 
 >Notes
   * Apps created on `/api/v1/apps` default to `consent_method=TRUSTED`, while those created on `/api/v1/clients` default to `consent_method=REQUIRED`.
   * If you request a scope that requires consent while using the `client_credentials` flow, an error is returned. Because there is no user, no consent can be given.
-  * These properties can be configured in the Okta user interface App Wizard, General tab: `tos_uri`, `policy_uri`, `logo_uri`, and `consent_method`. 
+  * These properties can also be configured in the Okta user interface App Wizard, General tab: `tos_uri`, `policy_uri`, `logo_uri`, and `consent_method`. They can't be set using [the Dynamic Client Registration API](/docs/api/resources/oauth-clients).
 
 ##### Request Example
 {:.api .api-request .api-request-example}
