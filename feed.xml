@@ -8,6 +8,184 @@
     <atom:link href="https://developer.okta.com/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>A Breakdown of the New SAML Authentication Bypass Vulnerability</title>
+        <description>&lt;p&gt;Several weeks ago a new critical vulnerability was discovered that affects many SAML implementations. This vulnerability was first reported by &lt;a href=&quot;https://twitter.com/kelbyludwig&quot;&gt;Kelby Ludwig&lt;/a&gt; of Duo Security and is particularly interesting to us (as a user management company) as it can be used to bypass authentication in a sinisterly simplistic way.&lt;/p&gt;
+
+&lt;p&gt;In this post we’ll take an in-depth look at this new SAML vulnerability, what it is, how it works, and what you need to know to protect yourself.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: Just in case you’re wondering whether or not Okta is vulnerable to this new issue: &lt;em&gt;we aren’t&lt;/em&gt; &amp;gt;;)&lt;/p&gt;
+
+&lt;h2 id=&quot;what-is-the-new-saml-authentication-bypass-vulnerability&quot;&gt;What is the New SAML Authentication Bypass Vulnerability?&lt;/h2&gt;
+
+&lt;p&gt;It is a new attack which has the potential to directly affect single sign-on (&lt;a href=&quot;https://wiki.oasis-open.org/security/FrontPage#SAML_V2.0_Standard&quot;&gt;SAML&lt;/a&gt;) security.&lt;/p&gt;
+
+&lt;p&gt;If you’re not familiar with SAML (short for Security Assertion Markup Language), it’s an open standard that allows users to share credentials between multiple web apps so they don’t need to manually log in when accessing different web services. Many vendors use SAML to handle user authentication and authorization so their users can access web applications without needing individual credentials for each.&lt;/p&gt;
+
+&lt;p&gt;The new SAML vulnerability allows an attacker to &lt;em&gt;bypass authentication&lt;/em&gt; and directly assume the role of an authenticated user as part of the SAML flow. &lt;strong&gt;This is a BIG DEAL.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;how-the-new-saml-authentication-bypass-vulnerability-works&quot;&gt;How the new SAML Authentication Bypass Vulnerability Works&lt;/h2&gt;
+
+&lt;p&gt;When a user is authenticating to a website using SAML, there are always three parties involved:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;A user in a web browser&lt;/li&gt;
+  &lt;li&gt;A service provider running a website that user is trying to access (EG: Salesforce)&lt;/li&gt;
+  &lt;li&gt;An identity provider that stores and manages the user’s account and credentials (EG: Okta)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;At some point during SAML authentication the service provider (EG: Salesforce) will ask the identity provider (EG: Okta): who is this person that’s trying to log into me? It’s then the identity provider’s (EG: Okta) job to generate a SAML assertion (a big XML document) and send it back to the service provider. This SAML assertion contains all the user information necessary for the service provider (EG: Salesforce) to log this user in without ever needing their password.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: This is an extreme oversimplification of how SAML works, but accurately covers the important bits needed to understand more about the new vulnerability.&lt;/p&gt;
+
+&lt;p&gt;Here’s what a simplified SAML assertion might look like:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:Assertion&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ID=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;123&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:Issuer&amp;gt;&lt;/span&gt;www.okta.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:Issuer&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:Subject&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:NameID&amp;gt;&lt;/span&gt;randall.degges@okta.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:NameID&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:Subject&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:Conditions&lt;/span&gt;
+                   &lt;span class=&quot;na&quot;&gt;NotBefore=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;2018-02-27T00:00:00Z&quot;&lt;/span&gt;
+                   &lt;span class=&quot;na&quot;&gt;NotOnOrAfter=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;2018-02-28T00:00:00Z&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:AudienceRestriction&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:Audience&amp;gt;&lt;/span&gt;www.salesforce.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:Audience&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:AudienceRestriction&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:Conditions&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:Assertion&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Looking at the XML sample above, one thing stands out above all else: the &lt;code class=&quot;highlighter-rouge&quot;&gt;saml:NameID&lt;/code&gt; element. This element is responsible for identifying the user who’s about to be logged in. In an actual SAML assertion, there’d be a lot of other stuff included. You’d also see things like:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;User attributes (first name, last name, etc.)&lt;/li&gt;
+  &lt;li&gt;User roles/permissions (is this user an admin? can they access a certain feature? etc.)&lt;/li&gt;
+  &lt;li&gt;An XML signature (this is required by almost all SAML vendors). XML signatures are frequently used to cryptographically sign the assertion element so that the service provider (EG: Salesforce) can ensure the SAML assertion it receives from the identity provider is valid and accurate (and has not been modified by an attacker).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The service provider (EG: Salesforce) relies on the data in this XML document to properly authenticate a user, so it’s critical that this information be accurate. Anddddd, as you might suspect, this is exactly where the new vulnerability comes into play.&lt;/p&gt;
+
+&lt;p&gt;It takes advantage of two potential issues in a SAML library implementation:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;XML parsing issues and&lt;/li&gt;
+  &lt;li&gt;Cryptographic signing issues in &lt;a href=&quot;https://www.w3.org/TR/xmldsig-core2/&quot;&gt;XMLDSIG&lt;/a&gt; (a specification which is used to generate and validate XML signatures)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;xml-parsing-issues&quot;&gt;XML Parsing Issues&lt;/h3&gt;
+
+&lt;p&gt;XML can be quite complicated.&lt;/p&gt;
+
+&lt;p&gt;Let’s say, for a moment, that a SAML assertion contains a &lt;code class=&quot;highlighter-rouge&quot;&gt;saml:NameID&lt;/code&gt; element like the one below:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:NameID&amp;gt;&lt;/span&gt;not-an-admin@okta.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:NameID&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;What do you think happens to the XML tree when this element is parsed? It looks something like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NameID
+|_ Text: not-an-admin@okta.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Most SAML libraries will parse the &lt;code class=&quot;highlighter-rouge&quot;&gt;saml:NameID&lt;/code&gt; element out of the XML tree, extracting the last text element inside of it and will use that value to identify the user logging in.&lt;/p&gt;
+
+&lt;p&gt;But… What happens if you break the &lt;code class=&quot;highlighter-rouge&quot;&gt;saml:NameID&lt;/code&gt; element up such that it contains an XML comment?&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:NameID&amp;gt;&lt;/span&gt;not-an-&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- this is a comment --&amp;gt;&lt;/span&gt;admin@okta.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:NameID&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;In this scenario, the XML tree, when parsed, will look like so:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NameID
+|_ Text: not-an-
+|_ Comment: this is a comment
+|_ Text: admin@okta.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And depending on the XML parsing logic used in the SAML library, you can probably see where this is headed: depending on where you insert a comment you can dramatically impact that identity of the user that’s being logged in!&lt;/p&gt;
+
+&lt;p&gt;This is &lt;strong&gt;bad news&lt;/strong&gt; for web security as a simple XML comment can cause a SAML implementation to incorrectly authenticate a user.&lt;/p&gt;
+
+&lt;h3 id=&quot;cryptographic-signing-issues&quot;&gt;Cryptographic Signing Issues&lt;/h3&gt;
+
+&lt;p&gt;The second issue the new SAML vulnerability takes advantage of is the relatively “weak” protection provided by XMLDSIG’s canonicalization algorithms that are used to create and validate XML signatures.&lt;/p&gt;
+
+&lt;p&gt;Typically, when a SAML assertion is created, the assertion element itself is cryptographically signed. This helps the service provider (EG: Salesforce) trust that the user they’re about to log in is valid. Unfortuantely however, there are several different types of canonicalization algorithms that are allowed to be used when XML signatures are created, and most of them are not well-suited for creating tamper-proof data.&lt;/p&gt;
+
+&lt;p&gt;Let’s take some basic XML, for example:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;     hi        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The XML document above would have the &lt;em&gt;exact same cryptographic signature&lt;/em&gt; as the XML document below:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;hi&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This is because XML doesn’t care about whitespace. When the XML document is analyzed before a signature is created, the space is removed.&lt;/p&gt;
+
+&lt;p&gt;What this new vulnerability takes advantage of, specifically, is the fact that most canonicalization algorithms &lt;em&gt;also&lt;/em&gt; don’t care about comments. This means that the following two XML documents (while vastly different in parseability as noted in the previous section) will have &lt;em&gt;identical&lt;/em&gt; cryptographic signatures: thereby allowing an attacker to sneak a comment into a SAML assertion and bypass authentication without ever raising any red flags in signature checks :(&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:NameID&amp;gt;&lt;/span&gt;not-an-&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- this is a comment --&amp;gt;&lt;/span&gt;admin@okta.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:NameID&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;and&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:NameID&amp;gt;&lt;/span&gt;not-an-admin@okta.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:NameID&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;While it is theoretically possible for all SAML vendors to only allow a specific canonicalization algorithm which DOES leave XML documents unmodified (so that they contain things like whitespace, comments, etc.), in practice this would be hard to enforce across vendors and implementations.&lt;/p&gt;
+
+&lt;p&gt;To read more about XML canonicalization issues you might want to check out the &lt;a href=&quot;https://en.wikipedia.org/wiki/XML_Signature#XML_canonicalization&quot;&gt;Wikipedia article&lt;/a&gt; on the topic.&lt;/p&gt;
+
+&lt;h2 id=&quot;how-to-protect-yourself-from-the-new-saml-authentication-bypass-vulnerability&quot;&gt;How to Protect Yourself from the New SAML Authentication Bypass Vulnerability&lt;/h2&gt;
+
+&lt;p&gt;If your company is using SAML you will want to &lt;em&gt;check with your SAML vendors&lt;/em&gt; to ensure they are not susceptible to this new vulnerability. &lt;a href=&quot;https://developer.okta.com/&quot;&gt;Okta&lt;/a&gt;, by the way, &lt;strong&gt;is not vulnerable&lt;/strong&gt; &amp;gt;:)&lt;/p&gt;
+
+&lt;p&gt;If you’re a developer building systems to integrate with SAML vendors or single sign-on providers, try to NOT integrate using SAML if possible. Instead: use a more modern identity standard such as OpenID Connect.&lt;/p&gt;
+
+&lt;p&gt;OpenID Connect is a lot simpler than SAML, doesn’t use XML or &lt;a href=&quot;https://www.w3.org/TR/xmldsig-core1/&quot;&gt;XMLDSIG&lt;/a&gt;, and is far less susceptible to attacks like these since it doesn’t rely on XML parsers. There’s a long, complex history with XML and SAML – many of the SAML vulnerabilities that have been found over the last ~15 years are centered around XML parsing (just like this one).&lt;/p&gt;
+
+&lt;p&gt;Take, for instance, &lt;a href=&quot;https://www.youtube.com/watch?v=QLKM4USUlZs&quot;&gt;XML Signature Wrapping&lt;/a&gt; attacks which have been known about since ~2002 but are still finding their way into modern SAML implementations as recently as 2014.&lt;/p&gt;
+
+&lt;p&gt;If possible, avoid SAML and use &lt;a href=&quot;https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1&quot;&gt;OpenID Connect&lt;/a&gt; whenever you can. If you must use SAML, check your SAML library (and its underlying XML parsing/validation/signature libraries) to ensure it is NOT vulnerable to the new attack.&lt;/p&gt;
+
+&lt;p&gt;Duo has graciously audited several popular SAML libraries and found that:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;OneLogin’s &lt;a href=&quot;https://github.com/onelogin/python-saml&quot;&gt;python-saml&lt;/a&gt;,&lt;/li&gt;
+  &lt;li&gt;OneLogin’s &lt;a href=&quot;https://github.com/onelogin/ruby-saml&quot;&gt;ruby-saml&lt;/a&gt;,&lt;/li&gt;
+  &lt;li&gt;Clever’s &lt;a href=&quot;https://github.com/Clever/saml2&quot;&gt;saml2&lt;/a&gt;,&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/omniauth/omniauth-saml&quot;&gt;omniauth-saml&lt;/a&gt;, and&lt;/li&gt;
+  &lt;li&gt;Shibboleth’s &lt;a href=&quot;https://www.shibboleth.net/products/opensaml-cpp/&quot;&gt;openSAML C++&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;are all vulnerable with many other libraries also likely to be affected.&lt;/p&gt;
+
+&lt;p&gt;If you are the author of a SAML library, there are two important steps you can take immediately to protect your users:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Look for an option in whatever XML library you’re using to remove all comments when creating and parsing XML documents. By strategically purging all XML comments upfront you’ll be able to avoid this issue entirely by never allowing a comment to leak into your XML tree.&lt;/p&gt;
+
+    &lt;p&gt;If the XML library you’re using doesn’t support purging comments, you can always work with the XML library maintainers to add this functionality or swap to a new XML library.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;When parsing nodes from an XML element tree using your XML parsing library, immediately bail out if you detect more than one child node exists for SAML nodes. This way, if you do stumble across a &lt;code class=&quot;highlighter-rouge&quot;&gt;saml:NameId&lt;/code&gt; node (or any other SAML node) that contains more than one child, you won’t make the mistake of using just the first or last child values.&lt;/p&gt;
+
+    &lt;p&gt;You should also avoid concatenating child values together as there may be a potential way to attack these values in the future.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Be safe out there.&lt;/p&gt;
+
+&lt;p&gt;If you have any questions, comments, or suggestions: please drop us a note in a comment below or &lt;a href=&quot;https://twitter.com/oktadev&quot;&gt;hit us up&lt;/a&gt; on Twitter.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 27 Feb 2018 00:00:00 -0500</pubDate>
+        <link>https://developer.okta.com/blog/2018/02/27/a-breakdown-of-the-new-saml-authentication-bypass-vulnerability</link>
+        <guid isPermaLink="true">https://developer.okta.com/blog/2018/02/27/a-breakdown-of-the-new-saml-authentication-bypass-vulnerability</guid>
+      </item>
+    
+      <item>
         <title>9 Talks I Can't Wait to See at Iterate</title>
         <description>&lt;p&gt;This year on February 27th my team at Okta will host our first ever developer conference, &lt;a href=&quot;https://www.iterateconf.io/&quot;&gt;Iterate&lt;/a&gt;. It will be held in downtown San Francisco at &lt;a href=&quot;http://www.bespokesf.co/&quot;&gt;Bespoke&lt;/a&gt; and has an incredible lineup of speakers from around the world. I am beyond excited to see some of the things that will be discussed. In this post I’d like to share with you the nine sessions I’m most looking forward to:&lt;/p&gt;
 
@@ -6012,165 +6190,6 @@ As always, feel free to contact me via &lt;a href=&quot;https://twitter.com/leeb
         <pubDate>Thu, 11 Jan 2018 00:00:00 -0500</pubDate>
         <link>https://developer.okta.com/blog/2018/01/11/sso-oauth-vertx</link>
         <guid isPermaLink="true">https://developer.okta.com/blog/2018/01/11/sso-oauth-vertx</guid>
-      </item>
-    
-      <item>
-        <title>Build an App for iOS and Android with Xamarin</title>
-        <description>&lt;p&gt;&lt;a href=&quot;https://www.xamarin.com/&quot;&gt;Xamarin&lt;/a&gt; is a cross-platform technology that makes it possible to build native applications for Android and iOS using a single, shared codebase. Like other technologies such as React Native and NativeScript, it allows development teams to spend less time writing code for both platforms.&lt;/p&gt;
-
-&lt;p&gt;Xamarin is open-source (and free). Under the hood, it uses Mono (a version of the Microsoft .NET runtime), so Xamarin apps are usually written in C#. You can build Xamarin apps on Windows using Visual Studio, or Mac using Visual Studio for Mac. Even though Xamarin apps are not written in Swift (or Java), they still look and feel like real, native apps on the device.&lt;/p&gt;
-
-&lt;p&gt;In this tutorial, I’ll show you how to use Xamarin to build a basic app for both iOS and Android, even if you’ve never done any app development before!&lt;/p&gt;
-
-&lt;h2 id=&quot;set-up-xamarin-on-windows&quot;&gt;Set Up Xamarin on Windows&lt;/h2&gt;
-&lt;p&gt;&lt;em&gt;Skip to the next section if you have a Mac!&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;If you don’t have Visual Studio installed, download the &lt;a href=&quot;https://www.visualstudio.com/downloads/&quot;&gt;free Community Edition&lt;/a&gt; from Microsoft.&lt;/p&gt;
-
-&lt;p&gt;When you install Visual Studio, be sure to pick the &lt;strong&gt;Mobile development with .NET&lt;/strong&gt; workload, which installs the Xamarin tools you need:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/build-app-for-ios-android-with-xamarin/vs-xamarin-workload-6d6d17cf5ee2bc44f4908450598b793432b0e3a5cf730e802a081215e5e9d1b0.gif&quot; alt=&quot;Install the Mobile development with .NET workload&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;If Visual Studio is already installed, open the Visual Studio Installer to make sure you have the above workload selected.&lt;/p&gt;
-
-&lt;p&gt;Once you have these tools installed, you’re ready to create a Xamarin project! Skip the next section.&lt;/p&gt;
-
-&lt;h2 id=&quot;set-up-xamarin-on-mac&quot;&gt;Set Up Xamarin on Mac&lt;/h2&gt;
-&lt;p&gt;If you have a Mac, you’ll need to install Visual Studio for Mac. Follow the &lt;a href=&quot;https://docs.microsoft.com/en-us/visualstudio/mac/installation&quot;&gt;official instructions&lt;/a&gt; to install the free Community Edition.&lt;/p&gt;
-
-&lt;p&gt;Once the application is installed, you’re ready to create a Xamarin project!&lt;/p&gt;
-
-&lt;h2 id=&quot;xamarin-and-xamarin-forms&quot;&gt;Xamarin and Xamarin Forms&lt;/h2&gt;
-&lt;p&gt;The base Xamarin SDK contains API bindings for each mobile platform, so you can call Android or iOS APIs from C# code. This allows you to build native apps using shared C# code, but you still need to design the UI separately for each platform.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.xamarin.com/forms&quot;&gt;Xamarin.Forms&lt;/a&gt; is an additional library that makes it possible to build your UI once (in XAML, a markup language for describing UI layouts). Xamarin.Forms then does the hard work of translating your XAML layout into the appropriate UI elements on the target platform. You can drop down to the “lower” Xamarin SDK level and interact with the platform APIs whenever you need to.&lt;/p&gt;
-
-&lt;p&gt;Deciding whether to use Xamarin.Forms in your project depends on how complex your app is. If you’re building an app that needs UI ultra-tailored for each platform or includes a lot of complex user interactions (such as a game), you’re better off with base Xamarin.&lt;/p&gt;
-
-&lt;p&gt;However, if you’re building a straightforward app that doesn’t need much platform-specific functionality or custom UI, using Xamarin.Forms means you can write even less code. Data-entry apps, productivity tools, and prototypes are great candidates. Since the goal of this tutorial is building a simple demo app, you’ll use Xamarin.Forms here!&lt;/p&gt;
-
-&lt;h2 id=&quot;create-a-new-xamarinforms-project&quot;&gt;Create a New Xamarin.Forms Project&lt;/h2&gt;
-&lt;p&gt;In Visual Studio, choose &lt;strong&gt;File - New Project&lt;/strong&gt;, pick the &lt;strong&gt;Cross-Platform&lt;/strong&gt; category, and choose the &lt;strong&gt;Cross-Platform App (Xamarin.Forms)&lt;/strong&gt; template. Name the project HelloWorldApp.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/build-app-for-ios-android-with-xamarin/vs-xamarin-new-project-6e9b382d3b6038f5c84f46749762bfb9a602d40cfe141ef97c641e7ae909d21d.gif&quot; alt=&quot;Create new Cross-Platform App (Xamarin.Forms) project&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Then, pick the &lt;strong&gt;Blank App&lt;/strong&gt; template and the platforms you want to build the app for. Choose &lt;strong&gt;Xamarin.Forms&lt;/strong&gt; as the UI Technology, and &lt;strong&gt;.NET Standard&lt;/strong&gt; as the Code Sharing Strategy:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/build-app-for-ios-android-with-xamarin/vs-xamarin-new-project-subtype-4039aa12d9583ac5637fc376e1d7d58df30eee8b8e881c7bcc40dc302c282134.png&quot; alt=&quot;Choose project creation options&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;In Visual Studio for Mac, choose &lt;strong&gt;File - New Solution&lt;/strong&gt;, pick the &lt;strong&gt;Multiplatform - App&lt;/strong&gt; category, and choose the &lt;strong&gt;Blank Forms App&lt;/strong&gt; template:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/build-app-for-ios-android-with-xamarin/vs-mac-xamarin-new-project-d70309e6a1ffef7896ed7ba0ac108d640dd8b639036d01b1fc9fbf54e58e5af9.gif&quot; alt=&quot;Choose project creation options&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Creating the new project may take a few minutes. The Blank App template creates a solution with a few sub-projects:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;HelloWorldApp&lt;/strong&gt;: Contains the XAML and shared code for each platform-specific project.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;HelloWorldApp.Android&lt;/strong&gt; (or Droid): Android-specific code. For a simple project, you won’t have to change much here.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;HelloWorldApp.iOS&lt;/strong&gt;: iOS-specific code. You won’t have to change much here, either.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;If you picked Windows (UWP) as a platform, your solution will contain an additional project targeting Windows devices.&lt;/p&gt;
-
-&lt;p&gt;In this tutorial, you’ll only need to modify the shared code project: HelloWorldApp.&lt;/p&gt;
-
-&lt;h2 id=&quot;add-a-page&quot;&gt;Add a Page&lt;/h2&gt;
-&lt;p&gt;UI views are called “pages” in Xamarin.Forms lingo, and your app already contains one called &lt;code class=&quot;highlighter-rouge&quot;&gt;MainPage&lt;/code&gt; (or &lt;code class=&quot;highlighter-rouge&quot;&gt;HelloWorldAppPage&lt;/code&gt; in Visual Studio for Mac). Double-click the XAML file in the Solution Explorer, and replace everything within the &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;ContentPage&amp;gt;&lt;/code&gt; tags with this markup:&lt;/p&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;ContentPage.Padding&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;OnPlatform&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;x:TypeArguments=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Thickness&quot;&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;iOS=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;20, 40, 20, 20&quot;&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;Android=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;20, 20, 20, 20&quot;&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;WinPhone=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;20, 20, 20, 20&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/ContentPage.Padding&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;ContentPage.Content&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;StackLayout&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;VerticalOptions=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;FillAndExpand&quot;&lt;/span&gt;
-                &lt;span class=&quot;na&quot;&gt;HorizontalOptions=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;FillAndExpand&quot;&lt;/span&gt;
-                &lt;span class=&quot;na&quot;&gt;Orientation=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Vertical&quot;&lt;/span&gt;
-                &lt;span class=&quot;na&quot;&gt;Spacing=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;15&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;Label&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;Text=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Enter your name&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;Entry&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;x:Name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;NameEntry&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;Text=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Jane Doe&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;Button&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;x:Name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;SayHelloButton&quot;&lt;/span&gt; 
-                &lt;span class=&quot;na&quot;&gt;Text=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Say Hello&quot;&lt;/span&gt;
-                &lt;span class=&quot;na&quot;&gt;Clicked=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;SayHelloButtonOnClicked&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/StackLayout&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/ContentPage.Content&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This XAML markup creates a basic layout containing Label, Entry (text box), and Button elements. The element names (specified with &lt;code class=&quot;highlighter-rouge&quot;&gt;x:Name&lt;/code&gt;) will be used to refer to these elements later in code. These XAML elements are generic and aren’t yet tied to a specific platform. Xamarin.Forms will automatically translate the elements in proper &lt;code class=&quot;highlighter-rouge&quot;&gt;UIButton&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;EditText&lt;/code&gt; views when your app runs on iOS or Android.&lt;/p&gt;
-
-&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;Clicked&lt;/code&gt; attribute on the Button element wires up the button click event to a handler called &lt;code class=&quot;highlighter-rouge&quot;&gt;SayHelloButtonClicked&lt;/code&gt;, which doesn’t exist yet. You’ll write that next.&lt;/p&gt;
-
-&lt;h2 id=&quot;add-code-to-the-page&quot;&gt;Add Code to the Page&lt;/h2&gt;
-&lt;p&gt;Each XAML file is paired with a C# code file, sometimes called a “code-behind”. Open up the code for the &lt;code class=&quot;highlighter-rouge&quot;&gt;MainPage.xaml&lt;/code&gt; (or &lt;code class=&quot;highlighter-rouge&quot;&gt;HelloWorldAppPage.xaml&lt;/code&gt;) file by expanding it in the Solution Explorer and selecting the &lt;code class=&quot;highlighter-rouge&quot;&gt;MainPage.xaml.cs&lt;/code&gt; file.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/build-app-for-ios-android-with-xamarin/vs-xamarin-open-xamlcs-ed211cae42a17a3082142a4aabb5a9fec440b3e95ac315444811048755953bcc.gif&quot; alt=&quot;Expand MainPage and open C# code file&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Below the &lt;code class=&quot;highlighter-rouge&quot;&gt;public MainPage()&lt;/code&gt; method, add the new &lt;code class=&quot;highlighter-rouge&quot;&gt;SayHelloButtonClicked&lt;/code&gt; method:&lt;/p&gt;
-
-&lt;div class=&quot;language-csharp highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;SayHelloButtonClicked&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EventArgs&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NameEntry&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;DisplayAlert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Greeting&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;$&quot;Hello &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Howdy&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;You may need to add the following declaration at the top of the file:&lt;/p&gt;
-
-&lt;div class=&quot;language-csharp highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Because it’s referenced in the &lt;code class=&quot;highlighter-rouge&quot;&gt;Clicked&lt;/code&gt; attribute, this method will run when the button is pressed or tapped on the XAML page. First, the value of the textbox is assigned to the &lt;code class=&quot;highlighter-rouge&quot;&gt;name&lt;/code&gt; variable, and then the &lt;code class=&quot;highlighter-rouge&quot;&gt;DisplayAlert&lt;/code&gt; method is called to display a modal alert on the device.&lt;/p&gt;
-
-&lt;p&gt;That’s it! Your new Xamarin app is ready to go. To test it, you can use a simulator, or you can use Xamarin Live Player to test it on a live device.&lt;/p&gt;
-
-&lt;h2 id=&quot;test-your-xamarin-app-on-your-own-device&quot;&gt;Test Your Xamarin App on Your Own Device&lt;/h2&gt;
-&lt;p&gt;The quickest (and coolest) way to test a Xamarin project is with &lt;a href=&quot;https://www.xamarin.com/live&quot;&gt;Xamarin Live Player&lt;/a&gt;, a small app you can download onto your own phone or device. After downloading the app, &lt;a href=&quot;https://developer.xamarin.com/guides/cross-platform/live/install/&quot;&gt;pair it with Visual Studio&lt;/a&gt;. Then, pick Live Player as the device target.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/build-app-for-ios-android-with-xamarin/vs-xamarin-start-live-player-60f95a4e1d3a39f7ffdcad305b7ff880d2c740751a861d5ab6e59eaee33b6e3f.gif&quot; alt=&quot;Pick Live Player and start debugging&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Start debugging by pressing the play icon, or choose &lt;strong&gt;Run - Start Debugging&lt;/strong&gt; on the Mac. You’ll be asked to scan a QR code to pair Visual Studio with your device, and Live Player will connect to your computer. (If it hangs, make sure your computer and your device are on the same wi-fi network).&lt;/p&gt;
-
-&lt;p&gt;After Live Player connects, you’ll be able to immediately start using your app on your device! You can even make changes to the code in Visual Studio and Live Player will refresh the app on your device automatically. Super cool.&lt;/p&gt;
-
-&lt;h2 id=&quot;test-your-xamarin-app-on-android&quot;&gt;Test Your Xamarin App on Android&lt;/h2&gt;
-&lt;p&gt;If you have the Visual Studio Android Emulator installed, testing the Android version of your Xamarin app is simple. In the Visual Studio toolbar, pick the &lt;strong&gt;HelloWorldApp.Android&lt;/strong&gt; project and choose an Android device to emulate. Then, click the play button to start the emulator.&lt;/p&gt;
-
-&lt;p&gt;The Android emulator can be slow to load, so give it some time. If everything builds properly, you’ll see your app running on Android:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/build-app-for-ios-android-with-xamarin/android-emulator-74b0af109c30b8daa52c996c84f03fab8ed3167d3399f9227ffb3ba27be13c1e.gif&quot; alt=&quot;Testing on the Android emulator&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;test-your-xamarin-app-on-ios&quot;&gt;Test Your Xamarin App on iOS&lt;/h2&gt;
-&lt;p&gt;Testing your Xamarin app on iOS is a little trickier, because it requires a Mac to provide the simulator. (Unless you’re already on a Mac and using Visual Studio for Mac, in which case, you’re good to go!)&lt;/p&gt;
-
-&lt;p&gt;If you’re on Windows and have a Mac handy, follow the &lt;a href=&quot;https://developer.xamarin.com/guides/ios/getting_started/installation/windows/&quot;&gt;official instructions&lt;/a&gt; to set up the Mac agent and connect it to Visual Studio. Then, pick the &lt;strong&gt;HelloWorld.iOS&lt;/strong&gt; project, and switch the architecture to &lt;strong&gt;iPhone Simulator&lt;/strong&gt;. Choose a device version and click play.&lt;/p&gt;
-
-&lt;p&gt;After the project builds, the simulator will launch on the Mac:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/build-app-for-ios-android-with-xamarin/ios-emulator-df8b6d1675fb5f7d5d8df5d6e155237e1c76b9dfbbdb79b3fe5b94898d9c3110.gif&quot; alt=&quot;Testing on the iOS simulator&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;next-steps&quot;&gt;Next Steps&lt;/h2&gt;
-&lt;p&gt;This tutorial only scratches the surface. There’s a ton more you can do with Xamarin!&lt;/p&gt;
-
-&lt;p&gt;Here’s some further reading:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://developer.xamarin.com/samples/tag/Xamarin.Forms/&quot;&gt;Xamarin.Forms samples apps&lt;/a&gt; and &lt;a href=&quot;https://github.com/xamarin/xamarin-forms-samples&quot;&gt;code on GitHub&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://blog.xamarin.com/xamarin-forms-tips-beating-learning-curve/&quot;&gt;Xamarin.Forms: Tips for Beating the Learning Curve&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://blog.xamarin.com/developing-enterprise-apps-using-xamarin-forms/&quot;&gt;Developing Enterprise Apps using Xamarin.Forms&lt;/a&gt; and the accompanying &lt;a href=&quot;http://aka.ms/XamarinPatternsEbook&quot;&gt;free eBook&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Do you want to learn more about Xamarin? What about other cross-platform app stacks like React Native, NativeScript, or Flutter? Let me know in the comments below!&lt;/p&gt;
-</description>
-        <pubDate>Wed, 10 Jan 2018 00:00:00 -0500</pubDate>
-        <link>https://developer.okta.com/blog/2018/01/10/build-app-for-ios-android-with-xamarin</link>
-        <guid isPermaLink="true">https://developer.okta.com/blog/2018/01/10/build-app-for-ios-android-with-xamarin</guid>
       </item>
     
   </channel>

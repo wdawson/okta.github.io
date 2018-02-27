@@ -8,6 +8,184 @@
     <atom:link href="https://developer.okta.com/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>A Breakdown of the New SAML Authentication Bypass Vulnerability</title>
+        <description>&lt;p&gt;Several weeks ago a new critical vulnerability was discovered that affects many SAML implementations. This vulnerability was first reported by &lt;a href=&quot;https://twitter.com/kelbyludwig&quot;&gt;Kelby Ludwig&lt;/a&gt; of Duo Security and is particularly interesting to us (as a user management company) as it can be used to bypass authentication in a sinisterly simplistic way.&lt;/p&gt;
+
+&lt;p&gt;In this post we’ll take an in-depth look at this new SAML vulnerability, what it is, how it works, and what you need to know to protect yourself.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: Just in case you’re wondering whether or not Okta is vulnerable to this new issue: &lt;em&gt;we aren’t&lt;/em&gt; &amp;gt;;)&lt;/p&gt;
+
+&lt;h2 id=&quot;what-is-the-new-saml-authentication-bypass-vulnerability&quot;&gt;What is the New SAML Authentication Bypass Vulnerability?&lt;/h2&gt;
+
+&lt;p&gt;It is a new attack which has the potential to directly affect single sign-on (&lt;a href=&quot;https://wiki.oasis-open.org/security/FrontPage#SAML_V2.0_Standard&quot;&gt;SAML&lt;/a&gt;) security.&lt;/p&gt;
+
+&lt;p&gt;If you’re not familiar with SAML (short for Security Assertion Markup Language), it’s an open standard that allows users to share credentials between multiple web apps so they don’t need to manually log in when accessing different web services. Many vendors use SAML to handle user authentication and authorization so their users can access web applications without needing individual credentials for each.&lt;/p&gt;
+
+&lt;p&gt;The new SAML vulnerability allows an attacker to &lt;em&gt;bypass authentication&lt;/em&gt; and directly assume the role of an authenticated user as part of the SAML flow. &lt;strong&gt;This is a BIG DEAL.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;how-the-new-saml-authentication-bypass-vulnerability-works&quot;&gt;How the new SAML Authentication Bypass Vulnerability Works&lt;/h2&gt;
+
+&lt;p&gt;When a user is authenticating to a website using SAML, there are always three parties involved:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;A user in a web browser&lt;/li&gt;
+  &lt;li&gt;A service provider running a website that user is trying to access (EG: Salesforce)&lt;/li&gt;
+  &lt;li&gt;An identity provider that stores and manages the user’s account and credentials (EG: Okta)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;At some point during SAML authentication the service provider (EG: Salesforce) will ask the identity provider (EG: Okta): who is this person that’s trying to log into me? It’s then the identity provider’s (EG: Okta) job to generate a SAML assertion (a big XML document) and send it back to the service provider. This SAML assertion contains all the user information necessary for the service provider (EG: Salesforce) to log this user in without ever needing their password.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: This is an extreme oversimplification of how SAML works, but accurately covers the important bits needed to understand more about the new vulnerability.&lt;/p&gt;
+
+&lt;p&gt;Here’s what a simplified SAML assertion might look like:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:Assertion&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ID=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;123&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:Issuer&amp;gt;&lt;/span&gt;www.okta.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:Issuer&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:Subject&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:NameID&amp;gt;&lt;/span&gt;randall.degges@okta.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:NameID&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:Subject&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:Conditions&lt;/span&gt;
+                   &lt;span class=&quot;na&quot;&gt;NotBefore=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;2018-02-27T00:00:00Z&quot;&lt;/span&gt;
+                   &lt;span class=&quot;na&quot;&gt;NotOnOrAfter=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;2018-02-28T00:00:00Z&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:AudienceRestriction&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:Audience&amp;gt;&lt;/span&gt;www.salesforce.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:Audience&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:AudienceRestriction&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:Conditions&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:Assertion&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Looking at the XML sample above, one thing stands out above all else: the &lt;code class=&quot;highlighter-rouge&quot;&gt;saml:NameID&lt;/code&gt; element. This element is responsible for identifying the user who’s about to be logged in. In an actual SAML assertion, there’d be a lot of other stuff included. You’d also see things like:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;User attributes (first name, last name, etc.)&lt;/li&gt;
+  &lt;li&gt;User roles/permissions (is this user an admin? can they access a certain feature? etc.)&lt;/li&gt;
+  &lt;li&gt;An XML signature (this is required by almost all SAML vendors). XML signatures are frequently used to cryptographically sign the assertion element so that the service provider (EG: Salesforce) can ensure the SAML assertion it receives from the identity provider is valid and accurate (and has not been modified by an attacker).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The service provider (EG: Salesforce) relies on the data in this XML document to properly authenticate a user, so it’s critical that this information be accurate. Anddddd, as you might suspect, this is exactly where the new vulnerability comes into play.&lt;/p&gt;
+
+&lt;p&gt;It takes advantage of two potential issues in a SAML library implementation:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;XML parsing issues and&lt;/li&gt;
+  &lt;li&gt;Cryptographic signing issues in &lt;a href=&quot;https://www.w3.org/TR/xmldsig-core2/&quot;&gt;XMLDSIG&lt;/a&gt; (a specification which is used to generate and validate XML signatures)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;xml-parsing-issues&quot;&gt;XML Parsing Issues&lt;/h3&gt;
+
+&lt;p&gt;XML can be quite complicated.&lt;/p&gt;
+
+&lt;p&gt;Let’s say, for a moment, that a SAML assertion contains a &lt;code class=&quot;highlighter-rouge&quot;&gt;saml:NameID&lt;/code&gt; element like the one below:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:NameID&amp;gt;&lt;/span&gt;not-an-admin@okta.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:NameID&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;What do you think happens to the XML tree when this element is parsed? It looks something like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NameID
+|_ Text: not-an-admin@okta.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Most SAML libraries will parse the &lt;code class=&quot;highlighter-rouge&quot;&gt;saml:NameID&lt;/code&gt; element out of the XML tree, extracting the last text element inside of it and will use that value to identify the user logging in.&lt;/p&gt;
+
+&lt;p&gt;But… What happens if you break the &lt;code class=&quot;highlighter-rouge&quot;&gt;saml:NameID&lt;/code&gt; element up such that it contains an XML comment?&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:NameID&amp;gt;&lt;/span&gt;not-an-&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- this is a comment --&amp;gt;&lt;/span&gt;admin@okta.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:NameID&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;In this scenario, the XML tree, when parsed, will look like so:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NameID
+|_ Text: not-an-
+|_ Comment: this is a comment
+|_ Text: admin@okta.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And depending on the XML parsing logic used in the SAML library, you can probably see where this is headed: depending on where you insert a comment you can dramatically impact that identity of the user that’s being logged in!&lt;/p&gt;
+
+&lt;p&gt;This is &lt;strong&gt;bad news&lt;/strong&gt; for web security as a simple XML comment can cause a SAML implementation to incorrectly authenticate a user.&lt;/p&gt;
+
+&lt;h3 id=&quot;cryptographic-signing-issues&quot;&gt;Cryptographic Signing Issues&lt;/h3&gt;
+
+&lt;p&gt;The second issue the new SAML vulnerability takes advantage of is the relatively “weak” protection provided by XMLDSIG’s canonicalization algorithms that are used to create and validate XML signatures.&lt;/p&gt;
+
+&lt;p&gt;Typically, when a SAML assertion is created, the assertion element itself is cryptographically signed. This helps the service provider (EG: Salesforce) trust that the user they’re about to log in is valid. Unfortuantely however, there are several different types of canonicalization algorithms that are allowed to be used when XML signatures are created, and most of them are not well-suited for creating tamper-proof data.&lt;/p&gt;
+
+&lt;p&gt;Let’s take some basic XML, for example:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;     hi        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The XML document above would have the &lt;em&gt;exact same cryptographic signature&lt;/em&gt; as the XML document below:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;hi&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This is because XML doesn’t care about whitespace. When the XML document is analyzed before a signature is created, the space is removed.&lt;/p&gt;
+
+&lt;p&gt;What this new vulnerability takes advantage of, specifically, is the fact that most canonicalization algorithms &lt;em&gt;also&lt;/em&gt; don’t care about comments. This means that the following two XML documents (while vastly different in parseability as noted in the previous section) will have &lt;em&gt;identical&lt;/em&gt; cryptographic signatures: thereby allowing an attacker to sneak a comment into a SAML assertion and bypass authentication without ever raising any red flags in signature checks :(&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:NameID&amp;gt;&lt;/span&gt;not-an-&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- this is a comment --&amp;gt;&lt;/span&gt;admin@okta.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:NameID&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;and&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:NameID&amp;gt;&lt;/span&gt;not-an-admin@okta.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:NameID&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;While it is theoretically possible for all SAML vendors to only allow a specific canonicalization algorithm which DOES leave XML documents unmodified (so that they contain things like whitespace, comments, etc.), in practice this would be hard to enforce across vendors and implementations.&lt;/p&gt;
+
+&lt;p&gt;To read more about XML canonicalization issues you might want to check out the &lt;a href=&quot;https://en.wikipedia.org/wiki/XML_Signature#XML_canonicalization&quot;&gt;Wikipedia article&lt;/a&gt; on the topic.&lt;/p&gt;
+
+&lt;h2 id=&quot;how-to-protect-yourself-from-the-new-saml-authentication-bypass-vulnerability&quot;&gt;How to Protect Yourself from the New SAML Authentication Bypass Vulnerability&lt;/h2&gt;
+
+&lt;p&gt;If your company is using SAML you will want to &lt;em&gt;check with your SAML vendors&lt;/em&gt; to ensure they are not susceptible to this new vulnerability. &lt;a href=&quot;https://developer.okta.com/&quot;&gt;Okta&lt;/a&gt;, by the way, &lt;strong&gt;is not vulnerable&lt;/strong&gt; &amp;gt;:)&lt;/p&gt;
+
+&lt;p&gt;If you’re a developer building systems to integrate with SAML vendors or single sign-on providers, try to NOT integrate using SAML if possible. Instead: use a more modern identity standard such as OpenID Connect.&lt;/p&gt;
+
+&lt;p&gt;OpenID Connect is a lot simpler than SAML, doesn’t use XML or &lt;a href=&quot;https://www.w3.org/TR/xmldsig-core1/&quot;&gt;XMLDSIG&lt;/a&gt;, and is far less susceptible to attacks like these since it doesn’t rely on XML parsers. There’s a long, complex history with XML and SAML – many of the SAML vulnerabilities that have been found over the last ~15 years are centered around XML parsing (just like this one).&lt;/p&gt;
+
+&lt;p&gt;Take, for instance, &lt;a href=&quot;https://www.youtube.com/watch?v=QLKM4USUlZs&quot;&gt;XML Signature Wrapping&lt;/a&gt; attacks which have been known about since ~2002 but are still finding their way into modern SAML implementations as recently as 2014.&lt;/p&gt;
+
+&lt;p&gt;If possible, avoid SAML and use &lt;a href=&quot;https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1&quot;&gt;OpenID Connect&lt;/a&gt; whenever you can. If you must use SAML, check your SAML library (and its underlying XML parsing/validation/signature libraries) to ensure it is NOT vulnerable to the new attack.&lt;/p&gt;
+
+&lt;p&gt;Duo has graciously audited several popular SAML libraries and found that:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;OneLogin’s &lt;a href=&quot;https://github.com/onelogin/python-saml&quot;&gt;python-saml&lt;/a&gt;,&lt;/li&gt;
+  &lt;li&gt;OneLogin’s &lt;a href=&quot;https://github.com/onelogin/ruby-saml&quot;&gt;ruby-saml&lt;/a&gt;,&lt;/li&gt;
+  &lt;li&gt;Clever’s &lt;a href=&quot;https://github.com/Clever/saml2&quot;&gt;saml2&lt;/a&gt;,&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/omniauth/omniauth-saml&quot;&gt;omniauth-saml&lt;/a&gt;, and&lt;/li&gt;
+  &lt;li&gt;Shibboleth’s &lt;a href=&quot;https://www.shibboleth.net/products/opensaml-cpp/&quot;&gt;openSAML C++&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;are all vulnerable with many other libraries also likely to be affected.&lt;/p&gt;
+
+&lt;p&gt;If you are the author of a SAML library, there are two important steps you can take immediately to protect your users:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Look for an option in whatever XML library you’re using to remove all comments when creating and parsing XML documents. By strategically purging all XML comments upfront you’ll be able to avoid this issue entirely by never allowing a comment to leak into your XML tree.&lt;/p&gt;
+
+    &lt;p&gt;If the XML library you’re using doesn’t support purging comments, you can always work with the XML library maintainers to add this functionality or swap to a new XML library.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;When parsing nodes from an XML element tree using your XML parsing library, immediately bail out if you detect more than one child node exists for SAML nodes. This way, if you do stumble across a &lt;code class=&quot;highlighter-rouge&quot;&gt;saml:NameId&lt;/code&gt; node (or any other SAML node) that contains more than one child, you won’t make the mistake of using just the first or last child values.&lt;/p&gt;
+
+    &lt;p&gt;You should also avoid concatenating child values together as there may be a potential way to attack these values in the future.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Be safe out there.&lt;/p&gt;
+
+&lt;p&gt;If you have any questions, comments, or suggestions: please drop us a note in a comment below or &lt;a href=&quot;https://twitter.com/oktadev&quot;&gt;hit us up&lt;/a&gt; on Twitter.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 27 Feb 2018 00:00:00 -0500</pubDate>
+        <link>https://developer.okta.com/blog/2018/02/27/a-breakdown-of-the-new-saml-authentication-bypass-vulnerability</link>
+        <guid isPermaLink="true">https://developer.okta.com/blog/2018/02/27/a-breakdown-of-the-new-saml-authentication-bypass-vulnerability</guid>
+      </item>
+    
+      <item>
         <title>9 Talks I Can't Wait to See at Iterate</title>
         <description>&lt;p&gt;This year on February 27th my team at Okta will host our first ever developer conference, &lt;a href=&quot;https://www.iterateconf.io/&quot;&gt;Iterate&lt;/a&gt;. It will be held in downtown San Francisco at &lt;a href=&quot;http://www.bespokesf.co/&quot;&gt;Bespoke&lt;/a&gt; and has an incredible lineup of speakers from around the world. I am beyond excited to see some of the things that will be discussed. In this post I’d like to share with you the nine sessions I’m most looking forward to:&lt;/p&gt;
 
