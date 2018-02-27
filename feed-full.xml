@@ -11,7 +11,7 @@
         <title>A Breakdown of the New SAML Authentication Bypass Vulnerability</title>
         <description>&lt;p&gt;Several weeks ago a new critical vulnerability was discovered that affects many SAML implementations. This vulnerability was first reported by &lt;a href=&quot;https://twitter.com/kelbyludwig&quot;&gt;Kelby Ludwig&lt;/a&gt; of Duo Security and is particularly interesting to us (as a user management company) as it can be used to bypass authentication in a sinisterly simplistic way.&lt;/p&gt;
 
-&lt;p&gt;In this post we’ll take an in-depth look at this new SAML vulnerability, what it is, how it works, and what you need to know to protect yourself.&lt;/p&gt;
+&lt;p&gt;In this post, we’ll take an in-depth look at this new SAML vulnerability, what it is, how it works, and what you need to know to protect yourself.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: Just in case you’re wondering whether or not Okta is vulnerable to this new issue: &lt;em&gt;we aren’t&lt;/em&gt; &amp;gt;;)&lt;/p&gt;
 
@@ -19,7 +19,7 @@
 
 &lt;p&gt;It is a new attack which has the potential to directly affect single sign-on (&lt;a href=&quot;https://wiki.oasis-open.org/security/FrontPage#SAML_V2.0_Standard&quot;&gt;SAML&lt;/a&gt;) security.&lt;/p&gt;
 
-&lt;p&gt;If you’re not familiar with SAML (short for Security Assertion Markup Language), it’s an open standard that allows users to share credentials between multiple web apps so they don’t need to manually log in when accessing different web services. Many vendors use SAML to handle user authentication and authorization so their users can access web applications without needing individual credentials for each.&lt;/p&gt;
+&lt;p&gt;If you’re not familiar with SAML (short for Security Assertion Markup Language), it’s an open standard that allows users to share credentials between multiple web apps, so they don’t need to log in when accessing different web services manually. Many vendors use SAML to handle user authentication and authorization so their users can access web applications without requiring individual credentials for each.&lt;/p&gt;
 
 &lt;p&gt;The new SAML vulnerability allows an attacker to &lt;em&gt;bypass authentication&lt;/em&gt; and directly assume the role of an authenticated user as part of the SAML flow. &lt;strong&gt;This is a BIG DEAL.&lt;/strong&gt;&lt;/p&gt;
 
@@ -29,11 +29,11 @@
 
 &lt;ul&gt;
   &lt;li&gt;A user in a web browser&lt;/li&gt;
-  &lt;li&gt;A service provider running a website that user is trying to access (EG: Salesforce)&lt;/li&gt;
-  &lt;li&gt;An identity provider that stores and manages the user’s account and credentials (EG: Okta)&lt;/li&gt;
+  &lt;li&gt;A service provider running a website that user is trying to access (e.g., Salesforce)&lt;/li&gt;
+  &lt;li&gt;An identity provider that stores and manages the user’s account and credentials (e.g., Okta)&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;At some point during SAML authentication the service provider (EG: Salesforce) will ask the identity provider (EG: Okta): who is this person that’s trying to log into me? It’s then the identity provider’s (EG: Okta) job to generate a SAML assertion (a big XML document) and send it back to the service provider. This SAML assertion contains all the user information necessary for the service provider (EG: Salesforce) to log this user in without ever needing their password.&lt;/p&gt;
+&lt;p&gt;At some point during SAML authentication the service provider (e.g., Salesforce) will ask the identity provider (e.g., Okta): who is this person that’s trying to log into me? It’s then the identity provider’s (e.g., Okta) job to generate a SAML assertion (a big XML document) and send it back to the service provider. This SAML assertion contains all the user information necessary for the service provider (e.g., Salesforce) to log this user in without ever needing their password.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: This is an extreme oversimplification of how SAML works, but accurately covers the important bits needed to understand more about the new vulnerability.&lt;/p&gt;
 
@@ -59,10 +59,10 @@
 &lt;ul&gt;
   &lt;li&gt;User attributes (first name, last name, etc.)&lt;/li&gt;
   &lt;li&gt;User roles/permissions (is this user an admin? can they access a certain feature? etc.)&lt;/li&gt;
-  &lt;li&gt;An XML signature (this is required by almost all SAML vendors). XML signatures are frequently used to cryptographically sign the assertion element so that the service provider (EG: Salesforce) can ensure the SAML assertion it receives from the identity provider is valid and accurate (and has not been modified by an attacker).&lt;/li&gt;
+  &lt;li&gt;An XML signature (this is required by almost all SAML vendors). XML signatures are frequently used to cryptographically sign the assertion element so that the service provider (e.g., Salesforce) can ensure the SAML assertion it receives from the identity provider is valid and accurate (and has not been modified by an attacker).&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;The service provider (EG: Salesforce) relies on the data in this XML document to properly authenticate a user, so it’s critical that this information be accurate. Anddddd, as you might suspect, this is exactly where the new vulnerability comes into play.&lt;/p&gt;
+&lt;p&gt;The service provider (e.g., Salesforce) relies on the data in this XML document to properly authenticate a user, so it’s critical that this information be accurate. Anddddd, as you might suspect, this is exactly where the new vulnerability comes into play.&lt;/p&gt;
 
 &lt;p&gt;It takes advantage of two potential issues in a SAML library implementation:&lt;/p&gt;
 
@@ -109,7 +109,7 @@
 
 &lt;p&gt;The second issue the new SAML vulnerability takes advantage of is the relatively “weak” protection provided by XMLDSIG’s canonicalization algorithms that are used to create and validate XML signatures.&lt;/p&gt;
 
-&lt;p&gt;Typically, when a SAML assertion is created, the assertion element itself is cryptographically signed. This helps the service provider (EG: Salesforce) trust that the user they’re about to log in is valid. Unfortuantely however, there are several different types of canonicalization algorithms that are allowed to be used when XML signatures are created, and most of them are not well-suited for creating tamper-proof data.&lt;/p&gt;
+&lt;p&gt;Typically, when a SAML assertion is created, the assertion element itself is cryptographically signed. This helps the service provider (e.g., Salesforce) trust that the user they’re about to log in is valid. Unfortunately however, there are several different types of canonicalization algorithms that are allowed to be used when XML signatures are created, and most of them are not well-suited for creating tamper-proof data.&lt;/p&gt;
 
 &lt;p&gt;Let’s take some basic XML, for example:&lt;/p&gt;
 
@@ -121,9 +121,9 @@
 &lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;hi&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;This is because XML doesn’t care about whitespace. When the XML document is analyzed before a signature is created, the space is removed.&lt;/p&gt;
+&lt;p&gt;This is because XML doesn’t care about whitespace. When the XML document is analyzed before a signature is created, space is removed.&lt;/p&gt;
 
-&lt;p&gt;What this new vulnerability takes advantage of, specifically, is the fact that most canonicalization algorithms &lt;em&gt;also&lt;/em&gt; don’t care about comments. This means that the following two XML documents (while vastly different in parseability as noted in the previous section) will have &lt;em&gt;identical&lt;/em&gt; cryptographic signatures: thereby allowing an attacker to sneak a comment into a SAML assertion and bypass authentication without ever raising any red flags in signature checks :(&lt;/p&gt;
+&lt;p&gt;What this new vulnerability takes advantage of, specifically, is the fact that most canonicalization algorithms &lt;em&gt;also&lt;/em&gt; don’t care about comments. This means that the following two XML documents (while vastly different in parseability as noted in the previous section) will have &lt;em&gt;identical&lt;/em&gt; cryptographic signatures: thereby allowing an attacker to sneak a comment into a SAML assertion and bypass authentication without ever raising any red flags in signature checks. :(&lt;/p&gt;
 
 &lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:NameID&amp;gt;&lt;/span&gt;not-an-&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- this is a comment --&amp;gt;&lt;/span&gt;admin@okta.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:NameID&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
@@ -139,7 +139,7 @@
 
 &lt;h2 id=&quot;how-to-protect-yourself-from-the-new-saml-authentication-bypass-vulnerability&quot;&gt;How to Protect Yourself from the New SAML Authentication Bypass Vulnerability&lt;/h2&gt;
 
-&lt;p&gt;If your company is using SAML you will want to &lt;em&gt;check with your SAML vendors&lt;/em&gt; to ensure they are not susceptible to this new vulnerability. &lt;a href=&quot;https://developer.okta.com/&quot;&gt;Okta&lt;/a&gt;, by the way, &lt;strong&gt;is not vulnerable&lt;/strong&gt; &amp;gt;:)&lt;/p&gt;
+&lt;p&gt;If your company is using SAML, you will want to &lt;em&gt;check with your SAML vendors&lt;/em&gt; to ensure they are not susceptible to this new vulnerability. &lt;a href=&quot;https://developer.okta.com/&quot;&gt;Okta&lt;/a&gt;, by the way, &lt;strong&gt;is not vulnerable&lt;/strong&gt;. &amp;gt;:)&lt;/p&gt;
 
 &lt;p&gt;If you’re a developer building systems to integrate with SAML vendors or single sign-on providers, try to NOT integrate using SAML if possible. Instead: use a more modern identity standard such as OpenID Connect.&lt;/p&gt;
 
@@ -147,7 +147,7 @@
 
 &lt;p&gt;Take, for instance, &lt;a href=&quot;https://www.youtube.com/watch?v=QLKM4USUlZs&quot;&gt;XML Signature Wrapping&lt;/a&gt; attacks which have been known about since ~2002 but are still finding their way into modern SAML implementations as recently as 2014.&lt;/p&gt;
 
-&lt;p&gt;If possible, avoid SAML and use &lt;a href=&quot;https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1&quot;&gt;OpenID Connect&lt;/a&gt; whenever you can. If you must use SAML, check your SAML library (and its underlying XML parsing/validation/signature libraries) to ensure it is NOT vulnerable to the new attack.&lt;/p&gt;
+&lt;p&gt;If possible, avoid SAML and use &lt;a href=&quot;/blog/2017/07/25/oidc-primer-part-1&quot;&gt;OpenID Connect&lt;/a&gt; whenever you can. If you must use SAML, check your SAML library (and its underlying XML parsing/validation/signature libraries) to ensure it is NOT vulnerable to the new attack.&lt;/p&gt;
 
 &lt;p&gt;Duo has graciously audited several popular SAML libraries and found that:&lt;/p&gt;
 
