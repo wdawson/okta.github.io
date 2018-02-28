@@ -3599,8 +3599,8 @@ Parameter      | Description                                         | Param Typ
 -------------- | --------------------------------------------------- | ---------- | -------- | -------- |
 factorId            | `id` of factor returned from enrollment             | URL        | String   | TRUE     |
 stateToken     | [state token](#state-token) for current transaction | Body       | String   | TRUE     |
-rememberDevice | user&#8217;s decision to remember device            | URL        | Boolean  | FALSE    |
-autoPush       | user&#8217;s decision to send push to device automatically | URL | Boolean  | FALSE    |
+rememberDevice | user's decision to remember device            | URL        | Boolean  | FALSE    |
+autoPush       | user's decision to send push to device automatically | URL | Boolean  | FALSE    |
 
 **Okta Verify Push Details Pertaining to Auto-Push**
 
