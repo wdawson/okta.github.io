@@ -319,7 +319,7 @@ curl -v -X POST \
 
 {% api_operation post /api/v1/meta/schemas/user/default %}
 
-Updates one or more [custom user profile properties](#user-profile-schema-property-object) in the schema or a [permission](#schema-property-permission-object) for a [user profile base property](#user-profile-base-subschema).
+Updates one or more [custom user profile properties](#user-profile-schema-property-object) in the schema, a [permission](#schema-property-permission-object) for a [user profile base property](#user-profile-base-subschema), or the nullability of the `firstName` and `lastName` properties in the [user profile base schema](#user-profile-base-subschema).
 
 ##### Request Parameters
 {:.api .api-request .api-request-params}
@@ -344,6 +344,26 @@ curl -v -X POST \
 -d '{
   {
     "definitions": {
+      "base": {
+        "id": "#base",
+        "type": "object",
+        "properties": {
+          "firstName": {
+          "title": "First name",
+          "type": "string",
+          "required": false,
+          "mutability": "READ_WRITE",
+          "scope": "NONE",
+          "permissions": [
+            {
+              "principal": "SELF",
+              "action": "READ_ONLY"
+            }
+          ]
+        }
+      },
+      "required": []
+    },
       "custom": {
         "id": "#custom",
         "type": "object",
@@ -1212,7 +1232,7 @@ Custom property names for the [profile object](users#profile-object) must be uni
 
 #### User Profile Base Subschema
 
-All Okta defined profile properties are defined in a profile sub-schema with the resolution scope `#base`.  These properties cannot be removed or edited (except for permission).
+All Okta defined profile properties are defined in a profile sub-schema with the resolution scope `#base`.  These properties cannot be modified, except to update permissions or change the nullability of `firstName` and `lastName`.  They cannot be removed.
 
 The base user profile is based on the [System for Cross-Domain Identity Management: Core Schema](https://tools.ietf.org/html/draft-ietf-scim-core-schema-22#section-4.1.1) and has following standard properties:
 
@@ -1221,8 +1241,8 @@ The base user profile is based on the [System for Cross-Domain Identity Manageme
 | login             | unique identifier for the user (`username`)                                                                                        | String   | FALSE    | TRUE   | FALSE    | 5         | 100       | [RFC 6531 Section 3.3](http://tools.ietf.org/html/rfc6531#section-3.3)                                            |
 | email             | primary email address of user                                                                                                      | String   | FALSE    | TRUE   | FALSE    | 5         | 100       | [RFC 5322 Section 3.2.3](http://tools.ietf.org/html/rfc5322#section-3.2.3)                                        |
 | secondEmail       | secondary email address of user typically used for account recovery                                                                | String   | TRUE     | TRUE   | FALSE    | 5         | 100       | [RFC 5322 Section 3.2.3](http://tools.ietf.org/html/rfc5322#section-3.2.3)                                        |
-| firstName         | given name of the user (`givenName`)                                                                                               | String   | FALSE    | FALSE  | FALSE    | 1         | 50        |                                                                                                                   |
-| lastName          | family name of the user (`familyName`)                                                                                             | String   | FALSE    | FALSE  | FALSE    | 1         | 50        |                                                                                                                   |
+| firstName         | given name of the user (`givenName`)                                                                                               | String   | FALSE (default)    | FALSE  | FALSE    | 1         | 50        |                                                                                                                   |
+| lastName          | family name of the user (`familyName`)                                                                                             | String   | FALSE (default)    | FALSE  | FALSE    | 1         | 50        |                                                                                                                   |
 | middleName        | middle name(s) of the user                                                                                                         | String   | FALSE    | FALSE  | FALSE    |           |           |                                                                                                                   |
 | honorificPrefix   | honorific prefix(es) of the user, or title in most Western languages                                                               | String   | TRUE     | FALSE  | FALSE    |           |           |                                                                                                                   |
 | honorificSuffix   | honorific suffix(es) of the user                                                                                                   | String   | TRUE     | FALSE  | FALSE    |           |           |                                                                                                                   |
