@@ -8,6 +8,800 @@
     <atom:link href="https://developer.okta.com/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Develop a Microservices Architecture with OAuth 2.0 and JHipster</title>
+        <description>&lt;p&gt;JHipster is a development platform to generate, develop, and deploy Spring Boot + Angular web applications and Spring microservices. It supports using many types of authentication: JWT, session-based, and OAuth 2.0. In its 5.0 release, it’ll also add React as a UI option. The 5.0 version is under active development and will likely be released in the next few months.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/what-is-jhipster-800981d8ce6a437997c930dd6fe3bdddcbb0df902d044e9577fa1e36609f7b4f.png&quot; alt=&quot;Spring Boot + Angular = JHipster&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In addition to having two popular UI frameworks, JHipster also has modules that support generating mobile applications. If you like Ionic, which currently leverages Angular, you can use &lt;a href=&quot;/blog/2018/01/30/jhipster-ionic-with-oidc-authentication&quot;&gt;Ionic for JHipster&lt;/a&gt;. If you’re a React aficionado, you can use &lt;a href=&quot;https://github.com/ruddell/ignite-jhipster&quot;&gt;Ignite JHipster&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.jhipster.tech&quot;&gt;JHipster&lt;/a&gt; is 🔥, and so are microservices! Follow the instructions in this tutorial to create an API gateway, a blog microservice, and a companion store microservice.&lt;/p&gt;
+
+&lt;h2 id=&quot;install-jhipster&quot;&gt;Install JHipster&lt;/h2&gt;
+
+&lt;p&gt;There are six different ways to &lt;a href=&quot;http://www.jhipster.tech/installation/&quot;&gt;install JHipster&lt;/a&gt;. The first way, &lt;a href=&quot;https://start.jhipster.tech/&quot;&gt;JHipster Online&lt;/a&gt;, doesn’t even require you to install anything. It’ll generate the application and push it to a GitHub repository for you. While this works nicely, I like to have my example apps in a single repository for easier discoverability.&lt;/p&gt;
+
+&lt;p&gt;A local installation with Yarn or npm are other options, as is using a package manager (Homebrew on Mac, Chocalatey on Windows), using a Vagrant-based developer box, or using a Docker container. Since I’m on a Mac, I like to use Homebrew because it allows me to use JHipster with multiple Node versions without installing JHipster again. You can install JHipster on a Mac using the following command:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brew install jhipster
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;On Windows, it’s as simple as:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;choco install jhipster
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Or you can use the standard npm installation:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm install &lt;span class=&quot;nt&quot;&gt;-g&lt;/span&gt; yo generator-jhipster
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Create an &lt;code class=&quot;highlighter-rouge&quot;&gt;okta-jhipster-microservices-oauth-example&lt;/code&gt; directory on your hard drive, or simply &lt;code class=&quot;highlighter-rouge&quot;&gt;apps&lt;/code&gt; if you don’t want to spell it all out.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;One of the most common things to happen with JHipster 4.x app is you’ll start it, and there will be a blank page when you navigate to it in your browser. If that happens to you, you need to rebuild the front end. You can do this by running &lt;code class=&quot;highlighter-rouge&quot;&gt;npm run webpack:build&lt;/code&gt; and restarting your server, or by running &lt;code class=&quot;highlighter-rouge&quot;&gt;yarn start&lt;/code&gt; (which will start an auto-reloading webpack dev server on port 9000).&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;generate-an-api-gateway&quot;&gt;Generate an API Gateway&lt;/h2&gt;
+
+&lt;p&gt;To generate an API Gateway with JHipster, open a terminal window, navigate to &lt;code class=&quot;highlighter-rouge&quot;&gt;okta-jhipster-microservices-oauth-example&lt;/code&gt;, create a &lt;code class=&quot;highlighter-rouge&quot;&gt;gateway&lt;/code&gt; directory, and run &lt;code class=&quot;highlighter-rouge&quot;&gt;jhipster&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir gateway &amp;amp;&amp;amp; cd gateway &amp;amp;&amp;amp; jhipster
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;JHipster asks a multitude of questions about the application you want to create and what features you’d like to include. Use the following answers to generate a gateway with OAuth 2.0 support.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Question&lt;/th&gt;
+      &lt;th&gt;Answer&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Type of application?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Microservice gateway&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Name?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;gateway&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Port?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;8080&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Java package name?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;com.okta.developer.gateway&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Which service discovery server?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;JHipster Registry&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Type of authentication?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;OAuth 2.0 / OIDC&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Type of database?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SQL&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Production database?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;PostgreSQL&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Development database?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;H2 with disk-based persistence&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Use Hibernate 2nd level cache?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Yes&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Maven or Gradle?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Maven&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Other technologies?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;blank&amp;gt;&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Client framework?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Angular 5&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Enable SASS support?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;No&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Enable i18n?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Yes&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Native language of application?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;English&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Additional languages?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;blank&amp;gt;&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Additional testing frameworks?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Protractor&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Install other generators?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;No&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;The project generation process will take several minutes to run, depending on your internet connection speed.&lt;/p&gt;
+
+&lt;p&gt;While you’re waiting, you can get started with setting up OAuth with Okta.&lt;/p&gt;
+
+&lt;h3 id=&quot;what-is-oauth-20&quot;&gt;What is OAuth 2.0?&lt;/h3&gt;
+
+&lt;p&gt;The OAuth implementation in JHipster leverages Spring Boot and its OAuth 2.0 support (an &lt;code class=&quot;highlighter-rouge&quot;&gt;@EnableOAuthSso&lt;/code&gt; annotation). If you’re not sure what OAuth and OpenID Connect (OIDC) are, please see &lt;a href=&quot;/blog/2017/06/21/what-the-heck-is-oauth&quot;&gt;What the Heck is OAuth?&lt;/a&gt;. It provides single sign-on (SSO) to JHipster applications. [Securing Microservices with Spring Security OAuth] shows a bare-bones Spring microservices architecture using OAuth. JHipster uses the same setup internally.&lt;/p&gt;
+
+&lt;p&gt;JHipster ships with &lt;a href=&quot;https://keycloak.org&quot;&gt;Keycloak&lt;/a&gt; configured for OAuth by default. To configure your apps to work with Okta, you’ll first need to &lt;a href=&quot;https://developer.okta.com/signup/&quot;&gt;create a free developer account&lt;/a&gt;. After doing so, you’ll get your own Okta domain, which has a name like &lt;code class=&quot;highlighter-rouge&quot;&gt;https://dev-123456.oktapreview.com&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;create-an-openid-connect-application-on-okta&quot;&gt;Create an OpenID Connect Application on Okta&lt;/h3&gt;
+
+&lt;p&gt;Create an OpenID Connect (OIDC) app in Okta to get a client ID and secret. This basically means you’re “registering” your application with Okta. Log in to your Okta Developer account and navigate to &lt;strong&gt;Applications&lt;/strong&gt; &amp;gt; &lt;strong&gt;Add Application&lt;/strong&gt;. Click &lt;strong&gt;Web&lt;/strong&gt; and click the &lt;strong&gt;Next&lt;/strong&gt; . Give the app a name you’ll remember (e.g., &lt;code class=&quot;highlighter-rouge&quot;&gt;JHipster Microservices&lt;/code&gt;), and specify &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt; as a Base URI and &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080/login&lt;/code&gt; as a Login Redirect URI. Click &lt;strong&gt;Done&lt;/strong&gt; and make a note of your client ID and client secret values.&lt;/p&gt;
+
+&lt;p&gt;For the roles coming from Okta to match the default roles in JHipster, you’ll need to create them. Create a &lt;code class=&quot;highlighter-rouge&quot;&gt;ROLE_ADMIN&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;ROLE_USER&lt;/code&gt; group (&lt;strong&gt;Users&lt;/strong&gt; &amp;gt; &lt;strong&gt;Groups&lt;/strong&gt; &amp;gt; &lt;strong&gt;Add Group&lt;/strong&gt;) and add users to them. You can use the account you signed up with, or create a new user (&lt;strong&gt;Users&lt;/strong&gt; &amp;gt; &lt;strong&gt;Add Person&lt;/strong&gt;). Navigate to &lt;strong&gt;API&lt;/strong&gt; &amp;gt; &lt;strong&gt;Authorization Servers&lt;/strong&gt;, click the &lt;strong&gt;Authorization Servers&lt;/strong&gt; tab and edit the default one. Click the &lt;strong&gt;Claims&lt;/strong&gt; tab and &lt;strong&gt;Add Claim&lt;/strong&gt;. Name it &lt;code class=&quot;highlighter-rouge&quot;&gt;roles&lt;/code&gt;, and include it in the ID Token. Set the value type to &lt;code class=&quot;highlighter-rouge&quot;&gt;Groups&lt;/code&gt; and set the filter to be a Regex of &lt;code class=&quot;highlighter-rouge&quot;&gt;.*&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Modify &lt;code class=&quot;highlighter-rouge&quot;&gt;gateway/src/main/resources/config/application.yml&lt;/code&gt; to have the following values:&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;security&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;basic&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;oauth2&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;access-token-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/token&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;user-authorization-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/authorize&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;client-id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;clientId&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;client-secret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;clientSecret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;client-authentication-scheme&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;form&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;scope&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;openid profile email&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;resource&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;filter-order&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;3&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;user-info-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/userinfo&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;token-info-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/introspect&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;prefer-token-info&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; Make sure to remove the &lt;code class=&quot;highlighter-rouge&quot;&gt;security.oauth2.resource.jwt.key-uri&lt;/code&gt; key and value. This property causes Spring Security to retrieve a public key from Keycloak, and Okta doesn’t have this same functionality. I &lt;a href=&quot;https://github.com/jhipster/generator-jhipster/issues/7116&quot;&gt;entered an issue&lt;/a&gt; to fix this in JHipster.&lt;/p&gt;
+
+&lt;p&gt;You can also use environment variables to override the default values. Using this technique is recommend because 1) You don’t need to modify the values in each microservice application and 2) it prevents you from leaking your client secret in a source code repository.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_CLIENT_ACCESS_TOKEN_URI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/token&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/authorize&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_RESOURCE_USER_INFO_URI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/userinfo&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_RESOURCE_TOKEN_INFO_URI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/introspect&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_CLIENT_CLIENT_ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;{clientId}&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_CLIENT_CLIENT_SECRET&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;{clientSecret}&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;TIP:&lt;/strong&gt; If you’re using JHipster’s Protractor support, you’ll want to add a user to the &lt;code class=&quot;highlighter-rouge&quot;&gt;ROLE_ADMIN&lt;/code&gt; group on Okta and change the credentials in &lt;code class=&quot;highlighter-rouge&quot;&gt;src/test/javascript/e2e/account/account.spec.ts&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;src/test/javascript/e2e/admin/administration.spec.ts&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;install-the-jhipster-registry&quot;&gt;Install the JHipster Registry&lt;/h2&gt;
+
+&lt;p&gt;You’ll need a service discovery server installed before you can start the gateway. In a browser, go to the &lt;a href=&quot;https://github.com/jhipster/jhipster-registry/releases&quot;&gt;JHipster Registry release page&lt;/a&gt; and download the latest release. At the time of this writing, it was v3.2.4.&lt;/p&gt;
+
+&lt;p&gt;Download the WAR and put it alongside your &lt;code class=&quot;highlighter-rouge&quot;&gt;gateway&lt;/code&gt; application. Start it so your apps can register with it.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;java&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;jar&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;jhipster&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;3.2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;war&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Start the &lt;code class=&quot;highlighter-rouge&quot;&gt;gateway&lt;/code&gt; app by navigating to its directory in a terminal and running:&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;./&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mvnw&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;TIP:&lt;/strong&gt; If you already have Maven installed, you can just use &lt;code class=&quot;highlighter-rouge&quot;&gt;mvn&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Open your browser and go to &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8761&lt;/code&gt;. Log in with &lt;code class=&quot;highlighter-rouge&quot;&gt;admin/admin&lt;/code&gt;, and you should see a welcome page that shows the gateway has registered.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/jhipster-registry-with-gateway-1f6ab845196ceb237d0d67262890e9f7a93227be586f518f5656f7c43da0b010.png&quot; alt=&quot;JHipster Registry with Gateway registered&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;generate-a-blog-microservice-application&quot;&gt;Generate a Blog Microservice Application&lt;/h2&gt;
+
+&lt;p&gt;In &lt;code class=&quot;highlighter-rouge&quot;&gt;okta-jhipster-microservices-oauth-example&lt;/code&gt;, create a &lt;code class=&quot;highlighter-rouge&quot;&gt;blog&lt;/code&gt; directory, and run &lt;code class=&quot;highlighter-rouge&quot;&gt;jhipster&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir blog &amp;amp;&amp;amp; cd blog &amp;amp;&amp;amp; jhipster
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Use the following answers to generate a blog microservice with OAuth 2.0 support.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Question&lt;/th&gt;
+      &lt;th&gt;Answer&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Type of application?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Microservice application&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Name?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;blog&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Port?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;8081&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Java package name?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;com.okta.developer.blog&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Which service discovery server?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;JHipster Registry&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Type of authentication?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;OAuth 2.0 / OIDC&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Type of database?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SQL&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Production database?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;PostgreSQL&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Development database?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;H2 with disk-based persistence&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Spring cache?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Yes, with Hazelcast&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Use Hibernate 2nd level cache?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Yes&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Maven or Gradle?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Maven&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Other technologies?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Search engine using Elasticsearch&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Enable i18n?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Yes&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Native language of application?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;English&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Additional languages?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;blank&amp;gt;&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Additional testing frameworks?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;blank&amp;gt;&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Install other generators?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;No&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Create a &lt;code class=&quot;highlighter-rouge&quot;&gt;blog/blog.jh&lt;/code&gt; file and fill it with the following JDL (JHipster Domain Language).&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;entity Blog {
+    name String required minlength(3),
+    handle String required minlength(2)
+}
+
+entity Entry {
+    title String required,
+    content TextBlob required,
+    date ZonedDateTime required
+}
+
+entity Tag {
+    name String required minlength(2)
+}
+
+relationship ManyToOne {
+    Entry{blog(name)} to Blog
+}
+
+relationship ManyToMany {
+    Entry{tag(name)} to Tag{entry}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; This schema does not have a many-to-one relationship from &lt;code class=&quot;highlighter-rouge&quot;&gt;Blog&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;User&lt;/code&gt; because JHipster’s microservices support for OAuth doesn’t currently have a &lt;code class=&quot;highlighter-rouge&quot;&gt;User&lt;/code&gt; entity. I’m &lt;a href=&quot;https://github.com/jhipster/generator-jhipster/issues/7065&quot;&gt;currently working to improve that&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Run &lt;code class=&quot;highlighter-rouge&quot;&gt;jhipster import-jdl blog.jh&lt;/code&gt; to create the backend API to power this schema. Answer &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; when prompted to overwrite &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/resources/config/liquibase/master.xml&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Change directories into the &lt;code class=&quot;highlighter-rouge&quot;&gt;gateway&lt;/code&gt; application and run &lt;code class=&quot;highlighter-rouge&quot;&gt;jhipster entity blog&lt;/code&gt;. Specify &lt;code class=&quot;highlighter-rouge&quot;&gt;Y&lt;/code&gt; when prompted to generate from an existing microservice. Enter &lt;code class=&quot;highlighter-rouge&quot;&gt;../blog&lt;/code&gt; as the path to the root directory. Select &lt;code class=&quot;highlighter-rouge&quot;&gt;Yes, re-generate the entity&lt;/code&gt; and type &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; when prompted to overwrite &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/webapp/app/entities/entity.module.ts&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Run the following commands to generate the UI for &lt;code class=&quot;highlighter-rouge&quot;&gt;entry&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;tag&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;jhipster entity entry
+jhipster entity tag
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;generate-a-store-microservice-application&quot;&gt;Generate a Store Microservice Application&lt;/h2&gt;
+
+&lt;p&gt;In &lt;code class=&quot;highlighter-rouge&quot;&gt;okta-jhipster-microservices-oauth-example&lt;/code&gt;, create a &lt;code class=&quot;highlighter-rouge&quot;&gt;store&lt;/code&gt; directory, then run &lt;code class=&quot;highlighter-rouge&quot;&gt;jhipster&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir store &amp;amp;&amp;amp; cd store &amp;amp;&amp;amp; jhipster
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Use the following answers to generate a store microservice with OAuth 2.0 and MongoDB.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Question&lt;/th&gt;
+      &lt;th&gt;Answer&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Type of application?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Microservice application&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Name?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;store&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Port?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;8082&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Java package name?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;com.okta.developer.store&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Which service discovery server?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;JHipster Registry&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Type of authentication?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;OAuth 2.0 / OIDC&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Type of database?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;MongoDB&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Spring cache?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Yes, with Hazelcast&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Use Hibernate 2nd level cache?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Yes&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Maven or Gradle?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Maven&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Other technologies?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Search engine using Elasticsearch&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Enable i18n?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Yes&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Native language of application?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;English&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Additional languages?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;blank&amp;gt;&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Additional testing frameworks?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;blank&amp;gt;&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Install other generators?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;No&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;You have an empty microservice, but it needs some entities to manage! Run &lt;code class=&quot;highlighter-rouge&quot;&gt;jhipster entity product&lt;/code&gt; to create a product entity.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Question&lt;/th&gt;
+      &lt;th&gt;Answer&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Add a field?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Y&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Field name?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;name&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Field type?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Field validation rules?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Y&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Which validation rules?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Required&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Add a field?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Y&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Field name?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;price&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Field type?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Double&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Field validation rules?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Y&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Which validation rules?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Required&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;Minimum&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Field minimum?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;0&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Add a field?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Y&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Field name?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;image&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Field type?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;[BETA] Blob&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;What is the content of the blob field?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;An image&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Field validation rules?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;N&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Add a field?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;N&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Separate service class?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;No&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Pagination on entity?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Yes, with pagination links&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Change directories into the &lt;code class=&quot;highlighter-rouge&quot;&gt;gateway&lt;/code&gt; application and run &lt;code class=&quot;highlighter-rouge&quot;&gt;jhipster entity product&lt;/code&gt;. Specify &lt;code class=&quot;highlighter-rouge&quot;&gt;Y&lt;/code&gt; when prompted to generate from an existing microservice. Enter &lt;code class=&quot;highlighter-rouge&quot;&gt;../store&lt;/code&gt; as the path to the root directory. Select &lt;code class=&quot;highlighter-rouge&quot;&gt;Yes, re-generate the entity&lt;/code&gt; and type &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; when prompted to overwrite &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/webapp/app/entities/entity.module.ts&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;run-your-microservices-architecture&quot;&gt;Run Your Microservices Architecture&lt;/h2&gt;
+
+&lt;p&gt;There’s a lot of services to start if you want to see all your applications running. The blog application depends on Elasticsearch and PostgreSQL, but only when running in production mode. The store app, however, needs MongoDB running. Luckily, JHipster creates Docker Compose files you can use to start MongoDB.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; Make sure to remove the &lt;code class=&quot;highlighter-rouge&quot;&gt;security.oauth2.resource.jwt.key-uri&lt;/code&gt; key and value from &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/resources/config/application.yml&lt;/code&gt; in the gateway, blog, and store apps before you try to run them.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Restart the gateway app since you added new entity management pages to it.&lt;/li&gt;
+  &lt;li&gt;Start the blog app from the &lt;code class=&quot;highlighter-rouge&quot;&gt;blog&lt;/code&gt; directory by running &lt;code class=&quot;highlighter-rouge&quot;&gt;mvn&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Start a Docker container for MongoDB from the &lt;code class=&quot;highlighter-rouge&quot;&gt;store&lt;/code&gt; directory by running:&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; docker-compose -f src/main/docker/mongodb.yml up
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Start the store app from the &lt;code class=&quot;highlighter-rouge&quot;&gt;store&lt;/code&gt; directory by running &lt;code class=&quot;highlighter-rouge&quot;&gt;mvn&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Once everything finishes starting, open a browser to &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt; and click &lt;strong&gt;sign in&lt;/strong&gt;. You should be redirected to your Okta org to sign-in, then back to the gateway once you’ve entered valid credentials.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/welcome-jhipster-367f19e745fead3a6d712e34e8736800551993f4cc89909204d1ab3b7c8a9f9b.png&quot; alt=&quot;Welcome, JHipster&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/okta-sign-in-0fa22b33db4a29a59421215c9817056a9cb737c4a80a63445602f226cb2406bd.png&quot; alt=&quot;Okta Sign-In&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/jhipster-logged-in-ceea5b498efbf586719f709a722655bb32622aa60d0a4cfd7d35a1e19eb987cd.png&quot; alt=&quot;JHipster after Okta SSO&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You should be able to navigate to &lt;strong&gt;Entities&lt;/strong&gt; &amp;gt; &lt;strong&gt;Blog&lt;/strong&gt; and add a new blog record to your blog microservice.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/new-blog-12cbac80fd545b75fd13848bb374d19b5501db025f5f55ee6ff91abf2f4463a1.png&quot; alt=&quot;New Blog&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Navigate to &lt;strong&gt;Entities&lt;/strong&gt; &amp;gt; &lt;strong&gt;Product&lt;/strong&gt; to prove your product microservice is working. Since you added an image as a property, you’ll be prompted to upload one when creating a new record.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/add-product-dialog-c3928931cf309bb6e0ab5b9c326e7bc32c753f5032c9c7ebbb1a74ae75c403d0.png&quot; alt=&quot;Add Product Dialog&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Click &lt;strong&gt;Save&lt;/strong&gt; and you’ll know it’s correctly using MongoDB based on the generated ID.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/new-product-3b2076c0586a39d31aeee804a850546561df99fa19376d75eee9d8e5a86c07b5.png&quot; alt=&quot;New Product&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;use-docker-compose-to-run-everything&quot;&gt;Use Docker Compose to Run Everything&lt;/h3&gt;
+
+&lt;p&gt;Rather than starting all your services individually, you can also start them all using &lt;a href=&quot;https://docs.docker.com/compose/&quot;&gt;Docker Compose&lt;/a&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;If you’d like to learn more about Docker Compose, see &lt;a href=&quot;/blog/2017/10/11/developers-guide-to-docker-part-3&quot;&gt;A Developer’s Guide To Docker - Docker Compose&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Create a &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose&lt;/code&gt; directory in the root directory (&lt;code class=&quot;highlighter-rouge&quot;&gt;okta-jhipster-microservices-oauth-example&lt;/code&gt;) of your applications and run JHipster’s Docker Compose sub-generator.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir docker-compose &amp;amp;&amp;amp; cd docker-compose &amp;amp;&amp;amp; jhipster docker-compose
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Answer as follows when prompted:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Question&lt;/th&gt;
+      &lt;th&gt;Answer&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Type of application?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Microservice application&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Type of gateway?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;JHipster gateway&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Directory location?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;../&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Applications to include?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;select all&amp;gt;&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Applications with clustered databases?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;blank&amp;gt;&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Setup monitoring?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Yes, with JHipster Console&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Additional technologies?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Zipkin&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Admin password&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;choose your own&amp;gt;&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;You’ll get a warning saying you need to generate Docker images by running the following command in the &lt;code class=&quot;highlighter-rouge&quot;&gt;blog&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;gateway&lt;/code&gt;, and &lt;code class=&quot;highlighter-rouge&quot;&gt;store&lt;/code&gt; directories. Stop all your running processes and build your Docker images before proceeding.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./mvnw verify -Pprod dockerfile:build
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; Building the gateway will likely fail because of &lt;a href=&quot;https://github.com/jhipster/generator-jhipster/issues/7114&quot;&gt;an issue with JavaScript tests&lt;/a&gt;. To workaround this issue, skip the tests with &lt;code class=&quot;highlighter-rouge&quot;&gt;mvn package -Pprod -DskipTests dockerfile:build&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;While you’re waiting for things to build, edit &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose/docker-compose.yml&lt;/code&gt; and change the Spring Security settings from being hard-coded to being environment variables. Make this change for all applications and make sure to add the client ID and secret default settings don’t include those.&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;SECURITY_OAUTH2_CLIENT_ACCESS_TOKEN_URI=${SECURITY_OAUTH2_CLIENT_ACCESS_TOKEN_URI}&lt;/span&gt;
+&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;SECURITY_OAUTH2_CLIENT_CLIENT_ID=${SECURITY_OAUTH2_CLIENT_CLIENT_ID}&lt;/span&gt;
+&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=${SECURITY_OAUTH2_CLIENT_CLIENT_SECRET}&lt;/span&gt;
+&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI=${SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI}&lt;/span&gt;
+&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;SECURITY_OAUTH2_RESOURCE_USER_INFO_URI=${SECURITY_OAUTH2_RESOURCE_USER_INFO_URI}&lt;/span&gt;
+&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;SECURITY_OAUTH2_RESOURCE_TOKEN_INFO_URI=${SECURITY_OAUTH2_RESOURCE_TOKEN_INFO_URI}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;TIP:&lt;/strong&gt; You can run &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose config&lt;/code&gt; to verify the environment variables are correctly substituted.&lt;/p&gt;
+
+&lt;p&gt;When everything has finished building, run &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose up -d&lt;/code&gt; from the &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose&lt;/code&gt; directory. It can take a while to start all 14 containers, so now might be a good time to take a break, or go on a run. You can use Docker’s Kitematic to watch the status of your images as they start.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;TIP:&lt;/strong&gt; Before you start everything, make sure you’ve provided adequate CPUs and Memory to Docker. It defaults to one CPU and 2 GB of memory. Not quite enough for 14 containers!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/kitematic-523ca1d3352ff43c6ad44d55b9832095a6af0d25af463a488d49a957fb3918c0.png&quot; alt=&quot;Kitematic&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;After you’ve verified everything works, you can stop all your Docker containers using the following command:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker stop &lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;docker ps &lt;span class=&quot;nt&quot;&gt;-a&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-q&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If you’d like to remove the images too, you can run:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker rm &lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;docker ps &lt;span class=&quot;nt&quot;&gt;-a&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-q&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;deploy-to-heroku&quot;&gt;Deploy to Heroku&lt;/h2&gt;
+
+&lt;p&gt;The founder of JHipster, &lt;a href=&quot;https://twitter.com/juliendubois&quot;&gt;Julien Dubois&lt;/a&gt;, wrote a blog post on the Heroku blog titled &lt;a href=&quot;https://blog.heroku.com/bootstrapping_your_microservices_architecture_with_jhipster_and_spring&quot;&gt;Bootstrapping Your Microservices Architecture with JHipster and Spring&lt;/a&gt;. Here’s an abbreviated set of steps to deploy all your apps to Heroku.&lt;/p&gt;
+
+&lt;h3 id=&quot;deploy-the-jhipster-registry&quot;&gt;Deploy the JHipster Registry&lt;/h3&gt;
+
+&lt;p&gt;Heroku and JHipster have configured a JHipster Registry for you, so you just need to click on the button below to start your own JHipster Registry:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://dashboard.heroku.com/new?&amp;amp;template=https%3A%2F%2Fgithub.com%2Fjhipster%2Fjhipster-registry&quot;&gt;&lt;img src=&quot;https://heroku-blog-files.s3.amazonaws.com/posts/1473343846-68747470733a2f2f7777772e6865726f6b7563646e2e636f6d2f6465706c6f792f627574746f6e2e706e67&quot; alt=&quot;Deploy to Heroku&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;deploy-your-gateway-and-apps&quot;&gt;Deploy Your Gateway and Apps&lt;/h3&gt;
+
+&lt;p&gt;Edit &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/resources/config/application-prod.yml&lt;/code&gt; in your gateway and apps. Remove &lt;code class=&quot;highlighter-rouge&quot;&gt;appname&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;instanceId&lt;/code&gt; and add the following &lt;code class=&quot;highlighter-rouge&quot;&gt;eureka.instance&lt;/code&gt; properties:&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;eureka&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;instance&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;hostname&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;lt;unique-prefix&amp;gt;-&amp;lt;app-name&amp;gt;.herokuapp.com&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;non-secure-port&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;80&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;prefer-ip-address&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;In the gateway, you’ll also need to specify the registry’s password in &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/resources/config/bootstrap-prod.yml&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;In each project, run &lt;code class=&quot;highlighter-rouge&quot;&gt;jhipster heroku&lt;/code&gt; and answer the questions as follows:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Question&lt;/th&gt;
+      &lt;th&gt;Answer&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Name to deploy as?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;unique-prefix&amp;gt;-&amp;lt;app-name&amp;gt;&lt;/code&gt; (e.g., okta-gateway)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Which region?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;us&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Type of deployment?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Git&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;JHipster Registry URL?&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;https://user:pass@app.herokuapp.com/&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;After each has deployed, you’ll want to run the following so they use Okta for authentication.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;heroku config:set &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_CLIENT_ACCESS_TOKEN_URI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$SECURITY_OAUTH2_CLIENT_ACCESS_TOKEN_URI&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_RESOURCE_USER_INFO_URI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$SECURITY_OAUTH2_RESOURCE_USER_INFO_URI&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_RESOURCE_TOKEN_INFO_URI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$SECURITY_OAUTH2_RESOURCE_TOKEN_INFO_URI&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_CLIENT_CLIENT_ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$SECURITY_OAUTH2_CLIENT_CLIENT_ID&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_CLIENT_CLIENT_SECRET&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$SECURITY_OAUTH2_CLIENT_CLIENT_SECRET&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;To set the JHipster Registry password on your gateway app, run:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;heroku config:set &lt;span class=&quot;nv&quot;&gt;JHIPSTER_REGISTRY_PASSWORD&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$JHIPSTER_REGISTRY_PASSWORD&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Then update your Okta app to have a &lt;strong&gt;Login redirect URI&lt;/strong&gt; that matches your Heroku app (e.g., &lt;code class=&quot;highlighter-rouge&quot;&gt;https://okta-gateway.herokuapp.com/&lt;/code&gt;). To do this, log in to your Okta account, go to &lt;strong&gt;Applications&lt;/strong&gt; &amp;gt; &lt;strong&gt;JHipster Microservices&lt;/strong&gt; &amp;gt; &lt;strong&gt;General&lt;/strong&gt; &amp;gt; &lt;strong&gt;Edit&lt;/strong&gt;. You’ll also need to add this as a trusted origin in &lt;strong&gt;API&lt;/strong&gt; &amp;gt; &lt;strong&gt;Trusted Origins&lt;/strong&gt; &amp;gt; &lt;strong&gt;Add Origin&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you chose Elasticsearch like I did, you’ll need to configure it to be in-memory and use &lt;a href=&quot;http://stackoverflow.com/questions/12416738/how-to-use-herokus-ephemeral-filesystem&quot;&gt;Heroku’s ephemeral filesystem&lt;/a&gt;. Add the following Elasticsearch properties to &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/resources/config/application-heroku.yml&lt;/code&gt; and redeploy your apps using &lt;code class=&quot;highlighter-rouge&quot;&gt;jhipster heroku&lt;/code&gt;. You could also try adding and configuring Heroku’s &lt;a href=&quot;https://elements.heroku.com/addons/searchbox&quot;&gt;Searchbox Elasticsearch add-on&lt;/a&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;spring:
+    data:
+        elasticsearch:
+            cluster-name:
+            cluster-nodes:
+            properties:
+                path:
+                    logs: target/elasticsearch/log
+                    data: target/elasticsearch/data
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;To see if your apps have started correctly, you can run &lt;code class=&quot;highlighter-rouge&quot;&gt;heroku logs --tail&lt;/code&gt; in each app’s directory. You may see a timeout error:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Error R10 (Boot timeout) -&amp;gt; Web process failed to bind to $PORT within 90 seconds of launch
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If this happens, go to &lt;a href=&quot;https://help.heroku.com/&quot;&gt;https://help.heroku.com/&lt;/a&gt; and click &lt;strong&gt;Create a ticket&lt;/strong&gt; at the top. Click &lt;strong&gt;Running Applications&lt;/strong&gt; &amp;gt; &lt;strong&gt;Java&lt;/strong&gt;, scroll to the bottom, and click &lt;strong&gt;Create a ticket&lt;/strong&gt;. Enter something like the following for the subject and description, select one of your apps, then submit it.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Subject: JHipster Apps Startup Timeout
+
+Description: Hello, I have three JHipster apps that have the following error on startup:
+
+Error R10 (Boot timeout) -&amp;gt; Web process failed to bind to $PORT within 90 seconds of launch
+
+Their URLs are as follows:
+
+* https://&amp;lt;your-prefix&amp;gt;-gateway.herokuapp.com/
+* https://&amp;lt;your-prefix&amp;gt;-blog.herokuapp.com/
+* https://&amp;lt;your-prefix&amp;gt;-store.herokuapp.com/
+
+Can you please increase the timeouts on these apps?
+
+Thanks!
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Below are screenshots to prove everything worked after I got my timeouts increased. 😊&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/heroku-welcome-fe193656c26bbce138bc35cd8d68716f8e4b1b3f2f888085b191139c73293842.png&quot; alt=&quot;Gateway on Heroku&quot; width=&quot;400&quot; /&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/heroku-gateway-routes-126508a6a3b3536986ad791cd347056b4e8cbeb3712542fa286eed69bdd49dae.png&quot; alt=&quot;Heroku Gateway Routes&quot; width=&quot;400&quot; /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/heroku-blog-4e2b7aedba56ae8660e31da97bf7dbc2893312da42004e88079374b500d0be27.png&quot; alt=&quot;Blog on Heroku&quot; width=&quot;400&quot; /&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/heroku-store-aef8aeb4efb9e59e922fe222d68dfe7db0902e87acf9e57a99aa8b02a9bb8857.png&quot; alt=&quot;Store on Heroku&quot; width=&quot;400&quot; /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;You can find the source code for this example at https://github.com/oktadeveloper/okta-jhipster-microservices-oauth-example.&lt;/p&gt;
+
+&lt;h2 id=&quot;learn-more-about-microservices-oauth-20-and-jhipster&quot;&gt;Learn More about Microservices, OAuth 2.0, and JHipster&lt;/h2&gt;
+
+&lt;p&gt;I hope you’ve enjoyed this whirlwind tour of how to create a microservices architecture with JHipster. Just because JHipster makes microservices easy doesn’t mean you should use them. In the wise words of &lt;a href=&quot;https://martinfowler.com/articles/microservices.html&quot;&gt;Martin Fowler&lt;/a&gt; (March 2014):&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;“You shouldn’t start with a microservices architecture. Instead begin with a monolith, keep it modular, and split it into microservices once the monolith becomes a problem.”&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Using a microservices architecture is a great way to scale development teams. However, if you don’t have a large team, a &lt;a href=&quot;https://m.signalvnoise.com/the-majestic-monolith-29166d022228&quot;&gt;Majestic Monolith&lt;/a&gt; might work better.&lt;/p&gt;
+
+&lt;p&gt;To learn more about microservices, authentication, and JHipster, see the following resources.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;/blog/2017/06/15/build-microservices-architecture-spring-boot&quot;&gt;Build a Microservices Architecture for Microbrews with Spring Boot&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/blog/2017/06/15/build-microservices-architecture-spring-boot&quot;&gt;Secure a Spring Microservices Architecture with Spring Security, JWTs, Juiser, and Okta&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;&quot;&gt;Secure a Spring Microservices Architecture with Spring Security and OAuth&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/blog/2017/10/20/oidc-with-jhipster&quot;&gt;Use OpenID Connect Support with JHipster&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.jhipster.tech/security/&quot;&gt;JHipster Security Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If you have any feedback, I’d love to hear it! Please leave a comment below, hit me up on Twitter &lt;a href=&quot;https://twitter.com/mraible&quot;&gt;@mraible&lt;/a&gt;, or post a question in our &lt;a href=&quot;https://devforum.okta.com/&quot;&gt;Developer Forums&lt;/a&gt;.&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 01 Mar 2018 00:00:00 -0500</pubDate>
+        <link>https://developer.okta.com/blog/2018/03/01/develop-microservices-jhipster-oauth</link>
+        <guid isPermaLink="true">https://developer.okta.com/blog/2018/03/01/develop-microservices-jhipster-oauth</guid>
+      </item>
+    
+      <item>
         <title>A Breakdown of the New SAML Authentication Bypass Vulnerability</title>
         <description>&lt;p&gt;Several weeks ago a new critical vulnerability was discovered that affects many SAML implementations. This vulnerability was first reported by &lt;a href=&quot;https://twitter.com/kelbyludwig&quot;&gt;Kelby Ludwig&lt;/a&gt; of Duo Security and is particularly interesting to us (as a user management company) as it can be used to bypass authentication in a sinisterly simplistic way.&lt;/p&gt;
 
@@ -5939,257 +6733,6 @@ As always, feel free to contact me via &lt;a href=&quot;https://twitter.com/leeb
         <pubDate>Thu, 11 Jan 2018 00:00:00 -0500</pubDate>
         <link>https://developer.okta.com/blog/2018/01/11/two-approaches-to-setting-up-a-mern-stack-app</link>
         <guid isPermaLink="true">https://developer.okta.com/blog/2018/01/11/two-approaches-to-setting-up-a-mern-stack-app</guid>
-      </item>
-    
-      <item>
-        <title>Add Single Sign-On to Your Vert.x Server with Okta</title>
-        <description>&lt;p&gt;Vert.x has continued to gain traction as a contender to the Spring ecosystem, largely due to improved performance and its polyglot accessibility. Fortunately, securing a Vert.x server with industry-leading authentication and authorization is almost as quick and easy as it is in Spring! In just a few minutes, you can have secure single sign-on guarding your server and giving you access to a wealth of information about your users. This tutorial will walk you through that process, as you stand up a new Vert.x server and integrate it with Okta for security and user management.&lt;/p&gt;
-
-&lt;h2 id=&quot;a-quick-recap-of-the-3-legged-oauth-flow&quot;&gt;A Quick Recap of the 3-Legged OAuth Flow&lt;/h2&gt;
-
-&lt;p&gt;This example will be using the third-party provider OAuth flow known as the 3-legged flow (the meat of single sign-on). Before launching into the code, a brief refresher of this process might be helpful.&lt;/p&gt;
-
-&lt;h3 id=&quot;the-problem&quot;&gt;The problem&lt;/h3&gt;
-
-&lt;p&gt;I’m a web server, and I want to secure my site and require users to log in. However, writing, maintaining, and managing user identities is a lot of work.&lt;/p&gt;
-
-&lt;h3 id=&quot;the-solution&quot;&gt;The solution&lt;/h3&gt;
-
-&lt;p&gt;Let someone else deal with it. To achieve this, a bit of cooperation is required between me (the web server), my user (perhaps on a web browser), and whoever is handling auth for me (in this example, Okta). These three cooperating participants are the three “legs” of the 3-legged OAuth flow. The process they go through is a three-way handshake:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;The user’s browser requests a protected resource from me, the web server&lt;/li&gt;
-  &lt;li&gt;I, the web server, decide that the user needs to sign in first. I refuse to service the request, and instead return a 302 redirect response that tells the browser to go visit Okta instead&lt;/li&gt;
-  &lt;li&gt;The browser complies, visits Okta instead, and the user signs in. Okta then returns its own 302 redirect, telling the browser to go back and visit me again… but this time, carrying a secret code&lt;/li&gt;
-  &lt;li&gt;The browser visits me once again, but this time I see that it carries with it this secret code. I now make my own direct call to Okta, exchanging this secret code for sensitive information about the user such as their name, email address, or phone number&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;The above handshake is what will be happening behind the scenes once this example is completed. Vert.x supplies a handy OAuth library to take care of this entire process for you – all you need to do is configure it and register it appropriately.  That’s what this tutorial demonstrates.&lt;/p&gt;
-
-&lt;p&gt;As a starter guide, this post assumes only basic familiarity with Java and a few Java essentials such as Maven. If you already have a Vert.x server running, feel free to fast forward to the good stuff: you’ll integrate with Okta in the &lt;a href=&quot;#configure-the-vertx-oauth-handler&quot;&gt;Configure the Vert.x OAuth Handler&lt;/a&gt; section.&lt;/p&gt;
-
-&lt;p&gt;The completed code example, including imports and pom.xml, can be found &lt;a href=&quot;https://github.com/oktadeveloper/OktaBlogs/tree/master/VertxAndOkta&quot;&gt;on Github&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;start-a-new-vertx-server&quot;&gt;Start A New Vert.x Server&lt;/h2&gt;
-
-&lt;p&gt;To kick things off, visit the &lt;a href=&quot;http://start.vertx.io&quot;&gt;Vert.x Starter page&lt;/a&gt; and generate a new project.  For this tutorial, you can leave all the default values in place, and include the &lt;code class=&quot;highlighter-rouge&quot;&gt;Vert.x Web&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;OAuth&lt;/code&gt;, and &lt;code class=&quot;highlighter-rouge&quot;&gt;Vert.x Config&lt;/code&gt; dependencies:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/sso-oauth-vertx/vertx-generate-588a96dcba33591cf8783311f398d90c06f00f6174f315d9a6072e1f96207064.png&quot; alt=&quot;Generate a Vert.x project&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;After clicking generate, downloading, and unzipping locally, you should see the following simple directory structure:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/sso-oauth-vertx/vertx-project-tree-ec41b09a90dbb6abc4114f2ff1110b3ca329735f4415a54739e62283dfa6da1e.png&quot; alt=&quot;Vert.x project tree&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;And running with &lt;code class=&quot;highlighter-rouge&quot;&gt;mvn compile exec:java&lt;/code&gt; from the &lt;code class=&quot;highlighter-rouge&quot;&gt;demo&lt;/code&gt; directory should start the server on port 8080:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/sso-oauth-vertx/vertx-compile-91d703dedebf657b29b6fbfeba3e9e1158a1cec539a1df9b3b9ee0b9fbdbf603.png&quot; alt=&quot;Vert.x project compiling&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Visiting &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt; in your browser returns a reassuring hello world response:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/sso-oauth-vertx/vertx-hello-2db8c2e0d3082a709465699304091576afcf87e7409990a0ba975a9164751ed9.png&quot; alt=&quot;Vert.x initial hello world page&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;At this point, a proper next step would be to switch to https before continuing to add authentication. However, to keep the tutorial short and focused, that part will be skipped and the examples will continue to use the unencrypted http server mode.&lt;/p&gt;
-
-&lt;h2 id=&quot;bring-in-the-vertx-config&quot;&gt;Bring in the Vert.x Config&lt;/h2&gt;
-
-&lt;p&gt;Vert.x offers a versatile config library, albeit a little more work to set up than in Spring. This example will make use of a handful of config values, so you can take this opportunity to add Vert.x Config to your project. The dependency should already be present in your &lt;code class=&quot;highlighter-rouge&quot;&gt;pom.xml&lt;/code&gt; if you specified Vert.x Config when creating the starter project.&lt;/p&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-   &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;io.vertx&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-   &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;vertx-config&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-   &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;${vertx.version}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Create a file called &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/application.json&lt;/code&gt; and add the following content:&lt;/p&gt;
-
-&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-   &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;clientId&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;{okta-client-id}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-   &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;clientSecret&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;{okta-client-secret}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-   &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;issuer&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;https://{yourOktaDomain}/oauth2/default&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-   &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;callbackUrl&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://localhost:8080/login&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-   &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;port&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8080&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;You’ll be updating those values shortly. Now in &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/java/com/example/demo/MainVerticle.java&lt;/code&gt;, replace the contents of the &lt;code class=&quot;highlighter-rouge&quot;&gt;start()&lt;/code&gt; method with the following, which will load the config. Notice that when it completes, it calls a method called &lt;code class=&quot;highlighter-rouge&quot;&gt;startServer()&lt;/code&gt; that doesn’t exist yet. You will add that in the next section.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-   &lt;span class=&quot;n&quot;&gt;ConfigStoreOptions&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fileStore&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ConfigStoreOptions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-       &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;file&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-       &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setConfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;JsonObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;path&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;src/main/application.json&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-   &lt;span class=&quot;n&quot;&gt;ConfigRetrieverOptions&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;options&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ConfigRetrieverOptions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-       &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addStore&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fileStore&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-   &lt;span class=&quot;n&quot;&gt;ConfigRetriever&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;retriever&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ConfigRetriever&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vertx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-   &lt;span class=&quot;n&quot;&gt;retriever&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getConfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ar&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-       &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ar&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;failed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-           &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;failed to retrieve config.&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-       &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-           &lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;mergeIn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ar&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-           &lt;span class=&quot;n&quot;&gt;startServer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-       &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-   &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;incorporate-the-vertx-router&quot;&gt;Incorporate the Vert.x Router&lt;/h2&gt;
-
-&lt;p&gt;By leveraging the &lt;a href=&quot;http://vertx.io/docs/apidocs/io/vertx/ext/web/Router.html&quot;&gt;Vert.x Router&lt;/a&gt;, you will be able to easily intercept calls to sensitive endpoints and enforce preauthentication. To do this, you’ll now implement  the &lt;code class=&quot;highlighter-rouge&quot;&gt;startServer()&lt;/code&gt; method in &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/java/com/example/demo/MainVerticle.java&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;startServer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;Router&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;router&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vertx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;route&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/private/secret&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-	    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;handler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Hi&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;vertx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;createHttpServer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-		&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;requestHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;router:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;accept&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-		&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;listen&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getInteger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;port&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;In the example above, you have created a new endpoint at &lt;code class=&quot;highlighter-rouge&quot;&gt;/private/secret&lt;/code&gt; with the intent of soon protecting every endpoint under the &lt;code class=&quot;highlighter-rouge&quot;&gt;/private&lt;/code&gt; path. But first, the Vert.x OAuth handler needs to be set up.&lt;/p&gt;
-
-&lt;h2 id=&quot;create-an-okta-account-and-gather-credentials&quot;&gt;Create an Okta Account and Gather Credentials&lt;/h2&gt;
-
-&lt;p&gt;If you don’t already have a free Okta account, you can follow &lt;a href=&quot;https://developer.okta.com/blog/2017/11/20/add-sso-spring-boot-15-min#get-your-okta-credentials&quot;&gt;these instructions&lt;/a&gt; to create one and set up your first Okta application. There are four key pieces of information you will need to gather:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Client Id - e.g.: &lt;strong&gt;&lt;em&gt;oot9wrjjararhfaa&lt;/em&gt;&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;Client Secret - (keep it secret!)&lt;/li&gt;
-  &lt;li&gt;Issuer - e.g.: &lt;strong&gt;&lt;em&gt;https://dev-123123.oktapreview.com/oauth2/default&lt;/em&gt;&lt;/strong&gt; …be sure to include the &lt;strong&gt;&lt;em&gt;/oauth2/default&lt;/em&gt;&lt;/strong&gt; path!&lt;/li&gt;
-  &lt;li&gt;Callback Url - this will be &lt;strong&gt;&lt;em&gt;http://localhost:8080/login&lt;/em&gt;&lt;/strong&gt; if you followed the instructions above.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;These values can now be used in your &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/application.json&lt;/code&gt; file.&lt;/p&gt;
-
-&lt;h2 id=&quot;configure-the-vertx-oauth-handler&quot;&gt;Configure the Vert.x OAuth Handler&lt;/h2&gt;
-
-&lt;p&gt;Vert.x comes with an out-of-the-box OAuth manager that integrates nicely with Okta as an identity provider.  To keep things tidy, you’ll create a separate factory method in &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/java/com/example/demo/MainVerticle.java&lt;/code&gt;that produces a configured OAuth handler.  Add the following to the &lt;code class=&quot;highlighter-rouge&quot;&gt;MainVerticle&lt;/code&gt; class, replacing the client info below with your account details obtained from the Okta developer dashboard:&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;AuthHandler&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getOAuthHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Router&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;OAuth2Auth&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;oauth2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OAuth2Auth&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vertx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OAuth2FlowType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;AUTH_CODE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OAuth2ClientOptions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setClientID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;clientId&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setClientSecret&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;clientSecret&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setSite&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;issuer&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setTokenPath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/v1/token&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setAuthorizationPath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/v1/authorize&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setUserInfoPath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/v1/userinfo&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setUseBasicAuthorizationHeader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;OAuth2AuthHandler&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authHandler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OAuth2AuthHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oauth2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;callbackUrl&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;authHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;extraParams&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;JsonObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;{\&quot;scope\&quot;:\&quot;openid profile email\&quot;}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;authHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setupCallback&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;route&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;In the above example, note the three requested scopes: &lt;strong&gt;openid&lt;/strong&gt;, &lt;strong&gt;profile&lt;/strong&gt;, and  &lt;strong&gt;email&lt;/strong&gt;. Future posts will explore additional scopes and authorization levels, but for now, these three will provide the absolute essentials (such as the user’s name and email address). Using the email address, you can also directly query Okta’s API for additional information about the user, and to perform account management tasks.&lt;/p&gt;
-
-&lt;h2 id=&quot;intercept-and-authorize-protected-endpoints&quot;&gt;Intercept and Authorize Protected Endpoints&lt;/h2&gt;
-
-&lt;p&gt;Now that the &lt;code class=&quot;highlighter-rouge&quot;&gt;AuthHandler&lt;/code&gt; is prepared, it needs to precede request handling of any protected endpoint and authenticate the user. By using a wildcard to register it as the top-level handler for all paths below &lt;code class=&quot;highlighter-rouge&quot;&gt;/private/&lt;/code&gt;, it will only need to be dealt with once for all future handlers you might create. Any request handler below the &lt;code class=&quot;highlighter-rouge&quot;&gt;/private/&lt;/code&gt; path can then be guaranteed that when it is called, it will only be from a properly authenticated user.&lt;/p&gt;
-
-&lt;p&gt;Alter the &lt;code class=&quot;highlighter-rouge&quot;&gt;startServer()&lt;/code&gt; method of the &lt;code class=&quot;highlighter-rouge&quot;&gt;MainVerticle&lt;/code&gt; class as indicated below to generate and register the handler:&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;startServer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;Router&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;router&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vertx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;c1&quot;&gt;//create and register the auth handler to intercept all&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;//requests below the /private/ URI:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;AuthHandler&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authHandler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getOAuthHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;route&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/private/*&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;handler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;authHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;route&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/private/secret&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-	    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;handler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Hi&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;vertx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;createHttpServer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-		&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;requestHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;router:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;accept&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-		&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;listen&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;“&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;”&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This would be an excellent time to start up the server again and make sure everything is running as expected. By running &lt;code class=&quot;highlighter-rouge&quot;&gt;mvn compile java:exec&lt;/code&gt; again and hitting &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080/private/secret&lt;/code&gt; from your browser, you should now be automatically redirected to Okta’s login page. After logging in, you should then be redirected back to your site to continue responding to the original &lt;code class=&quot;highlighter-rouge&quot;&gt;/private/secret&lt;/code&gt; request.&lt;/p&gt;
-
-&lt;h2 id=&quot;extract-user-info-from-the-jwt&quot;&gt;Extract User Info from the JWT&lt;/h2&gt;
-
-&lt;p&gt;Now that callers to your &lt;code class=&quot;highlighter-rouge&quot;&gt;/private/&lt;/code&gt; APIs are logged in, the next thing you’ll want is their information. This is delivered in the form of a &lt;a href=&quot;https://www.jsonwebtoken.io/&quot;&gt;JSON Web Token&lt;/a&gt;, which must be extracted and decoded. The Vert.x OAuth handler hides this as a named member of a stringified JSON object called the &lt;strong&gt;principal&lt;/strong&gt;, which is itself a component of the context’s &lt;strong&gt;user&lt;/strong&gt; object. That encoded token is then decoded and verified using the JWT library of your choice. This example uses &lt;a href=&quot;https://github.com/okta/okta-jwt-verifier-java&quot;&gt;Okta’s JWT verifier library&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Both the &lt;code class=&quot;highlighter-rouge&quot;&gt;access_token&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;id_token&lt;/code&gt; are available, but this tutorial will only decode the &lt;code class=&quot;highlighter-rouge&quot;&gt;id_token&lt;/code&gt;. There is a similar function to decode the &lt;code class=&quot;highlighter-rouge&quot;&gt;access_token&lt;/code&gt; if needed.  To accomplish this, include the Okta JWT lib dependency in your &lt;code class=&quot;highlighter-rouge&quot;&gt;pom.xml&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;com.okta.jwt&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;okta-jwt-verifier&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;0.2.0&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;…and add the following new function to the &lt;code class=&quot;highlighter-rouge&quot;&gt;MainVertical&lt;/code&gt; class:&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getIdClaims&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;RoutingContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;JwtVerifier&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;jwtVerifier&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;JwtHelper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setIssuerUrl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;“&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;issuer&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;”&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setAudience&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;api://default&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setClientId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;clientId&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-
-        &lt;span class=&quot;n&quot;&gt;Jwt&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;idTokenJwt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;jwtVerifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;decodeIdToken&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;principal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;id_token&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;idTokenJwt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClaims&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//do something with the exception...&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;And that’s it! You can now access user information in your request handler. To demonstrate, the &lt;code class=&quot;highlighter-rouge&quot;&gt;/private/secret&lt;/code&gt; handler can be updated to retrieve claims from the JWT as shown below:&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;startServer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;Router&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;router&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vertx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;AuthHandler&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authHandler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getOAuthHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;route&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/private/*&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;handler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;authHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;route&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/private/secret&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;handler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-        &lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;claims&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getIdClaims&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Hi &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
-                            &lt;span class=&quot;n&quot;&gt;claims&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
-                            &lt;span class=&quot;s&quot;&gt;&quot;, the email address we have on file for you is: &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
-                            &lt;span class=&quot;n&quot;&gt;claims&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;email&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;vertx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;createHttpServer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;requestHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;router:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;accept&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;listen&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;“&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;”&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;With this final change, restarting your server and once again hitting &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080/private/secret&lt;/code&gt;, your browser should now display a message with your authenticated user’s information!&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/sso-oauth-vertx/vertx-final-d439004fa9d194232f04778cb0a479140534bbc78de1082853b25f8e434d91ec.png&quot; alt=&quot;Browser screen shot showing user's details&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;onward-and-upward&quot;&gt;Onward and Upward&lt;/h2&gt;
-
-&lt;p&gt;Congratulations, you now have a high-performance Vert.x server protected by Okta’s state-of-the-art security and identity management! Okta provides a &lt;a href=&quot;https://github.com/okta/okta-sdk-java&quot;&gt;Java SDK&lt;/a&gt; for interacting further with users and accounts, including adding custom data and attributes to your users.&lt;/p&gt;
-
-&lt;p&gt;Thanks for reading, and as always, please hit us up in the comments below with questions. We’d love to have you follow us on Twitter &lt;a href=&quot;https://twitter.com/OktaDev&quot;&gt;@OktaDev&lt;/a&gt;, or read on for more great Java content from our blog:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://developer.okta.com/blog/2017/12/18/spring-security-5-oidc&quot;&gt;Get Started with Spring Security 5.0 and OIDC&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://developer.okta.com/blog/2017/12/06/bootiful-development-with-spring-boot-and-react&quot;&gt;Bootiful Development with Spring Boot and React&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://developer.okta.com/blog/2017/12/04/use-kong-gateway-to-centralize-authentication&quot;&gt;Use Kong Gateway to Centralize Authentication&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://developer.okta.com/blog/2017/12/04/basic-crud-angular-and-spring-boot&quot;&gt;Build a Basic CRUD App with Angular 5.0 and Spring Boot 2.0&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://developer.okta.com/blog/2017/10/27/secure-spa-spring-boot-oauth&quot;&gt;Secure Your SPA with Spring Boot and OAuth&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Thu, 11 Jan 2018 00:00:00 -0500</pubDate>
-        <link>https://developer.okta.com/blog/2018/01/11/sso-oauth-vertx</link>
-        <guid isPermaLink="true">https://developer.okta.com/blog/2018/01/11/sso-oauth-vertx</guid>
       </item>
     
   </channel>
