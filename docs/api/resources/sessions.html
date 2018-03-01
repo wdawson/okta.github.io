@@ -901,6 +901,26 @@
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div></div>
 
+<h4 id="option-use-the-http-header-prefer">Option: Use the HTTP Header Prefer</h4>
+
+<p>Okta now supports <a href="https://tools.ietf.org/html/rfc7240#section-4.2">the HTTP Header <code class="highlighter-rouge">Prefer</code></a> in <a href="/docs/api/resources/sessions#refresh-current-session">the Sessions API for refreshing sessions</a>. You can extend the session lifetime, but skip any processing work related to building the response body.</p>
+
+<h5 id="example-request">Example Request</h5>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> POST <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: SSWS </span><span class="k">${</span><span class="nv">api_token</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
+<span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/me/refresh"</span>
+</code></pre></div></div>
+<p>Note: <code class="highlighter-rouge">me</code> can also be an ID.</p>
+
+<h5 id="example-response">Example Response</h5>
+
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">204</span> <span class="ne">No Content</span>
+<span class="na">Preference-Applied</span><span class="p">:</span> <span class="s">return=minimal</span>
+</code></pre></div></div>
+
 <h3 class="api api-request" id="close-current-session">Close Current Session</h3>
 
 <p>Close the session for the currently logged in user. Use this method in a browser-based application to log a user out.</p>

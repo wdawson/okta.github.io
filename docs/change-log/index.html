@@ -265,7 +265,7 @@ a release, usually due to holiday schedules or other special events. We release 
 <p>Dates for preview and production release are the earliest possible release date. Always check your org to verify the release for your org.</p>
 
 <p>To verify the current release for an org, check the footer of the Dashboard page. If necessary, click the <strong>Admin</strong> button to navigate to your dashboard.
-<img src="/assets/release_notes/version_footer-6199e00ca76969eed4036e964a53b5598571c5cafe797a4890f152ce68dce49b.png" alt="Release Number in Footer" /></p>
+<img src="/assets/release_notes/version_footer-a57d55f5b1c199ffecc1b2460037adce2d24ff6bdfe4ffc1743dd8ead021460c.png" alt="Release Number in Footer" /></p>
 
 <blockquote>
   <p>Note: Changes to Okta unrelated to API Products are published in the <a href="https://help.okta.com/en/prod/Content/Topics/ReleaseNotes/okta-relnotes.htm">Okta Release Notes</a>.</p>
@@ -275,6 +275,306 @@ a release, usually due to holiday schedules or other special events. We release 
 
 
   
+  
+  <h2 id="201809">2018.09</h2>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Change</td>
+      <td>Expected in Preview Orgs</td>
+      <td>Rollout to Production Orgs Expected to Start</td>
+    </tr>
+    <tr>
+      <td><a href="#api-access-management-is-generally-available-in-preview">API Access Management is Generally Available in Preview</a></td>
+      <td>February 7, 2018</td>
+      <td>March 12, 2018</td>
+    </tr>
+    <tr>
+      <td><a href="#user-consent-for-oauth-20-and-openid-connect-flows-in-early-availability">User Consent for OAuth 2.0 and OpenID Connect Flows in Early Availability</a></td>
+      <td>February 28, 2018</td>
+      <td>March 5, 2018</td>
+    </tr>
+    <tr>
+      <td><a href="#sessions-api-supports-http-header-prefer">Sessions API Supports HTTP Header Prefer</a></td>
+      <td>February 28, 2018</td>
+      <td>March 5, 2018</td>
+    </tr>
+    <tr>
+      <td><a href="#user-schema-api-allows-nullable-firstname-lastname">User Schema API Allows Nullable <code class="highlighter-rouge">firstName</code>, <code class="highlighter-rouge">lastName</code></a></td>
+      <td>February 28, 2018</td>
+      <td>March 5, 2018</td>
+    </tr>
+    <tr>
+      <td><a href="#improved-response-mode-for-oauth-20-and-openid-connect-requests">Improved Response Mode for OAuth 2.0 and OpenID Connect Requests</a></td>
+      <td>February 28, 2018</td>
+      <td>March 5, 2018</td>
+    </tr>
+    <tr>
+      <td><a href="#change-to-authorize-response-for-prompt-for-oauth-20-and-openid-connect-requests">Change to <code class="highlighter-rouge">/authorize</code> Response for <code class="highlighter-rouge">prompt</code> for OAuth 2.0 and OpenID Connect Requests</a></td>
+      <td>February 28, 2018</td>
+      <td>March 5, 2018</td>
+    </tr>
+    <tr>
+      <td><a href="#changes-to-error-messages-from-user-creation-requests">Changes to Error Messages from User Creation Requests</a></td>
+      <td>February 28, 2018</td>
+      <td>March 5, 2018</td>
+    </tr>
+    <tr>
+      <td><a href="#improved-system-log-behavior-for-date-queries">Improved System Log Behavior for Date Queries</a></td>
+      <td>February 28, 2018</td>
+      <td>March 5, 2018</td>
+    </tr>
+    <tr>
+      <td><a href="#system-log-message-changes-related-to-authorization-servers">System Log Message Changes Related to Authorization Servers</a></td>
+      <td>February 28, 2018</td>
+      <td>March 5, 2018</td>
+    </tr>
+    <tr>
+      <td><a href="#bugs-fixed-for-201809">Bugs Fixed for 2018.09</a></td>
+      <td>February 28, 2018</td>
+      <td>March 5, 2018</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="user-consent-for-oauth-20-and-openid-connect-flows-in-early-availability">User Consent for OAuth 2.0 and OpenID Connect Flows in Early Availability</h3>
+
+<p>A consent represents a user’s explicit permission to allow an application to access resources protected by scopes. As part of an OAuth 2.0 or OpenID Connect authentication flow, you can prompt the user with a page to approve your app’s access to specified resources.</p>
+
+<p>Consent grants are different from tokens because a consent can outlast a token, and there can be multiple tokens with varying sets of scopes derived from a single consent. When an application comes back and needs to get a new access token, it may not need to prompt the user for consent if they have already consented to the specified scopes. Consent grants remain valid until the user manually revokes them, or until the user, application, authorization server or scope is deactivated or deleted.</p>
+
+<p>To configure an authorization or authentication flow to include a user consent page:</p>
+
+<ol>
+  <li>Verify that you have the API Access Management feature enabled, and request that User Consent also be enabled.</li>
+  <li>
+    <p>Create an app via the Apps API with the appropriate values for <code class="highlighter-rouge">tos_uri</code>, <code class="highlighter-rouge">policy_uri</code>, and <code class="highlighter-rouge">consent_method</code>. (<a href="/docs/api/resources/apps#settings-7">Details</a>)</p>
+
+    <p>Note: You can also configure an existing app in the Admin user interface: <strong>Applications &gt; [Application Name] &gt; General &gt; User Consent</strong>.</p>
+  </li>
+  <li>Ensure that your authentication or authorization flow is configured properly. The combination of <code class="highlighter-rouge">prompt</code> in the <code class="highlighter-rouge">/authorize</code> request, <code class="highlighter-rouge">consent_method</code> set on the app in the previous step, and <code class="highlighter-rouge">consent</code>, a property set on scopes, controls whether a user consent window is displayed during the authentication flow. <a href="/docs/api/resources/apps#settings-7">Details</a></li>
+</ol>
+
+<!-- OKTA-158107 -->
+
+<h3 id="sessions-api-supports-http-header-prefer">Sessions API Supports HTTP Header Prefer</h3>
+
+<p>Okta now supports <a href="https://tools.ietf.org/html/rfc7240#section-4.2">the HTTP Header <code class="highlighter-rouge">Prefer</code></a> in <a href="/docs/api/resources/sessions#refresh-current-session">the Sessions API for refreshing sessions</a>. You can extend the session lifetime, but skip any processing work related to building the response body.</p>
+
+<h4 id="example-request">Example Request</h4>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> POST <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: SSWS </span><span class="k">${</span><span class="nv">api_token</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
+<span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/sessions/me/refresh"</span>
+</code></pre></div></div>
+<p>Note: <code class="highlighter-rouge">me</code> can also be an ID.</p>
+
+<h4 id="example-response">Example Response</h4>
+
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">204</span> <span class="ne">No Content</span>
+<span class="na">Preference-Applied</span><span class="p">:</span> <span class="s">return=minimal</span>
+</code></pre></div></div>
+<!-- OKTA-152559 -->
+
+<h3 id="user-schema-api-allows-nullable-firstname-lastname">User Schema API Allows Nullable <code class="highlighter-rouge">firstName</code>, <code class="highlighter-rouge">lastName</code></h3>
+
+<p>You can set <code class="highlighter-rouge">firstName</code> or <code class="highlighter-rouge">lastName</code> to be nullable in <a href="/docs/api/resources/schemas#user-profile-base-subschema">the User Profile Base sub-schema</a>. These properties are defined in a profile sub-schema with the resolution scope <code class="highlighter-rouge">#base</code>.</p>
+
+<h3 id="improved-response-mode-for-oauth-20-and-openid-connect-requests">Improved Response Mode for OAuth 2.0 and OpenID Connect Requests</h3>
+
+<p>For <a href="/docs/api/resources/oidc#parameter-details">the <code class="highlighter-rouge">form_post</code> response mode</a>, we have reduced the HTML content returned in an OpenID Connect or OAuth 2.0 request. Now the response is only a form containing the requested tokens (access token, ID token, or both) and JavaScript to post the form. <!-- OKTA-96521 --></p>
+
+<h3 id="change-to-authorize-response-for-prompt-for-oauth-20-and-openid-connect-requests">Change to <code class="highlighter-rouge">/authorize</code> Response for <code class="highlighter-rouge">prompt</code> for OAuth 2.0 and OpenID Connect Requests</h3>
+
+<p>If you set <code class="highlighter-rouge">prompt=none</code> for a request on <code class="highlighter-rouge">/authorize</code> and the maximum age before sign-in is required (<code class="highlighter-rouge">max_age</code>) is exceeded, an error is returned. This ensures the safest possible result when <a href="/docs/api/resources/oidc#parameter-details">these two settings contradict each other</a>.</p>
+
+<p>This applies to <code class="highlighter-rouge">/authorize</code> with either the Okta Org Authorization Server or a Custom Authorization Server (which requires API Access Management).</p>
+
+<h3 id="changes-to-error-messages-from-user-creation-requests">Changes to Error Messages from User Creation Requests</h3>
+
+<p>Responses to an API user creation request (<code class="highlighter-rouge">/api/v1/users</code>) may contain error messages. The messages have changed in two ways:</p>
+
+<ol>
+  <li>
+    <p>The response <code class="highlighter-rouge">errorCauses</code> now contain additional fields:</p>
+
+    <ul>
+      <li><code class="highlighter-rouge">reason</code></li>
+      <li><code class="highlighter-rouge">location</code></li>
+      <li><code class="highlighter-rouge">locationType</code></li>
+      <li><code class="highlighter-rouge">domain</code></li>
+    </ul>
+  </li>
+  <li>
+    <p>Instead of a single <code class="highlighter-rouge">errorCauses</code> returned per message, each policy violation is reported in a separate <code class="highlighter-rouge">errorCauses</code>.</p>
+  </li>
+</ol>
+
+<h4 id="example-old-message-format">Example: Old Message Format</h4>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+    "errorCode": "E0000001",
+    "errorSummary": "Api validation failed: com.saasure.core.services.user.InvalidUserProfileException: Could not create user due to invalid profile: com.saasure.framework.validation.util.SimpleErrors: 1 errors\nError in object 'newUser': codes [password.passwordRequirementsNotMet.newUser,password.passwordRequirementsNotMet]; arguments [Password requirements: at least 8 characters, a lowercase letter, an uppercase letter, a number, no parts of your username.]; default message [Password requirements were not met. Password requirements: at least 8 characters, a lowercase letter, an uppercase letter, a number, no parts of your username.]",
+    "errorLink": "E0000001",
+    "errorId": "oaecNfS38enQ8KtWDvNfusWRw",
+    "errorCauses": [
+        {
+            "errorSummary": "Password requirements were not met. Password requirements: at least 8 characters, a lowercase letter, an uppercase letter, a number, no parts of your username."
+        }
+    ]
+}
+</code></pre></div></div>
+
+<h4 id="example-new-message-format">Example: New Message Format</h4>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+    "errorCode": "E0000001",
+    "errorSummary": "Api validation failed: com.saasure.core.services.user.InvalidUserProfileException: Could not create user due to invalid profile: com.saasure.framework.validation.util.SimpleErrors: 3 errors\nField error in object 'newUser' on field 'password': rejected value [aaaa]; codes [password.minlength.newUser.password,password.minlength.password,password.minlength.java.lang.String,password.minlength]; arguments [8]; default message [Password requirements: at least 8 characters.]\nField error in object 'newUser' on field 'password': rejected value [aaaa]; codes [password.uppercase.newUser.password,password.uppercase.password,password.uppercase.java.lang.String,password.uppercase]; arguments [Password requirements: at least 0 characters, an uppercase letter.]; default message [Password requirements: at least 0 characters, an uppercase letter.]\nField error in object 'newUser' on field 'password': rejected value [aaaa]; codes [password.number.newUser.password,password.number.password,password.number.java.lang.String,password.number]; arguments [Password requirements: at least 0 characters, a number.]; default message [Password requirements: at least 0 characters, a number.]",
+    "errorLink": "E0000001",
+    "errorId": "oaeGZUg95w6SK2GbA44cXgtvA",
+    "errorCauses": [
+        {
+            "errorSummary": "password: Passwords must be at least 8 characters in length",
+            "reason": "LENGTH_MINIMUM",
+            "location": "credentials.password.value",
+            "locationType": "body",
+            "domain": "user"
+        },
+        {
+            "errorSummary": "password: Password requirements: at least 0 characters, an uppercase letter.",
+            "reason": "UPPER_CASE_REQUIRED",
+            "location": "credentials.password.value",
+            "locationType": "body",
+            "domain": "user"
+        },
+        {
+            "errorSummary": "password: Password requirements: at least 0 characters, a number.",
+            "reason": "NUMBER_REQUIRED",
+            "location": "credentials.password.value",
+            "locationType": "body",
+            "domain": "user"
+        }
+    ]
+}
+</code></pre></div></div>
+
+<p>If you don’t want these changes, contact Support to opt out.</p>
+
+<h3 id="improved-system-log-behavior-for-date-queries">Improved System Log Behavior for Date Queries</h3>
+
+<ol>
+  <li>
+    <p>For <code class="highlighter-rouge">/logs</code>, the request parameters <a href="/docs/api/resources/system_log#request-parameters"><code class="highlighter-rouge">since</code> and <code class="highlighter-rouge">until</code></a> require <a href="https://tools.ietf.org/html/rfc3339#page-8">the RFC 3339 Internet Date/Time Format profile of ISO 8601</a>. This allows queries to more accurately target date ranges. <!-- OKTA-149837 --></p>
+  </li>
+  <li>
+    <p>For /<code class="highlighter-rouge">logs</code>, <a href="/docs/api/resources/system_log#request-parameters">the maximum page size</a> is 1,000 messages (<code class="highlighter-rouge">limit=1000</code>). The default remains at 100. <!-- OKTA-154711, OKTA-157865 --></p>
+  </li>
+</ol>
+
+<h3 id="system-log-message-changes-related-to-authorization-servers">System Log Message Changes Related to Authorization Servers</h3>
+
+<p>The following message changes apply to either the Okta Org Authorization Server or a Custom Authorization Server including <code class="highlighter-rouge">default</code> (which requires API Access Management), or both, as indicated in each section.</p>
+
+<h4 id="simplified-failure-messages-from-authorize-requests-for-events-system-log">Simplified Failure Messages from <a href="/docs/api/resources/oidc#authorize"><code class="highlighter-rouge">/authorize</code></a> Requests for <code class="highlighter-rouge">/events</code> System Log</h4>
+
+<p>The existing messages <code class="highlighter-rouge">app.oauth2.authorize_failure</code>, <code class="highlighter-rouge">app.oauth2.as.authorize_failure</code> and <code class="highlighter-rouge">app.oauth2.as.authorize.scope_denied_failure</code> replace these messages:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">app.oauth2.authorize.access_denied</code></li>
+  <li><code class="highlighter-rouge">app.oauth2.authorize.invalid_client_id</code></li>
+  <li><code class="highlighter-rouge">app.oauth2.authorize.invalid_cache_key</code></li>
+  <li><code class="highlighter-rouge">app.oauth2.authorize.no_existing_session</code></li>
+  <li><code class="highlighter-rouge">app.oauth2.authorize.login_failed</code></li>
+  <li><code class="highlighter-rouge">app.oauth2.authorize.mismatched_user_in_cache_and_session</code></li>
+  <li><code class="highlighter-rouge">app.oauth2.authorize.user_not_assigned</code></li>
+  <li><code class="highlighter-rouge">app.oauth2.authorize.scope_denied</code></li>
+  <li><code class="highlighter-rouge">app.oauth2.as.authorize.warn_failure</code></li>
+  <li><code class="highlighter-rouge">app.oauth2.as.authorize.scope_denied</code></li>
+</ul>
+
+<p>Details about the nature of the failure are included, so no information has been lost with this simplification.</p>
+
+<p>These system log changes affect responses from requests that involve either the Okta Org Authorization Server or a Custom Authorization Server including <code class="highlighter-rouge">default</code>.</p>
+
+<h4 id="simplified-failure-messages-from-token-requests-for-events-system-log">Simplified Failure Messages from <a href="/docs/api/resources/oidc#token"><code class="highlighter-rouge">/token</code></a> Requests for <code class="highlighter-rouge">/events</code> System Log</h4>
+
+<p>Instead of supplying two different messages for token grant failures on <code class="highlighter-rouge">/token</code>, the existing message <code class="highlighter-rouge">app.oauth2.as.authorize.token.grant_failure</code> replaces
+these messages:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">app.oauth2.as.token.grant.warn_failure</code></li>
+  <li><code class="highlighter-rouge">app.oauth2.as.token.grant.scope_denied_failure</code></li>
+</ul>
+
+<p>This system log change affects responses from requests that involve a Custom Authorization Server including <code class="highlighter-rouge">default</code>.</p>
+
+<h4 id="simplified-success-messages-from--token-requests-for-events-system-log">Simplified Success Messages from  <a href="/docs/api/resources/oidc#token"><code class="highlighter-rouge">/token</code></a> Requests for <code class="highlighter-rouge">/events</code> System Log</h4>
+
+<p>Instead of supplying a different message for ID token and access token generation, there’s just one message for each. The ID token or access token minted is included in the message as it was previously.</p>
+
+<ol>
+  <li>
+    <p>The existing message <code class="highlighter-rouge">app.oauth2.authorize.implicit_success</code> replaces:</p>
+
+    <ul>
+      <li><code class="highlighter-rouge">app.oauth2.authorize.implicit.id_token_success</code></li>
+      <li><code class="highlighter-rouge">app.oauth2.authorize.implicit.access_token_success</code></li>
+    </ul>
+  </li>
+  <li>
+    <p>The existing message <code class="highlighter-rouge">app.oauth2.as.authorize.implicit_success</code> replaces:</p>
+
+    <ul>
+      <li><code class="highlighter-rouge">app.oauth2.as.authorize.implicit.id_token_success</code></li>
+      <li><code class="highlighter-rouge">app.oauth2.as.authorize.implicit.access_token_success</code></li>
+    </ul>
+  </li>
+</ol>
+
+<p>The <code class="highlighter-rouge">_success</code> messages weren’t being written to the System Log previously, but are now. <!-- OKTA-157235 --></p>
+
+<p>These system log changes affect responses from requests that involve either the Okta Org Authorization Server or a Custom Authorization Server including <code class="highlighter-rouge">default</code>.</p>
+
+<h4 id="simplified-messages-from--token-requests-for-logs-system-log">Simplified Messages from  <a href="/docs/api/resources/oidc#token"><code class="highlighter-rouge">/token</code></a> Requests for <code class="highlighter-rouge">/logs</code> System Log</h4>
+
+<p>Instead of supplying a different message for ID token and access token generation, there’s just one message for each. The ID token or access token minted is included in the message as it was previously.</p>
+
+<ol>
+  <li>
+    <p>The existing message <code class="highlighter-rouge">app.oauth2.authorize.implicit</code> replaces:</p>
+
+    <ul>
+      <li><code class="highlighter-rouge">app.oauth2.authorize.implicit.id_token</code></li>
+      <li><code class="highlighter-rouge">app.oauth2.authorize.implicit.access_token</code></li>
+    </ul>
+  </li>
+  <li>
+    <p>The existing message <code class="highlighter-rouge">app.oauth2.as.authorize.implicit</code> replaces:</p>
+
+    <ul>
+      <li><code class="highlighter-rouge">app.oauth2.as.authorize.implicit.id_token</code></li>
+      <li><code class="highlighter-rouge">app.oauth2.as.authorize.implicit.access_token</code> <!-- OKTA-155402 --></li>
+    </ul>
+  </li>
+</ol>
+
+<p>These system log changes affect responses from requests that involve either the Okta Org Authorization Server or a Custom Authorization Server, including <code class="highlighter-rouge">default</code>.</p>
+
+<h3 id="bugs-fixed-for-201809">Bugs Fixed for 2018.09</h3>
+
+<p>The following bugs have been fixed and are expected in preview orgs February 28, 2018 and production orgs starting March 5, 2018.</p>
+
+<ul>
+  <li>If a user had a status of <code class="highlighter-rouge">ACTIVE</code> and had never signed in, and an API call reset the user’s password, the user’s status was incorrectly changed from <code class="highlighter-rouge">ACTIVE</code> to <code class="highlighter-rouge">PROVISIONED</code>, instead of the expected <code class="highlighter-rouge">RECOVERY</code>. (OKTA-154024)</li>
+  <li>If <code class="highlighter-rouge">-admin</code> was incorrectly included in the domain name during initialization of <a href="https://github.com/okta/okta-auth-js">an OktaAuth object</a>, no error was returned. (OKTA-156927)</li>
+  <li>Resetting a password with <code class="highlighter-rouge">/api/v1/users/lifecycle/reset_password</code> to a recently-used password, with <code class="highlighter-rouge">strict=true</code>, failed to reject the recently-used password. (OKTA-158966, OKTA-159085)</li>
+</ul>
+
+
+
   
   <h2 id="201807">2018.07</h2>
 
