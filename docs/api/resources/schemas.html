@@ -598,7 +598,7 @@
 
 <p><span class="api-uri-template api-uri-post"><span class="api-label">POST</span> /api/v1/meta/schemas/user/default</span></p>
 
-<p>Updates one or more <a href="#user-profile-schema-property-object">custom user profile properties</a> in the schema or a <a href="#schema-property-permission-object">permission</a> for a <a href="#user-profile-base-subschema">user profile base property</a>.</p>
+<p>Updates one or more <a href="#user-profile-schema-property-object">custom user profile properties</a> in the schema, a <a href="#schema-property-permission-object">permission</a> for a <a href="#user-profile-base-subschema">user profile base property</a>, or the nullability of the <code class="highlighter-rouge">firstName</code> and <code class="highlighter-rouge">lastName</code> properties in the <a href="#user-profile-base-subschema">user profile base schema</a>.</p>
 
 <h5 class="api api-request api-request-params" id="request-parameters-2">Request Parameters</h5>
 
@@ -636,6 +636,26 @@
 <span class="nt">-d</span> <span class="s1">'{
   {
     "definitions": {
+      "base": {
+        "id": "#base",
+        "type": "object",
+        "properties": {
+          "firstName": {
+          "title": "First name",
+          "type": "string",
+          "required": false,
+          "mutability": "READ_WRITE",
+          "scope": "NONE",
+          "permissions": [
+            {
+              "principal": "SELF",
+              "action": "READ_ONLY"
+            }
+          ]
+        }
+      },
+      "required": []
+    },
       "custom": {
         "id": "#custom",
         "type": "object",
@@ -1669,7 +1689,7 @@ A property cannot be removed if it is being referenced as a <a href="./idps#subj
 
 <h4 id="user-profile-base-subschema">User Profile Base Subschema</h4>
 
-<p>All Okta defined profile properties are defined in a profile sub-schema with the resolution scope <code class="highlighter-rouge">#base</code>.  These properties cannot be removed or edited (except for permission).</p>
+<p>All Okta defined profile properties are defined in a profile sub-schema with the resolution scope <code class="highlighter-rouge">#base</code>.  These properties cannot be modified, except to update permissions or change the nullability of <code class="highlighter-rouge">firstName</code> and <code class="highlighter-rouge">lastName</code>.  They cannot be removed.</p>
 
 <p>The base user profile is based on the <a href="https://tools.ietf.org/html/draft-ietf-scim-core-schema-22#section-4.1.1">System for Cross-Domain Identity Management: Core Schema</a> and has following standard properties:</p>
 
@@ -1725,7 +1745,7 @@ A property cannot be removed if it is being referenced as a <a href="./idps#subj
       <td>firstName</td>
       <td>given name of the user (<code class="highlighter-rouge">givenName</code>)</td>
       <td>String</td>
-      <td>FALSE</td>
+      <td>FALSE (default)</td>
       <td>FALSE</td>
       <td>FALSE</td>
       <td>1</td>
@@ -1736,7 +1756,7 @@ A property cannot be removed if it is being referenced as a <a href="./idps#subj
       <td>lastName</td>
       <td>family name of the user (<code class="highlighter-rouge">familyName</code>)</td>
       <td>String</td>
-      <td>FALSE</td>
+      <td>FALSE (default)</td>
       <td>FALSE</td>
       <td>FALSE</td>
       <td>1</td>
