@@ -1333,16 +1333,16 @@ Token limits:
 
 | Property                            | Description                                                                                           | Type    | Default      | Required for create or update |
 |:-------------------------------------|:------------------------------------------------------------------------------------------------------|:--------|:-------------|:------------------------------|
-| consent {% api_lifecycle beta %}     | Indicates whether a consent dialog is needed for the scope. Valid values: `REQUIRED`, `IMPLICIT`.      | Enum    | `IMPLICIT`   | False                         |
+| consent {% api_lifecycle ea %}     | Indicates whether a consent dialog is needed for the scope. Valid values: `REQUIRED`, `IMPLICIT`.      | Enum    | `IMPLICIT`   | False                         |
 | default                              | Whether test the scope is a default scope                                                              | Boolean |              | False                         |
 | description                          | Description of the scope                                                                               | String  |              | False                         |
-| displayName {% api_lifecycle beta %} | Name of the end user displayed in a consent dialog                                                     | String  |              | False                         |
+| displayName {% api_lifecycle ea %} | Name of the end user displayed in a consent dialog                                                     | String  |              | False                         |
 | id                                   | ID of the scope                                                                                        | String  |              | False                         |
 | metadataPublish                      | Whether or not the scope should be included in the metadata. Valid values: `NO_CLIENTS`, `ALL_CLIENTS` | Enum    | `NO_CLIENTS` | True except for create        |
 | name                                 | Name of the scope                                                                                      | String  |              | True                          |
 | system                               | Whether Okta created the scope                                                                         | Boolean |              | False                         |
 
-* {% api_lifecycle beta %} A consent dialog is displayed depending on the values of three elements:
+* {% api_lifecycle ea %} A consent dialog is displayed depending on the values of three elements:
     * `prompt`, a query parameter used in requests to [`/authorize`](/docs/api/resources/oidc#authorize)
     * `consent_method`, a property on [apps](/docs/api/resources/apps#settings-7)
     * `consent`, a property on scopes as listed in the table above
@@ -1355,7 +1355,9 @@ Token limits:
     | `NONE`            | `REQUIRED`                       | `REQUIRED`                  | Prompted     |
     | `NONE`            | `REQUIRED`                       | `IMPLICIT`                  | Not prompted | 
 
-> {% api_lifecycle beta %} Note: Apps created on `/api/v1/apps` default to `consent_method=TRUSTED`, while those created on `/api/v1/clients` default to `consent_method=REQUIRED`.
+> Notes:
+  * Apps created on `/api/v1/apps` default to `consent_method=TRUSTED`, while those created on `/api/v1/clients` default to `consent_method=REQUIRED`.
+  * If you request a scope that requires consent while using the `client_credentials` flow, an error is returned. Because there is no user, no consent can be given.
 
 ### Claim Object
 

@@ -996,15 +996,15 @@ Adds an OAuth 2.0 client application. This application is only available to the 
 | Parameter                                 | Description                                                                                 | DataType                                                                                     | Nullable | Unique | Validation | Default   |
 |:------------------------------------------|:--------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------|:---------|:-------|:-----------|:----------|
 | client_uri                                | URL string of a web page providing information about the client                             | String                                                                                       | TRUE     | FALSE  | FALSE      |           |
-| logo_uri                                  | URL string that references a logo for the client                                            | URL                                                                                          | TRUE     | FALSE  | FALSE      |           |
+| logo_uri                                  | URL string that references a logo for the client. This value is automatically copied from any logo you provide in the App Wizard for **Application logo** but can be changed to a different URI for consent.                                           | URL                                                                                          | TRUE     | FALSE  | FALSE      |           |
 | redirect_uris                             | Array of redirection URI strings for use in redirect-based flows                            | Array                                                                                        | TRUE     | FALSE  | TRUE       |           |
 | response_types                            | Array of OAuth 2.0 response type strings                                                    | Array of `code`, `token`, `id_token`                                                         | TRUE     | FALSE  | TRUE       |           |
 | grant_types                               | Array of OAuth 2.0 grant type strings                                                       | Array of `authorization_code`, `implicit`, `password`, `refresh_token`, `client_credentials` | FALSE    | FALSE  | TRUE       |           |
 | initiate_login_uri                        | URL string that a third party can use to initiate a login by the client                     | String                                                                                       | TRUE     | FALSE  | TRUE       |           |
 | application_type                          | The type of client application                                                              | `web`, `native`, `browser`, or `service`                                                     | TRUE     | FALSE  | TRUE       |           |
-| tos_uri {% api_lifecycle beta %}          | URL string of a web page providing the client's terms of service document                   | URL                                                                                          | TRUE     | FALSE  | FALSE      |           |
-| policy_uri {% api_lifecycle beta %}       | URL string of a web page providing the client's policy document                             | URL                                                                                          | TRUE     | FALSE  | FALSE      |           |
-| consent_method {% api_lifecycle beta %} } | Indicates whether user consent is required or implicit. Valid values: `REQUIRED`, `TRUSTED` | String                                                                                       | TRUE     | FALSE  | TRUE       | `TRUSTED` |
+| tos_uri {% api_lifecycle ea %}          | URL string of a web page providing the client's terms of service document                   | URL                                                                                          | TRUE     | FALSE  | FALSE      |           |
+| policy_uri {% api_lifecycle ea %}       | URL string of a web page providing the client's policy document                             | URL                                                                                          | TRUE     | FALSE  | FALSE      |           |
+| consent_method {% api_lifecycle ea %}  | Indicates whether user consent is required or implicit. Valid values: `REQUIRED`, `TRUSTED` | String                                                                                       | TRUE     | FALSE  | TRUE       | `TRUSTED` |
 
 * At least one redirect URI and response type is required for all client types, with exceptions: if the client uses the
   [Resource Owner Password](https://tools.ietf.org/html/rfc6749#section-4.3) flow (if `grant_types` contains the value `password`)
@@ -1029,7 +1029,7 @@ Adds an OAuth 2.0 client application. This application is only available to the 
     value that includes `authorization_code` implies a `response_types` value that includes `code`, as both values are defined as part of
     the OAuth 2.0 authorization code grant.
 
-* {% api_lifecycle beta %} A consent dialog is displayed depending on the values of three elements:
+* {% api_lifecycle ea %} A consent dialog is displayed depending on the values of three elements:
     * `prompt`, a query parameter used in requests to [`/oauth2/${authorizationServerId}/v1/authorize`](/docs/api/resources/oidc#authorize)(custom authorization server) or [`/oauth2/v1/authorize`](/docs/api/resources/oidc#authorize) (Org authorization server)
     * `consent_method`, a property listed in the Settings table above
     * `consent`, a property on [scopes](/docs/api/resources/authorization-servers#scope-properties)
@@ -1040,9 +1040,12 @@ Adds an OAuth 2.0 client application. This application is only available to the 
     | `CONSENT`         | `TRUSTED`                        | `IMPLICIT`                  | Not prompted |
     | `NONE`            | `TRUSTED`                        | `REQUIRED` or `IMPLICIT`    | Not prompted |
     | `NONE`            | `REQUIRED`                       | `REQUIRED`                  | Prompted     |
-    | `NONE`            | `REQUIRED`                       | `IMPLICIT`                  | Not prompted | <!--If you change this, change the table in /oauth2.md too. Add 'LOGIN' to first three rows when supported -->
+    | `NONE`            | `REQUIRED`                       | `IMPLICIT`                  | Not prompted | <!-- If you change this section, change it in authorization-servers.md as well. Add 'LOGIN' to first three rows when supported -->
 
-> {% api_lifecycle beta %} Note: Apps created on `/api/v1/apps` default to `consent_method=TRUSTED`, while those created on `/api/v1/clients` default to `consent_method=REQUIRED`.
+>Notes
+  * Apps created on `/api/v1/apps` default to `consent_method=TRUSTED`, while those created on `/api/v1/clients` default to `consent_method=REQUIRED`.
+  * If you request a scope that requires consent while using the `client_credentials` flow, an error is returned. Because there is no user, no consent can be given.
+  * These properties can also be configured in the Okta user interface App Wizard, General tab: `tos_uri`, `policy_uri`, `logo_uri`, and `consent_method`. They can't be set using [the Dynamic Client Registration API](/docs/api/resources/oauth-clients).
 
 ##### Request Example
 {:.api .api-request .api-request-example}
