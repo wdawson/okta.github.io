@@ -316,11 +316,6 @@ a release, usually due to holiday schedules or other special events. We release 
       <td>March 5, 2018</td>
     </tr>
     <tr>
-      <td><a href="#changes-to-error-messages-from-user-creation-requests">Changes to Error Messages from User Creation Requests</a></td>
-      <td>February 28, 2018</td>
-      <td>March 5, 2018</td>
-    </tr>
-    <tr>
       <td><a href="#improved-system-log-behavior-for-date-queries">Improved System Log Behavior for Date Queries</a></td>
       <td>February 28, 2018</td>
       <td>March 5, 2018</td>
@@ -392,76 +387,6 @@ a release, usually due to holiday schedules or other special events. We release 
 <p>If you set <code class="highlighter-rouge">prompt=none</code> for a request on <code class="highlighter-rouge">/authorize</code> and the maximum age before sign-in is required (<code class="highlighter-rouge">max_age</code>) is exceeded, an error is returned. This ensures the safest possible result when <a href="/docs/api/resources/oidc#parameter-details">these two settings contradict each other</a>.</p>
 
 <p>This applies to <code class="highlighter-rouge">/authorize</code> with either the Okta Org Authorization Server or a Custom Authorization Server (which requires API Access Management).</p>
-
-<h3 id="changes-to-error-messages-from-user-creation-requests">Changes to Error Messages from User Creation Requests</h3>
-
-<p>Responses to an API user creation request (<code class="highlighter-rouge">/api/v1/users</code>) may contain error messages. The messages have changed in two ways:</p>
-
-<ol>
-  <li>
-    <p>The response <code class="highlighter-rouge">errorCauses</code> now contain additional fields:</p>
-
-    <ul>
-      <li><code class="highlighter-rouge">reason</code></li>
-      <li><code class="highlighter-rouge">location</code></li>
-      <li><code class="highlighter-rouge">locationType</code></li>
-      <li><code class="highlighter-rouge">domain</code></li>
-    </ul>
-  </li>
-  <li>
-    <p>Instead of a single <code class="highlighter-rouge">errorCauses</code> returned per message, each policy violation is reported in a separate <code class="highlighter-rouge">errorCauses</code>.</p>
-  </li>
-</ol>
-
-<h4 id="example-old-message-format">Example: Old Message Format</h4>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
-    "errorCode": "E0000001",
-    "errorSummary": "Api validation failed: com.saasure.core.services.user.InvalidUserProfileException: Could not create user due to invalid profile: com.saasure.framework.validation.util.SimpleErrors: 1 errors\nError in object 'newUser': codes [password.passwordRequirementsNotMet.newUser,password.passwordRequirementsNotMet]; arguments [Password requirements: at least 8 characters, a lowercase letter, an uppercase letter, a number, no parts of your username.]; default message [Password requirements were not met. Password requirements: at least 8 characters, a lowercase letter, an uppercase letter, a number, no parts of your username.]",
-    "errorLink": "E0000001",
-    "errorId": "oaecNfS38enQ8KtWDvNfusWRw",
-    "errorCauses": [
-        {
-            "errorSummary": "Password requirements were not met. Password requirements: at least 8 characters, a lowercase letter, an uppercase letter, a number, no parts of your username."
-        }
-    ]
-}
-</code></pre></div></div>
-
-<h4 id="example-new-message-format">Example: New Message Format</h4>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
-    "errorCode": "E0000001",
-    "errorSummary": "Api validation failed: com.saasure.core.services.user.InvalidUserProfileException: Could not create user due to invalid profile: com.saasure.framework.validation.util.SimpleErrors: 3 errors\nField error in object 'newUser' on field 'password': rejected value [aaaa]; codes [password.minlength.newUser.password,password.minlength.password,password.minlength.java.lang.String,password.minlength]; arguments [8]; default message [Password requirements: at least 8 characters.]\nField error in object 'newUser' on field 'password': rejected value [aaaa]; codes [password.uppercase.newUser.password,password.uppercase.password,password.uppercase.java.lang.String,password.uppercase]; arguments [Password requirements: at least 0 characters, an uppercase letter.]; default message [Password requirements: at least 0 characters, an uppercase letter.]\nField error in object 'newUser' on field 'password': rejected value [aaaa]; codes [password.number.newUser.password,password.number.password,password.number.java.lang.String,password.number]; arguments [Password requirements: at least 0 characters, a number.]; default message [Password requirements: at least 0 characters, a number.]",
-    "errorLink": "E0000001",
-    "errorId": "oaeGZUg95w6SK2GbA44cXgtvA",
-    "errorCauses": [
-        {
-            "errorSummary": "password: Passwords must be at least 8 characters in length",
-            "reason": "LENGTH_MINIMUM",
-            "location": "credentials.password.value",
-            "locationType": "body",
-            "domain": "user"
-        },
-        {
-            "errorSummary": "password: Password requirements: at least 0 characters, an uppercase letter.",
-            "reason": "UPPER_CASE_REQUIRED",
-            "location": "credentials.password.value",
-            "locationType": "body",
-            "domain": "user"
-        },
-        {
-            "errorSummary": "password: Password requirements: at least 0 characters, a number.",
-            "reason": "NUMBER_REQUIRED",
-            "location": "credentials.password.value",
-            "locationType": "body",
-            "domain": "user"
-        }
-    ]
-}
-</code></pre></div></div>
-
-<p>If you don’t want these changes, contact Support to opt out.</p>
 
 <h3 id="improved-system-log-behavior-for-date-queries">Improved System Log Behavior for Date Queries</h3>
 
