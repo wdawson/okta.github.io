@@ -281,6 +281,103 @@ a release, usually due to holiday schedules or other special events. We release 
 
   
   
+  <h2 id="201810">2018.10</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Change</th>
+      <th style="text-align: left">Expected in Preview Orgs</th>
+      <th style="text-align: left">Rollout to Production Orgs Expected to Start</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><a href="#api-access-management-is-generally-available-ga-in-production">API Access Management is Generally Available (GA) in Production</a></td>
+      <td style="text-align: left">Available now</td>
+      <td style="text-align: left">March 12, 2018</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="#system-log-api-logs-is-in-early-access-ea">System Log API (<code class="highlighter-rouge">/logs</code>) Is in Early Access (EA)</a></td>
+      <td style="text-align: left">March 7, 2018</td>
+      <td style="text-align: left">March 12, 2018</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="#password-imports-with-salted-sha-256-algorithm-is-in-early-access-ea">Password Imports with Salted SHA-256 Algorithm is in Early Access (EA)</a></td>
+      <td style="text-align: left">March 7, 2018</td>
+      <td style="text-align: left">March 12, 2018</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="#new-parameter-for-authentication-with-okta-verify-with-auto-push">New Parameter for Authentication with Okta Verify with Auto-Push</a></td>
+      <td style="text-align: left">March 7, 2018</td>
+      <td style="text-align: left">March 12, 2018</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="#system-log-changes-for-201810">System Log Changes for 2018.10</a></td>
+      <td style="text-align: left">March 7, 2018</td>
+      <td style="text-align: left">March 12, 2018</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="#bugs-fixed-for-201810">Bugs Fixed for 2018.10</a></td>
+      <td style="text-align: left">March 7, 2018</td>
+      <td style="text-align: left">March 12, 2018</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="api-access-management-is-generally-available-ga-in-production">API Access Management is Generally Available (GA) in Production</h3>
+
+<p>Secure your APIs with API Access Management, Okta’s implementation of the OAuth 2.0 authorization framework. API Access Management uses the Okta Identity platform to enable powerful control over access to your APIs. API Access Management can be controlled through Okta’s admin user interface as well as a rich set of APIs for client, user, and policy management.</p>
+
+<p>Generally Available (GA) in preview orgs since February 7, 2018, API Access Management is scheduled to be GA in production orgs starting March 12, 2018.</p>
+
+<p>For more information, see <a href="/standards/OAuth/">OAuth 2.0 and Okta</a>. <!--OKTA-153127--></p>
+
+<h3 id="system-log-api-logs-is-in-early-access-ea">System Log API (<code class="highlighter-rouge">/logs</code>) is in Early Access (EA)</h3>
+
+<p>The Okta System Log records system events related to your organization in order to provide an audit trail that can be used to understand platform activity and to diagnose problems.</p>
+
+<p>The Okta System Log API provides near real-time read-only access to your organization’s system log and is the programmatic counterpart of the <a href="https://help.okta.com/en/prod/Content/Topics/Reports/Reports_SysLog.htm">System Log user interface</a>.</p>
+
+<p>Often the terms “event” and “log event” are used interchangeably. In the context of this API, an “event” is an occurrence of interest within the system and “log” or “log event” is the recorded fact.</p>
+
+<p>Notes:</p>
+
+<ul>
+  <li>The System Log API contains much more <a href="/docs/api/resources/system_log#logevent-object">structured data</a> than <a href="/docs/api/resources/events#event-model">the Events API</a>.</li>
+  <li>The System Log API supports <a href="/docs/api/resources/system_log#request-parameters">additional SCIM filters</a> and the <code class="highlighter-rouge">q</code> query parameter, because of the presence of more structured data than <a href="/docs/api/resources/events#event-model">the Events API</a>. <!-- OKTA-160902 OKTA-160880 --></li>
+</ul>
+
+<h3 id="password-imports-with-salted-sha-256-algorithm-is-in-early-access-ea">Password Imports with Salted SHA-256 Algorithm is in Early Access (EA)</h3>
+
+<p>You can use the salted SHA-256 hash type when <a href="/docs/api/resources/users#create-user-with-imported-hashed-password">importing passwords</a>. <!-- OKTA-160288 --></p>
+
+<h3 id="new-parameter-for-authentication-with-okta-verify-with-auto-push">New Parameter for Authentication with Okta Verify with Auto-Push</h3>
+
+<p>We have added <a href="/docs/api/resources/authn#request-parameters-for-verify-push-factor">an optional URL parameter, <code class="highlighter-rouge">autoPush</code> </a> that allows Okta to store the user’s Auto-Push preference when verifying Okta Verify with Auto-Push. This parameter is only necessary when implementing custom login flows that do not use the Okta Sign-In Widget. <!-- OKTA-155563 --></p>
+
+<h3 id="system-log-changes-for-201810">System Log Changes for 2018.10</h3>
+
+<ul>
+  <li>If a query to <code class="highlighter-rouge">/logs</code> timed out, an HTTP 504 error was returned. Now an HTTP 500 error will be returned. This aligns <code class="highlighter-rouge">/logs</code> error responses with other Okta APIs, and ensures implementation details are not leaked to API consumers. (OKTA-159642)</li>
+  <li>The following changes to error codes related to the system log were made to make them consistent with <a href="/reference/error_codes/">Okta error codes</a>:
+    <ul>
+      <li><code class="highlighter-rouge">MEDIA_TYPE_NOT_ACCEPTED_EXCEPTION</code> replaced by <code class="highlighter-rouge">UNSUPPORTED_MEDIA_TYPE</code></li>
+      <li><code class="highlighter-rouge">OPP_INVALID_PAGINATION_PROPERTIES</code> replaced by <code class="highlighter-rouge">INVALID_PAGING_EXCEPTION</code></li>
+      <li><code class="highlighter-rouge">OPP_INVALID_SCIM_FILTER</code> replaced by <code class="highlighter-rouge">INVALID_SEARCH_CRITERIA_EXCEPTION</code> <!-- OKTA-149847 --></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="bugs-fixed-for-201810">Bugs Fixed for 2018.10</h3>
+
+<ul>
+  <li>GET requests to list 200 or more apps were taking a long time to complete. (OKTA-158391)</li>
+  <li><a href="/docs/api/resources/users#list-users-with-search">List User with Search requests</a> in preview orgs failed to return pagination links. (OKTA-160424)</li>
+</ul>
+
+
+  
   <h2 id="201809">2018.09</h2>
 
 <table>
