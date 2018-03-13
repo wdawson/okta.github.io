@@ -509,8 +509,8 @@
 
 <h3 id="logs">Logs</h3>
 
-<p>Our System Log API is a recent addition that improvies upon our Events API.<br />
-Among other thigns it provides:</p>
+<p>Our System Log API is a recent addition that improves upon our Events API.<br />
+Among other things it provides:</p>
 
 <ul>
   <li>Extensible query parameters
@@ -543,7 +543,7 @@ Authentication events, user profile updates, user state changes, application and
 
   <p>For ongoing polling, the of collection should be configurable. Regular polling for new logs is preferred, a suggested default interval between 60 and 300 seconds is encouraged. A maximum interval of 1 day should be enforced.</p>
 
-  <p>for Ad hoc queries, crafting a tightly scoped <code class="highlighter-rouge">filter</code> and specifcying <code class="highlighter-rouge">start</code> and <code class="highlighter-rouge">end</code> dates to reduce the data overhead associated with trying to do client side filtering.</p>
+  <p>for Ad hoc queries, crafting a tightly scoped <code class="highlighter-rouge">filter</code> and specifying <code class="highlighter-rouge">start</code> and <code class="highlighter-rouge">end</code> dates to reduce the data overhead associated with trying to do client side filtering.</p>
 
 </div>
 
@@ -566,20 +566,20 @@ Authentication events, user profile updates, user state changes, application and
 
 <h6 id="collection-pseudocode">Collection Pseudocode</h6>
 
-<p>This demonstates a logic to deal with pagination aware cold and warm start collection</p>
+<p>This demonstrates logic to deal with pagination aware cold and warm start collection</p>
 
 <p>Pseudocode (<em>pythonish</em>)</p>
 
 <ul>
   <li><code class="highlighter-rouge">since</code> = ISO8601 date/time
     <ul>
-      <li>not to exeed 180 days in the past</li>
-      <li>if ommitted, defaults to 7 days in the past</li>
+      <li>not to exceed 180 days in the past</li>
+      <li>if omitted, defaults to 7 days in the past</li>
     </ul>
   </li>
   <li><code class="highlighter-rouge">limit</code> = configurable page size
     <ul>
-      <li>if ommitted, default 100</li>
+      <li>if omitted, default 100</li>
     </ul>
   </li>
 </ul>
@@ -608,12 +608,12 @@ Authentication events, user profile updates, user state changes, application and
     <span class="n">url</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">links</span><span class="p">[</span><span class="s">'next'</span><span class="p">][</span><span class="s">'url'</span><span class="p">]</span>
   <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span> <span class="o">=</span> <span class="mi">0</span><span class="p">:</span>
     <span class="c"># if this request returned 0 results there is no next link contained</span>
-    <span class="c"># use the same as the checkpointUrl for the next itteration</span>
+    <span class="c"># use the same as the checkpointUrl for the next iteration</span>
     <span class="n">checkpointUrl</span> <span class="o">=</span> <span class="n">url</span>
     <span class="n">url</span> <span class="o">=</span> <span class="n">false</span>
   <span class="k">else</span><span class="p">:</span>
     <span class="c"># if this request returned fewer results than requested</span>
-    <span class="c"># use the next link contained in the response for the next itteration</span>
+    <span class="c"># use the next link contained in the response for the next iteration</span>
     <span class="n">checkpointUrl</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">links</span><span class="p">[</span><span class="s">'next'</span><span class="p">][</span><span class="s">'url'</span><span class="p">]</span>
     <span class="n">url</span> <span class="o">=</span> <span class="n">false</span>
 
@@ -630,14 +630,14 @@ Authentication events, user profile updates, user state changes, application and
 
 <h6 id="ad-hoc-pseudocode-1">Ad hoc Pseudocode 1</h6>
 
-<p>fetch all events occuring in the last 7 days with a specific eventType</p>
+<p>fetch all events occurring in the last 7 days with a specific eventType</p>
 
 <p>Pseudocode (<em>pythonish</em>)</p>
 
 <ul>
   <li><code class="highlighter-rouge">limit</code> = configurable page size
     <ul>
-      <li>if ommitted, default 100</li>
+      <li>if omitted, default 100</li>
     </ul>
   </li>
   <li><code class="highlighter-rouge">eventType</code> = a specific event type</li>
@@ -668,14 +668,14 @@ Authentication events, user profile updates, user state changes, application and
 
 <h6 id="ad-hoc-pseudocode-2">Ad hoc Pseudocode 2</h6>
 
-<p>fetch the most recent 1000 events or 7 day worth of events for a specific user</p>
+<p>fetch the most recent 1000 events or 7 days worth of events for a specific user</p>
 
 <p>Pseudocode (<em>pythonish</em>)</p>
 
 <ul>
   <li><code class="highlighter-rouge">limit</code> = configurable page size
     <ul>
-      <li>if ommitted, default 100</li>
+      <li>if omitted, default 100</li>
     </ul>
   </li>
   <li><code class="highlighter-rouge">userId</code> = a specific user of interest</li>
@@ -699,7 +699,7 @@ Authentication events, user profile updates, user state changes, application and
 <span class="k">while</span> <span class="n">url</span><span class="p">:</span>
   <span class="n">response</span> <span class="o">=</span> <span class="n">GET</span> <span class="n">url</span>
   <span class="n">results</span> <span class="o">+=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
-  <span class="c"># determin if we have already collected 1000</span>
+  <span class="c"># determine if we have already collected 1000</span>
   <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1000</span>
     <span class="n">url</span> <span class="o">=</span> <span class="n">false</span>
   <span class="c"># determine if there are more pages to collect</span>
