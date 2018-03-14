@@ -382,6 +382,14 @@
       <td style="text-align: left"> </td>
     </tr>
     <tr>
+      <td>audience</td>
+      <td style="text-align: left">App ID of the target app the user is signing into</td>
+      <td style="text-align: left">Body</td>
+      <td style="text-align: left">String</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
       <td>relayState</td>
       <td style="text-align: left">Optional state value that is persisted for the lifetime of the authentication transaction</td>
       <td style="text-align: left">Body</td>
@@ -1323,7 +1331,7 @@
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div></div>
 
-<h3 class="api api-operation" id="step-up-authentication">Step-up Authentication</h3>
+<h3 class="api api-operation" id="sp-initiated-step-up-authentication">SP-initiated Step-up Authentication</h3>
 
 <p><a href="/docs/api/getting_started/releases-at-okta#early-access-ea"> <span class="api-label api-label-ea "> <i class="fa fa-flag"></i> Early Access </span> </a></p>
 
@@ -1584,7 +1592,7 @@ To determine the next step, check the <a href="#get-transaction-state">state of 
             </span><span class="p">},</span><span class="w">
             </span><span class="s2">"_links"</span><span class="p">:{</span><span class="w">  
                </span><span class="s2">"verify"</span><span class="p">:{</span><span class="w">  
-                  </span><span class="s2">"href"</span><span class="p">:</span><span class="s2">"https://{yourOktaDomain}.okta.com/api/v1/authn/factors/opf1cla0yyvOBWxuC1d8/verify"</span><span class="p">,</span><span class="w">
+                  </span><span class="s2">"href"</span><span class="p">:</span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authn/factors/opf1cla0yyvOBWxuC1d8/verify"</span><span class="p">,</span><span class="w">
                   </span><span class="s2">"hints"</span><span class="p">:{</span><span class="w">  
                      </span><span class="s2">"allow"</span><span class="p">:[</span><span class="w">  
                         </span><span class="s2">"POST"</span><span class="w">
@@ -1696,6 +1704,302 @@ To determine the next step, check the <a href="#get-transaction-state">state of 
          </span><span class="p">}</span><span class="w">
       </span><span class="p">}</span><span class="w">
    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 class="api api-operation" id="idp-initiated-step-up-authentication">IDP-initiated Step-up Authentication</h3>
+
+<p><span class="api-uri-template api-uri-post"><span class="api-label">POST</span> /api/v1/authn</span></p>
+
+<p><a href="/docs/api/getting_started/releases-at-okta#early-access-ea"> <span class="api-label api-label-ea "> <i class="fa fa-flag"></i> Early Access </span> </a></p>
+
+<p>Authenticates a user for signing into the specified application.</p>
+
+<p>Note:</p>
+<ul>
+  <li>Only WS-Federation, SAML based apps are supported.</li>
+  <li>Pass the application instance ID of the app as <a href="#request-parameters-for-primary-authentication">“audience”</a> along with the user credentials.</li>
+</ul>
+
+<blockquote>
+  <p>Okta Sign-on Policy and the related App Sign-on Policy will be evaluated after successful primary authentication.</p>
+</blockquote>
+
+<h5 class="api api-request api-request-example" id="request-example-for-idp-initiated-step-up-authentication">Request Example for IDP initiated Step-up Authentication</h5>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> POST <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+<span class="nt">-d</span> <span class="s1">'{
+  "username": "dade.murphy@example.com",
+  "password": "correcthorsebatterystaple",
+  "audience": "0oa6gva7owNAhDam50h7",
+  "options": {
+    "multiOptionalFactorEnroll": false,
+    "warnBeforePasswordExpired": true
+  }
+}'</span> <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authn"</span>
+</code></pre></div></div>
+
+<h5 class="api api-response api-response-example" id="response-example-when-mfa-isnt-required">Response Example When MFA Isn’t Required</h5>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+   </span><span class="s2">"stateToken"</span><span class="p">:</span><span class="s2">"00quAZYqYjXg9DZhS5UzE1wrJuQ6KKb_kzOeH7OGB5"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"type"</span><span class="p">:</span><span class="s2">"SESSION_STEP_UP"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"expiresAt"</span><span class="p">:</span><span class="s2">"2017-05-30T23:19:40.000Z"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"status"</span><span class="p">:</span><span class="s2">"SUCCESS"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"_embedded"</span><span class="p">:{</span><span class="w">
+      </span><span class="s2">"user"</span><span class="p">:{</span><span class="w">
+         </span><span class="s2">"id"</span><span class="p">:</span><span class="s2">"00ub0oNGTSWTBKOLGLNR"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"passwordChanged"</span><span class="p">:</span><span class="s2">"2017-03-29T21:37:25.000Z"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"profile"</span><span class="p">:{</span><span class="w">
+            </span><span class="s2">"login"</span><span class="p">:</span><span class="s2">"dade.murphy@example.com"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"firstName"</span><span class="p">:</span><span class="s2">"Dade"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"lastName"</span><span class="p">:</span><span class="s2">"Murphy"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"locale"</span><span class="p">:</span><span class="s2">"en_US"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"timeZone"</span><span class="p">:</span><span class="s2">"America/Los_Angeles"</span><span class="w">
+         </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"target"</span><span class="p">:{</span><span class="w">
+         </span><span class="s2">"type"</span><span class="p">:</span><span class="s2">"APP"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"salesforce"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"label"</span><span class="p">:</span><span class="s2">"Salesforce.com"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"_links"</span><span class="p">:{</span><span class="w">
+            </span><span class="s2">"logo"</span><span class="p">:{</span><span class="w">
+               </span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"medium"</span><span class="p">,</span><span class="w">
+               </span><span class="s2">"href"</span><span class="p">:</span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/assets/img/logos/salesforce_logo.dbd7e0b4de118a1dae1c39d60a3c30e5.png"</span><span class="p">,</span><span class="w">
+               </span><span class="s2">"type"</span><span class="p">:</span><span class="s2">"image/png"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+         </span><span class="p">}</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="s2">"_links"</span><span class="p">:{</span><span class="w">
+      </span><span class="s2">"next"</span><span class="p">:{</span><span class="w">
+         </span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"original"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"href"</span><span class="p">:</span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/login/step-up/redirect?stateToken=00quAZYqYjXg9DZhS5UzE1wrJuQ6KKb_kzOeH7OGB5"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"hints"</span><span class="p">:{</span><span class="w">
+            </span><span class="s2">"allow"</span><span class="p">:[</span><span class="w">
+               </span><span class="s2">"GET"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+         </span><span class="p">}</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<blockquote>
+  <p>Sign in to the app by following the <code class="highlighter-rouge">next</code> link relation.</p>
+</blockquote>
+
+<h5 class="api api-response api-response-example" id="response-example-for-factor-enroll">Response Example for Factor Enroll</h5>
+
+<p>User is assigned to an MFA Policy that requires enrollment during sign-on and must <a href="#enroll-factor">select a factor to enroll</a> to complete the authentication transaction.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+   </span><span class="s2">"stateToken"</span><span class="p">:</span><span class="s2">"00zEfSRIpELrl87ndYiHNkvOEbyEPrBmTYuf9dsGLl"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"type"</span><span class="p">:</span><span class="s2">"SESSION_STEP_UP"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"expiresAt"</span><span class="p">:</span><span class="s2">"2017-05-30T22:58:09.000Z"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"status"</span><span class="p">:</span><span class="s2">"MFA_ENROLL"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"_embedded"</span><span class="p">:{</span><span class="w">
+      </span><span class="s2">"user"</span><span class="p">:{</span><span class="w">
+         </span><span class="s2">"id"</span><span class="p">:</span><span class="s2">"00ub0oNGTSWTBKOLGLNR"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"passwordChanged"</span><span class="p">:</span><span class="s2">"2017-03-29T21:37:25.000Z"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"profile"</span><span class="p">:{</span><span class="w">
+            </span><span class="s2">"login"</span><span class="p">:</span><span class="s2">"dade.murphy@example.com"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"firstName"</span><span class="p">:</span><span class="s2">"Dade"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"lastName"</span><span class="p">:</span><span class="s2">"Murphy"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"locale"</span><span class="p">:</span><span class="s2">"en_US"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"timeZone"</span><span class="p">:</span><span class="s2">"America/Los_Angeles"</span><span class="w">
+         </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"factors"</span><span class="p">:[</span><span class="w">
+         </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"factorType"</span><span class="p">:</span><span class="s2">"sms"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"provider"</span><span class="p">:</span><span class="s2">"OKTA"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"vendorName"</span><span class="p">:</span><span class="s2">"OKTA"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"_links"</span><span class="p">:{</span><span class="w">
+               </span><span class="s2">"enroll"</span><span class="p">:{</span><span class="w">
+                  </span><span class="s2">"href"</span><span class="p">:</span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authn/factors"</span><span class="p">,</span><span class="w">
+                  </span><span class="s2">"hints"</span><span class="p">:{</span><span class="w">
+                     </span><span class="s2">"allow"</span><span class="p">:[</span><span class="w">
+                        </span><span class="s2">"POST"</span><span class="w">
+                     </span><span class="p">]</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+               </span><span class="p">}</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"status"</span><span class="p">:</span><span class="s2">"NOT_SETUP"</span><span class="w">
+         </span><span class="p">}</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="s2">"target"</span><span class="p">:{</span><span class="w">
+         </span><span class="s2">"type"</span><span class="p">:</span><span class="s2">"APP"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"salesforce"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"label"</span><span class="p">:</span><span class="s2">"Salesforce.com"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"_links"</span><span class="p">:{</span><span class="w">
+            </span><span class="s2">"logo"</span><span class="p">:{</span><span class="w">
+               </span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"medium"</span><span class="p">,</span><span class="w">
+               </span><span class="s2">"href"</span><span class="p">:</span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/assets/img/logos/salesforce_logo.dbd7e0b4de118a1dae1c39d60a3c30e5.png"</span><span class="p">,</span><span class="w">
+               </span><span class="s2">"type"</span><span class="p">:</span><span class="s2">"image/png"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+         </span><span class="p">}</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="s2">"_links"</span><span class="p">:{</span><span class="w">
+      </span><span class="s2">"cancel"</span><span class="p">:{</span><span class="w">
+         </span><span class="s2">"href"</span><span class="p">:</span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authn/cancel"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"hints"</span><span class="p">:{</span><span class="w">
+            </span><span class="s2">"allow"</span><span class="p">:[</span><span class="w">
+               </span><span class="s2">"POST"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+         </span><span class="p">}</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h5 class="api api-response api-response-example" id="response-example-for-factor-challenge">Response Example for Factor Challenge</h5>
+
+<p>User is assigned to a Sign-on Policy or App Sign-on Policy that requires additional verification and must <a href="#verify-factor">select and verify</a> a previously enrolled <a href="#factor-object">factor</a> by <code class="highlighter-rouge">id</code> to complete the authentication transaction.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+   </span><span class="s2">"stateToken"</span><span class="p">:</span><span class="s2">"00POAgFjELRueYUC1p7GFAmrm32EQa2HXw0_YssJ5J"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"type"</span><span class="p">:</span><span class="s2">"SESSION_STEP_UP"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"expiresAt"</span><span class="p">:</span><span class="s2">"2017-05-30T23:07:00.000Z"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"status"</span><span class="p">:</span><span class="s2">"MFA_REQUIRED"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"_embedded"</span><span class="p">:{</span><span class="w">
+      </span><span class="s2">"user"</span><span class="p">:{</span><span class="w">
+         </span><span class="s2">"id"</span><span class="p">:</span><span class="s2">"00ub0oNGTSWTBKOLGLNR"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"passwordChanged"</span><span class="p">:</span><span class="s2">"2017-03-29T21:37:25.000Z"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"profile"</span><span class="p">:{</span><span class="w">
+            </span><span class="s2">"login"</span><span class="p">:</span><span class="s2">"dade.murphy@example.com"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"firstName"</span><span class="p">:</span><span class="s2">"Dade"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"lastName"</span><span class="p">:</span><span class="s2">"Murphy"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"locale"</span><span class="p">:</span><span class="s2">"en_US"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"timeZone"</span><span class="p">:</span><span class="s2">"America/Los_Angeles"</span><span class="w">
+         </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"factors"</span><span class="p">:[</span><span class="w">
+         </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="s2">"opf1cla0gggOBWxuC1d8"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"factorType"</span><span class="p">:</span><span class="s2">"push"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"provider"</span><span class="p">:</span><span class="s2">"OKTA"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"vendorName"</span><span class="p">:</span><span class="s2">"OKTA"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"profile"</span><span class="p">:{</span><span class="w">
+               </span><span class="s2">"credentialId"</span><span class="p">:</span><span class="s2">"abcd@okta.com"</span><span class="p">,</span><span class="w">
+               </span><span class="s2">"deviceType"</span><span class="p">:</span><span class="s2">"SmartPhone_Android"</span><span class="p">,</span><span class="w">
+               </span><span class="s2">"keys"</span><span class="p">:[</span><span class="w">
+                  </span><span class="p">{</span><span class="w">
+                     </span><span class="s2">"kty"</span><span class="p">:</span><span class="s2">"PKIX"</span><span class="p">,</span><span class="w">
+                     </span><span class="s2">"use"</span><span class="p">:</span><span class="s2">"sig"</span><span class="p">,</span><span class="w">
+                     </span><span class="s2">"kid"</span><span class="p">:</span><span class="s2">"default"</span><span class="p">,</span><span class="w">
+                     </span><span class="s2">"x5c"</span><span class="p">:[</span><span class="w">
+                        </span><span class="s2">"Mdkkdfjkdjf"</span><span class="w">
+                     </span><span class="p">]</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+               </span><span class="p">],</span><span class="w">
+               </span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"SM-N9005"</span><span class="p">,</span><span class="w">
+               </span><span class="s2">"platform"</span><span class="p">:</span><span class="s2">"ANDROID"</span><span class="p">,</span><span class="w">
+               </span><span class="s2">"version"</span><span class="p">:</span><span class="s2">"21"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"_links"</span><span class="p">:{</span><span class="w">
+               </span><span class="s2">"verify"</span><span class="p">:{</span><span class="w">
+                  </span><span class="s2">"href"</span><span class="p">:</span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authn/factors/opf1cla0yyvOBWxuC1d8/verify"</span><span class="p">,</span><span class="w">
+                  </span><span class="s2">"hints"</span><span class="p">:{</span><span class="w">
+                     </span><span class="s2">"allow"</span><span class="p">:[</span><span class="w">
+                        </span><span class="s2">"POST"</span><span class="w">
+                     </span><span class="p">]</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+               </span><span class="p">}</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+         </span><span class="p">},</span><span class="w">
+         </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="s2">"smsph8F1esz8LlSjo0g3"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"factorType"</span><span class="p">:</span><span class="s2">"sms"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"provider"</span><span class="p">:</span><span class="s2">"OKTA"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"vendorName"</span><span class="p">:</span><span class="s2">"OKTA"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"profile"</span><span class="p">:{</span><span class="w">
+               </span><span class="s2">"phoneNumber"</span><span class="p">:</span><span class="s2">"+1 XXX-XXX-3161"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"_links"</span><span class="p">:{</span><span class="w">
+               </span><span class="s2">"verify"</span><span class="p">:{</span><span class="w">
+                  </span><span class="s2">"href"</span><span class="p">:</span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authn/factors/smsph8F1esz8LlSjo0g3/verify"</span><span class="p">,</span><span class="w">
+                  </span><span class="s2">"hints"</span><span class="p">:{</span><span class="w">
+                     </span><span class="s2">"allow"</span><span class="p">:[</span><span class="w">
+                        </span><span class="s2">"POST"</span><span class="w">
+                     </span><span class="p">]</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+               </span><span class="p">}</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+         </span><span class="p">}</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="s2">"policy"</span><span class="p">:{</span><span class="w">
+         </span><span class="s2">"allowRememberDevice"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"rememberDeviceLifetimeInMinutes"</span><span class="p">:</span><span class="mi">1440</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"rememberDeviceByDefault"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"factorsPolicyInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+             </span><span class="s2">"opf1cla0gggOBWxuC1d8"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                 </span><span class="s2">"autoPushEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+             </span><span class="p">}</span><span class="w">
+         </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"target"</span><span class="p">:{</span><span class="w">
+         </span><span class="s2">"type"</span><span class="p">:</span><span class="s2">"APP"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"salesforce"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"label"</span><span class="p">:</span><span class="s2">"Salesforce.com"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"_links"</span><span class="p">:{</span><span class="w">
+            </span><span class="s2">"logo"</span><span class="p">:{</span><span class="w">
+               </span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"medium"</span><span class="p">,</span><span class="w">
+               </span><span class="s2">"href"</span><span class="p">:</span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/assets/img/logos/salesforce_logo.dbd7e0b4de118a1dae1c39d60a3c30e5.png"</span><span class="p">,</span><span class="w">
+               </span><span class="s2">"type"</span><span class="p">:</span><span class="s2">"image/png"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+         </span><span class="p">}</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="s2">"_links"</span><span class="p">:{</span><span class="w">
+      </span><span class="s2">"cancel"</span><span class="p">:{</span><span class="w">
+         </span><span class="s2">"href"</span><span class="p">:</span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authn/cancel"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"hints"</span><span class="p">:{</span><span class="w">
+            </span><span class="s2">"allow"</span><span class="p">:[</span><span class="w">
+               </span><span class="s2">"POST"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+         </span><span class="p">}</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h5 class="api api-response api-response-example" id="response-example-for-invalid-or-unknown-application">Response Example for Invalid or Unknown Application</h5>
+
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">400</span> <span class="ne">Bad Request</span>
+<span class="na">Content-Type</span><span class="p">:</span> <span class="s">application/json</span>
+
+<span class="p">{</span><span class="w">
+    </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Api validation failed: authRequest"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorLink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oae-W6QeEcJQKarRZv8JcmtrA"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorCauses"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Invalid or unknown audience '0oa6gva7owNAhDam50h7'."</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h5 class="api api-response api-response-example" id="response-example-for-unsupported-application">Response Example for Unsupported Application</h5>
+
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">400</span> <span class="ne">Bad Request</span>
+<span class="na">Content-Type</span><span class="p">:</span> <span class="s">application/json</span>
+
+<span class="p">{</span><span class="w">
+    </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Api validation failed: authRequest"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorLink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000001"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oaelApNWe8WR4uiK7EROTqp-Q"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"errorCauses"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"errorSummary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sign-in not allowed for app '0oapt2yIp38ySYiMP0g3'."</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div></div>
 
@@ -7033,7 +7337,7 @@ to skip the other factors.</p>
 
 <p>Represents the type of authentication</p>
 
-<p>Currently available only during <a href="#step-up-authentication">step-up authentication</a>.</p>
+<p>Currently available only during <a href="#sp-initiated-step-up-authentication">SP-initiated step-up authentication</a> and <a href="#idp-initiated-step-up-authentication">IDP-initiated step-up authentication</a>.</p>
 
 <h3 id="tokens">Tokens</h3>
 
@@ -7400,7 +7704,7 @@ to skip the other factors.</p>
 
 <p><a href="/docs/api/getting_started/releases-at-okta#early-access-ea"> <span class="api-label api-label-ea "> <i class="fa fa-flag"></i> Early Access </span> </a> 
 Represents the target resource that user tried accessing. Typically this is the app that user is trying to sign-in.
-Currently this is available only during <a href="#step-up-authentication">step-up authentication</a>.</p>
+Currently this is available only during <a href="#sp-initiated-step-up-authentication">SP-initiated step-up authentication</a> and <a href="#idp-initiated-step-up-authentication">IDP-initiated step-up authentication</a>.</p>
 
 <table>
   <thead>

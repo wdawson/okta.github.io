@@ -281,6 +281,73 @@ a release, usually due to holiday schedules or other special events. We release 
 
   
   
+  <h2 id="201811">2018.11</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Change</th>
+      <th style="text-align: left">Expected in Preview Orgs</th>
+      <th style="text-align: left">Rollout to Production Orgs Expected to Start</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><a href="#api-support-for-idp-initiated-authentication">API Support for IdP-initiated Authentication</a></td>
+      <td style="text-align: left">March 14</td>
+      <td style="text-align: left">March 19</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="#new-powershell-module-for-tls-12-compatibility">New Powershell Module for TLS 1.2 Compatibility</a></td>
+      <td style="text-align: left">March 14</td>
+      <td style="text-align: left">March 19</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="#rate-limit-for-system-log-increased">Rate Limit for System Log Increased</a></td>
+      <td style="text-align: left">Available Now</td>
+      <td style="text-align: left">Available Now</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="#system-log-api-is-in-early-access-ea">System Log API Is in Early Access (EA)</a></td>
+      <td style="text-align: left">Available Now</td>
+      <td style="text-align: left">Available Now</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="#password-imports-with-salted-sha-256-algorithm-is-in-early-access-ea">Password Imports with Salted SHA-256 Algorithm is in Early Access (EA)</a></td>
+      <td style="text-align: left">Available Now</td>
+      <td style="text-align: left">Available Now</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="#bugs-fixed-for-201811">Bugs Fixed for 2018.11</a></td>
+      <td style="text-align: left">March 14, 2018</td>
+      <td style="text-align: left">March 19, 2018</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="api-support-for-idp-initiated-authentication">API Support for IdP-initiated Authentication</h3>
+
+<p>Use this feature to allow a client to specify the application right away during an authentication request, instead of taking the user through “step-up” authentication in a separate request. <a href="/docs/api/resources/authn#sp-initiated-step-up-authentication">Documentation</a> <!-- OKTA-160275 --></p>
+
+<h3 id="new-powershell-module-for-tls-12-compatibility">New Powershell Module for TLS 1.2 Compatibility</h3>
+
+<p>The new version of Okta’s Powershell module is compatible with TLS 1.2. <a href="https://www.powershellgallery.com/packages/Okta.Core.Automation/1.0.1">Documentation</a><!-- OKTA-161239 --></p>
+
+<h3 id="rate-limit-for-system-log-increased">Rate Limit for System Log Increased</h3>
+
+<p>The rate limit for GET requests to <code class="highlighter-rouge">/api/v1/logs</code> has been increased from 60 per minute to 120. <a href="/docs/api/getting_started/rate-limits#okta-api-endpoints-and-per-minute-limits">Documentation</a></p>
+
+<h3 id="bugs-fixed-for-201811">Bugs Fixed for 2018.11</h3>
+
+<ul>
+  <li>An incorrect error message was returned when a blank password was specified in a password reset request. (OKTA-144982)</li>
+  <li>If administrators in an org with the Developer Console enabled used the Classic user interface instead, and had no apps assigned, they couldn’t access their own user home page. (OKTA-152324)</li>
+  <li>For <a href="/docs/api/resources/system_log">the System Log API</a>, the <code class="highlighter-rouge">displayName</code> in the Target object was set to <code class="highlighter-rouge">Unknown</code> if the <code class="highlighter-rouge">eventType</code> was <code class="highlighter-rouge">user.authentication.sso</code> and if the value didn’t exist in the profile editor.
+This behavior matches the behavior in <code class="highlighter-rouge">/events</code>. (OKTA-156484)</li>
+</ul>
+
+
+  
   <h2 id="201810">2018.10</h2>
 
 <table>
@@ -298,7 +365,7 @@ a release, usually due to holiday schedules or other special events. We release 
       <td style="text-align: left">March 12, 2018</td>
     </tr>
     <tr>
-      <td style="text-align: left"><a href="#system-log-api-logs-is-in-early-access-ea">System Log API (<code class="highlighter-rouge">/logs</code>) Is in Early Access (EA)</a></td>
+      <td style="text-align: left"><a href="#system-log-api-is-in-early-access-ea">System Log API Is in Early Access (EA)</a></td>
       <td style="text-align: left">March 7, 2018</td>
       <td style="text-align: left">March 12, 2018</td>
     </tr>
@@ -333,7 +400,7 @@ a release, usually due to holiday schedules or other special events. We release 
 
 <p>For more information, see <a href="/standards/OAuth/">OAuth 2.0 and Okta</a>. <!--OKTA-153127--></p>
 
-<h3 id="system-log-api-logs-is-in-early-access-ea">System Log API (<code class="highlighter-rouge">/logs</code>) is in Early Access (EA)</h3>
+<h3 id="system-log-api-is-in-early-access-ea">System Log API is in Early Access (EA)</h3>
 
 <p>The Okta System Log records system events related to your organization in order to provide an audit trail that can be used to understand platform activity and to diagnose problems.</p>
 
@@ -2403,7 +2470,7 @@ Additionally, the Set Recovery Question Answer operation doesn’t validate comp
 <h4 id="step-up-authentication-for-saml-apps-is-an-early-access-feature">Step-up Authentication for SAML Apps is an Early Access Feature</h4>
 
 <p>Every step-up transaction starts with a user accessing an application. If step-up authentication is required, Okta redirects the user to the custom login page with state token as a request parameter.
-For more information, see the <a href="/docs/api/resources/authn#step-up-authentication">Step-up Authentication documentation</a>.</p>
+For more information, see the <a href="/docs/api/resources/authn#sp-initiated-step-up-authentication">SP initiated Step-up Authentication documentation</a>.</p>
 
 <h4 id="simple-hal-links-generally-available-in-preview-for-may-2017">Simple HAL Links Generally Available in Preview for May, 2017</h4>
 
