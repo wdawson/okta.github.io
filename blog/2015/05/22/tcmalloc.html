@@ -53,7 +53,7 @@
   <meta class="swiftype" name="summary" data-type="string" content="Sometimes fixing a problem causes or reveals a ..." />
 
   <link type="text/css" rel="stylesheet" href="/assets/animate-ec43d72c3ed45e08a460b8a2966d8dba6006aebfa0530935c3973fa493a8771f.css">
-  <link type="text/css" rel="stylesheet" href="/assets/okta-5709780bae87480dbcdc9610d80786f64ecd7c7f9f16a3215f689067ddb318f4.css">
+  <link type="text/css" rel="stylesheet" href="/assets/okta-980d465fb01d9d9034e5f18bb97a17688f56aa81d5c69f457f546c9a00acc358.css">
   
   
   <title>How Okta Chased Down Severe System CPU Contention in MySQL | Okta Developer</title>
@@ -184,7 +184,7 @@
 
         <div class="BlogPost-attribution">
             
-            <img src="/assets/avatar-mloughran-6836e35a41e197dd88a6684795c89e1c99557bd8a3f77f7252506976e44385e8.png" alt="avatar-mloughran.png" class="BlogPost-avatar">
+            <img src="/assets/avatar-mloughran-816c799f358a6cf5812b7da84ae7843e795fca81af245043ef0dc5018144a82e.png" alt="avatar-mloughran.png" class="BlogPost-avatar">
             
             <span class="BlogPost-author">Matt Loughran</span>
         </div>
@@ -201,7 +201,7 @@
 
 <p>As problems go, growing pains are good problems to have. But they usually come at a cost: the increased traffic caused significant CPU contention, as shown in the following image.</p>
 
-<p><img src="/assets/Pre-buffer_adjustment-58e80e794c7705471c28860e29c13043e7e5ab9f77b701db169e8dce43c38bfc.png" alt="Before tuning the database" /></p>
+<p><img src="/assets/Pre-buffer_adjustment-51772d26f7b15f4d7e82e56e061697e91f90b06a97e5ab69071c617bdc07b17a.png" alt="Before tuning the database" /></p>
 
 <p>Those red and yellow spikes in late October, 2014 seized our attention and spurred an aggressive response from Okta’s site operations team. The team took immediate action to prevent this situation from getting worse and potentially causing a issue with our site.</p>
 
@@ -210,7 +210,7 @@
 <p>As a first step, we tuned our MySQL database to fully utilize the amount of RAM in our server instances. We had been running with a relatively small buffer pool
 compared to the amount of available RAM, which meant that we were sacrificing both performance and money.  Increasing the size of the buffer pool decreased page response times and nearly eliminated disk reads.</p>
 
-<p><img src="/assets/EliminateDiskReads-0f613b4d1409fc89d2fed4648451ff471b21c2821b8877e6f61b9d6fbdf43094.png" alt="Almost eliminated disk reads" /></p>
+<p><img src="/assets/EliminateDiskReads-225ae0cf0f44fdad62a39bd268c3ff7d988095ac6c3d45499b1df691d0218e04.png" alt="Almost eliminated disk reads" /></p>
 
 <h2 id="doubling-hardware-resources">Doubling hardware resources</h2>
 
@@ -218,7 +218,7 @@ compared to the amount of available RAM, which meant that we were sacrificing bo
 
 <p>After the holiday, CPU spikes returned, now worse than ever. Page render time slowed down, queries against the database took longer, and jobs backed up.</p>
 
-<p><img src="/assets/Thanksgiving-e40444ba87a0d54dd1650c36ff1a5a6aaee6167151397260ff01bc531dc380f3.png" alt="Thanksgiving holiday" /></p>
+<p><img src="/assets/Thanksgiving-9e7fd1358174212e7170025f27571963b11d3dbcf361e4578826f44dafa0d8c0.png" alt="Thanksgiving holiday" /></p>
 
 <p><strong>Note:</strong> Flat areas in the graph showing no CPU usage indicate periods when we were running on a secondary server.</p>
 
@@ -262,7 +262,7 @@ compared to the amount of available RAM, which meant that we were sacrificing bo
 
 <p>Which is why THP is so wrong for our platform. By late 2014 we were using 95% of the RAM and 58% of the 32 CPU cores in our servers . In order to store all of those tiny transaction IDs, we were rewriting memory so rapidly that THP’s efforts to move pages around couldn’t keep up. Clearly, standard 4kb blocks were much more efficient for us than the larger page size that THP was “helping” us with. So we turned THP off. The following image tells the story.</p>
 
-<p><img src="/assets/TCMalloc-2b21a26c5e5ba8ff9afb958d4d1d38b43c2671b93bf3d31c59f796f54dfa87a0.png" alt="TCMalloc" /></p>
+<p><img src="/assets/TCMalloc-caeb2b0a870f5a2cec8685fff24c83dd45b8e7a72d517fc194b6191240362fac.png" alt="TCMalloc" /></p>
 
 <p><strong>Note:</strong> Flat areas in the graph showing no CPU usage indicate periods when we were running on a secondary server.</p>
 
