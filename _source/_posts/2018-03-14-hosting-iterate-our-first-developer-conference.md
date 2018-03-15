@@ -10,7 +10,7 @@ tweets:
 ---
 
 
-{% img /blog/iterate/iterate-front-wall.jpg alt:"Iterate Front Wall" width:"500" %}{: .center-image }
+{% img blog/iterate/iterate-front-wall.jpg alt:"Iterate Front Wall" width:"500" %}{: .center-image }
 
 A couple weeks ago (Tuesday, Feb. 27) [we](https://twitter.com/oktadev) officially ran the very first [Iterate developer conference](https://www.iterateconf.io/). Not only did we have a ton of fun throwing a developer conference, but it was also a huge success and succeeded in hitting all of our goals.
 
@@ -52,23 +52,23 @@ Being a great developer is about a whole lot more than just staying up-to-date w
 
 ### Picking a Theme
 
-{% img /blog/iterate/iterate-nate.jpg alt:"Iterate Nate" width:"500" %}{: .center-image }
+{% img blog/iterate/iterate-nate.jpg alt:"Iterate Nate" width:"500" %}{: .center-image }
 
 To ensure Iterate was an event we could all be proud of, [the](https://twitter.com/rdegges) [four](https://twitter.com/nbarbettini) [of](https://twitter.com/LindsayB610) [us](https://twitter.com/Alyssa_C) sat down to discuss our ideas and decided to build Iterate around the theme of constant improvement: *Iteration*.
 
 From there we decided to have two talk tracks at Iterate: Build and Evolve.
 
-{% img /blog/iterate/iterate-build-agenda.jpg alt:"Iterate Build Agenda" width:"300" %}{: .center-image }
+{% img blog/iterate/iterate-build-agenda.jpg alt:"Iterate Build Agenda" width:"300" %}{: .center-image }
 
 Build was our technical track consisting of four carefully selected topics that educated the audience about what’s happening at the bleeding edge of technology: what are the latest and most important things to know for frontend developers and backend developers? What should developers know about security to stay relevant and build secure applications? What are other important aspects of development that are rapidly changing?
 
-{% img /blog/iterate/iterate-evolve-agenda.jpg alt:"Iterate Evolve Agenda" width:"300" %}{: .center-image }
+{% img blog/iterate/iterate-evolve-agenda.jpg alt:"Iterate Evolve Agenda" width:"300" %}{: .center-image }
 
 Evolve was our culture track that consisted of four talks about improving yourself as a developer in non-technical ways: measuring and automating your life so you can tweak what doesn’t work and double down on what does, how to stay passionate over the long haul, how to build a team and culture at your company that enables *everyone* to be a 10x developer, and also how to be massively productive by discarding management norms and working in innovative ways.
 
 ### Making Your Conference Feel Special
 
-{% img /blog/iterate/iterate-fun.jpg alt:"Iterate Fun" width:"500" %}{: .center-image }
+{% img blog/iterate/iterate-fun.jpg alt:"Iterate Fun" width:"500" %}{: .center-image }
 
 Once we had our tracks defined and topics planned out in a way that made sense, we started working on all the details that would make Iterate truly unique. We pulled in ideas from the best conferences we’ve attended in the past, and threw in some new ideas of our own.
 
@@ -76,7 +76,7 @@ I, for instance, was really adamant about starting the conference around lunch t
 
 We wanted our attendees to show up to Iterate awake and refreshed, not sluggish from just waking up and commuting to the venue. Starting with lunch would give attendees a chance to make friends and hang out before diving into technical talks and intense focus.
 
-{% img /blog/iterate/iterate-zoltar.jpg alt:"Iterate Zoltar" width:"500" %}{: .center-image }
+{% img blog/iterate/iterate-zoltar.jpg alt:"Iterate Zoltar" width:"500" %}{: .center-image }
 
 To stay true to our mission of being authentic and focusing on building a hacker friendly event, we also decided to not do any self promotion: we didn’t have typical vendor booths and we didn’t focus on lead collection activities.
 
@@ -92,21 +92,21 @@ When the big day finally came, everything really came together nicely.
 
 After lunch, we started the conference off in the main room. Every attendee found a copy of Jeff Atwood’s book, [Effective Programming: More Than Writing Code](http://amzn.to/2Hni9SE), on their seat. This is *the book* on writing quality software.
 
-{% img /blog/iterate/iterate-jeff-atwood-book.jpg alt:"Jeff Atwood's Book at Iterate " width:"500" %}{: .center-image }
+{% img blog/iterate/iterate-jeff-atwood-book.jpg alt:"Jeff Atwood's Book at Iterate " width:"500" %}{: .center-image }
 
 We opened the conference up with an AWESOME intro video (which we’ll upload soon) set to the [best programming music ever made](https://www.youtube.com/watch?v=vlEN8svyHj8)*) and a great talk by [Alex Salazar](https://twitter.com/salatzar) introducing the conference and setting the tone.
 
-{% img /blog/iterate/iterate-alex.jpg alt:"Iterate Alex" width:"500" %}{: .center-image }
+{% img blog/iterate/iterate-alex.jpg alt:"Iterate Alex" width:"500" %}{: .center-image }
 
 The intro video is a story in and of itself, but imagine a huge LED wall and a pitch black stage. Then imagine a terminal tinted green (like those old school CRT monitors). After a few seconds you see some typing and a programmer opens a file and starts writing cryptic python code. A moment later the program is finished and the newly created program is ran. Queue a stream of slowly printing ASCII art which prints a welcome message and has some hidden hacker emblems =) Finally, the program introduces the first speaker of the day and slowly fades away. It was pretty epic.
 
-{% img /blog/iterate/iterate-jeff-atwood.jpg alt:"Iterate Jeff Atwood" width:"500" %}{: .center-image }
+{% img blog/iterate/iterate-jeff-atwood.jpg alt:"Iterate Jeff Atwood" width:"500" %}{: .center-image }
 
 [Jeff Atwood](codinghorror.com), co-founder of [StackOverflow](https://stackoverflow.com/) and [Discourse](https://www.discourse.org/), as well as one of the most influential developers of all time then gave an [amazing keynote](https://www.youtube.com/watch?v=vrKTSg5gWN4) about crafting software. If you’re a software developer, you really owe it to yourself to watch his talk: it was absolutely fantastic for anyone who’s building programs that people interact with.
 
 Once the keynote had finished, attendees split up into the two tracks (Build and Evolve) and the first round of talks got started.
 
-{% img /blog/iterate/iterate-attendees.jpg alt:"Iterate Attendees" width:"500" %}{: .center-image }
+{% img blog/iterate/iterate-attendees.jpg alt:"Iterate Attendees" width:"500" %}{: .center-image }
 
 During breaks attendees went out into the main hall to grab snacks (*we had awesome food!*) and partake in the partner experiences:
 
@@ -121,7 +121,7 @@ During breaks attendees went out into the main hall to grab snacks (*we had awes
 
 Once the conference talks were over (each track consisted of four talks), we turned the main conference hall into a big party. Everyone hung out, made friends, and had a good time.
 
-{% img /blog/iterate/iterate-google-home.jpg alt:"Iterate Google Home" width:"500" %}{: .center-image }
+{% img blog/iterate/iterate-google-home.jpg alt:"Iterate Google Home" width:"500" %}{: .center-image }
 
 Throughout the day, attendees also got a pretty cool Iterate t-shirt and Google Home Mini to take home with them as a thank you for coming. People loved this.
 
