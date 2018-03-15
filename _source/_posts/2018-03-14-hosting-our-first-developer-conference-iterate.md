@@ -12,7 +12,7 @@ tweets:
 
 {% img blog/iterate/iterate-front-wall.jpg alt:"Iterate Front Wall" width:"500" %}{: .center-image }
 
-A couple weeks ago (Tuesday, Feb. 27) [we](https://twitter.com/oktadev) officially ran the very first [Iterate developer conference](https://www.iterateconf.io/). Not only did we have a ton of fun throwing a developer conference, but it was also a huge success and succeeded in hitting all of our goals.
+A couple weeks ago (Tuesday, Feb. 27) [we](https://twitter.com/oktadev) officially ran the very first [Iterate Developer Conference](https://www.iterateconf.io/). Not only did we have a ton of fun throwing a developer conference, but it was also a huge success and succeeded in hitting all of our goals.
 
 In this post I’ll recap the Iterate experience from start to finish, including some interesting things I learned along the way.
 
@@ -20,7 +20,7 @@ If you weren’t lucky enough to attend Iterate, don’t worry – we’ll most 
 
 Want to know what Iterate was like? Check out our cool new recap video!
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/R4P_8bi8s9M" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<div style="text-align: center"><iframe style="max-width: 100%" width="560" height="315" src="https://www.youtube.com/embed/R4P_8bi8s9M" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>
 
 ## Why Host a Developer Conference?
 
@@ -28,15 +28,15 @@ Hosting a conference is a __lot__ of work. If you’re considering hosting a dev
 
 What it essentially boils down to is this: have a strong purpose and goal in mind before you dive into running a big event like a conference that will consume a massive amount of time and resources.
 
-So, *why* did we decide to host a developer conference? Good question ;) Okta, after all, already runs a large and successful conference called [Oktane](https://www.okta.com/oktane18/) each year. Why add another one?
+So, *why* did we decide to host a developer conference? Good question! ;) Okta, after all, already runs a large and successful conference called [Oktane](https://www.okta.com/oktane18/) each year. Why add another one?
 
 Oktane is primarily focused on Okta’s IT business and customers. While Oktane is a great event (Barack Obama AND Kumail Nanjiani will be [speaking there this year](https://www.okta.com/oktane18/)!) we wanted to host a separate conference that would truly embody the developer spirit and serve as a tribute to hackers everywhere.
 
 We wanted to host a conference that would:
 
-- Exist to serve developers and no one else
+- Exist to serve developers and no one else.
 - Not be about marketing, sales, or self promotion. We wanted our new conference to be 100% genuine and authentic to the developer community in a way that is simply not possible when the goal of your event is to make money.
-- Motivate developers to improve themselves: get better at their craft, become more effective in their jobs and businesses, find new ways to keep their passions alive, and realize their full potential
+- Motivate developers to improve themselves: get better at their craft, become more effective in their jobs and businesses, find new ways to keep their passions alive, and realize their full potential.
 
 We decided upfront that we’d track our success through post-event surveys with carefully selected questions and gauge our success against a rubric.
 
@@ -60,7 +60,7 @@ From there we decided to have two talk tracks at Iterate: Build and Evolve.
 
 {% img blog/iterate/iterate-build-agenda.jpg alt:"Iterate Build Agenda" width:"300" %}{: .center-image }
 
-Build was our technical track consisting of four carefully selected topics that educated the audience about what’s happening at the bleeding edge of technology: what are the latest and most important things to know for frontend developers and backend developers? What should developers know about security to stay relevant and build secure applications? What are other important aspects of development that are rapidly changing?
+Build was our technical track consisting of four carefully selected topics that educated the audience about what’s happening at the bleeding edge of technology. What are the latest and most important things to know for frontend developers and backend developers? What should developers know about security to stay relevant and build secure applications? What are other important aspects of development that are rapidly changing?
 
 {% img blog/iterate/iterate-evolve-agenda.jpg alt:"Iterate Evolve Agenda" width:"300" %}{: .center-image }
 
@@ -98,11 +98,13 @@ We opened the conference up with an AWESOME intro video (which we’ll upload so
 
 {% img blog/iterate/iterate-alex.jpg alt:"Iterate Alex" width:"500" %}{: .center-image }
 
-The intro video is a story in and of itself, but imagine a huge LED wall and a pitch black stage. Then imagine a terminal tinted green (like those old school CRT monitors). After a few seconds you see some typing and a programmer opens a file and starts writing cryptic python code. A moment later the program is finished and the newly created program is ran. Queue a stream of slowly printing ASCII art which prints a welcome message and has some hidden hacker emblems =) Finally, the program introduces the first speaker of the day and slowly fades away. It was pretty epic.
+The intro video is a story in and of itself, but imagine a huge LED wall and a pitch black stage. Then imagine a terminal tinted green (like those old school CRT monitors). After a few seconds you see some typing and a programmer opens a file and starts writing cryptic Python code. A moment later the program is finished and the newly created program runs. Queue a stream of slowly printing ASCII art which prints a welcome message and has some hidden hacker emblems. =) Finally, the program introduces the first speaker of the day and slowly fades away. It was pretty epic.
 
 {% img blog/iterate/iterate-jeff-atwood.jpg alt:"Iterate Jeff Atwood" width:"500" %}{: .center-image }
 
 [Jeff Atwood](https://blog.codinghorror.com/), co-founder of [StackOverflow](https://stackoverflow.com/) and [Discourse](https://www.discourse.org/), as well as one of the most influential developers of all time then gave an [amazing keynote](https://www.youtube.com/watch?v=vrKTSg5gWN4) about crafting software. If you’re a software developer, you really owe it to yourself to watch his talk: it was absolutely fantastic for anyone who’s building programs that people interact with.
+
+<div style="text-align: center"><iframe style="max-width: 100%" width="560" height="315" src="https://www.youtube.com/embed/vrKTSg5gWN4" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>
 
 Once the keynote had finished, attendees split up into the two tracks (Build and Evolve) and the first round of talks got started.
 
@@ -116,8 +118,8 @@ During breaks attendees went out into the main hall to grab snacks (*we had awes
 - The JS Foundation had popcorn and puns
 - We (Okta) hosted a really fun photo booth
 - We ([Okta For Good](https://www.okta.com/okta-for-good/)) also hosted a donation station where developers could pledge to either:
-- Donate money to the [Open Source Collective](https://opencollective.com/opensource), a fund that distributes money to open source projects in need of funding
-- Donate their time towards contributing to an open source project: writing docs, fixing bugs, or adding features
+  - Donate money to the [Open Source Collective](https://opencollective.com/opensource), a fund that distributes money to open source projects in need of funding
+  - Donate their time towards contributing to an open source project: writing docs, fixing bugs, or adding features
 
 Once the conference talks were over (each track consisted of four talks), we turned the main conference hall into a big party. Everyone hung out, made friends, and had a good time.
 
@@ -142,11 +144,11 @@ While there were a few minor things we all thought we could do better next time,
 
 Iterate was a ton of fun, and all of us helping put it together had a blast. I want to give a massive shout-out to some of the core crewmembers who really made it all happen (in no particular order):
 
-- [Alyssa](https://twitter.com/Alyssa_C)
-- [Lindsay](https://twitter.com/LindsayB610)
-- [Nate](https://twitter.com/nbarbettini)
-- [Rebecca](https://www.linkedin.com/in/rebecca-haugen-gagnon-14bb9158/)
-- And [Katie](https://twitter.com/BattenKatie)
+- [Alyssa Smrekar](https://twitter.com/Alyssa_C)
+- [Lindsay Brunner](https://twitter.com/LindsayB610)
+- [Nate Barbettini](https://twitter.com/nbarbettini)
+- [Rebecca Gagnon](https://www.linkedin.com/in/rebecca-haugen-gagnon-14bb9158/)
+- And [Katie Batten](https://twitter.com/BattenKatie)
 
 {% img blog/iterate/iterate-staff.jpg alt:"Iterate Staff" width:"500" %}{: .center-image }
 
