@@ -94,7 +94,7 @@ After lunch, we started the conference off in the main room. Every attendee foun
 
 {% img blog/iterate/iterate-jeff-atwood-book.jpg alt:"Jeff Atwood's Book at Iterate " width:"500" %}{: .center-image }
 
-We opened the conference up with an AWESOME intro video (which we’ll upload soon) set to the [best programming music ever made](https://www.youtube.com/watch?v=vlEN8svyHj8)*) and a great talk by [Alex Salazar](https://twitter.com/salatzar) introducing the conference and setting the tone.
+We opened the conference up with an AWESOME intro video (which we’ll upload soon) set to the [best programming music ever made](https://www.youtube.com/watch?v=vlEN8svyHj8) and a great talk by [Alex Salazar](https://twitter.com/salatzar) introducing the conference and setting the tone.
 
 {% img blog/iterate/iterate-alex.jpg alt:"Iterate Alex" width:"500" %}{: .center-image }
 
