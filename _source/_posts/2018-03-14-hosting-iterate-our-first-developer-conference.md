@@ -102,7 +102,7 @@ The intro video is a story in and of itself, but imagine a huge LED wall and a p
 
 {% img blog/iterate/iterate-jeff-atwood.jpg alt:"Iterate Jeff Atwood" width:"500" %}{: .center-image }
 
-[Jeff Atwood](codinghorror.com), co-founder of [StackOverflow](https://stackoverflow.com/) and [Discourse](https://www.discourse.org/), as well as one of the most influential developers of all time then gave an [amazing keynote](https://www.youtube.com/watch?v=vrKTSg5gWN4) about crafting software. If you’re a software developer, you really owe it to yourself to watch his talk: it was absolutely fantastic for anyone who’s building programs that people interact with.
+[Jeff Atwood](https://blog.codinghorror.com/), co-founder of [StackOverflow](https://stackoverflow.com/) and [Discourse](https://www.discourse.org/), as well as one of the most influential developers of all time then gave an [amazing keynote](https://www.youtube.com/watch?v=vrKTSg5gWN4) about crafting software. If you’re a software developer, you really owe it to yourself to watch his talk: it was absolutely fantastic for anyone who’s building programs that people interact with.
 
 Once the keynote had finished, attendees split up into the two tracks (Build and Evolve) and the first round of talks got started.
 
