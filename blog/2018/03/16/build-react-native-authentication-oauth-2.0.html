@@ -1,0 +1,979 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html class="ie6 no-flexbox"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie7 no-flexbox"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie8 no-flexbox"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie9 no-flexbox"> <![endif]-->
+<!--[if IE 10 ]>    <html class="ie10 no-flexbox"> <![endif]-->
+<!--[if (gt IE 10)|!(IE)]><!--> <html class="modern wf-loading" lang="en"> <!--<![endif]-->
+  <head>
+  <script>
+    var searchDomain = 'https://developer.okta.com';
+    var isProduction = window.location.hostname === 'developer.okta.com';
+    if (isProduction) {
+      // TypeKit
+      (function(d) {
+        var config = {
+          kitId: 'jff5neq',
+          scriptTimeout: 3000,
+          async: true
+        },
+        h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/bwf-loadingb/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+      })(document);
+
+      // Google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-15777010-3', 'auto');
+      ga('send', 'pageview');
+
+      // START Google Tag Manager
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-TJ45R6');
+      // END Google Tag Manager
+
+      // Start Heap Analytics
+      window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var r=t.forceSSL||"https:"===document.location.protocol,a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=(r?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+e+".js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n);for(var o=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["addEventProperties","addUserProperties","clearEventProperties","identify","removeEventProperty","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=o(p[c])};
+      heap.load("3356162945");
+      // End Heap Analytics
+    }
+  </script>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+
+  <link type="text/css" rel="stylesheet" href="https://developer.okta.com/sites/all/themes/developer/css/master.css" media="all" />
+  <meta class="swiftype" name="title" data-type="string" content="Build a React Native Application and Authenticate with OAuth 2.0 | Okta Developer">
+  <meta class="swiftype" name="summary" data-type="string" content="Learn how to add authentication to your React Native applications with AppAuth and Okta." />
+
+  <link type="text/css" rel="stylesheet" href="/assets/animate-ec43d72c3ed45e08a460b8a2966d8dba6006aebfa0530935c3973fa493a8771f.css">
+  <link type="text/css" rel="stylesheet" href="/assets/okta-980d465fb01d9d9034e5f18bb97a17688f56aa81d5c69f457f546c9a00acc358.css">
+  
+  
+  <title>Build a React Native Application and Authenticate with OAuth 2.0 | Okta Developer</title>
+  <meta name="description" content="Learn how to add authentication to your React Native applications with AppAuth and Okta.">
+  <link rel="alternate" type="application/rss+xml" title="Okta Developer" href="https://developer.okta.com/feed.xml"><!-- GA -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/assets/favicon/manifest.json">
+  <link rel="mask-icon" href="/assets/favicon/safari-pinned-tab.svg" color="#21313a">
+  <meta name="msapplication-config" content="/assets/favicon/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  
+    <body id="blog">
+	
+
+
+
+
+<header class="Header is-fixed">
+
+  <div class="Wrap">
+
+    <a class="Logo" href="https://developer.okta.com">
+      <svg version="1.1" id="OktaLogo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 431.9 151.4" style="enable-background:new 0 0 431.9 151.4;" xml:space="preserve"><g><g><g><path d="M102.2,41.4c-21,0-38.1,17.1-38.1,38.1s17.1,38.1,38.1,38.1s38.1-17.1,38.1-38.1l0,0C140.3,58.5,123.2,41.4,102.2,41.4z M102.2,98.5c-10.5,0-19-8.5-19-19s8.5-19,19-19s19,8.5,19,19c0.1,10.5-8.4,19-18.9,19.1C102.3,98.6,102.2,98.6,102.2,98.5L102.2,98.5z"/><path d="M169.1,92.3c0-1.9,1.5-3.4,3.4-3.4c0.9,0,1.8,0.4,2.4,1c9.5,9.7,25.3,26.3,25.4,26.4c0.4,0.5,0.8,0.8,1.4,0.9l1.6,0.2h17.2c1.8,0,3.3-1.4,3.4-3.2c0-0.8-0.3-1.5-0.8-2.2l-28.6-29.2l-1.5-1.5c-3.2-3.9-2.9-5.4,0.8-9.3l22.6-25.1c1.1-1.4,0.8-3.5-0.6-4.6c-0.6-0.4-1.3-0.7-2-0.7h-17c-0.6,0.2-1.1,0.5-1.5,0.9L175,64.4c-1.3,1.4-3.4,1.5-4.8,0.2c-0.7-0.6-1.1-1.5-1.1-2.5V18.9c0-1.7-1.3-3-3-3c-0.1,0-0.2,0-0.3,0h-12.7c-2.2,0-3.3,1.5-3.3,2.8v95.8c0,2.2,1.8,2.8,3.3,2.8h12.7c1.7,0.1,3.2-1.2,3.3-2.9c0,0,0,0,0,0V92.3z"/><path d="M273,114l-1.4-12.8c-0.2-1.7-1.7-2.9-3.4-2.7c0,0,0,0-0.1,0l-2.9,0.2c-10.1,0-18.5-7.9-19-18c0-0.3,0-0.7,0-1V64.2c-0.1-2,1.5-3.6,3.5-3.7c0,0,0,0,0,0h17c1.7-0.1,3.1-1.5,3-3.2c0,0,0-0.1,0-0.1v-12c0-2.3-1.5-3.6-2.8-3.6h-17.1c-1.9,0.1-3.5-1.5-3.6-3.4c0,0,0,0,0,0V18.9c-0.1-1.7-1.5-3.1-3.2-3c0,0-0.1,0-0.1,0h-12.7c-1.6-0.1-3,1.1-3.1,2.7c0,0.1,0,0.1,0,0.2c0,0,0,61.7,0,62c0.5,21,17.9,37.6,38.9,37c1.4,0,2.9-0.2,4.3-0.3C272,117.2,273.2,115.7,273,114z"/></g><path d="M364.7,98c-10.8,0-12.4-3.8-12.4-18.3l0,0V44.8c0-1.8-1.4-3.2-3.2-3.2c0,0-0.1,0-0.1,0h-12.8c-1.8,0-3.2,1.4-3.3,3.2v1.6C314.6,36,291.3,42.5,281,60.8c-10.4,18.3-3.9,41.6,14.4,51.9c14,7.9,31.4,6.2,43.5-4.2c3.6,5.5,9.3,9.1,18.3,9.1c1.5,0,9.7,0.3,9.7-3.5v-13.6C367,99.2,366,98.1,364.7,98z M314.2,98.6c-10.5,0-19-8.5-19-19s8.5-19,19-19s19,8.5,19,19l0,0C333.2,90.1,324.7,98.6,314.2,98.6z"/></g><path d="M19.4,74c2.2-1.9,4.1-4.1,5.7-6.6c3.5-5.3,5.4-11.5,5.2-17.9V27c0-4.9,0.9-8.4,2.7-10.5c1.8-2.1,4.8-3,9.2-3h12.6c1.2,0,2.1-0.9,2.2-2.1l0,0V2.2C57,1,56,0,54.8,0c0,0,0,0,0,0H41.5c-7.8,0-12.9,2.1-18,7.6s-7.1,12.3-7.1,21.7v14.2c0,2.2-0.1,4-0.2,5.7v2.2c-0.5,3.2-1.8,6.2-3.6,8.9C9.4,64.7,5.1,70.9,0.9,74l0,0l-0.3,0.3l0,0l-0.2,0.3H0.2v0.3l0,0c-0.1,0.3-0.1,0.7,0,1l0,0v0.3h0.1l0.2,0.3l0,0l0.3,0.3l0,0c4.2,3.1,8.5,9.3,11.3,13.7c1.8,2.7,3.1,5.7,3.6,8.9v2.2c0.1,1.6,0.2,3.5,0.2,5.7v14.3c0,9.4,2.4,16.7,7.1,21.7s10.2,7.6,18,7.6h13.8c1.2,0,2.2-1,2.2-2.2V140l0,0c0-1.2-1-2.2-2.2-2.2H42.2c-4.4,0-7.5-1-9.2-3s-2.7-5.6-2.7-10.5v-22.4c0.2-6.4-1.7-12.6-5.2-17.9c-1.6-2.5-3.5-4.7-5.7-6.6l0,0c-0.9-0.7-1.1-2-0.4-2.9C19.2,74.3,19.3,74.2,19.4,74L19.4,74z"/><path d="M412.5,74c-2.2-1.9-4.1-4.1-5.7-6.6c-3.5-5.3-5.4-11.5-5.2-17.9V27c0-4.9-0.9-8.4-2.7-10.5s-4.8-3-9.2-3h-12.6c-1.2,0-2.2-1-2.2-2.2c0,0,0,0,0,0l0,0V2.2c0-1.2,1-2.2,2.2-2.2c0,0,0,0,0,0h13.4c7.8,0,12.9,2.1,18,7.6s7.1,12.3,7.1,21.7v14.2c0,2.2,0.1,4,0.2,5.7v2.2c0.5,3.2,1.8,6.2,3.6,8.9c2.8,4.5,7.1,10.7,11.3,13.7l0,0l0.3,0.3l0,0l0.2,0.3h0.1v0.3l0,0c0.1,0.3,0.1,0.7,0,1l0,0v0.3h-0.1l-0.2,0.3l0,0l-0.3,0.3l0,0c-4.2,3.1-8.5,9.3-11.3,13.7c-1.8,2.7-3.1,5.7-3.6,8.9v2.2c-0.1,1.6-0.2,3.5-0.2,5.7v14.3c0,9.4-2.4,16.7-7.1,21.7s-10.2,7.6-18,7.6h-13.4c-1.2,0-2.2-1-2.2-2.2c0,0,0,0,0,0V140l0,0c0-1.2,1-2.2,2.2-2.2l0,0h12.7c4.4,0,7.5-1,9.2-3s2.7-5.6,2.7-10.5v-22.4c-0.2-6.3,1.6-12.6,5.1-17.9c1.6-2.5,3.5-4.7,5.7-6.6l0,0c0.9-0.7,1.1-2,0.4-2.9C412.7,74.3,412.6,74.2,412.5,74L412.5,74z"/></g></svg>
+    </a>
+
+    <nav class="Header-nav PrimaryNav">
+      <ul class="menu">
+        <li class="first expanded">
+          <a href="https://developer.okta.com/product/">Product</a>
+          <ul class="menu">
+            <li class="first leaf"><a href="https://developer.okta.com/product/">Overview</a></li>
+            <li class="leaf"><a href="https://developer.okta.com/product/authentication/">Authentication</a></li>
+            <li class="leaf"><a href="https://developer.okta.com/product/authorization/">Authorization</a></li>
+            <li class="last leaf"><a href="https://developer.okta.com/product/user-management/">User Management</a></li>
+          </ul>
+        </li>
+        <li class="leaf">
+          <a href="https://developer.okta.com/pricing/">Pricing</a>
+        </li>
+        <li class="leaf">
+          <a href="/blog/" class="active">Blog</a>
+        </li>
+        <li class="leaf">
+          <a href="/documentation/">Docs</a>
+        </li>
+        <li class="last expanded">
+          <span class="nolink">Support</span>
+          <ul class="menu">
+            <li class="first leaf"><a href="https://devforum.okta.com/">Okta Developer Forums</a></li>
+            <li class="last leaf"><a href="mailto:developers@okta.com">developers@okta.com</a></li>
+          </ul>
+        </li>
+      </ul>
+      <a class="PrimaryNav-toggle" href="#">
+        <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g class="MenuIcon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+                <path d="M1,16 L19,16" class="MenuIcon-line1" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,4 L19,4" class="MenuIcon-line2" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,10 L19,10" class="MenuIcon-line3" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,10 L19,10" class="MenuIcon-line4" stroke="#FFFFFF" stroke-width="2"></path>
+            </g>
+        </svg>
+        <svg class="CloseIcon" width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <g id="ALl-Boards" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="Desktop" transform="translate(-915.000000, -235.000000)" fill="#FFFFFF">
+              <g id="Search-bar-Active" transform="translate(30.000000, 26.000000)">
+                <polygon id="Icon/Cross" points="901 210.6 899.4 209 893 215.4 886.6 209 885 210.6 891.4 217 885 223.4 886.6 225 893 218.6 899.4 225 901 223.4 894.6 217"></polygon>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </a>
+
+      <div class="PrimaryNav-cta">
+        <a target="_blank" rel="noopener noreferrer" href="https://login.okta.com/?SAMLRequest=fc%2B7CsJAEAXQXvAflu1NNJUMeZBGELTx1a%2FrYILJTtyZGD%2FfSBRiYzlw77lMnD3rSj3Qc0ku0YtgrhU6S5fSXRN9PKxmS52l00nMpq6iBvJWCrfDe4ss6vStRe9aDzmGIZfo1jsgwyWDMzUyiIV9vt1AH4XGk5ClSvewUgMNa%2BYW%2FVj5jxhm9NLP67QQaSAMu64L6CYmsFSHlnzT4ZlLwTgcL6Sf8%2FeX9AU%3Dhttps://login.okta.com/?SAMLRequest=fc%2B7CsJAEAXQXvAflu1NNJUMeZBGELTx1a%2FrYILJTtyZGD%2FfSBRiYzlw77lMnD3rSj3Qc0ku0YtgrhU6S5fSXRN9PKxmS52l00nMpq6iBvJWCrfDe4ss6vStRe9aDzmGIZfo1jsgwyWDMzUyiIV9vt1AH4XGk5ClSvewUgMNa%2BYW%2FVj5jxhm9NLP67QQaSAMu64L6CYmsFSHlnzT4ZlLwTgcL6Sf8%2FeX9AU%3D" class="Button--redOutline">Login</a>
+        <a href="https://developer.okta.com/signup/" class="Button--red">Sign up</a>
+      </div>
+
+      <a class="SearchIcon" href="#"></a>
+      <form id="form_search" class="SearchBar Formisimo_clocked_69929" method="get" action="https://developer.okta.com/search/" name="form_search" __bizdiag="-784164280" __biza="WJ__">
+        <input type="text" name="stq" autocomplete="off" id="st-search-input-auto" class="st-search-input" placeholder="Search">
+        <input type="submit" name="submit" value="GO">
+      </form>
+
+    </nav>
+
+  </div>
+
+</header>
+
+	<div class="page-content">
+		
+		
+
+
+
+
+
+
+<section class="Blog is-single">
+		
+	<div class="Blog-social">
+		
+		<a href="https://github.com/mraible" target="_blank"><i class="fa fa-github"></i></a>
+		
+		
+		<a href="https://twitter.com/mraible" target="_blank"><i class="fa fa-twitter"></i></a>
+		
+		
+		
+		<a href="http://raibledesigns.com" target="_blank"><i class="fa fa-external-link"></i></a>
+		
+	</div>
+	
+	
+
+<article class="BlogPost">
+
+    <header class="BlogPost-header">
+
+        <time class="BlogPost-date" datetime="2018-03-16">March 16, 2018</time>
+
+        <h1 class="BlogPost-title">
+            
+            Build a React Native Application and Authenticate with OAuth 2.0
+            
+        </h1>
+
+        <div class="BlogPost-attribution">
+            
+            <img src="/assets/avatar-matt_raible-9974af6192eb1753b7137c8fff0a2c6e6bb9736a2517986cb5cc50bb040e83d4.jpg" alt="avatar-matt_raible.jpg" class="BlogPost-avatar">
+            
+            <span class="BlogPost-author">Matt Raible</span>
+        </div>
+
+    </header>
+
+    <div class="BlogPost-content">
+        
+	<p>With Okta and OpenID Connect (OIDC) you can easily integrate authentication into a React Native application and never have to build it yourself again. OIDC allows you to authenticate directly against the <a href="https://developer.okta.com/product/">Okta API</a>, and this article shows you how to do just that in a React Native application. Today you’ll see how to log a user into your React Native application using an OIDC redirect via the AppAuth library.</p>
+
+<p>React Native is a pretty slick framework. Unlike Ionic and other hybrid mobile frameworks, it allows you to use web technologies (React and JavaScript) to build native mobile apps. There is no browser or WebView involved, so developing a mobile app with React Native is similar to using the native SDK in that you’ll do all your testing on an emulator or device. There is no way to test it in your browser like there is with Ionic. This can be a benefit in that you don’t have to write code that works in-browser and on-device separately.</p>
+
+<p>If you look at Google Trends, you can see that React Native is even more popular than Android and iOS for native development!</p>
+
+<script type="text/javascript" src="https://ssl.gstatic.com/trends_nrtr/1294_RC01/embed_loader.js"></script>
+<script type="text/javascript"> trends.embed.renderExploreWidget("TIMESERIES", {"comparisonItem":[{"keyword":"ios development","geo":"","time":"today 12-m"},{"keyword":"android development","geo":"","time":"today 12-m"},{"keyword":"react native","geo":"","time":"today 12-m"}],"category":0,"property":""}, {"exploreQuery":"q=ios%20development,android%20development,react%20native&date=today 12-m,today 12-m,today 12-m","guestPath":"https://trends.google.com:443/trends/embed/"}); </script>
+
+<p>Today I’m going to show you how to develop a React Native app with the latest and greatest releases. At the time of this writing, that’s React 16.2.0 and React Native 0.54.0. You’ll create a new app, add <a href="https://appauth.io/">AppAuth</a> for authentication, authenticate with Okta, and see it running on both iOS and Android.</p>
+
+<blockquote>
+  <p>AppAuth is a client SDK for native apps to authenticate and authorize end-users using OAuth 2.0 and OpenID Connect. Available for iOS, macOS, Android and Native JS environments, it implements modern security and usability <a href="https://tools.ietf.org/html/rfc8252">best practices</a> for native app authentication and authorization.</p>
+</blockquote>
+
+<h2 id="create-your-react-native-application">Create Your React Native Application</h2>
+
+<p>React has a <code class="highlighter-rouge">create-react-app</code> command-line tool (CLI) that you can use to create new React apps. React Native has a similar tool called <a href="https://github.com/react-community/create-react-native-app">Create React Native App</a>. Before you install it, make sure you have <a href="https://nodejs.org/">Node</a> v6 or later installed.</p>
+
+<p>Install <code class="highlighter-rouge">create-react-native-app</code> and create a new project called <code class="highlighter-rouge">okta-rn</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install <span class="nt">-g</span> create-react-native-app
+create-react-native-app okta-rn
+<span class="nb">cd </span>okta-rn
+npm start
+</code></pre></div></div>
+
+<p>Running these commands will result in your terminal prompting you with some options:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>To view your app with live reloading, point the Expo app to this QR code.
+You'll find the QR scanner on the Projects tab of the app.
+
+[QR Code]
+
+Or enter this address in the Expo app's search bar:
+
+  exp://172.31.98.12:19000
+
+Your phone will need to be on the same local network as this computer.
+For links to install the Expo app, please visit https://expo.io.
+
+Logs from serving your app will appear here. Press Ctrl+C at any time to stop.
+
+ › Press a to open Android device or emulator, or i to open iOS emulator.
+ › Press q to display QR code.
+ › Press r to restart packager, or R to restart packager and clear cache.
+ › Press d to toggle development mode. (current mode: development)
+</code></pre></div></div>
+
+<p>If you’re on a Mac, press <strong>i</strong> to open iOS emulator. You will be prompted to install/open with Expo, then presented with the rendered <code class="highlighter-rouge">App.js</code>.</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/assets/blog/react-native-app-auth/open-in-expo-99aa3f61ee9cea9951ca8b232460f501ef3f1a3c07cd4f47c49c3b2b4717afe0.png" alt="Open in Expo" width="400" /></td>
+      <td><img src="/assets/blog/react-native-app-auth/default-page-bd56cd1311197957c4d096855eea8f6f93687d14c37e72b39b489beba0dcfbea.png" alt="Rendered App.js" width="400" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>If you’re on Windows or Linux, I’d suggest trying the Android emulator or your Android device (if you have one). If it doesn’t work, don’t worry, I’ll show you how to make that work later on.</p>
+
+<p><strong>TIP:</strong> You can use TypeScript instead of JavaScript in your React Native app using Microsoft’s <a href="https://github.com/Microsoft/TypeScript-React-Native-Starter">TypeScript React Native Starter</a>. If you decide to go this route, I’d recommend following the steps to convert your app after you’ve completed this tutorial.</p>
+
+<h2 id="react-native-and-oauth-20">React Native and OAuth 2.0</h2>
+
+<p>In this example, I’ll use <a href="https://github.com/FormidableLabs/react-native-app-auth">React Native App Auth</a>, a library created by <a href="http://formidable.com/">Formidable</a>. The reason I’m using this library is three-fold: 1) they provide an excellent <a href="https://github.com/FormidableLabs/react-native-app-auth/tree/master/Example">example</a> that I was able to make work in just a few minutes, 2) it uses AppAuth (a mature OAuth client implementation), and 3) I was unable to get anything else working.</p>
+
+<ul>
+  <li>I tried <a href="https://github.com/fullstackreact/react-native-oauth">react-native-oauth</a> but discovered it required using an existing provider before adding a new one. I only wanted to have Okta as a provider. Also, it’s high number of issues and pull requests served as a warning sign.</li>
+  <li>I tried <a href="https://github.com/adamjmcgrath/react-native-simple-auth">react-native-simple-auth</a> but had problems getting the deprecated Navigator component to work with the latest React Native release.</li>
+  <li>I tried doing <a href="https://medium.com/@jtremback/oauth-2-with-react-native-c3c7c64cbb6d">this OAuth 2 with React Native tutorial</a>, but also had problems redirecting back to my app.</li>
+</ul>
+
+<h3 id="create-native-application-in-okta">Create Native Application in Okta</h3>
+
+<p>Before you add AppAuth to your React Native application, you’ll need an app to authorize against. If you don’t have a free-forever Okta Developer account, <a href="https://developer.okta.com/signup/">get one today</a>!</p>
+
+<p>Log in to your Okta Developer account and navigate to <strong>Applications</strong> &gt; <strong>Add Application</strong>. Click <strong>Native</strong> and click <strong>Next</strong>. Give the app a name you’ll remember (e.g., <code class="highlighter-rouge">React Native</code>), select <code class="highlighter-rouge">Refresh Token</code> as a grant type, in addition to the default <code class="highlighter-rouge">Authorization Code</code>. Copy the <strong>Login redirect URI</strong> (e.g., <code class="highlighter-rouge">com.oktapreview.dev-158606:/callback</code>) and save it somewhere. You’ll need this value when configuring your app.</p>
+
+<p>Click <strong>Done</strong> and you should see a client ID on the next screen. Copy and save this value as well.</p>
+
+<h3 id="add-react-native-appauth-for-authentication">Add React Native AppAuth for Authentication</h3>
+
+<p>You’ll need to “eject” the native configuration for your app, which is normally hidden by create-react-native-app.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm run eject
+</code></pre></div></div>
+
+<p>When prompted to answer questions, use the following answers:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Question</th>
+      <th>Answer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>How would you like to eject from create-react-native-app?</td>
+      <td><code class="highlighter-rouge">React Native</code></td>
+    </tr>
+    <tr>
+      <td>What should your app appear as on a user’s home screen?</td>
+      <td><code class="highlighter-rouge">Okta RN</code></td>
+    </tr>
+    <tr>
+      <td>What should your Android Studio and Xcode projects be called?</td>
+      <td><code class="highlighter-rouge">OktaRN</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>To install App Auth for React Native, run the following commands:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm i react-native-app-auth@2.2.0
+npm i
+react-native link
+</code></pre></div></div>
+
+<p>After running these commands, you have to <a href="https://github.com/FormidableLabs/react-native-app-auth#setup">configure the native iOS projects</a>. I’ve copied the steps below for your convenience.</p>
+
+<h3 id="ios-setup">iOS Setup</h3>
+
+<p>React Native App Auth depends on <a href="https://github.com/openid/AppAuth-iOS">AppAuth-ios</a>, so you have to configure it as a dependency. The easiest way to do that is to use <a href="https://guides.cocoapods.org/using/getting-started.html">CocoaPods</a>. To install CocoaPods, run the following command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>gem install cocoapods
+</code></pre></div></div>
+
+<p>Create a <code class="highlighter-rouge">Podfile</code> in the <code class="highlighter-rouge">ios</code> directory of your project that specifies AppAuth-ios as a dependency. Make sure that <code class="highlighter-rouge">OktaRN</code> matches the app name you specified when running <code class="highlighter-rouge">npm run eject</code>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>platform :ios, '11.0'
+
+target 'OktaRN' do
+  pod 'AppAuth', '&gt;= 0.91'
+end
+</code></pre></div></div>
+
+<p>Then run <code class="highlighter-rouge">pod install</code> from the <code class="highlighter-rouge">ios</code> directory. This can take a while the first time, even on a fast connection. Now is a good time to grab a coffee or a scotch! 🥃</p>
+
+<p>Open your project in Xcode by running <code class="highlighter-rouge">open OktaRN.xcworkspace</code> from the <code class="highlighter-rouge">ios</code> directory.</p>
+
+<p>If you intend to support iOS 10 and older, you need to define the supported redirect URL schemes in <code class="highlighter-rouge">ios/OktaRN/Info.plist</code> as follows:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;key&gt;</span>CFBundleURLTypes<span class="nt">&lt;/key&gt;</span>
+<span class="nt">&lt;array&gt;</span>
+  <span class="nt">&lt;dict&gt;</span>
+    <span class="nt">&lt;key&gt;</span>CFBundleURLName<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;string&gt;</span>$(PRODUCT_BUNDLE_IDENTIFIER)<span class="nt">&lt;/string&gt;</span>
+    <span class="nt">&lt;key&gt;</span>CFBundleURLSchemes<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;array&gt;</span>
+      <span class="nt">&lt;string&gt;</span>{yourReversedOktaDomain}<span class="nt">&lt;/string&gt;</span>
+    <span class="nt">&lt;/array&gt;</span>
+  <span class="nt">&lt;/dict&gt;</span>
+<span class="nt">&lt;/array&gt;</span>
+</code></pre></div></div>
+
+<p>Below is what mine looks like after I changed my app identifier and added this key.</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;key&gt;</span>CFBundleIdentifier<span class="nt">&lt;/key&gt;</span>
+<span class="nt">&lt;string&gt;</span>com.okta.developer.reactnative.$(PRODUCT_NAME:rfc1034identifier)<span class="nt">&lt;/string&gt;</span>
+<span class="nt">&lt;key&gt;</span>CFBundleURLTypes<span class="nt">&lt;/key&gt;</span>
+<span class="nt">&lt;array&gt;</span>
+  <span class="nt">&lt;dict&gt;</span>
+    <span class="nt">&lt;key&gt;</span>CFBundleURLName<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;string&gt;</span>$(PRODUCT_BUNDLE_IDENTIFIER)<span class="nt">&lt;/string&gt;</span>
+    <span class="nt">&lt;key&gt;</span>CFBundleURLSchemes<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;array&gt;</span>
+      <span class="nt">&lt;string&gt;</span>com.oktapreview.dev-158606<span class="nt">&lt;/string&gt;</span>
+    <span class="nt">&lt;/array&gt;</span>
+  <span class="nt">&lt;/dict&gt;</span>
+<span class="nt">&lt;/array&gt;</span>
+</code></pre></div></div>
+
+<p>Open <code class="highlighter-rouge">AppDelegate.h</code> in your Xcode project (OktaRN &gt; OktaRN &gt; <code class="highlighter-rouge">AppDelegate.h</code>) and add the lines with the <code class="highlighter-rouge">+</code> next to them below.</p>
+
+<div class="language-diff highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gi">+ @protocol OIDAuthorizationFlowSession;
+</span>
+  @interface AppDelegate : UIResponder &lt;UIApplicationDelegate&gt;
+<span class="gi">+ @property(nonatomic, strong, nullable) id&lt;OIDAuthorizationFlowSession&gt; currentAuthorizationFlow;
+</span>  @property (nonatomic, strong) UIWindow *window;
+  @end
+</code></pre></div></div>
+
+<p>This property holds the authorization flow information that started before you redirect to Okta. After Okta authorizes you, it redirects to the <code class="highlighter-rouge">redirect_uri</code> that’s passed in.</p>
+
+<p>The authorization flow starts from an <code class="highlighter-rouge">openURL()</code> app delegate method. To add it, open <code class="highlighter-rouge">AppDelegate.m</code> and import <code class="highlighter-rouge">AppAuth.h</code>.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#import "AppAuth.h"
+</span></code></pre></div></div>
+
+<p>Then at the bottom of the class (before <code class="highlighter-rouge"><span class="k">@end</span></code>), add the <code class="highlighter-rouge">openURL()</code> method.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">-</span> <span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="n">application</span><span class="o">:</span><span class="p">(</span><span class="n">UIApplication</span> <span class="o">*</span><span class="p">)</span><span class="n">app</span>
+            <span class="n">openURL</span><span class="o">:</span><span class="p">(</span><span class="n">NSURL</span> <span class="o">*</span><span class="p">)</span><span class="n">url</span>
+            <span class="n">options</span><span class="o">:</span><span class="p">(</span><span class="n">NSDictionary</span><span class="o">&lt;</span><span class="n">NSString</span> <span class="o">*</span><span class="p">,</span> <span class="n">id</span><span class="o">&gt;</span> <span class="o">*</span><span class="p">)</span><span class="n">options</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">([</span><span class="n">_currentAuthorizationFlow</span> <span class="n">resumeAuthorizationFlowWithURL</span><span class="o">:</span><span class="n">url</span><span class="p">])</span> <span class="p">{</span>
+    <span class="n">_currentAuthorizationFlow</span> <span class="o">=</span> <span class="n">nil</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">YES</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="n">NO</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="build-your-react-native-app">Build Your React Native App</h2>
+
+<p>Replace the code in <code class="highlighter-rouge">App.js</code> with the following JavaScript. This code allows you to authorize, refresh your access token, and revoke it.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'react'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">UIManager</span><span class="p">,</span> <span class="nx">LayoutAnimation</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'react-native'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">authorize</span><span class="p">,</span> <span class="nx">refresh</span><span class="p">,</span> <span class="nx">revoke</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'react-native-app-auth'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Page</span><span class="p">,</span> <span class="nx">Button</span><span class="p">,</span> <span class="nx">ButtonContainer</span><span class="p">,</span> <span class="nx">Form</span><span class="p">,</span> <span class="nx">Heading</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'./components'</span><span class="p">;</span>
+
+<span class="nx">UIManager</span><span class="p">.</span><span class="nx">setLayoutAnimationEnabledExperimental</span> <span class="o">&amp;&amp;</span>
+  <span class="nx">UIManager</span><span class="p">.</span><span class="nx">setLayoutAnimationEnabledExperimental</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">scopes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'openid'</span><span class="p">,</span> <span class="s1">'profile'</span><span class="p">,</span> <span class="s1">'email'</span><span class="p">,</span> <span class="s1">'offline_access'</span><span class="p">];</span>
+
+<span class="nx">type</span> <span class="nx">State</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">hasLoggedInOnce</span><span class="p">:</span> <span class="kr">boolean</span><span class="p">,</span>
+  <span class="na">accessToken</span><span class="p">:</span> <span class="p">?</span><span class="nx">string</span><span class="p">,</span>
+  <span class="nx">accessTokenExpirationDate</span><span class="p">:</span> <span class="p">?</span><span class="nx">string</span><span class="p">,</span>
+  <span class="nx">refreshToken</span><span class="p">:</span> <span class="p">?</span><span class="nx">string</span>
+<span class="p">};</span>
+
+<span class="kd">const</span> <span class="nx">config</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">issuer</span><span class="p">:</span> <span class="s1">'https://{yourOktaDomain}.oktapreview.com/oauth2/default'</span><span class="p">,</span>
+  <span class="na">clientId</span><span class="p">:</span> <span class="s1">'{clientId}'</span><span class="p">,</span>
+  <span class="na">redirectUrl</span><span class="p">:</span> <span class="s1">'com.{yourReversedOktaDomain}:/callback'</span><span class="p">,</span>
+  <span class="na">additionalParameters</span><span class="p">:</span> <span class="p">{},</span>
+  <span class="na">scopes</span><span class="p">:</span> <span class="p">[</span><span class="s1">'openid'</span><span class="p">,</span> <span class="s1">'profile'</span><span class="p">,</span> <span class="s1">'email'</span><span class="p">,</span> <span class="s1">'offline_access'</span><span class="p">]</span>
+<span class="p">};</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="kd">class</span> <span class="nx">App</span> <span class="kd">extends</span> <span class="nx">Component</span><span class="o">&lt;</span><span class="p">{},</span> <span class="nx">State</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">hasLoggedInOnce</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="na">accessToken</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
+    <span class="na">accessTokenExpirationDate</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
+    <span class="na">refreshToken</span><span class="p">:</span> <span class="s1">''</span>
+  <span class="p">};</span>
+
+  <span class="nx">animateState</span><span class="p">(</span><span class="na">nextState</span><span class="p">:</span> <span class="nx">$Shape</span><span class="o">&lt;</span><span class="nx">State</span><span class="o">&gt;</span><span class="p">,</span> <span class="na">delay</span><span class="p">:</span> <span class="nx">number</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="nx">LayoutAnimation</span><span class="p">.</span><span class="nx">easeInEaseOut</span><span class="p">();</span>
+        <span class="k">return</span> <span class="nx">nextState</span><span class="p">;</span>
+      <span class="p">});</span>
+    <span class="p">},</span> <span class="nx">delay</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nx">authorize</span> <span class="o">=</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">authState</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">authorize</span><span class="p">(</span><span class="nx">config</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">animateState</span><span class="p">(</span>
+        <span class="p">{</span>
+          <span class="na">hasLoggedInOnce</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="na">accessToken</span><span class="p">:</span> <span class="nx">authState</span><span class="p">.</span><span class="nx">accessToken</span><span class="p">,</span>
+          <span class="na">accessTokenExpirationDate</span><span class="p">:</span> <span class="nx">authState</span><span class="p">.</span><span class="nx">accessTokenExpirationDate</span><span class="p">,</span>
+          <span class="na">refreshToken</span><span class="p">:</span> <span class="nx">authState</span><span class="p">.</span><span class="nx">refreshToken</span>
+        <span class="p">},</span>
+        <span class="mi">500</span>
+      <span class="p">);</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">Alert</span><span class="p">.</span><span class="nx">alert</span><span class="p">(</span><span class="s1">'Failed to log in'</span><span class="p">,</span> <span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+
+  <span class="nx">refresh</span> <span class="o">=</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">authState</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">refresh</span><span class="p">(</span><span class="nx">config</span><span class="p">,</span> <span class="p">{</span>
+        <span class="na">refreshToken</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">refreshToken</span>
+      <span class="p">});</span>
+              
+      <span class="k">this</span><span class="p">.</span><span class="nx">animateState</span><span class="p">({</span>
+        <span class="na">accessToken</span><span class="p">:</span> <span class="nx">authState</span><span class="p">.</span><span class="nx">accessToken</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">accessToken</span><span class="p">,</span>
+        <span class="na">accessTokenExpirationDate</span><span class="p">:</span>
+          <span class="nx">authState</span><span class="p">.</span><span class="nx">accessTokenExpirationDate</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">accessTokenExpirationDate</span><span class="p">,</span>
+        <span class="na">refreshToken</span><span class="p">:</span> <span class="nx">authState</span><span class="p">.</span><span class="nx">refreshToken</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">refreshToken</span>
+      <span class="p">});</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">Alert</span><span class="p">.</span><span class="nx">alert</span><span class="p">(</span><span class="s1">'Failed to refresh token'</span><span class="p">,</span> <span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+
+  <span class="nx">revoke</span> <span class="o">=</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="kr">await</span> <span class="nx">revoke</span><span class="p">(</span><span class="nx">config</span><span class="p">,</span> <span class="p">{</span>
+        <span class="na">tokenToRevoke</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">accessToken</span><span class="p">,</span>
+        <span class="na">sendClientId</span><span class="p">:</span> <span class="kc">true</span>
+      <span class="p">});</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">animateState</span><span class="p">({</span>
+        <span class="na">accessToken</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
+        <span class="na">accessTokenExpirationDate</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
+        <span class="na">refreshToken</span><span class="p">:</span> <span class="s1">''</span>
+      <span class="p">});</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">Alert</span><span class="p">.</span><span class="nx">alert</span><span class="p">(</span><span class="s1">'Failed to revoke token'</span><span class="p">,</span> <span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="p">{</span><span class="nx">state</span><span class="p">}</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">Page</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="o">!!</span><span class="nx">state</span><span class="p">.</span><span class="nx">accessToken</span> <span class="p">?</span> <span class="p">(</span>
+          <span class="o">&lt;</span><span class="nx">Form</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="nx">Form</span><span class="p">.</span><span class="nx">Label</span><span class="o">&gt;</span><span class="nx">accessToken</span><span class="o">&lt;</span><span class="sr">/Form.Label</span><span class="err">&gt;
+</span>            <span class="o">&lt;</span><span class="nx">Form</span><span class="p">.</span><span class="nx">Value</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">state</span><span class="p">.</span><span class="nx">accessToken</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/Form.Value</span><span class="err">&gt;
+</span>            <span class="o">&lt;</span><span class="nx">Form</span><span class="p">.</span><span class="nx">Label</span><span class="o">&gt;</span><span class="nx">accessTokenExpirationDate</span><span class="o">&lt;</span><span class="sr">/Form.Label</span><span class="err">&gt;
+</span>            <span class="o">&lt;</span><span class="nx">Form</span><span class="p">.</span><span class="nx">Value</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">state</span><span class="p">.</span><span class="nx">accessTokenExpirationDate</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/Form.Value</span><span class="err">&gt;
+</span>            <span class="o">&lt;</span><span class="nx">Form</span><span class="p">.</span><span class="nx">Label</span><span class="o">&gt;</span><span class="nx">refreshToken</span><span class="o">&lt;</span><span class="sr">/Form.Label</span><span class="err">&gt;
+</span>            <span class="o">&lt;</span><span class="nx">Form</span><span class="p">.</span><span class="nx">Value</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">state</span><span class="p">.</span><span class="nx">refreshToken</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/Form.Value</span><span class="err">&gt;
+</span>          <span class="o">&lt;</span><span class="sr">/Form</span><span class="err">&gt;
+</span>        <span class="p">)</span> <span class="p">:</span> <span class="p">(</span>
+          <span class="o">&lt;</span><span class="nx">Heading</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">state</span><span class="p">.</span><span class="nx">hasLoggedInOnce</span> <span class="p">?</span> <span class="s1">'Goodbye.'</span> <span class="p">:</span> <span class="s1">'Hello, stranger.'</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/Heading</span><span class="err">&gt;
+</span>        <span class="p">)}</span>
+
+        <span class="o">&lt;</span><span class="nx">ButtonContainer</span><span class="o">&gt;</span>
+          <span class="p">{</span><span class="o">!</span><span class="nx">state</span><span class="p">.</span><span class="nx">accessToken</span> <span class="o">&amp;&amp;</span> <span class="p">(</span>
+            <span class="o">&lt;</span><span class="nx">Button</span> <span class="nx">onPress</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">authorize</span><span class="p">}</span> <span class="nx">text</span><span class="o">=</span><span class="s2">"Authorize"</span> <span class="nx">color</span><span class="o">=</span><span class="s2">"#017CC0"</span><span class="o">/&gt;</span>
+          <span class="p">)}</span>
+          <span class="p">{</span><span class="o">!!</span><span class="nx">state</span><span class="p">.</span><span class="nx">refreshToken</span> <span class="o">&amp;&amp;</span> <span class="o">&lt;</span><span class="nx">Button</span> <span class="nx">onPress</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">refresh</span><span class="p">}</span> <span class="nx">text</span><span class="o">=</span><span class="s2">"Refresh"</span> <span class="nx">color</span><span class="o">=</span><span class="s2">"#24C2CB"</span><span class="o">/&gt;</span><span class="p">}</span>
+          <span class="p">{</span><span class="o">!!</span><span class="nx">state</span><span class="p">.</span><span class="nx">accessToken</span> <span class="o">&amp;&amp;</span> <span class="o">&lt;</span><span class="nx">Button</span> <span class="nx">onPress</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">revoke</span><span class="p">}</span> <span class="nx">text</span><span class="o">=</span><span class="s2">"Revoke"</span> <span class="nx">color</span><span class="o">=</span><span class="s2">"#EF525B"</span><span class="o">/&gt;</span><span class="p">}</span>
+        <span class="o">&lt;</span><span class="sr">/ButtonContainer</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="sr">/Page</span><span class="err">&gt;
+</span>    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Make sure to adjust <code class="highlighter-rouge">config</code> with your settings.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const config = {
+  issuer: 'https://{yourOktaDomain}.oktapreview.com/oauth2/default',
+  clientId: '{clientId}',
+  redirectUrl: 'com.{yourReversedOktaDomain}:/callback',
+  ...
+};
+</code></pre></div></div>
+
+<p>Change <code class="highlighter-rouge">index.js</code> to use <code class="highlighter-rouge">OktaRN</code> as the name of your app.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">AppRegistry</span><span class="p">.</span><span class="nx">registerComponent</span><span class="p">(</span><span class="s1">'OktaRN'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">App</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>This code uses <a href="https://github.com/styled-components/styled-components">styled-components</a>, so you’ll need to install that as a dependency.</p>
+
+<p><strong>NOTE:</strong> Make sure to navigate into the root directory of your project before running the commands below.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm i styled-components
+</code></pre></div></div>
+
+<p>Then copy the <code class="highlighter-rouge">components</code> directory into your project’s root directory from Formidable’s example.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>svn <span class="nb">export </span>https://github.com/FormidableLabs/react-native-app-auth/trunk/Example/components
+</code></pre></div></div>
+
+<p>Grab the background image that’s referenced in the <code class="highlighter-rouge">Page.js</code> component too.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>svn <span class="nb">export </span>https://github.com/FormidableLabs/react-native-app-auth/trunk/Example/assets
+</code></pre></div></div>
+
+<h3 id="run-on-ios-simulator">Run on iOS Simulator</h3>
+
+<p>Run your app with <code class="highlighter-rouge">npm run ios</code>.</p>
+
+<p>You should see a screen that says “Hello, stranger.” Click on <strong>Authorize</strong>, and you’ll be prompted to continue or cancel.</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/assets/blog/react-native-app-auth/hello-66b967d2aea0c4ead301126613602623482ea310b93c41b9d68043807956a668.png" alt="Hello, stranger" width="400" /></td>
+      <td><img src="/assets/blog/react-native-app-auth/continue-72cc6e6f30d9456dde4a47949f67a4d804ead0a0b2f30d00106a50f4ea7f954c.png" alt="Cancel or Continue" width="400" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Click <strong>Continue</strong> and you should see an Okta sign-in form. Enter your credentials, and you’ll be redirected back to the application.</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/assets/blog/react-native-app-auth/okta-login-6c4c379db5ff7d5a5e6cc9410b719a47e5a0534f7d9cac6b1c8d1ef87c4a3dc3.png" alt="Okta Sign-In" width="400" /></td>
+      <td><img src="/assets/blog/react-native-app-auth/access-token-e9458e233082fd30cd491425979c6ecc1dbe8a840e2420337e88cde1a1a1b228.png" alt="Access Token Info" width="400" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>You can click <strong>Refresh</strong> to watch the values for the access token and expire date change.</p>
+
+<p><strong>TIP:</strong> If animations happen slowly in iOS Simulator, toggle <strong>Debug</strong> &gt; <strong>Slow Animations</strong>.</p>
+
+<h3 id="android-setup">Android Setup</h3>
+
+<p>To configure the native Android project, start by upgrading the version of Gradle it uses.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>android
+./gradlew wrapper <span class="nt">--gradle-version</span> 4.6
+</code></pre></div></div>
+
+<p>React Native App Auth for Android depends on <a href="https://github.com/openid/AppAuth-android">AppAuth-android</a>, but you need to add the correct Android Support library version to your project.</p>
+
+<p>Add the Google Maven repository to your <code class="highlighter-rouge">android/build.gradle</code> and upgrade the Android Tools dependency:</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">buildscript</span> <span class="o">{</span>
+    <span class="n">repositories</span> <span class="o">{</span>
+        <span class="n">jcenter</span><span class="o">()</span>
+        <span class="n">google</span><span class="o">()</span>
+    <span class="o">}</span>
+    <span class="n">dependencies</span> <span class="o">{</span>
+        <span class="n">classpath</span> <span class="s1">'com.android.tools.build:gradle:3.0.1'</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Upgrade the <code class="highlighter-rouge">appcompat</code> dependency in <code class="highlighter-rouge">android/app/build.gradle</code> to <code class="highlighter-rouge">25.3.1</code> to match the one expected by AppAuth.</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dependencies</span> <span class="o">{</span>
+  <span class="n">compile</span> <span class="s2">"com.android.support:appcompat-v7:25.3.1"</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Remove <code class="highlighter-rouge">buildToolsVersion "23.0.1"</code> as its no longer necessary.</p>
+
+<p>Update the <code class="highlighter-rouge">compileSdkVersion</code>:</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">android</span> <span class="o">{</span>
+  <span class="n">compileSdkVersion</span> <span class="mi">25</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Add the <code class="highlighter-rouge">appAuthRedirectScheme</code> property the <code class="highlighter-rouge">defaultConfig</code> in <code class="highlighter-rouge">android/app/build.gradle</code>:</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">android</span> <span class="o">{</span>
+  <span class="n">defaultConfig</span> <span class="o">{</span>
+    <span class="o">...</span>
+    <span class="n">manifestPlaceholders</span> <span class="o">=</span> <span class="o">[</span>
+      <span class="nl">appAuthRedirectScheme:</span> <span class="s1">'{yourReversedOktaDomain}'</span>
+    <span class="o">]</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>After making this change, my <code class="highlighter-rouge">defaultConfig</code> looks as follows.</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">defaultConfig</span> <span class="o">{</span>
+    <span class="n">applicationId</span> <span class="s2">"com.oktarn"</span>
+    <span class="n">minSdkVersion</span> <span class="mi">16</span>
+    <span class="n">targetSdkVersion</span> <span class="mi">22</span>
+    <span class="n">versionCode</span> <span class="mi">1</span>
+    <span class="n">versionName</span> <span class="s2">"1.0"</span>
+    <span class="n">ndk</span> <span class="o">{</span>
+        <span class="n">abiFilters</span> <span class="s2">"armeabi-v7a"</span><span class="o">,</span> <span class="s2">"x86"</span>
+    <span class="o">}</span>
+    <span class="n">manifestPlaceholders</span> <span class="o">=</span> <span class="o">[</span>
+        <span class="nl">appAuthRedirectScheme:</span> <span class="s1">'com.oktapreview.dev-158606'</span>
+    <span class="o">]</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="run-on-android">Run on Android</h3>
+
+<p>To try it on an Android emulator, run <code class="highlighter-rouge">npm run android</code>. If you don’t have a phone plugged in or an Android Virtual Device (AVD) running, you’ll see an error:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">*</span> What went wrong:
+Execution failed <span class="k">for </span>task <span class="s1">':app:installDebug'</span><span class="nb">.</span>
+<span class="o">&gt;</span> com.android.builder.testing.api.DeviceException: No connected devices!
+</code></pre></div></div>
+
+<p>To fix this, open Android Studio, choose <strong>open existing project</strong>, and select the <code class="highlighter-rouge">android</code> directory in your project. If you’re prompted to update anything, approve it.</p>
+
+<p>To create a new AVD, navigate to <strong>Tools</strong> &gt; <strong>Android</strong> &gt; <strong>AVD Manager</strong>. Create a new Virtual Device and click Play. I chose a Pixel 2 as you can see from my settings below.</p>
+
+<p><img src="/assets/blog/react-native-app-auth/avd-pixel-2-b4bcf85e3239bb1fe3cf90e18e6ffaea6ae35bd44f0e9c477868c9139e9ab8b2.png" alt="AVD Pixel 2" width="800" class="center-image" /></p>
+
+<p>Run <code class="highlighter-rouge">npm run android</code> again. You should see a welcome screen and be able to authorize successfully.</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/assets/blog/react-native-app-auth/android-hello-059ee0a3972c0752d22d001ec095c6ae199da2d592a5583e0f227db4d4fe8b10.png" alt="Hello, stranger" width="280" /></td>
+      <td><img src="/assets/blog/react-native-app-auth/android-sign-in-be6915f81ec9adb8ea94aa7a651d45bb96b357488fa17d74907a37a4052430df.png" alt="Okta Sign-In" width="280" /></td>
+      <td><img src="/assets/blog/react-native-app-auth/android-access-token-637a3a63fe517eb8193961fca79d52e4197d192584755eecb9d896ca90f10503.png" alt="Access Token on Android" width="280" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>TIP:</strong> To fix <code class="highlighter-rouge">Configuration 'compile' in project ':app' is deprecated. Use 'implementation' instead.</code>, change <code class="highlighter-rouge">compile</code> under <code class="highlighter-rouge">dependencies</code> to <code class="highlighter-rouge">implementation</code>. More information can be found in <a href="https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration.html">Migrate to Android Plugin for Gradle 3.0.0</a>.</p>
+
+<h3 id="upgrade-to-the-latest-release-of-react-native">Upgrade to the Latest Release of React Native</h3>
+
+<p>The <a href="https://www.npmjs.com/package/react-native-git-upgrade">react-native-git-upgrade</a> tool is a handy way to upgrade your project to use the latest versions. Install it and run it.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm i <span class="nt">-g</span> react-native-git-upgrade
+react-native-git-upgrade
+npm i
+</code></pre></div></div>
+
+<p>Or, you can just change your <code class="highlighter-rouge">package.json</code> to have <code class="highlighter-rouge">"react-native": "0.54.2"</code> and then run <code class="highlighter-rouge">npm i</code>.</p>
+
+<h3 id="get-and-view-an-id-token">Get and View an ID Token</h3>
+
+<p>If you’d like to get an ID token in addition to an access token, add <code class="highlighter-rouge">idToken</code> as a property of type <code class="highlighter-rouge">State</code> and the <code class="highlighter-rouge">state</code> variable in <code class="highlighter-rouge">App.js</code>.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">type</span> <span class="nx">State</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="p">...</span>
+  <span class="na">idToken</span><span class="p">:</span> <span class="p">?</span><span class="nx">string</span>
+<span class="p">};</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="kd">class</span> <span class="nx">App</span> <span class="kd">extends</span> <span class="nx">Component</span><span class="o">&lt;</span><span class="p">{},</span> <span class="nx">State</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="p">...</span>
+  <span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">...</span>
+    <span class="na">idToken</span><span class="p">:</span> <span class="s1">''</span>
+  <span class="p">};</span>
+</code></pre></div></div>
+
+<p>Then update the <code class="highlighter-rouge">authorize()</code> method to set the property from <code class="highlighter-rouge">authState</code>. You’ll want to add similar logic in the <code class="highlighter-rouge">refresh()</code> and <code class="highlighter-rouge">revoke()</code> methods.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">authorize</span> <span class="o">=</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">authState</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">authorize</span><span class="p">(</span><span class="nx">config</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">animateState</span><span class="p">(</span>
+      <span class="p">{</span>
+        <span class="na">hasLoggedInOnce</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="na">accessToken</span><span class="p">:</span> <span class="nx">authState</span><span class="p">.</span><span class="nx">accessToken</span><span class="p">,</span>
+        <span class="na">accessTokenExpirationDate</span><span class="p">:</span> <span class="nx">authState</span><span class="p">.</span><span class="nx">accessTokenExpirationDate</span><span class="p">,</span>
+        <span class="na">refreshToken</span><span class="p">:</span> <span class="nx">authState</span><span class="p">.</span><span class="nx">refreshToken</span><span class="p">,</span>
+        <span class="na">idToken</span><span class="p">:</span> <span class="nx">authState</span><span class="p">.</span><span class="nx">idToken</span>
+      <span class="p">},</span>
+      <span class="mi">500</span>
+    <span class="p">);</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">Alert</span><span class="p">.</span><span class="nx">alert</span><span class="p">(</span><span class="s1">'Failed to log in'</span><span class="p">,</span> <span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>To see what’s in your ID token, install <a href="https://www.npmjs.com/package/buffer">buffer</a>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm i buffer
+</code></pre></div></div>
+
+<p>Import it at the top of <code class="highlighter-rouge">App.js</code>.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Buffer</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'buffer'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Then change the <code class="highlighter-rouge">render()</code> method to decode it.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="p">{</span><span class="nx">state</span><span class="p">}</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">state</span><span class="p">.</span><span class="nx">idToken</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">jwtBody</span> <span class="o">=</span> <span class="nx">state</span><span class="p">.</span><span class="nx">idToken</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">'.'</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="kd">const</span> <span class="nx">base64</span> <span class="o">=</span> <span class="nx">jwtBody</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s1">'-'</span><span class="p">,</span> <span class="s1">'+'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="s1">'_'</span><span class="p">,</span> <span class="s1">'/'</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">decodedJwt</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">base64</span><span class="p">,</span> <span class="s1">'base64'</span><span class="p">);</span>
+    <span class="nx">state</span><span class="p">.</span><span class="nx">idTokenJSON</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">decodedJwt</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="p">...</span>
+</code></pre></div></div>
+
+<p>Finally, add a <code class="highlighter-rouge">&lt;Form.Label&gt;</code> and <code class="highlighter-rouge">&lt;Form.Value&gt;</code> row after the one that displays the access token.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;Form</span><span class="err">.</span><span class="na">Label</span><span class="nt">&gt;</span>ID Token<span class="nt">&lt;/Form</span><span class="err">.Label</span><span class="nt">&gt;</span>
+<span class="nt">&lt;Form</span><span class="err">.</span><span class="na">Value</span><span class="nt">&gt;</span>{JSON.stringify(state.idTokenJSON)}<span class="nt">&lt;/Form</span><span class="err">.Value</span><span class="nt">&gt;</span>
+</code></pre></div></div>
+
+<p>Run <code class="highlighter-rouge">npm run ios</code> (or <code class="highlighter-rouge">npm run android</code>) and you should see the claims in the ID token after authorizing with Okta. Below is a screenshot proving it works in iOS Simulator.</p>
+
+<p><img src="/assets/blog/react-native-app-auth/ios-id-token-fa76478fe93fa5a01eae360d06f75abf681e22937dd7df4fa924827c2db1a437.png" alt="ID Token on iOS" width="500" class="center-image" /></p>
+
+<h3 id="call-an-api-with-your-access-token">Call an API with Your Access Token</h3>
+
+<p>Now that you have an access token, what can you do with it? You can call an Okta-protected API with it in an <code class="highlighter-rouge">Authorization</code> header!</p>
+
+<p>I wrote about how to create a “Good Beers” API in <a href="/blog/2017/12/06/bootiful-development-with-spring-boot-and-react">Bootiful Development with Spring Boot and React</a>. You can use the backend of that application to prove it works.</p>
+
+<p>Clone the project from GitHub and check out the <code class="highlighter-rouge">okta</code> branch.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/oktadeveloper/spring-boot-react-example.git
+git checkout okta
+</code></pre></div></div>
+
+<p>Modify <code class="highlighter-rouge">spring-boot-react-example/server/src/main/resources/application.properties</code> to set the <code class="highlighter-rouge">issuer</code> and <code class="highlighter-rouge">clientId</code>.</p>
+
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">okta.oauth2.issuer</span><span class="p">=</span><span class="s"><span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>/oauth2/default</span>
+<span class="py">okta.oauth2.clientId</span><span class="p">=</span><span class="s">{clientId}</span>
+</code></pre></div></div>
+
+<p><strong>NOTE:</strong> You’ll need to have <a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">Java 8</a> installed to run this Spring Boot application.</p>
+
+<p>Start the app by running <code class="highlighter-rouge">./mvnw</code> from the <code class="highlighter-rouge">server</code> directory.</p>
+
+<p>Back to the React Native client. In <code class="highlighter-rouge">App.js</code>, add <code class="highlighter-rouge">beers</code> as a property of <code class="highlighter-rouge">state</code>.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="p">...</span>
+  <span class="na">beers</span><span class="p">:</span> <span class="p">[]</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>Set it to this same value in the <code class="highlighter-rouge">revoke()</code> method. Add a <code class="highlighter-rouge">fetchGoodBeers()</code> method that uses the access token to call the backend.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">fetchGoodBeers</span> <span class="o">=</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">beers</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// reset to id token if beers is already populated</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">animateState</span><span class="p">({</span><span class="na">beers</span><span class="p">:</span> <span class="p">[]})</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">fetch</span><span class="p">(</span><span class="s1">'http://localhost:8080/good-beers'</span><span class="p">,</span> <span class="p">{</span>
+      <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">'Authorization'</span><span class="p">:</span> <span class="s2">`Bearer </span><span class="p">${</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">accessToken</span><span class="p">}</span><span class="s2">`</span>
+      <span class="p">}</span>
+    <span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="nx">response</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
+      <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">animateState</span><span class="p">({</span><span class="na">beers</span><span class="p">:</span> <span class="nx">data</span><span class="p">})</span>
+      <span class="p">})</span>
+      <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">));</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p><strong>TIP:</strong> For this to work in the Android emulator (and on a real phone), you’ll need to change <code class="highlighter-rouge">localhost</code> to your IP address.</p>
+
+<p>In the <code class="highlighter-rouge">&lt;ButtonContainer&gt;</code> at the bottom, add a “Good Beers” button that allows you to call the API, as well as press it again to view the ID Token.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="o">!!</span><span class="nx">state</span><span class="p">.</span><span class="nx">accessToken</span> <span class="o">&amp;&amp;</span> <span class="o">&lt;</span><span class="nx">Button</span> <span class="nx">onPress</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">fetchGoodBeers</span><span class="p">}</span> <span class="nx">text</span><span class="o">=</span><span class="p">{</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">beers</span><span class="p">.</span><span class="nx">length</span> <span class="p">?</span> <span class="s1">'Good Beers'</span> <span class="p">:</span> <span class="s1">'ID Token'</span><span class="p">}</span> <span class="nx">color</span><span class="o">=</span><span class="s2">"#008000"</span> <span class="o">/&gt;</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>Modify the row where you display the ID token to show the JSON from the API.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;Form</span><span class="err">.</span><span class="na">Label</span><span class="nt">&gt;</span>{state.beers.length ? 'Good Beers' : 'ID Token'}<span class="nt">&lt;/Form</span><span class="err">.Label</span><span class="nt">&gt;</span>
+<span class="nt">&lt;Form</span><span class="err">.</span><span class="na">Value</span><span class="nt">&gt;</span>{JSON.stringify(state.beers.length ? state.beers : state.idTokenJSON)}<span class="nt">&lt;/Form</span><span class="err">.Value</span><span class="nt">&gt;</span>
+</code></pre></div></div>
+
+<p>In iOS Simulator, press <strong>Command + R</strong> to reload everything and you should see the JSON when you click on the <strong>Good Beers</strong> button. You can reload in Android using <strong>Command + M</strong> (on Mac, <strong>CTRL + M</strong> on other operating systems).</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/assets/blog/react-native-app-auth/good-beers-ios-5b86767375d3af847ce5d1c783cab3911372f49b70b4ba9c93bcac14ba0da1b0.png" alt="Good Beers on iOS" width="400" /></td>
+      <td><img src="/assets/blog/react-native-app-auth/good-beers-android-36193795e927333bbf9d0871912e511b0511f07e7400999009af40c0627faafb.png" alt="Good Beers on Android" width="350" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>NOTE:</strong> There is an <a href="https://github.com/FormidableLabs/react-native-app-auth/issues/70">open issue in react-native-app-auth</a> about revoke not working with Okta because an <code class="highlighter-rouge">Authorization</code> header is not sent.</p>
+
+<h2 id="learn-more-about-react-native-and-react">Learn More about React Native and React</h2>
+
+<p>I hope you’ve enjoyed this whirlwind tour of how to do authentication with Okta and React Native. You can learn more about React Native on <a href="https://facebook.github.io/react-native/">its official site</a>. You can also add to its ~60K stars <a href="https://github.com/facebook/react-native">on GitHub</a>.</p>
+
+<p>You can find the source code for this application at <a href="https://github.com/oktadeveloper/okta-react-native-app-auth-example">https://github.com/oktadeveloper/okta-react-native-app-auth-example</a>.</p>
+
+<p>If you’re interested in seeing how to do regular React development with Okta, I encourage you to check out the following resources:</p>
+
+<ul>
+  <li><a href="/blog/2017/03/30/react-okta-sign-in-widget">Build a React Application with User Authentication in 15 Minutes</a></li>
+  <li><a href="/blog/2017/10/19/build-a-preact-app-with-authentication">Build a Preact App with Authentication</a></li>
+  <li><a href="/blog/2017/12/06/bootiful-development-with-spring-boot-and-react">Bootiful Development with Spring Boot and React</a></li>
+</ul>
+
+<p>If you have any questions about this article, please hit me up on Twitter <a href="https://twitter.com/mraible">@mraible</a>.</p>
+
+
+    </div>
+
+    
+    <div id="disqus">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_title = "Build a React Native Application and Authenticate with OAuth 2.0";
+            var disqus_url = 'https://developer.okta.com/blog/2018/03/16/build-react-native-authentication-oauth-2.0';
+
+            (function () {
+                var dsq = document.createElement('script');
+                dsq.async = true;
+                dsq.type = 'text/javascript';
+                dsq.src = '//oktadevblog.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+          </script>
+          <noscript>
+              Please enable JavaScript to view the
+              <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus</a>.
+         </noscript>
+    </div>
+    
+</article>
+
+		
+</section>
+
+		
+	</div>
+	<footer class="Footer">
+    <div class="Wrap">
+
+        <div class="Row">
+
+            <div class="Column--3 Column--medium-6 Column--xSmall-12">
+                <a href="https://www.okta.com/" target="_blank" rel="noopener noreferrer">
+                    <div class="Logo">
+                        <img src="https://developer.okta.com/sites/all/themes/developer/images/logo-footer.png" alt="Okta">
+                    </div>
+                    <p>Visit okta.com</p>
+                </a>
+            </div>
+
+            <div class="Column--3 Column--medium-12 Column--xSmall-12">
+                <h4>Social</h4>
+                <ul class="Footer-links Footer-links--social">
+                    <li><a class="Footer-links--github" target="_blank" rel="noopener noreferrer" href="http://github.com/oktadeveloper">Github</a></li>
+                    <li><a class="Footer-links--twitter" target="_blank" rel="noopener noreferrer" href="http://twitter.com/OktaDev">Twitter</a></li>
+                    <li><a class="Footer-links--forum" target="_blank" rel="noopener noreferrer" href="https://devforum.okta.com/">Forum</a></li>
+                    <li><a class="Footer-links--rss" target="_blank" rel="noopener noreferrer" href="http://feeds.feedburner.com/OktaBlog">RSS Blog</a></li>
+                </ul>
+            </div>
+
+            <div class="Column--3 Column--medium-6 Column--small-12">
+                <h4>More Info</h4>
+                <ul class="Footer-links">
+                    <li><a target="_blank" href="https://developer.okta.com/integrate-with-okta/">Integrate with Okta</a></li>
+                    <li><a href="/blog/">Blog</a></li>
+                    <li><a href="/docs/change-log/">Change Log</a></li>
+                    <li><a href="/3rd_party_notices/">3rd Party Notices</a></li>
+                </ul>
+            </div>
+
+            <div class="Column--3 Column--medium-6 Column--small-12">
+                <h4>Contact &amp; Legal</h4>
+                <ul class="Footer-links">
+                    <li><a href="https://developer.okta.com/contact/">Contact Sales</a></li>
+                    <li><a target="_blank" rel="noopener noreferrer" href="mailto:developers@okta.com">Contact Support</a></li>
+                    <li><a href="https://developer.okta.com/terms/">Terms &amp; Conditions</a></li>
+                    <li><a href="https://developer.okta.com/privacy/">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script type="text/javascript" src="/assets/master-aa397c892d9083236c5cb20732dde679021b9236c8142ce78177b8b184567a02.js"></script>
+    <script type="text/javascript" src="/assets/myOkta-911cbafbbe079b7a5522d9cbe15bd2a5f44e1582531e88393934bec69f97696b.js"></script>
+    
+    
+    
+    
+      <script type="text/javascript" src="/assets/blog-6e32dad27404131cc8630a5282264bed2ab4c08c91ac86fa496b75c53aa4f681.js"></script>
+    
+
+  <!-- START Post Footer -->
+  
+  <!-- START Google Tag Manager -->
+  <!-- https://support.google.com/tagmanager/answer/6103696?hl=en -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TJ45R6" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- END Google Tag Manager -->
+  <!-- START Google Remarketing Tag -->
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var google_conversion_id = 1006913831;
+    var google_custom_params = window.google_tag_params;
+    var google_remarketing_only = true;
+    /* ]]> */
+  </script>
+  <div style="display:none;"><script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script></div>
+  <noscript><div style="display:inline;"><img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1006913831/?value=0&amp;guid=ON&amp;script=0"></div></noscript>
+  <!-- END Google Remarketing Tag -->
+  <!-- START Crazy Egg Tracking -->
+  <script type="text/javascript">
+    setTimeout(function(){var a=document.createElement("script");
+    var b=document.getElementsByTagName("script")[0];
+    a.src=document.location.protocol+"//script.crazyegg.com/pages/scripts/0021/9333.js?"+Math.floor(new Date().getTime()/3600000);
+    a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+  </script>
+  <!-- END Crazy Egg Tracking -->
+
+  <!-- END Post Footer -->
+</body>
+</html>
