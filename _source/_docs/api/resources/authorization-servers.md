@@ -1523,3 +1523,316 @@ This object defines a [JSON Web Key Set](https://tools.ietf.org/html/rfc7517) fo
 | n         | RSA modulus value.                                              | String |
 | status    | `ACTIVE`, `NEXT`, or `EXPIRED`                                                         | Enum   |
 | use       | How the key is used. Valid value: `sig`                                                | String |
+
+## Client Resource Operations
+
+{% api_lifecycle ea %}
+
+### List Client Resources for an Authorization Server
+{:.api .api-operation}
+
+{% api_lifecycle ea %}
+
+{% api_operation get /api/v1/authorizationServers/${authorizationServerId}/clients %}
+
+Lists all client resources for which the specified authorization server has tokens
+
+#### Request Parameters
+{:.api .api-request .api-request-params}
+
+| Parameter              | Description                    | Parameter Type | DataType | Required |
+|:-----------------------|:-------------------------------|:---------------|:---------|:---------|
+| authorizationServerId  | ID of the authorization server | URL            | String   | TRUE     |
+
+#### Request Example
+{:.api .api-request .api-request-example}
+
+~~~sh
+curl -v -X GET \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-H "Authorization: SSWS ${api_token}" \
+"https://{yourOktaDomain}.com/api/v1/authorizationServers/ausnsopoM6vBRB3PD0g3/clients"
+~~~
+
+#### Response Example
+{:.api .api-response .api-response-example}
+
+~~~json
+[
+    {
+        "client_id": "0oabskvc6442nkvQO0h7",
+        "client_name": "My App",
+        "client_uri": null,
+        "logo_uri": null,
+        "_links": {
+            "tokens": {
+                "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/ausnsopoM6vBRB3PD0g3/clients/0oabskvc6442nkvQO0h7/tokens"
+            }
+        }
+    }
+]
+~~~
+
+## OAuth 2.0 Token Management Operations
+
+* [List OAuth 2.0 Tokens for Authorization Server and Client](#list-oauth-20-tokens-for-authorization-server-and-client)
+* [Get OAuth 2.0 Token for Authorization Server and Client](#get-oauth-20-token-for-authorization-server-and-client)
+* [Revoke OAuth 2.0 Tokens for Authorization Server and Client](#revoke-oauth-20-tokens-for-authorization-server-and-client)
+* [Revoke OAuth 2.0 Token for Authorization Server and Client](#revoke-oauth-20-token-for-authorization-server-and-client)
+
+### List OAuth 2.0 Tokens for Authorization Server and Client
+{:.api .api-operation}
+
+{% api_operation get /api/v1/authorizationServers/${authorizationServerId}/clients/${clientId}/tokens %}
+
+Lists all tokens for the authorization server and client.
+
+#### Request Parameters
+{:.api .api-request .api-request-params}
+
+| Parameter             | Description                                                                                  | Param Type | DataType | Required | Default |
+|:----------------------|:---------------------------------------------------------------------------------------------|:-----------|:---------|:---------|:--------|
+| authorizationServerId | ID of the authorization server                                                               | URL        | String   | TRUE     |         |
+| clientId              | ID of the client                                                                             | URL        | String   | TRUE     |         |
+| expand                | Valid value: `scope`. If specified, scope details are included in the `_embedded` attribute. | Query      | String   | FALSE    |         |
+| limit                 | The maximum number of tokens to return                                                       | Query      | Number   | FALSE    | 20      |
+| after                 | Specifies the pagination cursor for the next page of tokens                                  | Query      | String   | FALSE    |         |
+
+* The maximum value for `limit` is 200.
+
+#### Request Example
+{:.api .api-request .api-request-example}
+
+~~~sh
+curl -v -X GET \
+-H "Accept: application/json" \
+-H "Authorization: SSWS ${api_token}" \
+"https://{yourOktaDomain}.com/api/v1/authorizationServers/ausnsopoM6vBRB3PD0g3/clients/0oabskvc6442nkvQO0h7/tokens"
+~~~
+
+#### Response Example
+{:.api .api-response .api-response-example}
+
+~~~json
+[
+  {
+    "id": "oar579Mcp7OUsNTlo0g3",
+    "status": "ACTIVE",
+    "created": "2018-03-09T03:18:06.000Z",
+    "lastUpdated": "2018-03-09T03:18:06.000Z",
+    "expiresAt": "2018-03-16T03:18:06.000Z",
+    "issuer": "https://{yourOktaDomain}.com/oauth2/ausnsopoM6vBRB3PD0g3",
+    "clientId": "0oabskvc6442nkvQO0h7",
+    "userId": "00upcgi9dyWEOeCwM0g3",
+    "scopes": [
+      "offline_access",
+      "car:drive"
+    ],
+    "_links": {
+      "app": {
+        "href": "https://{yourOktaDomain}.com/api/v1/apps/0oabskvc6442nkvQO0h7",
+        "title": "Native"
+      },
+      "self": {
+        "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/ausnsopoM6vBRB3PD0g3/clients/0oabskvc6442nkvQO0h7/tokens/oar579Mcp7OUsNTlo0g3"
+      },
+      "revoke": {
+        "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/ausnsopoM6vBRB3PD0g3/clients/0oabskvc6442nkvQO0h7/tokens/oar579Mcp7OUsNTlo0g3",
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        }
+      },
+      "client": {
+        "href": "https://{yourOktaDomain}.com/oauth2/v1/clients/0oabskvc6442nkvQO0h7",
+        "title": "Example Client App"
+      },
+      "user": {
+        "href": "https://{yourOktaDomain}.com/api/v1/users/00upcgi9dyWEOeCwM0g3",
+        "title": "Saml Jackson"
+      },
+      "authorizationServer": {
+        "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/ausnsopoM6vBRB3PD0g3",
+        "title": "Example Authorization Server"
+      }
+    }
+  }
+]
+~~~
+
+
+### Get OAuth 2.0 Token for Authorization Server and Client
+{:.api .api-operation}
+
+{% api_operation get /api/v1/authorizationServers/${authorizationServerId}/clients/${clientId}/tokens/${tokenId} %}
+
+Gets a token for the specified authorization server and client
+
+#### Request Parameters
+{:.api .api-request .api-request-params}
+
+| Parameter             | Description                                                                                  | Param Type | DataType | Required | Default |
+|:----------------------|:---------------------------------------------------------------------------------------------|:-----------|:---------|:---------|:--------|
+| authorizationServerId | ID of the authorization server                                                               | URL        | String   | TRUE     |         |
+| clientId              | ID of the client                                                                             | URL        | String   | TRUE     |         |
+| tokenId               | ID of the token                                                                              | URL        | String   | TRUE     |         |
+| expand                | Valid value: `scope`. If specified, scope details are included in the `_embedded` attribute. | Query      | String   | FALSE    |         |
+
+#### Request Example
+{:.api .api-request .api-request-example}
+
+~~~sh
+curl -v -X GET \
+-H "Accept: application/json" \
+-H "Authorization: SSWS ${api_token}" \
+"https://{yourOktaDomain}.com/api/v1/authorizationServers/default/clients/0oabskvc6442nkvQO0h7/tokens/oar579Mcp7OUsNTlo0g3?expand=scope"
+~~~
+
+#### Response Example
+{:.api .api-response .api-response-example}
+
+~~~json
+{
+  "id": "oar579Mcp7OUsNTlo0g3",
+  "status": "ACTIVE",
+  "created": "2018-03-09T03:18:06.000Z",
+  "lastUpdated": "2018-03-09T03:18:06.000Z",
+  "expiresAt": "2018-03-16T03:18:06.000Z",
+  "issuer": "https://{yourOktaDomain}.com/oauth2/default",
+  "clientId": "0oabskvc6442nkvQO0h7",
+  "userId": "00upcgi9dyWEOeCwM0g3",
+  "scopes": [
+    "offline_access",
+    "car:drive"
+  ],
+  "_embedded": {
+    "scopes": [
+      {
+        "id": "scppb56cIl4GvGxy70g3",
+        "name": "offline_access",
+        "description": "Requests a refresh token by default, used to obtain more access tokens without re-prompting the user for authentication.",
+        "_links": {
+          "scope": {
+            "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/default/scopes/scppb56cIl4GvGxy70g3",
+            "title": "offline_access"
+          }
+        }
+      },
+      {
+        "id": "scp142iq2J8IGRUCS0g4",
+        "name": "car:drive",
+        "displayName": "Drive car",
+        "description": "Allows the user to drive a car.",
+        "_links": {
+          "scope": {
+            "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/default/scopes/scp142iq2J8IGRUCS0g4",
+            "title": "Drive car"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "app": {
+      "href": "https://{yourOktaDomain}.com/api/v1/apps/0oabskvc6442nkvQO0h7",
+      "title": "Native"
+    },
+    "self": {
+      "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/default/clients/0oabskvc6442nkvQO0h7/tokens/oar579Mcp7OUsNTlo0g3"
+    },
+    "revoke": {
+      "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/default/clients/0oabskvc6442nkvQO0h7/tokens/oar579Mcp7OUsNTlo0g3",
+      "hints": {
+        "allow": [
+          "DELETE"
+        ]
+      }
+    },
+    "client": {
+      "href": "https://{yourOktaDomain}.com/oauth2/v1/clients/0oabskvc6442nkvQO0h7",
+      "title": "Example Client App"
+    },
+    "user": {
+      "href": "https://{yourOktaDomain}.com/api/v1/users/00upcgi9dyWEOeCwM0g3",
+      "title": "Saml Jackson"
+    },
+    "authorizationServer": {
+      "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/default",
+      "title": "Example Authorization Server"
+    }
+  }
+}
+~~~
+
+### Revoke OAuth 2.0 Tokens for Authorization Server and Client
+{:.api .api-operation}
+
+{% api_lifecycle ea %}
+
+{% api_operation delete /api/v1/authorizationServers/${authorizationServerId}/clients/${clientId}/tokens %}
+
+Revokes all tokens for the specified authorization server and client
+
+#### Request Parameters
+{:.api .api-request .api-request-params}
+
+| Parameter             | Description                              | Parameter Type | DataType | Required |
+|:----------------------|:-----------------------------------------|:---------------|:---------|:---------|
+| authorizationServerId | ID of the authorization server           | URL            | String   | TRUE     |
+| clientId              | ID of the client                         | URL            | String   | TRUE     |
+
+#### Request Example
+{:.api .api-request .api-request-example}
+
+~~~sh
+curl -v -X DELETE \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-H "Authorization: SSWS ${api_token}" \
+"https://{yourOktaDomain}.com/api/v1/authorizationServers/default/clients/0oabskvc6442nkvQO0h7/tokens"
+~~~
+
+#### Response Example
+{:.api .api-response .api-response-example}
+
+~~~sh
+HTTP/1.1 204 No Content
+~~~
+
+### Revoke OAuth 2.0 Token for Authorization Server and Client
+{:.api .api-operation}
+
+{% api_lifecycle ea %}
+
+{% api_operation delete /api/v1/authorizationServers/${authServerId}/clients/${clientId}/tokens/${tokenId} %}
+
+Revokes the specified token for the specified authorization server and client
+
+#### Request Parameters
+{:.api .api-request .api-request-params}
+
+| Parameter             | Description                              | Parameter Type | DataType | Required |
+|:----------------------|:-----------------------------------------|:---------------|:---------|:---------|
+| authorizationServerId | ID of the authorization server           | URL            | String   | TRUE     |
+| clientId              | ID of the client                         | URL            | String   | TRUE     |
+| tokenId               | ID of the token                          | URL            | String   | TRUE     |
+
+#### Request Example
+{:.api .api-request .api-request-example}
+
+~~~sh
+curl -v -X DELETE \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-H "Authorization: SSWS ${api_token}" \
+"https://{yourOktaDomain}.com/api/v1/authorizationServers/default/clients/0oabskvc6442nkvQO0h7/tokens/oar579Mcp7OUsNTlo0g3"
+~~~
+
+#### Response Example
+{:.api .api-response .api-response-example}
+
+~~~sh
+HTTP/1.1 204 No Content
+~~~
