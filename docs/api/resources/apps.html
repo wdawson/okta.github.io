@@ -221,7 +221,7 @@
           <li><a href="/docs/api/resources/groups">Groups</a></li>
           <li><a href="/docs/api/resources/idps">Identity Providers</a></li>
           <li><a href="/docs/api/resources/policy">Policy</a></li>
-          <li><a href="/docs/api/resources/roles">Admin Roles</a></li>
+          <li><a href="/docs/api/resources/roles">Administrator Roles</a></li>
           <li><a href="/docs/api/resources/schemas">Schemas</a></li>
           <li><a href="/docs/api/resources/system_log">System Log</a></li>
           <li><a href="/docs/api/resources/templates">Templates</a></li>
@@ -2024,7 +2024,7 @@ then no redirect URI or response type is necessary. In these cases you can pass 
   <ul>
     <li>Apps created on <code class="highlighter-rouge">/api/v1/apps</code> default to <code class="highlighter-rouge">consent_method=TRUSTED</code>, while those created on <code class="highlighter-rouge">/api/v1/clients</code> default to <code class="highlighter-rouge">consent_method=REQUIRED</code>.</li>
     <li>If you request a scope that requires consent while using the <code class="highlighter-rouge">client_credentials</code> flow, an error is returned. Because there is no user, no consent can be given.</li>
-    <li>These properties can also be configured in the Okta user interface App Wizard, General tab: <code class="highlighter-rouge">tos_uri</code>, <code class="highlighter-rouge">policy_uri</code>, <code class="highlighter-rouge">logo_uri</code>, and <code class="highlighter-rouge">consent_method</code>. They can’t be set using <a href="/docs/api/resources/oauth-clients">the Dynamic Client Registration API</a>.</li>
+    <li>These properties can also be configured in the App Wizard, General tab in the administrator UI: <code class="highlighter-rouge">tos_uri</code>, <code class="highlighter-rouge">policy_uri</code>, <code class="highlighter-rouge">logo_uri</code>, and <code class="highlighter-rouge">consent_method</code>. They can’t be set using <a href="/docs/api/resources/oauth-clients">the Dynamic Client Registration API</a>.</li>
   </ul>
 </blockquote>
 
@@ -6312,10 +6312,10 @@ MIIC4DCCAcgCAQAwcTELMAkGA1UEBhMCVVMxEzARBgNVBAgMCkNhbGlmb3JuaWExFjAUBgNVBAcMDVNh
   </tbody>
 </table>
 
-<p>The current workaround is to manually configure the desired application via the Okta Admin UI in a preview (sandbox) organization and view the application via <a href="#get-application">Get Application</a></p>
+<p>The current workaround is to manually configure the desired application via the administrator UI in a preview (sandbox) organization and view the application via <a href="#get-application">Get Application</a></p>
 
 <blockquote>
-  <p>App provisioning settings currently cannot be managed via the API and must be configured via the Okta Admin UI.</p>
+  <p>App provisioning settings currently cannot be managed via the API and must be configured via the administrator UI.</p>
 </blockquote>
 
 <h5 id="features">Features</h5>
@@ -6323,7 +6323,7 @@ MIIC4DCCAcgCAQAwcTELMAkGA1UEBhMCVVMxEzARBgNVBAgMCkNhbGlmb3JuaWExFjAUBgNVBAcMDVNh
 <p>Applications may support optional provisioning features on a per-app basis.</p>
 
 <blockquote>
-  <p>Provisioning features currently may not be configured via the API and must be configured via the Okta Admin UI.</p>
+  <p>Provisioning features currently may not be configured via the API and must be configured via the administrator UI.</p>
 </blockquote>
 
 <p>The list of provisioning features an app may support are:</p>
@@ -6332,7 +6332,7 @@ MIIC4DCCAcgCAQAwcTELMAkGA1UEBhMCVVMxEzARBgNVBAgMCkNhbGlmb3JuaWExFjAUBgNVBAcMDVNh
   <thead>
     <tr>
       <th>App Feature</th>
-      <th>Admin UI Name</th>
+      <th>Name in the Administrator UI</th>
       <th>Description</th>
     </tr>
   </thead>
@@ -6929,7 +6929,7 @@ MIIC4DCCAcgCAQAwcTELMAkGA1UEBhMCVVMxEzARBgNVBAgMCkNhbGlmb3JuaWExFjAUBgNVBAcMDVNh
     <p>The <code class="highlighter-rouge">client_id</code> must consist of alphanumeric characters or the following special characters <code class="highlighter-rouge">$-_.+!*'(),</code>. It must contain between 6 and 100 characters, inclusive, and must not be the reserved word <code class="highlighter-rouge">ALL_CLIENTS</code>. The <code class="highlighter-rouge">client_secret</code> must consist of printable characters, which are defined in <a href="https://tools.ietf.org/html/rfc6749#appendix-A">the OAuth 2.0 Spec</a>, and must contain between 14 and 100 characters, inclusive.</p>
   </li>
   <li>
-    <p>If <code class="highlighter-rouge">autoKeyRotation</code> is not specified, the client automatically opts in for Okta’s <a href="/authentication-guide/tokens/validating-id-tokens">key rotation</a>. This property may be updated via the API or via the Okta Admin user interface.</p>
+    <p>If <code class="highlighter-rouge">autoKeyRotation</code> is not specified, the client automatically opts in for Okta’s <a href="/authentication-guide/tokens/validating-id-tokens">key rotation</a>. This property may be updated via the API or via the administrator UI.</p>
   </li>
 </ul>
 
@@ -7573,7 +7573,7 @@ MIIC4DCCAcgCAQAwcTELMAkGA1UEBhMCVVMxEzARBgNVBAgMCkNhbGlmb3JuaWExFjAUBgNVBAcMDVNh
       <li>Application user is assigned an <code class="highlighter-rouge">externalId</code> when successfully provisioned in target application.  The <code class="highlighter-rouge">externalId</code> should be immutable for the life of the assignment</li>
     </ul>
   </li>
-  <li>If the background provisioning job completes with an error, the application user remains with the <code class="highlighter-rouge">STAGED</code> status but has <code class="highlighter-rouge">syncState</code> as <code class="highlighter-rouge">ERROR</code>.  A provisioning task is created in the Okta Admin UI that must be resolved to retry the job.</li>
+  <li>If the background provisioning job completes with an error, the application user remains with the <code class="highlighter-rouge">STAGED</code> status but has <code class="highlighter-rouge">syncState</code> as <code class="highlighter-rouge">ERROR</code>.  A provisioning task is created in the administrator UI that must be resolved to retry the job.</li>
 </ol>
 
 <p>When the <code class="highlighter-rouge">PUSH_PROFILE_UPDATES</code> feature is enabled, updates to an upstream profile are pushed downstream to the application according to profile mastering priority.  The app user’s <code class="highlighter-rouge">syncState</code> has the following values:</p>
@@ -7600,13 +7600,13 @@ MIIC4DCCAcgCAQAwcTELMAkGA1UEBhMCVVMxEzARBgNVBAgMCkNhbGlmb3JuaWExFjAUBgNVBAcMDVNh
     </tr>
     <tr>
       <td>ERROR</td>
-      <td>Background provisioning job failed to update the user’s profile in the target application. A provisioning task is created in the Okta Admin UI that must be resolved to retry the job.</td>
+      <td>Background provisioning job failed to update the user’s profile in the target application. A provisioning task is created in the administrator UI that must be resolved to retry the job.</td>
     </tr>
   </tbody>
 </table>
 
 <blockquote>
-  <p>User provisioning currently must be configured via the Okta Admin UI and is only available with specific editions.</p>
+  <p>User provisioning currently must be configured via the administrator UI and is only available with specific editions.</p>
 </blockquote>
 
 <h4 id="application-user-credentials-object">Application User Credentials Object</h4>
@@ -7679,7 +7679,7 @@ MIIC4DCCAcgCAQAwcTELMAkGA1UEBhMCVVMxEzARBgNVBAgMCkNhbGlmb3JuaWExFjAUBgNVBAcMDVNh
 
 <h4 id="application-user-profile-object">Application User Profile Object</h4>
 
-<p>Application User profiles are app-specific but may be customized by the Profile Editor in the Okta Admin UI. SSO apps typically don’t support a user profile while apps with <a href="#features">user provisioning features</a> have an app-specific profiles with optional and/or required properties.  Any profile properties visible in the Okta Admin UI for an application assignment can also be assigned via the API. Some properties are reference properties and imported from the target application and only allow specific values to be configured.</p>
+<p>Application User profiles are app-specific but may be customized by the Profile Editor in the administrator UI. SSO apps typically don’t support a user profile while apps with <a href="#features">user provisioning features</a> have an app-specific profiles with optional and/or required properties.  Any profile properties visible in the administrator UI for an application assignment can also be assigned via the API. Some properties are reference properties and imported from the target application and only allow specific values to be configured.</p>
 
 <h5 id="profile-editor">Profile Editor</h5>
 
