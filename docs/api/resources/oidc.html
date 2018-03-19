@@ -377,7 +377,7 @@
 
 <p>This is for use cases where Okta is the identity and authorization platform for your application or API, so your users will be logging in to something other than Okta. In this case you are using a Custom Authorization Server inside Okta, and your full URL looks like this:</p>
 
-<p><code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authorizationServerId}/v1/authorize</code></p>
+<p><code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authServerId}/v1/authorize</code></p>
 
 <p>If you have a developer account, you can use the <code class="highlighter-rouge">default</code> authorization server that was created along with your account, in which case the full URL looks like this:</p>
 
@@ -1618,7 +1618,7 @@ WWW-Authenticate: Bearer error="insufficient_scope", error_description="The acce
 
 <h3 class="api api-operation" id="well-knownoauth-authorization-server">/.well-known/oauth-authorization-server</h3>
 
-<p><span class="api-uri-template api-uri-get"><span class="api-label">GET</span> /oauth2/<strong>${authorizationServerId}</strong>/.well-known/oauth-authorization-server</span></p>
+<p><span class="api-uri-template api-uri-get"><span class="api-label">GET</span> /oauth2/<strong>${authServerId}</strong>/.well-known/oauth-authorization-server</span></p>
 
 <blockquote>
   <p>This endpoint is only available on custom authorization servers, so there are no distinct <a href="#composing-your-base-url">base URLs</a>.</p>
@@ -1633,7 +1633,7 @@ WWW-Authenticate: Bearer error="insufficient_scope", error_description="The acce
 <h4 class="api api-request api-request-example" id="request-example-1">Request Example</h4>
 
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-X</span> GET <span class="se">\</span>
-  <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/</span><span class="k">${</span><span class="nv">authorizationServerId</span><span class="k">}</span><span class="s2">/.well-known/oauth-authorization-server?client_id=0oabzljih3rnr6aGt0h7"</span> <span class="se">\</span>
+  <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/</span><span class="k">${</span><span class="nv">authServerId</span><span class="k">}</span><span class="s2">/.well-known/oauth-authorization-server?client_id=0oabzljih3rnr6aGt0h7"</span> <span class="se">\</span>
 </code></pre></div></div>
 
 <h4 class="api api-response api-response-example" id="response-properties-6">Response Properties</h4>
@@ -1753,11 +1753,11 @@ WWW-Authenticate: Bearer error="insufficient_scope", error_description="The acce
 <h4 class="api api-response api-response-example" id="response-example-success-5">Response Example (Success)</h4>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"issuer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authorizationServerId}"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"authorization_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authorizationServerId}/v1/authorize"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"token_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authorizationServerId}/v1/token"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"issuer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authServerId}"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"authorization_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authServerId}/v1/authorize"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"token_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authServerId}/v1/token"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"registration_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://{baseUrl}/clients"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"jwks_uri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authorizationServerId}/v1/keys"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"jwks_uri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authServerId}/v1/keys"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"response_types_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"code"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"token"</span><span class="p">,</span><span class="w">
@@ -1803,21 +1803,21 @@ WWW-Authenticate: Bearer error="insufficient_scope", error_description="The acce
     </span><span class="s2">"code_challenge_methods_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"S256"</span><span class="w">
     </span><span class="p">],</span><span class="w">
-    </span><span class="s2">"introspection_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authorizationServerId}/v1/introspect"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"introspection_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authServerId}/v1/introspect"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"introspection_endpoint_auth_methods_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"client_secret_basic"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"client_secret_post"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"client_secret_jwt"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"none"</span><span class="w">
     </span><span class="p">],</span><span class="w">
-    </span><span class="s2">"revocation_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authorizationServerId}/v1/revoke"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"revocation_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authServerId}/v1/revoke"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"revocation_endpoint_auth_methods_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"client_secret_basic"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"client_secret_post"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"client_secret_jwt"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"none"</span><span class="w">
     </span><span class="p">]</span><span class="w">
-    </span><span class="s2">"end_session_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authorizationServerId}/v1/logout"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"end_session_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authServerId}/v1/logout"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"request_parameter_supported"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
     </span><span class="s2">"request_object_signing_alg_values_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"HS256"</span><span class="p">,</span><span class="w">
@@ -1831,7 +1831,7 @@ WWW-Authenticate: Bearer error="insufficient_scope", error_description="The acce
 <div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">HTTP 404 Not Found
 {
     "errorCode": "E0000007",
-    "errorSummary": "Not found: Resource not found: ${authorizationServerId} (AuthorizationServer)",
+    "errorSummary": "Not found: Resource not found: ${authServerId} (AuthorizationServer)",
     "errorLink": "E0000007",
     "errorId": "oaeQdc5IvrlSGGnewf-cqqDqA",
     "errorCauses": []
@@ -1853,7 +1853,7 @@ WWW-Authenticate: Bearer error="insufficient_scope", error_description="The acce
 <h4 class="api api-request api-request-example" id="request-example-2">Request Example</h4>
 
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-X</span> GET <span class="se">\</span>
-  <span class="s2">"https:/{yourOktaDomain}.com/oauth2/</span><span class="k">${</span><span class="nv">authorizationServerId</span><span class="k">}</span><span class="s2">/.well-known/openid-configuration?client_id=0oabzljih3rnr6aGt0h7"</span> <span class="se">\</span>
+  <span class="s2">"https:/{yourOktaDomain}.com/oauth2/</span><span class="k">${</span><span class="nv">authServerId</span><span class="k">}</span><span class="s2">/.well-known/openid-configuration?client_id=0oabzljih3rnr6aGt0h7"</span> <span class="se">\</span>
 </code></pre></div></div>
 
 <h4 class="api api-response api-response-example" id="response-properties-7">Response Properties</h4>
@@ -2082,7 +2082,7 @@ WWW-Authenticate: Bearer error="insufficient_scope", error_description="The acce
 HTTP 404 Not Found
 {
     "errorCode": "E0000007",
-    "errorSummary": "Not found: Resource not found: ${authorizationServerId} (AuthorizationServer)",
+    "errorSummary": "Not found: Resource not found: ${authServerId} (AuthorizationServer)",
     "errorLink": "E0000007",
     "errorId": "oaeQdc5IvrlSGGnewf-cqqDqA",
     "errorCauses": []
