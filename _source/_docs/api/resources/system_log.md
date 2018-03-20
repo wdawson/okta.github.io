@@ -271,6 +271,7 @@ When an event is triggered by an HTTP request, the `client` object describes the
 |------------+--------------------------------------------------------------------------------------------------------------------+-----------------+----------|
 | Property   | Description                                                                                                        | DataType        | Nullable |
 | ---------- | ------------------------------------------------------------------------------------------------------------------ | --------------- | -------- |
+| id  | For OAuth requests this is the id of the OAuth [client](https://tools.ietf.org/html/rfc6749#section-1.1) making the request. For SSWS token requests, this is the id of the agent making the request. | [UserAgent Object](#useragent-object) | TRUE |
 | userAgent  | The [user agent](https://en.wikipedia.org/wiki/User_agent) used by an actor to perform an action | [UserAgent Object](#useragent-object) | TRUE |
 | geographicalContext | The physical location where the client made its request from | [GeographicalContext Object](#geographicalcontext-object)    | TRUE     |
 | zone       | The `name` of the [Zone](/docs/api/resources/zones#ZoneModel) that the client's location is mapped to       | String          | TRUE     |
@@ -412,7 +413,7 @@ Among other operations, this response object can be used to scan for suspicious 
 | Property   | Description                                                    | DataType        | Nullable | MinLength | MaxLength |
 | ---------- | -------------------------------------------------------------- | --------------- | -------- | --------- | --------- |
 | authenticationProvider | The system that proves the identity of an actor using the credentials provided to it | String | TRUE  | | |
-| credentialProvider | A credential provider is a software service that manages identities and their associated credentials. When authentication occurs via credentials provided by a credential provider, that credential provider will be recorded here. | Array of String | TRUE | | |
+| credentialProvider | A credential provider is a software service that manages identities and their associated credentials. When authentication occurs via credentials provided by a credential provider, that credential provider will be recorded here. | String | TRUE | | |
 | credentialType | The underlying technology/scheme used in the credential    | String          | TRUE     |           |           |
 | issuer     | The specific software entity that created and issued the credential. | [Issuer Object](#issuer-object) | TRUE | |   |
 | externalSessionId | A proxy for the actor's [session ID](https://www.owasp.org/index.php/Session_Management_Cheat_Sheet) | String | TRUE | 1 | 255 |
