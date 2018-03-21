@@ -6,7 +6,7 @@
 <body>
     <h2 id="okta-aspnet-4x-mvc-quickstart">Okta ASP.NET 4.x MVC Quickstart</h2>
 
-<p>If you want a full, working example, head over to the <a href="https://github.com/oktadeveloper/okta-aspnet-mvc-example">ASP.NET MVC example</a> repository.</p>
+<p>If you want a full, working example, head over to the <a href="https://github.com/oktadeveloper/okta-aspnet-mvc-example">ASP.NET MVC example</a> repository and follow the instructions in that readme.</p>
 
 <h3 id="create-a-new-project">Create a new project</h3>
 
@@ -15,10 +15,10 @@
 <p>Install these packages in the new project:</p>
 
 <ul>
-  <li><a href="https://www.nuget.org/packages/Microsoft.Owin.Host.SystemWeb">Microsoft.Owin.Host.SystemWeb</a> 3.1.0 or higher</li>
-  <li><a href="https://www.nuget.org/packages/Microsoft.Owin.Security.Cookies">Microsoft.Owin.Security.Cookies</a> 3.1.0 or higher</li>
-  <li><a href="https://www.nuget.org/packages/Microsoft.Owin.Security.OpenIdConnect">Microsoft.Owin.Security.OpenIdConnect</a> 3.1.0 or higher</li>
-  <li><a href="https://www.nuget.org/packages/IdentityModel">IdentityModel</a> 2.16.1 or higher</li>
+  <li><a href="https://www.nuget.org/packages/Microsoft.Owin.Host.SystemWeb">Microsoft.Owin.Host.SystemWeb</a> 4.0.0 or higher</li>
+  <li><a href="https://www.nuget.org/packages/Microsoft.Owin.Security.Cookies">Microsoft.Owin.Security.Cookies</a> 4.0.0 or higher</li>
+  <li><a href="https://www.nuget.org/packages/Microsoft.Owin.Security.OpenIdConnect">Microsoft.Owin.Security.OpenIdConnect</a> 4.0.0 or higher</li>
+  <li><a href="https://www.nuget.org/packages/IdentityModel">IdentityModel</a> 3.3.1 or higher</li>
 </ul>
 
 <h3 id="add-a-startup-class">Add a Startup class</h3>
@@ -29,89 +29,84 @@
 
 <div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Startup</span>
 <span class="p">{</span>
-    <span class="k">public</span> <span class="k">void</span> <span class="nf">Configuration</span><span class="p">(</span><span class="n">IAppBuilder</span> <span class="n">app</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="nf">ConfigureAuth</span><span class="p">(</span><span class="n">app</span><span class="p">);</span>
-    <span class="p">}</span>
+    <span class="c1">// These values are stored in Web.config. Make sure you update them!</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="kt">string</span> <span class="n">clientId</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"okta:ClientId"</span><span class="p">];</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="kt">string</span> <span class="n">redirectUri</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"okta:RedirectUri"</span><span class="p">];</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="kt">string</span> <span class="n">authority</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"okta:OrgUri"</span><span class="p">];</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="kt">string</span> <span class="n">clientSecret</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"okta:ClientSecret"</span><span class="p">];</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="kt">string</span> <span class="n">postLogoutRedirectUri</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"okta:PostLogoutRedirectUri"</span><span class="p">];</span>
 
-    <span class="k">private</span> <span class="k">void</span> <span class="nf">ConfigureAuth</span><span class="p">(</span><span class="n">IAppBuilder</span> <span class="n">app</span><span class="p">)</span>
+    <span class="c1">/// &lt;summary&gt;</span>
+    <span class="c1">/// Configure OWIN to use OpenID Connect to log in with Okta.</span>
+    <span class="c1">/// &lt;/summary&gt;</span>
+    <span class="c1">/// &lt;param name="app"&gt;&lt;/param&gt;</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Configuration</span><span class="p">(</span><span class="n">IAppBuilder</span> <span class="n">app</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">app</span><span class="p">.</span><span class="nf">SetDefaultSignInAsAuthenticationType</span><span class="p">(</span><span class="n">CookieAuthenticationDefaults</span><span class="p">.</span><span class="n">AuthenticationType</span><span class="p">);</span>
 
-        <span class="n">app</span><span class="p">.</span><span class="nf">UseCookieAuthentication</span><span class="p">(</span><span class="k">new</span> <span class="n">CookieAuthenticationOptions</span>
-        <span class="p">{</span>
-            <span class="n">AuthenticationType</span> <span class="p">=</span> <span class="n">CookieAuthenticationDefaults</span><span class="p">.</span><span class="n">AuthenticationType</span><span class="p">,</span>
-        <span class="p">});</span>
-
-        <span class="kt">var</span> <span class="n">clientId</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"okta:ClientId"</span><span class="p">].</span><span class="nf">ToString</span><span class="p">();</span>
-        <span class="kt">var</span> <span class="n">clientSecret</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"okta:ClientSecret"</span><span class="p">].</span><span class="nf">ToString</span><span class="p">();</span>
-        <span class="kt">var</span> <span class="n">issuer</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"okta:Issuer"</span><span class="p">].</span><span class="nf">ToString</span><span class="p">();</span>
-        <span class="kt">var</span> <span class="n">redirectUri</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"okta:RedirectUri"</span><span class="p">].</span><span class="nf">ToString</span><span class="p">();</span>
+        <span class="n">app</span><span class="p">.</span><span class="nf">UseCookieAuthentication</span><span class="p">(</span><span class="k">new</span> <span class="nf">CookieAuthenticationOptions</span><span class="p">());</span>
 
         <span class="n">app</span><span class="p">.</span><span class="nf">UseOpenIdConnectAuthentication</span><span class="p">(</span><span class="k">new</span> <span class="n">OpenIdConnectAuthenticationOptions</span>
         <span class="p">{</span>
             <span class="n">ClientId</span> <span class="p">=</span> <span class="n">clientId</span><span class="p">,</span>
             <span class="n">ClientSecret</span> <span class="p">=</span> <span class="n">clientSecret</span><span class="p">,</span>
-            <span class="n">Authority</span> <span class="p">=</span> <span class="n">issuer</span><span class="p">,</span>
+            <span class="n">Authority</span> <span class="p">=</span> <span class="n">authority</span><span class="p">,</span>
             <span class="n">RedirectUri</span> <span class="p">=</span> <span class="n">redirectUri</span><span class="p">,</span>
-            <span class="n">ResponseType</span> <span class="p">=</span> <span class="s">"code id_token"</span><span class="p">,</span>
-            <span class="n">UseTokenLifetime</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span>
-            <span class="n">Scope</span> <span class="p">=</span> <span class="s">"openid profile"</span><span class="p">,</span>
-            <span class="n">PostLogoutRedirectUri</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"okta:PostLogoutRedirectUri"</span><span class="p">].</span><span class="nf">ToString</span><span class="p">(),</span>
+            <span class="n">ResponseType</span> <span class="p">=</span> <span class="n">OpenIdConnectResponseType</span><span class="p">.</span><span class="n">CodeIdToken</span><span class="p">,</span>
+            <span class="n">Scope</span> <span class="p">=</span> <span class="n">OpenIdConnectScope</span><span class="p">.</span><span class="n">OpenIdProfile</span><span class="p">,</span>
+            <span class="n">PostLogoutRedirectUri</span> <span class="p">=</span> <span class="n">postLogoutRedirectUri</span><span class="p">,</span>
             <span class="n">TokenValidationParameters</span> <span class="p">=</span> <span class="k">new</span> <span class="n">TokenValidationParameters</span>
             <span class="p">{</span>
                 <span class="n">NameClaimType</span> <span class="p">=</span> <span class="s">"name"</span>
             <span class="p">},</span>
+
             <span class="n">Notifications</span> <span class="p">=</span> <span class="k">new</span> <span class="n">OpenIdConnectAuthenticationNotifications</span>
             <span class="p">{</span>
-                <span class="n">RedirectToIdentityProvider</span> <span class="p">=</span> <span class="n">context</span> <span class="p">=&gt;</span>
-                <span class="p">{</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="n">ProtocolMessage</span><span class="p">.</span><span class="n">RequestType</span> <span class="p">==</span> <span class="n">OpenIdConnectRequestType</span><span class="p">.</span><span class="n">LogoutRequest</span><span class="p">)</span>
-                    <span class="p">{</span>
-                        <span class="kt">var</span> <span class="n">idToken</span> <span class="p">=</span> <span class="n">context</span><span class="p">.</span><span class="n">OwinContext</span><span class="p">.</span><span class="n">Authentication</span><span class="p">.</span><span class="n">User</span><span class="p">.</span><span class="n">Claims</span>
-                            <span class="p">.</span><span class="nf">FirstOrDefault</span><span class="p">(</span><span class="n">c</span> <span class="p">=&gt;</span> <span class="n">c</span><span class="p">.</span><span class="n">Type</span> <span class="p">==</span> <span class="s">"id_token"</span><span class="p">)?.</span><span class="n">Value</span><span class="p">;</span>
-                        <span class="n">context</span><span class="p">.</span><span class="n">ProtocolMessage</span><span class="p">.</span><span class="n">IdTokenHint</span> <span class="p">=</span> <span class="n">idToken</span><span class="p">;</span>
-                    <span class="p">}</span>
-
-                    <span class="k">return</span> <span class="n">Task</span><span class="p">.</span><span class="nf">FromResult</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
-                <span class="p">},</span>
-                <span class="n">AuthorizationCodeReceived</span> <span class="p">=</span> <span class="k">async</span> <span class="n">context</span> <span class="p">=&gt;</span>
+                <span class="n">AuthorizationCodeReceived</span> <span class="p">=</span> <span class="k">async</span> <span class="n">n</span> <span class="p">=&gt;</span> 
                 <span class="p">{</span>
                     <span class="c1">// Exchange code for access and ID tokens</span>
-                    <span class="kt">var</span> <span class="n">tokenClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TokenClient</span><span class="p">(</span>
-                        <span class="n">issuer</span> <span class="p">+</span> <span class="s">"/v1/token"</span><span class="p">,</span> <span class="n">clientId</span><span class="p">,</span> <span class="n">clientSecret</span><span class="p">);</span>
-                    <span class="kt">var</span> <span class="n">tokenResponse</span> <span class="p">=</span> <span class="k">await</span> <span class="n">tokenClient</span><span class="p">.</span><span class="nf">RequestAuthorizationCodeAsync</span><span class="p">(</span>
-                        <span class="n">context</span><span class="p">.</span><span class="n">ProtocolMessage</span><span class="p">.</span><span class="n">Code</span><span class="p">,</span> <span class="n">redirectUri</span><span class="p">);</span>
+                    <span class="kt">var</span> <span class="n">tokenClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TokenClient</span><span class="p">(</span><span class="n">authority</span> <span class="p">+</span> <span class="s">"/v1/token"</span><span class="p">,</span> <span class="n">clientId</span><span class="p">,</span> <span class="n">clientSecret</span><span class="p">);</span>
+                    <span class="kt">var</span> <span class="n">tokenResponse</span> <span class="p">=</span> <span class="k">await</span> <span class="n">tokenClient</span><span class="p">.</span><span class="nf">RequestAuthorizationCodeAsync</span><span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="n">Code</span><span class="p">,</span> <span class="n">redirectUri</span><span class="p">);</span>
 
                     <span class="k">if</span> <span class="p">(</span><span class="n">tokenResponse</span><span class="p">.</span><span class="n">IsError</span><span class="p">)</span>
                     <span class="p">{</span>
                         <span class="k">throw</span> <span class="k">new</span> <span class="nf">Exception</span><span class="p">(</span><span class="n">tokenResponse</span><span class="p">.</span><span class="n">Error</span><span class="p">);</span>
                     <span class="p">}</span>
-                    
-                    <span class="kt">var</span> <span class="n">userInfoClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">UserInfoClient</span><span class="p">(</span><span class="n">issuer</span> <span class="p">+</span> <span class="s">"/v1/userinfo"</span><span class="p">);</span>
+
+                    <span class="kt">var</span> <span class="n">userInfoClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">UserInfoClient</span><span class="p">(</span><span class="n">authority</span> <span class="p">+</span> <span class="s">"/v1/userinfo"</span><span class="p">);</span>
                     <span class="kt">var</span> <span class="n">userInfoResponse</span> <span class="p">=</span> <span class="k">await</span> <span class="n">userInfoClient</span><span class="p">.</span><span class="nf">GetAsync</span><span class="p">(</span><span class="n">tokenResponse</span><span class="p">.</span><span class="n">AccessToken</span><span class="p">);</span>
+                    <span class="kt">var</span> <span class="n">claims</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Claim</span><span class="p">&gt;();</span>
+                    <span class="n">claims</span><span class="p">.</span><span class="nf">AddRange</span><span class="p">(</span><span class="n">userInfoResponse</span><span class="p">.</span><span class="n">Claims</span><span class="p">);</span>
+                    <span class="n">claims</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="nf">Claim</span><span class="p">(</span><span class="s">"id_token"</span><span class="p">,</span> <span class="n">tokenResponse</span><span class="p">.</span><span class="n">IdentityToken</span><span class="p">));</span>
+                    <span class="n">claims</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="nf">Claim</span><span class="p">(</span><span class="s">"access_token"</span><span class="p">,</span> <span class="n">tokenResponse</span><span class="p">.</span><span class="n">AccessToken</span><span class="p">));</span>
 
-                    <span class="kt">var</span> <span class="n">identity</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ClaimsIdentity</span><span class="p">();</span>
-                    <span class="n">identity</span><span class="p">.</span><span class="nf">AddClaims</span><span class="p">(</span><span class="n">userInfoResponse</span><span class="p">.</span><span class="n">Claims</span><span class="p">);</span>
-
-                    <span class="n">identity</span><span class="p">.</span><span class="nf">AddClaim</span><span class="p">(</span><span class="k">new</span> <span class="nf">Claim</span><span class="p">(</span><span class="s">"id_token"</span><span class="p">,</span> <span class="n">tokenResponse</span><span class="p">.</span><span class="n">IdentityToken</span><span class="p">));</span>
-                    <span class="n">identity</span><span class="p">.</span><span class="nf">AddClaim</span><span class="p">(</span><span class="k">new</span> <span class="nf">Claim</span><span class="p">(</span><span class="s">"access_token"</span><span class="p">,</span> <span class="n">tokenResponse</span><span class="p">.</span><span class="n">AccessToken</span><span class="p">));</span>
                     <span class="k">if</span> <span class="p">(!</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span><span class="p">(</span><span class="n">tokenResponse</span><span class="p">.</span><span class="n">RefreshToken</span><span class="p">))</span>
                     <span class="p">{</span>
-                        <span class="n">identity</span><span class="p">.</span><span class="nf">AddClaim</span><span class="p">(</span><span class="k">new</span> <span class="nf">Claim</span><span class="p">(</span><span class="s">"refresh_token"</span><span class="p">,</span> <span class="n">tokenResponse</span><span class="p">.</span><span class="n">RefreshToken</span><span class="p">));</span>
+                        <span class="n">claims</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="nf">Claim</span><span class="p">(</span><span class="s">"refresh_token"</span><span class="p">,</span> <span class="n">tokenResponse</span><span class="p">.</span><span class="n">RefreshToken</span><span class="p">));</span>
                     <span class="p">}</span>
 
-                    <span class="kt">var</span> <span class="n">nameClaim</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Claim</span><span class="p">(</span>
-                        <span class="n">ClaimTypes</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span>
-                        <span class="n">userInfoResponse</span><span class="p">.</span><span class="n">Claims</span><span class="p">.</span><span class="nf">FirstOrDefault</span><span class="p">(</span><span class="n">c</span> <span class="p">=&gt;</span> <span class="n">c</span><span class="p">.</span><span class="n">Type</span> <span class="p">==</span> <span class="s">"name"</span><span class="p">)?.</span><span class="n">Value</span><span class="p">);</span>
-                    <span class="n">identity</span><span class="p">.</span><span class="nf">AddClaim</span><span class="p">(</span><span class="n">nameClaim</span><span class="p">);</span>
+                    <span class="n">n</span><span class="p">.</span><span class="n">AuthenticationTicket</span><span class="p">.</span><span class="n">Identity</span><span class="p">.</span><span class="nf">AddClaims</span><span class="p">(</span><span class="n">claims</span><span class="p">);</span>
 
+                    <span class="k">return</span><span class="p">;</span>
+                <span class="p">},</span>
 
-                    <span class="n">context</span><span class="p">.</span><span class="n">AuthenticationTicket</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AuthenticationTicket</span><span class="p">(</span>
-                        <span class="k">new</span> <span class="nf">ClaimsIdentity</span><span class="p">(</span><span class="n">identity</span><span class="p">.</span><span class="n">Claims</span><span class="p">,</span> <span class="n">context</span><span class="p">.</span><span class="n">AuthenticationTicket</span><span class="p">.</span><span class="n">Identity</span><span class="p">.</span><span class="n">AuthenticationType</span><span class="p">),</span>
-                        <span class="n">context</span><span class="p">.</span><span class="n">AuthenticationTicket</span><span class="p">.</span><span class="n">Properties</span><span class="p">);</span>
+                <span class="n">RedirectToIdentityProvider</span> <span class="p">=</span> <span class="n">n</span> <span class="p">=&gt;</span>
+                <span class="p">{</span>
+                    <span class="c1">// If signing out, add the id_token_hint</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="n">ProtocolMessage</span><span class="p">.</span><span class="n">RequestType</span> <span class="p">==</span> <span class="n">OpenIdConnectRequestType</span><span class="p">.</span><span class="n">Logout</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="kt">var</span> <span class="n">idTokenClaim</span> <span class="p">=</span> <span class="n">n</span><span class="p">.</span><span class="n">OwinContext</span><span class="p">.</span><span class="n">Authentication</span><span class="p">.</span><span class="n">User</span><span class="p">.</span><span class="nf">FindFirst</span><span class="p">(</span><span class="s">"id_token"</span><span class="p">);</span>
+
+                        <span class="k">if</span> <span class="p">(</span><span class="n">idTokenClaim</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+                        <span class="p">{</span>
+                            <span class="n">n</span><span class="p">.</span><span class="n">ProtocolMessage</span><span class="p">.</span><span class="n">IdTokenHint</span> <span class="p">=</span> <span class="n">idTokenClaim</span><span class="p">.</span><span class="n">Value</span><span class="p">;</span>
+                        <span class="p">}</span>
+
+                    <span class="p">}</span>
+
+                    <span class="k">return</span> <span class="n">Task</span><span class="p">.</span><span class="n">CompletedTask</span><span class="p">;</span>
                 <span class="p">}</span>
-            <span class="p">}</span>
+            <span class="p">},</span>
         <span class="p">});</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -119,19 +114,19 @@
 
 <p>Add these using statements at the top of the file:</p>
 
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Configuration</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.IdentityModel.Tokens</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Security.Claims</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Threading.Tasks</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">IdentityModel.Client</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">Microsoft.IdentityModel.Protocols</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">Microsoft.Owin</span><span class="p">;</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">Microsoft.Owin</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Owin</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">Microsoft.Owin.Security</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">Microsoft.Owin.Security.Cookies</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">Microsoft.Owin.Security.OpenIdConnect</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">Owin</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Threading.Tasks</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Microsoft.IdentityModel.Protocols.OpenIdConnect</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Configuration</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Security.Claims</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">IdentityModel.Client</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Microsoft.IdentityModel.Tokens</span><span class="p">;</span>
 </code></pre></div></div>
 
 <h3 id="configure-the-application-in-okta">Configure the application in Okta</h3>
@@ -141,13 +136,13 @@
 <ul>
   <li><strong>Application type</strong>: Web</li>
   <li><strong>Allowed grant types</strong>: Authorization Code, Implicit (Hybrid) - Allow ID Token</li>
-  <li><strong>Login redirect URI</strong>: <code class="highlighter-rouge">http://localhost:59896/authorization-code/callback</code></li>
-  <li><strong>Logout redirect URI</strong>: <code class="highlighter-rouge">http://localhost:59896/Account/PostLogout</code></li>
+  <li><strong>Login redirect URI</strong>: <code class="highlighter-rouge">http://localhost:8080/authorization-code/callback</code></li>
+  <li><strong>Logout redirect URI</strong>: <code class="highlighter-rouge">http://localhost:8080/Account/PostLogout</code></li>
 </ul>
 
 <p>If you are creating an Okta application from scratch, click <strong>Done</strong> to see the full settings page and make sure the settings match the values above.</p>
 
-<p><strong>Note</strong>: The local port may be different on your machine. You can find the assigned port by running the application, or right-clicking on the project and choosing <strong>Properties</strong>, then <strong>Web</strong>. If it’s different than 59896, update the URIs in Okta and in <code class="highlighter-rouge">Web.config</code> below.</p>
+<p><strong>Note</strong>: The local port may be different on your machine. You can find the assigned port by running the application, or right-clicking on the project and choosing <strong>Properties</strong>, then <strong>Web</strong>. If it’s different than 8080, update the URIs in Okta and in <code class="highlighter-rouge">Web.config</code> below.</p>
 
 <h3 id="configure-the-project">Configure the project</h3>
 
@@ -156,11 +151,11 @@
 <div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- 1. Replace these values with your Okta configuration --&gt;</span>
 <span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"okta:ClientId"</span> <span class="na">value=</span><span class="s">"{clientId}"</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"okta:ClientSecret"</span> <span class="na">value=</span><span class="s">"{clientSecret}"</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"okta:Issuer"</span> <span class="na">value=</span><span class="s">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"okta:OrgUri"</span> <span class="na">value=</span><span class="s">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default"</span> <span class="nt">/&gt;</span>
 
 <span class="c">&lt;!-- 2. Update the Okta application with these values --&gt;</span>
-<span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"okta:RedirectUri"</span> <span class="na">value=</span><span class="s">"http://localhost:59896/authorization-code/callback"</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"okta:PostLogoutRedirectUri"</span> <span class="na">value=</span><span class="s">"http://localhost:59896/Account/PostLogout"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"okta:RedirectUri"</span> <span class="na">value=</span><span class="s">"http://localhost:8080/authorization-code/callback"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"okta:PostLogoutRedirectUri"</span> <span class="na">value=</span><span class="s">"http://localhost:8080/Account/PostLogout"</span> <span class="nt">/&gt;</span>
 </code></pre></div></div>
 
 <p>Copy the client ID and client secret from your Okta application into the appropriate keys in <code class="highlighter-rouge">Web.config</code>, and replace <code class="highlighter-rouge">{yourOktaDomain}</code> with your Okta domain name. You can find your Okta domain name in the top-right corner of the Dashboard page.</p>
