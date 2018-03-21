@@ -3916,23 +3916,28 @@ If for any reason the user can’t scan the QR code, they can use the link provi
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- Get the u2f-api.js from https://github.com/google/u2f-ref-code/tree/master/u2f-gae-demo/war/js --&gt;</span>
 <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/u2f-api.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
 <span class="nt">&lt;script&gt;</span>
-<span class="c1">//use the appId from the activation object</span>
-<span class="kd">var</span> <span class="nx">appId</span> <span class="o">=</span> <span class="nx">activation</span><span class="p">.</span><span class="nx">appId</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">registerRequests</span> <span class="o">=</span> <span class="p">[{</span>
-    <span class="na">version</span><span class="p">:</span> <span class="nx">activation</span><span class="p">.</span><span class="nx">version</span><span class="p">,</span> <span class="c1">//use the version from the activation object</span>
-    <span class="na">challenge</span><span class="p">:</span> <span class="nx">activation</span><span class="p">.</span><span class="nx">nonce</span> <span class="c1">//use the nonce from the activation object</span>
-    <span class="p">}];</span>
-<span class="nx">u2f</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="nx">appId</span><span class="p">,</span> <span class="nx">registerRequests</span><span class="p">,</span> <span class="p">[],</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">errorCode</span> <span class="o">&amp;&amp;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">errorCode</span> <span class="o">!==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">//Error from U2F platform</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-	  <span class="c1">//Get the registrationData from the callback result</span>
-	  <span class="kd">var</span> <span class="nx">registrationData</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">registrationData</span><span class="p">;</span>
+  <span class="c1">// Use the appId from the activation object</span>
+  <span class="kd">var</span> <span class="nx">appId</span> <span class="o">=</span> <span class="nx">activation</span><span class="p">.</span><span class="nx">appId</span><span class="p">;</span>
 
-	  <span class="c1">//Get the clientData from the callback result</span>
-	  <span class="kd">var</span> <span class="nx">clientData</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">clientData</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">});</span>
+  <span class="c1">// Use the version and nonce from the activation object</span>
+  <span class="kd">var</span> <span class="nx">registerRequests</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="na">version</span><span class="p">:</span> <span class="nx">activation</span><span class="p">.</span><span class="nx">version</span><span class="p">,</span>
+      <span class="na">challenge</span><span class="p">:</span> <span class="nx">activation</span><span class="p">.</span><span class="nx">nonce</span>
+    <span class="p">}</span>
+  <span class="p">];</span>
+
+  <span class="nx">u2f</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="nx">appId</span><span class="p">,</span> <span class="nx">registerRequests</span><span class="p">,</span> <span class="p">[],</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">errorCode</span> <span class="o">&amp;&amp;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">errorCode</span> <span class="o">!==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// Error from U2F platform</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="c1">// Get the registrationData from the callback result</span>
+      <span class="kd">var</span> <span class="nx">registrationData</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">registrationData</span><span class="p">;</span>
+
+      <span class="c1">// Get the clientData from the callback result</span>
+      <span class="kd">var</span> <span class="nx">clientData</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">clientData</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
 <span class="nt">&lt;/script&gt;</span>
 </code></pre></div></div>
 
@@ -5088,24 +5093,32 @@ JavaScript API to get the signed assertion from the U2F token.</p>
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- Get the u2f-api.js from https://github.com/google/u2f-ref-code/tree/master/u2f-gae-demo/war/js --&gt;</span>
 <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/u2f-api.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
 <span class="nt">&lt;script&gt;</span>
-<span class="kd">var</span> <span class="nx">challengeNonce</span> <span class="o">=</span> <span class="nx">factor</span><span class="p">.</span><span class="nx">_embedded</span><span class="p">.</span><span class="nx">challenge</span><span class="p">.</span><span class="nx">nonce</span><span class="p">;</span> <span class="c1">//use the nonce from the challenge object</span>
-<span class="kd">var</span> <span class="nx">appId</span> <span class="o">=</span> <span class="nx">factor</span><span class="p">.</span><span class="nx">profile</span><span class="p">.</span><span class="nx">appId</span><span class="p">;</span> <span class="c1">//use the appId from factor profile object</span>
+  <span class="c1">// Use the nonce from the challenge object</span>
+  <span class="kd">var</span> <span class="nx">challengeNonce</span> <span class="o">=</span> <span class="nx">factor</span><span class="p">.</span><span class="nx">_embedded</span><span class="p">.</span><span class="nx">challenge</span><span class="p">.</span><span class="nx">nonce</span><span class="p">;</span>
 
-<span class="c1">//Use the version and credentialId from factor profile object</span>
-<span class="kd">var</span> <span class="nx">registeredKeys</span> <span class="o">=</span> <span class="p">[{</span><span class="na">version</span><span class="p">:</span> <span class="nx">factor</span><span class="p">.</span><span class="nx">profile</span><span class="p">.</span><span class="nx">version</span><span class="p">,</span> <span class="na">keyHandle</span><span class="p">:</span> <span class="nx">factor</span><span class="p">.</span><span class="nx">profile</span><span class="p">.</span><span class="nx">credentialId</span> <span class="p">}];</span>
+  <span class="c1">// Use the appId from factor profile object</span>
+  <span class="kd">var</span> <span class="nx">appId</span> <span class="o">=</span> <span class="nx">factor</span><span class="p">.</span><span class="nx">profile</span><span class="p">.</span><span class="nx">appId</span><span class="p">;</span>
 
-<span class="c1">//Call the U2F javascript API to get signed assertion from the U2F token</span>
-<span class="nx">u2f</span><span class="p">.</span><span class="nx">sign</span><span class="p">(</span><span class="nx">appId</span><span class="p">,</span> <span class="nx">factorData</span><span class="p">.</span><span class="nx">challenge</span><span class="p">.</span><span class="nx">nonce</span><span class="p">,</span> <span class="nx">registeredKeys</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">errorCode</span> <span class="o">&amp;&amp;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">errorCode</span> <span class="o">!==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">//Error from U2F platform</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-	  <span class="c1">//Get the client data from callback result</span>
-	  <span class="kd">var</span> <span class="nx">clientData</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">clientData</span><span class="p">;</span>
+  <span class="c1">// Use the version and credentialId from factor profile object</span>
+  <span class="kd">var</span> <span class="nx">registeredKeys</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="na">version</span><span class="p">:</span> <span class="nx">factor</span><span class="p">.</span><span class="nx">profile</span><span class="p">.</span><span class="nx">version</span><span class="p">,</span>
+      <span class="na">keyHandle</span><span class="p">:</span> <span class="nx">factor</span><span class="p">.</span><span class="nx">profile</span><span class="p">.</span><span class="nx">credentialId</span>
+    <span class="p">}</span>
+  <span class="p">];</span>
 
-    <span class="c1">//Get the signature data from callback result</span>
-	  <span class="kd">var</span> <span class="nx">signatureData</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">signatureData</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  <span class="c1">// Call the U2F javascript API to get signed assertion from the U2F token</span>
+  <span class="nx">u2f</span><span class="p">.</span><span class="nx">sign</span><span class="p">(</span><span class="nx">appId</span><span class="p">,</span> <span class="nx">factorData</span><span class="p">.</span><span class="nx">challenge</span><span class="p">.</span><span class="nx">nonce</span><span class="p">,</span> <span class="nx">registeredKeys</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">errorCode</span> <span class="o">&amp;&amp;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">errorCode</span> <span class="o">!==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// Error from U2F platform</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="c1">// Get the client data from callback result</span>
+      <span class="kd">var</span> <span class="nx">clientData</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">clientData</span><span class="p">;</span>
+
+      <span class="c1">// Get the signature data from callback result</span>
+      <span class="kd">var</span> <span class="nx">signatureData</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">signatureData</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
 <span class="nt">&lt;/script&gt;</span>
 </code></pre></div></div>
 
@@ -7693,19 +7706,19 @@ to skip the other factors.</p>
 
 <h5 id="when-sign-on-policy-is-device-based">When sign-on policy is device based</h5>
 
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">  
-   </span><span class="s2">"allowRememberDevice"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="w">
-   </span><span class="s2">"rememberDeviceByDefault"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="w">
-   </span><span class="s2">"rememberDeviceLifetimeInMinutes"</span><span class="p">:</span><span class="mi">0</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"allowRememberDevice"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"rememberDeviceByDefault"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"rememberDeviceLifetimeInMinutes"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div></div>
 
 <h5 id="when-sign-on-policy-is-time-based">When sign-on policy is time based</h5>
 
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">  
-   </span><span class="s2">"allowRememberDevice"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="w">
-   </span><span class="s2">"rememberDeviceByDefault"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="w"> 
-   </span><span class="s2">"rememberDeviceLifetimeInMinutes"</span><span class="p">:</span><span class="mi">5</span><span class="w"> 
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"allowRememberDevice"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"rememberDeviceByDefault"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"rememberDeviceLifetimeInMinutes"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div></div>
 
