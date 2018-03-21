@@ -5,7 +5,7 @@ exampleDescription: ASP.NET 4.x MVC authorization code example
 
 ## Okta ASP.NET 4.x MVC Quickstart
 
-If you want a full, working example, head over to the [ASP.NET MVC example](https://github.com/oktadeveloper/okta-aspnet-mvc-example) repository.
+If you want a full, working example, head over to the [ASP.NET MVC example](https://github.com/oktadeveloper/okta-aspnet-mvc-example) repository and follow the instructions in that readme.
 
 ### Create a new project
 
