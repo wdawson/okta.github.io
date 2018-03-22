@@ -270,7 +270,7 @@ Here are some more resources if you want to keep learning:
 * [How to Secure Your .NET Web API with Token Authentication](/blog/2018/02/01/secure-aspnetcore-webapi-token-auth) here on the Okta blog
 * A [deep dive into the JWT bearer middleware](https://andrewlock.net/a-look-behind-the-jwt-bearer-authentication-middleware-in-asp-net-core/) on Andrew Lock's blog
 * [What the Heck is OAuth?][wthk-oauth]
-* A [primer on OpenID Connect](oidc-primer)
+* Our [primer on OpenID Connect](oidc-primer)
 * [OAuth and OpenID Connect in plain English][nate-oidc-talk] on YouTube, by yours truly
 
 I'd love to hear your feedback! If you have questions or thoughts, post a comment below. You can also reach us on Twitter [@oktadev](https://twitter.com/oktadev).
