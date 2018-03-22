@@ -4723,7 +4723,7 @@ Starts a new password recovery transaction for a given user and issues a [recove
 Parameter   | Description                                                                                                       | Param Type | DataType                          | Required | MaxLength |
 ----------- | ----------------------------------------------------------------------------------------------------------------- | ---------- | --------------------------------- | -------- | --------- |
 username    | User's non-qualified short-name (e.g. dade.murphy) or unique fully-qualified login (dade.murphy@example.com)| Body       | String                            | TRUE     |           |
-factorType  | Recovery factor to use for primary authentication                                                                 | Body       | `EMAIL` or `SMS` or `Voice Call`  | FALSE    |           |
+factorType  | Recovery factor to use for primary authentication                                                                 | Body       | `EMAIL` or `SMS` or `CALL`  | FALSE    |           |
 relayState  | Optional state value that is persisted for the lifetime of the recovery transaction                               | Body       | String                            | FALSE    |   2048    |
 
 > A valid `factorType` is required for requests without an API token with administrator privileges. For more information, see [Forgot Password with Trusted Application](#forgot-password-with-trusted-application).
