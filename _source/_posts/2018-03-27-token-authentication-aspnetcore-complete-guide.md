@@ -230,11 +230,11 @@ Back in the ASP.NET 4.5 days, the `UseOAuthAuthorizationServer` middleware gave 
 
 The two common ways to get an authorization server are:
 
-* Using a cloud service like Azure AD B2C or [Okta](https://developer.okta.com/quickstart/#/widget/dotnet/aspnetcore)
+* Using a cloud service like Azure AD B2C or [Okta](/quickstart/#/widget/dotnet/aspnetcore)
 * Building or configuring your own
 
 ### Hosted Authorization Server with Okta
-A hosted authorization server is the easiest way to generate tokens, because you don't need to build (or maintain) anything yourself. You can sign up for a [free account](https://developer.okta.com/signup) and then follow the [Okta + ASP.NET Core API quickstart](https://developer.okta.com/quickstart/#/widget/dotnet/aspnetcore) for step-by-step instructions.
+A hosted authorization server is the easiest way to generate tokens, because you don't need to build (or maintain) anything yourself. You can sign up for a [free account](/signup) and then follow the [Okta + ASP.NET Core API quickstart](/quickstart/#/widget/dotnet/aspnetcore) for step-by-step instructions.
 
 Since the authorization server Okta creates for you has a standard discovery document, the `JwtBearer` configuration is super simple:
 
@@ -267,7 +267,7 @@ IdentityServer is a good choice when you want to roll your own full-fledged Open
 I hope this article helps it feel a little less confusing. The ASP.NET Core team has done a great job of making it easy to add token authentication to your ASP.NET Core API, and options like OpenIddict and Okta make it easy to spin up an authorization server that generates tokens for your clients.
 
 Here are some more resources if you want to keep learning:
-* [How to Secure Your .NET Web API with Token Authentication](https://developer.okta.com/blog/2018/02/01/secure-aspnetcore-webapi-token-auth) here on the Okta blog
+* [How to Secure Your .NET Web API with Token Authentication](/blog/2018/02/01/secure-aspnetcore-webapi-token-auth) here on the Okta blog
 * A [deep dive into the JWT bearer middleware](https://andrewlock.net/a-look-behind-the-jwt-bearer-authentication-middleware-in-asp-net-core/) on Andrew Lock's blog
 * [What the Heck is OAuth?][wthk-oauth]
 * A [primer on OpenID Connect](oidc-primer)
@@ -275,7 +275,7 @@ Here are some more resources if you want to keep learning:
 
 I'd love to hear your feedback! If you have questions or thoughts, post a comment below. You can also reach us on Twitter [@oktadev](https://twitter.com/oktadev).
 
-[wthk-oauth]: https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth
-[oidc-primer]: https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1
+[wthk-oauth]: /blog/2017/06/21/what-the-heck-is-oauth
+[oidc-primer]: /blog/2017/07/25/oidc-primer-part-1
 [nate-oidc-talk]: https://www.youtube.com/watch?v=996OiexHze0
 
