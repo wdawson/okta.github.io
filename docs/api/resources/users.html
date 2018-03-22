@@ -3642,6 +3642,10 @@ Consent grants remain valid until the user manually revokes them, or until the u
   <p>Note: The after cursor should treated as an opaque value and obtained through <a href="/docs/api/getting_started/design_principles#pagination">the next link relation</a>.</p>
 </blockquote>
 
+<ul>
+  <li>The maximum value for <code class="highlighter-rouge">limit</code> is 200.</li>
+</ul>
+
 <h4 class="api api-request api-request-example" id="request-example-34">Request Example</h4>
 
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> GET <span class="se">\</span>
@@ -3653,52 +3657,56 @@ Consent grants remain valid until the user manually revokes them, or until the u
 
 <h4 class="api api-response api-response-example" id="response-example-36">Response Example</h4>
 
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>
-    <span class="o">{</span>
-        <span class="s2">"id"</span>: <span class="s2">"oag3ih1zrm1cBFOiq0h6"</span>,
-        <span class="s2">"status"</span>: <span class="s2">"ACTIVE"</span>,
-        <span class="s2">"created"</span>: <span class="s2">"2017-10-30T22:06:53.000Z"</span>,
-        <span class="s2">"lastUpdated"</span>: <span class="s2">"2017-10-30T22:06:53.000Z"</span>,
-        <span class="s2">"issuerId"</span>: <span class="s2">"ausain6z9zIedDCxB0h7"</span>,
-        <span class="s2">"clientId"</span>: <span class="s2">"0oabskvc6442nkvQO0h7"</span>,
-        <span class="s2">"userId"</span>: <span class="s2">"00u5t60iloOHN9pBi0h7"</span>,
-        <span class="s2">"scopeId"</span>: <span class="s2">"scpCmCCV1DpxVkCaye2X"</span>,
-        <span class="s2">"_links"</span>: <span class="o">{</span>
-            <span class="s2">"revoke"</span>: <span class="o">{</span>
-                <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7/grants/oag3ih1zrm1cBFOiq0h6"</span>,
-                <span class="s2">"hints"</span>: <span class="o">{</span>
-                    <span class="s2">"allow"</span>: <span class="o">[</span>
-                        <span class="s2">"DELETE"</span>
-                    <span class="o">]</span>
-                <span class="o">}</span>
-            <span class="o">}</span>,
-            <span class="s2">"app"</span>: <span class="o">{</span>
-                <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/apps/0oabskvc6442nkvQO0h7"</span>,
-                <span class="s2">"title"</span>: <span class="s2">"My App"</span>
-            <span class="o">}</span>,
-            <span class="s2">"scope"</span>: <span class="o">{</span>
-                <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authorizationServers/ausain6z9zIedDCxB0h7/scopes/scpCmCCV1DpxVkCaye2X"</span>,
-                <span class="s2">"title"</span>: <span class="s2">"My phone"</span>
-            <span class="o">}</span>,
-            <span class="s2">"client"</span>: <span class="o">{</span>
-                <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/clients/0oabskvc6442nkvQO0h7"</span>,
-                <span class="s2">"title"</span>: <span class="s2">"My App"</span>
-            <span class="o">}</span>,
-            <span class="s2">"issuer"</span>: <span class="o">{</span>
-                <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authorizationServers/ausain6z9zIedDCxB0h7"</span>,
-                <span class="s2">"title"</span>: <span class="s2">"My Custom Authorization Server"</span>
-            <span class="o">}</span>,
-            <span class="s2">"self"</span>: <span class="o">{</span>
-                <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7/grants/oag3ih1zrm1cBFOiq0h6"</span>
-            <span class="o">}</span>,
-            <span class="s2">"user"</span>: <span class="o">{</span>
-                <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7"</span>,
-                <span class="s2">"title"</span>: <span class="s2">"SAML Jackson"</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">]</span>
-</code></pre></div></div>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oag3ih1zrm1cBFOiq0h6"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-10-30T22:06:53.000Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"lastUpdated"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-10-30T22:06:53.000Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"issuerId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ausain6z9zIedDCxB0h7"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"clientId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0oabskvc6442nkvQO0h7"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00u5t60iloOHN9pBi0h7"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"scopeId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scpCmCCV1DpxVkCaye2X"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"revoke"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7/grants/oag3ih1zrm1cBFOiq0h6"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                        </span><span class="s2">"DELETE"</span><span class="w">
+                    </span><span class="p">]</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"app"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/apps/0oabskvc6442nkvQO0h7"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My App"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"scope"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authorizationServers/ausain6z9zIedDCxB0h7/scopes/scpCmCCV1DpxVkCaye2X"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My phone"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"client"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/clients/0oabskvc6442nkvQO0h7"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My App"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"issuer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authorizationServers/ausain6z9zIedDCxB0h7"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My Custom Authorization Server"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7/grants/oag3ih1zrm1cBFOiq0h6"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SAML Jackson"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"authorizationServer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authorizationServers/ausain6z9zIedDCxB0h7"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Example Authorization Server"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
 
 <h3 class="api api-operation" id="get-a-grant">Get a Grant</h3>
 
@@ -3756,50 +3764,54 @@ Consent grants remain valid until the user manually revokes them, or until the u
 
 <h4 class="api api-response api-response-example" id="response-example-37">Response Example</h4>
 
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">{</span>
-    <span class="s2">"id"</span>: <span class="s2">"oag3ih1zrm1cBFOiq0h6"</span>,
-    <span class="s2">"status"</span>: <span class="s2">"ACTIVE"</span>,
-    <span class="s2">"created"</span>: <span class="s2">"2017-10-30T22:06:53.000Z"</span>,
-    <span class="s2">"lastUpdated"</span>: <span class="s2">"2017-10-30T22:06:53.000Z"</span>,
-    <span class="s2">"issuerId"</span>: <span class="s2">"ausain6z9zIedDCxB0h7"</span>,
-    <span class="s2">"clientId"</span>: <span class="s2">"0oabskvc6442nkvQO0h7"</span>,
-    <span class="s2">"userId"</span>: <span class="s2">"00u5t60iloOHN9pBi0h7"</span>,
-    <span class="s2">"scopeId"</span>: <span class="s2">"scpCmCCV1DpxVkCaye2X"</span>,
-    <span class="s2">"_links"</span>: <span class="o">{</span>
-        <span class="s2">"revoke"</span>: <span class="o">{</span>
-            <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7/grants/oag3ih1zrm1cBFOiq0h6"</span>,
-            <span class="s2">"hints"</span>: <span class="o">{</span>
-                <span class="s2">"allow"</span>: <span class="o">[</span>
-                    <span class="s2">"DELETE"</span>
-                <span class="o">]</span>
-            <span class="o">}</span>
-        <span class="o">}</span>,
-        <span class="s2">"app"</span>: <span class="o">{</span>
-            <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/apps/0oabskvc6442nkvQO0h7"</span>,
-            <span class="s2">"title"</span>: <span class="s2">"My App"</span>
-        <span class="o">}</span>,
-        <span class="s2">"scope"</span>: <span class="o">{</span>
-            <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authorizationServers/ausain6z9zIedDCxB0h7/scopes/scpCmCCV1DpxVkCaye2X"</span>,
-            <span class="s2">"title"</span>: <span class="s2">"My phone"</span>
-        <span class="o">}</span>,
-        <span class="s2">"client"</span>: <span class="o">{</span>
-            <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/clients/0oabskvc6442nkvQO0h7"</span>,
-            <span class="s2">"title"</span>: <span class="s2">"My App"</span>
-        <span class="o">}</span>,
-        <span class="s2">"issuer"</span>: <span class="o">{</span>
-            <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authorizationServers/ausain6z9zIedDCxB0h7"</span>,
-            <span class="s2">"title"</span>: <span class="s2">"My Custom Authorization Server"</span>
-        <span class="o">}</span>,
-        <span class="s2">"self"</span>: <span class="o">{</span>
-            <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7/grants/oag3ih1zrm1cBFOiq0h6"</span>
-        <span class="o">}</span>,
-        <span class="s2">"user"</span>: <span class="o">{</span>
-            <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7"</span>,
-            <span class="s2">"title"</span>: <span class="s2">"SAML Jackson"</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oag3ih1zrm1cBFOiq0h6"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-10-30T22:06:53.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"lastUpdated"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-10-30T22:06:53.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"issuerId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ausain6z9zIedDCxB0h7"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"clientId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0oabskvc6442nkvQO0h7"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00u5t60iloOHN9pBi0h7"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"scopeId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scpCmCCV1DpxVkCaye2X"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"revoke"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7/grants/oag3ih1zrm1cBFOiq0h6"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="s2">"DELETE"</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"app"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/apps/0oabskvc6442nkvQO0h7"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My App"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"scope"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authorizationServers/ausain6z9zIedDCxB0h7/scopes/scpCmCCV1DpxVkCaye2X"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My phone"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"client"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/clients/0oabskvc6442nkvQO0h7"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My App"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"issuer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authorizationServers/ausain6z9zIedDCxB0h7"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My Custom Authorization Server"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7/grants/oag3ih1zrm1cBFOiq0h6"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SAML Jackson"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"authorizationServer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authorizationServers/ausain6z9zIedDCxB0h7"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Example Authorization Server"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
 
 <h3 class="api api-operation" id="list-grants-for-a-user-client-combination">List Grants for a User-Client Combination</h3>
 
@@ -3819,6 +3831,7 @@ Consent grants remain valid until the user manually revokes them, or until the u
       <th style="text-align: left">Parameter Type</th>
       <th style="text-align: left">DataType</th>
       <th style="text-align: left">Required</th>
+      <th style="text-align: left">Default</th>
     </tr>
   </thead>
   <tbody>
@@ -3828,6 +3841,7 @@ Consent grants remain valid until the user manually revokes them, or until the u
       <td style="text-align: left">URL</td>
       <td style="text-align: left">String</td>
       <td style="text-align: left">TRUE</td>
+      <td style="text-align: left"> </td>
     </tr>
     <tr>
       <td style="text-align: left">clientId</td>
@@ -3835,9 +3849,38 @@ Consent grants remain valid until the user manually revokes them, or until the u
       <td style="text-align: left">URL</td>
       <td style="text-align: left">String</td>
       <td style="text-align: left">TRUE</td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">expand</td>
+      <td style="text-align: left">Valid value: <code class="highlighter-rouge">scope</code>. If specified, scope details are included in the <code class="highlighter-rouge">_embedded</code> attribute.</td>
+      <td style="text-align: left">Query</td>
+      <td style="text-align: left">String</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">limit</td>
+      <td style="text-align: left">The maximum number of tokens to return</td>
+      <td style="text-align: left">Query</td>
+      <td style="text-align: left">Number</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left">20</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">after</td>
+      <td style="text-align: left">Specifies the pagination cursor for the next page of tokens</td>
+      <td style="text-align: left">Query</td>
+      <td style="text-align: left">String</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left"> </td>
     </tr>
   </tbody>
 </table>
+
+<ul>
+  <li>The maximum value for <code class="highlighter-rouge">limit</code> is 200.</li>
+</ul>
 
 <h4 class="api api-request api-request-example" id="request-example-36">Request Example</h4>
 
@@ -3850,52 +3893,56 @@ Consent grants remain valid until the user manually revokes them, or until the u
 
 <h4 class="api api-response api-response-example" id="response-example-38">Response Example</h4>
 
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>
-    <span class="o">{</span>
-        <span class="s2">"id"</span>: <span class="s2">"oag3j3j33ILN7OFqP0h6"</span>,
-        <span class="s2">"status"</span>: <span class="s2">"ACTIVE"</span>,
-        <span class="s2">"created"</span>: <span class="s2">"2017-11-03T03:34:17.000Z"</span>,
-        <span class="s2">"lastUpdated"</span>: <span class="s2">"2017-11-03T03:34:17.000Z"</span>,
-        <span class="s2">"issuerId"</span>: <span class="s2">"ausain6z9zIedDCxB0h7"</span>,
-        <span class="s2">"clientId"</span>: <span class="s2">"0oabskvc6442nkvQO0h7"</span>,
-        <span class="s2">"userId"</span>: <span class="s2">"00u5t60iloOHN9pBi0h7"</span>,
-        <span class="s2">"scopeId"</span>: <span class="s2">"scpCmCCV1DpxVkCaye2X"</span>,
-        <span class="s2">"_links"</span>: <span class="o">{</span>
-            <span class="s2">"app"</span>: <span class="o">{</span>
-                <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/apps/0oabskvc6442nkvQO0h7"</span>,
-                <span class="s2">"title"</span>: <span class="s2">"Test App for Groups Claim"</span>
-            <span class="o">}</span>,
-            <span class="s2">"scope"</span>: <span class="o">{</span>
-                <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authorizationServers/ausain6z9zIedDCxB0h7/scopes/scpCmCCV1DpxVkCaye2X"</span>,
-                <span class="s2">"title"</span>: <span class="s2">"Your phone"</span>
-            <span class="o">}</span>,
-            <span class="s2">"self"</span>: <span class="o">{</span>
-                <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7/grants/oag3j3j33ILN7OFqP0h6"</span>
-            <span class="o">}</span>,
-            <span class="s2">"revoke"</span>: <span class="o">{</span>
-                <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7/grants/oag3j3j33ILN7OFqP0h6"</span>,
-                <span class="s2">"hints"</span>: <span class="o">{</span>
-                    <span class="s2">"allow"</span>: <span class="o">[</span>
-                        <span class="s2">"DELETE"</span>
-                    <span class="o">]</span>
-                <span class="o">}</span>
-            <span class="o">}</span>,
-            <span class="s2">"client"</span>: <span class="o">{</span>
-                <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/clients/0oabskvc6442nkvQO0h7"</span>,
-                <span class="s2">"title"</span>: <span class="s2">"Test App for Groups Claim"</span>
-            <span class="o">}</span>,
-            <span class="s2">"user"</span>: <span class="o">{</span>
-                <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7"</span>,
-                <span class="s2">"title"</span>: <span class="s2">"Saml Jackson"</span>
-            <span class="o">}</span>,
-            <span class="s2">"issuer"</span>: <span class="o">{</span>
-                <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authorizationServers/ausain6z9zIedDCxB0h7"</span>,
-                <span class="s2">"title"</span>: <span class="s2">"Example Authorization Server"</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">]</span>
-</code></pre></div></div>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oag3j3j33ILN7OFqP0h6"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-11-03T03:34:17.000Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"lastUpdated"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-11-03T03:34:17.000Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"issuerId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ausain6z9zIedDCxB0h7"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"clientId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0oabskvc6442nkvQO0h7"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00u5t60iloOHN9pBi0h7"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"scopeId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scpCmCCV1DpxVkCaye2X"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"app"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/apps/0oabskvc6442nkvQO0h7"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Test App for Groups Claim"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"scope"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authorizationServers/ausain6z9zIedDCxB0h7/scopes/scpCmCCV1DpxVkCaye2X"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Your phone"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7/grants/oag3j3j33ILN7OFqP0h6"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"revoke"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7/grants/oag3j3j33ILN7OFqP0h6"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                        </span><span class="s2">"DELETE"</span><span class="w">
+                    </span><span class="p">]</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"client"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/clients/0oabskvc6442nkvQO0h7"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Test App for Groups Claim"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Saml Jackson"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"issuer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authorizationServers/ausain6z9zIedDCxB0h7"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Example Authorization Server"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"authorizationServer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authorizationServers/ausain6z9zIedDCxB0h7"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Example Authorization Server"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
 
 <h3 class="api api-operation" id="revoke-all-grants-for-a-user">Revoke All Grants for a User</h3>
 
@@ -4046,21 +4093,314 @@ Consent grants remain valid until the user manually revokes them, or until the u
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 204 No Content
 </code></pre></div></div>
 
-<h2 id="user-client-grant-reference-operations">User-Client Grant Reference Operations</h2>
+<h2 id="user-oauth-20-token-operations">User OAuth 2.0 Token Operations</h2>
 
 <p><a href="/docs/api/getting_started/releases-at-okta#early-access-ea"> <span class="api-label api-label-ea "> <i class="fa fa-flag"></i> Early Access </span> </a></p>
 
-<p>Each grant references a user and a client.</p>
-
-<h3 class="api api-operation" id="list-user-client-grant-references">List User-Client Grant References</h3>
+<h3 class="api api-operation" id="list-oauth-20-tokens-for-user-and-client">List OAuth 2.0 Tokens for User and Client</h3>
 
 <p><a href="/docs/api/getting_started/releases-at-okta#early-access-ea"> <span class="api-label api-label-ea "> <i class="fa fa-flag"></i> Early Access </span> </a></p>
 
-<p><span class="api-uri-template api-uri-get"><span class="api-label">GET</span> /api/v1/users/<strong>${userId}</strong>/clients</span></p>
+<p><span class="api-uri-template api-uri-get"><span class="api-label">GET</span> /api/v1/users/<strong>${userId}</strong>/clients/<strong>${clientId}</strong>/tokens</span></p>
 
-<p>Lists all grant references for the specified user</p>
+<p>Lists all tokens for the specified user and client</p>
 
 <h4 class="api api-request api-request-params" id="request-parameters-26">Request Parameters</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Parameter</th>
+      <th style="text-align: left">Description</th>
+      <th style="text-align: left">Param Type</th>
+      <th style="text-align: left">DataType</th>
+      <th style="text-align: left">Required</th>
+      <th style="text-align: left">Default</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">userId</td>
+      <td style="text-align: left">ID of the user for whom you are fetching tokens</td>
+      <td style="text-align: left">URL</td>
+      <td style="text-align: left">String</td>
+      <td style="text-align: left">TRUE</td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">clientId</td>
+      <td style="text-align: left">ID of the client</td>
+      <td style="text-align: left">URL</td>
+      <td style="text-align: left">String</td>
+      <td style="text-align: left">TRUE</td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">expand</td>
+      <td style="text-align: left">Valid value: <code class="highlighter-rouge">scope</code>. If specified, scope details are included in the <code class="highlighter-rouge">_embedded</code> attribute.</td>
+      <td style="text-align: left">Query</td>
+      <td style="text-align: left">String</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">limit</td>
+      <td style="text-align: left">The maximum number of tokens to return</td>
+      <td style="text-align: left">Query</td>
+      <td style="text-align: left">Number</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left">20</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">after</td>
+      <td style="text-align: left">Specifies the pagination cursor for the next page of tokens</td>
+      <td style="text-align: left">Query</td>
+      <td style="text-align: left">String</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left"> </td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <p>Note: The after cursor should treated as an opaque value and obtained through <a href="/docs/api/getting_started/design_principles#pagination">the next link relation</a>.</p>
+</blockquote>
+
+<ul>
+  <li>The maximum value for <code class="highlighter-rouge">limit</code> is 200.</li>
+</ul>
+
+<h4 class="api api-request api-request-example" id="request-example-40">Request Example</h4>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> GET <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: SSWS </span><span class="k">${</span><span class="nv">api_token</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
+<span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7/clients/0oabskvc6442nkvQO0h7/tokens"</span>
+</code></pre></div></div>
+
+<h4 class="api api-response api-response-example" id="response-example-42">Response Example</h4>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oar579Mcp7OUsNTlo0g3"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-03-09T03:18:06.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"lastUpdated"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-03-09T03:18:06.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-03-16T03:18:06.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"issuer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/ausain6z9zIedDCxB0h7"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"clientId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0oabskvc6442nkvQO0h7"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00u5t60iloOHN9pBi0h7"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"scopes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"offline_access"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"car:drive"</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"app"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/apps/0oabskvc6442nkvQO0h7"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Native"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7/clients/0oabskvc6442nkvQO0h7/tokens/oar579Mcp7OUsNTlo0g3"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"revoke"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7/clients/0oabskvc6442nkvQO0h7/tokens/oar579Mcp7OUsNTlo0g3"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="s2">"DELETE"</span><span class="w">
+          </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"client"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/clients/0oabskvc6442nkvQO0h7"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Example Client App"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00upcgi9dyWEOeCwM0g3"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Saml Jackson"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"authorizationServer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authorizationServers/ausain6z9zIedDCxB0h7"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Example Authorization Server"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 class="api api-operation" id="get-oauth-20-token-for-user-and-client">Get OAuth 2.0 Token for User and Client</h3>
+
+<p><a href="/docs/api/getting_started/releases-at-okta#early-access-ea"> <span class="api-label api-label-ea "> <i class="fa fa-flag"></i> Early Access </span> </a></p>
+
+<p><span class="api-uri-template api-uri-get"><span class="api-label">GET</span> /api/v1/users/<strong>${userId}</strong>/clients/<strong>${clientId}</strong>/tokens/<strong>${tokenId}</strong></span></p>
+
+<p>Gets a token for the specified user and client</p>
+
+<h4 class="api api-request api-request-params" id="request-parameters-27">Request Parameters</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Parameter</th>
+      <th style="text-align: left">Description</th>
+      <th style="text-align: left">Param Type</th>
+      <th style="text-align: left">DataType</th>
+      <th style="text-align: left">Required</th>
+      <th style="text-align: left">Default</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">userId</td>
+      <td style="text-align: left">ID of the user for whom you are fetching tokens</td>
+      <td style="text-align: left">URL</td>
+      <td style="text-align: left">String</td>
+      <td style="text-align: left">TRUE</td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">clientId</td>
+      <td style="text-align: left">ID of the client</td>
+      <td style="text-align: left">URL</td>
+      <td style="text-align: left">String</td>
+      <td style="text-align: left">TRUE</td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">tokenId</td>
+      <td style="text-align: left">ID of the token</td>
+      <td style="text-align: left">URL</td>
+      <td style="text-align: left">String</td>
+      <td style="text-align: left">TRUE</td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">expand</td>
+      <td style="text-align: left">Valid value: <code class="highlighter-rouge">scope</code>. If specified, scope details are included in the <code class="highlighter-rouge">_embedded</code> attribute.</td>
+      <td style="text-align: left">Query</td>
+      <td style="text-align: left">String</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">limit</td>
+      <td style="text-align: left">The maximum number of grants to return</td>
+      <td style="text-align: left">Query</td>
+      <td style="text-align: left">Number</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left">20</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">after</td>
+      <td style="text-align: left">Specifies the pagination cursor for the next page of grants</td>
+      <td style="text-align: left">Query</td>
+      <td style="text-align: left">String</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left"> </td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <p>Note: The after cursor should treated as an opaque value and obtained through <a href="/docs/api/getting_started/design_principles#pagination">the next link relation</a>.</p>
+</blockquote>
+
+<ul>
+  <li>The maximum value for <code class="highlighter-rouge">limit</code> is 200.</li>
+</ul>
+
+<h4 class="api api-request api-request-example" id="request-example-41">Request Example</h4>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> GET <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: SSWS </span><span class="k">${</span><span class="nv">api_token</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
+<span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7/clients/0oabskvc6442nkvQO0h7/tokens/oar579Mcp7OUsNTlo0g3?expand=scope"</span>
+</code></pre></div></div>
+
+<h4 class="api api-response api-response-example" id="response-example-43">Response Example</h4>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oar579Mcp7OUsNTlo0g3"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-03-09T03:18:06.000Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"lastUpdated"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-03-09T03:18:06.000Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-03-16T03:18:06.000Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"issuer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/ausain6z9zIedDCxB0h7"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"clientId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0oabskvc6442nkvQO0h7"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00u5t60iloOHN9pBi0h7"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"scopes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"offline_access"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"car:drive"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"_embedded"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"scopes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scppb56cIl4GvGxy70g3"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"offline_access"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Requests a refresh token by default, used to obtain more access tokens without re-prompting the user for authentication."</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"scope"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authorizationServers/ausain6z9zIedDCxB0h7/scopes/scppb56cIl4GvGxy70g3"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"offline_access"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scp142iq2J8IGRUCS0g4"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"car:drive"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"displayName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Drive car"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allows the user to drive a car."</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"scope"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authorizationServers/ausain6z9zIedDCxB0h7/scopes/scp142iq2J8IGRUCS0g4"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Drive car"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"app"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/apps/0oabskvc6442nkvQO0h7"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Native"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7/clients/0oabskvc6442nkvQO0h7/tokens/oar579Mcp7OUsNTlo0g3"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"revoke"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7/clients/0oabskvc6442nkvQO0h7/tokens/oar579Mcp7OUsNTlo0g3"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"allow"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="s2">"DELETE"</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"client"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/clients/0oabskvc6442nkvQO0h7"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Example Client App"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00upcgi9dyWEOeCwM0g3"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Saml Jackson"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"authorizationServer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authorizationServers/ausain6z9zIedDCxB0h7"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Example Authorization Server"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 class="api api-operation" id="revoke-oauth-20-tokens-for-user-and-client">Revoke OAuth 2.0 Tokens for User and Client</h3>
+
+<p><a href="/docs/api/getting_started/releases-at-okta#early-access-ea"> <span class="api-label api-label-ea "> <i class="fa fa-flag"></i> Early Access </span> </a></p>
+
+<p><span class="api-uri-template api-uri-delete"><span class="api-label">DELETE</span> /api/v1/users/<strong>${userId}</strong>/clients/<strong>${clientId}</strong>/tokens</span></p>
+
+<p>Revokes all tokens for the specified user and client</p>
+
+<h4 class="api api-request api-request-params" id="request-parameters-28">Request Parameters</h4>
 
 <table>
   <thead>
@@ -4075,7 +4415,14 @@ Consent grants remain valid until the user manually revokes them, or until the u
   <tbody>
     <tr>
       <td style="text-align: left">userId</td>
-      <td style="text-align: left">ID of the user whose grants you are listing</td>
+      <td style="text-align: left">ID of the user whose grants are being revoked for the specified client</td>
+      <td style="text-align: left">URL</td>
+      <td style="text-align: left">String</td>
+      <td style="text-align: left">TRUE</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">clientId</td>
+      <td style="text-align: left">ID of the client who was granted consent by the specified user</td>
       <td style="text-align: left">URL</td>
       <td style="text-align: left">String</td>
       <td style="text-align: left">TRUE</td>
@@ -4083,7 +4430,115 @@ Consent grants remain valid until the user manually revokes them, or until the u
   </tbody>
 </table>
 
-<h4 class="api api-request api-request-example" id="request-example-40">Request Example</h4>
+<h4 class="api api-request api-request-example" id="request-example-42">Request Example</h4>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> DELETE <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: SSWS </span><span class="k">${</span><span class="nv">api_token</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
+<span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00ucmukel4KHsPARU0h7/clients/0oabskvc6442nkvQO0h7/tokens"</span>
+</code></pre></div></div>
+
+<h4 class="api api-response api-response-example" id="response-example-44">Response Example</h4>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 204 No Content
+</code></pre></div></div>
+
+<h3 class="api api-operation" id="revoke-oauth-20-token-for-user-and-client">Revoke OAuth 2.0 Token for User and Client</h3>
+
+<p><a href="/docs/api/getting_started/releases-at-okta#early-access-ea"> <span class="api-label api-label-ea "> <i class="fa fa-flag"></i> Early Access </span> </a></p>
+
+<p><span class="api-uri-template api-uri-delete"><span class="api-label">DELETE</span> /api/v1/users/<strong>${userId}</strong>/clients/<strong>${clientId}</strong>/tokens/<strong>${tokenId}</strong></span></p>
+
+<p>Revokes the specified token for the specified user and client</p>
+
+<h4 class="api api-request api-request-params" id="request-parameters-29">Request Parameters</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Parameter</th>
+      <th style="text-align: left">Description</th>
+      <th style="text-align: left">Parameter Type</th>
+      <th style="text-align: left">DataType</th>
+      <th style="text-align: left">Required</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">userId</td>
+      <td style="text-align: left">ID of the user whose grants are being revoked for the specified client</td>
+      <td style="text-align: left">URL</td>
+      <td style="text-align: left">String</td>
+      <td style="text-align: left">TRUE</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">clientId</td>
+      <td style="text-align: left">ID of the client who was granted consent by the specified user</td>
+      <td style="text-align: left">URL</td>
+      <td style="text-align: left">String</td>
+      <td style="text-align: left">TRUE</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">tokenId</td>
+      <td style="text-align: left">ID of the token</td>
+      <td style="text-align: left">URL</td>
+      <td style="text-align: left">String</td>
+      <td style="text-align: left">TRUE</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 class="api api-request api-request-example" id="request-example-43">Request Example</h4>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> DELETE <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: SSWS </span><span class="k">${</span><span class="nv">api_token</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
+<span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00ucmukel4KHsPARU0h7/clients/0oabskvc6442nkvQO0h7/tokens/oar579Mcp7OUsNTlo0g3"</span>
+</code></pre></div></div>
+
+<h4 class="api api-response api-response-example" id="response-example-45">Response Example</h4>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 204 No Content
+</code></pre></div></div>
+
+<h2 id="user-client-resource-operations">User Client Resource Operations</h2>
+
+<p><a href="/docs/api/getting_started/releases-at-okta#early-access-ea"> <span class="api-label api-label-ea "> <i class="fa fa-flag"></i> Early Access </span> </a></p>
+
+<h3 class="api api-operation" id="list-client-resources-for-a-user">List Client Resources for a User</h3>
+
+<p><a href="/docs/api/getting_started/releases-at-okta#early-access-ea"> <span class="api-label api-label-ea "> <i class="fa fa-flag"></i> Early Access </span> </a></p>
+
+<p><span class="api-uri-template api-uri-get"><span class="api-label">GET</span> /api/v1/users/<strong>${userId}</strong>/clients</span></p>
+
+<p>Lists all client resources for which the specified user has grants or tokens.</p>
+
+<h4 class="api api-request api-request-params" id="request-parameters-30">Request Parameters</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Parameter</th>
+      <th style="text-align: left">Description</th>
+      <th style="text-align: left">Parameter Type</th>
+      <th style="text-align: left">DataType</th>
+      <th style="text-align: left">Required</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">userId</td>
+      <td style="text-align: left">ID of the user</td>
+      <td style="text-align: left">URL</td>
+      <td style="text-align: left">String</td>
+      <td style="text-align: left">TRUE</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 class="api api-request api-request-example" id="request-example-44">Request Example</h4>
 
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-X</span> GET <span class="se">\</span>
 <span class="nt">-H</span> <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
@@ -4092,22 +4547,25 @@ Consent grants remain valid until the user manually revokes them, or until the u
 <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00ucmukel4KHsPARU0h7/clients"</span>
 </code></pre></div></div>
 
-<h4 class="api api-response api-response-example" id="response-example-42">Response Example</h4>
+<h4 class="api api-response api-response-example" id="response-example-46">Response Example</h4>
 
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>
-    <span class="o">{</span>
-        <span class="s2">"client_id"</span>: <span class="s2">"0oabskvc6442nkvQO0h7"</span>,
-        <span class="s2">"client_name"</span>: <span class="s2">"My App"</span>,
-        <span class="s2">"client_uri"</span>: null,
-        <span class="s2">"logo_uri"</span>: null,
-        <span class="s2">"_links"</span>: <span class="o">{</span>
-            <span class="s2">"grants"</span>: <span class="o">{</span>
-                <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7/clients/0oabskvc6442nkvQO0h7/grants"</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">]</span>
-</code></pre></div></div>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"client_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0oabskvc6442nkvQO0h7"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"client_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My App"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"client_uri"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"logo_uri"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"grants"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7/clients/0oabskvc6442nkvQO0h7/grants"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"tokens"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/users/00u5t60iloOHN9pBi0h7/clients/0oabskvc6442nkvQO0h7/tokens"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
 
 <h2 id="user-email-operations">User Email Operations</h2>
 
@@ -4362,7 +4820,7 @@ Consent grants remain valid until the user manually revokes them, or until the u
   <p>Verification is idempotent and can be retried at any time.  Issuing a new verification invalidates any previously issued verification tokens.</p>
 </blockquote>
 
-<h4 class="api api-request api-request-params" id="request-parameters-27">Request Parameters</h4>
+<h4 class="api api-request api-request-params" id="request-parameters-31">Request Parameters</h4>
 
 <table>
   <thead>
@@ -4511,7 +4969,7 @@ Content-Type: application/json
   <p>Email changes are idempotent.  Issuing a new change verification replaces any previously issued change verification tokens.</p>
 </blockquote>
 
-<h4 class="api api-request api-request-params" id="request-parameters-28">Request Parameters</h4>
+<h4 class="api api-request api-request-params" id="request-parameters-32">Request Parameters</h4>
 
 <table>
   <thead>
@@ -5752,6 +6210,10 @@ A hashed password may be specified in a Password Object when creating or updatin
         “issuer”: <span class="o">{</span>
             “href”: “https://<span class="o">{</span>yourOktaDomain<span class="o">}</span>.com:1802/api/v1/authorizationServers/default”,
             “title”: “default”
+        <span class="o">}</span>,
+        <span class="s2">"authorizationServer"</span>: <span class="o">{</span>
+            <span class="s2">"href"</span>: <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/api/v1/authorizationServers/ausain6z9zIedDCxB0h7"</span>,
+            <span class="s2">"title"</span>: <span class="s2">"Example Authorization Server"</span>
         <span class="o">}</span>
     <span class="o">}</span>
 <span class="o">}</span>
