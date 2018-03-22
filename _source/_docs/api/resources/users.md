@@ -2734,6 +2734,8 @@ Lists all grants for the specified user
 
 > Note: The after cursor should treated as an opaque value and obtained through [the next link relation](/docs/api/getting_started/design_principles#pagination).
 
+* The maximum value for `limit` is 200.
+
 #### Request Example
 {:.api .api-request .api-request-example}
 
@@ -2748,7 +2750,7 @@ curl -v -X GET \
 #### Response Example
 {:.api .api-response .api-response-example}
 
-~~~sh
+~~~json
 [
     {
         "id": "oag3ih1zrm1cBFOiq0h6",
@@ -2790,6 +2792,10 @@ curl -v -X GET \
             "user": {
                 "href": "https://{yourOktaDomain}.com/api/v1/users/00u5t60iloOHN9pBi0h7",
                 "title": "SAML Jackson"
+            },
+            "authorizationServer": {
+                "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/ausain6z9zIedDCxB0h7",
+                "title": "Example Authorization Server"
             }
         }
     }
@@ -2828,7 +2834,7 @@ curl -v -X GET \
 #### Response Example
 {:.api .api-response .api-response-example}
 
-~~~sh
+~~~json
 {
     "id": "oag3ih1zrm1cBFOiq0h6",
     "status": "ACTIVE",
@@ -2869,6 +2875,10 @@ curl -v -X GET \
         "user": {
             "href": "https://{yourOktaDomain}.com/api/v1/users/00u5t60iloOHN9pBi0h7",
             "title": "SAML Jackson"
+        },
+        "authorizationServer": {
+            "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/ausain6z9zIedDCxB0h7",
+            "title": "Example Authorization Server"
         }
     }
 }
@@ -2886,10 +2896,15 @@ Lists all grants for a specified user and client
 #### Request Parameters
 {:.api .api-request .api-request-params}
 
-| Parameter | Description                                                                                         | Parameter Type | DataType | Required |
-|:----------|:----------------------------------------------------------------------------------------------|:---------------|:---------|:---------|
-| userId    | ID of the user whose grants you are listing for the specified `clientId`  | URL            | String   | TRUE     |
-| clientId  | ID of the client whose grants you are listing for the specified `userId`   | URL            | String   | TRUE      |
+| Parameter | Description                                                                                  | Parameter Type | DataType | Required | Default |
+|:----------|:---------------------------------------------------------------------------------------------|:---------------|:---------|:---------|:--------|
+| userId    | ID of the user whose grants you are listing for the specified `clientId`                     | URL            | String   | TRUE     |         |
+| clientId  | ID of the client whose grants you are listing for the specified `userId`                     | URL            | String   | TRUE     |         |
+| expand    | Valid value: `scope`. If specified, scope details are included in the `_embedded` attribute. | Query          | String   | FALSE    |         |
+| limit     | The maximum number of tokens to return                                                       | Query          | Number   | FALSE    | 20      |
+| after     | Specifies the pagination cursor for the next page of tokens                                  | Query          | String   | FALSE    |         |
+
+* The maximum value for `limit` is 200.
 
 #### Request Example
 {:.api .api-request .api-request-example}
@@ -2905,7 +2920,7 @@ curl -v -X GET \
 #### Response Example
 {:.api .api-response .api-response-example}
 
-~~~sh
+~~~json
 [
     {
         "id": "oag3j3j33ILN7OFqP0h6",
@@ -2945,6 +2960,10 @@ curl -v -X GET \
                 "title": "Saml Jackson"
             },
             "issuer": {
+                "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/ausain6z9zIedDCxB0h7",
+                "title": "Example Authorization Server"
+            },
+            "authorizationServer": {
                 "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/ausain6z9zIedDCxB0h7",
                 "title": "Example Authorization Server"
             }
@@ -3022,7 +3041,6 @@ curl -v -X DELETE \
 HTTP/1.1 204 No Content
 ~~~
 
-
 ### Revoke Grants for User and Client
 {:.api .api-operation}
 
@@ -3058,27 +3076,298 @@ curl -v -X DELETE \
 HTTP/1.1 204 No Content
 ~~~
 
-## User-Client Grant Reference Operations
+## User OAuth 2.0 Token Operations
 
 {% api_lifecycle ea %}
 
-Each grant references a user and a client.
+### List OAuth 2.0 Tokens for User and Client
+{:.api .api-operation}
 
-### List User-Client Grant References
+{% api_lifecycle ea %}
+
+{% api_operation get /api/v1/users/${userId}/clients/${clientId}/tokens %}
+
+Lists all tokens for the specified user and client
+
+#### Request Parameters
+{:.api .api-request .api-request-params}
+
+| Parameter | Description                                                                                  | Param Type | DataType | Required | Default |
+|:----------|:---------------------------------------------------------------------------------------------|:-----------|:---------|:---------|:--------|
+| userId    | ID of the user for whom you are fetching tokens                                              | URL        | String   | TRUE     |         |
+| clientId  | ID of the client                                                                             | URL        | String   | TRUE     |         |
+| expand    | Valid value: `scope`. If specified, scope details are included in the `_embedded` attribute. | Query      | String   | FALSE    |         |
+| limit     | The maximum number of tokens to return                                                       | Query      | Number   | FALSE    | 20      |
+| after     | Specifies the pagination cursor for the next page of tokens                                  | Query      | String   | FALSE    |         |
+
+> Note: The after cursor should treated as an opaque value and obtained through [the next link relation](/docs/api/getting_started/design_principles#pagination).
+
+* The maximum value for `limit` is 200.
+
+#### Request Example
+{:.api .api-request .api-request-example}
+
+~~~sh
+curl -v -X GET \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-H "Authorization: SSWS ${api_token}" \
+"https://{yourOktaDomain}.com/api/v1/users/00u5t60iloOHN9pBi0h7/clients/0oabskvc6442nkvQO0h7/tokens"
+~~~
+
+#### Response Example
+{:.api .api-response .api-response-example}
+
+~~~json
+[
+  {
+    "id": "oar579Mcp7OUsNTlo0g3",
+    "status": "ACTIVE",
+    "created": "2018-03-09T03:18:06.000Z",
+    "lastUpdated": "2018-03-09T03:18:06.000Z",
+    "expiresAt": "2018-03-16T03:18:06.000Z",
+    "issuer": "https://{yourOktaDomain}.com/oauth2/ausain6z9zIedDCxB0h7",
+    "clientId": "0oabskvc6442nkvQO0h7",
+    "userId": "00u5t60iloOHN9pBi0h7",
+    "scopes": [
+      "offline_access",
+      "car:drive"
+    ],
+    "_links": {
+      "app": {
+        "href": "https://{yourOktaDomain}.com/api/v1/apps/0oabskvc6442nkvQO0h7",
+        "title": "Native"
+      },
+      "self": {
+        "href": "https://{yourOktaDomain}.com/api/v1/users/00u5t60iloOHN9pBi0h7/clients/0oabskvc6442nkvQO0h7/tokens/oar579Mcp7OUsNTlo0g3"
+      },
+      "revoke": {
+        "href": "https://{yourOktaDomain}.com/api/v1/users/00u5t60iloOHN9pBi0h7/clients/0oabskvc6442nkvQO0h7/tokens/oar579Mcp7OUsNTlo0g3",
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        }
+      },
+      "client": {
+        "href": "https://{yourOktaDomain}.com/oauth2/v1/clients/0oabskvc6442nkvQO0h7",
+        "title": "Example Client App"
+      },
+      "user": {
+        "href": "https://{yourOktaDomain}.com/api/v1/users/00upcgi9dyWEOeCwM0g3",
+        "title": "Saml Jackson"
+      },
+      "authorizationServer": {
+        "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/ausain6z9zIedDCxB0h7",
+        "title": "Example Authorization Server"
+      }
+    }
+  }
+]
+~~~
+
+### Get OAuth 2.0 Token for User and Client
+{:.api .api-operation}
+
+{% api_lifecycle ea %}
+
+{% api_operation get /api/v1/users/${userId}/clients/${clientId}/tokens/${tokenId} %}
+
+Gets a token for the specified user and client
+
+#### Request Parameters
+{:.api .api-request .api-request-params}
+
+| Parameter | Description                                                                                  | Param Type | DataType | Required | Default |
+|:----------|:---------------------------------------------------------------------------------------------|:-----------|:---------|:---------|:--------|
+| userId    | ID of the user for whom you are fetching tokens                                              | URL        | String   | TRUE     |         |
+| clientId  | ID of the client                                                                             | URL        | String   | TRUE     |         |
+| tokenId   | ID of the token                                                                             | URL        | String   | TRUE     |         |
+| expand    | Valid value: `scope`. If specified, scope details are included in the `_embedded` attribute. | Query      | String   | FALSE    |         |
+| limit     | The maximum number of grants to return                                                       | Query      | Number   | FALSE    | 20      |
+| after     | Specifies the pagination cursor for the next page of grants                                  | Query      | String   | FALSE    |         |
+
+> Note: The after cursor should treated as an opaque value and obtained through [the next link relation](/docs/api/getting_started/design_principles#pagination).
+
+* The maximum value for `limit` is 200.
+
+#### Request Example
+{:.api .api-request .api-request-example}
+
+~~~sh
+curl -v -X GET \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-H "Authorization: SSWS ${api_token}" \
+"https://{yourOktaDomain}.com/api/v1/users/00u5t60iloOHN9pBi0h7/clients/0oabskvc6442nkvQO0h7/tokens/oar579Mcp7OUsNTlo0g3?expand=scope"
+~~~
+
+#### Response Example
+{:.api .api-response .api-response-example}
+
+~~~json
+{
+  "id": "oar579Mcp7OUsNTlo0g3",
+  "status": "ACTIVE",
+  "created": "2018-03-09T03:18:06.000Z",
+  "lastUpdated": "2018-03-09T03:18:06.000Z",
+  "expiresAt": "2018-03-16T03:18:06.000Z",
+  "issuer": "https://{yourOktaDomain}.com/oauth2/ausain6z9zIedDCxB0h7",
+  "clientId": "0oabskvc6442nkvQO0h7",
+  "userId": "00u5t60iloOHN9pBi0h7",
+  "scopes": [
+    "offline_access",
+    "car:drive"
+  ],
+  "_embedded": {
+    "scopes": [
+      {
+        "id": "scppb56cIl4GvGxy70g3",
+        "name": "offline_access",
+        "description": "Requests a refresh token by default, used to obtain more access tokens without re-prompting the user for authentication.",
+        "_links": {
+          "scope": {
+            "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/ausain6z9zIedDCxB0h7/scopes/scppb56cIl4GvGxy70g3",
+            "title": "offline_access"
+          }
+        }
+      },
+      {
+        "id": "scp142iq2J8IGRUCS0g4",
+        "name": "car:drive",
+        "displayName": "Drive car",
+        "description": "Allows the user to drive a car.",
+        "_links": {
+          "scope": {
+            "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/ausain6z9zIedDCxB0h7/scopes/scp142iq2J8IGRUCS0g4",
+            "title": "Drive car"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "app": {
+      "href": "https://{yourOktaDomain}.com/api/v1/apps/0oabskvc6442nkvQO0h7",
+      "title": "Native"
+    },
+    "self": {
+      "href": "https://{yourOktaDomain}.com/api/v1/users/00u5t60iloOHN9pBi0h7/clients/0oabskvc6442nkvQO0h7/tokens/oar579Mcp7OUsNTlo0g3"
+    },
+    "revoke": {
+      "href": "https://{yourOktaDomain}.com/api/v1/users/00u5t60iloOHN9pBi0h7/clients/0oabskvc6442nkvQO0h7/tokens/oar579Mcp7OUsNTlo0g3",
+      "hints": {
+        "allow": [
+          "DELETE"
+        ]
+      }
+    },
+    "client": {
+      "href": "https://{yourOktaDomain}.com/oauth2/v1/clients/0oabskvc6442nkvQO0h7",
+      "title": "Example Client App"
+    },
+    "user": {
+      "href": "https://{yourOktaDomain}.com/api/v1/users/00upcgi9dyWEOeCwM0g3",
+      "title": "Saml Jackson"
+    },
+    "authorizationServer": {
+      "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/ausain6z9zIedDCxB0h7",
+      "title": "Example Authorization Server"
+    }
+  }
+}
+~~~
+
+### Revoke OAuth 2.0 Tokens for User and Client
+{:.api .api-operation}
+
+{% api_lifecycle ea %}
+
+{% api_operation delete /api/v1/users/${userId}/clients/${clientId}/tokens %}
+
+Revokes all tokens for the specified user and client
+
+#### Request Parameters
+{:.api .api-request .api-request-params}
+
+| Parameter | Description                                                            | Parameter Type | DataType | Required |
+|:----------|:-----------------------------------------------------------------------|:---------------|:---------|:---------|
+| userId    | ID of the user whose grants are being revoked for the specified client | URL            | String   | TRUE     |
+| clientId  | ID of the client who was granted consent by the specified user         | URL            | String   | TRUE     |
+
+#### Request Example
+{:.api .api-request .api-request-example}
+
+~~~sh
+curl -v -X DELETE \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-H "Authorization: SSWS ${api_token}" \
+"https://{yourOktaDomain}.com/api/v1/users/00ucmukel4KHsPARU0h7/clients/0oabskvc6442nkvQO0h7/tokens"
+~~~
+
+#### Response Example
+{:.api .api-response .api-response-example}
+
+~~~sh
+HTTP/1.1 204 No Content
+~~~
+
+### Revoke OAuth 2.0 Token for User and Client
+{:.api .api-operation}
+
+{% api_lifecycle ea %}
+
+{% api_operation delete /api/v1/users/${userId}/clients/${clientId}/tokens/${tokenId} %}
+
+Revokes the specified token for the specified user and client
+
+#### Request Parameters
+{:.api .api-request .api-request-params}
+
+| Parameter | Description                                                            | Parameter Type | DataType | Required |
+|:----------|:-----------------------------------------------------------------------|:---------------|:---------|:---------|
+| userId    | ID of the user whose grants are being revoked for the specified client | URL            | String   | TRUE     |
+| clientId  | ID of the client who was granted consent by the specified user         | URL            | String   | TRUE     |
+| tokenId   | ID of the token                                                        | URL            | String   | TRUE     |
+
+#### Request Example
+{:.api .api-request .api-request-example}
+
+~~~sh
+curl -v -X DELETE \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-H "Authorization: SSWS ${api_token}" \
+"https://{yourOktaDomain}.com/api/v1/users/00ucmukel4KHsPARU0h7/clients/0oabskvc6442nkvQO0h7/tokens/oar579Mcp7OUsNTlo0g3"
+~~~
+
+#### Response Example
+{:.api .api-response .api-response-example}
+
+~~~sh
+HTTP/1.1 204 No Content
+~~~
+
+## User Client Resource Operations
+
+{% api_lifecycle ea %}
+
+### List Client Resources for a User
 {:.api .api-operation}
 
 {% api_lifecycle ea %}
 
 {% api_operation get /api/v1/users/${userId}/clients %}
 
-Lists all grant references for the specified user
+Lists all client resources for which the specified user has grants or tokens.
 
 #### Request Parameters
 {:.api .api-request .api-request-params}
 
 | Parameter | Description                                     | Parameter Type | DataType | Required |
 |:----------|:------------------------------------------------|:---------------|:---------|:---------|
-| userId    | ID of the user whose grants you are listing     | URL            | String   | TRUE     |
+| userId    | ID of the user                                  | URL            | String   | TRUE     |
 
 #### Request Example
 {:.api .api-request .api-request-example}
@@ -3094,7 +3383,7 @@ curl -v -X GET \
 #### Response Example
 {:.api .api-response .api-response-example}
 
-~~~sh
+~~~json
 [
     {
         "client_id": "0oabskvc6442nkvQO0h7",
@@ -3104,11 +3393,15 @@ curl -v -X GET \
         "_links": {
             "grants": {
                 "href": "https://{yourOktaDomain}.com/api/v1/users/00u5t60iloOHN9pBi0h7/clients/0oabskvc6442nkvQO0h7/grants"
+            },
+            "tokens": {
+                "href": "https://{yourOktaDomain}.com/api/v1/users/00u5t60iloOHN9pBi0h7/clients/0oabskvc6442nkvQO0h7/tokens"
             }
         }
     }
 ]
 ~~~
+
 
 ## User Email Operations
 
@@ -3942,6 +4235,10 @@ For an individual User result, the Links Object contains a full set of link rela
         “issuer”: {
             “href”: “https://{yourOktaDomain}.com:1802/api/v1/authorizationServers/default”,
             “title”: “default”
+        },
+        "authorizationServer": {
+            "href": "https://{yourOktaDomain}.com/api/v1/authorizationServers/ausain6z9zIedDCxB0h7",
+            "title": "Example Authorization Server"
         }
     }
 }
