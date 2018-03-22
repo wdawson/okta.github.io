@@ -365,7 +365,7 @@
 
 <h3 id="composing-your-base-url">Composing Your Base URL</h3>
 
-<p>All of the endpoints on this page start with an authorization server. You have two types of authorization servers to choose from, depending on your use case:</p>
+<p>All of the endpoints on this page start with an authorization server, however the URL for that server will vary depending on the endpoint and the type of authorization server. You have two types of authorization servers to choose from, depending on your use case:</p>
 
 <h4 id="1-single-sign-on-to-okta">1. Single sign-on to Okta</h4>
 
@@ -1816,7 +1816,7 @@ WWW-Authenticate: Bearer error="insufficient_scope", error_description="The acce
         </span><span class="s2">"client_secret_post"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"client_secret_jwt"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"none"</span><span class="w">
-    </span><span class="p">]</span><span class="w">
+    </span><span class="p">],</span><span class="w">
     </span><span class="s2">"end_session_endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/${authServerId}/v1/logout"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"request_parameter_supported"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
     </span><span class="s2">"request_object_signing_alg_values_supported"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
@@ -1840,10 +1840,12 @@ WWW-Authenticate: Bearer error="insufficient_scope", error_description="The acce
 
 <h3 class="api api-operation" id="well-knownopenid-configuration">/.well-known/openid-configuration</h3>
 
-<p><span class="api-uri-template api-uri-get"><span class="api-label">GET</span> <strong>${baseUrl}</strong>/.well-known/openid-configuration</span></p>
+<p><span class="api-uri-template api-uri-get"><span class="api-label">GET</span> <span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/.well-known/openid-configuration</span></p>
+
+<p><span class="api-uri-template api-uri-get"><span class="api-label">GET</span> <span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/<strong>${authServerId}</strong>/.well-known/openid-configuration</span></p>
 
 <blockquote>
-  <p>This endpoint’s base URL will vary depending on whether you are using a custom authorization server or not. For more information, see <a href="#composing-your-base-url">Composing Your Base URL</a>.</p>
+  <p>This endpoint’s base URL will vary depending on whether you are using a custom authorization server or not. The custom authorization server URL specifies an <code class="highlighter-rouge">authServerId</code>. For example, the custom Authorization Server automatically created for you by Okta has an <code class="highlighter-rouge">authServerId</code> value of <code class="highlighter-rouge">default</code>.</p>
 </blockquote>
 
 <p>Returns OpenID Connect metadata about your authorization server. This information can be used by clients to programmatically configure their interactions with Okta. Custom scopes and custom claims aren’t returned.</p>
@@ -1853,7 +1855,7 @@ WWW-Authenticate: Bearer error="insufficient_scope", error_description="The acce
 <h4 class="api api-request api-request-example" id="request-example-2">Request Example</h4>
 
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-X</span> GET <span class="se">\</span>
-  <span class="s2">"https:/{yourOktaDomain}.com/oauth2/</span><span class="k">${</span><span class="nv">authServerId</span><span class="k">}</span><span class="s2">/.well-known/openid-configuration?client_id=0oabzljih3rnr6aGt0h7"</span> <span class="se">\</span>
+  <span class="s2">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/</span><span class="k">${</span><span class="nv">authServerId</span><span class="k">}</span><span class="s2">/.well-known/openid-configuration?client_id=0oabzljih3rnr6aGt0h7"</span> <span class="se">\</span>
 </code></pre></div></div>
 
 <h4 class="api api-response api-response-example" id="response-properties-7">Response Properties</h4>
@@ -1868,7 +1870,7 @@ WWW-Authenticate: Bearer error="insufficient_scope", error_description="The acce
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: left">authorization endpoint</td>
+      <td style="text-align: left">authorization_endpoint</td>
       <td style="text-align: left">URL of the authorization server’s <a href="#authorize">authorization endpoint</a>.</td>
       <td style="text-align: left">String</td>
     </tr>
