@@ -30,7 +30,7 @@ This page contains detailed information about the OAuth 2.0 / OpenID Connect end
 
 ### Composing Your Base URL
 
-All of the endpoints on this page start with an authorization server, however the URL for that authorization will vary depending on the endpoint and the type of authorization server. You have two types of authorization servers to choose from, depending on your use case:
+All of the endpoints on this page start with an authorization server, however the URL for that server will vary depending on the endpoint and the type of authorization server. You have two types of authorization servers to choose from, depending on your use case:
 
 #### 1. Single sign-on to Okta
 
