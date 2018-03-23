@@ -13,10 +13,10 @@ If you don't already have a Web API project, create a new ASP.NET (.NET Framewor
 
 First, install these packages with NuGet:
 
-- `Microsoft.Owin.Host.SystemWeb 4.0.0 or higher` (if it isn't already installed)
-- `Microsoft.IdentityModel.Protocols.OpenIdConnect 5.2.1 or higher`
-- `Microsoft.IdentityModel.Tokens 5.2.1 or higher`
-- `Microsoft.Owin.Security.Jwt 4.0.0 or higher`
+- `Microsoft.Owin.Host.SystemWeb` 4.0.0 or higher (if it isn't already installed)
+- `Microsoft.IdentityModel.Protocols.OpenIdConnect` 5.2.1 or higher
+- `Microsoft.IdentityModel.Tokens` 5.2.1 or higher
+- `Microsoft.Owin.Security.Jwt` 4.0.0 or higher
 
 
 ### Configure the middleware
