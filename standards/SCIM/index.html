@@ -285,6 +285,7 @@
       <div class="PageContent-main" id="docs-body">
         <a id="edit-link" href="https://github.com/okta/okta.github.io/edit/source/_source/_standards/SCIM/index.md" data-proofer-ignore>Edit Page</a>
       <h1 id="scim-provisioning-with-oktas-lifecycle-management">SCIM: Provisioning with Okta’s Lifecycle Management</h1>
+
 <p>Developers at a software vendor (ISV), Okta customers, and system-integrators (SI) want to facilitate fast,
 enterprise-wide deployment of their app by integrating with Okta for user provisioning primarily via the SCIM standard.
 This article describes:</p>
@@ -408,19 +409,16 @@ Until then, consider out-of-band processes that work around these use cases.</p>
 
 <ul>
   <li>
-    <p>Attribute-level mastering—The app wants to be the master for some employee attributes like phone number, while letting Okta or another app master other attributes. We call this attribute-level mastering.</p>
+    <p>Attribute-level mastering: The app wants to be the master for some employee attributes like phone number, while letting Okta or another app master other attributes. We call this attribute-level mastering.</p>
   </li>
   <li>
-    <p>Pre-hire interval—In an HR-as-Master use case, there is sometimes a desire to import the new employee into Okta from the HR app a few days prior to the hire/start date. This gives IT time to set up the employee’s apps in advance.
-A pre-hire interval configuration would specify how many days before the employee’s hire date Okta should import the employee.</p>
+    <p>Pre-hire interval: In an HR-as-Master use case, there is sometimes a desire to import the new employee into Okta from the HR app a few days prior to the hire/start date. This gives IT time to set up the employee’s apps in advance. A pre-hire interval configuration would specify how many days before the employee’s hire date Okta should import the employee.</p>
   </li>
   <li>
-    <p>Real-time sync/termination—In an HR-as-Master use case, a change in employee status within the HR system may need to be immediately reflected in Okta.
-Involuntary terminations is one scenario where an employee’s access to sensitive apps and content via Okta needs to be cut off within minutes.</p>
+    <p>Real-time sync/termination: In an HR-as-Master use case, a change in employee status within the HR system may need to be immediately reflected in Okta. Involuntary terminations is one scenario where an employee’s access to sensitive apps and content via Okta needs to be cut off within minutes.</p>
   </li>
   <li>
-    <p>Incremental/delta import—Importing a large number of user profiles from an app into Okta can take minutes, even hours.
-This can become a major performance and timing issue if frequent updates are needed. Currently, the SCIM-Based Provisioning option doesn’t support the ability to import only those user profiles that have changed since the last import. In the future, we may support this via filtering on <code class="highlighter-rouge">meta.lastModified</code>. (<a href="#filtering-on-metalastmodified">More information</a>)</p>
+    <p>Incremental/delta import: Importing a large number of user profiles from an app into Okta can take minutes, even hours. This can become a major performance and timing issue if frequent updates are needed. Currently, the SCIM-Based Provisioning option doesn’t support the ability to import only those user profiles that have changed since the last import. In the future, we may support this via filtering on <code class="highlighter-rouge">meta.lastModified</code>. (<a href="#filtering-on-metalastmodified">More information</a>)</p>
   </li>
 </ul>
 
@@ -681,17 +679,17 @@ system ID of the user (<code class="highlighter-rouge">id</code>) must be return
     <p><strong>Direct assignment</strong></p>
 
     <p>When a user is assigned to an Okta application using the “Assign
-to People” button in the “People” tab.</p>
+  to People” button in the “People” tab.</p>
   </li>
   <li>
     <p><strong>Group-based assignment</strong></p>
 
     <p>When a user is added to a group that is assigned to an Okta
-application. For example, an Okta administrator can assign a
-group of users to an Okta application using the “Assign to
-Groups” button in the “Groups” tab. When a group is assigned to an
-Okta application, Okta sends updates to the assigned
-application when a user is added or removed from that group.</p>
+  application. For example, an Okta administrator can assign a
+  group of users to an Okta application using the “Assign to
+  Groups” button in the “Groups” tab. When a group is assigned to an
+  Okta application, Okta sends updates to the assigned
+  application when a user is added or removed from that group.</p>
   </li>
 </ul>
 
@@ -800,20 +798,16 @@ of the <a href="https://tools.ietf.org/html/rfc7644">SCIM 2.0 Protocol Specifica
 application is changed, Okta will do the following:</p>
 
 <ul>
-  <li>Make a GET request against <code class="highlighter-rouge">/Users/{id}</code> on your SCIM API for the
-user to update.</li>
-  <li>Take the resource returned from your SCIM API and update only the
-attributes that need to be updated.</li>
-  <li>Make a PUT request against <code class="highlighter-rouge">/Users/{id}</code> in your SCIM API with
-the updated resource as the payload.</li>
+  <li>Make a GET request against <code class="highlighter-rouge">/Users/{id}</code> on your SCIM API for the user to update.</li>
+  <li>Take the resource returned from your SCIM API and update only the attributes that need to be updated.</li>
+  <li>Make a PUT request against <code class="highlighter-rouge">/Users/{id}</code> in your SCIM API with the updated resource as the payload.</li>
 </ul>
 
 <p>Examples of things that can cause changes to an Okta user profile
 are:</p>
 
 <ul>
-  <li>A change in profile a master like Active Directory or a Human Resource
-Management Software system.</li>
+  <li>A change in profile a master like Active Directory or a Human Resource Management Software system.</li>
   <li>A direct change of a profile attribute in Okta for a local user.</li>
 </ul>
 
@@ -852,9 +846,7 @@ application. Examples of when this happen are as follows:</p>
 <ul>
   <li>A user is manually unassigned from your application.</li>
   <li>A user is removed from a group which is assigned to your application.</li>
-  <li>When a user is deactivated in Okta, either manually or via
-by an external profile master like Active Directory or a Human
-Resource Management Software system.</li>
+  <li>When a user is deactivated in Okta, either manually or via by an external profile master like Active Directory or a Human Resource Management Software system.</li>
 </ul>
 
 <p>Below is how the sample application handles account deactivation:</p>
@@ -900,9 +892,9 @@ system.</p>
 <p>Examples of filters that Okta might send to your SCIM API are as
 follows:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>userName eq "jane.doe"
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>userName eq <span class="s2">"jane.doe"</span>
 
-userName eq "jane.doe@example.com"
+userName eq <span class="s2">"jane.doe@example.com"</span>
 </code></pre></div></div>
 
 <p>Here is an example of how to implement SCIM filtering in Python:</p>
@@ -938,7 +930,7 @@ example:</p>
 <p>Here is an example of an <code class="highlighter-rouge">externalId</code> filter that might be sent to
 your application:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>externalId eq "00u1abcdefGHIJKLMNOP"
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>externalId eq <span class="s2">"00u1abcdefGHIJKLMNOP"</span>
 </code></pre></div></div>
 
 <p>For details about supporting <code class="highlighter-rouge">externalId</code>, see
@@ -1048,9 +1040,9 @@ requests are made to your API.</p>
 <p>For more details on rate limiting requests using the HTTP 429
 status code, see <a href="https://tools.ietf.org/html/rfc6585#section-4">section 4</a> of <a href="https://tools.ietf.org/html/rfc6585">RFC 6585</a>.</p>
 
-<h5 id="get-groups-api-endpoint">GET /Groups API Endpoint</h5>
+<h5 id="get-groups-api-endpoint">GET /groups API Endpoint</h5>
 
-<p>Okta currently supports the /Groups endpoint for GET /Groups of a SCIM API. This is usually done to check for groups data and is not mandatory for SCIM to work. The minimum check we require is for the resources to be of JSON. check example below.</p>
+<p>Okta currently supports the /groups endpoint for GET /groups of a SCIM API. This is usually done to check for groups data and is not mandatory for SCIM to work. The minimum check we require is for the resources to be of JSON. check example below.</p>
 
 <p>Example:</p>
 
@@ -1085,27 +1077,25 @@ status code, see <a href="https://tools.ietf.org/html/rfc6585#section-4">section
 <span class="o">}</span>
 </code></pre></div></div>
 
-<h5 id="create-group-post-groups">Create Group: POST /Groups</h5>
+<h5 id="create-group-post-groups">Create Group: POST /groups</h5>
 
 <p>With Group Push Beta, Okta now supports creation of a Group along with its user memberships in the downstream SCIM enabled application if your SCIM 2.0 API supports it. The caveat is that the users must already be provisioned in your SCIM enabled application.</p>
 
-<h5 id="read-group-details-get-groupsid">Read Group Details: GET /Groups/{id}</h5>
+<h5 id="read-group-details-get-groupsid">Read Group Details: GET /groups/{id}</h5>
 
-<p>With Group Push Beta, Okta now supports reading the Group’s details by group id along with the membership details. If a Group is not found, your SCIM application may return a HTTP status 404(“not found”).For more details on the <code class="highlighter-rouge">/Groups/{id}</code> SCIM endpoint, see <a href="https://tools.ietf.org/html/rfc7644#section-3.4.1">section 3.4.1</a> of the <a href="https://tools.ietf.org/html/rfc7644">SCIM 2.0 Protocol Specification</a>.</p>
+<p>With Group Push Beta, Okta now supports reading the Group’s details by group id along with the membership details. If a Group is not found, your SCIM application may return a HTTP status 404(“not found”).For more details on the <code class="highlighter-rouge">/groups/{id}</code> SCIM endpoint, see <a href="https://tools.ietf.org/html/rfc7644#section-3.4.1">section 3.4.1</a> of the <a href="https://tools.ietf.org/html/rfc7644">SCIM 2.0 Protocol Specification</a>.</p>
 
-<h5 id="update-group-details-put-groupsid">Update Group Details: PUT /Groups/{id}</h5>
+<h5 id="update-group-details-put-groupsid">Update Group Details: PUT /groups/{id}</h5>
 
 <p>With Group Push Beta, any updates to the Group profile and memberships in Okta can now be reflected into your SCIM application. Okta will do the following to make the Group changes effective:</p>
+
 <ul>
-  <li>Make a GET request against <code class="highlighter-rouge">/Groups/{id}</code> on your SCIM API for the
-group to update.</li>
-  <li>Take the resource returned from your SCIM API and update only the
-attributes that need to be updated.</li>
-  <li>Make a PUT request against <code class="highlighter-rouge">/Groups/{id}</code> in your SCIM API with
-the updated resource as the payload.</li>
+  <li>Make a GET request against <code class="highlighter-rouge">/groups/{id}</code> on your SCIM API for the group to update.</li>
+  <li>Take the resource returned from your SCIM API and update only the attributes that need to be updated.</li>
+  <li>Make a PUT request against <code class="highlighter-rouge">/groups/{id}</code> in your SCIM API with the updated resource as the payload.</li>
 </ul>
 
-<h5 id="delete-group-delete-groupsid">Delete Group: DELETE /Groups/{id}</h5>
+<h5 id="delete-group-delete-groupsid">Delete Group: DELETE /groups/{id}</h5>
 
 <p>With Group Push Beta, Okta can delete the Group in your SCIM enabled application. For more details on deleting resources, see section <a href="https://tools.ietf.org/html/rfc7644#section-3.6">3.6</a> of the <a href="https://tools.ietf.org/html/rfc7644">SCIM 2.0 Protocol Specification</a>.</p>
 
@@ -1228,14 +1218,7 @@ you’ll need to get your app published in <a href="https://www.okta.com/resourc
   <p>Have questions? Need help? Email us at <a href="mailto:developers@okta.com">developers@okta.com</a> or post your question on <a href="http://stackoverflow.com/search?q=okta,scim">Stack Overflow</a>.</p>
 </blockquote>
 
-<blockquote>
-  <p>Note: The OIN is for making an integration publicly discoverable and accessible to all Okta customers.
-However, you can also just use the integration privately within a few named orgs, called the Private App Option.
-This could be the case if you are a system integrator, customer, or Okta PS integrating to a custom app.
-If this is the case, follow steps 1-3 and you will be able to indicate in step 3 that you don’t want to publish in OIN.
-Okta will create the submitted integration per usual and assign it to Orgs that you specify as a private app.
-Note that you cannot use the SCIM template app used for prototyping, as it has limitations that prevent it from being used in production.</p>
-</blockquote>
+<p><strong>Note:</strong> The OIN is for making an integration publicly discoverable and accessible to all Okta customers. However, you can also just use the integration privately within a few named orgs, called the Private App Option. This could be the case if you are a system integrator, customer, or Okta PS integrating to a custom app. If this is the case, follow steps 1-3 and you will be able to indicate in step 3 that you don’t want to publish in OIN. Okta will create the submitted integration per usual and assign it to Orgs that you specify as a private app. Note that you cannot use the SCIM template app used for prototyping, as it has limitations that prevent it from being used in production.</p>
 
 <h3 id="step-1-review-oktas-scim-docs-and-prepare-your-app">Step 1. Review Okta’s SCIM Docs and Prepare Your App</h3>
 
@@ -1285,18 +1268,14 @@ with <a href="https://www.runscope.com/okta">Runscope’s free trial plan for Ok
     <p>You will use this file to import Okta’s SCIM test suite into Runscope.)</p>
   </li>
   <li><a href="http://www.runscope.com/signup">Sign up for Runscope</a>.</li>
-  <li>You may see a tutorial after signing up for Runscope, if so, click
-    “Skip Tutorial”.</li>
+  <li>You may see a tutorial after signing up for Runscope, if so, click “Skip Tutorial”.</li>
   <li>You should now see a screen that says “API Tests”.</li>
-  <li>In the lower left of your screen, click on the “Import Tests”
-    link.</li>
-  <li>You should now see a title that starts with “Import Tests into
-    …”</li>
+  <li>In the lower left of your screen, click on the “Import Tests” link.</li>
+  <li>You should now see a title that starts with “Import Tests into …”</li>
   <li>Select “Runscope API Tests” as the format to import</li>
   <li>Click the “Choose File” button and select the JSON file that you saved in Step 1.</li>
   <li>Click the blue “Import API Test” button.</li>
-  <li>After the import completes, click on the “All Tests” link on
-the left hand side of your screen.</li>
+  <li>After the import completes, click on the “All Tests” link on the left hand side of your screen.</li>
 </ol>
 
 <p>Now that you’ve imported Okta’s SCIM test suite into Runscope, your
@@ -1309,18 +1288,12 @@ integration that you are writing.</p>
 configure the test for your SCIM integration. Here is how to do that:</p>
 
 <ol>
-  <li>You should be looking at the “API Tests” screen in Runscope, if
-not, click on the “Tests” tab on the top of Runscope’s user interface.</li>
-  <li>You should see a test named “Okta SCIM 2.0 Tests”, if not,
-follow the “Set up Runscope” steps above.</li>
-  <li>Move your mouse over the “Okta SCIM 2.0 Tests” test, then select
-the “Edit” link on the lower left of the test.</li>
-  <li>In the “Environment” section of your test, you should see a
-collapsed “Test Settings” section, click the arrow on the left
-of “Test Settings” to expand this section.</li>
+  <li>You should be looking at the “API Tests” screen in Runscope, if not, click on the “Tests” tab on the top of Runscope’s user interface.</li>
+  <li>You should see a test named “Okta SCIM 2.0 Tests”, if not, follow the “Set up Runscope” steps above.</li>
+  <li>Move your mouse over the “Okta SCIM 2.0 Tests” test, then select the “Edit” link on the lower left of the test.</li>
+  <li>In the “Environment” section of your test, you should see a collapsed “Test Settings” section, click the arrow on the left of “Test Settings” to expand this section.</li>
   <li>
-    <p>“Initial Variables” should be selected, click the “Add Initial
-Variable” link and add the following:</p>
+    <p>“Initial Variables” should be selected, click the “Add Initial Variable” link and add the following:</p>
 
     <table>
       <thead>
@@ -1333,8 +1306,8 @@ Variable” link and add the following:</p>
       <tbody>
         <tr>
           <td style="text-align: left">SCIMBaseURL</td>
-          <td style="text-align: left">https://example.com/scim/v2</td>
-          <td style="text-align: left">For example, if your SCIM integration is hosted on https://example.com and uses a prefix of /scim/v2 then the “SCIM Base URL” for your integration would be: https://example.com/scim/v2.</td>
+          <td style="text-align: left"><code class="highlighter-rouge">https://example.com/scim/v2</code></td>
+          <td style="text-align: left">For example, if your SCIM integration is hosted on https://example.com and uses a prefix of /scim/v2 then the “SCIM Base URL” for your integration would be: <code class="highlighter-rouge">https://example.com/scim/v2</code>.</td>
         </tr>
         <tr>
           <td style="text-align: left">auth</td>
@@ -1344,13 +1317,7 @@ Variable” link and add the following:</p>
       </tbody>
     </table>
   </li>
-  <li>
-    <p>Add the <a href="SCIMFiles/Initial_Script_Spec.txt">Initial Script Spec</a>.</p>
-
-    <p>If you are developing your SCIM integration in a local
-development environment, we suggest using the excellent tool
-<a href="https://ngrok.com/">ngrok</a> to expose your local development environment to Runscope.</p>
-  </li>
+  <li>Add the <a href="SCIMFiles/Initial_Script_Spec.txt">Initial Script Spec</a>. If you are developing your SCIM integration in a local development environment, we suggest using the excellent tool <a href="https://ngrok.com/">ngrok</a> to expose your local development environment to Runscope.</li>
   <li>Click the “Save” button at the top of the test.</li>
 </ol>
 
@@ -1360,30 +1327,15 @@ development environment, we suggest using the excellent tool
 server, it is time to run the test:</p>
 
 <ol>
-  <li>If you followed the steps above, you should now be seeing a “Run
-Now” button at the top of your test.</li>
+  <li>If you followed the steps above, you should now be seeing a “Run Now” button at the top of your test.</li>
   <li>Click the “Run Now” button.</li>
-  <li>On the left side of your screen, you will see a test show up in
-the “Recent Test Results” section.</li>
+  <li>On the left side of your screen, you will see a test show up in the “Recent Test Results” section.</li>
   <li>Click on the top test in the “Recent Test Results” section.</li>
-  <li>If the test is still running, you will see live updates of the
-test in progress. Once the test is complete, you will see the
-results of your test.</li>
-  <li>
-    <p>To see the details of tests, click on the little arrow next to
-each test to expand the details of a particular test case.</p>
-
-    <p>Doing this will allow you to see the <strong>Request</strong> and <strong>Response</strong>
-for each HTTP request that was made.</p>
-  </li>
-  <li>Since this test is running in your own Runscope instance, we
-encourage you to update the tests to better fit your own
-environment.</li>
-  <li>See <a href="#required-scim-server-capabilities">Required SCIM Server Capabilities</a> for details
-about your SCIM server needs to implement to pass all of
-the tests.</li>
-  <li>Keep running this test suite until all the tests pass.
-Here is an <a href="https://www.runscope.com/radar/qmovuxkrhtws/f95ac15f-3f22-46c3-8f1a-1001fbf8fb66/history/6a35fabf-5ce5-4e48-a13f-7292b1bd3cc5">example of a test suite where all tests pass</a>.</li>
+  <li>If the test is still running, you will see live updates of the test in progress. Once the test is complete, you will see the results of your test.</li>
+  <li>To see the details of tests, click on the little arrow next to each test to expand the details of a particular test case. Doing this will allow you to see the <strong>Request</strong> and <strong>Response</strong> for each HTTP request that was made.</li>
+  <li>Since this test is running in your own Runscope instance, we encourage you to update the tests to better fit your own environment.</li>
+  <li>See <a href="#required-scim-server-capabilities">Required SCIM Server Capabilities</a> for details about your SCIM server needs to implement to pass all of the tests.</li>
+  <li>Keep running this test suite until all the tests pass. Here is an <a href="https://www.runscope.com/radar/qmovuxkrhtws/f95ac15f-3f22-46c3-8f1a-1001fbf8fb66/history/6a35fabf-5ce5-4e48-a13f-7292b1bd3cc5">example of a test suite where all tests pass</a>.</li>
 </ol>
 
 <h5 id="sharing-test-results-from-runscope">Sharing test results from Runscope</h5>
@@ -1395,14 +1347,11 @@ share test results with teammates or with Okta.</p>
 
 <ol>
   <li>Open the test result that you want to share.</li>
-  <li>At the top of the test result, Change the “Private / Shareable”
-toggle from “Private” to “Shareable”.</li>
-  <li>Copy the URL for the test result, it will look something like
-this:
-<code class="highlighter-rouge">https://www.runscope.com/radar/abcdefghijkl/m01nopq2-3456-7r8s-9012-t34567uvw890/history/123ef4gh-i567-89j0-1k2l-3m4n5o678901</code></li>
-  <li>Share that URL with the person that you want to share the test
-result with. Here is an example test result from Runscope:
-<a href="https://www.runscope.com/radar/qmovuxkrhtws/f95ac15f-3f22-46c3-8f1a-1001fbf8fb66/history/6a35fabf-5ce5-4e48-a13f-7292b1bd3cc5">https://www.runscope.com/radar/qmovuxkrhtws/f95ac15f-3f22-46c3-8f1a-1001fbf8fb66/history/6a35fabf-5ce5-4e48-a13f-7292b1bd3cc5</a></li>
+  <li>At the top of the test result, Change the “Private / Shareable” toggle from “Private” to “Shareable”.</li>
+  <li>Copy the URL for the test result, it will look something like this:
+ <code class="highlighter-rouge">https://www.runscope.com/radar/abcdefghijkl/m01nopq2-3456-7r8s-9012-t34567uvw890/history/123ef4gh-i567-89j0-1k2l-3m4n5o678901</code></li>
+  <li>Share that URL with the person that you want to share the test result with. Here is an example test result from Runscope:
+ <a href="https://www.runscope.com/radar/qmovuxkrhtws/f95ac15f-3f22-46c3-8f1a-1001fbf8fb66/history/6a35fabf-5ce5-4e48-a13f-7292b1bd3cc5">https://www.runscope.com/radar/qmovuxkrhtws/f95ac15f-3f22-46c3-8f1a-1001fbf8fb66/history/6a35fabf-5ce5-4e48-a13f-7292b1bd3cc5</a></li>
 </ol>
 
 <h4 id="testing-your-scim-server-with-okta">Testing your SCIM server with Okta</h4>
@@ -1458,26 +1407,18 @@ you would want your users to see.</p>
 <p>Check your Profile Attributes as follows:</p>
 
 <ul>
-  <li>From the “Admin” section in Okta, open the settings page for your
-application.</li>
-  <li>In the “Provisioning” tab, scroll to the bottom and click the
-“Edit Attributes” button in the “User Attributes” section.</li>
+  <li>From the “Admin” section in Okta, open the settings page for your application.</li>
+  <li>In the “Provisioning” tab, scroll to the bottom and click the “Edit Attributes” button in the “User Attributes” section.</li>
   <li>A “Profile Editor” screen will open, check the following settings:
     <ul>
       <li>The “Display name” for the application</li>
       <li>The “Description”</li>
       <li>
-        <p>In the “Attributes” section, remove all attributes that are not
-supported by your application.</p>
+        <p>In the “Attributes” section, remove all attributes that are not supported by your application.</p>
 
-        <p>This is an important step! Your users will get confused if your
-application appears to support attributes that are not
-supported by your SCIM API.</p>
+        <p>This is an important step! Your users will get confused if your application appears to support attributes that are not supported by your SCIM API.</p>
 
-        <p>You can delete an attribute by selecting it, then
-clicking the “Delete” button located in right hand attribute details pane.
-Before removing, check the mapping between Okta and Application and
-<strong>remove the mappings</strong> for the attribute(s) to be deleted.</p>
+        <p>You can delete an attribute by selecting it, then clicking the “Delete” button located in right hand attribute details pane. Before removing, check the mapping between Okta and Application and <strong>remove the mappings</strong> for the attribute(s) to be deleted.</p>
       </li>
     </ul>
   </li>
@@ -1495,12 +1436,9 @@ user’s Universal Directory profile.</p>
 following:</p>
 
 <ul>
-  <li>From the “Admin” section in Okta, open the settings page for your
-application.</li>
-  <li>In the “Provisioning” tab, scroll to the bottom and click the
-“Edit Mappings” button in the “Attribute Mappings” section.</li>
-  <li>Check that each mapping is what you would expect it to be. Be
-sure to check both of the following:
+  <li>From the “Admin” section in Okta, open the settings page for your application.</li>
+  <li>In the “Provisioning” tab, scroll to the bottom and click the “Edit Mappings” button in the “Attribute Mappings” section.</li>
+  <li>Check that each mapping is what you would expect it to be. Be sure to check both of the following:
     <ol>
       <li>From your application to Okta.</li>
       <li>From Okta to your application.</li>
@@ -1531,7 +1469,7 @@ This allows the Application to be tested with actual Okta integration so thereby
 </ol>
 
 <p>If you are already familiar with Runscope, then import the
-OKTA SCIM 2.0 CRUD Test and configure the <code class="highlighter-rouge">SCIM Base
+<a href="SCIMFiles/Initial_Script_CRUD.txt">OKTA SCIM 2.0 CRUD</a> Test and configure the <code class="highlighter-rouge">SCIM Base
   URL</code> variable to point at the base URL for your SCIM server, for
 example: <code class="highlighter-rouge">https://example.com/scim/v2</code>.</p>
 
@@ -1741,7 +1679,7 @@ In addition to OAuth, Okta also supports basic auth and header token auth option
 <p>Use the three-legged OAuth (Authorization Grant flow),
 so that you know exactly which token/key the customer is using.
 Another option is by URL. When the customer configures your app in Okta, we can prompt them to add their unique subdomain for your app  (see Zscaler app below).
-Okta can use part of this url in the SCIM endpoint for that customer, for example http://www.company.com/tenantA/scim or http://www.company.com/tenantB/scim).
+Okta can use part of this url in the SCIM endpoint for that customer, for example <code class="highlighter-rouge">http://www.company.com/tenantA/scim</code> or <code class="highlighter-rouge">http://www.company.com/tenantB/scim</code>.
 This subdomain field can be configured with Okta after you submit your app for Okta review.</p>
 
 <p><img src="/assets/scim-scalar-337e8cb8e222a2c917c8f3f5015e924bc6604e435813920a0ce929c2fd24b305.png" alt="Example SCIM endpoint with subdomain" /></p>
@@ -1766,9 +1704,9 @@ This subdomain field can be configured with Okta after you submit your app for O
 
 <p>Okta users are never deleted for compliance and audit purposes; they are deactivated instead. Because of this, Okta never makes an HTTP DELETE request to a user resource on your SCIM API. Instead, Okta makes an HTTP PATCH request to set the active setting to false. You’ll need to support the concept of an “active” and “inactive” user in your app.</p>
 
-<p><strong>Will Okta be supporting the /Groups SCIM endpoint? When?</strong></p>
+<p><strong>Will Okta be supporting the /groups SCIM endpoint? When?</strong></p>
 
-<p>Yes, Okta will eventually support the /Groups endpoint of the SCIM API. We are targeting early 2017 for this feature. In the meantime, to support the setting licensing / entitlements in your app without groups, you can use custom attributes in Okta to manage this. For examples, Lucidchart was able to support this use case with a user attribute called “License Type”. See the “Extensibility” section of Lucidchart’s blog post for more details.</p>
+<p>Yes, Okta will eventually support the /groups endpoint of the SCIM API. We are targeting early 2017 for this feature. In the meantime, to support the setting licensing / entitlements in your app without groups, you can use custom attributes in Okta to manage this. For examples, Lucidchart was able to support this use case with a user attribute called “License Type”. See the “Extensibility” section of Lucidchart’s blog post for more details.</p>
 
 <p><strong>How does data validation work with SCIM provisioning? For example, if my app requires phone number in a specific format, how do I ensure that Okta passes the attribute in that format? If a data validation error issue occurs how does error reporting work?</strong></p>
 
@@ -1792,10 +1730,10 @@ Note that Okta only supports filtering via the eq operator on the SCIM userName 
 
 <h3 id="dev-doc-examples">Dev Doc Examples</h3>
 
-<p>Box - https://docs.box.com/docs/getting-started-box-integration
-Slack - https://api.slack.com/
-OneLogin - https://developers.onelogin.com/
-Zendesk - https://developer.zendesk.com/apps</p>
+<p>Box - <a href="https://docs.box.com/docs/getting-started-box-integration">https://docs.box.com/docs/getting-started-box-integration</a>
+Slack - <a href="https://api.slack.com/">https://api.slack.com/</a>
+OneLogin - <a href="https://developers.onelogin.com/">https://developers.onelogin.com/</a>
+Zendesk - <a href="https://developer.zendesk.com/apps">https://developer.zendesk.com/apps</a></p>
 
 <h2 id="helpful-resources">Helpful Resources</h2>
 
@@ -1836,33 +1774,27 @@ currently work with Python 3.</p>
   <li>
     <p><code class="highlighter-rouge">cd</code> to the directory you just checked out:</p>
 
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cd okta-scim-beta
-</code></pre></div>    </div>
+    <p><code class="highlighter-rouge">$ cd okta-scim-beta</code></p>
   </li>
   <li>
     <p>Create an isolated Python environment named <code class="highlighter-rouge">venv</code> using <a href="http://docs.python-guide.org/en/latest/dev/virtualenvs/">virtualenv</a>:</p>
 
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ virtualenv venv
-</code></pre></div>    </div>
+    <p><code class="highlighter-rouge">$ virtualenv venv</code></p>
   </li>
   <li>
     <p>Next, activate the newly created virtual environment:</p>
 
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ source venv/bin/activate
-</code></pre></div>    </div>
+    <p><code class="highlighter-rouge">$ source venv/bin/activate</code></p>
   </li>
   <li>
-    <p>Then, install the dependencies for the sample SCIM server using
-Python’s <a href="https://en.wikipedia.org/wiki/Pip_%28package_manager%29">“pip” package manager</a>:</p>
+    <p>Then, install the dependencies for the sample SCIM server using Python’s <a href="https://en.wikipedia.org/wiki/Pip_%28package_manager%29">“pip” package manager</a>:</p>
 
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ pip install -r requirements.txt
-</code></pre></div>    </div>
+    <p><code class="highlighter-rouge">$ pip install -r requirements.txt</code></p>
   </li>
   <li>
     <p>Finally, start the example SCIM server using this command:</p>
 
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ python scim-server.py
-</code></pre></div>    </div>
+    <p><code class="highlighter-rouge">$ python scim-server.py</code></p>
   </li>
 </ol>
 
@@ -1908,7 +1840,7 @@ db = SQLAlchemy(app)
 socketio = SocketIO(app)
 </code></pre></div></div>
 
-<h3 id="sqlalchemy-support-for-the-users-table">SQLAlchemy support for the “users” table:</h3>
+<h3 id="sqlalchemy-support-for-the-users-table">SQLAlchemy support for the “users” table</h3>
 
 <p>Below is the class that SQLAlchemy uses to give us easy access to
 the “users” table.</p>
@@ -2033,17 +1965,10 @@ def hello():
 <p>This page is updated using the functions below:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">send_to_browser</code> is syntactic sugar that will <code class="highlighter-rouge">emit</code> Socket.IO
-messages to the browser with the proper <code class="highlighter-rouge">broadcast</code> and
-<code class="highlighter-rouge">namespace</code> settings.</li>
-  <li><code class="highlighter-rouge">render_json</code> is more syntactic sugar which is used to render
-JSON replies to Okta’s SCIM client and <code class="highlighter-rouge">emit</code> the SCIM resource
-to Socket.IO at the same time.</li>
-  <li><code class="highlighter-rouge">test_connect</code> is the function called with a browser first starts
-up Socket.IO, it returns a list of currently active users to the
-browser via Socket.IO.</li>
-  <li><code class="highlighter-rouge">test_disconnect</code> is a stub that shows how to handle Socket.IO
-“disconnect” messages.</li>
+  <li><code class="highlighter-rouge">send_to_browser</code> is syntactic sugar that will <code class="highlighter-rouge">emit</code> Socket.IO messages to the browser with the proper <code class="highlighter-rouge">broadcast</code> and <code class="highlighter-rouge">namespace</code> settings.</li>
+  <li><code class="highlighter-rouge">render_json</code> is more syntactic sugar which is used to render JSON replies to Okta’s SCIM client and <code class="highlighter-rouge">emit</code> the SCIM resource to Socket.IO at the same time.</li>
+  <li><code class="highlighter-rouge">test_connect</code> is the function called with a browser first starts up Socket.IO, it returns a list of currently active users to the browser via Socket.IO.</li>
+  <li><code class="highlighter-rouge">test_disconnect</code> is a stub that shows how to handle Socket.IO “disconnect” messages.</li>
 </ul>
 
 <p>The code described above is as follows:</p>
@@ -2074,10 +1999,7 @@ def test_disconnect():
 
 <h3 id="socketio-application">Socket.IO application</h3>
 
-<p>Below is the JavaScript that powers the Socket.IO application
-described above. For the full contents of the HTML that this
-JavaScript is part of, see the <code class="highlighter-rouge">base.html</code> file in the <code class="highlighter-rouge">templates</code>
-directory of this project.</p>
+<p>Below is the JavaScript that powers the Socket.IO application described above. For the full contents of the HTML that this JavaScript is part of, see the <code class="highlighter-rouge">base.html</code> file in the <code class="highlighter-rouge">templates</code> directory of this project.</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$(document).ready(function () {
     namespace = '/test'; // change to an empty string to use the global namespace
@@ -2108,12 +2030,9 @@ directory of this project.</p>
 
 <h3 id="support-for-running-from-the-command-line">Support for running from the command line</h3>
 
-<p>This bit of code allows you to run the sample application by typing
-<code class="highlighter-rouge">python scim-server.py</code> from your command line.</p>
+<p>This bit of code allows you to run the sample application by typing <code class="highlighter-rouge">python scim-server.py</code> from your command line.</p>
 
-<p>This code also includes a <code class="highlighter-rouge">try/catch</code> block that creates all tables
-of the <code class="highlighter-rouge">User.query.one()</code> function throws an error (which should
-only happen if the User table isn’t defined.</p>
+<p>This code also includes a <code class="highlighter-rouge">try/catch</code> block that creates all tables of the <code class="highlighter-rouge">User.query.one()</code> function throws an error (which should only happen if the User table isn’t defined.</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if __name__ == "__main__":
     try:
