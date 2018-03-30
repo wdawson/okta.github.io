@@ -1,0 +1,538 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html class="ie6 no-flexbox"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie7 no-flexbox"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie8 no-flexbox"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie9 no-flexbox"> <![endif]-->
+<!--[if IE 10 ]>    <html class="ie10 no-flexbox"> <![endif]-->
+<!--[if (gt IE 10)|!(IE)]><!--> <html class="modern wf-loading" lang="en"> <!--<![endif]-->
+  <head>
+  <script>
+    var searchDomain = 'https://developer.okta.com';
+    var isProduction = window.location.hostname === 'developer.okta.com';
+    if (isProduction) {
+      // TypeKit
+      (function(d) {
+        var config = {
+          kitId: 'jff5neq',
+          scriptTimeout: 3000,
+          async: true
+        },
+        h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/bwf-loadingb/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+      })(document);
+
+      // Google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-15777010-3', 'auto');
+      ga('send', 'pageview');
+
+      // START Google Tag Manager
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-TJ45R6');
+      // END Google Tag Manager
+
+      // Start Heap Analytics
+      window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var r=t.forceSSL||"https:"===document.location.protocol,a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=(r?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+e+".js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n);for(var o=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["addEventProperties","addUserProperties","clearEventProperties","identify","removeEventProperty","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=o(p[c])};
+      heap.load("3356162945");
+      // End Heap Analytics
+    }
+  </script>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+
+  <link type="text/css" rel="stylesheet" href="https://developer.okta.com/sites/all/themes/developer/css/master.css" media="all" />
+  <meta class="swiftype" name="title" data-type="string" content="Everything You Need to Know About the Twelve-Factor App | Okta Developer">
+  <meta class="swiftype" name="summary" data-type="string" content="A breakdown of the twelve-factor app pattern and how you can use it to build more secure web services." />
+
+  <link type="text/css" rel="stylesheet" href="/assets/animate-ec43d72c3ed45e08a460b8a2966d8dba6006aebfa0530935c3973fa493a8771f.css">
+  <link type="text/css" rel="stylesheet" href="/assets/okta-08727e750970ed833aacb927097f470cd9c160b72534a03342e487ea88d90b5c.css">
+  
+  
+  <title>Everything You Need to Know About the Twelve-Factor App | Okta Developer</title>
+  <meta name="description" content="A breakdown of the twelve-factor app pattern and how you can use it to build more secure web services.">
+  <link rel="alternate" type="application/rss+xml" title="Okta Developer" href="https://developer.okta.com/feed.xml"><!-- GA -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/assets/favicon/manifest.json">
+  <link rel="mask-icon" href="/assets/favicon/safari-pinned-tab.svg" color="#21313a">
+  <meta name="msapplication-config" content="/assets/favicon/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  
+    <body id="blog">
+	
+
+
+
+
+<header class="Header is-fixed">
+
+  <div class="Wrap">
+
+    <a class="Logo" href="https://developer.okta.com">
+      <svg version="1.1" id="OktaLogo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 431.9 151.4" style="enable-background:new 0 0 431.9 151.4;" xml:space="preserve"><g><g><g><path d="M102.2,41.4c-21,0-38.1,17.1-38.1,38.1s17.1,38.1,38.1,38.1s38.1-17.1,38.1-38.1l0,0C140.3,58.5,123.2,41.4,102.2,41.4z M102.2,98.5c-10.5,0-19-8.5-19-19s8.5-19,19-19s19,8.5,19,19c0.1,10.5-8.4,19-18.9,19.1C102.3,98.6,102.2,98.6,102.2,98.5L102.2,98.5z"/><path d="M169.1,92.3c0-1.9,1.5-3.4,3.4-3.4c0.9,0,1.8,0.4,2.4,1c9.5,9.7,25.3,26.3,25.4,26.4c0.4,0.5,0.8,0.8,1.4,0.9l1.6,0.2h17.2c1.8,0,3.3-1.4,3.4-3.2c0-0.8-0.3-1.5-0.8-2.2l-28.6-29.2l-1.5-1.5c-3.2-3.9-2.9-5.4,0.8-9.3l22.6-25.1c1.1-1.4,0.8-3.5-0.6-4.6c-0.6-0.4-1.3-0.7-2-0.7h-17c-0.6,0.2-1.1,0.5-1.5,0.9L175,64.4c-1.3,1.4-3.4,1.5-4.8,0.2c-0.7-0.6-1.1-1.5-1.1-2.5V18.9c0-1.7-1.3-3-3-3c-0.1,0-0.2,0-0.3,0h-12.7c-2.2,0-3.3,1.5-3.3,2.8v95.8c0,2.2,1.8,2.8,3.3,2.8h12.7c1.7,0.1,3.2-1.2,3.3-2.9c0,0,0,0,0,0V92.3z"/><path d="M273,114l-1.4-12.8c-0.2-1.7-1.7-2.9-3.4-2.7c0,0,0,0-0.1,0l-2.9,0.2c-10.1,0-18.5-7.9-19-18c0-0.3,0-0.7,0-1V64.2c-0.1-2,1.5-3.6,3.5-3.7c0,0,0,0,0,0h17c1.7-0.1,3.1-1.5,3-3.2c0,0,0-0.1,0-0.1v-12c0-2.3-1.5-3.6-2.8-3.6h-17.1c-1.9,0.1-3.5-1.5-3.6-3.4c0,0,0,0,0,0V18.9c-0.1-1.7-1.5-3.1-3.2-3c0,0-0.1,0-0.1,0h-12.7c-1.6-0.1-3,1.1-3.1,2.7c0,0.1,0,0.1,0,0.2c0,0,0,61.7,0,62c0.5,21,17.9,37.6,38.9,37c1.4,0,2.9-0.2,4.3-0.3C272,117.2,273.2,115.7,273,114z"/></g><path d="M364.7,98c-10.8,0-12.4-3.8-12.4-18.3l0,0V44.8c0-1.8-1.4-3.2-3.2-3.2c0,0-0.1,0-0.1,0h-12.8c-1.8,0-3.2,1.4-3.3,3.2v1.6C314.6,36,291.3,42.5,281,60.8c-10.4,18.3-3.9,41.6,14.4,51.9c14,7.9,31.4,6.2,43.5-4.2c3.6,5.5,9.3,9.1,18.3,9.1c1.5,0,9.7,0.3,9.7-3.5v-13.6C367,99.2,366,98.1,364.7,98z M314.2,98.6c-10.5,0-19-8.5-19-19s8.5-19,19-19s19,8.5,19,19l0,0C333.2,90.1,324.7,98.6,314.2,98.6z"/></g><path d="M19.4,74c2.2-1.9,4.1-4.1,5.7-6.6c3.5-5.3,5.4-11.5,5.2-17.9V27c0-4.9,0.9-8.4,2.7-10.5c1.8-2.1,4.8-3,9.2-3h12.6c1.2,0,2.1-0.9,2.2-2.1l0,0V2.2C57,1,56,0,54.8,0c0,0,0,0,0,0H41.5c-7.8,0-12.9,2.1-18,7.6s-7.1,12.3-7.1,21.7v14.2c0,2.2-0.1,4-0.2,5.7v2.2c-0.5,3.2-1.8,6.2-3.6,8.9C9.4,64.7,5.1,70.9,0.9,74l0,0l-0.3,0.3l0,0l-0.2,0.3H0.2v0.3l0,0c-0.1,0.3-0.1,0.7,0,1l0,0v0.3h0.1l0.2,0.3l0,0l0.3,0.3l0,0c4.2,3.1,8.5,9.3,11.3,13.7c1.8,2.7,3.1,5.7,3.6,8.9v2.2c0.1,1.6,0.2,3.5,0.2,5.7v14.3c0,9.4,2.4,16.7,7.1,21.7s10.2,7.6,18,7.6h13.8c1.2,0,2.2-1,2.2-2.2V140l0,0c0-1.2-1-2.2-2.2-2.2H42.2c-4.4,0-7.5-1-9.2-3s-2.7-5.6-2.7-10.5v-22.4c0.2-6.4-1.7-12.6-5.2-17.9c-1.6-2.5-3.5-4.7-5.7-6.6l0,0c-0.9-0.7-1.1-2-0.4-2.9C19.2,74.3,19.3,74.2,19.4,74L19.4,74z"/><path d="M412.5,74c-2.2-1.9-4.1-4.1-5.7-6.6c-3.5-5.3-5.4-11.5-5.2-17.9V27c0-4.9-0.9-8.4-2.7-10.5s-4.8-3-9.2-3h-12.6c-1.2,0-2.2-1-2.2-2.2c0,0,0,0,0,0l0,0V2.2c0-1.2,1-2.2,2.2-2.2c0,0,0,0,0,0h13.4c7.8,0,12.9,2.1,18,7.6s7.1,12.3,7.1,21.7v14.2c0,2.2,0.1,4,0.2,5.7v2.2c0.5,3.2,1.8,6.2,3.6,8.9c2.8,4.5,7.1,10.7,11.3,13.7l0,0l0.3,0.3l0,0l0.2,0.3h0.1v0.3l0,0c0.1,0.3,0.1,0.7,0,1l0,0v0.3h-0.1l-0.2,0.3l0,0l-0.3,0.3l0,0c-4.2,3.1-8.5,9.3-11.3,13.7c-1.8,2.7-3.1,5.7-3.6,8.9v2.2c-0.1,1.6-0.2,3.5-0.2,5.7v14.3c0,9.4-2.4,16.7-7.1,21.7s-10.2,7.6-18,7.6h-13.4c-1.2,0-2.2-1-2.2-2.2c0,0,0,0,0,0V140l0,0c0-1.2,1-2.2,2.2-2.2l0,0h12.7c4.4,0,7.5-1,9.2-3s2.7-5.6,2.7-10.5v-22.4c-0.2-6.3,1.6-12.6,5.1-17.9c1.6-2.5,3.5-4.7,5.7-6.6l0,0c0.9-0.7,1.1-2,0.4-2.9C412.7,74.3,412.6,74.2,412.5,74L412.5,74z"/></g></svg>
+    </a>
+
+    <nav class="Header-nav PrimaryNav">
+      <ul class="menu">
+        <li class="first expanded">
+          <a href="https://developer.okta.com/product/">Product</a>
+          <ul class="menu">
+            <li class="first leaf"><a href="https://developer.okta.com/product/">Overview</a></li>
+            <li class="leaf"><a href="https://developer.okta.com/product/authentication/">Authentication</a></li>
+            <li class="leaf"><a href="https://developer.okta.com/product/authorization/">Authorization</a></li>
+            <li class="last leaf"><a href="https://developer.okta.com/product/user-management/">User Management</a></li>
+          </ul>
+        </li>
+        <li class="leaf">
+          <a href="https://developer.okta.com/pricing/">Pricing</a>
+        </li>
+        <li class="leaf">
+          <a href="/blog/" class="active">Blog</a>
+        </li>
+        <li class="leaf">
+          <a href="/documentation/">Docs</a>
+        </li>
+        <li class="last expanded">
+          <span class="nolink">Support</span>
+          <ul class="menu">
+            <li class="first leaf"><a href="https://devforum.okta.com/">Okta Developer Forums</a></li>
+            <li class="last leaf"><a href="mailto:developers@okta.com">developers@okta.com</a></li>
+          </ul>
+        </li>
+      </ul>
+      <a class="PrimaryNav-toggle" href="#">
+        <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g class="MenuIcon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+                <path d="M1,16 L19,16" class="MenuIcon-line1" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,4 L19,4" class="MenuIcon-line2" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,10 L19,10" class="MenuIcon-line3" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,10 L19,10" class="MenuIcon-line4" stroke="#FFFFFF" stroke-width="2"></path>
+            </g>
+        </svg>
+        <svg class="CloseIcon" width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <g id="ALl-Boards" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="Desktop" transform="translate(-915.000000, -235.000000)" fill="#FFFFFF">
+              <g id="Search-bar-Active" transform="translate(30.000000, 26.000000)">
+                <polygon id="Icon/Cross" points="901 210.6 899.4 209 893 215.4 886.6 209 885 210.6 891.4 217 885 223.4 886.6 225 893 218.6 899.4 225 901 223.4 894.6 217"></polygon>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </a>
+
+      <div class="PrimaryNav-cta">
+        <a target="_blank" rel="noopener noreferrer" href="https://login.okta.com/?SAMLRequest=fc%2B7CsJAEAXQXvAflu1NNJUMeZBGELTx1a%2FrYILJTtyZGD%2FfSBRiYzlw77lMnD3rSj3Qc0ku0YtgrhU6S5fSXRN9PKxmS52l00nMpq6iBvJWCrfDe4ss6vStRe9aDzmGIZfo1jsgwyWDMzUyiIV9vt1AH4XGk5ClSvewUgMNa%2BYW%2FVj5jxhm9NLP67QQaSAMu64L6CYmsFSHlnzT4ZlLwTgcL6Sf8%2FeX9AU%3Dhttps://login.okta.com/?SAMLRequest=fc%2B7CsJAEAXQXvAflu1NNJUMeZBGELTx1a%2FrYILJTtyZGD%2FfSBRiYzlw77lMnD3rSj3Qc0ku0YtgrhU6S5fSXRN9PKxmS52l00nMpq6iBvJWCrfDe4ss6vStRe9aDzmGIZfo1jsgwyWDMzUyiIV9vt1AH4XGk5ClSvewUgMNa%2BYW%2FVj5jxhm9NLP67QQaSAMu64L6CYmsFSHlnzT4ZlLwTgcL6Sf8%2FeX9AU%3D" class="Button--redOutline">Login</a>
+        <a href="https://developer.okta.com/signup/" class="Button--red">Sign up</a>
+      </div>
+
+      <a class="SearchIcon" href="#"></a>
+      <form id="form_search" class="SearchBar Formisimo_clocked_69929" method="get" action="https://developer.okta.com/search/" name="form_search" __bizdiag="-784164280" __biza="WJ__">
+        <input type="text" name="stq" autocomplete="off" id="st-search-input-auto" class="st-search-input" placeholder="Search">
+        <input type="submit" name="submit" value="GO">
+      </form>
+
+    </nav>
+
+  </div>
+
+</header>
+
+	<div class="page-content">
+		
+		
+
+
+
+
+
+
+<section class="Blog is-single">
+		
+	<div class="Blog-social">
+		
+		<a href="https://github.com/rdegges" target="_blank"><i class="fa fa-github"></i></a>
+		
+		
+		<a href="https://twitter.com/rdegges" target="_blank"><i class="fa fa-twitter"></i></a>
+		
+		
+		
+		<a href="https://www.rdegges.com" target="_blank"><i class="fa fa-external-link"></i></a>
+		
+	</div>
+	
+	
+
+<article class="BlogPost">
+
+    <header class="BlogPost-header">
+
+        <time class="BlogPost-date" datetime="2018-03-30">March 30, 2018</time>
+
+        <h1 class="BlogPost-title">
+            
+            Everything You Need to Know About the Twelve-Factor App
+            
+        </h1>
+
+        <div class="BlogPost-attribution">
+            
+            <img src="/assets/avatar-rdegges-9fb23ebb06890fb7924b8ceb3a28d666ae4ae1a297a3cddf517e549547e5dfe3.jpg" alt="avatar-rdegges.jpg" class="BlogPost-avatar">
+            
+            <span class="BlogPost-author">Randall Degges</span>
+        </div>
+
+    </header>
+
+    <div class="BlogPost-content">
+        
+	<p><img src="/assets/blog/twelve-factor/twelve-factor-6a69d14e6514b8402ab8171cc8b830b37c2744da4b61ad79ec3c1f3d5f565f92.png" alt="the twelve-factor app" width="800" class="center-image" /></p>
+
+<p>Ever heard of the <a href="https://12factor.net/">twelve-factor app</a>? Earlier this week I was scrolling through one of my favorite websites, <a href="https://news.ycombinator.com/">Hacker News</a>, and stumbled across the twelve-factor app for the first time.</p>
+
+<p>While I didn’t have time to read the official twelve-factor website, I wanted to take some time to share my thoughts about building twelve-factor apps, why they’re important, and what you need to know about them.</p>
+
+<p>Writing secure web applications can be really difficult!</p>
+
+<p>My hope is that this guide shows you how you can make any web app far more secure by following the principles laid out in the twelve-factor app. Thanks <a href="https://twitter.com/hirodusk">@hirodusk</a> for creating the twelve-factor app and teaching new developers like me more about web security! &lt;3</p>
+
+<h2 id="why-you-need-twelve-factor">Why You Need Twelve Factor</h2>
+
+<p><img src="/assets/blog/twelve-factor/stick-figure-teacher-aece0264cd87116960efdb1acddaa6e24ac013e42ecb80281c91a1beb4d5c916.png" alt="stick figure teacher" width="200" class="center-image" /></p>
+
+<p>The idea behind the <a href="https://12factor.net/">twelve-factor app</a> app is simple: logging users into websites and mobile apps is insecure. No matter how much time you spend securing your websites and mobile apps, it still isn’t enough.</p>
+
+<p>Think I’m exaggerating? Just take a look at some of the largest <a href="http://lmgtfy.com/?q=famous+website+hacks">website hacks</a> over the last few years. Tons of massive companies with large engineering teams and amazing security prowess have all become the victims of relatively simple exploits.</p>
+
+<p>The twelve-factor app is an excellent security pattern designed to dramatically improve the security of any website or mobile app that users log into, making them almost completely impenetrable.</p>
+
+<h2 id="the-problem-with-current-login-technology">The Problem with Current Login Technology</h2>
+
+<p><img src="/assets/blog/twelve-factor/rage-face-f131e87b74518eb6bcc9cc1cff5e1f3240362c33cef54905a5ae71163d05c012.png" alt="rage face" width="200" class="center-image" /></p>
+
+<p>Time for a quick history lesson.</p>
+
+<p>Back in the day, when programmers would build a login page for a website or mobile app, they’d typically craft something simple that accepted a username <em>or</em> email address and password.</p>
+
+<p>When the user would enter this information correctly, they’d be immediately logged into the website or app.</p>
+
+<p>While this was simple and straightforward, it ended up being a huge security issue as attackers could simply guess a user’s username/password over and over again until they got lucky and were able to access their account.</p>
+
+<p>Because modern computers are so fast (<em>thanks a lot, <a href="https://en.wikipedia.org/wiki/Moore%27s_law">Gordon Moore</a>!</em>) attackers can now guess many username/password combinations quickly, meaning that a skilled attacker can compromise your account even if you have a long, random password. Boo.</p>
+
+<p>Once developers began realizing that username/password login was insecure, they started to experiment with multiple factors.</p>
+
+<p>The way two-factor authentication worked was a little more complicated, but far more secure:</p>
+
+<ul>
+  <li>A user would visit a login page and enter their username/password just like before</li>
+  <li>If the username/password entered were valid, then the user would receive an SMS message containing a number</li>
+  <li>The user would then be required to enter that number into the website to <em>prove</em> that they had access to their cell phone, and that the user was therefore who they claimed to be</li>
+</ul>
+
+<p>This was a great advancement for web security at the time because even if a hacker was able to steal your username and password, they’d also have to steal your phone to be able to actually log in.</p>
+
+<p>But… Not long after two-factor became a popular method of authentication, problems appeared. Hackers found ways to <a href="https://www.theverge.com/2017/9/18/16328172/sms-two-factor-authentication-hack-password-bitcoin">compromise SMS</a> as a protocol and gain access to text messaging capabilities without ever stealing your phone.</p>
+
+<p>And with that the entire security industry was back to square one.</p>
+
+<p>As SMS codes faded into a distant memory, multi-factor authentication was becoming popular. Multi-factor authentication is a pattern that allows a user to register different <em>factors</em>, for example:</p>
+
+<ul>
+  <li>SMS</li>
+  <li>Google Authenticator</li>
+  <li>Authy</li>
+  <li>Okta Verify</li>
+  <li>Yubikey</li>
+  <li>etc.</li>
+</ul>
+
+<p>This way, a user can choose which type of factor to use after entering their username and password on a website. By allowing users to use different types of factors other than SMS, a hacker’s job becomes much more difficult.</p>
+
+<p>If a hacker wanted to break through multi-factor authentication, they’d need to learn to exploit whatever factors a user had configured. And that is hard work.</p>
+
+<p>Which brings us to today. Today, multi-factor authentication is quickly becoming a standard, but still suffers <em>severe</em> security limitations: it’s only as secure as the amount of factors you use.</p>
+
+<p>While multi-factor is awesome in that it allows a user to pick and choose what type of factor they log in with (outside of their username/password), it simply doesn’t go far enough.</p>
+
+<p>If an attacker is able to successfully guess your username/password, they’ll also be able to see what factor you’ve configured to log in with. Let’s say you’ve configured your <a href="https://github.com/">Github account</a>, for instance, to support Google Authenticator.</p>
+
+<p>All an attacker needs to do at this point is hack your Google Authenticator and then <em>bam</em>: you’re right back to where you started — completely insecure.</p>
+
+<p>Which brings us to the new official security recommendation of 2018: the twelve-factor app.</p>
+
+<h2 id="what-is-the-twelve-factor-app">What is the Twelve-Factor App?</h2>
+
+<p><img src="/assets/blog/twelve-factor/confused-stick-figure-ee0818999f06b24bfbe37f6efffa62624b1b79313e795abb13bd83a741208039.jpg" alt="confused stick figure" width="100" class="center-image" /></p>
+
+<p>The twelve-factor app is a new best practice for building secure login systems that picks up where multi-factor left off.</p>
+
+<p>Instead of allowing a user to configure different factors they can choose from to log in — a twelve-factor compliant app <em>requires</em> each user to have twelve different authentication factors and to use them <em>each time</em> they log into a website or mobile app.</p>
+
+<p>Here’s an example of a twelve-factor compliant app:</p>
+
+<ol>
+  <li>A user visits a website and enters their username/password (factor 1)</li>
+  <li>The user then receives an SMS message and types in a code</li>
+  <li>The user then opens their Google Authenticator app on their phone and enters the code from there</li>
+  <li>The user then opens their Authy app on their phone and enters the code from there</li>
+  <li>The user then opens their Okta Verify app on their phone and enters the code from there</li>
+  <li>The user then uses FaceID to have their face detected</li>
+  <li>The user then presses their finger up against the fingerprint scanner on their phone and uses that to confirm their fingerprint</li>
+  <li>The user then says their “voice password” out loud when their phone prompts them (this does voice recognition)</li>
+  <li>The user then enters their preferred credit card number into the app when requested to confirm that their billing details are known</li>
+  <li>The user then enters their social security number which helps verify their identity</li>
+  <li>The user then enters their birthday</li>
+  <li>Finally, the user enters private genome data about themselves that is cross-referenced against the <a href="https://api.23andme.com/">23andMe API</a></li>
+</ol>
+
+<p>While this process is slightly inconvenient for a user to repeat each time they log in, in provides superior protection against attackers and makes you virtually hacker-proof.</p>
+
+<p>Let’s say an attacker is able to get a hold of your username/password and your phone: they’d still have to compromise a TON of other things about you (your face, your fingerprint, your credit card numbers, your social, a sample of your blood, etc.) before they could ever log into your account!</p>
+
+<h2 id="how-to-adopt-twelve-factor-in-your-apps">How to Adopt Twelve-Factor in Your Apps</h2>
+
+<p><img src="/assets/blog/twelve-factor/stick-figure-beard-4baa77a062ee214aec455fb8723dfff16d188b012b712ba17eba5d771f1f7e6b.jpg" alt="stick figure beard" width="150" class="center-image" /></p>
+
+<p>The twelve-factor app takes the concept of multi-factor authentication to the next level and is the minimum needed to keep mainstream websites and mobile apps secure.</p>
+
+<p>While it does take a little bit of extra time to build out a twelve-factor compliant app, it can certainly be done. Here are some steps I’d recommend taking immediately:</p>
+
+<ul>
+  <li>Write down a list of twelve separate factors you intend to support (including username/password)</li>
+  <li>Look up API services that can easily offload some of this work:
+    <ul>
+      <li><a href="https://api.23andme.com/">23andMe</a></li>
+      <li><a href="https://www.twilio.com/">Twilio</a></li>
+      <li><a href="https://developer.okta.com/">Okta Verify</a></li>
+      <li>etc.</li>
+    </ul>
+  </li>
+  <li>The next time your users log into your application, require them to connect twelve separate authentication factors to their account so that the next time they log they will be used</li>
+</ul>
+
+<p>One side effect of implementing a twelve-factor app is that you’ll definitely receive a lot of user support calls, but in my experience, offloading that to your support team will generally be fine. Since twelve-factor apps are increasingly common, your support team is most likely already familiar with helping users configure their twelve factors, sign in, etc.</p>
+
+<p>With that said, I hope you enjoyed this brief breakdown of the twelve-factor app and some in-depth information about how you can use it to make your sites more secure.</p>
+
+<p>Please <a href="https://twitter.com/rdegges">tweet at me</a> if you have any security questions! Now go out there and make your applications more secure!</p>
+
+<!--
+## Gotcha!
+
+<img src="/assets/blog/twelve-factor/stick-figure-happy-1bd8e401a320e50b051d7a352c196f923afa43ff11471db6c0feaf9e89763f3b.gif" alt="stick figure happy" width="200">{: .center-image }
+
+Congratulations on making it this far: happy April Fools' Day!
+
+I'm not insane (*despite what my friends and co-workers might tell you*), and I'm also not advocating that you use *twelve-factor* authentication for your apps.
+
+
+## What is Twelve-Factor, Really?
+
+<img src="/assets/blog/twelve-factor/stick-figure-eyeroll-1848f3409acc55235c85986f8f9e928aa2f1ed1b3b6e095d0df90b7908fa1191.gif" alt="stick figure eyeroll" width="200">{: .center-image }
+
+The [twelve-factor app](https://12factor.net/) is a collection of best practices for building modern web applications. It's called twelve-factor because there are twelve separate guidelines that it recommends every developer follow to build simple and scalable applications:
+
+1. Use one codebase with version control to track many deploys
+2. Explicitly declare and isolate dependencies
+3. Store your configuration in environment variables
+4. Treat backing services as attached resources (databases, file servers, etc.)
+5. Strictly separate the build and run stages of your deployment pipeline
+6. Execute your app as one or more stateless processes
+7. Export your services via port binding
+8. Scale out via the process model
+9. Maximize robustness with fast startup and graceful shutdown
+10. Keep development, staging, and production as similar as possible
+11. Treat logs as event streams
+12. Run admin/management tasks as one-off processes
+
+One of my programmer heroes, [Adam Wiggins](http://about.adamwiggins.com/) (co-founder of one of my favorite services: [Heroku](https://www.heroku.com/)), is the creator of the twelve-factor app pattern.
+
+With that said, it should be obvious that the twelve-factor app has nothing to do with multi-factor authentication.
+
+
+## Why is Twelve-Factor Authentication Bad?
+
+<img src="/assets/blog/twelve-factor/stick-figure-thinking-9c14c3395cf8573d2ea114a886f8c3dfe07c1724845d09c9a51a0fa5096f64c1.jpg" alt="stick figure thinking" width="250">{: .center-image }
+
+While it's true that more factors provides more security, twelve-factor authentication is bad for a few primary reasons.
+
+First of all, the more factors you require a user to enter each time they log in, the less they'll log in. If you had to enter twelve separate proofs about yourself upon each login you'd go crazy.
+
+Second, what a lot of people don't realize is that each factor your application supports places a really high burden on your development team.
+
+Maintaining all sorts of connectors and verification methods to do things like verify SMS codes, Google Authenticator codes, Yubikey key presses, etc. can take a ton of time and effort to build and maintain.
+
+Finally, twelve-factor authentication as I laid it out above would also create an insane burden on your support team (if you have one). Imagine the amount of customer support phone calls and emails Netflix would receive if one day they require you to go through twelve factors of authentication to login; there'd be riots in the streets of San Francisco!
+
+
+## Multi-Factor is Good, but Adaptive Multi-Factor is Better
+
+<img src="/assets/blog/twelve-factor/nerdy-stick-figure-99762115ee51de2412023fcee9e7be2e1d69dbf161a149b515b1d0d0e7783e5f.png" alt="nerdy stick figure" width="200">{: .center-image }
+
+Multi-factor authentication is awesome:
+
+- It allows your users to prove themselves with only a little bit of inconvenience.
+- It allows your users to add multiple "factors" to select from when logging in — this way, if you add both an SMS factor *and* a Yubikey factor you can still log into your account even if you forget your Yubikey device..
+
+The problem with multi-factor authentication, however, is the same exact problem you'd have implementing twelve-factor authentication as well: it's annoying.
+
+I'll give you an example: when I log into my bank account, I'm *always* prompted to enter an SMS code from my phone. It doesn't matter if I've just been away from my computer for 30 minutes, I've always got to re-authenticate using my second factor each and every time.
+
+This gets annoying really quick.
+
+To help solve this problem, some really smart people got together and decided to coin the term "adaptive multi-factor authentication", which refers to the strategy of only prompting users for multi-factor authentication *when needed* (eg: being adaptive about it).
+
+For example: let's say I log into my bank website from my house and authenticate with a second factor (like an SMS code).
+
+The website I'm visiting can remember my public IP, my browser, and some other facts about me so that the next time I log in, if these details are the same, the bank website can still trust me and not require me to enter an SMS code again.
+
+By combining modern techniques like machine learning with simple user context it is possible to relax multi-factor requirements while still retaining a high level of security and a maximum amount of usability.
+
+Once you've gotten used to adaptive multi-factor, there's no going back. At Okta, our [adaptive multi-factor authentication solutions](https://www.okta.com/products/adaptive-multi-factor-authentication/) are incredibly popular.
+
+
+## Best Practices for Secure Login
+
+<img src="/assets/blog/twelve-factor/stick-figure-officer-a704145a1cbca7229b2c6d738fff75373480a5f8d8455d24bd337bf3a161260c.gif" alt="stick figure officer" width="100">{: .center-image }
+
+Thanks for reading this far, I hope you had as much fun reading this as I had writing it!
+
+To sum things up, here's what I'd recommend you do when trying to build applications that are not only secure, but also convenient:
+
+- Allow users to register one or more factors when they sign up for your service (SMS, Yubikey, Google Authenticator, Okta Verify, Authy, etc.)
+- Try to discourage users from using insecure factors (like SMS)
+- Use adaptive multi-factor when possible so that your users won't be bombarded with authentication proof requirements upon every login
+
+If you do the above you're getting the best of both worlds: security and convenience.
+
+That's all for now, please [hit us up](https://twitter.com/oktadev) if you have any questions or leave a comment below.
+-->
+
+
+    </div>
+
+    
+    <div id="disqus">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_title = "Everything You Need to Know About the Twelve-Factor App";
+            var disqus_url = 'https://developer.okta.com/blog/2018/03/30/everything-you-need-to-know-about-the-twelve-factor-app';
+
+            (function () {
+                var dsq = document.createElement('script');
+                dsq.async = true;
+                dsq.type = 'text/javascript';
+                dsq.src = '//oktadevblog.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+          </script>
+          <noscript>
+              Please enable JavaScript to view the
+              <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus</a>.
+         </noscript>
+    </div>
+    
+</article>
+
+		
+</section>
+
+		
+	</div>
+	<footer class="Footer">
+    <div class="Wrap">
+
+        <div class="Row">
+
+            <div class="Column--3 Column--medium-6 Column--xSmall-12">
+                <a href="https://www.okta.com/" target="_blank" rel="noopener noreferrer">
+                    <div class="Logo">
+                        <img src="https://developer.okta.com/sites/all/themes/developer/images/logo-footer.png" alt="Okta">
+                    </div>
+                    <p>Visit okta.com</p>
+                </a>
+            </div>
+
+            <div class="Column--3 Column--medium-12 Column--xSmall-12">
+                <h4>Social</h4>
+                <ul class="Footer-links Footer-links--social">
+                    <li><a class="Footer-links--github" target="_blank" rel="noopener noreferrer" href="http://github.com/oktadeveloper">Github</a></li>
+                    <li><a class="Footer-links--twitter" target="_blank" rel="noopener noreferrer" href="http://twitter.com/OktaDev">Twitter</a></li>
+                    <li><a class="Footer-links--forum" target="_blank" rel="noopener noreferrer" href="https://devforum.okta.com/">Forum</a></li>
+                    <li><a class="Footer-links--rss" target="_blank" rel="noopener noreferrer" href="http://feeds.feedburner.com/OktaBlog">RSS Blog</a></li>
+                </ul>
+            </div>
+
+            <div class="Column--3 Column--medium-6 Column--small-12">
+                <h4>More Info</h4>
+                <ul class="Footer-links">
+                    <li><a target="_blank" href="https://developer.okta.com/integrate-with-okta/">Integrate with Okta</a></li>
+                    <li><a href="/blog/">Blog</a></li>
+                    <li><a href="/docs/change-log/">Change Log</a></li>
+                    <li><a href="/3rd_party_notices/">3rd Party Notices</a></li>
+                </ul>
+            </div>
+
+            <div class="Column--3 Column--medium-6 Column--small-12">
+                <h4>Contact &amp; Legal</h4>
+                <ul class="Footer-links">
+                    <li><a href="https://developer.okta.com/contact/">Contact Sales</a></li>
+                    <li><a target="_blank" rel="noopener noreferrer" href="mailto:developers@okta.com">Contact Support</a></li>
+                    <li><a href="https://developer.okta.com/terms/">Terms &amp; Conditions</a></li>
+                    <li><a href="https://developer.okta.com/privacy/">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script type="text/javascript" src="/assets/master-aa397c892d9083236c5cb20732dde679021b9236c8142ce78177b8b184567a02.js"></script>
+    <script type="text/javascript" src="/assets/myOkta-911cbafbbe079b7a5522d9cbe15bd2a5f44e1582531e88393934bec69f97696b.js"></script>
+    
+    
+    
+    
+      <script type="text/javascript" src="/assets/blog-6e32dad27404131cc8630a5282264bed2ab4c08c91ac86fa496b75c53aa4f681.js"></script>
+    
+
+  <!-- START Post Footer -->
+  
+  <!-- START Google Tag Manager -->
+  <!-- https://support.google.com/tagmanager/answer/6103696?hl=en -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TJ45R6" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- END Google Tag Manager -->
+  <!-- START Google Remarketing Tag -->
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var google_conversion_id = 1006913831;
+    var google_custom_params = window.google_tag_params;
+    var google_remarketing_only = true;
+    /* ]]> */
+  </script>
+  <div style="display:none;"><script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script></div>
+  <noscript><div style="display:inline;"><img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1006913831/?value=0&amp;guid=ON&amp;script=0"></div></noscript>
+  <!-- END Google Remarketing Tag -->
+  <!-- START Crazy Egg Tracking -->
+  <script type="text/javascript">
+    setTimeout(function(){var a=document.createElement("script");
+    var b=document.getElementsByTagName("script")[0];
+    a.src=document.location.protocol+"//script.crazyegg.com/pages/scripts/0021/9333.js?"+Math.floor(new Date().getTime()/3600000);
+    a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+  </script>
+  <!-- END Crazy Egg Tracking -->
+
+  <!-- END Post Footer -->
+</body>
+</html>
