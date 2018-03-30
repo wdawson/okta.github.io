@@ -37,7 +37,7 @@ The twelve-factor app is an excellent security pattern designed to dramatically 
 
 Time for a quick history lesson.
 
-Back in the day, when programmers would build a login page for a website or mobile app, they'd typically craft something simple that accepted a user's username OR email address and password.
+Back in the day, when programmers would build a login page for a website or mobile app, they'd typically craft something simple that accepted a username *or* email address and password.
 
 When the user would enter this information correctly, they'd be immediately logged into the website or app.
 
@@ -72,7 +72,7 @@ This way, a user can choose which type of factor to use after entering their use
 
 If a hacker wanted to break through multi-factor authentication, they'd need to learn to exploit whatever factors a user had configured. And that is hard work.
 
-Which brings us to today. Today, multi-factor authentication is quickly becoming a standard, but still suffers *severe* security limitations.
+Which brings us to today. Today, multi-factor authentication is quickly becoming a standard, but still suffers *severe* security limitations: it's only as secure as the amount of factors you use.
 
 While multi-factor is awesome in that it allows a user to pick and choose what type of factor they log in with (outside of their username/password), it simply doesn't go far enough.
 
@@ -104,7 +104,7 @@ Here's an example of a twelve-factor compliant app:
 9. The user then enters their preferred credit card number into the app when requested to confirm that their billing details are known
 10. The user then enters their social security number which helps verify their identity
 11. The user then enters their birthday
-12. Finally, the user could enter some genetic data about themselves which can be cross-referenced against the [23andMe API](https://api.23andme.com/)
+12. Finally, the user enters private genome data about themselves that is cross-referenced against the [23andMe API](https://api.23andme.com/)
 
 While this process is slightly inconvenient for a user to repeat each time they log in, in provides superior protection against attackers and makes you virtually hacker-proof.
 
@@ -127,7 +127,7 @@ While it does take a little bit of extra time to build out a twelve-factor compl
   - etc.
 - The next time your users log into your application, require them to connect twelve separate authentication factors to their account so that the next time they log they will be used
 
-One side-effect of implementing a twelve-factor app is that you'll definitely receive a lot of user support calls, but in my experience, offloading that to your support team will generally be fine. Since twelve-factor apps are increasingly common, your support team is most likely already familiar with helping users configure their twelve factors, sign in, etc.
+One side effect of implementing a twelve-factor app is that you'll definitely receive a lot of user support calls, but in my experience, offloading that to your support team will generally be fine. Since twelve-factor apps are increasingly common, your support team is most likely already familiar with helping users configure their twelve factors, sign in, etc.
 
 With that said, I hope you enjoyed this brief breakdown of the twelve-factor app and some in-depth information about how you can use it to make your sites more secure.
 
@@ -194,15 +194,15 @@ Multi-factor authentication is awesome:
 
 The problem with multi-factor authentication, however, is the same exact problem you'd have implementing twelve-factor authentication as well: it's annoying.
 
-I'll give you an example: when I log into my banking account, I'm *always* prompted to enter an SMS code from my phone. It doesn't matter if I've just been away from my computer for 30 minutes, I've always got to re-authenticate using my second factor each and every time.
+I'll give you an example: when I log into my bank account, I'm *always* prompted to enter an SMS code from my phone. It doesn't matter if I've just been away from my computer for 30 minutes, I've always got to re-authenticate using my second factor each and every time.
 
 This gets annoying really quick.
 
 To help solve this problem, some really smart people got together and decided to coin the term "adaptive multi-factor authentication", which refers to the strategy of only prompting users for multi-factor authentication *when needed* (eg: being adaptive about it).
 
-For example: let's say I log into my banking website from my house and authenticate with a second factor (like an SMS code).
+For example: let's say I log into my bank website from my house and authenticate with a second factor (like an SMS code).
 
-The website I'm visiting can remember my public IP, my browser, and some other facts about me so that the next time I log in, if these details are the same, the banking website can still trust me and not require me to enter an SMS code again.
+The website I'm visiting can remember my public IP, my browser, and some other facts about me so that the next time I log in, if these details are the same, the bank website can still trust me and not require me to enter an SMS code again.
 
 By combining modern techniques like machine learning with simple user context it is possible to relax multi-factor requirements while still retaining a high level of security and a maximum amount of usability.
 
