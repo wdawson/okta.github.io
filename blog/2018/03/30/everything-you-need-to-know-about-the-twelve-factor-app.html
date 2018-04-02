@@ -328,97 +328,97 @@
 
 <p>Please <a href="https://twitter.com/rdegges">tweet at me</a> if you have any security questions! Now go out there and make your applications more secure!</p>
 
-<!--
-## Gotcha!
+<h2 id="gotcha">Gotcha!</h2>
 
-<img src="/assets/blog/twelve-factor/stick-figure-happy-1bd8e401a320e50b051d7a352c196f923afa43ff11471db6c0feaf9e89763f3b.gif" alt="stick figure happy" width="200">{: .center-image }
+<p><img src="/assets/blog/twelve-factor/stick-figure-happy-1bd8e401a320e50b051d7a352c196f923afa43ff11471db6c0feaf9e89763f3b.gif" alt="stick figure happy" width="200" class="center-image" /></p>
 
-Congratulations on making it this far: happy April Fools' Day!
+<p>Congratulations on making it this far: happy April Fools’ Day!</p>
 
-I'm not insane (*despite what my friends and co-workers might tell you*), and I'm also not advocating that you use *twelve-factor* authentication for your apps.
+<p>I’m not insane (<em>despite what my friends and co-workers might tell you</em>), and I’m also not advocating that you use <em>twelve-factor</em> authentication for your apps.</p>
 
+<h2 id="what-is-twelve-factor-really">What is Twelve-Factor, Really?</h2>
 
-## What is Twelve-Factor, Really?
+<p><img src="/assets/blog/twelve-factor/stick-figure-eyeroll-1848f3409acc55235c85986f8f9e928aa2f1ed1b3b6e095d0df90b7908fa1191.gif" alt="stick figure eyeroll" width="200" class="center-image" /></p>
 
-<img src="/assets/blog/twelve-factor/stick-figure-eyeroll-1848f3409acc55235c85986f8f9e928aa2f1ed1b3b6e095d0df90b7908fa1191.gif" alt="stick figure eyeroll" width="200">{: .center-image }
+<p>The <a href="https://12factor.net/">twelve-factor app</a> is a collection of best practices for building modern web applications. It’s called twelve-factor because there are twelve separate guidelines that it recommends every developer follow to build simple and scalable applications:</p>
 
-The [twelve-factor app](https://12factor.net/) is a collection of best practices for building modern web applications. It's called twelve-factor because there are twelve separate guidelines that it recommends every developer follow to build simple and scalable applications:
+<ol>
+  <li>Use one codebase with version control to track many deploys</li>
+  <li>Explicitly declare and isolate dependencies</li>
+  <li>Store your configuration in environment variables</li>
+  <li>Treat backing services as attached resources (databases, file servers, etc.)</li>
+  <li>Strictly separate the build and run stages of your deployment pipeline</li>
+  <li>Execute your app as one or more stateless processes</li>
+  <li>Export your services via port binding</li>
+  <li>Scale out via the process model</li>
+  <li>Maximize robustness with fast startup and graceful shutdown</li>
+  <li>Keep development, staging, and production as similar as possible</li>
+  <li>Treat logs as event streams</li>
+  <li>Run admin/management tasks as one-off processes</li>
+</ol>
 
-1. Use one codebase with version control to track many deploys
-2. Explicitly declare and isolate dependencies
-3. Store your configuration in environment variables
-4. Treat backing services as attached resources (databases, file servers, etc.)
-5. Strictly separate the build and run stages of your deployment pipeline
-6. Execute your app as one or more stateless processes
-7. Export your services via port binding
-8. Scale out via the process model
-9. Maximize robustness with fast startup and graceful shutdown
-10. Keep development, staging, and production as similar as possible
-11. Treat logs as event streams
-12. Run admin/management tasks as one-off processes
+<p>One of my programmer heroes, <a href="http://about.adamwiggins.com/">Adam Wiggins</a> (co-founder of one of my favorite services: <a href="https://www.heroku.com/">Heroku</a>), is the creator of the twelve-factor app pattern.</p>
 
-One of my programmer heroes, [Adam Wiggins](http://about.adamwiggins.com/) (co-founder of one of my favorite services: [Heroku](https://www.heroku.com/)), is the creator of the twelve-factor app pattern.
+<p>With that said, it should be obvious that the twelve-factor app has nothing to do with multi-factor authentication.</p>
 
-With that said, it should be obvious that the twelve-factor app has nothing to do with multi-factor authentication.
+<h2 id="why-is-twelve-factor-authentication-bad">Why is Twelve-Factor Authentication Bad?</h2>
 
+<p><img src="/assets/blog/twelve-factor/stick-figure-thinking-9c14c3395cf8573d2ea114a886f8c3dfe07c1724845d09c9a51a0fa5096f64c1.jpg" alt="stick figure thinking" width="250" class="center-image" /></p>
 
-## Why is Twelve-Factor Authentication Bad?
+<p>While it’s true that more factors provides more security, twelve-factor authentication is bad for a few primary reasons.</p>
 
-<img src="/assets/blog/twelve-factor/stick-figure-thinking-9c14c3395cf8573d2ea114a886f8c3dfe07c1724845d09c9a51a0fa5096f64c1.jpg" alt="stick figure thinking" width="250">{: .center-image }
+<p>First of all, the more factors you require a user to enter each time they log in, the less they’ll log in. If you had to enter twelve separate proofs about yourself upon each login you’d go crazy.</p>
 
-While it's true that more factors provides more security, twelve-factor authentication is bad for a few primary reasons.
+<p>Second, what a lot of people don’t realize is that each factor your application supports places a really high burden on your development team.</p>
 
-First of all, the more factors you require a user to enter each time they log in, the less they'll log in. If you had to enter twelve separate proofs about yourself upon each login you'd go crazy.
+<p>Maintaining all sorts of connectors and verification methods to do things like verify SMS codes, Google Authenticator codes, Yubikey key presses, etc. can take a ton of time and effort to build and maintain.</p>
 
-Second, what a lot of people don't realize is that each factor your application supports places a really high burden on your development team.
+<p>Finally, twelve-factor authentication as I laid it out above would also create an insane burden on your support team (if you have one). Imagine the amount of customer support phone calls and emails Netflix would receive if one day they require you to go through twelve factors of authentication to login; there’d be riots in the streets of San Francisco!</p>
 
-Maintaining all sorts of connectors and verification methods to do things like verify SMS codes, Google Authenticator codes, Yubikey key presses, etc. can take a ton of time and effort to build and maintain.
+<h2 id="multi-factor-is-good-but-adaptive-multi-factor-is-better">Multi-Factor is Good, but Adaptive Multi-Factor is Better</h2>
 
-Finally, twelve-factor authentication as I laid it out above would also create an insane burden on your support team (if you have one). Imagine the amount of customer support phone calls and emails Netflix would receive if one day they require you to go through twelve factors of authentication to login; there'd be riots in the streets of San Francisco!
+<p><img src="/assets/blog/twelve-factor/nerdy-stick-figure-99762115ee51de2412023fcee9e7be2e1d69dbf161a149b515b1d0d0e7783e5f.png" alt="nerdy stick figure" width="200" class="center-image" /></p>
 
+<p>Multi-factor authentication is awesome:</p>
 
-## Multi-Factor is Good, but Adaptive Multi-Factor is Better
+<ul>
+  <li>It allows your users to prove themselves with only a little bit of inconvenience.</li>
+  <li>It allows your users to add multiple “factors” to select from when logging in — this way, if you add both an SMS factor <em>and</em> a Yubikey factor you can still log into your account even if you forget your Yubikey device..</li>
+</ul>
 
-<img src="/assets/blog/twelve-factor/nerdy-stick-figure-99762115ee51de2412023fcee9e7be2e1d69dbf161a149b515b1d0d0e7783e5f.png" alt="nerdy stick figure" width="200">{: .center-image }
+<p>The problem with multi-factor authentication, however, is the same exact problem you’d have implementing twelve-factor authentication as well: it’s annoying.</p>
 
-Multi-factor authentication is awesome:
+<p>I’ll give you an example: when I log into my bank account, I’m <em>always</em> prompted to enter an SMS code from my phone. It doesn’t matter if I’ve just been away from my computer for 30 minutes, I’ve always got to re-authenticate using my second factor each and every time.</p>
 
-- It allows your users to prove themselves with only a little bit of inconvenience.
-- It allows your users to add multiple "factors" to select from when logging in — this way, if you add both an SMS factor *and* a Yubikey factor you can still log into your account even if you forget your Yubikey device..
+<p>This gets annoying really quick.</p>
 
-The problem with multi-factor authentication, however, is the same exact problem you'd have implementing twelve-factor authentication as well: it's annoying.
+<p>To help solve this problem, some really smart people got together and decided to coin the term “adaptive multi-factor authentication”, which refers to the strategy of only prompting users for multi-factor authentication <em>when needed</em> (eg: being adaptive about it).</p>
 
-I'll give you an example: when I log into my bank account, I'm *always* prompted to enter an SMS code from my phone. It doesn't matter if I've just been away from my computer for 30 minutes, I've always got to re-authenticate using my second factor each and every time.
+<p>For example: let’s say I log into my bank website from my house and authenticate with a second factor (like an SMS code).</p>
 
-This gets annoying really quick.
+<p>The website I’m visiting can remember my public IP, my browser, and some other facts about me so that the next time I log in, if these details are the same, the bank website can still trust me and not require me to enter an SMS code again.</p>
 
-To help solve this problem, some really smart people got together and decided to coin the term "adaptive multi-factor authentication", which refers to the strategy of only prompting users for multi-factor authentication *when needed* (eg: being adaptive about it).
+<p>By combining modern techniques like machine learning with simple user context it is possible to relax multi-factor requirements while still retaining a high level of security and a maximum amount of usability.</p>
 
-For example: let's say I log into my bank website from my house and authenticate with a second factor (like an SMS code).
+<p>Once you’ve gotten used to adaptive multi-factor, there’s no going back. At Okta, our <a href="https://www.okta.com/products/adaptive-multi-factor-authentication/">adaptive multi-factor authentication solutions</a> are incredibly popular.</p>
 
-The website I'm visiting can remember my public IP, my browser, and some other facts about me so that the next time I log in, if these details are the same, the bank website can still trust me and not require me to enter an SMS code again.
+<h2 id="best-practices-for-secure-login">Best Practices for Secure Login</h2>
 
-By combining modern techniques like machine learning with simple user context it is possible to relax multi-factor requirements while still retaining a high level of security and a maximum amount of usability.
+<p><img src="/assets/blog/twelve-factor/stick-figure-officer-a704145a1cbca7229b2c6d738fff75373480a5f8d8455d24bd337bf3a161260c.gif" alt="stick figure officer" width="100" class="center-image" /></p>
 
-Once you've gotten used to adaptive multi-factor, there's no going back. At Okta, our [adaptive multi-factor authentication solutions](https://www.okta.com/products/adaptive-multi-factor-authentication/) are incredibly popular.
+<p>Thanks for reading this far, I hope you had as much fun reading this as I had writing it!</p>
 
+<p>To sum things up, here’s what I’d recommend you do when trying to build applications that are not only secure, but also convenient:</p>
 
-## Best Practices for Secure Login
+<ul>
+  <li>Allow users to register one or more factors when they sign up for your service (SMS, Yubikey, Google Authenticator, Okta Verify, Authy, etc.)</li>
+  <li>Try to discourage users from using insecure factors (like SMS)</li>
+  <li>Use adaptive multi-factor when possible so that your users won’t be bombarded with authentication proof requirements upon every login</li>
+</ul>
 
-<img src="/assets/blog/twelve-factor/stick-figure-officer-a704145a1cbca7229b2c6d738fff75373480a5f8d8455d24bd337bf3a161260c.gif" alt="stick figure officer" width="100">{: .center-image }
+<p>If you do the above you’re getting the best of both worlds: security and convenience.</p>
 
-Thanks for reading this far, I hope you had as much fun reading this as I had writing it!
-
-To sum things up, here's what I'd recommend you do when trying to build applications that are not only secure, but also convenient:
-
-- Allow users to register one or more factors when they sign up for your service (SMS, Yubikey, Google Authenticator, Okta Verify, Authy, etc.)
-- Try to discourage users from using insecure factors (like SMS)
-- Use adaptive multi-factor when possible so that your users won't be bombarded with authentication proof requirements upon every login
-
-If you do the above you're getting the best of both worlds: security and convenience.
-
-That's all for now, please [hit us up](https://twitter.com/oktadev) if you have any questions or leave a comment below.
--->
+<p>That’s all for now, please <a href="https://twitter.com/oktadev">hit us up</a> if you have any questions or leave a comment below.</p>
 
 
     </div>

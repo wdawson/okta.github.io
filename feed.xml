@@ -8,6 +8,273 @@
     <atom:link href="https://developer.okta.com/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Secure Server-to-Server Communication with Spring Boot and OAuth 2.0</title>
+        <description>&lt;p&gt;Most OAuth 2.0 guides are focused around the context of a user, i.e., login to an application using Google, Github, Okta, etc., then do something on behalf of that user. While useful, these guides ignore server-to-server communication where there is no user and you only have one service connecting to another one.&lt;/p&gt;
+
+&lt;p&gt;The OAuth 2 client credentials grant type is exclusively used for scenarios in which no user exists (CRON jobs, scheduled tasks, other data workloads, etc.). This flow is less &lt;em&gt;showy&lt;/em&gt; than other OAuth flows as there is no end user or browser to deal with, but is far easier to understand than the more complicated user-centric OAuth 2.0 grant types.&lt;/p&gt;
+
+&lt;h2 id=&quot;oauth-20-client-credentials-grant&quot;&gt;OAuth 2.0 Client Credentials Grant&lt;/h2&gt;
+
+&lt;p&gt;The goal of the &lt;a href=&quot;https://www.oauth.com/oauth2-servers/access-tokens/client-credentials/&quot;&gt;client credentials&lt;/a&gt; grant is to allow two machines to communicate securely. In this grant type you have a client (think of this as your application) making API requests to another service (this is your resource server).&lt;/p&gt;
+
+&lt;p&gt;To help illustrate why this flow is important, let’s take a step back and talk about what we did before OAuth 2.0.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: If you’re an OAuth pro, you can skip ahead to the &lt;a href=&quot;#lets-build-an-oauth-20-client-credentials-app&quot;&gt;code examples below&lt;/a&gt; or check out the example on &lt;a href=&quot;https://github.com/oktadeveloper/spring-boot-client-credentials-example&quot;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Before OAuth 2.0 the way developers handled server-to-server authentication was with HTTP Basic Auth. Essentially what this boiled down to was that a developer would send over a server’s unique username and password (often referred to as an ID and secret) on each request. The API service would then validate this username and password on every request by connecting to a user store (database, LDAP, etc.) in order to validate the credentials.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/client-creds-with-spring-boot/password-sequence-9b906eb603088adfc6e18de6c08ee3cb6675ac625cea80c3d073cd49a3538349.png&quot; alt=&quot;Password sequence diagram&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This approach has a few drawbacks and exposure points:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Each application in the diagram above handles the username and password&lt;/li&gt;
+  &lt;li&gt;A second username and password might be needed to connect to user store&lt;/li&gt;
+  &lt;li&gt;The same username and password is used for each request&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;There are various ways to help mitigate these risks, but that’s out of scope in this post.&lt;/p&gt;
+
+&lt;p&gt;The OAuth 2.0 client credentials grant was created to help solve for the problems that HTTP Basic Auth had. While the client still uses a username and password (called the &lt;code class=&quot;highlighter-rouge&quot;&gt;client_id&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;client_secret&lt;/code&gt;), instead of sending them directly to the API service on each request they are instead exchanged for a token via an &lt;a href=&quot;https://tools.ietf.org/html/rfc6749#section-1.1&quot;&gt;authorization server&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/client-creds-with-spring-boot/client-creds-bee5993c5a5f34e9148049de60099414fcaa51974959fb8526f7225a3b19cb86.png&quot; alt=&quot;Client credentials sequence diagram&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The authorization server returns a temporary access token (which is used until it expires). The client then uses this access token when communicating with the resource server which means that your client’s most sensitive data (the id and secret) are only shared over the network once every expiration period, dramatically reducing the likelihood of compromise. Once the resource server receives the incoming request with the access token it will then validate the token with by talking to the authorization server.&lt;/p&gt;
+
+&lt;p&gt;I’ll talk about a couple of ways to reduce the number of network calls further at the end of this post, but first, onto an example!&lt;/p&gt;
+
+&lt;h2 id=&quot;lets-build-an-oauth-20-client-credentials-app&quot;&gt;Let’s Build an OAuth 2.0 Client Credentials App!&lt;/h2&gt;
+
+&lt;p&gt;Enough talk, let’s do something! I’m going to show you  &lt;em&gt;how&lt;/em&gt; to implement the client credentials grant type with Spring using two applications: a &lt;code class=&quot;highlighter-rouge&quot;&gt;client&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;server&lt;/code&gt;.  The server will have a single endpoint which returns a “message of the day.”  The client will be a simple command line application; you could easily replace this with a backend web application, CRON job, or any other backend script.&lt;/p&gt;
+
+&lt;h3 id=&quot;set-up-your-authorization-server&quot;&gt;Set Up Your Authorization Server&lt;/h3&gt;
+
+&lt;p&gt;To keep things simple, you’ll use Okta to create an OAuth 2.0 authorization server. This will handle all of the client credentials grant stuff mentioned above. Do you need to use Okta? Not at all! You can use any OAuth 2.0 compatible server you want — but because our service is free and simple to use, it speeds this process up.&lt;/p&gt;
+
+&lt;p&gt;If you don’t already have a free developer account, head over to &lt;a href=&quot;/&quot;&gt;developer.okta.com&lt;/a&gt; and click sign up. When that’s done you’ll have two pieces of information, your Okta base URL which looks something like: &lt;code class=&quot;highlighter-rouge&quot;&gt;dev-123456.oktapreview.com&lt;/code&gt;, and an email with instructions on how to activate your account.&lt;/p&gt;
+
+&lt;p&gt;After activating your account, while you are still in the Okta Developer Console, you then need to create an application and a custom OAuth scope. The application will give you a client ID and secret, while the custom scope will restrict your access token to this example.&lt;/p&gt;
+
+&lt;p&gt;Click the &lt;strong&gt;Applications&lt;/strong&gt; menu item, then &lt;strong&gt;Add Application&lt;/strong&gt;, then &lt;strong&gt;Service&lt;/strong&gt; -&amp;gt; &lt;strong&gt;Next&lt;/strong&gt;. Change the name to whatever you want (I’m going to use “My MOD App”), then click &lt;strong&gt;Done&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;You will need the &lt;strong&gt;Client ID&lt;/strong&gt; and &lt;strong&gt;Client secret&lt;/strong&gt; values for the next steps.&lt;/p&gt;
+
+&lt;p&gt;Next, create a &lt;a href=&quot;https://www.oauth.com/oauth2-servers/scope/defining-scopes/&quot;&gt;custom scope&lt;/a&gt; for your application.&lt;/p&gt;
+
+&lt;p&gt;From the menu bar select &lt;strong&gt;API&lt;/strong&gt; -&amp;gt; &lt;strong&gt;Authorization Servers&lt;/strong&gt;. Remember the &lt;strong&gt;Issuer URI&lt;/strong&gt; value; you will need this for the next steps. Edit the authorization server by clicking on the edit pencil, then click &lt;strong&gt;Scopes&lt;/strong&gt; -&amp;gt; &lt;strong&gt;Add Scope&lt;/strong&gt;.  Fill out the name field with &lt;code class=&quot;highlighter-rouge&quot;&gt;custom_mod&lt;/code&gt; and press &lt;strong&gt;Create&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/client-creds-with-spring-boot/custom-scope-eabddbbebd0c5229678116143bbdd49318cca8e261d50f6070b011055022c281.png&quot; alt=&quot;Create a custom scope in Okta Developer Console&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Onto the fun stuff!&lt;/p&gt;
+&lt;h3 id=&quot;create-a-resource-server&quot;&gt;Create a Resource Server&lt;/h3&gt;
+
+&lt;p&gt;This resource server (aka: API service) is going to be overly simple and consist of a single &lt;code class=&quot;highlighter-rouge&quot;&gt;/mod&lt;/code&gt; endpoint. Create a new project using the &lt;a href=&quot;https://start.spring.io/&quot;&gt;Spring Initializer&lt;/a&gt; on the command line:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl https://start.spring.io/starter.tgz  &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;artifactId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;creds-example-server &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;dependencies&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;security,web &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;language&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;java &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;maven-project &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;baseDir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;creds-example-server &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+| &lt;span class=&quot;nb&quot;&gt;tar&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-xzvf&lt;/span&gt; -
+
+&lt;span class=&quot;c&quot;&gt;# change into the new directory&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;creds-example-server
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You will also need to manually add one more dependency to your &lt;code class=&quot;highlighter-rouge&quot;&gt;pom.xml&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.security.oauth.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-security-oauth2-autoconfigure&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;2.0.0.RELEASE&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: I also renamed the &lt;code class=&quot;highlighter-rouge&quot;&gt;DemoApplication&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;ServerApplication&lt;/code&gt; because we are going to create another application shortly.&lt;/p&gt;
+
+&lt;p&gt;Update &lt;code class=&quot;highlighter-rouge&quot;&gt;ServerApplication&lt;/code&gt; to include the &lt;code class=&quot;highlighter-rouge&quot;&gt;@EnableResourceServer&lt;/code&gt; annotation and add a simple REST controller:&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@EnableResourceServer&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@SpringBootApplication&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ServerApplication&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;SpringApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ServerApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;cm&quot;&gt;/**
+     * Allows for @PreAuthorize annotation processing.
+     */&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@EnableGlobalMethodSecurity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prePostEnabled&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GlobalSecurityConfiguration&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GlobalMethodSecurityConfiguration&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MethodSecurityExpressionHandler&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;createExpressionHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;OAuth2MethodSecurityExpressionHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@RestController&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MessageOfTheDayController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nd&quot;&gt;@GetMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/mod&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;nd&quot;&gt;@PreAuthorize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;#oauth2.hasScope('custom_mod')&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getMessageOfTheDay&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Principal&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;principal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;The message of the day is boring for user: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;principal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now it’s time to configure the application! I renamed my &lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt; file to &lt;code class=&quot;highlighter-rouge&quot;&gt;application.yml&lt;/code&gt; and updated it to include:&lt;/p&gt;
+
+&lt;div class=&quot;language-yml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;security&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;oauth2&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;clientId&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;client-id-from-above&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;clientSecret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;client-secret-from-above&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;resource&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;tokenInfoUri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;issuer-uri-from-above&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/v1/introspect&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;That’s it: a few lines of code and a couple lines of config! Spring Boot will automatically handle the validation of the access tokens, all you need to worry about is your code.&lt;/p&gt;
+
+&lt;p&gt;Start it up and leave it running:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./mvn spring-boot:run
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You can try to access &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080/mod&lt;/code&gt; if you want, it will respond with a, &lt;code class=&quot;highlighter-rouge&quot;&gt;HTTP 401 UNAUTHORIZED&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id=&quot;create-the-oauth-20-client&quot;&gt;Create the OAuth 2.0 Client&lt;/h3&gt;
+
+&lt;p&gt;Next, you’re going to create a simple command line client (you could easily duplicate this logic in any type of application).&lt;/p&gt;
+
+&lt;p&gt;Open up a new terminal window and create a second application with the Spring Initializer:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl https://start.spring.io/starter.tgz  &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;artifactId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;creds-example-client &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;dependencies&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;security &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;language&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;java &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;maven-project &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;baseDir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;creds-example-client &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+| &lt;span class=&quot;nb&quot;&gt;tar&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-xzvf&lt;/span&gt; -
+
+&lt;span class=&quot;c&quot;&gt;# change into the new directory&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;creds-example-client
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Same as before, add in the Spring OAuth 2.0 library as a dependency in your &lt;code class=&quot;highlighter-rouge&quot;&gt;pom.xml&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.security.oauth.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-security-oauth2-autoconfigure&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;2.0.0.RELEASE&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This time I’ll start by defining the configuration (again I renamed &lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;application.yml&lt;/code&gt;):&lt;/p&gt;
+
+&lt;div class=&quot;language-yml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;example&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;baseUrl&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://localhost:8080&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;oauth2&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;grantType&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;client_credentials&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;clientId&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;client-id-from-above&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;clientSecret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;client-secret-from-above&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;accessTokenUri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;issuer-uri-from-above&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/v1/token&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;scope&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;custom_mod&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I’ve namespaced the configuration under &lt;code class=&quot;highlighter-rouge&quot;&gt;example&lt;/code&gt; as you could be connecting to multiple servers.&lt;/p&gt;
+
+&lt;p&gt;I configured a few properties:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;baseUrl&lt;/code&gt; is the base URL of our example server&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;grantType&lt;/code&gt; defines the grant type for the connection&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;clientId&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;clientSecret&lt;/code&gt; are the same as above&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;accessTokenUri&lt;/code&gt; defines the URI used to get an access token&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;scope&lt;/code&gt; is the custom scope we created above&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Last up is our &lt;code class=&quot;highlighter-rouge&quot;&gt;ClientApplication&lt;/code&gt; (renamed from &lt;code class=&quot;highlighter-rouge&quot;&gt;DemoApplication&lt;/code&gt;):&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@SpringBootApplication&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ClientApplication&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CommandLineRunner&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LoggerFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ClientApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;#{ @environment['example.baseUrl'] }&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;serverBaseUrl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;SpringApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ClientApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@ConfigurationProperties&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;example.oauth2.client&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ClientCredentialsResourceDetails&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;oAuthDetails&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ClientCredentialsResourceDetails&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RestTemplate&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;restTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;OAuth2RestTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oAuthDetails&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;MOD: {}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;restTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getForObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;serverBaseUrl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;/mod&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;There are a few things I want to touch on:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;CommandLineRunner&lt;/code&gt; interface adds a &lt;code class=&quot;highlighter-rouge&quot;&gt;run&lt;/code&gt; method, which is called automatically after initialization, the application exits after leaving this method&lt;/li&gt;
+  &lt;li&gt;I created a &lt;code class=&quot;highlighter-rouge&quot;&gt;ClientCredentialsResourceDetails&lt;/code&gt; bean which is bound to my configuration properties: &lt;code class=&quot;highlighter-rouge&quot;&gt;example.oauth2.client&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;I use an &lt;code class=&quot;highlighter-rouge&quot;&gt;OAuth2RestTemplate&lt;/code&gt; in place of a standard &lt;code class=&quot;highlighter-rouge&quot;&gt;RestTemplate&lt;/code&gt; this automatically manages all of the OAuth 2.0 access token exchange and sets the &lt;code class=&quot;highlighter-rouge&quot;&gt;Authentication: Bearer&lt;/code&gt; header value.  Basically, it handles all of the OAuth detail so you don’t need to worry about any of them!&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Run the application with &lt;code class=&quot;highlighter-rouge&quot;&gt;./mvnw spring-boot:run&lt;/code&gt; and you should see console output similar to:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;2018-03-20 12:56:10.058  INFO 15833 --- [main] c.e.c.ClientApplication: MOD: The message of the day is boring for user: 0oabcd12yz2EpHuis75s3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The client has successfully communicated with the server! Not bad, right? In just a few lines of code you were able to get an OAuth 2.0 authorization server setup and configured as well as create two Spring apps (one client and one server) which can now communicate securely using the OAuth 2.0 client credentials grant type!&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; if you see a &lt;code class=&quot;highlighter-rouge&quot;&gt;401&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;500&lt;/code&gt; exception double check that your &lt;code class=&quot;highlighter-rouge&quot;&gt;application.yml&lt;/code&gt; config files contain the correct information.&lt;/p&gt;
+
+&lt;h2 id=&quot;extra-credit-reduce-the-number-of-calls-to-the-authorization-server&quot;&gt;Extra Credit: Reduce the Number of Calls to the Authorization Server&lt;/h2&gt;
+
+&lt;p&gt;The second sequence diagram above seems more complicated than the first, even when factoring in the reuse of an access token. Access tokens are opaque, there is no spec behind them, and the format is left to the implementation of the authorization server.&lt;/p&gt;
+
+&lt;p&gt;At Okta we use signed JWTs which means you can &lt;a href=&quot;/authentication-guide/tokens/validating-access-tokens&quot;&gt;validate them locally&lt;/a&gt; instead of making an additional request from the API service to the authorization server on each request.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/client-creds-with-spring-boot/client-creds-jwt-07b152a57df877b7b1d2bb9345e8b6c934144f4e6562972835ded99b7e345a9f.png&quot; alt=&quot;Client credentials with JWT sequence&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We have helper libraries in a &lt;a href=&quot;https://github.com/okta?q=okta-jwt-&quot;&gt;few different languages&lt;/a&gt; and a &lt;a href=&quot;https://github.com/okta/okta-spring-boot&quot;&gt;Spring Boot starter&lt;/a&gt; that will handle the local validation for you.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; at the time of this writing &lt;code class=&quot;highlighter-rouge&quot;&gt;okta-spring-boot&lt;/code&gt; only works with Spring Boot 1.5.x, see an example on &lt;a href=&quot;https://github.com/okta/samples-java-spring/tree/master/resource-server&quot;&gt;GitHub&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;learn-more-about-oauth-20-and-okta&quot;&gt;Learn More About OAuth 2.0 and Okta&lt;/h2&gt;
+
+&lt;p&gt;In this post, I’ve explained the OAuth 2.0 client credentials grant type and created small demo applications that exercised this flow (with very little code, thanks to Spring Boot!). If you have questions, leave them below or ping me (&lt;a href=&quot;https://twitter.com/briandemers&quot;&gt;@briandemers&lt;/a&gt;) or &lt;a href=&quot;https://twitter.com/oktadev&quot;&gt;@OktaDev&lt;/a&gt; on Twitter.&lt;/p&gt;
+
+&lt;p&gt;For more info on OAuth 2.0 and Okta check out these resources:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;/blog/2017/06/21/what-the-heck-is-oauth&quot;&gt;What the Heck is OAuth?&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.oauth.com/&quot;&gt;OAuth.com&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/blog/2017/10/27/secure-spa-spring-boot-oauth&quot;&gt;Secure your SPA with Spring Boot and OAuth&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Mon, 02 Apr 2018 00:00:00 -0500</pubDate>
+        <link>https://developer.okta.com/blog/2018/04/02/client-creds-with-spring-boot</link>
+        <guid isPermaLink="true">https://developer.okta.com/blog/2018/04/02/client-creds-with-spring-boot</guid>
+      </item>
+    
+      <item>
         <title>Everything You Need to Know About the Twelve-Factor App</title>
         <description>&lt;p&gt;&lt;img src=&quot;/assets/blog/twelve-factor/twelve-factor-6a69d14e6514b8402ab8171cc8b830b37c2744da4b61ad79ec3c1f3d5f565f92.png&quot; alt=&quot;the twelve-factor app&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
 
@@ -140,97 +407,97 @@
 
 &lt;p&gt;Please &lt;a href=&quot;https://twitter.com/rdegges&quot;&gt;tweet at me&lt;/a&gt; if you have any security questions! Now go out there and make your applications more secure!&lt;/p&gt;
 
-&lt;!--
-## Gotcha!
+&lt;h2 id=&quot;gotcha&quot;&gt;Gotcha!&lt;/h2&gt;
 
-&lt;img src=&quot;/assets/blog/twelve-factor/stick-figure-happy-1bd8e401a320e50b051d7a352c196f923afa43ff11471db6c0feaf9e89763f3b.gif&quot; alt=&quot;stick figure happy&quot; width=&quot;200&quot;&gt;{: .center-image }
+&lt;p&gt;&lt;img src=&quot;/assets/blog/twelve-factor/stick-figure-happy-1bd8e401a320e50b051d7a352c196f923afa43ff11471db6c0feaf9e89763f3b.gif&quot; alt=&quot;stick figure happy&quot; width=&quot;200&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
 
-Congratulations on making it this far: happy April Fools' Day!
+&lt;p&gt;Congratulations on making it this far: happy April Fools’ Day!&lt;/p&gt;
 
-I'm not insane (*despite what my friends and co-workers might tell you*), and I'm also not advocating that you use *twelve-factor* authentication for your apps.
+&lt;p&gt;I’m not insane (&lt;em&gt;despite what my friends and co-workers might tell you&lt;/em&gt;), and I’m also not advocating that you use &lt;em&gt;twelve-factor&lt;/em&gt; authentication for your apps.&lt;/p&gt;
 
+&lt;h2 id=&quot;what-is-twelve-factor-really&quot;&gt;What is Twelve-Factor, Really?&lt;/h2&gt;
 
-## What is Twelve-Factor, Really?
+&lt;p&gt;&lt;img src=&quot;/assets/blog/twelve-factor/stick-figure-eyeroll-1848f3409acc55235c85986f8f9e928aa2f1ed1b3b6e095d0df90b7908fa1191.gif&quot; alt=&quot;stick figure eyeroll&quot; width=&quot;200&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
 
-&lt;img src=&quot;/assets/blog/twelve-factor/stick-figure-eyeroll-1848f3409acc55235c85986f8f9e928aa2f1ed1b3b6e095d0df90b7908fa1191.gif&quot; alt=&quot;stick figure eyeroll&quot; width=&quot;200&quot;&gt;{: .center-image }
+&lt;p&gt;The &lt;a href=&quot;https://12factor.net/&quot;&gt;twelve-factor app&lt;/a&gt; is a collection of best practices for building modern web applications. It’s called twelve-factor because there are twelve separate guidelines that it recommends every developer follow to build simple and scalable applications:&lt;/p&gt;
 
-The [twelve-factor app](https://12factor.net/) is a collection of best practices for building modern web applications. It's called twelve-factor because there are twelve separate guidelines that it recommends every developer follow to build simple and scalable applications:
+&lt;ol&gt;
+  &lt;li&gt;Use one codebase with version control to track many deploys&lt;/li&gt;
+  &lt;li&gt;Explicitly declare and isolate dependencies&lt;/li&gt;
+  &lt;li&gt;Store your configuration in environment variables&lt;/li&gt;
+  &lt;li&gt;Treat backing services as attached resources (databases, file servers, etc.)&lt;/li&gt;
+  &lt;li&gt;Strictly separate the build and run stages of your deployment pipeline&lt;/li&gt;
+  &lt;li&gt;Execute your app as one or more stateless processes&lt;/li&gt;
+  &lt;li&gt;Export your services via port binding&lt;/li&gt;
+  &lt;li&gt;Scale out via the process model&lt;/li&gt;
+  &lt;li&gt;Maximize robustness with fast startup and graceful shutdown&lt;/li&gt;
+  &lt;li&gt;Keep development, staging, and production as similar as possible&lt;/li&gt;
+  &lt;li&gt;Treat logs as event streams&lt;/li&gt;
+  &lt;li&gt;Run admin/management tasks as one-off processes&lt;/li&gt;
+&lt;/ol&gt;
 
-1. Use one codebase with version control to track many deploys
-2. Explicitly declare and isolate dependencies
-3. Store your configuration in environment variables
-4. Treat backing services as attached resources (databases, file servers, etc.)
-5. Strictly separate the build and run stages of your deployment pipeline
-6. Execute your app as one or more stateless processes
-7. Export your services via port binding
-8. Scale out via the process model
-9. Maximize robustness with fast startup and graceful shutdown
-10. Keep development, staging, and production as similar as possible
-11. Treat logs as event streams
-12. Run admin/management tasks as one-off processes
+&lt;p&gt;One of my programmer heroes, &lt;a href=&quot;http://about.adamwiggins.com/&quot;&gt;Adam Wiggins&lt;/a&gt; (co-founder of one of my favorite services: &lt;a href=&quot;https://www.heroku.com/&quot;&gt;Heroku&lt;/a&gt;), is the creator of the twelve-factor app pattern.&lt;/p&gt;
 
-One of my programmer heroes, [Adam Wiggins](http://about.adamwiggins.com/) (co-founder of one of my favorite services: [Heroku](https://www.heroku.com/)), is the creator of the twelve-factor app pattern.
+&lt;p&gt;With that said, it should be obvious that the twelve-factor app has nothing to do with multi-factor authentication.&lt;/p&gt;
 
-With that said, it should be obvious that the twelve-factor app has nothing to do with multi-factor authentication.
+&lt;h2 id=&quot;why-is-twelve-factor-authentication-bad&quot;&gt;Why is Twelve-Factor Authentication Bad?&lt;/h2&gt;
 
+&lt;p&gt;&lt;img src=&quot;/assets/blog/twelve-factor/stick-figure-thinking-9c14c3395cf8573d2ea114a886f8c3dfe07c1724845d09c9a51a0fa5096f64c1.jpg&quot; alt=&quot;stick figure thinking&quot; width=&quot;250&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
 
-## Why is Twelve-Factor Authentication Bad?
+&lt;p&gt;While it’s true that more factors provides more security, twelve-factor authentication is bad for a few primary reasons.&lt;/p&gt;
 
-&lt;img src=&quot;/assets/blog/twelve-factor/stick-figure-thinking-9c14c3395cf8573d2ea114a886f8c3dfe07c1724845d09c9a51a0fa5096f64c1.jpg&quot; alt=&quot;stick figure thinking&quot; width=&quot;250&quot;&gt;{: .center-image }
+&lt;p&gt;First of all, the more factors you require a user to enter each time they log in, the less they’ll log in. If you had to enter twelve separate proofs about yourself upon each login you’d go crazy.&lt;/p&gt;
 
-While it's true that more factors provides more security, twelve-factor authentication is bad for a few primary reasons.
+&lt;p&gt;Second, what a lot of people don’t realize is that each factor your application supports places a really high burden on your development team.&lt;/p&gt;
 
-First of all, the more factors you require a user to enter each time they log in, the less they'll log in. If you had to enter twelve separate proofs about yourself upon each login you'd go crazy.
+&lt;p&gt;Maintaining all sorts of connectors and verification methods to do things like verify SMS codes, Google Authenticator codes, Yubikey key presses, etc. can take a ton of time and effort to build and maintain.&lt;/p&gt;
 
-Second, what a lot of people don't realize is that each factor your application supports places a really high burden on your development team.
+&lt;p&gt;Finally, twelve-factor authentication as I laid it out above would also create an insane burden on your support team (if you have one). Imagine the amount of customer support phone calls and emails Netflix would receive if one day they require you to go through twelve factors of authentication to login; there’d be riots in the streets of San Francisco!&lt;/p&gt;
 
-Maintaining all sorts of connectors and verification methods to do things like verify SMS codes, Google Authenticator codes, Yubikey key presses, etc. can take a ton of time and effort to build and maintain.
+&lt;h2 id=&quot;multi-factor-is-good-but-adaptive-multi-factor-is-better&quot;&gt;Multi-Factor is Good, but Adaptive Multi-Factor is Better&lt;/h2&gt;
 
-Finally, twelve-factor authentication as I laid it out above would also create an insane burden on your support team (if you have one). Imagine the amount of customer support phone calls and emails Netflix would receive if one day they require you to go through twelve factors of authentication to login; there'd be riots in the streets of San Francisco!
+&lt;p&gt;&lt;img src=&quot;/assets/blog/twelve-factor/nerdy-stick-figure-99762115ee51de2412023fcee9e7be2e1d69dbf161a149b515b1d0d0e7783e5f.png&quot; alt=&quot;nerdy stick figure&quot; width=&quot;200&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
 
+&lt;p&gt;Multi-factor authentication is awesome:&lt;/p&gt;
 
-## Multi-Factor is Good, but Adaptive Multi-Factor is Better
+&lt;ul&gt;
+  &lt;li&gt;It allows your users to prove themselves with only a little bit of inconvenience.&lt;/li&gt;
+  &lt;li&gt;It allows your users to add multiple “factors” to select from when logging in — this way, if you add both an SMS factor &lt;em&gt;and&lt;/em&gt; a Yubikey factor you can still log into your account even if you forget your Yubikey device..&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;img src=&quot;/assets/blog/twelve-factor/nerdy-stick-figure-99762115ee51de2412023fcee9e7be2e1d69dbf161a149b515b1d0d0e7783e5f.png&quot; alt=&quot;nerdy stick figure&quot; width=&quot;200&quot;&gt;{: .center-image }
+&lt;p&gt;The problem with multi-factor authentication, however, is the same exact problem you’d have implementing twelve-factor authentication as well: it’s annoying.&lt;/p&gt;
 
-Multi-factor authentication is awesome:
+&lt;p&gt;I’ll give you an example: when I log into my bank account, I’m &lt;em&gt;always&lt;/em&gt; prompted to enter an SMS code from my phone. It doesn’t matter if I’ve just been away from my computer for 30 minutes, I’ve always got to re-authenticate using my second factor each and every time.&lt;/p&gt;
 
-- It allows your users to prove themselves with only a little bit of inconvenience.
-- It allows your users to add multiple &quot;factors&quot; to select from when logging in — this way, if you add both an SMS factor *and* a Yubikey factor you can still log into your account even if you forget your Yubikey device..
+&lt;p&gt;This gets annoying really quick.&lt;/p&gt;
 
-The problem with multi-factor authentication, however, is the same exact problem you'd have implementing twelve-factor authentication as well: it's annoying.
+&lt;p&gt;To help solve this problem, some really smart people got together and decided to coin the term “adaptive multi-factor authentication”, which refers to the strategy of only prompting users for multi-factor authentication &lt;em&gt;when needed&lt;/em&gt; (eg: being adaptive about it).&lt;/p&gt;
 
-I'll give you an example: when I log into my bank account, I'm *always* prompted to enter an SMS code from my phone. It doesn't matter if I've just been away from my computer for 30 minutes, I've always got to re-authenticate using my second factor each and every time.
+&lt;p&gt;For example: let’s say I log into my bank website from my house and authenticate with a second factor (like an SMS code).&lt;/p&gt;
 
-This gets annoying really quick.
+&lt;p&gt;The website I’m visiting can remember my public IP, my browser, and some other facts about me so that the next time I log in, if these details are the same, the bank website can still trust me and not require me to enter an SMS code again.&lt;/p&gt;
 
-To help solve this problem, some really smart people got together and decided to coin the term &quot;adaptive multi-factor authentication&quot;, which refers to the strategy of only prompting users for multi-factor authentication *when needed* (eg: being adaptive about it).
+&lt;p&gt;By combining modern techniques like machine learning with simple user context it is possible to relax multi-factor requirements while still retaining a high level of security and a maximum amount of usability.&lt;/p&gt;
 
-For example: let's say I log into my bank website from my house and authenticate with a second factor (like an SMS code).
+&lt;p&gt;Once you’ve gotten used to adaptive multi-factor, there’s no going back. At Okta, our &lt;a href=&quot;https://www.okta.com/products/adaptive-multi-factor-authentication/&quot;&gt;adaptive multi-factor authentication solutions&lt;/a&gt; are incredibly popular.&lt;/p&gt;
 
-The website I'm visiting can remember my public IP, my browser, and some other facts about me so that the next time I log in, if these details are the same, the bank website can still trust me and not require me to enter an SMS code again.
+&lt;h2 id=&quot;best-practices-for-secure-login&quot;&gt;Best Practices for Secure Login&lt;/h2&gt;
 
-By combining modern techniques like machine learning with simple user context it is possible to relax multi-factor requirements while still retaining a high level of security and a maximum amount of usability.
+&lt;p&gt;&lt;img src=&quot;/assets/blog/twelve-factor/stick-figure-officer-a704145a1cbca7229b2c6d738fff75373480a5f8d8455d24bd337bf3a161260c.gif&quot; alt=&quot;stick figure officer&quot; width=&quot;100&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
 
-Once you've gotten used to adaptive multi-factor, there's no going back. At Okta, our [adaptive multi-factor authentication solutions](https://www.okta.com/products/adaptive-multi-factor-authentication/) are incredibly popular.
+&lt;p&gt;Thanks for reading this far, I hope you had as much fun reading this as I had writing it!&lt;/p&gt;
 
+&lt;p&gt;To sum things up, here’s what I’d recommend you do when trying to build applications that are not only secure, but also convenient:&lt;/p&gt;
 
-## Best Practices for Secure Login
+&lt;ul&gt;
+  &lt;li&gt;Allow users to register one or more factors when they sign up for your service (SMS, Yubikey, Google Authenticator, Okta Verify, Authy, etc.)&lt;/li&gt;
+  &lt;li&gt;Try to discourage users from using insecure factors (like SMS)&lt;/li&gt;
+  &lt;li&gt;Use adaptive multi-factor when possible so that your users won’t be bombarded with authentication proof requirements upon every login&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;img src=&quot;/assets/blog/twelve-factor/stick-figure-officer-a704145a1cbca7229b2c6d738fff75373480a5f8d8455d24bd337bf3a161260c.gif&quot; alt=&quot;stick figure officer&quot; width=&quot;100&quot;&gt;{: .center-image }
+&lt;p&gt;If you do the above you’re getting the best of both worlds: security and convenience.&lt;/p&gt;
 
-Thanks for reading this far, I hope you had as much fun reading this as I had writing it!
-
-To sum things up, here's what I'd recommend you do when trying to build applications that are not only secure, but also convenient:
-
-- Allow users to register one or more factors when they sign up for your service (SMS, Yubikey, Google Authenticator, Okta Verify, Authy, etc.)
-- Try to discourage users from using insecure factors (like SMS)
-- Use adaptive multi-factor when possible so that your users won't be bombarded with authentication proof requirements upon every login
-
-If you do the above you're getting the best of both worlds: security and convenience.
-
-That's all for now, please [hit us up](https://twitter.com/oktadev) if you have any questions or leave a comment below.
---&gt;
+&lt;p&gt;That’s all for now, please &lt;a href=&quot;https://twitter.com/oktadev&quot;&gt;hit us up&lt;/a&gt; if you have any questions or leave a comment below.&lt;/p&gt;
 </description>
         <pubDate>Fri, 30 Mar 2018 00:00:00 -0500</pubDate>
         <link>https://developer.okta.com/blog/2018/03/30/everything-you-need-to-know-about-the-twelve-factor-app</link>
@@ -4668,185 +4935,6 @@ git checkout oauth
         <pubDate>Thu, 08 Feb 2018 00:00:00 -0500</pubDate>
         <link>https://developer.okta.com/blog/2018/02/08/set-up-and-enforce-multi-factor-auth-with-okta</link>
         <guid isPermaLink="true">https://developer.okta.com/blog/2018/02/08/set-up-and-enforce-multi-factor-auth-with-okta</guid>
-      </item>
-    
-      <item>
-        <title>A Developer's Guide To Docker - Docker Swarm</title>
-        <description>&lt;p&gt;Redundancy is a big deal when scaling websites. However, deploying and managing clusters of containers can quickly become untenable. While there are a few container orchestration tools out there like Kubernetes and Mesosphere (DC/OS), Docker has its own called Docker Swarm Mode. Swarm Mode allows you to deploy, scale, and manage clusters of Docker containers from a single command window.&lt;/p&gt;
-
-&lt;p&gt;In this tutorial, I’ll show you how to create a swarm, create some virtual machines that will be part of the swarm, deploy containers to the swarm, and scale those containers horizontally. Let’s get started!&lt;/p&gt;
-
-&lt;h2 id=&quot;install-docker-dependencies&quot;&gt;Install Docker Dependencies&lt;/h2&gt;
-
-&lt;p&gt;For this tutorial, you’ll need Docker installed. I am using the latest version of Docker tools (17.12.0-ce). To ensure you have it, run &lt;code class=&quot;highlighter-rouge&quot;&gt;docker -v&lt;/code&gt; in your command shell and you should see a version close to that. If you don’t have Docker installed, you can get download it from the &lt;a href=&quot;https://www.docker.com/get-docker&quot;&gt;Docker website&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;You’ll also need some sort of virtual machine software. VirtualBox from Oracle is free to download at &lt;a href=&quot;https://www.virtualbox.org/wiki/Downloads&quot;&gt;https://www.virtualbox.org/wiki/Downloads&lt;/a&gt; and works on most operating systems.&lt;/p&gt;
-
-&lt;p&gt;If you are on Windows, make sure you are using Linux containers by right-clicking on the whale icon in the Windows bar at the bottom of your screen and if you see “Switch to Windows containers…” in the menu items, then you are using Linux containers. Otherwise you will see a “Switch to Linux containers…” in the context menu.&lt;/p&gt;
-
-&lt;h2 id=&quot;create-some-virtual-machines-with-docker-machine&quot;&gt;Create Some Virtual Machines with Docker Machine&lt;/h2&gt;
-
-&lt;p&gt;To make this a little more realistic, let’s use Docker Machine. If you are on Mac or Windows, Docker Machine is installed with Docker. If you are on a Linux machine you may have to install it by following &lt;a href=&quot;https://docs.docker.com/machine/install-machine/&quot;&gt;these instructions&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Docker Machine is an easy way to create virtual Docker hosts, aka virtual machines with Docker already installed on them. Docker Machine uses whatever virtualization software you have installed to create these VMs. In this case, assuming you’ve installed VirtualBox, that is what Docker Machine will use to provision VMs. You should be able to see you have no virtual machines currently managed by Docker Machine by running &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-machine ls&lt;/code&gt; at your command prompt. You should see some output like this:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NAME   ACTIVE   DRIVER   STATE   URL   SWARM   DOCKER   ERRORS
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;To create your first virtual host, run the command:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker-machine create &lt;span class=&quot;nt&quot;&gt;--driver&lt;/span&gt; virtualbox m1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This may take a few minutes as the Boot2Docker ISO may be out of date (as mine was) and it is provisioning resources from your host (disk space, RAM, etc). Mine also took a minute to find an IP for the new VM. Eventually you will see “Docker is up and running!” near the bottom of the output.&lt;/p&gt;
-
-&lt;p&gt;Also, create another VM called “w1”.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker-machine create &lt;span class=&quot;nt&quot;&gt;--driver&lt;/span&gt; virtualbox w1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Once that finishes, you can ensure both were created successfully as well as get some information about the VMs by running &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-machine ls&lt;/code&gt;. The output will look something like below (the IP addresses may be different).&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NAME   ACTIVE   DRIVER       STATE     URL                         SWARM   DOCKER        ERRORS
-m1     -        virtualbox   Running   tcp://192.168.99.100:2376           v18.01.0-ce   
-w1     -        virtualbox   Running   tcp://192.168.99.101:2376           v18.01.0-ce   
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;initialize-docker-swarm-mode&quot;&gt;Initialize Docker Swarm Mode&lt;/h2&gt;
-
-&lt;p&gt;You’re going to initialize Docker Swarm on the “m1” VM. To do that, you’ll need to be operating on that machine. You’ll do that by sshing into the “m1” machine. Docker Machine makes this easy:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker-machine ssh m1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This should drop you into a command line on the virtual machine.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/docker-swarm/docker-machine-ssh-82daa22691f9716b1d1b730440827601659c6df8544c85abd4ef29160496dc25.png&quot; alt=&quot;docker machine command line&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;You can now initialize the swarm:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker swarm init &lt;span class=&quot;nt&quot;&gt;--advertise-addr&lt;/span&gt; 192.168.99.100
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Your IP address for &lt;code class=&quot;highlighter-rouge&quot;&gt;--advertise-addr&lt;/code&gt; may differ, but it should be the IP address of the “m1” virtual machine from the &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-machine ls&lt;/code&gt; output above.&lt;/p&gt;
-
-&lt;p&gt;You will see output that swarm mode was initialized and that the node you are currently on (m1) is a manager for the swarm.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Swarm initialized: current node &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;xjrema6dtbyhwchuiskflhkzs&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; is now a manager.
-
-To add a worker to this swarm, run the following &lt;span class=&quot;nb&quot;&gt;command&lt;/span&gt;:
-
-    docker swarm join &lt;span class=&quot;nt&quot;&gt;--token&lt;/span&gt; SWMTKN-1-3x2qs4opurzbk9uhngxjvt9g0a49qmf9r0c1spk6h73zrpkvkg-4li8vbz5i0nokggb9ayfsmdwf 192.168.99.100:2377
-
-To add a manager to this swarm, run &lt;span class=&quot;s1&quot;&gt;'docker swarm join-token manager'&lt;/span&gt; and follow the instructions.
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Your tokens and IPs may vary, but Docker is helping you out here by assuming that you’re going to want to join some workers to this swarm (thanks Docker!). Copy the &lt;code class=&quot;highlighter-rouge&quot;&gt;docker swarm join --token ...&lt;/code&gt; command and exit this virtual machine by simply typing &lt;code class=&quot;highlighter-rouge&quot;&gt;exit&lt;/code&gt; at the command line.&lt;/p&gt;
-
-&lt;p&gt;Next, you’ll ssh into the “w1” VM and join it to the swarm as a worker node.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker-machine ssh w1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Then run the command you copied to join the swarm and you will see a very simple output telling you that you’ve joined the swarm as a worker.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;This node joined a swarm as a worker.
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;You can verify this node is part of a swarm by running the &lt;code class=&quot;highlighter-rouge&quot;&gt;docker info&lt;/code&gt; command on either virtual machine. You will see a bunch of output, but the stuff you care about will be under the &lt;code class=&quot;highlighter-rouge&quot;&gt;Swarm&lt;/code&gt; header. Running this on the “w1” machine will show output like below.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;...
-Swarm: active
- NodeID: su9ywsey3i2pmpyzstvau3wre
- Is Manager: &lt;span class=&quot;nb&quot;&gt;false
- &lt;/span&gt;Node Address: 192.168.99.101
- Manager Addresses:
-  192.168.99.100:2377
-...
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;On the manager node it will be only slightly different:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;...
-Swarm: active
- NodeID: xjrema6dtbyhwchuiskflhkzs
- Is Manager: &lt;span class=&quot;nb&quot;&gt;true
- &lt;/span&gt;ClusterID: e0uwcyffisncxhb0fvyxji4gl
- Managers: 1
- Nodes: 2
-...
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;You now have a swarm of two nodes working together! Next, you’ll add some services (the Swarm equivalent of containers) to this swarm and watch it work its magic visually.&lt;/p&gt;
-
-&lt;h2 id=&quot;manage-docker-swarm-services&quot;&gt;Manage Docker Swarm Services&lt;/h2&gt;
-
-&lt;p&gt;If you are not already, ssh into the “m1” node.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker-machine ssh m1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;In order to visualize what Docker Swarm is doing, you’ll use a visualizer created by Docker called &lt;a href=&quot;https://github.com/dockersamples/docker-swarm-visualizer&quot;&gt;docker-swarm-visualizer&lt;/a&gt;. From the command line of m1, run:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; docker run &lt;span class=&quot;nt&quot;&gt;-it&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 8080:8080 &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; /var/run/docker.sock:/var/run/docker.sock dockersamples/visualizer
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This will create a container (that will not be managed by the swarm) so you can visualize what’s going on in the swarm.&lt;/p&gt;
-
-&lt;p&gt;This will take a few moments as it will pull down the image to run the visualizer. Once it’s up and running, go to a browser and put the IP address of the m1 node with a port of 8080 into the browser’s address bar.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/docker-swarm/swarm-visualizer-screen-253f03e06584b5bb54348add36c5c5b037430e2084d5b471da5131312de100ab.png&quot; alt=&quot;Swarm Visualizer Screen&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Finally, create a service to run the simple &lt;code class=&quot;highlighter-rouge&quot;&gt;nginx&lt;/code&gt; container.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker service create &lt;span class=&quot;nt&quot;&gt;--name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;web &lt;span class=&quot;nt&quot;&gt;--publish&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;80:80/tcp nginx
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;You will almost immediately see the m1 node in the visualizer add a box called web. The “light” on the box will be red until the service has been completely created and started. Once it’s done, the “light” will turn green.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/docker-swarm/web-service-green-light-c23d44781203330472cc4336d26846e032bf46a8512d30f61489d10f68812f5b.png&quot; alt=&quot;Web Service Green Light&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;To scale this service horizontally, simply tell Docker to scale it.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker service scale &lt;span class=&quot;nv&quot;&gt;web&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;4
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;You can see the services starting up in the visualizer. Docker will spread the services evenly across the nodes.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/docker-swarm/web-service-scaled-ccee15f38f454e6d52158c4603a7514aa3587534cd7a1b0f2f8441ca03807156.png&quot; alt=&quot;Web Service Scaled&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;You can scale the service anyway you like: up or down by simply specifying the number of instances of the service you want running. You can check the service by running&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker service list
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Which will generate output similar to:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
-evo4eseldujq        web                 replicated          4/4                 nginx:latest        &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;:80-&amp;gt;80/tcp
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This tells you that the service named “web” is replicated, that 4 out of 4 instances are running, and that the service is based on the &lt;code class=&quot;highlighter-rouge&quot;&gt;nginx:latest&lt;/code&gt; image. You can even go to the browser for the IP address of the manager node on port 80 and see the NGINX service running!&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/docker-swarm/nginx-service-running-061d6ac4250dd67503c1fd53947e05dccda042452c210225792c89e6ae75d0d0.png&quot; alt=&quot;NGINX Service Running&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;You are now ready to go conquer some of your own Docker Swarms now!&lt;/p&gt;
-
-&lt;h2 id=&quot;learn-more&quot;&gt;Learn More&lt;/h2&gt;
-
-&lt;p&gt;If you enjoyed this post, I’d encourage you to learn more about  learn more about &lt;a href=&quot;https://docs.docker.com/machine&quot;&gt;Docker Machine&lt;/a&gt;. You can specify other spreading techniques for the swarm, and even specify that Docker only deploy these services to specific nodes in the cluster based on labels. Learn more about Swarm from its &lt;a href=&quot;https://docs.docker.com/swarm&quot;&gt;Product Documentation&lt;/a&gt;. Or, if you’d like to learn more about what you can do with Docker, check out the other posts in this series:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;/blog/2017/05/10/developers-guide-to-docker-part-1&quot;&gt;A Gentle Introduction&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;/blog/2017/08/28/developers-guide-to-docker-part-2&quot;&gt;The Dockerfile&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;/blog/2017/10/11/developers-guide-to-docker-part-3&quot;&gt;Docker Compose&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;As always, hit me up in the comments with any questions, and follow &lt;a href=&quot;https://twitter.com/OktaDev&quot;&gt;@oktadev&lt;/a&gt; on Twitter for more awesome content from the team at Okta.&lt;/p&gt;
-</description>
-        <pubDate>Wed, 07 Feb 2018 00:00:00 -0500</pubDate>
-        <link>https://developer.okta.com/blog/2018/02/07/developers-guide-to-docker-part-4</link>
-        <guid isPermaLink="true">https://developer.okta.com/blog/2018/02/07/developers-guide-to-docker-part-4</guid>
       </item>
     
   </channel>
