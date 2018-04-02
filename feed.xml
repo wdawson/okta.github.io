@@ -23,7 +23,7 @@
 
 &lt;p&gt;Before OAuth 2.0 the way developers handled server-to-server authentication was with HTTP Basic Auth. Essentially what this boiled down to was that a developer would send over a server’s unique username and password (often referred to as an ID and secret) on each request. The API service would then validate this username and password on every request by connecting to a user store (database, LDAP, etc.) in order to validate the credentials.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/blog/client-creds-with-spring-boot/password-sequence-9b906eb603088adfc6e18de6c08ee3cb6675ac625cea80c3d073cd49a3538349.png&quot; alt=&quot;Password sequence diagram&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/client-creds-with-spring-boot/password-sequence-425e0b5f98c58bdf5b977262eaa422c275c63ec3b2d4c4c670fd866d90c0f69b.png&quot; alt=&quot;Password sequence diagram&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;This approach has a few drawbacks and exposure points:&lt;/p&gt;
 
@@ -37,7 +37,7 @@
 
 &lt;p&gt;The OAuth 2.0 client credentials grant was created to help solve for the problems that HTTP Basic Auth had. While the client still uses a username and password (called the &lt;code class=&quot;highlighter-rouge&quot;&gt;client_id&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;client_secret&lt;/code&gt;), instead of sending them directly to the API service on each request they are instead exchanged for a token via an &lt;a href=&quot;https://tools.ietf.org/html/rfc6749#section-1.1&quot;&gt;authorization server&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/blog/client-creds-with-spring-boot/client-creds-bee5993c5a5f34e9148049de60099414fcaa51974959fb8526f7225a3b19cb86.png&quot; alt=&quot;Client credentials sequence diagram&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/client-creds-with-spring-boot/client-creds-7fee4525b7b3e50e56ab635711468599b17126e8a8393986c572fffc2c4883b3.png&quot; alt=&quot;Client credentials sequence diagram&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The authorization server returns a temporary access token (which is used until it expires). The client then uses this access token when communicating with the resource server which means that your client’s most sensitive data (the id and secret) are only shared over the network once every expiration period, dramatically reducing the likelihood of compromise. Once the resource server receives the incoming request with the access token it will then validate the token with by talking to the authorization server.&lt;/p&gt;
 
@@ -251,7 +251,7 @@
 
 &lt;p&gt;At Okta we use signed JWTs which means you can &lt;a href=&quot;/authentication-guide/tokens/validating-access-tokens&quot;&gt;validate them locally&lt;/a&gt; instead of making an additional request from the API service to the authorization server on each request.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/blog/client-creds-with-spring-boot/client-creds-jwt-07b152a57df877b7b1d2bb9345e8b6c934144f4e6562972835ded99b7e345a9f.png&quot; alt=&quot;Client credentials with JWT sequence&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/client-creds-with-spring-boot/client-creds-jwt-90615dab46fe5a23d5bca2a29ec42e518683860826b70840fa2a6cea62108440.png&quot; alt=&quot;Client credentials with JWT sequence&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;We have helper libraries in a &lt;a href=&quot;https://github.com/okta?q=okta-jwt-&quot;&gt;few different languages&lt;/a&gt; and a &lt;a href=&quot;https://github.com/okta/okta-spring-boot&quot;&gt;Spring Boot starter&lt;/a&gt; that will handle the local validation for you.&lt;/p&gt;
 
