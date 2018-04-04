@@ -44,15 +44,15 @@
    
 
   <link type="text/css" rel="stylesheet" href="https://developer.okta.com/sites/all/themes/developer/css/master.css" media="all" />
-  <meta class="swiftype" name="title" data-type="string" content="Authorization Code Flow | Okta Developer">
-  <meta class="swiftype" name="summary" data-type="string" content="How to implement the authorization code flow wi..." />
+  <meta class="swiftype" name="title" data-type="string" content="Relationships with Linked Objects | Okta Developer">
+  <meta class="swiftype" name="summary" data-type="string" content="Create users with relationships." />
 
   <link type="text/css" rel="stylesheet" href="/assets/animate-ec43d72c3ed45e08a460b8a2966d8dba6006aebfa0530935c3973fa493a8771f.css">
   <link type="text/css" rel="stylesheet" href="/assets/okta-4cdd13e8e2d1b92407eb31809cf09b924e2389ccdb14cd31623506ebbdf9f086.css">
   
   
-  <title>Authorization Code Flow | Okta Developer</title>
-  <meta name="description" content="How to implement the authorization code flow wi...">
+  <title>Relationships with Linked Objects | Okta Developer</title>
+  <meta name="description" content="Create users with relationships.">
   <link rel="alternate" type="application/rss+xml" title="Okta Developer" href="https://developer.okta.com/feed.xml"><!-- GA -->
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
@@ -64,7 +64,7 @@
 </head>
 
 <body>
-  <div class="Page authorization-code-flow Page--docs-page">
+  <div class="Page relationships-with-linked-objects Page--docs-page">
     <!-- START Header -->
     
 
@@ -157,43 +157,8 @@
         <a href = "/authentication-guide/auth-overview/">OAuth 2.0 Overview</a>
         
       </li>
-      <li class="is-active">
+      <li>
         <a href = "/authentication-guide/implementing-authentication/">Implementing OAuth 2.0</a>
-        
-          <ul>
-            
-              
-                <li class="is-active">
-                  <a href="/authentication-guide/implementing-authentication/auth-code">Authorization Code Flow</a>
-                </li>
-            
-              
-                <li>
-                  <a href="/authentication-guide/implementing-authentication/auth-code-pkce">Authorization Code Flow with PKCE</a>
-                </li>
-            
-              
-                <li>
-                  <a href="/authentication-guide/implementing-authentication/client-creds">Client Credentials Flow</a>
-                </li>
-            
-              
-                <li>
-                  <a href="/authentication-guide/implementing-authentication/implicit">Implicit Flow</a>
-                </li>
-            
-              
-              
-                <li>
-                  <a href="/authentication-guide/implementing-authentication/password">Resource Owner Password Flow</a>
-                </li>
-            
-              
-                <li>
-                  <a href="/authentication-guide/implementing-authentication/set-up-authz-server">Customizing Your Authorization Server</a>
-                </li>
-            
-          </ul>
         
       </li>
       <li>
@@ -230,7 +195,7 @@
       <li>
         <a href="/use_cases/integrate_with_okta/">Integrate with Okta</a>
       </li>
-      <li>
+      <li class="is-active">
         <a href="/use_cases/relationships/">Relationships with Linked Objects</a>
       </li>
     </ul>
@@ -321,133 +286,47 @@
 <!-- END Fixed sidebar -->
       <!-- START Page Content -->
       <div class="PageContent-main" id="docs-body">
-        <a id="edit-link" href="https://github.com/okta/okta.github.io/edit/source/_source/_authentication-guide/implementing-authentication/auth-code.md" data-proofer-ignore>Edit Page</a>
-      <h1 id="implement-the-authorization-code-flow">Implement the Authorization Code Flow</h1>
+        <a id="edit-link" href="https://github.com/okta/okta.github.io/edit/source/_source/_use_cases/relationships/index.md" data-proofer-ignore>Edit Page</a>
+      <h1 id="relationships-with-linked-objects">Relationships with Linked Objects</h1>
 
-<p>If you are building a server-side (or “web”) application that is capable of securely storing secrets, then the authorization code flow is the recommended method for controlling access to it.</p>
+<p>Users have relationships to each other, like manager and subordinate or customer and sales representative. You can create users with relationships by using the <a href="/docs/api/resources/linked-objects">Linked Objects API</a>.</p>
 
-<p>At a high-level, this flow has the following steps:</p>
+<h2 id="linked-objects-and-users">Linked Objects and Users</h2>
 
-<ul>
-  <li>Your application directs the browser to the Okta Sign-In page, where the user authenticates.</li>
-  <li>The browser receives an authorization code from your Okta authorization server.</li>
-  <li>The authorization code is passed to your application.</li>
-  <li>Your application sends this code to Okta, and Okta returns access and ID tokens, and optionally a refresh token.</li>
-  <li>Your application can now use these tokens to call the resource server (for example an API) on behalf of the user.</li>
-</ul>
-
-<p>For more information on the authorization code flow, including why to use it, see <a href="/authentication-guide/auth-overview/#authorization-code-flow">our OAuth 2.0 overview</a>.</p>
-
-<h3 id="1-setting-up-your-application">1. Setting up your Application</h3>
-
-<p>You set up your OpenID Connect application inside the Okta Developer Console:</p>
-
-<ol>
-  <li>From the Applications page, choose <strong>Add Application</strong>.</li>
-  <li>On the Create New Application page, select <strong>Web</strong>.</li>
-  <li>Fill-in the Application Settings, then click <strong>Done</strong>. The “Login redirect URIs” must match a URI that your user can be redirected to with their authorization code. See below for more details.</li>
-</ol>
-
-<h3 id="2-using-the-authorization-code-flow">2. Using the Authorization Code Flow</h3>
-
-<p>To get an authorization code, you make a request to your authorization server’s <code class="highlighter-rouge">/authorize</code> endpoint. If you are using the default Okta authorization server, then your request URL would look something like this:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/authorize?client_id=0oabucvy
-c38HLL1ef0h7&amp;response_type=code&amp;scope=openid&amp;redirect_uri=http%3A%2F%2Flocal
-host%3A8080&amp;state=state-296bc9a0-a2a2-4a57-be1a-d0e2fd9bb601'
-</code></pre></div></div>
-
-<p>Note the parameters that are being passed:</p>
+<p>Okta allows you to create up to 200 linked object definitions. These definitions are one-to-many:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">client_id</code> matches the Client ID of your Okta OAuth application that you created above. You can find it at the bottom of your application’s General tab.</li>
-  <li><code class="highlighter-rouge">response_type</code> is <code class="highlighter-rouge">code</code>, indicating that we are using the authorization code grant type.</li>
-  <li><code class="highlighter-rouge">scope</code> is <code class="highlighter-rouge">openid</code>, which means that the <code class="highlighter-rouge">/token</code> endpoint will return an ID token. For more information about scopes, see <a href="/standards/OIDC/#scopes">here</a>.</li>
-  <li><code class="highlighter-rouge">redirect_uri</code> is the callback location where the user-agent will be directed to along with the <code class="highlighter-rouge">code</code>. This must match one of the “Login redirect URIs” you specified when you were creating your Okta application in Step 1.</li>
-  <li><code class="highlighter-rouge">state</code> is an arbitrary alphanumeric string that the authorization server will reproduce when redirecting the user-agent back to the client. This is used to help prevent cross-site request forgery.</li>
+  <li>A manager has many subordinates</li>
+  <li>A sales representative has many customers</li>
+  <li>A case worker has many clients</li>
 </ul>
 
-<p>For more information on these parameters, see <a href="/docs/api/resources/oidc#authorize">the OAuth 2.0 API reference</a>.</p>
+<p>Of course, most organizations have more than one manager or sales representative. You can create the linked object definition once, then assign the <code class="highlighter-rouge">primary</code> relationship to as many users as you have people in that relationship.</p>
 
-<p>If the user does not have an existing session, this will open the Okta Sign-in Page. If they have an existing session, or after they authenticate, they will arrive at the specified <code class="highlighter-rouge">redirect_uri</code> along with a <code class="highlighter-rouge">code</code>:</p>
+<p>You can assign the <code class="highlighter-rouge">associated</code> relationship for a single <code class="highlighter-rouge">primary</code> user to as many users as needed. The <code class="highlighter-rouge">associated</code> user can be related to only one <code class="highlighter-rouge">primary</code> per linked object definition. But a user can be assigned to more than one linked object definition.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://localhost:8080/?code=P5I7mdxxdv13_JfXrCSq&amp;state=state-296bc9a0-a2a2-4a57
--be1a-d0e2fd9bb601
-</code></pre></div></div>
-
-<p>This code will remain valid for 60 seconds, during which it can be exchanged for tokens.</p>
-
-<h3 id="3-exchanging-the-code-for-tokens">3. Exchanging the Code for Tokens</h3>
-
-<p>To exchange this code for access and ID tokens, you pass it to your authorization server’s <code class="highlighter-rouge">/token</code> endpoint. If you are using the default Okta authorization server, then your request would look something like this:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl --request POST \
-  --url <span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/token \
-  --header 'accept: application/json' \
-  --header 'authorization: Basic MG9hY...' \
-  --header 'content-type: application/x-www-form-urlencoded' \
-  --data 'grant_type=authorization_code&amp;redirect_uri=http%3A%2F%2Flocalhost%3A8080&amp;code=P59yPm1_X1gxtdEOEZjn'
-</code></pre></div></div>
-
-<blockquote>
-  <p>Important: The call to the <code class="highlighter-rouge">/token</code> endpoint requires authentication. In this case, it is a Basic Auth digest of the client ID and secret. You can find the client ID and secret in your application’s General tab. This requirement is why this call is only appropriate for applications that can guarantee the secrecy of the client secret. For more on Basic Auth, please see <a href="https://developer.okta.com/docs/api/resources/oidc#token-authentication-methods">Token Authentication Methods</a>.</p>
-</blockquote>
-
-<p>Note the parameters that are being passed:</p>
+<p>For example, assume that you’ve created one linked object definition for manager (<code class="highlighter-rouge">primary</code>) and subordinates (<code class="highlighter-rouge">associated</code>):</p>
 
 <ul>
-  <li><code class="highlighter-rouge">grant_type</code> is <code class="highlighter-rouge">authorization_code</code>, indicating that we are using the authorization code grant type.</li>
-  <li><code class="highlighter-rouge">redirect_uri</code> must match the URI that was used to get the authorization code.</li>
-  <li><code class="highlighter-rouge">code</code> is the authorization code that you got from the <code class="highlighter-rouge">/authorize</code> endpoint.</li>
+  <li>Joe is Frank’s manager.</li>
+  <li>Bob is Joe’s manager, but Jane’s subordinate.</li>
+  <li>Jane is the CEO, so she reports to herself.</li>
 </ul>
 
-<p>For more information on these parameters, see the <a href="https://developer.okta.com/docs/api/resources/oidc#token">OAuth 2.0 API reference</a>.</p>
+<p>Thus you can create chains of relationships (Jane &gt; Bob &gt; Joe &gt; Frank), or terminal relationships (Jane is both <code class="highlighter-rouge">primary</code> and <code class="highlighter-rouge">associated</code> user).</p>
 
-<p>If the code is still valid, your application will receive back access and ID tokens:</p>
+<p>Then, if you created another linked object relationship for scrum team membership, you could assign relationships to the same four users:</p>
 
-<pre><code class="language-jwt">{
-    "access_token": "eyJhbG[...]9pDQ",
-    "token_type": "Bearer",
-    "expires_in": 3600,
-    "scope": "openid",
-    "id_token": "eyJhbG[...]RTM0A"
-}
-</code></pre>
+<ul>
+  <li>Bob is the scrummaster for the Identity Scrum Team</li>
+  <li>Joe and Frank are both contributors to the team.</li>
+</ul>
 
-<h3 id="4-next-steps">4. Next Steps</h3>
+<p>Bob can be the <code class="highlighter-rouge">primary</code> for a Manager:Subordinate, an <code class="highlighter-rouge">associated</code> user for that same linked object definition, and also the <code class="highlighter-rouge">primary</code> for the Scrummaster:Contributor linked object definition.</p>
 
-<p>When your application passes a request with an <code class="highlighter-rouge">access_token</code>, the resource server will need to validate it. For more on this, see <a href="/authentication-guide/tokens/validating-access-tokens">Validating Access Tokens</a>.</p>
+<p>To represent a relationship, create a linked object definition that specifies a <code class="highlighter-rouge">primary</code> (parent) relationship and an <code class="highlighter-rouge">associated</code> (child), and then assign each side of that link type to the appropriate user.</p>
 
-<h3 id="examples">Examples</h3>
-
-<p>The following web application examples show you the authorization code flow, as it would be implemented by a web app that needs to authenticate the end user and then create a local session for that user. These projects use popular web frameworks to handle the heavy lifting. Each project can be cloned and ran locally.</p>
-
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: center"> </th>
-      <th>Framework</th>
-      <th>Example Repository</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: center"><i class="icon code-dotnet-32"></i></td>
-      <td>ASP.NET Core</td>
-      <td><a href="https://github.com/oktadeveloper/okta-aspnetcore-mvc-example">https://github.com/oktadeveloper/okta-aspnetcore-mvc-example</a></td>
-    </tr>
-    <tr>
-      <td style="text-align: center"><i class="icon code-nodejs-32"></i></td>
-      <td>Express.js</td>
-      <td><a href="https://github.com/okta/samples-nodejs-express-4">https://github.com/okta/samples-nodejs-express-4</a></td>
-    </tr>
-    <tr>
-      <td style="text-align: center"><i class="icon code-java-32"></i></td>
-      <td>Spring</td>
-      <td><a href="https://github.com/okta/samples-java-spring-mvc">https://github.com/okta/samples-java-spring-mvc</a></td>
-    </tr>
-  </tbody>
-</table>
+<p>To get started, visit  <a href="/docs/api/resources/linked-objects">Linked Objects API</a>.</p>
 
       </div>
       <div class="TableOfContents TableOfContentsPreload">
