@@ -111,7 +111,7 @@ public class Startup
 }
 ```
 
-**Note**: If you are using  .NET framework <4.6 and TLS 1.2 make sure to include the following code in the `Application_Start` or `Startup`:
+**Note**: If you are using .NET framework <4.6 or you are getting the following error: ```The request was aborted: Could not create SSL/TLS secure channel ```. Make sure to include the following code in the `Application_Start` or `Startup`:
 
 ```csharp
 // Enable TLS 1.2
