@@ -111,6 +111,13 @@ public class Startup
 }
 ```
 
+**Note**: If you are using  .NET framework <4.6 and TLS 1.2 make sure to include the following code in the `Application_Start` or `Startup`:
+
+```csharp
+// Enable TLS 1.2
+ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
+```
+
 Add these using statements at the top of the file:
 
 ```csharp
