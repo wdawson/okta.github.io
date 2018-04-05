@@ -408,12 +408,12 @@
       <div class="PageContent-main">
         <h1 id="overview">Overview</h1>
 
-<p>When you use the Okta API to <a href="/docs/api/resources/oidc#authorize">obtain an authorization grant for a user</a>, the response contains a signed JWT (<code class="highlighter-rouge">id_token</code> and/or <code class="highlighter-rouge">access_token</code>).</p>
+<p>When you use Okta to <a href="/authentication-guide/implementing-authentication/">get OAuth 2.0 or OpenID Connect tokens for a user</a>, the response contains a signed JWT (<code class="highlighter-rouge">id_token</code> and/or <code class="highlighter-rouge">access_token</code>).</p>
 
-<p>A common practice is to send one of these tokens in the <code class="highlighter-rouge">Bearer</code> header of future requests, to authorize the request for that user. Your server must then validate the token to make sure it’s authentic and hasn’t expired.</p>
+<p>If you are writing low-level code that retrieves or uses these tokens, it’s important to validate the tokens before you trust them. This guide will show you how to validate tokens manually.</p>
 
 <blockquote>
-  <p>Note: This guide is specific to the .NET environment.  If you need general information, please see <a href="/authentication-guide/tokens/">Working With OAuth 2.0 Tokens</a>.</p>
+  <p>Note: This guide is specific to .NET and C#.  If you need general information, read <a href="/authentication-guide/tokens/">Working With OAuth 2.0 Tokens</a> instead.</p>
 </blockquote>
 
 <h2 id="who-should-use-this-guide">Who should use this guide</h2>
@@ -421,32 +421,29 @@
 <p>You <em>don’t</em> need to validate tokens manually if:</p>
 
 <ul>
-  <li>You are using <a href="/quickstart/#/widget/dotnet/aspnet4" data-proofer-ignore="">ASP.NET</a> or <a href="/quickstart/#/widget/dotnet/aspnetcore" data-proofer-ignore="">ASP.NET Core</a> with the <code class="highlighter-rouge">JwtBearer</code> or <code class="highlighter-rouge">OpenIdConnect</code> middleware</li>
-  <li>You want to send tokens to Okta to be validated (this is called <a href="/docs/api/resources/oidc#introspect">token introspection</a>)</li>
+  <li>You are using <a href="/quickstart/#/widget/dotnet/aspnet4" data-proofer-ignore="">ASP.NET</a> or <a href="/quickstart/#/widget/dotnet/aspnetcore" data-proofer-ignore="">ASP.NET Core</a> - follow our quickstarts instead!</li>
+  <li>You send the tokens to Okta to be validated (this is called <a href="/docs/api/resources/oidc#introspect">token introspection</a>)</li>
 </ul>
 
 <p>If you need to validate a token manually, and don’t want to make a network call to Okta, this guide will help you validate tokens locally.</p>
 
-<h2 id="what-youll-need">What you’ll need</h2>
+<h3 id="what-youll-need">What you’ll need</h3>
 
 <ul>
-  <li>Your authorization server URL</li>
-  <li>A JWT (string)</li>
+  <li>Your authorization server URL (see <a href="/docs/api/resources/oidc#composing-your-base-url">Composing Your Base URL</a>)</li>
+  <li>A token (JWT string)</li>
   <li>Libraries for retrieving the signing keys and validating the token</li>
 </ul>
 
-<p>When you create a <a href="https://www.okta.com/developer/signup">new Okta developer org</a>, Okta creates an authorization server called <code class="highlighter-rouge">default</code>. The URL for this authorization server is <code class="highlighter-rouge"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default</code>. You can always find the full authorization server URL (also called an Issuer URI) in the Okta developer console by opening the <strong>API</strong> menu and choosing <strong>Authorization Servers</strong>.</p>
+<p>This guide will use the official Microsoft OpenID Connect and JWT libraries, but you can adapt it to other key and token parsing libraries.</p>
 
-<p>In this guide, you’ll use the official Microsoft OpenID Connect and JWT libraries, but you can adapt it to your preferred key parser and JWT validation libraries as well.</p>
+<h3 id="get-the-signing-keys">Get the signing keys</h3>
 
-<h2 id="get-the-signing-keys">Get the signing keys</h2>
-
-<p>Okta signs JWTs using <a href="https://stackoverflow.com/a/39239395/3191599">asymmetric encryption (RS256)</a>, and publishes the public signing keys in a JWKS (JSON Web Key set) as part of the OAuth 2.0 and OpenID Connect discovery documents. The signing keys are rotated on a regular basis. The first step to verify a signed JWT is to retrieve the current signing keys.</p>
+<p>Okta signs JWTs using <a href="https://stackoverflow.com/a/39239395/3191599">asymmetric encryption (RS256)</a>, and publishes the public signing keys in a JWKS (JSON Web Key Set) as part of the OAuth 2.0 and OpenID Connect discovery documents. The signing keys are rotated on a regular basis. The first step to verify a signed JWT is to retrieve the current signing keys.</p>
 
 <p>The <code class="highlighter-rouge">OpenIdConnectConfigurationRetriever</code> class in the <a href="https://www.nuget.org/packages/Microsoft.IdentityModel.Protocols.OpenIdConnect/">Microsoft.IdentityModel.Protocols.OpenIdConnect</a> package will download and parse the discovery document to get the key set. You can use it in conjunction with the <code class="highlighter-rouge">ConfigurationManager</code> class, which will handle caching the response and refreshing it regularly:</p>
 
 <div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Replace with your authorization server URL:</span>
-
 <span class="kt">var</span> <span class="n">issuer</span> <span class="p">=</span> <span class="s">"<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default"</span><span class="p">;</span>
 
 <span class="kt">var</span> <span class="n">configurationManager</span> <span class="p">=</span> <span class="k">new</span> <span class="n">ConfigurationManager</span><span class="p">&lt;</span><span class="n">OpenIdConnectConfiguration</span><span class="p">&gt;(</span>
@@ -457,7 +454,7 @@
 
 <p>Once you’ve instantiated the <code class="highlighter-rouge">configurationManager</code>, keep it around as a singleton. You only need to set it up once.</p>
 
-<h2 id="validate-a-token">Validate a token</h2>
+<h3 id="validate-a-token">Validate a token</h3>
 
 <p>The <code class="highlighter-rouge">JwtSecurityTokenHandler</code> class in the <a href="https://www.nuget.org/packages/System.IdentityModel.Tokens.Jwt">System.IdentityModel.Tokens.Jwt</a> package will handle the low-level details of validating a JWT.</p>
 
@@ -486,7 +483,6 @@
         <span class="c1">// (a lower value is better; we recommend five minutes or less)</span>
         <span class="n">ClockSkew</span> <span class="p">=</span> <span class="n">TimeSpan</span><span class="p">.</span><span class="nf">FromMinutes</span><span class="p">(</span><span class="m">5</span><span class="p">),</span>
         <span class="c1">// See additional validation for aud below</span>
-        <span class="n">ValidateAudience</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span>
     <span class="p">};</span>
 
     <span class="k">try</span>
@@ -518,24 +514,25 @@
 <span class="k">else</span>
 <span class="p">{</span>
     <span class="c1">// Additional validation...</span>
-
     <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Token is valid!"</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
 <p>This method will return an instance of <code class="highlighter-rouge">JwtSecurityToken</code> if the token is valid, or <code class="highlighter-rouge">null</code> if it is invalid. Returning <code class="highlighter-rouge">JwtSecurityToken</code> makes it possible to retrieve claims from the token later.</p>
 
-<p>Depending on your application, you could change this method to return a <code class="highlighter-rouge">bool</code>, log specific exceptions like <code class="highlighter-rouge">SecurityTokenExpiredException</code> with a message, or handle validation failures in some other way.</p>
+<p>Depending on your application, you could change this method to return a boolean, log specific exceptions like <code class="highlighter-rouge">SecurityTokenExpiredException</code> with a message, or handle validation failures in some other way.</p>
 
 <h3 id="additional-validation-for-access-tokens">Additional validation for access tokens</h3>
 
-<p>If you are validating access tokens, you should verify that the <code class="highlighter-rouge">aud</code> (Audience) claim equals the Audience that is configured for your Authorization Server in the Okta Developer Dashboard. For example, if your Authorization Server Audience is set to <code class="highlighter-rouge">MyAwesomeApi</code>, add this to the validation parameters:</p>
+<p>If you are validating access tokens, you should verify that the <code class="highlighter-rouge">aud</code> (audience) claim equals the audience that is configured for your Authorization Server in the Okta Developer Console.</p>
+
+<p>For example, if your Authorization Server audience is set to <code class="highlighter-rouge">MyAwesomeApi</code>, add this to the validation parameters:</p>
 
 <div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ValidateAudience</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
 <span class="n">ValidAudience</span> <span class="p">=</span> <span class="s">"MyAwesomeApi"</span><span class="p">,</span>
 </code></pre></div></div>
 
-<p>You can also optionally verify that the <code class="highlighter-rouge">cid</code> claim matches the expected Client ID of the current application. You’ll have to perform this check after the <code class="highlighter-rouge">ValidateToken</code> method returns a validated token:</p>
+<p>You also must verify that the <code class="highlighter-rouge">cid</code> claim matches the expected Client ID of the current application. You’ll have to perform this check after the <code class="highlighter-rouge">ValidateToken</code> method returns a validated token:</p>
 
 <div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">validatedToken</span> <span class="p">=</span> <span class="k">await</span> <span class="nf">ValidateToken</span><span class="p">(</span><span class="n">accessToken</span><span class="p">,</span> <span class="n">issuer</span><span class="p">,</span> <span class="n">configurationManager</span><span class="p">);</span>
 
@@ -552,13 +549,15 @@
 
 <h3 id="additional-validation-for-id-tokens">Additional validation for ID tokens</h3>
 
-<p>When validating an ID token, you should verify that the <code class="highlighter-rouge">aud</code> (Audience) claim equals the Client ID of the current application. Add this to the validation parameters:</p>
+<p>When validating an ID token, you should verify that the <code class="highlighter-rouge">aud</code> (Audience) claim equals the Client ID of the current application.</p>
+
+<p>Add this to the validation parameters:</p>
 
 <div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ValidateAudience</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
 <span class="n">ValidAudience</span> <span class="p">=</span> <span class="s">"xyz123"</span><span class="p">,</span> <span class="c1">// This Application's Client ID</span>
 </code></pre></div></div>
 
-<p>If you specified a nonce during the initial code exchange when your application retrieved the ID token, you can verify that the nonce matches:</p>
+<p>If you specified a nonce during the initial code exchange when your application retrieved the ID token, you should verify that the nonce matches:</p>
 
 <div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">validatedToken</span> <span class="p">=</span> <span class="k">await</span> <span class="nf">ValidateToken</span><span class="p">(</span><span class="n">accessToken</span><span class="p">,</span> <span class="n">issuer</span><span class="p">,</span> <span class="n">configurationManager</span><span class="p">);</span>
 
@@ -595,6 +594,8 @@
 <h2 id="conclusion">Conclusion</h2>
 
 <p>This guide provides the basic steps required to locally verify an access or ID token signed by Okta. It uses packages from Microsoft for key parsing and token validation, but the general principles should apply to any JWT validation library.</p>
+
+<p>Most applications don’t need to follow this guide. If you are using our <a href="/quickstart/#/widget/dotnet/aspnet4" data-proofer-ignore="">ASP.NET quickstart</a> or <a href="/quickstart/#/widget/dotnet/aspnetcore" data-proofer-ignore="">ASP.NET Core quickstart</a> to connect your application to Okta, all of these validation steps are done automatically for you.</p>
 
       </div>
       <!-- END Page Content -->
