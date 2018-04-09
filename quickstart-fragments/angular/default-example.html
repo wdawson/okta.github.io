@@ -142,13 +142,15 @@
   <span class="nl">isAuthenticated</span><span class="p">:</span> <span class="kr">boolean</span><span class="p">;</span>
 
   <span class="kd">constructor</span><span class="p">(</span><span class="kr">public</span> <span class="nx">oktaAuth</span><span class="p">:</span> <span class="nx">OktaAuthService</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// Get the authentication state for immediate use</span>
-    <span class="kr">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">isAuthenticated</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">oktaAuth</span><span class="p">.</span><span class="nx">isAuthenticated</span><span class="p">();</span>
-
     <span class="c1">// Subscribe to authentication state changes</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">oktaAuth</span><span class="p">.</span><span class="nx">$authenticatedState</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">oktaAuth</span><span class="p">.</span><span class="nx">$authenticationState</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span>
       <span class="p">(</span><span class="nx">isAuthenticated</span><span class="p">:</span> <span class="kr">boolean</span><span class="p">)</span>  <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">isAuthenticated</span> <span class="o">=</span> <span class="nx">isAuthenticated</span>
     <span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">async</span> <span class="nx">ngOnInit</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Get the authentication state for immediate use</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">isAuthenticated</span> <span class="o">=</span> <span class="kr">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">oktaAuth</span><span class="p">.</span><span class="nx">isAuthenticated</span><span class="p">();</span>
   <span class="p">}</span>
 
   <span class="nx">login</span><span class="p">()</span> <span class="p">{</span>
@@ -223,7 +225,7 @@
   <span class="p">}</span>
 
   <span class="k">async</span> <span class="nx">ngOnInit</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">accessToken</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">oktaAuth</span><span class="p">.</span><span class="nx">getAccessToken</span><span class="p">();</span>
+    <span class="kd">const</span> <span class="nx">accessToken</span> <span class="o">=</span> <span class="kr">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">oktaAuth</span><span class="p">.</span><span class="nx">getAccessToken</span><span class="p">();</span>
     <span class="kd">const</span> <span class="nx">headers</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Headers</span><span class="p">({</span>
       <span class="na">Authorization</span><span class="p">:</span> <span class="s1">'Bearer '</span> <span class="o">+</span> <span class="nx">accessToken</span>
     <span class="p">});</span>
