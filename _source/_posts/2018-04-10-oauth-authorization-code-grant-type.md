@@ -11,7 +11,7 @@ tweets:
 
 The Authorization Code Grant Type is probably the most common of the OAuth 2.0 grant types that you'll encounter. It is used by both web apps and native apps to get an access token after a user authorizes an app.
 
-This post is the first part of a series where we explore frequently used OAuth 2.0 grant types. If you want to back up a bit and learn more about OAuth 2.0 before we dive in, check out [What the Heck is OAuth?](https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth), also on the Okta developer blog.
+This post is the first part of a series where we explore frequently used OAuth 2.0 grant types. If you want to back up a bit and learn more about OAuth 2.0 before we dive in, check out [What the Heck is OAuth?](/blog/2017/06/21/what-the-heck-is-oauth), also on the Okta developer blog.
 
 ## What is an OAuth 2.0 Grant Type?
 
@@ -51,7 +51,7 @@ Here’s each query parameter explained:
 
 When the user visits this URL, the authorization server will present them with a prompt asking if they would like to authorize this application's request.
 
-![OAuth Prompt](https://oauth2simplified.com/images/oauth-prompt.png)
+{% img blog/oauth-authorization-code-grant-type/oauth-prompt.png alt:"OAuth Prompt" width:"500" %}{: .center-image }
 
 ### Redirect Back to the Application
 
@@ -76,10 +76,10 @@ We're about ready to wrap up the flow. Now that the application has the authoriz
 The application makes a POST request to the service's token endpoint with the following parameters:
 
 * `grant_type=authorization_code` - This tells the token endpoint that the application is using the Authorization Code grant type.
-* `code=` - The application includes the authorization code it was given in the redirect.
-* `redirect_uri=` - The same redirect URI that was used when requesting the code. Some APIs don’t require this parameter, so you’ll need to double check the documentation of the particular API you’re accessing.
-* `client_id=` - The application's client ID.
-* `client_secret=` - The application's client secret. This ensures that the request to get the access token is made only from the application, and not from a potential attacker that may have intercepted the authorization code.
+* `code` - The application includes the authorization code it was given in the redirect.
+* `redirect_uri` - The same redirect URI that was used when requesting the code. Some APIs don’t require this parameter, so you’ll need to double check the documentation of the particular API you’re accessing.
+* `client_id` - The application's client ID.
+* `client_secret` - The application's client secret. This ensures that the request to get the access token is made only from the application, and not from a potential attacker that may have intercepted the authorization code.
 
 The token endpoint will verify all the parameters in the request, ensuring the code hasn't expired and that the client ID and secret match. If everything checks out, it will generate an access token and return it in the response!
 
@@ -112,8 +112,8 @@ The code exchange step ensures that an attacker isn’t able to intercept the ac
 ## Learn More About OAuth and Okta
 
 You can learn more about OAuth 2.0 on [OAuth.com](https://www.oauth.com/), or check out any of these resources to get started building!
-* [Get Started with Spring Boot, OAuth 2.0, and Okta](https://developer.okta.com/blog/2017/03/21/spring-boot-oauth)
-* [Token Authentication in ASP.NET Core 2.0 - A Complete Guide](https://developer.okta.com/blog/2018/03/23/token-authentication-aspnetcore-complete-guide)
-* [Secure your SPA with Spring Boot and OAuth](https://developer.okta.com/blog/2017/10/27/secure-spa-spring-boot-oauth)
-Or hit up [Okta’s OIDC/OAuth 2.0 API](http://developer.okta.com/docs/api/resources/oidc) for specific information on how we support OAuth. And as always, follow us on Twitter @oktadev for more great content.
+* [Get Started with Spring Boot, OAuth 2.0, and Okta](/blog/2017/03/21/spring-boot-oauth)
+* [Token Authentication in ASP.NET Core 2.0 - A Complete Guide](/blog/2018/03/23/token-authentication-aspnetcore-complete-guide)
+* [Secure your SPA with Spring Boot and OAuth](/blog/2017/10/27/secure-spa-spring-boot-oauth)
+Or hit up [Okta’s OIDC/OAuth 2.0 API](/docs/api/resources/oidc) for specific information on how we support OAuth. And as always, follow us on Twitter @oktadev for more great content.
 
