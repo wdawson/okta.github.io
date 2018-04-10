@@ -8,6 +8,126 @@
     <atom:link href="https://developer.okta.com/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>What is the OAuth 2.0 Authorization Code Grant Type?</title>
+        <description>&lt;p&gt;The Authorization Code Grant Type is probably the most common of the OAuth 2.0 grant types that you’ll encounter. It is used by both web apps and native apps to get an access token after a user authorizes an app.&lt;/p&gt;
+
+&lt;p&gt;This post is the first part of a series where we explore frequently used OAuth 2.0 grant types. If you want to back up a bit and learn more about OAuth 2.0 before we dive in, check out &lt;a href=&quot;/blog/2017/06/21/what-the-heck-is-oauth&quot;&gt;What the Heck is OAuth?&lt;/a&gt;, also on the Okta developer blog.&lt;/p&gt;
+
+&lt;h2 id=&quot;what-is-an-oauth-20-grant-type&quot;&gt;What is an OAuth 2.0 Grant Type?&lt;/h2&gt;
+
+&lt;p&gt;In OAuth 2.0, the term “grant type” refers to the way an application gets an access token. OAuth 2.0 defines several grant types, including the authorization code flow. OAuth 2.0 extensions can also define new grant types.&lt;/p&gt;
+
+&lt;p&gt;Each grant type is optimized for a particular use case, whether that’s a web app, a native app, a device without the ability to launch a web browser, or server-to-server applications.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-authorization-code-flow&quot;&gt;The Authorization Code Flow&lt;/h2&gt;
+
+&lt;p&gt;The Authorization Code grant type is used by web and mobile apps. It differs from most of the other grant types by first requiring the app launch a browser to begin the flow. At a high level, the flow has the following steps:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The application opens a browser to send the user to the OAuth server&lt;/li&gt;
+  &lt;li&gt;The user sees the authorization prompt and approves the app’s request&lt;/li&gt;
+  &lt;li&gt;The user is redirected back to the application with an authorization code in the query string&lt;/li&gt;
+  &lt;li&gt;The application exchanges the authorization code for an access token&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;get-the-users-permission&quot;&gt;Get the User’s Permission&lt;/h3&gt;
+
+&lt;p&gt;OAuth is all about enabling users to grant limited access to applications. The application first needs to decide which permissions it is requesting, then send the user to a browser to get their permission. To begin the authorization flow, the application constructs a URL like the following and opens a browser to that URL.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;https://authorization-server.com/auth
+ ?response_type=code
+ &amp;amp;client_id=29352915982374239857
+ &amp;amp;redirect_uri=https%3A%2F%2Fexample-app.com%2Fcallback
+ &amp;amp;scope=create+delete
+ &amp;amp;state=xcoiv98y2kd22vusuye3kch
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Here’s each query parameter explained:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;response_type=code&lt;/code&gt; - This tells the authorization server that the application is initiating the authorization code flow.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;client_id&lt;/code&gt; - The public identifier for the application, obtained when the developer first registered the application.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;redirect_uri&lt;/code&gt; - Tells the authorization server where to send the user back to after they approve the request.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;scope&lt;/code&gt; - One or more space-separated strings indicating which permissions the application is requesting. The specific OAuth API you’re using will define the scopes that it supports.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;state&lt;/code&gt; - The application generates a random string and includes it in the request. It should then check that the same value is returned after the user authorizes the app. This is used to prevent &lt;a href=&quot;https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29&quot;&gt;CSRF attacks&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;When the user visits this URL, the authorization server will present them with a prompt asking if they would like to authorize this application’s request.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/oauth-authorization-code-grant-type/oauth-prompt-6489c6516fda5e0deea637d96f8398683fea6ade6054ee779e306e0b8ac5dcb8.png&quot; alt=&quot;OAuth Prompt&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;redirect-back-to-the-application&quot;&gt;Redirect Back to the Application&lt;/h3&gt;
+
+&lt;p&gt;If the user approves the request, the authorization server will redirect the browser back to the &lt;code class=&quot;highlighter-rouge&quot;&gt;redirect_uri&lt;/code&gt; specified by the application, adding a &lt;code class=&quot;highlighter-rouge&quot;&gt;code&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;state&lt;/code&gt; to the query string.&lt;/p&gt;
+
+&lt;p&gt;For example, the user will be redirected back to a URL such as&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;https://example-app.com/redirect
+ ?code=g0ZGZmNjVmOWIjNTk2NTk4ZTYyZGI3
+ &amp;amp;state=xcoiv98y2kd22vusuye3kch
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;state&lt;/code&gt; value will be the same value that the application initially set in the request. The application is expected to check that the state in the redirect matches the state it originally set. This protects against CSRF and other related attacks.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;code&lt;/code&gt; is the authorization code generated by the authorization server. This code is relatively short-lived, typically lasting between 1 to 10 minutes depending on the OAuth service.&lt;/p&gt;
+
+&lt;h3 id=&quot;exchange-the-authorization-code-for-an-access-token&quot;&gt;Exchange the Authorization Code for an Access Token&lt;/h3&gt;
+
+&lt;p&gt;We’re about ready to wrap up the flow. Now that the application has the authorization code, it can use that to get an access token.&lt;/p&gt;
+
+&lt;p&gt;The application makes a POST request to the service’s token endpoint with the following parameters:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;grant_type=authorization_code&lt;/code&gt; - This tells the token endpoint that the application is using the Authorization Code grant type.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;code&lt;/code&gt; - The application includes the authorization code it was given in the redirect.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;redirect_uri&lt;/code&gt; - The same redirect URI that was used when requesting the code. Some APIs don’t require this parameter, so you’ll need to double check the documentation of the particular API you’re accessing.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;client_id&lt;/code&gt; - The application’s client ID.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;client_secret&lt;/code&gt; - The application’s client secret. This ensures that the request to get the access token is made only from the application, and not from a potential attacker that may have intercepted the authorization code.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The token endpoint will verify all the parameters in the request, ensuring the code hasn’t expired and that the client ID and secret match. If everything checks out, it will generate an access token and return it in the response!&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: no-store
+Pragma: no-cache
+
+{
+  &quot;access_token&quot;:&quot;MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI3&quot;,
+  &quot;token_type&quot;:&quot;bearer&quot;,
+  &quot;expires_in&quot;:3600,
+  &quot;refresh_token&quot;:&quot;IwOGYzYTlmM2YxOTQ5MGE3YmNmMDFkNTVk&quot;,
+  &quot;scope&quot;:&quot;create delete&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The Authorization Code flow is complete! The application now has an access token it can use when making API requests.&lt;/p&gt;
+
+&lt;h2 id=&quot;when-to-use-the-authorization-code-flow&quot;&gt;When to use the Authorization Code Flow&lt;/h2&gt;
+
+&lt;p&gt;The Authorization Code flow is best used in web and mobile apps. Since the Authorization Code grant has the extra step of exchanging the authorization code for the access token, it provides an additional layer of security not present in the Implicit grant type.&lt;/p&gt;
+
+&lt;p&gt;If you’re using the Authorization Code flow in a mobile app, or any other type of application that can’t store a client secret, then you should also use the &lt;a href=&quot;https://www.oauth.com/oauth2-servers/pkce/&quot;&gt;PKCE extension&lt;/a&gt;, which provides protections against other attacks where the authorization code may be intercepted.&lt;/p&gt;
+
+&lt;p&gt;The code exchange step ensures that an attacker isn’t able to intercept the access token, since the access token is always sent via a secure backchannel between the application and the OAuth server.&lt;/p&gt;
+
+&lt;h2 id=&quot;learn-more-about-oauth-and-okta&quot;&gt;Learn More About OAuth and Okta&lt;/h2&gt;
+
+&lt;p&gt;You can learn more about OAuth 2.0 on &lt;a href=&quot;https://www.oauth.com/&quot;&gt;OAuth.com&lt;/a&gt;, or check out any of these resources to get started building!&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;/blog/2017/03/21/spring-boot-oauth&quot;&gt;Get Started with Spring Boot, OAuth 2.0, and Okta&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/blog/2018/03/23/token-authentication-aspnetcore-complete-guide&quot;&gt;Token Authentication in ASP.NET Core 2.0 - A Complete Guide&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/blog/2017/10/27/secure-spa-spring-boot-oauth&quot;&gt;Secure your SPA with Spring Boot and OAuth&lt;/a&gt;
+Or hit up &lt;a href=&quot;/docs/api/resources/oidc&quot;&gt;Okta’s OIDC/OAuth 2.0 API&lt;/a&gt; for specific information on how we support OAuth. And as always, follow us on Twitter &lt;a href=&quot;https://twitter.com/oktadev&quot;&gt;@oktadev&lt;/a&gt; for more great content.&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        <pubDate>Tue, 10 Apr 2018 00:00:00 -0500</pubDate>
+        <link>https://developer.okta.com/blog/2018/04/10/oauth-authorization-code-grant-type</link>
+        <guid isPermaLink="true">https://developer.okta.com/blog/2018/04/10/oauth-authorization-code-grant-type</guid>
+      </item>
+    
+      <item>
         <title>Secure Server-to-Server Communication with Spring Boot and OAuth 2.0</title>
         <description>&lt;p&gt;Most OAuth 2.0 guides are focused around the context of a user, i.e., login to an application using Google, Github, Okta, etc., then do something on behalf of that user. While useful, these guides ignore server-to-server communication where there is no user and you only have one service connecting to another one.&lt;/p&gt;
 
@@ -4905,36 +5025,6 @@ git checkout oauth
         <pubDate>Tue, 13 Feb 2018 00:00:00 -0500</pubDate>
         <link>https://developer.okta.com/blog/2018/02/13/secure-spring-microservices-with-oauth</link>
         <guid isPermaLink="true">https://developer.okta.com/blog/2018/02/13/secure-spring-microservices-with-oauth</guid>
-      </item>
-    
-      <item>
-        <title>Set Up and Enforce Multi-Factor Authentication with the Okta API</title>
-        <description>&lt;p&gt;So, you’re building a custom app and you need to include support for multi-factor authentication (MFA). Did you know that &lt;a href=&quot;https://developer.okta.com/&quot;&gt;Okta’s API&lt;/a&gt; can support multi-step MFA workflows?&lt;/p&gt;
-
-&lt;p&gt;The diagram below shows the primary authentication flows with MFA enrollment and enforcement enabled.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/use-okta-api-for-mfa/mfa_enroll_enforce-94f5a32813f0ce1c8e1a826fe50d849db2b2081e4d3b67fed5a9840d603fba34.png&quot; alt=&quot;With API&quot; width=&quot;700&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Okta has a push-based verification app called Okta Verify. It’s available on the &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.okta.android.auth&amp;amp;hl=en&quot;&gt;Google Play&lt;/a&gt; and &lt;a href=&quot;https://itunes.apple.com/us/app/okta-verify/id490179405?mt=8&quot;&gt;Apple App&lt;/a&gt; stores. Okta Verify is similar to Google Authenticator, except it adds the additional feature of supporting push notifications. We think this strikes a really great balance between additional security and user experience.&lt;/p&gt;
-
-&lt;p&gt;I created a screencast to demonstrate how you can manage the whole MFA enrollment and enforcement process using the Okta API &lt;a href=&quot;https://www.youtube.com/embed/EVL3gnt7BYo&quot;&gt;here&lt;/a&gt; or you can watch below:&lt;/p&gt;
-
-&lt;div style=&quot;width: 800px; margin: 0 auto&quot;&gt;
-  &lt;iframe width=&quot;800&quot; height=&quot;450&quot; src=&quot;https://www.youtube.com/embed/EVL3gnt7BYo&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Interested in learning more about secure authentication with Okta? Check out our &lt;a href=&quot;https://developer.okta.com/documentation/&quot;&gt;Product Documentation&lt;/a&gt;, our hands-on &lt;a href=&quot;https://www.okta.com/services/training/&quot;&gt;Platform for Developers&lt;/a&gt; course, or any of these great posts from our developer blog:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;/blog/2018/01/10/build-app-for-ios-android-with-xamarin&quot;&gt;Build an App for iOS and Android with Xamarin&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;/blog/2017/12/18/spring-security-5-oidc&quot;&gt;Get Started with Spring Security 5.0 and OIDC&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;/blog/2017/12/04/use-kong-gateway-to-centralize-authentication&quot;&gt;Use Kong Gateway to Centralize Authentication&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;/blog/2017/10/31/add-authentication-to-play-framework-with-oidc&quot;&gt;Add Auth to Play Framework with OIDC and Okta&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;/blog/2017/10/19/use-openid-connect-to-build-a-simple-node-website&quot;&gt;Use OpenID Connect to Build a Simple Node.js Website&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Thu, 08 Feb 2018 00:00:00 -0500</pubDate>
-        <link>https://developer.okta.com/blog/2018/02/08/set-up-and-enforce-multi-factor-auth-with-okta</link>
-        <guid isPermaLink="true">https://developer.okta.com/blog/2018/02/08/set-up-and-enforce-multi-factor-auth-with-okta</guid>
       </item>
     
   </channel>
