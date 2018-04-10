@@ -211,7 +211,7 @@
 
 <p><strong>NOTE:</strong> The instructions below for building a Spring Boot API are the same as the ones in <a href="/blog/2017/04/26/bootiful-development-with-spring-boot-and-angular">Bootiful Development with Spring Boot and Angular</a>. I’ve copied them below for your convenience.</p>
 
-<p>To get started with Spring Boot, navigate to <a href="https://start.spring.io">start.spring.io</a>. In the “Search for dependencies” field, select the following:</p>
+<p>To get started with Spring Boot, navigate to <a href="https://start.spring.io">start.spring.io</a> and choose version 1.5.12+. In the “Search for dependencies” field, select the following:</p>
 
 <ul>
   <li><a href="http://www.h2database.com/html/main.html">H2</a>: An in-memory database</li>
@@ -220,7 +220,7 @@
   <li><a href="https://github.com/spring-projects/spring-boot/blob/master/spring-boot-project/spring-boot-starters/spring-boot-starter-web/pom.xml">Web</a>: Spring MVC with Jackson (for JSON), Hibernate Validator, and embedded Tomcat</li>
 </ul>
 
-<p><img src="/assets/blog/react-spring-boot/start.spring.io-c5ba06511aca2142deff20985f3fe5aab9e22032c3f46774306b28b2fe87f0cc.png" alt="start.spring.io" width="800" class="center-image" /></p>
+<p><img src="/assets/blog/react-spring-boot/start.spring.io-c53e2e82ff171e7e58ea8576ac1d00960d4a031c6796a8638d823bfd55fbe370.png" alt="start.spring.io" width="800" class="center-image" /></p>
 
 <p>If you like the command-line better, you can use the following command to download a <code class="highlighter-rouge">demo.zip</code> file with <a href="https://httpie.org/">HTTPie</a>.</p>
 
@@ -322,7 +322,7 @@ dependencies==h2,data-jpa,data-rest,web -d
 
 <p>Rebuild your project, and you should see a list of beers printed in your terminal.</p>
 
-<p><img src="/assets/blog/react-spring-boot/beers-in-terminal-01963516a6a2c4e65b0e3572f48aa39b0eac19779069f8ace0e7fa0bc9cc164c.png" alt="Beers printed in terminal" width="800" class="center-image" /></p>
+<p><img src="/assets/blog/react-spring-boot/beers-in-terminal-75dec59c06dd3f310eff6d1cde4e11e2948cbe2b38382e3e4093e703c88f85c3.png" alt="Beers printed in terminal" width="800" class="center-image" /></p>
 
 <p>Add a <a href="http://docs.spring.io/spring-data/rest/docs/2.6.x/api/org/springframework/data/rest/core/annotation/RepositoryRestResource.html"><code class="highlighter-rouge">@RepositoryRestResource</code></a> annotation to <code class="highlighter-rouge">BeerRepository</code> to expose all its CRUD operations as REST endpoints.</p>
 
@@ -383,7 +383,7 @@ dependencies==h2,data-jpa,data-rest,web -d
 
 <p>To create a React project, make sure you have <a href="https://nodejs.org/">Node.js</a>, <a href="https://github.com/facebookincubator/create-react-app">Create React App</a>, and <a href="https://yarnpkg.com/">Yarn</a> installed.</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install <span class="nt">-g</span> create-react-app@1.4.3
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install <span class="nt">-g</span> create-react-app@1.5.2
 </code></pre></div></div>
 
 <p>From a terminal window, cd into the root of the <code class="highlighter-rouge">spring-boot-react-example</code> directory and run the following command. This command will create a new React application with TypeScript support.</p>
@@ -409,22 +409,24 @@ dependencies==h2,data-jpa,data-rest,web -d
 <p><a href="https://reactjs.org/docs/react-component.html#the-component-lifecycle">React’s component lifecycle</a> will call the <code class="highlighter-rouge">componentDidMount()</code> method. The code above uses <a href="https://fetch.spec.whatwg.org/"><code class="highlighter-rouge">fetch</code></a>,
 a modern replacement for <code class="highlighter-rouge">XMLHttpRequest</code>. It’s <a href="https://caniuse.com/#search=fetch">supported in most browsers according to caniuse.com</a>.</p>
 
-<p>You can see that it sets the <code class="highlighter-rouge">beers</code> state with the response data. To initialize the state for this component, you need to override the constructor.</p>
+<p>You can see that it sets the <code class="highlighter-rouge">beers</code> state with the response data. To initialize the state for this component, you need create a few interfaces and override the constructor.</p>
 
-<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">:</span> <span class="nx">any</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
-
-  <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="na">beers</span><span class="p">:</span> <span class="p">[],</span>
-    <span class="na">isLoading</span><span class="p">:</span> <span class="kc">false</span>
-  <span class="p">};</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">Beer</span> <span class="p">{</span>
+  <span class="nl">id</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="nl">name</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div></div>
 
-<p>For this to work, you need to add parameter types to the class signature. The code below shows what the top of your <code class="highlighter-rouge">App</code> class should look like at this point.</p>
+<span class="kr">interface</span> <span class="nx">AppProps</span> <span class="p">{</span>
+<span class="p">}</span>
 
-<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">App</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span><span class="o">&lt;</span><span class="p">{},</span> <span class="nx">any</span><span class="o">&gt;</span> <span class="p">{</span>
-  <span class="kd">constructor</span><span class="p">(</span><span class="na">props</span><span class="p">:</span> <span class="nx">any</span><span class="p">)</span> <span class="p">{</span>
+<span class="kr">interface</span> <span class="nx">AppState</span> <span class="p">{</span>
+  <span class="nl">beers</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="nx">Beer</span><span class="o">&gt;</span><span class="p">;</span>
+  <span class="nl">isLoading</span><span class="p">:</span> <span class="kr">boolean</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nx">App</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span><span class="o">&lt;</span><span class="nx">AppProps</span><span class="p">,</span> <span class="nx">AppState</span><span class="o">&gt;</span> <span class="p">{</span>
+
+  <span class="kd">constructor</span><span class="p">(</span><span class="na">props</span><span class="p">:</span> <span class="nx">AppProps</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
 
     <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
@@ -433,6 +435,7 @@ a modern replacement for <code class="highlighter-rouge">XMLHttpRequest</code>. 
     <span class="p">};</span>
   <span class="p">}</span>
   <span class="c1">// componentDidMount() and render()</span>
+  <span class="p">...</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
@@ -447,10 +450,10 @@ a modern replacement for <code class="highlighter-rouge">XMLHttpRequest</code>. 
 
   <span class="k">return</span> <span class="p">(</span>
     <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"App"</span><span class="o">&gt;</span>
-      <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"App-header"</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nx">header</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"App-header"</span><span class="o">&gt;</span>
         <span class="o">&lt;</span><span class="nx">img</span> <span class="nx">src</span><span class="o">=</span><span class="p">{</span><span class="nx">logo</span><span class="p">}</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"App-logo"</span> <span class="nx">alt</span><span class="o">=</span><span class="s2">"logo"</span> <span class="o">/&gt;</span>
-        <span class="o">&lt;</span><span class="nx">h2</span><span class="o">&gt;</span><span class="nx">Welcome</span> <span class="nx">to</span> <span class="nx">React</span><span class="o">&lt;</span><span class="sr">/h2</span><span class="err">&gt;
-</span>      <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+        <span class="o">&lt;</span><span class="nx">h1</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"App-title"</span><span class="o">&gt;</span><span class="nx">Welcome</span> <span class="nx">to</span> <span class="nx">React</span><span class="o">&lt;</span><span class="sr">/h1</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="sr">/header</span><span class="err">&gt;
 </span>      <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
         <span class="o">&lt;</span><span class="nx">h2</span><span class="o">&gt;</span><span class="nx">Beer</span> <span class="nx">List</span><span class="o">&lt;</span><span class="sr">/h2</span><span class="err">&gt;
 </span>        <span class="p">{</span><span class="nx">beers</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">beer</span><span class="p">:</span> <span class="nx">any</span><span class="p">)</span> <span class="o">=&gt;</span>
@@ -489,12 +492,26 @@ Failed to load http://localhost:8080/good-beers: No 'Access-Control-Allow-Origin
 
 <h3 id="create-a-beerlist-component">Create a BeerList Component</h3>
 
-<p>To make this application easier to maintain, move the beer list fetching and rendering from <code class="highlighter-rouge">App.tsx</code> to its own <code class="highlighter-rouge">BeerList</code> component. Create <code class="highlighter-rouge">src/BeerList.tsx</code> and populate it with the code from <code class="highlighter-rouge">App.tsx</code>.</p>
+<p>To make this application easier to maintain, move the beer list fetching and rendering from <code class="highlighter-rouge">App.tsx</code> to its own <code class="highlighter-rouge">BeerList</code> component. Create <code class="highlighter-rouge">src/BeerList.tsx</code> and populate it with the code from <code class="highlighter-rouge">App.tsx</code>. Change all code references from <code class="highlighter-rouge">App</code> to <code class="highlighter-rouge">BeerList</code>, except in the JSX code (where <code class="highlighter-rouge">App*</code> CSS classes are specified).</p>
 
 <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">React</span> <span class="k">from</span> <span class="s1">'react'</span><span class="p">;</span>
 
-<span class="kd">class</span> <span class="nx">BeerList</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span><span class="o">&lt;</span><span class="p">{},</span> <span class="nx">any</span><span class="o">&gt;</span> <span class="p">{</span>
-  <span class="kd">constructor</span><span class="p">(</span><span class="na">props</span><span class="p">:</span> <span class="nx">any</span><span class="p">)</span> <span class="p">{</span>
+<span class="kr">interface</span> <span class="nx">Beer</span> <span class="p">{</span>
+  <span class="nl">id</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="nl">name</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kr">interface</span> <span class="nx">BeerListProps</span> <span class="p">{</span>
+<span class="p">}</span>
+
+<span class="kr">interface</span> <span class="nx">BeerListState</span> <span class="p">{</span>
+  <span class="nl">beers</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="nx">Beer</span><span class="o">&gt;</span><span class="p">;</span>
+  <span class="nl">isLoading</span><span class="p">:</span> <span class="kr">boolean</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nx">BeerList</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span><span class="o">&lt;</span><span class="nx">BeerListProps</span><span class="p">,</span> <span class="nx">BeerListState</span><span class="o">&gt;</span> <span class="p">{</span>
+
+  <span class="kd">constructor</span><span class="p">(</span><span class="na">props</span><span class="p">:</span> <span class="nx">BeerListProps</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
 
     <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
@@ -521,7 +538,7 @@ Failed to load http://localhost:8080/good-beers: No 'Access-Control-Allow-Origin
     <span class="k">return</span> <span class="p">(</span>
       <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
         <span class="o">&lt;</span><span class="nx">h2</span><span class="o">&gt;</span><span class="nx">Beer</span> <span class="nx">List</span><span class="o">&lt;</span><span class="sr">/h2</span><span class="err">&gt;
-</span>        <span class="p">{</span><span class="nx">beers</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="na">beer</span><span class="p">:</span> <span class="nx">any</span><span class="p">)</span> <span class="o">=&gt;</span>
+</span>        <span class="p">{</span><span class="nx">beers</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="na">beer</span><span class="p">:</span> <span class="nx">Beer</span><span class="p">)</span> <span class="o">=&gt;</span>
           <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">key</span><span class="o">=</span><span class="p">{</span><span class="nx">beer</span><span class="p">.</span><span class="nx">id</span><span class="p">}</span><span class="o">&gt;</span>
             <span class="p">{</span><span class="nx">beer</span><span class="p">.</span><span class="nx">name</span><span class="p">}</span>
           <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
@@ -546,10 +563,10 @@ Failed to load http://localhost:8080/good-beers: No 'Access-Control-Allow-Origin
   <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">return</span> <span class="p">(</span>
       <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"App"</span><span class="o">&gt;</span>
-        <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"App-header"</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">header</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"App-header"</span><span class="o">&gt;</span>
           <span class="o">&lt;</span><span class="nx">img</span> <span class="nx">src</span><span class="o">=</span><span class="p">{</span><span class="nx">logo</span><span class="p">}</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"App-logo"</span> <span class="nx">alt</span><span class="o">=</span><span class="s2">"logo"</span><span class="o">/&gt;</span>
-          <span class="o">&lt;</span><span class="nx">h2</span><span class="o">&gt;</span><span class="nx">Welcome</span> <span class="nx">to</span> <span class="nx">React</span><span class="o">&lt;</span><span class="sr">/h2</span><span class="err">&gt;
-</span>        <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+          <span class="o">&lt;</span><span class="nx">h1</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"App-title"</span><span class="o">&gt;</span><span class="nx">Welcome</span> <span class="nx">to</span> <span class="nx">React</span><span class="o">&lt;</span><span class="sr">/h1</span><span class="err">&gt;
+</span>        <span class="o">&lt;</span><span class="sr">/header</span><span class="err">&gt;
 </span>        <span class="o">&lt;</span><span class="nx">BeerList</span><span class="o">/&gt;</span>
       <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
 </span>    <span class="p">);</span>
@@ -569,7 +586,12 @@ Failed to load http://localhost:8080/good-beers: No 'Access-Control-Allow-Origin
   <span class="nl">name</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="kd">class</span> <span class="nx">GiphyImage</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span><span class="o">&lt;</span><span class="nx">GiphyImageProps</span><span class="p">,</span> <span class="nx">any</span><span class="o">&gt;</span> <span class="p">{</span>
+<span class="kr">interface</span> <span class="nx">GiphyImageState</span> <span class="p">{</span>
+  <span class="nl">giphyUrl</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="nl">isLoading</span><span class="p">:</span> <span class="kr">boolean</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nx">GiphyImage</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span><span class="o">&lt;</span><span class="nx">GiphyImageProps</span><span class="p">,</span> <span class="nx">GiphyImageState</span><span class="o">&gt;</span> <span class="p">{</span>
   <span class="kd">constructor</span><span class="p">(</span><span class="na">props</span><span class="p">:</span> <span class="nx">GiphyImageProps</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
 
@@ -665,7 +687,7 @@ You may serve it with a static server:
 
 <p>I ran a <a href="https://developers.google.com/web/tools/lighthouse/">Lighthouse</a> audit in Chrome and found that this app only scores a 73/100 at this point.</p>
 
-<p><img src="/assets/blog/react-spring-boot/lighthouse-first-6607d3b26528ef1cbc91f16a31be99cdfe6d24981375e6302bf03cb8cb87079b.png" alt="Lighthouse Score from first audit" width="800" class="center-image" /></p>
+<p><img src="/assets/blog/react-spring-boot/lighthouse-first-6db582d65cbd68cf81631c76328fee29fec4a8cfe497442d4e67a5d9ee24d183.png" alt="Lighthouse Score from first audit" width="800" class="center-image" /></p>
 
 <p>You’ll notice in the screenshot above that “Manifest does not have icons at least 512px”. This one sounds easy enough to fix. You can download a 512-pixel free beer icon from <a href="https://www.flaticon.com/free-icon/beer_168557#term=beer&amp;page=1&amp;position=29">this page</a>.</p>
 
@@ -679,8 +701,8 @@ You may serve it with a static server:
   </span><span class="s2">"icons"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
       </span><span class="s2">"src"</span><span class="p">:</span><span class="w"> </span><span class="s2">"favicon.ico"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"sizes"</span><span class="p">:</span><span class="w"> </span><span class="s2">"192x192"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"image/png"</span><span class="w">
+      </span><span class="s2">"sizes"</span><span class="p">:</span><span class="w"> </span><span class="s2">"64x64 32x32 24x24 16x16"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"image/x-icon"</span><span class="w">
     </span><span class="p">},</span><span class="w">
     </span><span class="p">{</span><span class="w">
       </span><span class="s2">"src"</span><span class="p">:</span><span class="w"> </span><span class="s2">"beer.png"</span><span class="p">,</span><span class="w">
@@ -714,7 +736,7 @@ You may serve it with a static server:
 <div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>com.okta.spring<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>okta-spring-boot-starter<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>0.2.0<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>0.4.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 </code></pre></div></div>
 
@@ -725,7 +747,7 @@ You may serve it with a static server:
         <span class="nt">&lt;dependency&gt;</span>
             <span class="nt">&lt;groupId&gt;</span>org.springframework.security.oauth<span class="nt">&lt;/groupId&gt;</span>
             <span class="nt">&lt;artifactId&gt;</span>spring-security-oauth2<span class="nt">&lt;/artifactId&gt;</span>
-            <span class="nt">&lt;version&gt;</span>2.2.0.RELEASE<span class="nt">&lt;/version&gt;</span>
+            <span class="nt">&lt;version&gt;</span>2.3.0.RELEASE<span class="nt">&lt;/version&gt;</span>
         <span class="nt">&lt;/dependency&gt;</span>
     <span class="nt">&lt;/dependencies&gt;</span>
 <span class="nt">&lt;/dependencyManagement&gt;</span>
@@ -764,8 +786,8 @@ You may serve it with a static server:
 
 <p>Okta’s React SDK allows you to integrate OIDC into a React application. You can learn more about Okta’s React SDK can be <a href="https://www.npmjs.com/package/@okta/okta-react">found on npmjs.com</a>. To install, run the following commands:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yarn add @okta/okta-react react-router-dom
-yarn add -D @types/react-router-dom
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yarn add @okta/okta-react@1.0.0 react-router-dom@4.2.2
+yarn add -D @types/react-router-dom@4.2.6
 </code></pre></div></div>
 
 <p>Okta’s React SDK depends on <a href="https://www.npmjs.com/package/react-router">react-router</a>, hence the reason for installing <code class="highlighter-rouge">react-router-dom</code>. Configuring routing in <code class="highlighter-rouge">client/src/App.tsx</code> is a common practice, so replace its code with the TypeScript below that sets up authentication with Okta.</p>
@@ -783,7 +805,7 @@ yarn add -D @types/react-router-dom
 <span class="p">};</span>
 
 <span class="k">export</span> <span class="kr">interface</span> <span class="nx">Auth</span> <span class="p">{</span>
-  <span class="nx">login</span><span class="p">():</span> <span class="p">{};</span>
+  <span class="nx">login</span><span class="p">(</span><span class="nx">path</span><span class="p">:</span> <span class="nx">string</span><span class="p">):</span> <span class="p">{};</span>
   <span class="nx">logout</span><span class="p">():</span> <span class="p">{};</span>
   <span class="nx">isAuthenticated</span><span class="p">():</span> <span class="kr">boolean</span><span class="p">;</span>
   <span class="nx">getAccessToken</span><span class="p">():</span> <span class="nx">string</span><span class="p">;</span>
@@ -833,7 +855,8 @@ yarn add -D @types/react-router-dom
     <span class="k">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span><span class="na">authenticated</span><span class="p">:</span> <span class="kc">false</span><span class="p">};</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span><span class="p">();</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">login</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">login</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">logout</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">logout</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
   <span class="p">}</span>
 
   <span class="k">async</span> <span class="nx">checkAuthentication</span><span class="p">()</span> <span class="p">{</span>
@@ -844,8 +867,20 @@ yarn add -D @types/react-router-dom
     <span class="p">}</span>
   <span class="p">}</span>
 
-  <span class="nx">componentDidUpdate</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span><span class="p">();</span>
+  <span class="k">async</span> <span class="nx">componentDidMount</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kr">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">async</span> <span class="nx">componentDidUpdate</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kr">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">async</span> <span class="nx">login</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">login</span><span class="p">(</span><span class="s1">'/'</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">async</span> <span class="nx">logout</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">logout</span><span class="p">();</span>
   <span class="p">}</span>
 
   <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
@@ -854,24 +889,24 @@ yarn add -D @types/react-router-dom
     <span class="k">if</span> <span class="p">(</span><span class="nx">authenticated</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">body</span> <span class="o">=</span> <span class="p">(</span>
         <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"Buttons"</span><span class="o">&gt;</span>
-          <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">logout</span><span class="p">}</span><span class="o">&gt;</span><span class="nx">Logout</span><span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
+          <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">logout</span><span class="p">}</span><span class="o">&gt;</span><span class="nx">Logout</span><span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
 </span>          <span class="o">&lt;</span><span class="nx">BeerList</span> <span class="nx">auth</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">auth</span><span class="p">}</span><span class="sr">/</span><span class="err">&gt;
 </span>        <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
 </span>      <span class="p">);</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
       <span class="nx">body</span> <span class="o">=</span> <span class="p">(</span>
         <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"Buttons"</span><span class="o">&gt;</span>
-          <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">login</span><span class="p">}</span><span class="o">&gt;</span><span class="nx">Login</span><span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
+          <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">login</span><span class="p">}</span><span class="o">&gt;</span><span class="nx">Login</span><span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
 </span>        <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
 </span>      <span class="p">);</span>
     <span class="p">}</span>
 
     <span class="k">return</span> <span class="p">(</span>
       <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"App"</span><span class="o">&gt;</span>
-        <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"App-header"</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">header</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"App-header"</span><span class="o">&gt;</span>
           <span class="o">&lt;</span><span class="nx">img</span> <span class="nx">src</span><span class="o">=</span><span class="p">{</span><span class="nx">logo</span><span class="p">}</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"App-logo"</span> <span class="nx">alt</span><span class="o">=</span><span class="s2">"logo"</span><span class="o">/&gt;</span>
-          <span class="o">&lt;</span><span class="nx">h2</span><span class="o">&gt;</span><span class="nx">Welcome</span> <span class="nx">to</span> <span class="nx">React</span><span class="o">&lt;</span><span class="sr">/h2</span><span class="err">&gt;
-</span>        <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+          <span class="o">&lt;</span><span class="nx">h1</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"App-title"</span><span class="o">&gt;</span><span class="nx">Welcome</span> <span class="nx">to</span> <span class="nx">React</span><span class="o">&lt;</span><span class="sr">/h1</span><span class="err">&gt;
+</span>        <span class="o">&lt;</span><span class="sr">/header</span><span class="err">&gt;
 </span>        <span class="p">{</span><span class="nx">body</span><span class="p">}</span>
       <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
 </span>    <span class="p">);</span>
@@ -881,13 +916,10 @@ yarn add -D @types/react-router-dom
 
 <p>If you look at your React app in your browser, you’ll likely see an error like the following:</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./src/Home.tsx
-<span class="o">(</span>4,26<span class="o">)</span>: error TS7016: Could not find a declaration file <span class="k">for </span>module <span class="s1">'@okta/okta-react'</span><span class="nb">.</span>
-<span class="s1">'/Users/mraible/spring-boot-react-example/client/node_modules/@okta/okta-react/dist/index.js'</span>
-implicitly has an <span class="s1">'any'</span> type.
- Try <span class="sb">`</span>npm install @types/@okta/okta-react<span class="sb">`</span> <span class="k">if </span>it exists or add a new declaration <span class="o">(</span>.d.ts<span class="o">)</span> file
- containing <span class="sb">`</span><span class="nb">declare </span>module <span class="s1">'@okta/okta-react'</span><span class="p">;</span><span class="sb">`</span>
-</code></pre></div></div>
+<pre>
+(5,44): Could not find a declaration file for module '@okta/okta-react'. '/Users/mraible/dev/okta/spring-boot-react-example/client/node_modules/@okta/okta-react/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/okta__okta-react` if it exists or add a new declaration (.d.ts) file containing `declare module 'okta__okta-react';`
+</pre>
 
 <p>Create <code class="highlighter-rouge">client/src/okta.d.ts</code> with the following declaration to solve this problem.</p>
 
@@ -896,21 +928,25 @@ implicitly has an <span class="s1">'any'</span> type.
 
 <p>Restart the client, and you’ll see there’s some work to do on the <code class="highlighter-rouge">BeerList</code> component.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./src/Home.tsx
-(44,21): error TS2339: Property 'auth' does not exist on type 'IntrinsicAttributes &amp;
-IntrinsicClassAttributes&lt;BeerList&gt; &amp; Readonly&lt;{ children?: ReactNode; }&gt; &amp; ...'.
-</code></pre></div></div>
+<pre>
+(39,21): Property 'auth' does not exist on type 'IntrinsicAttributes &amp; IntrinsicClassAttributes&lt;BeerList&gt; &amp; Readonly&lt;{ children?: ReactNode; }&gt; &amp; ...'.
+</pre>
 
-<p>In <code class="highlighter-rouge">client/src/BeerList.tsx</code>, add the <code class="highlighter-rouge">auth</code> property to the props by creating a <code class="highlighter-rouge">BeerListProps</code> interface that’s passed into the class signature.</p>
+<p>In <code class="highlighter-rouge">client/src/BeerList.tsx</code>, add the <code class="highlighter-rouge">auth</code> property to the <code class="highlighter-rouge">BeerListProps</code> interface.</p>
 
 <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Auth</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'./App'</span><span class="p">;</span>
+
+<span class="kr">interface</span> <span class="nx">Beer</span> <span class="p">{</span>
+  <span class="nl">id</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="nl">name</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+<span class="p">}</span>
 
 <span class="kr">interface</span> <span class="nx">BeerListProps</span> <span class="p">{</span>
   <span class="nl">auth</span><span class="p">:</span> <span class="nx">Auth</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="kr">interface</span> <span class="nx">BeerListState</span> <span class="p">{</span>
-  <span class="nl">beers</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="p">{}</span><span class="o">&gt;</span><span class="p">;</span>
+  <span class="nl">beers</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="nx">Beer</span><span class="o">&gt;</span><span class="p">;</span>
   <span class="nl">isLoading</span><span class="p">:</span> <span class="kr">boolean</span><span class="p">;</span>
 <span class="p">}</span>
 
@@ -936,7 +972,7 @@ IntrinsicClassAttributes&lt;BeerList&gt; &amp; Readonly&lt;{ children?: ReactNod
 
 <p>When you click the button to log in, enter the email and password you used to create your Okta Developer account. When it redirects you back to your application, you’ll likely see “Loading…” and a CORS error in your browser’s console.</p>
 
-<p><img src="/assets/blog/react-spring-boot/cors-error-c2d6f9e04f47d488a8ab5d56843f47764e3c7a706ca935f1669046654714968c.png" alt="CORS Error after login" width="800" class="center-image" /></p>
+<p><img src="/assets/blog/react-spring-boot/cors-error-2cb4748b1952a1050bb530bb04b4a689adf61d72e89c4aa94f4682af6221fe7b.png" alt="CORS Error after login" width="800" class="center-image" /></p>
 
 <p>This error happens because Spring’s <code class="highlighter-rouge">@CrossOrigin</code> doesn’t play well with Spring Security. To solve this problem, add a <code class="highlighter-rouge">simpleCorsFilter</code> bean to the body of <code class="highlighter-rouge">DemoApplication.java</code>.</p>
 
@@ -1001,7 +1037,7 @@ IntrinsicClassAttributes&lt;BeerList&gt; &amp; Readonly&lt;{ children?: ReactNod
 <p>You’ll also need to add <code class="highlighter-rouge">error</code> in the <code class="highlighter-rouge">BeerListState</code> interface.</p>
 
 <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">BeerListState</span> <span class="p">{</span>
-  <span class="nl">beers</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="p">{}</span><span class="o">&gt;</span><span class="p">;</span>
+  <span class="nl">beers</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="nx">Beer</span><span class="o">&gt;</span><span class="p">;</span>
   <span class="nl">isLoading</span><span class="p">:</span> <span class="kr">boolean</span><span class="p">;</span>
   <span class="nl">error</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
 <span class="p">}</span>
@@ -1039,51 +1075,6 @@ IntrinsicClassAttributes&lt;BeerList&gt; &amp; Readonly&lt;{ children?: ReactNod
 
 <p>If it works, congratulations!</p>
 
-<h3 id="clean-up-those-typescript-warnings">Clean Up Those TypeScript Warnings</h3>
-
-<p>You might notice that your browser’s console reports some TypeScript warnings.</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./src/BeerList.tsx
-<span class="o">[</span>16, 22]: Type declaration of <span class="s1">'any'</span> loses type-safety. Consider replacing it with a more precise
-<span class="nb">type</span>, the empty <span class="nb">type</span> <span class="o">(</span><span class="s1">'{}'</span><span class="o">)</span>, or suppress this occurrence.
-<span class="o">[</span>52, 27]: Type declaration of <span class="s1">'any'</span> loses type-safety. Consider replacing it with a more precise
-<span class="nb">type</span>, the empty <span class="nb">type</span> <span class="o">(</span><span class="s1">'{}'</span><span class="o">)</span>, or suppress this occurrence.
-./src/GiphyImage.tsx
-<span class="o">[</span>7, 59]: Type declaration of <span class="s1">'any'</span> loses type-safety. Consider replacing it with a more precise
-<span class="nb">type</span>, the empty <span class="nb">type</span> <span class="o">(</span><span class="s1">'{}'</span><span class="o">)</span>, or suppress this occurrence.
-</code></pre></div></div>
-
-<p>To fix the first issue, change <code class="highlighter-rouge">client/src/BeerList.tsx</code> so its constructor reads as follows:</p>
-
-<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">:</span> <span class="nx">BeerListProps</span><span class="p">)</span> <span class="p">{</span>
-  <span class="p">...</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>For the second issue, create a <code class="highlighter-rouge">Beer</code> interface in <code class="highlighter-rouge">client/src/BeerList.tsx</code>. Put it alongside the other interfaces at the top.</p>
-
-<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">Beer</span> <span class="p">{</span>
-  <span class="nl">id</span><span class="p">:</span> <span class="nx">number</span><span class="p">;</span>
-  <span class="nl">name</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>Then change <code class="highlighter-rouge">{beers.map((beer: any) =&gt;</code> to be <code class="highlighter-rouge">{beers.map((beer: Beer) =&gt;</code>.</p>
-
-<p>The third issue can be solved by creating a new <code class="highlighter-rouge">GiphyImageState</code> interface in <code class="highlighter-rouge">client/src/GiphyImage.tsx</code> to define the state properties.</p>
-
-<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">GiphyImageState</span> <span class="p">{</span>
-  <span class="nl">giphyUrl</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
-  <span class="nl">isLoading</span><span class="p">:</span> <span class="kr">boolean</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kd">class</span> <span class="nx">GiphyImage</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span><span class="o">&lt;</span><span class="nx">GiphyImageProps</span><span class="p">,</span> <span class="nx">GiphyImageState</span><span class="o">&gt;</span> <span class="p">{</span>
-  <span class="p">...</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>After making these changes, you should be rid of your TypeScript warnings.</p>
-
 <h2 id="learn-more-about-spring-boot-and-react">Learn More About Spring Boot and React</h2>
 
 <p>To learn more about React, Spring Boot, or Okta, check out the following resources:</p>
@@ -1104,6 +1095,12 @@ git checkout okta
 </code></pre></div></div>
 
 <p>If you find any issues, please add a comment below, and I’ll do my best to help. If you liked this tutorial, I’d love to have you <a href="https://twitter.com/mraible">follow me on Twitter</a>. To be notified of more articles like this one, follow <a href="https://twitter.com/oktadev">@oktadev</a>.</p>
+
+<p><strong>Changelog:</strong></p>
+
+<ul>
+  <li>Apr 10, 2018: Updated to use Spring Boot 1.5.12, Okta Spring Boot Starter 0.4.0, and Okta React 1.0.0. You can see the code changes in the example app via pull requests on GitHub: <a href="https://github.com/oktadeveloper/spring-boot-react-example/pull/3">master#3</a>, <a href="https://github.com/oktadeveloper/spring-boot-react-example/pull/2">okta#2</a>. Changes to this article can be viewed in <a href="https://github.com/okta/okta.github.io/pull/1942">okta/okta.github.io#1942</a>.</li>
+</ul>
 
 
     </div>
