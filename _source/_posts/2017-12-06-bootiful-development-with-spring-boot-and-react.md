@@ -6,7 +6,7 @@ description: "This post shows how you can build a UI and an API as separate apps
 tags: [authentication, spring boot, react, okta, oidc]
 tweets: 
   - "Learn how to integrate @springboot and @reactjs in this tutorial from @mraible."
-  - "Want to develop an application with @java on the backend and @typescriptlang on the front? This article is for you!"
+  - "Want to develop an application with @java on the backend and @reactjs on the front-end? This article is for you!"
 ---
 
 React has been getting a lot of positive press in the last couple years, making it an appealing frontend option for Java developers! Once you learn how it works, it makes a lot of sense and can be fun to develop with. Not only that, but it's *wicked fast!* If you’ve been following me, or if you've read this blog for a bit, you might remember my [Bootiful Development with Spring Boot and Angular](/blog/2017/04/26/bootiful-development-with-spring-boot-and-angular) tutorial. Today, I'll show you how to build the same application, except with React this time. Before we dive into that, let’s talk some more about what React is great for, and why I chose to explore it in this post.
@@ -23,7 +23,7 @@ Let's get started!
 
 **NOTE:** The instructions below for building a Spring Boot API are the same as the ones in [Bootiful Development with Spring Boot and Angular](/blog/2017/04/26/bootiful-development-with-spring-boot-and-angular). I've copied them below for your convenience.
 
-To get started with Spring Boot, navigate to [start.spring.io](https://start.spring.io). In the “Search for dependencies" field, select the following:
+To get started with Spring Boot, navigate to [start.spring.io](https://start.spring.io) and choose version 1.5.12+. In the “Search for dependencies" field, select the following:
 
 * [H2](http://www.h2database.com/html/main.html): An in-memory database
 * [JPA](http://www.oracle.com/technetwork/java/javaee/tech/persistence-jsp-140049.html): Standard ORM for Java
@@ -201,7 +201,7 @@ Creating an API seems to be the easy part these days, thanks in large part to Sp
 To create a React project, make sure you have [Node.js](https://nodejs.org/), [Create React App](https://github.com/facebookincubator/create-react-app), and [Yarn](https://yarnpkg.com/) installed.
 
 ```bash
-npm install -g create-react-app@1.4.3
+npm install -g create-react-app@1.5.2
 ```
 
 From a terminal window, cd into the root of the `spring-boot-react-example` directory and run the following command. This command will create a new React application with TypeScript support.
@@ -229,24 +229,25 @@ componentDidMount() {
 [React's component lifecycle](https://reactjs.org/docs/react-component.html#the-component-lifecycle) will call the `componentDidMount()` method. The code above uses [`fetch`](https://fetch.spec.whatwg.org/),
 a modern replacement for `XMLHttpRequest`. It's [supported in most browsers according to caniuse.com](https://caniuse.com/#search=fetch).
 
-You can see that it sets the `beers` state with the response data. To initialize the state for this component, you need to override the constructor.
+You can see that it sets the `beers` state with the response data. To initialize the state for this component, you need create a few interfaces and override the constructor.
 
 ```typescript
-constructor(props: any) {
-  super(props);
-
-  this.state = {
-    beers: [],
-    isLoading: false
-  };
+interface Beer {
+  id: string;
+  name: string;
 }
-```
 
-For this to work, you need to add parameter types to the class signature. The code below shows what the top of your `App` class should look like at this point.
+interface AppProps {
+}
 
-```typescript
-class App extends React.Component<{}, any> {
-  constructor(props: any) {
+interface AppState {
+  beers: Array<Beer>;
+  isLoading: boolean;
+}
+
+class App extends React.Component<AppProps, AppState> {
+
+  constructor(props: AppProps) {
     super(props);
 
     this.state = {
@@ -255,6 +256,7 @@ class App extends React.Component<{}, any> {
     };
   }
   // componentDidMount() and render()
+  ...
 }
 ```
 
@@ -270,10 +272,10 @@ render() {
 
   return (
     <div className="App">
-      <div className="App-header">
+      <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <h2>Welcome to React</h2>
-      </div>
+        <h1 className="App-title">Welcome to React</h1>
+      </header>
       <div>
         <h2>Beer List</h2>
         {beers.map((beer: any) =>
@@ -313,13 +315,27 @@ After making these changes, restart the server, refresh your browser, and you sh
 
 ### Create a BeerList Component
 
-To make this application easier to maintain, move the beer list fetching and rendering from `App.tsx` to its own `BeerList` component. Create `src/BeerList.tsx` and populate it with the code from `App.tsx`.
+To make this application easier to maintain, move the beer list fetching and rendering from `App.tsx` to its own `BeerList` component. Create `src/BeerList.tsx` and populate it with the code from `App.tsx`. Change all code references from `App` to `BeerList`, except in the JSX code (where `App*` CSS classes are specified).
 
 ```typescript
 import * as React from 'react';
 
-class BeerList extends React.Component<{}, any> {
-  constructor(props: any) {
+interface Beer {
+  id: string;
+  name: string;
+}
+
+interface BeerListProps {
+}
+
+interface BeerListState {
+  beers: Array<Beer>;
+  isLoading: boolean;
+}
+
+class BeerList extends React.Component<BeerListProps, BeerListState> {
+
+  constructor(props: BeerListProps) {
     super(props);
 
     this.state = {
@@ -346,7 +362,7 @@ class BeerList extends React.Component<{}, any> {
     return (
       <div>
         <h2>Beer List</h2>
-        {beers.map((beer: any) =>
+        {beers.map((beer: Beer) =>
           <div key={beer.id}>
             {beer.name}
           </div>
@@ -372,10 +388,10 @@ class App extends React.Component<{}, any> {
   render() {
     return (
       <div className="App">
-        <div className="App-header">
+        <header className="App-header">
           <img src={logo} className="App-logo" alt="logo"/>
-          <h2>Welcome to React</h2>
-        </div>
+          <h1 className="App-title">Welcome to React</h1>
+        </header>
         <BeerList/>
       </div>
     );
@@ -396,7 +412,12 @@ interface GiphyImageProps {
   name: string;
 }
 
-class GiphyImage extends React.Component<GiphyImageProps, any> {
+interface GiphyImageState {
+  giphyUrl: string;
+  isLoading: boolean;
+}
+
+class GiphyImage extends React.Component<GiphyImageProps, GiphyImageState> {
   constructor(props: GiphyImageProps) {
     super(props);
 
@@ -510,8 +531,8 @@ Copy the downloaded `beer.png` to `client/public`. Modify `client/public/manifes
   "icons": [
     {
       "src": "favicon.ico",
-      "sizes": "192x192",
-      "type": "image/png"
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
     },
     {
       "src": "beer.png",
@@ -546,7 +567,7 @@ To lock down the backend, you can use [Okta's Spring Boot Starter](https://githu
 <dependency>
     <groupId>com.okta.spring</groupId>
     <artifactId>okta-spring-boot-starter</artifactId>
-    <version>0.2.0</version>
+    <version>0.4.0</version>
 </dependency>
 ```
 
@@ -558,7 +579,7 @@ You'll also need to add a `<dependencyManagement>` section to upgrade Spring Sec
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
-            <version>2.2.0.RELEASE</version>
+            <version>2.3.0.RELEASE</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
@@ -600,8 +621,8 @@ After making these changes, you should be able to restart the server and see acc
 Okta's React SDK allows you to integrate OIDC into a React application. You can learn more about Okta's React SDK can be [found on npmjs.com](https://www.npmjs.com/package/@okta/okta-react). To install, run the following commands:
 
 ```
-yarn add @okta/okta-react react-router-dom
-yarn add -D @types/react-router-dom
+yarn add @okta/okta-react@1.0.0 react-router-dom@4.2.2
+yarn add -D @types/react-router-dom@4.2.6
 ```
 
 Okta's React SDK depends on [react-router](https://www.npmjs.com/package/react-router), hence the reason for installing `react-router-dom`. Configuring routing in `client/src/App.tsx` is a common practice, so replace its code with the TypeScript below that sets up authentication with Okta.
@@ -620,7 +641,7 @@ const config = {
 };
 
 export interface Auth {
-  login(): {};
+  login(path: string): {};
   logout(): {};
   isAuthenticated(): boolean;
   getAccessToken(): string;
@@ -671,7 +692,8 @@ export default withAuth(class Home extends React.Component<HomeProps, HomeState>
     super(props);
     this.state = {authenticated: false};
     this.checkAuthentication = this.checkAuthentication.bind(this);
-    this.checkAuthentication();
+    this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   async checkAuthentication() {
@@ -682,8 +704,20 @@ export default withAuth(class Home extends React.Component<HomeProps, HomeState>
     }
   }
 
-  componentDidUpdate() {
-    this.checkAuthentication();
+  async componentDidMount() {
+    await this.checkAuthentication();
+  }
+
+  async componentDidUpdate() {
+    await this.checkAuthentication();
+  }
+
+  async login() {
+    this.props.auth.login('/');
+  }
+
+  async logout() {
+    this.props.auth.logout();
   }
 
   render() {
@@ -692,24 +726,24 @@ export default withAuth(class Home extends React.Component<HomeProps, HomeState>
     if (authenticated) {
       body = (
         <div className="Buttons">
-          <button onClick={this.props.auth.logout}>Logout</button>
+          <button onClick={this.logout}>Logout</button>
           <BeerList auth={this.props.auth}/>
         </div>
       );
     } else {
       body = (
         <div className="Buttons">
-          <button onClick={this.props.auth.login}>Login</button>
+          <button onClick={this.login}>Login</button>
         </div>
       );
     }
 
     return (
       <div className="App">
-        <div className="App-header">
+        <header className="App-header">
           <img src={logo} className="App-logo" alt="logo"/>
-          <h2>Welcome to React</h2>
-        </div>
+          <h1 className="App-title">Welcome to React</h1>
+        </header>
         {body}
       </div>
     );
@@ -719,14 +753,10 @@ export default withAuth(class Home extends React.Component<HomeProps, HomeState>
 
 If you look at your React app in your browser, you'll likely see an error like the following:
 
-```bash
-./src/Home.tsx
-(4,26): error TS7016: Could not find a declaration file for module '@okta/okta-react'.
-'/Users/mraible/spring-boot-react-example/client/node_modules/@okta/okta-react/dist/index.js'
-implicitly has an 'any' type.
- Try `npm install @types/@okta/okta-react` if it exists or add a new declaration (.d.ts) file
- containing `declare module '@okta/okta-react';`
-```
+<pre>
+(5,44): Could not find a declaration file for module '@okta/okta-react'. '/Users/mraible/dev/okta/spring-boot-react-example/client/node_modules/@okta/okta-react/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/okta__okta-react` if it exists or add a new declaration (.d.ts) file containing `declare module 'okta__okta-react';`
+</pre>
 
 Create `client/src/okta.d.ts` with the following declaration to solve this problem.
 
@@ -736,23 +766,26 @@ declare module '@okta/okta-react';
 
 Restart the client, and you'll see there's some work to do on the `BeerList` component.
 
-```
-./src/Home.tsx
-(44,21): error TS2339: Property 'auth' does not exist on type 'IntrinsicAttributes &
-IntrinsicClassAttributes<BeerList> & Readonly<{ children?: ReactNode; }> & ...'.
-```
+<pre>
+(39,21): Property 'auth' does not exist on type 'IntrinsicAttributes &amp; IntrinsicClassAttributes&lt;BeerList&gt; &amp; Readonly&lt;{ children?: ReactNode; }&gt; &amp; ...'.
+</pre>
 
-In `client/src/BeerList.tsx`, add the `auth` property to the props by creating a `BeerListProps` interface that's passed into the class signature.
+In `client/src/BeerList.tsx`, add the `auth` property to the `BeerListProps` interface.
 
 ```typescript
 import { Auth } from './App';
+
+interface Beer {
+  id: string;
+  name: string;
+}
 
 interface BeerListProps {
   auth: Auth;
 }
 
 interface BeerListState {
-  beers: Array<{}>;
+  beers: Array<Beer>;
   isLoading: boolean;
 }
 
@@ -848,7 +881,7 @@ You'll also need to add `error` in the `BeerListState` interface.
 
 ```typescript
 interface BeerListState {
-  beers: Array<{}>;
+  beers: Array<Beer>;
   isLoading: boolean;
   error: string;
 }
@@ -888,55 +921,6 @@ Now you should be able to see the beer list as an authenticated user.
 
 If it works, congratulations!
 
-### Clean Up Those TypeScript Warnings
-
-You might notice that your browser's console reports some TypeScript warnings.
-
-```bash
-./src/BeerList.tsx
-[16, 22]: Type declaration of 'any' loses type-safety. Consider replacing it with a more precise
-type, the empty type ('{}'), or suppress this occurrence.
-[52, 27]: Type declaration of 'any' loses type-safety. Consider replacing it with a more precise
-type, the empty type ('{}'), or suppress this occurrence.
-./src/GiphyImage.tsx
-[7, 59]: Type declaration of 'any' loses type-safety. Consider replacing it with a more precise
-type, the empty type ('{}'), or suppress this occurrence.
-```
-
-To fix the first issue, change `client/src/BeerList.tsx` so its constructor reads as follows:
-
-```typescript
-constructor(props: BeerListProps) {
-  ...
-}
-```
-
-For the second issue, create a `Beer` interface in `client/src/BeerList.tsx`. Put it alongside the other interfaces at the top.
-
-```typescript
-interface Beer {
-  id: number;
-  name: string;
-}
-```
-
-Then change `{beers.map((beer: any) =>` to be `{beers.map((beer: Beer) =>`.
-
-The third issue can be solved by creating a new `GiphyImageState` interface in `client/src/GiphyImage.tsx` to define the state properties.
-
-```typescript
-interface GiphyImageState {
-  giphyUrl: string;
-  isLoading: boolean;
-}
-
-class GiphyImage extends React.Component<GiphyImageProps, GiphyImageState> {
-  ...
-}
-```
-
-After making these changes, you should be rid of your TypeScript warnings.
-
 ## Learn More About Spring Boot and React
 
 To learn more about React, Spring Boot, or Okta, check out the following resources:
@@ -956,3 +940,7 @@ git checkout okta
 ```
 
 If you find any issues, please add a comment below, and I'll do my best to help. If you liked this tutorial, I’d love to have you [follow me on Twitter](https://twitter.com/mraible). To be notified of more articles like this one, follow [@oktadev](https://twitter.com/oktadev).
+
+**Changelog:**
+
+* Apr 10, 2018: Updated to use Spring Boot 1.5.12, Okta Spring Boot Starter 0.4.0, and Okta React 1.0.0. You can see the code changes in the example app via pull requests on GitHub: [master#3](https://github.com/oktadeveloper/spring-boot-react-example/pull/3), [okta#2](https://github.com/oktadeveloper/spring-boot-react-example/pull/2). Changes to this article can be viewed in [okta/okta.github.io#1942](https://github.com/okta/okta.github.io/pull/1942).
