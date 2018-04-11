@@ -361,6 +361,8 @@ curl -v -X GET \
 ##### Response Example
 {:.api .api-response .api-response-example}
 
+The example shows two applications and two instances. Note the response for instances has an `id` field.
+
 ~~~json
 [
   {
@@ -393,7 +395,10 @@ curl -v -X GET \
           "href": "https://{yourOktaDomain}.com/img/logos/salesforce_logo.png",
           "type": "image/png"
         }
-      ]
+      ],
+      "self": {
+          "href": "https://{yourOktaDomain}.com/api/v1/catalog/apps/salesforce"
+      }
     }
   },
   {
@@ -424,10 +429,34 @@ curl -v -X GET \
           "href": "https://{yourOktaDomain}.com/img/logos/box.png",
           "type": "image/png"
         }
-      ]
+      ],
+      "self": {
+          "href": "https://{yourOktaDomain}.com/api/v1/catalog/apps/boxnet"
+      }
+    }
+  },
+  {
+    "name": "Facebook for Detroit Office",
+    "status": "ACTIVE",
+    "id": "0oapsqQ5dv19pqyEo0g3",
+    "_links": {
+      "self": {
+          "href": "https://{yourOktaDomain}.com/api/v1/apps/0oapsqQ5dv19pqyEo0g3"
+      }
+    }
+  },
+  {
+    "name": "Facebook (Toronto)",
+    "status": "ACTIVE",
+    "id": "0obdfgrQ5dv29pqyQo0f5",
+    "_links": {
+       "self": {
+           "href": "https://{yourOktaDomain}.com/api/v1/apps/0obdfgrQ5dv29pqyQo0f5"
+       }
     }
   }
 ]
+
 ~~~
 
 #### Add App Target to App Administrator Role
@@ -438,6 +467,8 @@ curl -v -X GET \
 Adds an app target for an `APP_ADMIN` role assignment.
 
 Adding the first app target changes the scope of the role assignment from applying to all app targets to applying to the specified target.
+
+Adding an app target will override any existing instance targets of the app. For example, if someone was assigned to administer a specific Facebook instance, calling this endpoint with `facebook` for `appName`, would make them administrator for all Facebook instances.
 
 ##### Request Parameters
 {:.api .api-request .api-request-params}
@@ -473,14 +504,61 @@ curl -v -X PUT \
 HTTP/1.1 204 No Content
 ~~~
 
+
+#### Add App Instance Target to App Administrator Role
+{:.api .api-operation}
+
+{% api_operation put /api/v1/users/${userId}/roles/${roleId}/targets/catalog/apps/${appName}/${appInstanceId} %}
+
+Adds an app instance target for an `APP_ADMIN` role assignment
+
+Adding the first app or (app instance) target changes the scope of the role assignment from applying to all app targets to applying to the specified target.
+
+App Targets and App Instance Targets cannot be mixed for the same app name. For example, you cannot specify that an administrator has access to mange Salesforce (the entire app type) and specific instances of the Salesforce app; it must be one or the other.
+
+##### Request Parameters
+{:.api .api-request .api-request-params}
+
+| Parameter | Description                                                | Param Type | DataType | Required |
+|:----------|:-----------------------------------------------------------|:-----------|:---------|:---------|
+| userId       | `id` of a user                                               | URL        | String   | TRUE     |
+| roleId       | `id` of a role                                               | URL        | String   | TRUE     |
+| appName   | `name` of app target from catalog to scope role assignment | URL        | String   | TRUE     |
+| appInstanceId   | `id` of the app instance target to scope role assignment | URL        | String   | TRUE     |
+
+##### Response Parameters
+{:.api .api-response .api-response-params}
+
+~~~ http
+HTTP/1.1 204 No Content
+~~~
+
+##### Request Example
+{:.api .api-request .api-request-example}
+
+~~~sh
+curl -v -X PUT \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-H "Authorization: SSWS ${api_token}" \
+"https://{yourOktaDomain}.com/api/v1/users/00u6fud33CXDPBXULRNG/roles/KVJUKUS7IFCE2SKO/targets/catalog/apps/amazon_aws"
+~~~
+
+##### Response Example
+{:.api .api-response .api-response-example}
+
+~~~ http
+HTTP/1.1 204 No Content
+~~~
+
 #### Remove App Target from App Administrator Role
 {:.api .api-operation}
 
 {% api_operation delete /api/v1/users/${userId}/roles/${roleId}/targets/catalog/apps/${appName} %}
 
-Removes an app target from an `APP_ADMIN` role assignment.
+Removes an app target from an `APP_ADMIN` role assignment
 
-Don't remove the last app target from a role assignment, as this causes an exception.  If you need a role assignment that applies to all apps, the API consumer should delete the `APP_ADMIN` role assignment and recreate it.
+> Note: Don't remove the last app target from a role assignment, as this causes an exception.  If you need a role assignment that applies to all apps, the API consumer should delete the `APP_ADMIN` role assignment and recreate it.
 
 ##### Request Parameters
 {:.api .api-request .api-request-params}
@@ -490,6 +568,50 @@ Don't remove the last app target from a role assignment, as this causes an excep
 | userId       | `id` of a user                             | URL        | String   | TRUE     |
 | roleId       | `id` of a role                             | URL        | String   | TRUE     |
 | appName   | `name` of app target for role assignment | URL        | String   | TRUE     |
+
+##### Response Parameters
+{:.api .api-response .api-response-params}
+
+~~~ http
+HTTP/1.1 204 No Content
+~~~
+
+##### Request Example
+{:.api .api-request .api-request-example}
+
+~~~sh
+curl -v -X DELETE \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-H "Authorization: SSWS ${api_token}" \
+"https://{yourOktaDomain}.com/api/v1/users/00u6fud33CXDPBXULRNG/roles/KVJUKUS7IFCE2SKO/targets/catalog/apps/amazon_aws"
+~~~
+
+##### Response Example
+{:.api .api-response .api-response-example}
+
+~~~ http
+HTTP/1.1 204 No Content
+~~~
+
+#### Remove App Instance Target from App Administrator Role
+{:.api .api-operation}
+
+{% api_operation delete /api/v1/users/${userId}/roles/${roleId}/targets/catalog/apps/${appName}/${appInstanceId} %}
+
+Removes an app instance target from an `APP_ADMIN` role assignment.
+
+> Note: Don't remove the last app target from a role assignment, as this causes an exception.  If you need a role assignment that applies to all apps, the API consumer should delete the `APP_ADMIN` role assignment and recreate it.
+
+##### Request Parameters
+{:.api .api-request .api-request-params}
+
+| Parameter | Description                              | Param Type | DataType | Required |
+|:----------|:-----------------------------------------|:-----------|:---------|:---------|
+| userId       | `id` of a user                             | URL        | String   | TRUE     |
+| roleId       | `id` of a role                             | URL        | String   | TRUE     |
+| appName   | `name` of app target for role assignment | URL        | String   | TRUE     |
+| appInstanceId   | `id` of the app instance target for role assignment | URL        | String   | TRUE     |
 
 ##### Response Parameters
 {:.api .api-response .api-response-params}
