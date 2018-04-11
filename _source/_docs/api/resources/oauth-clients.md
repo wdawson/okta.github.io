@@ -562,12 +562,11 @@ Content-Type: application/json;charset=UTF-8
 ~~~json
 {
   "client_id": "0jrabyQWm4B9zVJPbotY",
-  "client_secret": "t1hgVNl06UiMTzlsVVj0UywSDDuNdG529lm0bpy8",
+  "client_secret": "5W7XULCEs4BJKnWUXwh8lgmeXRhcGcdViFp84pWe",
   "client_id_issued_at": 1453913425,
   "client_secret_expires_at": 0,
   "client_name": "Updated OAuth Client",
   "client_uri": "https://www.example-application.com",
-  "client_secret": "cdUQIFvE61wGI5P51H33ORC4SRB1RXfX",
   "logo_uri": "https://www.example-application.com/logo.png",
   "application_type": "web",
   "redirect_uris": [
