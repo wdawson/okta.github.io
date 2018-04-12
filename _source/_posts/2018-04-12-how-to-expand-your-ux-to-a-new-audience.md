@@ -3,6 +3,7 @@ layout: blog_post
 title: "How to Expand Your UX to a New Audience"
 author: adahl
 tags: [design, okta, ux, process]
+description: "Interested in expanding your UX to a new audience? So were we! Read more about how we did it here."
 tweets:
   - "How do you expand your UX to a new audience? Here's how we did it at Okta."
   - "Designing for different types of users is hard. Here’s how to take it step by step."
