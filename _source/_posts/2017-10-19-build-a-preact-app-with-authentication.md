@@ -27,10 +27,10 @@ npm install -g preact-cli
 ```
 
 Once you have the CLI installed, run the command to create a base Preact
-application:
+application with the default template:
 
 ```bash
-preact create okta-preact-example
+preact create default okta-preact-example
 ```
 
 This command will chug along for a few minutes scaffolding a basic Preact app
@@ -114,12 +114,6 @@ using:
 
 ```bash
 npm install @okta/okta-signin-widget --save
-```
-
-You’ll also need to install `preact-router` with:
-
-```bash
-npm install preact-router --save
 ```
 
 
