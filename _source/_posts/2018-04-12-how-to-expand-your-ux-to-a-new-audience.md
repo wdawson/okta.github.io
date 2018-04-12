@@ -24,7 +24,7 @@ While Okta’s executives had clearly made this a priority, I was worried that i
 
 The designer working on developer experience before me, Shawn, gave a great handoff and encouraged me to find my own paths.
 
-> "In design, there are usually multiple ways to tackle a problem, and it can constrain the new person's creativity and problem solving if they need to run with the decisions made before them. I think our best work, and ultimately the best solution for our users, comes out when designers have the freedom to explore and try many solutions." –Shawn Gupta, Product Design Architect at Okta
+> "In design, there are usually multiple ways to tackle a problem, and it can constrain the new person's creativity and problem solving if they need to run with the decisions made before them. I think our best work, and ultimately the best solution for our users, comes out when designers have the freedom to explore and try many solutions." &mdash;Shawn Gupta, Product Design Architect at Okta
 
 With an open road ahead of you, adding a new audience can feel a lot like starting over. You have to [figure out what to build](https://www.invisionapp.com/blog/how-do-you-decide-what-to-build/): what does your audience need?
 
@@ -73,7 +73,7 @@ Based on what we learned, we made a number of changes before our first release. 
 To keep the feedback cycle going, ship as soon as you can. Maybe that’s a small beta, or maybe it’s a big release. In our case, we were privileged to have a major conference demo.
 
 > "I wasn’t expecting applause just for showing the developer dashboard, but
-people were excited. I knew we were on the right track." –Nate Barbettini, Product Manager at Okta
+people were excited. I knew we were on the right track." &mdash;Nate Barbettini, Product Manager at Okta
 
 <div style="max-width: 560px; margin: 0 auto">
 <iframe width="560" height="315" src="https://www.youtube.com/embed/53jnHhfS00o?start=4170" frameborder="0" allowfullscreen></iframe>
