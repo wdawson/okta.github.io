@@ -9,13 +9,11 @@ tweets:
   - "What's going on inside the minds of your designers? Take a peek at how one of ours worked through a project."
 ---
 
-
 As your business grows, you’ll probably reach a point where you need to grow your audience as well. Not just acquire more customers in your target segment, but expand to more segments and new types of customers. How do you adapt your product to your new audience? How do you avoid a "least common denominator" solution that isn’t great for anyone?
 
 At Okta, we faced these questions when [the Stormpath team joined](https://www.okta.com/blog/2017/03/stormpath-welcome-to-Okta/) the company last year. The Okta Identity Cloud is a complex enterprise platform that was designed for IT administrators who manage employee identity. As a product designer who joined Okta from Stormpath, I faced a big challenge. How could we ensure a great experience for an additional audience: developers building customer identity into their apps?
 
 I had previous experience pivoting to different audiences at other startups, where we kept the core product while replacing who it was for. But at Okta, this wasn’t a pivot: we needed to provide great experiences for multiple audiences with very different perspectives and use cases. And we needed to solve this as new hires on a team going through big changes.
-
 
 ## Set Expectations Within Your Design Team
 
@@ -31,13 +29,11 @@ With an open road ahead of you, adding a new audience can feel a lot like starti
 
 But it’s different than doing it from scratch. **Don’t throw out the good stuff.** Your team learned a lot building for your existing audience, and you had good reasons behind what was designed before. Be prepared to investigate which of those reasons are also relevant to the new audience. If nothing you’ve done still makes sense, do you have the right audience?
 
-
 ## Understand Your Audience
 
 **Research, research, research.** Application developers were a different audience for Okta, so our design team had already started user interviews and usability testing before I arrived. The team that joined from Stormpath had a lot of institutional knowledge, but it wasn’t well-documented.
 
 One of my first activities was to codify and consolidate everything we knew about our audience into our team wiki. Segments, personas, use cases, success criteria, peer companies – it’s all in one place for anyone in the company to reference.  I maintain this documentation today as a living document and guiding star.
-
 
 ## Analyze What Exists Today
 
@@ -48,7 +44,6 @@ We did an inventory of all current features, and documented all the touchpoints 
 What features are missing? What needs to change for your new audience? How is their mental model different?
 
 Crucially, **what can be the same for both audiences?** If it ain’t broke, don’t fix it. When flagging a problem for our new audience, we also evaluated if our existing audience would benefit from improvements in that area.
-
 
 ## Explore and Execute
 
@@ -64,7 +59,6 @@ With a core architecture decided, it’s time to go to work. While special conce
 
 *([Some of our exploration](https://dribbble.com/shots/3805509-Okta-Developer-Dashboard-Exploration) for a new developer dashboard.)*
 
-
 ## Validate Your New UX
 
 **Don’t forget to keep researching.** Are the decisions you’re making actually going to work?
@@ -72,7 +66,6 @@ With a core architecture decided, it’s time to go to work. While special conce
 Even though we were moving fast, we made sure to test our hypotheses. Through moderated usability tests with an Invision prototype, we got real feedback from potential customers before we shipped. We learned some things were really successful, and other things weren’t.
 
 Based on what we learned, we made a number of changes before our first release. Other problems needed more time to dig in deeper, so we documented additional issues to improve upon later.
-
 
 ## Ship It!
 
@@ -86,7 +79,6 @@ people were excited. I knew we were on the right track." –Nate Barbettini, Pro
 </div>
 
 **Celebrate!** It wasn’t easy getting to this point, so make sure to enjoy it. Even if you start hearing criticisms and shortcomings from your new audience, that’s a huge accomplishment – take all the feedback and start addressing it.
-
 
 ## Reflect and Iterate
 
