@@ -346,7 +346,7 @@ For the `componentWillLoad()` method, just read in the user information from the
 ​
 ```js
 componentWillLoad() {
-  if(!this.isServer){
+  if (!this.isServer) {
     let token = JSON.parse(localStorage.getItem('okta_id_token'));
     if (token) {
       this.user = token.claims;
