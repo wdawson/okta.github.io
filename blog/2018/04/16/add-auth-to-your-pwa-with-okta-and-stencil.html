@@ -1,0 +1,751 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html class="ie6 no-flexbox"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie7 no-flexbox"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie8 no-flexbox"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie9 no-flexbox"> <![endif]-->
+<!--[if IE 10 ]>    <html class="ie10 no-flexbox"> <![endif]-->
+<!--[if (gt IE 10)|!(IE)]><!--> <html class="modern wf-loading" lang="en"> <!--<![endif]-->
+  <head>
+  <script>
+    var searchDomain = 'https://developer.okta.com';
+    var isProduction = window.location.hostname === 'developer.okta.com';
+    if (isProduction) {
+      // TypeKit
+      (function(d) {
+        var config = {
+          kitId: 'jff5neq',
+          scriptTimeout: 3000,
+          async: true
+        },
+        h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/bwf-loadingb/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+      })(document);
+
+      // Google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-15777010-3', 'auto');
+      ga('send', 'pageview');
+
+      // START Google Tag Manager
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-TJ45R6');
+      // END Google Tag Manager
+
+      // Start Heap Analytics
+      window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var r=t.forceSSL||"https:"===document.location.protocol,a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=(r?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+e+".js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n);for(var o=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["addEventProperties","addUserProperties","clearEventProperties","identify","removeEventProperty","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=o(p[c])};
+      heap.load("3356162945");
+      // End Heap Analytics
+    }
+  </script>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+
+  <link type="text/css" rel="stylesheet" href="https://developer.okta.com/sites/all/themes/developer/css/master.css" media="all" />
+  <meta class="swiftype" name="title" data-type="string" content="Add Auth to Your PWA with Okta and Stencil | Okta Developer">
+  <meta class="swiftype" name="summary" data-type="string" content="Stencil creates a PWA out of the box. Learn how to add authentication to your PWA with Okta." />
+
+  <link type="text/css" rel="stylesheet" href="/assets/animate-ec43d72c3ed45e08a460b8a2966d8dba6006aebfa0530935c3973fa493a8771f.css">
+  <link type="text/css" rel="stylesheet" href="/assets/okta-914cad2dd6d069302444327ce911da52da68a3c68755f66cf5a4e92b9a38f3eb.css">
+  
+  
+  <title>Add Auth to Your PWA with Okta and Stencil | Okta Developer</title>
+  <meta name="description" content="Stencil creates a PWA out of the box. Learn how to add authentication to your PWA with Okta.">
+  <link rel="alternate" type="application/rss+xml" title="Okta Developer" href="https://developer.okta.com/feed.xml"><!-- GA -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/assets/favicon/manifest.json">
+  <link rel="mask-icon" href="/assets/favicon/safari-pinned-tab.svg" color="#21313a">
+  <meta name="msapplication-config" content="/assets/favicon/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  
+    <body id="blog">
+	
+
+
+
+
+<header class="Header is-fixed">
+
+  <div class="Wrap">
+
+    <a class="Logo" href="https://developer.okta.com">
+      <svg version="1.1" id="OktaLogo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 431.9 151.4" style="enable-background:new 0 0 431.9 151.4;" xml:space="preserve"><g><g><g><path d="M102.2,41.4c-21,0-38.1,17.1-38.1,38.1s17.1,38.1,38.1,38.1s38.1-17.1,38.1-38.1l0,0C140.3,58.5,123.2,41.4,102.2,41.4z M102.2,98.5c-10.5,0-19-8.5-19-19s8.5-19,19-19s19,8.5,19,19c0.1,10.5-8.4,19-18.9,19.1C102.3,98.6,102.2,98.6,102.2,98.5L102.2,98.5z"/><path d="M169.1,92.3c0-1.9,1.5-3.4,3.4-3.4c0.9,0,1.8,0.4,2.4,1c9.5,9.7,25.3,26.3,25.4,26.4c0.4,0.5,0.8,0.8,1.4,0.9l1.6,0.2h17.2c1.8,0,3.3-1.4,3.4-3.2c0-0.8-0.3-1.5-0.8-2.2l-28.6-29.2l-1.5-1.5c-3.2-3.9-2.9-5.4,0.8-9.3l22.6-25.1c1.1-1.4,0.8-3.5-0.6-4.6c-0.6-0.4-1.3-0.7-2-0.7h-17c-0.6,0.2-1.1,0.5-1.5,0.9L175,64.4c-1.3,1.4-3.4,1.5-4.8,0.2c-0.7-0.6-1.1-1.5-1.1-2.5V18.9c0-1.7-1.3-3-3-3c-0.1,0-0.2,0-0.3,0h-12.7c-2.2,0-3.3,1.5-3.3,2.8v95.8c0,2.2,1.8,2.8,3.3,2.8h12.7c1.7,0.1,3.2-1.2,3.3-2.9c0,0,0,0,0,0V92.3z"/><path d="M273,114l-1.4-12.8c-0.2-1.7-1.7-2.9-3.4-2.7c0,0,0,0-0.1,0l-2.9,0.2c-10.1,0-18.5-7.9-19-18c0-0.3,0-0.7,0-1V64.2c-0.1-2,1.5-3.6,3.5-3.7c0,0,0,0,0,0h17c1.7-0.1,3.1-1.5,3-3.2c0,0,0-0.1,0-0.1v-12c0-2.3-1.5-3.6-2.8-3.6h-17.1c-1.9,0.1-3.5-1.5-3.6-3.4c0,0,0,0,0,0V18.9c-0.1-1.7-1.5-3.1-3.2-3c0,0-0.1,0-0.1,0h-12.7c-1.6-0.1-3,1.1-3.1,2.7c0,0.1,0,0.1,0,0.2c0,0,0,61.7,0,62c0.5,21,17.9,37.6,38.9,37c1.4,0,2.9-0.2,4.3-0.3C272,117.2,273.2,115.7,273,114z"/></g><path d="M364.7,98c-10.8,0-12.4-3.8-12.4-18.3l0,0V44.8c0-1.8-1.4-3.2-3.2-3.2c0,0-0.1,0-0.1,0h-12.8c-1.8,0-3.2,1.4-3.3,3.2v1.6C314.6,36,291.3,42.5,281,60.8c-10.4,18.3-3.9,41.6,14.4,51.9c14,7.9,31.4,6.2,43.5-4.2c3.6,5.5,9.3,9.1,18.3,9.1c1.5,0,9.7,0.3,9.7-3.5v-13.6C367,99.2,366,98.1,364.7,98z M314.2,98.6c-10.5,0-19-8.5-19-19s8.5-19,19-19s19,8.5,19,19l0,0C333.2,90.1,324.7,98.6,314.2,98.6z"/></g><path d="M19.4,74c2.2-1.9,4.1-4.1,5.7-6.6c3.5-5.3,5.4-11.5,5.2-17.9V27c0-4.9,0.9-8.4,2.7-10.5c1.8-2.1,4.8-3,9.2-3h12.6c1.2,0,2.1-0.9,2.2-2.1l0,0V2.2C57,1,56,0,54.8,0c0,0,0,0,0,0H41.5c-7.8,0-12.9,2.1-18,7.6s-7.1,12.3-7.1,21.7v14.2c0,2.2-0.1,4-0.2,5.7v2.2c-0.5,3.2-1.8,6.2-3.6,8.9C9.4,64.7,5.1,70.9,0.9,74l0,0l-0.3,0.3l0,0l-0.2,0.3H0.2v0.3l0,0c-0.1,0.3-0.1,0.7,0,1l0,0v0.3h0.1l0.2,0.3l0,0l0.3,0.3l0,0c4.2,3.1,8.5,9.3,11.3,13.7c1.8,2.7,3.1,5.7,3.6,8.9v2.2c0.1,1.6,0.2,3.5,0.2,5.7v14.3c0,9.4,2.4,16.7,7.1,21.7s10.2,7.6,18,7.6h13.8c1.2,0,2.2-1,2.2-2.2V140l0,0c0-1.2-1-2.2-2.2-2.2H42.2c-4.4,0-7.5-1-9.2-3s-2.7-5.6-2.7-10.5v-22.4c0.2-6.4-1.7-12.6-5.2-17.9c-1.6-2.5-3.5-4.7-5.7-6.6l0,0c-0.9-0.7-1.1-2-0.4-2.9C19.2,74.3,19.3,74.2,19.4,74L19.4,74z"/><path d="M412.5,74c-2.2-1.9-4.1-4.1-5.7-6.6c-3.5-5.3-5.4-11.5-5.2-17.9V27c0-4.9-0.9-8.4-2.7-10.5s-4.8-3-9.2-3h-12.6c-1.2,0-2.2-1-2.2-2.2c0,0,0,0,0,0l0,0V2.2c0-1.2,1-2.2,2.2-2.2c0,0,0,0,0,0h13.4c7.8,0,12.9,2.1,18,7.6s7.1,12.3,7.1,21.7v14.2c0,2.2,0.1,4,0.2,5.7v2.2c0.5,3.2,1.8,6.2,3.6,8.9c2.8,4.5,7.1,10.7,11.3,13.7l0,0l0.3,0.3l0,0l0.2,0.3h0.1v0.3l0,0c0.1,0.3,0.1,0.7,0,1l0,0v0.3h-0.1l-0.2,0.3l0,0l-0.3,0.3l0,0c-4.2,3.1-8.5,9.3-11.3,13.7c-1.8,2.7-3.1,5.7-3.6,8.9v2.2c-0.1,1.6-0.2,3.5-0.2,5.7v14.3c0,9.4-2.4,16.7-7.1,21.7s-10.2,7.6-18,7.6h-13.4c-1.2,0-2.2-1-2.2-2.2c0,0,0,0,0,0V140l0,0c0-1.2,1-2.2,2.2-2.2l0,0h12.7c4.4,0,7.5-1,9.2-3s2.7-5.6,2.7-10.5v-22.4c-0.2-6.3,1.6-12.6,5.1-17.9c1.6-2.5,3.5-4.7,5.7-6.6l0,0c0.9-0.7,1.1-2,0.4-2.9C412.7,74.3,412.6,74.2,412.5,74L412.5,74z"/></g></svg>
+    </a>
+
+    <nav class="Header-nav PrimaryNav">
+      <ul class="menu">
+        <li class="first expanded">
+          <a href="https://developer.okta.com/product/">Product</a>
+          <ul class="menu">
+            <li class="first leaf"><a href="https://developer.okta.com/product/">Overview</a></li>
+            <li class="leaf"><a href="https://developer.okta.com/product/authentication/">Authentication</a></li>
+            <li class="leaf"><a href="https://developer.okta.com/product/authorization/">Authorization</a></li>
+            <li class="last leaf"><a href="https://developer.okta.com/product/user-management/">User Management</a></li>
+          </ul>
+        </li>
+        <li class="leaf">
+          <a href="https://developer.okta.com/pricing/">Pricing</a>
+        </li>
+        <li class="leaf">
+          <a href="/blog/" class="active">Blog</a>
+        </li>
+        <li class="leaf">
+          <a href="/documentation/">Docs</a>
+        </li>
+        <li class="last expanded">
+          <span class="nolink">Support</span>
+          <ul class="menu">
+            <li class="first leaf"><a href="https://devforum.okta.com/">Okta Developer Forums</a></li>
+            <li class="last leaf"><a href="mailto:developers@okta.com">developers@okta.com</a></li>
+          </ul>
+        </li>
+      </ul>
+      <a class="PrimaryNav-toggle" href="#">
+        <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g class="MenuIcon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+                <path d="M1,16 L19,16" class="MenuIcon-line1" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,4 L19,4" class="MenuIcon-line2" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,10 L19,10" class="MenuIcon-line3" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,10 L19,10" class="MenuIcon-line4" stroke="#FFFFFF" stroke-width="2"></path>
+            </g>
+        </svg>
+        <svg class="CloseIcon" width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <g id="ALl-Boards" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="Desktop" transform="translate(-915.000000, -235.000000)" fill="#FFFFFF">
+              <g id="Search-bar-Active" transform="translate(30.000000, 26.000000)">
+                <polygon id="Icon/Cross" points="901 210.6 899.4 209 893 215.4 886.6 209 885 210.6 891.4 217 885 223.4 886.6 225 893 218.6 899.4 225 901 223.4 894.6 217"></polygon>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </a>
+
+      <div class="PrimaryNav-cta">
+        <a target="_blank" rel="noopener noreferrer" href="https://login.okta.com/?SAMLRequest=fc%2B7CsJAEAXQXvAflu1NNJUMeZBGELTx1a%2FrYILJTtyZGD%2FfSBRiYzlw77lMnD3rSj3Qc0ku0YtgrhU6S5fSXRN9PKxmS52l00nMpq6iBvJWCrfDe4ss6vStRe9aDzmGIZfo1jsgwyWDMzUyiIV9vt1AH4XGk5ClSvewUgMNa%2BYW%2FVj5jxhm9NLP67QQaSAMu64L6CYmsFSHlnzT4ZlLwTgcL6Sf8%2FeX9AU%3Dhttps://login.okta.com/?SAMLRequest=fc%2B7CsJAEAXQXvAflu1NNJUMeZBGELTx1a%2FrYILJTtyZGD%2FfSBRiYzlw77lMnD3rSj3Qc0ku0YtgrhU6S5fSXRN9PKxmS52l00nMpq6iBvJWCrfDe4ss6vStRe9aDzmGIZfo1jsgwyWDMzUyiIV9vt1AH4XGk5ClSvewUgMNa%2BYW%2FVj5jxhm9NLP67QQaSAMu64L6CYmsFSHlnzT4ZlLwTgcL6Sf8%2FeX9AU%3D" class="Button--redOutline">Login</a>
+        <a href="https://developer.okta.com/signup/" class="Button--red">Sign up</a>
+      </div>
+
+      <a class="SearchIcon" href="#"></a>
+      <form id="form_search" class="SearchBar Formisimo_clocked_69929" method="get" action="https://developer.okta.com/search/" name="form_search" __bizdiag="-784164280" __biza="WJ__">
+        <input type="text" name="stq" autocomplete="off" id="st-search-input-auto" class="st-search-input" placeholder="Search">
+        <input type="submit" name="submit" value="GO">
+      </form>
+
+    </nav>
+
+  </div>
+
+</header>
+
+	<div class="page-content">
+		
+		
+
+
+
+
+
+
+<section class="Blog is-single">
+		
+	<div class="Blog-social">
+		
+		<a href="https://github.com/leebrandt" target="_blank"><i class="fa fa-github"></i></a>
+		
+		
+		<a href="https://twitter.com/leebrandt" target="_blank"><i class="fa fa-twitter"></i></a>
+		
+		
+		
+		<a href="http://leebrandt.me" target="_blank"><i class="fa fa-external-link"></i></a>
+		
+	</div>
+	
+	
+
+<article class="BlogPost">
+
+    <header class="BlogPost-header">
+
+        <time class="BlogPost-date" datetime="2018-04-16">April 16, 2018</time>
+
+        <h1 class="BlogPost-title">
+            
+            Add Auth to Your PWA with Okta and Stencil
+            
+        </h1>
+
+        <div class="BlogPost-attribution">
+            
+            <img src="/assets/avatar-leebrandt-23a647548f26433d031856dcef1df5204763b94283cd68c397d816a61363a94d.jpg" alt="avatar-leebrandt.jpg" class="BlogPost-avatar">
+            
+            <span class="BlogPost-author">Lee Brandt</span>
+        </div>
+
+    </header>
+
+    <div class="BlogPost-content">
+        
+	<p><a href="/blog/2017/07/20/the-ultimate-guide-to-progressive-web-applications">Progressive Web Applications</a> (PWAs) are the newest technology on the web dev block and they’ve arrived just in time to solve a growing problem. Many companies are struggling to keep isolated development teams across their organization up-to-date when new features are released. Some companies are even trying to decide if it’s worth the cost to develop both a web app <em>and</em> a mobile application. Not surprisingly, it’s a headache most companies are looking to avoid. PWAs can give companies a lot of the features they need from a mobile app without the need to manage multiple teams and codebases.
+​
+A <a href="https://developers.google.com/web/progressive-web-apps/">PWA</a> performs spectacularly when on a fast connection and still performs well when offline or on Wi-Fi that’s not really fast enough to be called Wi-Fi (sometimes called “Lie-Fi”). It does so via caching and a JavaScript “Service Worker” that intercepts server calls and tries to serve the data from cache first, then when the server finally responds, it will replace the cached data with possibly “fresher” data from the server.
+​
+Recently, the <a href="https://ionicframework.com/">Ionic</a> team released a new project called <a href="https://stenciljs.com/">Stencil</a>. Stencil is a compiler that generates standards-compliant web components. Unlike most JavaScript frameworks, it doesn’t deliver a “framework” of code to the browser. It simply takes the code you write and uses its compiler to create vanilla components. You can also use Stencil’s compiler <em>with</em> your favorite framework. The <a href="https://github.com/ionic-team/stencil-app-starter">Stencil starter project</a> is the easiest way to get started with Stencil and produces a base application that scores nearly a 100% score on <a href="https://developers.google.com/web/tools/lighthouse/">Lighthouse</a>’s progressive web app scorecard.
+​
+To get started building a PWA using Stencil, clone the starter application and detach it from the GitHub remote.
+​
+<strong>WARNING</strong>: Stencil is not at a 1.0 release yet (as of this writing). So be aware that if you continue, you’re in early-adopter territory. If you find bugs, <a href="https://github.com/ionic-team/stencil/issues">submit an issue</a>.
+​</p>
+<h2 id="set-up-the-starter-application">Set Up the Starter Application</h2>
+<p>​</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/ionic-team/stencil-starter.git first-stencil
+<span class="nb">cd </span>first-stencil
+git remote rm origin
+</code></pre></div></div>
+<p>​
+Then, install all the dependencies that your new Stencil app will need.
+​</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install
+</code></pre></div></div>
+<p>​
+You may see a couple of warnings from <code class="highlighter-rouge">node-pre-gyp</code> around <code class="highlighter-rouge">fsevents</code>. There’s nothing to see here. This is just to get around a <a href="https://github.com/strongloop/fsevents/issues/157">nasty little npm bug</a>.
+​
+Next, add the Okta Auth SDK (via CDN) to the bottom of the <code class="highlighter-rouge">index.html</code> page, right before the closing <code class="highlighter-rouge">&lt;/body&gt;</code> tag.
+​</p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"https://ok1static.oktacdn.com/assets/js/sdk/okta-auth-js/1.8.0/okta-auth-js.min.js"</span> <span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</code></pre></div></div>
+<p>​
+While there is an npm package for Okta’s Auth SDK, Stencil has a hard time compiling it. Overall it works better for now if you just use the CDN to include it.
+​
+If you’re like me, the next thing you’ll want to do is run <code class="highlighter-rouge">npm start</code> and check the site with Lighthouse. If you do, you’ll notice that the score is <em>kind of</em> low. In particular, it doesn’t register a service worker or return a 200 when offline, That’s because it’s a <em>development</em> build, and generally, you don’t want the service worker intercepting server calls and returning cached data in development.
+​
+To ensure an accurate depiction of the kind of PWA you get out of the box with Stencil, make sure to run a <em>production</em> build using <code class="highlighter-rouge">npm run build</code>. Once you do, you’ll see a <code class="highlighter-rouge">www</code> folder and inside that folder, you’ll see a <code class="highlighter-rouge">sw.js</code> file. That’s your service worker!
+​</p>
+<h2 id="set-up-your-okta-application">Set Up Your Okta Application</h2>
+
+<p>If you haven’t already done so, create a free-forever developer account at <a href="https://developer.okta.com/signup/">https://developer.okta.com/signup/</a>.
+​
+Once you’ve registered, click on <strong>Applications</strong> in the top menu. Then click <strong>Add Application</strong>.
+​</p>
+
+<p><img src="/assets/blog/add-auth-to-stencil/ApplicationListingScreen-008adbfcd6aba9acfd19054bca9bbd360a1e1d6f58b20ae85aa7532141c65c3f.png" alt="Application Listing Screen" width="800" class="center-image" /></p>
+
+<p>​
+You will then be taken to the application creation wizard. Choose <strong>Single-Page App</strong> and click <strong>Next</strong> at the bottom.</p>
+
+<p>​
+<img src="/assets/blog/add-auth-to-stencil/CreateApplicationScreenSPA-64f2eb2b85fdf060d61b602f1e77fca29f3a07c09a9be1224694b91106581647.png" alt="Create Application Screen SPA" width="800" class="center-image" /></p>
+
+<p>On the next screen, you’ll see the default settings provided by the single-page application template. Change the name of the application to something more descriptive, like “Stencil SPA”. Also, change the base URIs and the login redirect URIs settings to use port 3333 because that’s where your application will be running. The rest of the default settings are fine.
+​</p>
+
+<p><img src="/assets/blog/add-auth-to-stencil/ApplicationSettingStencil-a5ef20862100e81001e35f69cf0c9b7c30155d8f54380e633d33cc1c59ac906b.png" alt="Application Settings Screen" width="800" class="center-image" /></p>
+
+<p>​
+Click <strong>Done</strong> at the bottom.
+​
+Select your newly created application from the listing, and click on the <strong>General</strong> tab to view the general settings.
+​</p>
+
+<p><img src="/assets/blog/add-auth-to-stencil/GeneralSettingsClientId-f23a50d696788bf92c681465762a32e578ef6e52f733809722d47c32f9518dc9.png" alt="General Settings Client Id" width="800" class="center-image" /></p>
+
+<p>​
+At the bottom, you’ll see a <strong>Client ID</strong> setting (yours won’t be blurred out, obviously). Copy this to use in your Stencil application. You will also need your Okta organization URL, which you can find at the top right of the dashboard page. It will probably look something like “https://dev-XXXXXX.oktapreview.com”. 
+​</p>
+<h2 id="add-the-authentication-component">Add the Authentication Component</h2>
+<p>​
+In the <code class="highlighter-rouge">components</code> folder, add a new folder called <code class="highlighter-rouge">app-auth</code>. This is where your login page component will go. You can call it whatever you want, I’m just following the naming conventions set out by the starter app here. I’d definitely recommend deciding on a naming convention early and sticking with it.
+​
+Inside the newly created <code class="highlighter-rouge">app-auth</code> folder create two files: <code class="highlighter-rouge">app-auth.css</code> and <code class="highlighter-rouge">app-auth.tsx</code>. Start by creating the shell of the <code class="highlighter-rouge">app-auth.tsx</code> file.
+​</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@stencil/core'</span><span class="p">;</span>
+<span class="err">​</span>
+<span class="p">@</span><span class="nd">Component</span><span class="p">({</span>
+  <span class="na">tag</span><span class="p">:</span> <span class="s1">'app-auth'</span><span class="p">,</span>
+  <span class="na">styleUrl</span><span class="p">:</span> <span class="s1">'app-auth.css'</span>
+<span class="p">})</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">AppAuth</span> <span class="p">{</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">Hello</span><span class="o">&lt;</span><span class="sr">/div&gt;</span><span class="err">;
+</span>  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>​
+If you are like I was, you might be thinking, “What kind of Frankenstein framework is this?”
+​
+You’ll notice the <code class="highlighter-rouge">@Component</code> decorator over the <code class="highlighter-rouge">AppAuth</code> class declaration like Angular, and then a <code class="highlighter-rouge">render()</code> method at the bottom like React. To me, that’s the beauty of Stencil. It takes some of the best parts of both popular frameworks and uses them to compile reusable components!
+​</p>
+<h2 id="add-a-login-form">Add a Login Form</h2>
+<p>​
+Next, you’ll add the JSX (that’s right, I said it) to the new component. Change the <code class="highlighter-rouge">render()</code> method to:
+​</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">(</span>
+    <span class="o">&lt;</span><span class="nx">form</span> <span class="kd">class</span><span class="o">=</span><span class="s2">"app-auth"</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nx">div</span> <span class="kd">class</span><span class="o">=</span><span class="s2">"form-item"</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span>
+          <span class="nx">Username</span><span class="p">:</span>
+          <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"text"</span> <span class="nx">name</span><span class="o">=</span><span class="s2">"username"</span> <span class="nx">autocomplete</span><span class="o">=</span><span class="s2">"username"</span> <span class="o">/&gt;</span>
+        <span class="o">&lt;</span><span class="sr">/label</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="nx">div</span> <span class="kd">class</span><span class="o">=</span><span class="s2">"form-item"</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span>
+          <span class="nx">Password</span><span class="p">:</span>
+          <span class="o">&lt;</span><span class="nx">input</span>
+            <span class="nx">type</span><span class="o">=</span><span class="s2">"password"</span>
+            <span class="nx">name</span><span class="o">=</span><span class="s2">"password"</span>
+            <span class="nx">autocomplete</span><span class="o">=</span><span class="s2">"current-password"</span>
+          <span class="o">/&gt;</span>
+        <span class="o">&lt;</span><span class="sr">/label</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="nx">div</span> <span class="kd">class</span><span class="o">=</span><span class="s2">"form-actions"</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"button"</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{()</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">login</span><span class="p">()}</span><span class="o">&gt;</span>
+          <span class="nx">Login</span>
+        <span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>    <span class="o">&lt;</span><span class="sr">/form</span><span class="err">&gt;
+</span>  <span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>​
+This is just a regular JSX form, but the login button’s <code class="highlighter-rouge">onClick</code> event is currently wired to function that doesn’t exist. 
+​</p>
+<h2 id="add-the-login-methods-dependencies">Add the Login Method’s Dependencies</h2>
+<p>​
+Before you create that function, you’ll need to set up the <code class="highlighter-rouge">OktaAuth</code> JavaScript object to call the Okta API for authentication. You’ll add the object to the component’s state, so right below the class declaration, add the following line:
+​</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">@</span><span class="nd">State</span><span class="p">()</span> <span class="nx">authClient</span><span class="p">:</span> <span class="nx">any</span><span class="p">;</span>
+</code></pre></div></div>
+<p>​
+You will also have to import the <code class="highlighter-rouge">@State()</code> decorator. This is is used for values related to the internal state of the component. In the first <code class="highlighter-rouge">import</code> statement add State to the deconstruction list.
+​</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">State</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@stencil/core'</span>
+</code></pre></div></div>
+<p>You’ll also need to get the username and password values from the form itself, so add an <code class="highlighter-rouge">@Element()</code> to the code right below that <code class="highlighter-rouge">@State()</code> like you just created, so it read like this:
+​</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">@</span><span class="nd">State</span><span class="p">()</span> <span class="nx">authClient</span><span class="p">:</span> <span class="nx">any</span><span class="p">;</span>
+<span class="p">@</span><span class="nd">Element</span><span class="p">()</span> <span class="nx">host</span><span class="p">:</span> <span class="nx">HTMLElement</span><span class="p">;</span>
+</code></pre></div></div>
+<p>​
+Then also add the <code class="highlighter-rouge">@Element()</code> decorator to the import so it reads:
+​</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">State</span><span class="p">,</span> <span class="nx">Element</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@stencil/core'</span><span class="p">;</span>
+</code></pre></div></div>
+<p>​
+One last thing that the <code class="highlighter-rouge">login()</code> function will need is access to the router, so you can redirect the user to their profile page if their authentication is successful. You’ll need a class property, so add it right below the <code class="highlighter-rouge">@Element</code>.
+​</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">@</span><span class="nd">State</span><span class="p">()</span> <span class="nx">authClient</span><span class="p">:</span> <span class="nx">any</span><span class="p">;</span>
+<span class="p">@</span><span class="nd">Element</span><span class="p">()</span> <span class="nx">host</span><span class="p">:</span> <span class="nx">HTMLElement</span><span class="p">;</span>
+<span class="p">@</span><span class="nd">Prop</span><span class="p">()</span> <span class="nx">history</span><span class="p">:</span> <span class="nx">RouterHistory</span><span class="p">;</span>
+</code></pre></div></div>
+<p>​
+To import it, add the <code class="highlighter-rouge">@Prop()</code> decorator to the main import and then import the <code class="highlighter-rouge">RouterHistory</code> from <code class="highlighter-rouge">@stencil/router</code> right below the core import statement. The <code class="highlighter-rouge">@Prop</code> decorator is used to define properties that can be passed in to your component. In this case, it’s not a passed in value, but it could be if need be. Your final import section should read:
+​</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">Prop</span><span class="p">,</span> <span class="nx">State</span><span class="p">,</span> <span class="nx">Element</span><span class="p">,</span> <span class="nx">Listen</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@stencil/core'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">RouterHistory</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@stencil/router'</span><span class="p">;</span>
+</code></pre></div></div>
+<p>​
+Finally, to use the <code class="highlighter-rouge">OktaAuth</code> JavaScript library you brought in from the CDN, add a declaration for it right below the import statements.
+​</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">declare</span> <span class="kd">const</span> <span class="nx">OktaAuth</span><span class="p">:</span> <span class="nx">any</span><span class="p">;</span>
+</code></pre></div></div>
+<p>​</p>
+<h2 id="add-the-login-method">Add the Login Method</h2>
+<p>​
+Now you included everything you’ll need to get the login function to authenticate users with your Okta organization. First, set up the <code class="highlighter-rouge">OktaAuth</code> object in the constructor of the <code class="highlighter-rouge">AppAuth</code> class. Right below the property for the <code class="highlighter-rouge">RouterHistory</code> object, add:
+​</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">authClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OktaAuth</span><span class="p">({</span>
+    <span class="na">clientId</span><span class="p">:</span> <span class="s1">'{yourClientId}'</span><span class="p">,</span>
+    <span class="na">url</span><span class="p">:</span> <span class="s1">'<span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>'</span><span class="p">,</span>
+    <span class="na">issuer</span><span class="p">:</span> <span class="s1">'default'</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>​
+You can get your Client ID from that general settings page of your Okta application.​</p>
+
+<p><img src="/assets/blog/add-auth-to-stencil/GeneralSettingsClientId-f23a50d696788bf92c681465762a32e578ef6e52f733809722d47c32f9518dc9.png" alt="General Settings Client Id" width="800" class="center-image" />
+​</p>
+
+<p>You’ll also need your Okta org URL, from the upper-right side of the Okta dashboard page.
+​</p>
+
+<p><img src="/assets/blog/add-auth-to-stencil/OktaOrgUrlDashboard-b9283a021008d94d056e5a4ac6d2b130ff00a71e8c4d6a44f7029af95392a8f1.png" alt="Okta Dashboard Org Url" width="800" class="center-image" /></p>
+
+<p>Now everything is set up for the <code class="highlighter-rouge">login()</code> function, so you’ll create that next. Right above the <code class="highlighter-rouge">render()</code> method, add a <code class="highlighter-rouge">login()</code> function.
+​</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">login</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">inputs</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">host</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="s1">'input'</span><span class="p">);</span>
+  <span class="kd">let</span> <span class="nx">user</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">username</span><span class="p">:</span> <span class="nx">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">value</span><span class="p">,</span>
+    <span class="na">password</span><span class="p">:</span> <span class="nx">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">value</span>
+  <span class="p">};</span>
+<span class="err">​</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">authClient</span><span class="p">.</span><span class="nx">signIn</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">'SUCCESS'</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">authClient</span><span class="p">.</span><span class="nx">token</span>
+          <span class="p">.</span><span class="nx">getWithoutPrompt</span><span class="p">({</span>
+            <span class="na">responseType</span><span class="p">:</span> <span class="s1">'id_token'</span><span class="p">,</span>
+            <span class="na">scopes</span><span class="p">:</span> <span class="p">[</span><span class="s1">'openid'</span><span class="p">,</span> <span class="s1">'profile'</span><span class="p">,</span> <span class="s1">'email'</span><span class="p">],</span>
+            <span class="na">sessionToken</span><span class="p">:</span> <span class="nx">res</span><span class="p">.</span><span class="nx">sessionToken</span><span class="p">,</span>
+            <span class="na">redirectUri</span><span class="p">:</span> <span class="s1">'http://localhost:3333'</span>
+          <span class="p">})</span>
+          <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">token</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="nx">localStorage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span>
+              <span class="s1">'okta_id_token'</span><span class="p">,</span>
+              <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">token</span><span class="p">)</span>
+            <span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">history</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">'/profile'</span><span class="p">,</span> <span class="p">{});</span>
+          <span class="p">});</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="s2">`Unable to handle </span><span class="p">${</span><span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">}</span><span class="s2"> status code`</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>​
+Since is really the “meat” of the component, I’ll walk you through what’s going on here.
+​
+The first thing, is getting all the inputs inside the <code class="highlighter-rouge">form</code> element of the component. Then a user object is created with the username and password from their respective inputs.
+​
+Next the <code class="highlighter-rouge">authClient</code> object is used to call the <code class="highlighter-rouge">signIn()</code> method with the user object that was created. It returns a promise, so you handle the <code class="highlighter-rouge">then</code> condition by getting the response and check to see if the response’s status is a 200. If it is, call the <code class="highlighter-rouge">authClient.token</code>’s <code class="highlighter-rouge">getWithoutPrompt()</code> method which also returns a promise. It takes a <code class="highlighter-rouge">responseType</code> property which is set to <code class="highlighter-rouge">id_token</code>, because that’s what you want to get from Okta. You’ve also asked for three scopes that will give you the openid, profile, and email data associated with the newly authenticated user. The method need the session token returned from the <code class="highlighter-rouge">signIn()</code> method’s response. Finally, you’ve told the function to call back to the <code class="highlighter-rouge">redirectUri</code>, which was set as a trusted redirect origin in Okta when you created your application.
+​
+In the <code class="highlighter-rouge">then</code> condition of this promise, you take the id token received and set it in local storage as <code class="highlighter-rouge">okta_id_token</code>. If all that worked, the user is redirected to the profile page.
+​
+If the response had a status of anything other than 200, it merely throws an error that says it can’t handle any other statuses. Finally, the fail condition for the <code class="highlighter-rouge">signIn()</code> method call simply logs any errors to the console.
+​</p>
+<h2 id="simplify-login">Simplify Login</h2>
+<p>​
+While this works, there are two things that would make this component a little nicer: being able to hit enter to log in instead of having to click the login button, and not even showing the login form if the person tries to go the login page when they’re already logged in.
+​
+To achieve this, add a method to take the user directly to the profile page if they’re already logged in. Like React components, Stencil components have lifecycle methods. Instead of <code class="highlighter-rouge">componentWillMount()</code> for React, Stencil has a <code class="highlighter-rouge">componentWillLoad()</code> method, so that’s what you’ll use here.
+​</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">componentWillLoad</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">idToken</span> <span class="o">=</span> <span class="nx">localStorage</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s1">'okta_id_token'</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">idToken</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">history</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">'/profile'</span><span class="p">,</span> <span class="p">{});</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>​
+Simply put, all you’re doing is reading the token from local storage. If one exists, you’re assuming they are logged in and redirecting them to the profile page.
+​
+The last thing that will make this login form easier to use is to add the ability to submit the form with the enter key. Stencil has some built-in listeners for key presses. In this case, use the ‘keydown.enter’ listener. Import the <code class="highlighter-rouge">@Listen()</code> decorator in the very top import statement where you imported <code class="highlighter-rouge">Component</code>.
+​</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">Prop</span><span class="p">,</span> <span class="nx">State</span><span class="p">,</span> <span class="nx">Element</span><span class="p">,</span> <span class="nx">Listen</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@stencil/core'</span><span class="p">;</span>
+</code></pre></div></div>
+<p>​
+Then add a handler for the ‘keydown.enter’ event just below the <code class="highlighter-rouge">componentWillLoad()</code> function.
+​</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">@</span><span class="nd">Listen</span><span class="p">(</span><span class="s1">'keydown.enter'</span><span class="p">)</span>
+<span class="nx">handleEnter</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">login</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>​</p>
+<h2 id="update-the-profile-page">Update the Profile Page</h2>
+<p>​
+Now that you have a nice login page, update the profile page so that it shows the user’s claims once they’re logged in.
+​
+First, you’ll need a type to put the user’s claims in. So create a new file in the <code class="highlighter-rouge">app-profile</code> folder called <code class="highlighter-rouge">AppUser.tsx</code>. The contents are simple, but long. I simply looked at all the claims in the token stored in <code class="highlighter-rouge">localStorage</code> and created an interface that matched it. So the <code class="highlighter-rouge">AppUser.tsx</code> file is as follows:
+​</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">AppUser</span> <span class="p">{</span>
+  <span class="nl">sub</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="nl">name</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="nl">locale</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="nl">email</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="nl">ver</span><span class="p">:</span> <span class="nx">number</span><span class="p">;</span>
+  <span class="nl">iss</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="nl">aud</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="nl">iat</span><span class="p">:</span> <span class="nx">number</span><span class="p">;</span>
+  <span class="nl">exp</span><span class="p">:</span> <span class="nx">number</span><span class="p">;</span>
+  <span class="nl">jti</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="nl">amr</span><span class="p">:</span> <span class="nx">string</span><span class="p">[];</span>
+  <span class="nl">idp</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="nl">nonce</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="nl">nickname</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="nl">preferred_username</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="nl">given_name</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="nl">family_name</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="nl">zoneinfo</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="nl">updated_at</span><span class="p">:</span> <span class="nx">number</span><span class="p">;</span>
+  <span class="nl">email_verified</span><span class="p">:</span> <span class="kr">boolean</span><span class="p">;</span>
+  <span class="nl">auth_time</span><span class="p">:</span> <span class="nx">number</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>Once you have a type to declare for your profile’s user object, update the <code class="highlighter-rouge">app-profile.tsx</code> file.
+​
+The imports at the top should look like:
+​</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">Prop</span><span class="p">,</span> <span class="nx">State</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@stencil/core'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">RouterHistory</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@stencil/router'</span><span class="p">;</span>
+</code></pre></div></div>
+<p>​
+Remove the <code class="highlighter-rouge">@Prop()</code> line for <code class="highlighter-rouge">match</code> and replace is with:
+​</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">@</span><span class="nd">Prop</span><span class="p">()</span> <span class="nx">history</span><span class="p">:</span> <span class="nx">RouterHistory</span><span class="p">;</span>
+<span class="p">@</span><span class="nd">State</span><span class="p">()</span> <span class="nx">user</span><span class="p">:</span> <span class="nx">AppUser</span><span class="p">;</span>
+<span class="p">@</span><span class="nd">Prop</span><span class="p">({</span> <span class="na">context</span><span class="p">:</span> <span class="s1">'isServer'</span> <span class="p">})</span> <span class="kr">private</span> <span class="nx">isServer</span><span class="p">:</span> <span class="kr">boolean</span><span class="p">;</span>
+</code></pre></div></div>
+<p>​
+The <code class="highlighter-rouge">isServer</code> property is a special property. Because Stencil supports prerendering and <code class="highlighter-rouge">localStorage</code> may not be available during prerender, you’ll need to wrap the <code class="highlighter-rouge">localStorage</code> calls in an <code class="highlighter-rouge">if(!isServer){}</code> to make sure it will build for production. This shouldn’t stop it from working, it’s just a work around for the build process.
+​
+For the <code class="highlighter-rouge">componentWillLoad()</code> method, just read in the user information from the ‘okta_id_token’ in local storage:
+​</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">componentWillLoad</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">isServer</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">token</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s1">'okta_id_token'</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">token</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">user</span> <span class="o">=</span> <span class="nx">token</span><span class="p">.</span><span class="nx">claims</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">history</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">'/login'</span><span class="p">,</span> <span class="p">{});</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>​
+This will be your protector for the profile page as well, it just checks if the token exists. If so, it loads the claims from it. If not, it redirects to the login page.
+​
+For the <code class="highlighter-rouge">render()</code> method, change it to display the claims in a list.
+​</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">keys</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">user</span><span class="p">);</span>
+  <span class="k">return</span> <span class="o">&lt;</span><span class="nx">div</span> <span class="kd">class</span><span class="o">=</span><span class="s2">"app-profile"</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nx">h2</span><span class="o">&gt;</span><span class="nx">User</span> <span class="nx">Claims</span><span class="o">&lt;</span><span class="sr">/h2</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="nx">ul</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="nx">keys</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">key</span> <span class="o">=&gt;</span> <span class="o">&lt;</span><span class="nx">li</span><span class="o">&gt;&lt;</span><span class="nx">span</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">key</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/span&gt;: {this.user</span><span class="se">[</span><span class="sr">key</span><span class="se">]</span><span class="sr">}&lt;/</span><span class="nx">li</span><span class="o">&gt;</span><span class="p">)}</span>
+      <span class="o">&lt;</span><span class="sr">/ul</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">logout</span><span class="p">}</span><span class="o">&gt;</span>
+        <span class="nx">Logout</span>
+      <span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
+</span>    <span class="o">&lt;</span><span class="sr">/div&gt;</span><span class="err">;
+</span>  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>​
+The only thing left is to add the <code class="highlighter-rouge">logout()</code> method. This will just remove the token from local storage and reload the page, this will force the <code class="highlighter-rouge">componentWillLoad()</code> to redirect the user to the login page.
+​</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">logout</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">isServer</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">localStorage</span><span class="p">.</span><span class="nx">removeItem</span><span class="p">(</span><span class="s1">'okta_id_token'</span><span class="p">);</span>
+    <span class="nx">location</span><span class="p">.</span><span class="nx">reload</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>​</p>
+<h2 id="set-up-the-login-route">Set Up the Login Route</h2>
+<p>​
+The only thing left is to add the route to the login component to the application so that users can get there.
+​
+In the <code class="highlighter-rouge">components/my-app/my-app.tsx</code> file add the route inside the <code class="highlighter-rouge">stencil-router</code> component so that the final section looks like this:
+​</p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;stencil-router&gt;</span>
+  <span class="nt">&lt;stencil-route</span> <span class="na">url=</span><span class="s">"/"</span> <span class="na">component=</span><span class="s">"app-home"</span> <span class="na">exact=</span><span class="s">{true}</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;stencil-route</span> <span class="na">url=</span><span class="s">"/profile"</span> <span class="na">component=</span><span class="s">"app-profile"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;stencil-route</span> <span class="na">url=</span><span class="s">"/login"</span> <span class="na">component=</span><span class="s">"app-auth"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/stencil-router&gt;</span>
+</code></pre></div></div>
+<p>​
+You’ll also need to update the route for the link on the home page. In <code class="highlighter-rouge">components/app-home/app-home.tsx</code> update the <code class="highlighter-rouge">stencil-route-link</code> element’s url to no longer pass in the url parameter.
+​</p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;stencil-route-link</span> <span class="na">url=</span><span class="s">"/profile"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;button&gt;</span>
+    Profile page
+  <span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/stencil-route-link&gt;</span>
+</code></pre></div></div>
+<p>​
+That’s it! You should now be able to run the app, click on the profile page, get redirected to the login page, and be redirected back to the profile page once you’ve logged in. The profile page should show all your claims after you’ve authenticated.
+​
+Congratulations, you now have a PWA with authentication in it, ready to go conquer the world!
+​</p>
+<h2 id="add-styles">Add Styles</h2>
+<p>​
+As extra credit, you might want to add some styling to the login form and the profile page. Below is my style sheet for the login page that goes in <code class="highlighter-rouge">app-auth.css</code>:
+​</p>
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.app-auth</span> <span class="p">{</span>
+  <span class="nl">width</span><span class="p">:</span> <span class="m">30%</span><span class="p">;</span>
+  <span class="nl">margin</span><span class="p">:</span> <span class="m">2rem</span> <span class="nb">auto</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.app-auth</span> <span class="nc">.form-item</span> <span class="p">{</span>
+  <span class="nl">padding</span><span class="p">:</span> <span class="m">.25rem</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.app-auth</span> <span class="nt">label</span> <span class="p">{</span>
+  <span class="nl">width</span><span class="p">:</span> <span class="m">100%</span><span class="p">;</span>
+  <span class="nl">font-size</span><span class="p">:</span> <span class="m">1rem</span><span class="p">;</span>
+  <span class="nl">color</span><span class="p">:</span> <span class="m">#999</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="err">​</span>
+<span class="nc">.app-auth</span> <span class="nt">label</span> <span class="nt">input</span> <span class="p">{</span>
+  <span class="nl">width</span><span class="p">:</span> <span class="m">97%</span><span class="p">;</span>
+  <span class="nl">border-radius</span><span class="p">:</span> <span class="m">.25rem</span><span class="p">;</span>
+  <span class="nl">font-size</span><span class="p">:</span> <span class="m">1.5rem</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="err">​</span>
+<span class="nc">.app-auth</span> <span class="nc">.form-actions</span> <span class="p">{</span>
+  <span class="nl">text-align</span><span class="p">:</span> <span class="nb">right</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>​
+Finally, in <code class="highlighter-rouge">app-profile.css</code> just some simple styles to bold the label of each item.
+​</p>
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.app-profile</span> <span class="p">{</span>
+  <span class="nl">padding</span><span class="p">:</span> <span class="m">10px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="err">​</span>
+<span class="nc">.app-profile</span> <span class="nt">ul</span> <span class="nt">li</span> <span class="nt">span</span> <span class="p">{</span>
+  <span class="nl">font-weight</span><span class="p">:</span> <span class="nb">bold</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>​
+Now when you run the app, you will see a nicely styled application, ready for the web!
+​</p>
+
+<p><img src="/assets/blog/add-auth-to-stencil/StencilAppLoginPage-2790ae37ee773e9a4478da7f266be8908753c6f685a81c3de2618ae76b47d30c.png" alt="Stencil App Login Page" width="800" class="center-image" /></p>
+
+<p>​</p>
+<h2 id="learn-more">Learn More</h2>
+<p>​
+To learn more about PWAs, check out Matt Raible’s <a href="/blog/2017/07/20/the-ultimate-guide-to-progressive-web-applications">ultimate guide to PWAs</a> on the Okta developer blog.
+​
+If you want to know more about Ionic apps, check out Matt’s blog post about <a href="/blog/2017/08/22/build-an-ionic-app-with-user-authentication">building Ionic apps</a>.
+​
+You can learn about building a basic CRUD app with VueJS from <a href="/blog/2018/02/15/build-crud-app-vuejs-node">Brandon Parise’s post</a>.
+​
+Finally, right here you can see <a href="/blog/2018/02/06/build-user-registration-with-node-react-and-okta">how to set up user registration with Node and React</a>!
+​
+As always, if you have any questions you can comment below or  hit me up on Twitter <a href="https://twitter.com/leebrandt">@leebrandt</a> and don’t forget to follow <a href="https://twitter.com/oktadev">@OktaDev</a> for great content from our communities + all the news about Okta’s developer platform!</p>
+
+
+    </div>
+
+    
+    <div id="disqus">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_title = "Add Auth to Your PWA with Okta and Stencil";
+            var disqus_url = 'https://developer.okta.com/blog/2018/04/16/add-auth-to-your-pwa-with-okta-and-stencil';
+
+            (function () {
+                var dsq = document.createElement('script');
+                dsq.async = true;
+                dsq.type = 'text/javascript';
+                dsq.src = '//oktadevblog.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+          </script>
+          <noscript>
+              Please enable JavaScript to view the
+              <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus</a>.
+         </noscript>
+    </div>
+    
+</article>
+
+		
+</section>
+
+		
+	</div>
+	<footer class="Footer">
+    <div class="Wrap">
+
+        <div class="Row">
+
+            <div class="Column--3 Column--medium-6 Column--xSmall-12">
+                <a href="https://www.okta.com/" target="_blank" rel="noopener noreferrer">
+                    <div class="Logo">
+                        <img src="https://developer.okta.com/sites/all/themes/developer/images/logo-footer.png" alt="Okta">
+                    </div>
+                    <p>Visit okta.com</p>
+                </a>
+            </div>
+
+            <div class="Column--3 Column--medium-12 Column--xSmall-12">
+                <h4>Social</h4>
+                <ul class="Footer-links Footer-links--social">
+                    <li><a class="Footer-links--github" target="_blank" rel="noopener noreferrer" href="http://github.com/oktadeveloper">Github</a></li>
+                    <li><a class="Footer-links--twitter" target="_blank" rel="noopener noreferrer" href="http://twitter.com/OktaDev">Twitter</a></li>
+                    <li><a class="Footer-links--forum" target="_blank" rel="noopener noreferrer" href="https://devforum.okta.com/">Forum</a></li>
+                    <li><a class="Footer-links--rss" target="_blank" rel="noopener noreferrer" href="http://feeds.feedburner.com/OktaBlog">RSS Blog</a></li>
+                </ul>
+            </div>
+
+            <div class="Column--3 Column--medium-6 Column--small-12">
+                <h4>More Info</h4>
+                <ul class="Footer-links">
+                    <li><a target="_blank" href="https://developer.okta.com/integrate-with-okta/">Integrate with Okta</a></li>
+                    <li><a href="/blog/">Blog</a></li>
+                    <li><a href="/docs/change-log/">Change Log</a></li>
+                    <li><a href="/3rd_party_notices/">3rd Party Notices</a></li>
+                </ul>
+            </div>
+
+            <div class="Column--3 Column--medium-6 Column--small-12">
+                <h4>Contact &amp; Legal</h4>
+                <ul class="Footer-links">
+                    <li><a href="https://developer.okta.com/contact/">Contact Sales</a></li>
+                    <li><a target="_blank" rel="noopener noreferrer" href="mailto:developers@okta.com">Contact Support</a></li>
+                    <li><a href="https://developer.okta.com/terms/">Terms &amp; Conditions</a></li>
+                    <li><a href="https://developer.okta.com/privacy/">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script type="text/javascript" src="/assets/master-aa397c892d9083236c5cb20732dde679021b9236c8142ce78177b8b184567a02.js"></script>
+    <script type="text/javascript" src="/assets/myOkta-911cbafbbe079b7a5522d9cbe15bd2a5f44e1582531e88393934bec69f97696b.js"></script>
+    
+    
+    
+    
+      <script type="text/javascript" src="/assets/blog-6e32dad27404131cc8630a5282264bed2ab4c08c91ac86fa496b75c53aa4f681.js"></script>
+    
+
+  <!-- START Post Footer -->
+  
+  <!-- START Google Tag Manager -->
+  <!-- https://support.google.com/tagmanager/answer/6103696?hl=en -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TJ45R6" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- END Google Tag Manager -->
+  <!-- START Google Remarketing Tag -->
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var google_conversion_id = 1006913831;
+    var google_custom_params = window.google_tag_params;
+    var google_remarketing_only = true;
+    /* ]]> */
+  </script>
+  <div style="display:none;"><script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script></div>
+  <noscript><div style="display:inline;"><img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1006913831/?value=0&amp;guid=ON&amp;script=0"></div></noscript>
+  <!-- END Google Remarketing Tag -->
+  <!-- START Crazy Egg Tracking -->
+  <script type="text/javascript">
+    setTimeout(function(){var a=document.createElement("script");
+    var b=document.getElementsByTagName("script")[0];
+    a.src=document.location.protocol+"//script.crazyegg.com/pages/scripts/0021/9333.js?"+Math.floor(new Date().getTime()/3600000);
+    a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+  </script>
+  <!-- END Crazy Egg Tracking -->
+
+  <!-- END Post Footer -->
+</body>
+</html>
