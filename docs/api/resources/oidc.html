@@ -477,7 +477,7 @@ of the callback response.</p>
     </tr>
     <tr>
       <td style="text-align: left">prompt</td>
-      <td style="text-align: left">Either <code class="highlighter-rouge">none</code> or <code class="highlighter-rouge">login</code>. See <a href="#parameter-details">Parameter Details</a> for more.</td>
+      <td style="text-align: left">Valid values: <code class="highlighter-rouge">none</code>, <code class="highlighter-rouge">consent</code>, <code class="highlighter-rouge">login</code>, or <code class="highlighter-rouge">consent</code> and <code class="highlighter-rouge">login</code> in either order. See <a href="#parameter-details">Parameter Details</a> for more information.</td>
       <td style="text-align: left">Query</td>
       <td style="text-align: left">String</td>
       <td style="text-align: left">FALSE</td>
@@ -537,19 +537,29 @@ of the callback response.</p>
 <h4 id="parameter-details">Parameter Details</h4>
 
 <ul>
-  <li><code class="highlighter-rouge">idp</code>, <code class="highlighter-rouge">sessionToken</code> and <code class="highlighter-rouge">idp_scope</code> are Okta extensions to <a href="http://openid.net/specs/openid-connect-core-1_0.html#Authentication">the OpenID specification</a>.
- All other parameters comply with the OpenID Connect specification and their behavior is consistent with the specification.</li>
+  <li>
+    <p><code class="highlighter-rouge">idp</code>, <code class="highlighter-rouge">sessionToken</code> and <code class="highlighter-rouge">idp_scope</code> are Okta extensions to <a href="http://openid.net/specs/openid-connect-core-1_0.html#Authentication">the OpenID specification</a>.
+ All other parameters comply with the OpenID Connect specification and their behavior is consistent with the specification.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">prompt</code>:</p>
+
+    <p>If no <code class="highlighter-rouge">prompt</code> parameter is specified, the standard behavior occurs:</p>
+    <ul>
+      <li>If an Okta session already exists, the user is silently authenticated. Otherwise, the user is prompted to authenticate.</li>
+      <li>If scopes are requested that require consent and consent is not yet given by the authenticated user, the user is prompted to give consent.</li>
+    </ul>
+
+    <p>There are four possible values for this parameter:</p>
+
+    <ul>
+      <li><code class="highlighter-rouge">none</code>: Do not prompt for authentication or consent. If an Okta session already exists, the user is silently authenticated. Otherwise, an error is returned.</li>
+      <li><code class="highlighter-rouge">login</code>: Always prompt the user for authentication, regardless of whether they have an Okta session.</li>
+      <li><code class="highlighter-rouge">consent</code>:  <a href="/docs/api/getting_started/releases-at-okta#early-access-ea"> <span class="api-label api-label-ea "> <i class="fa fa-flag"></i> Early Access </span> </a>  Depending on the <a href="/docs/api/resources/apps.html#add-oauth-20-client-application">values set for <code class="highlighter-rouge">consent_method</code> in the app and and <code class="highlighter-rouge">consent</code> on the scope</a>, display the Okta consent dialog, even if the user has already given consent. User consent is available for Custom Authorization Servers (requires the API Access Management feature and the User Consent feature enabled).</li>
+      <li><code class="highlighter-rouge">login consent</code> or <code class="highlighter-rouge">consent login</code> (order doesn’t matter): The user is always prompted for authentication, and the user consent dialog is displayed depending on the <a href="/docs/api/resources/apps.html#add-oauth-20-client-application">values set for <code class="highlighter-rouge">consent_method</code> in the app and and <code class="highlighter-rouge">consent</code> on the scope</a>, even if the user has already given consent.</li>
+    </ul>
+  </li>
 </ul>
-
-<p><code class="highlighter-rouge">prompt</code>:</p>
-
-<p>There are three possible values for this parameter:</p>
-
-<ol>
-  <li>Null (no <code class="highlighter-rouge">prompt</code> parameter): Normal behavior. If an Okta session already exists, the user is silently authenticated. Otherwise, the user is prompted to authenticate.</li>
-  <li><code class="highlighter-rouge">none</code>: Do not prompt for authentication. If an Okta session already exists, the user is silently authenticated. Otherwise, an error is returned.</li>
-  <li><code class="highlighter-rouge">login</code>: Always prompt the user for authentication, regardless of whether they have an Okta session.</li>
-</ol>
 
 <p><code class="highlighter-rouge">request</code>:</p>
 
