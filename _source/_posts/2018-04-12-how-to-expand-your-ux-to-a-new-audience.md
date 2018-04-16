@@ -24,7 +24,9 @@ While Okta’s executives had clearly made this a priority, I was worried that i
 
 The designer working on developer experience before me, Shawn, gave a great handoff and encouraged me to find my own paths.
 
-> "In design, there are usually multiple ways to tackle a problem, and it can constrain the new person's creativity and problem solving if they need to run with the decisions made before them. I think our best work, and ultimately the best solution for our users, comes out when designers have the freedom to explore and try many solutions." &mdash;Shawn Gupta, Product Design Architect at Okta
+<div style="max-width: 560px; margin: 0 auto">
+<em>“In design, there are usually multiple ways to tackle a problem, and it can constrain the new person's creativity and problem solving if they need to run with the decisions made before them. I think our best work, and ultimately the best solution for our users, comes out when designers have the freedom to explore and try many solutions.” &mdash;Shawn Gupta, Product Design Architect at Okta</em>
+</div>
 
 With an open road ahead of you, adding a new audience can feel a lot like starting over. You have to [figure out what to build](https://www.invisionapp.com/blog/how-do-you-decide-what-to-build/): what does your audience need?
 
@@ -38,7 +40,7 @@ One of my first activities was to codify and consolidate everything we knew abou
 
 ## Analyze What Exists Today
 
-**Survey your current landscape.** What’s the experience currently like? 
+**Survey your current landscape.** What’s the experience currently like?
 
 We did an inventory of all current features, and documented all the touchpoints where developers would interact with Okta. This is more than just UIs – for us it includes email campaigns, technical documentation, even how people sign up and pay.
 
@@ -52,13 +54,13 @@ Now you’ve identified problems you need to solve. It might be a lot, but take 
 
 A big challenge for us was to decide on an overall architecture. Could we evolve a single experience to work for both audiences? Or would we need to develop completely separate products optimized for each audience? There was no clear answer, but a lot of tradeoffs.
 
-From a user perspective, we ultimately decided to fork into two separate products. IT customers continue use our existing admin UI, while developers sign in to a [new developer console](https://developer.okta.com/blog/2017/09/25/all-new-developer-console). The flows, information architecture, and branding are designed to serve each audience’s specific needs. But under the hood, both products are in a single codebase and share many components and views.
+From a user perspective, we ultimately decided to fork into two separate products. IT customers continue use our existing admin UI, while developers sign in to a [new developer console](/blog/2017/09/25/all-new-developer-console). The flows, information architecture, and branding are designed to serve each audience’s specific needs. But under the hood, both products are in a single codebase and share many components and views.
 
 With a core architecture decided, it’s time to go to work. While special concerns will keep coming up, it’s mostly your normal design process. **Make sure to stay agile**, and not get stalled in the search for something perfect. We needed to move very quickly, so our goal was to ideate and converge with a bias toward velocity.
 
-{% img blog/how-to-expand-your-ux-to-a-new-audience/dribbble-dev-dashboard-exploration.png alt:"Okta's dev dashboard exploration" %}{: .center-image }
+{% img blog/how-to-expand-your-ux-to-a-new-audience/expand-ux-dashboard.png alt:"Developer Dashboard Wireframes" width:"560" %}{: .center-image }
 
-*([Some of our exploration](https://dribbble.com/shots/3805509-Okta-Developer-Dashboard-Exploration) for a new developer dashboard.)*
+<center><small><a href="https://dribbble.com/shots/3805509-Okta-Developer-Dashboard-Exploration">Some of our exploration</a> for a new developer dashboard.</small></center>
 
 ## Validate Your New UX
 
@@ -72,8 +74,10 @@ Based on what we learned, we made a number of changes before our first release. 
 
 To keep the feedback cycle going, ship as soon as you can. Maybe that’s a small beta, or maybe it’s a big release. In our case, we were privileged to have a major conference demo.
 
-> "I wasn’t expecting applause just for showing the developer dashboard, but
-people were excited. I knew we were on the right track." &mdash;Nate Barbettini, Product Manager at Okta
+<div style="max-width: 560px; margin: 0 auto">
+<p><em>“I wasn’t expecting applause just for showing the developer dashboard, but people were excited. I knew we were on the right track.” &mdash;Nate Barbettini, Product Manager at Okta</em></p>
+<p></p>
+</div>
 
 <div style="max-width: 560px; margin: 0 auto">
 <iframe width="560" height="315" src="https://www.youtube.com/embed/53jnHhfS00o?start=4170" frameborder="0" allowfullscreen></iframe>
