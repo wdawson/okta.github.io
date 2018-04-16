@@ -48,7 +48,6 @@ If you’re like me, the next thing you’ll want to do is run `npm start` and c
 ​
 To ensure an accurate depiction of the kind of PWA you get out of the box with Stencil, make sure to run a *production* build using `npm run build`. Once you do, you’ll see a `www` folder and inside that folder, you’ll see a `sw.js` file. That’s your service worker!
 ​
-
 ## Set Up Your Okta Application
 
 If you haven't already done so, create a free-forever developer account at <https://developer.okta.com/signup/>.
@@ -63,16 +62,17 @@ You will then be taken to the application creation wizard. Choose **Single-Page 
 
 ​
 {% img blog/add-auth-to-stencil/CreateApplicationScreenSPA.png alt:"Create Application Screen SPA" width:"800" %}{: .center-image }
-​
+
+
 On the next screen, you’ll see the default settings provided by the single-page application template. Change the name of the application to something more descriptive, like "Stencil SPA". Also, change the base URIs and the login redirect URIs settings to use port 3333 because that’s where your application will be running. The rest of the default settings are fine.
 ​
 
 {% img blog/add-auth-to-stencil/ApplicationSettingStencil.png alt:"Application Settings Screen" width:"800" %}{: .center-image }
 
 ​
-Then click **Done** at the bottom.
+Click **Done** at the bottom.
 ​
-Once the application has been created, select it from the applications listing, and click on the **General** tab to view the general settings for your application.
+Select your newly created application from the listing, and click on the **General** tab to view the general settings.
 ​
 
 {% img blog/add-auth-to-stencil/GeneralSettingsClientId.png alt:"General Settings Client Id" width:"800" %}{: .center-image }
@@ -87,11 +87,11 @@ In the `components` folder, add a new folder called `app-auth`. This is where yo
 Inside the newly created `app-auth` folder create two files: `app-auth.css` and `app-auth.tsx`. Start by creating the shell of the `app-auth.tsx` file.
 ​
 ```js
-import { Component } from "@stencil/core";
+import { Component } from '@stencil/core';
 ​
 @Component({
-  tag: "app-auth",
-  styleUrl: "app-auth.css"
+  tag: 'app-auth',
+  styleUrl: 'app-auth.css'
 })
 export class AppAuth {
   render() {
@@ -148,7 +148,7 @@ Before you create that function, you'll need to set up the `OktaAuth` JavaScript
 @State() authClient: any;
 ```
 ​
-You will also have to import the `@State()` decorator. This is is used for values related to the internal state of the component. In the first `import` statement add 'State' to the deconstruction list.
+You will also have to import the `@State()` decorator. This is is used for values related to the internal state of the component. In the first `import` statement add State to the deconstruction list.
 ​
 ```js
 import { Component, State } from '@stencil/core'
@@ -166,7 +166,7 @@ Then also add the `@Element()` decorator to the import so it reads:
 import { Component, State, Element } from '@stencil/core';
 ```
 ​
-One last thing that the `login()` function will need is access to the router, so you can redirect the user to their profile page if their authentication is successful.You'll need a class property, so add it right below the `@Element`.
+One last thing that the `login()` function will need is access to the router, so you can redirect the user to their profile page if their authentication is successful. You'll need a class property, so add it right below the `@Element`.
 ​
 ```js
 @State() authClient: any;
@@ -177,14 +177,14 @@ One last thing that the `login()` function will need is access to the router, so
 To import it, add the `@Prop()` decorator to the main import and then import the `RouterHistory` from `@stencil/router` right below the core import statement. The `@Prop` decorator is used to define properties that can be passed in to your component. In this case, it's not a passed in value, but it could be if need be. Your final import section should read:
 ​
 ```js
-import { Component, Prop, State, Element, Listen } from "@stencil/core";
-import { RouterHistory } from "@stencil/router";
+import { Component, Prop, State, Element, Listen } from '@stencil/core';
+import { RouterHistory } from '@stencil/router';
 ```
 ​
 Finally, to use the `OktaAuth` JavaScript library you brought in from the CDN, add a declaration for it right below the import statements.
 ​
 ```js
-declare const OktaAuth:any;
+declare const OktaAuth: any;
 ```
 ​
 ## Add the Login Method
@@ -194,14 +194,14 @@ Now you included everything you'll need to get the login function to authenticat
 ```js
 constructor() {
   this.authClient = new OktaAuth({
-    clientId: "{yourClientId}",
-    url: "{yourOktaDomain}",
-    issuer: "default"
+    clientId: '{yourClientId}',
+    url: 'https://{yourOktaDomain}.com',
+    issuer: 'default'
   });
 }
 ```
 ​
-You can get your Client Id from that general settings page of your Okta application.​
+You can get your Client ID from that general settings page of your Okta application.​
 
 
 {% img blog/add-auth-to-stencil/GeneralSettingsClientId.png alt:"General Settings Client Id" width:"800" %}{: .center-image }
@@ -217,30 +217,29 @@ Now everything is set up for the `login()` function, so you'll create that next.
 ​
 ```js
 login() {
-  let inputs = this.host.querySelectorAll("input");
+  let inputs = this.host.querySelectorAll('input');
   let user = {
-    username: inputs[0].value, 
-    password: inputs[1].value 
+    username: inputs[0].value,
+    password: inputs[1].value
   };
 ​
   return this.authClient.signIn(user)
     .then(res => {
-      if (res.status === "SUCCESS") {
+      if (res.status === 'SUCCESS') {
         return this.authClient.token
           .getWithoutPrompt({
-            responseType: "id_token",
-            scopes: ["openid", "profile", "email"],
+            responseType: 'id_token',
+            scopes: ['openid', 'profile', 'email'],
             sessionToken: res.sessionToken,
-            redirectUri: "http://localhost:3333"
+            redirectUri: 'http://localhost:3333'
           })
           .then(token => {
             localStorage.setItem(
-                    'okta_id_token', 
-                    JSON.stringify(token)
-                );
-            this.history.push("/profile", {});
+              'okta_id_token',
+              JSON.stringify(token)
+            );
+            this.history.push('/profile', {});
           });
-​
       } else {
         throw `Unable to handle ${res.status} status code`;
       }
@@ -255,9 +254,9 @@ Since is really the "meat" of the component, I'll walk you through what's going 
 ​
 The first thing, is getting all the inputs inside the `form` element of the component. Then a user object is created with the username and password from their respective inputs.
 ​
-Next the `authClient` object is used to call the `signIn()` method with the user object that was created. It returns a promise, so you handle the `then` condition by getting the response and check to see if the response's status is a 200. If it is, call the `authClient.token`'s `getWithoutPrompt()` method which also returns a promise. It takes a `responseType` property which is set to 'id_token', because that's what you want to get from Okta. You've also asked for three scopes that will give you the 'openid', profile, and email data associated with the newly authenticated user. The method need the session token returned from the `signIn()` method's response. Finally, you've told the function to call back to the `redirectUri`, which was set as a trusted redirect origin in Okta when you created your application.
+Next the `authClient` object is used to call the `signIn()` method with the user object that was created. It returns a promise, so you handle the `then` condition by getting the response and check to see if the response's status is a 200. If it is, call the `authClient.token`'s `getWithoutPrompt()` method which also returns a promise. It takes a `responseType` property which is set to `id_token`, because that's what you want to get from Okta. You've also asked for three scopes that will give you the openid, profile, and email data associated with the newly authenticated user. The method need the session token returned from the `signIn()` method's response. Finally, you've told the function to call back to the `redirectUri`, which was set as a trusted redirect origin in Okta when you created your application.
 ​
-In the 'then' condition of this promise, you take the id token received and set it in local storage as 'okta_id_token'. If all that worked, the user is redirected to the profile page.
+In the `then` condition of this promise, you take the id token received and set it in local storage as `okta_id_token`. If all that worked, the user is redirected to the profile page.
 ​
 If the response had a status of anything other than 200, it merely throws an error that says it can't handle any other statuses. Finally, the fail condition for the `signIn()` method call simply logs any errors to the console.
 ​
@@ -269,9 +268,9 @@ To achieve this, add a method to take the user directly to the profile page if t
 ​
 ```js
 componentWillLoad() {
-  let idToken = localStorage.getItem("okta_id_token");
-  if(idToken){
-    this.history.push("/profile", {});
+  let idToken = localStorage.getItem('okta_id_token');
+  if (idToken) {
+    this.history.push('/profile', {});
   }
 }
 ```
@@ -281,13 +280,13 @@ Simply put, all you're doing is reading the token from local storage. If one exi
 The last thing that will make this login form easier to use is to add the ability to submit the form with the enter key. Stencil has some built-in listeners for key presses. In this case, use the 'keydown.enter' listener. Import the `@Listen()` decorator in the very top import statement where you imported `Component`.
 ​
 ```js
-import { Component, Prop, State, Element, Listen } from "@stencil/core";
+import { Component, Prop, State, Element, Listen } from '@stencil/core';
 ```
 ​
 Then add a handler for the 'keydown.enter' event just below the `componentWillLoad()` function.
 ​
 ```js
-@Listen("keydown.enter")
+@Listen('keydown.enter')
 handleEnter() {
   this.login();
 }
@@ -295,7 +294,7 @@ handleEnter() {
 ​
 ## Update the Profile Page
 ​
-Now that you have a nice login page, update the profile page so that it shows the user's claims once they're logged in. 
+Now that you have a nice login page, update the profile page so that it shows the user's claims once they're logged in.
 ​
 First, you’ll need a type to put the user’s claims in. So create a new file in the `app-profile` folder called `AppUser.tsx`. The contents are simple, but long. I simply looked at all the claims in the token stored in `localStorage` and created an interface that matched it. So the `AppUser.tsx` file is as follows:
 ​
@@ -329,8 +328,8 @@ Once you have a type to declare for your profile's user object, update the `app-
 The imports at the top should look like:
 ​
 ```js
-import { Component, Prop, State } from "@stencil/core";
-import { RouterHistory } from "@stencil/router";
+import { Component, Prop, State } from '@stencil/core';
+import { RouterHistory } from '@stencil/router';
 ```
 ​
 Remove the `@Prop()` line for `match` and replace is with:
@@ -338,7 +337,7 @@ Remove the `@Prop()` line for `match` and replace is with:
 ```js
 @Prop() history: RouterHistory;
 @State() user: AppUser;
-@Prop({ context: "isServer" }) private isServer: boolean;
+@Prop({ context: 'isServer' }) private isServer: boolean;
 ```
 ​
 The `isServer` property is a special property. Because Stencil supports prerendering and `localStorage` may not be available during prerender, you'll need to wrap the `localStorage` calls in an `if(!isServer){}` to make sure it will build for production. This shouldn't stop it from working, it's just a work around for the build process.
@@ -348,11 +347,11 @@ For the `componentWillLoad()` method, just read in the user information from the
 ```js
 componentWillLoad() {
   if(!this.isServer){
-    let token = JSON.parse(localStorage.getItem("okta_id_token"));
+    let token = JSON.parse(localStorage.getItem('okta_id_token'));
     if (token) {
       this.user = token.claims;
     } else {
-      this.history.push("/login", {});
+      this.history.push('/login', {});
     }
   }
 }
@@ -364,7 +363,7 @@ For the `render()` method, change it to display the claims in a list.
 ​
 ```js
 render() {
-  if(this.user){
+  if (this.user) {
   let keys = Object.keys(this.user);
   return <div class="app-profile">
       <h2>User Claims</h2>
@@ -383,8 +382,8 @@ The only thing left is to add the `logout()` method. This will just remove the t
 ​
 ```js
 logout() {
-  if(!this.isServer){
-    localStorage.removeItem("okta_id_token");
+  if (!this.isServer) {
+    localStorage.removeItem('okta_id_token');
     location.reload();
   }
 }
@@ -396,7 +395,7 @@ The only thing left is to add the route to the login component to the applicatio
 ​
 In the `components/my-app/my-app.tsx` file add the route inside the `stencil-router` component so that the final section looks like this:
 ​
-```js
+```html
 <stencil-router>
   <stencil-route url="/" component="app-home" exact={true} />
   <stencil-route url="/profile" component="app-profile" />
@@ -407,7 +406,7 @@ In the `components/my-app/my-app.tsx` file add the route inside the `stencil-rou
 You'll also need to update the route for the link on the home page. In `components/app-home/app-home.tsx` update the `stencil-route-link` element's url to no longer pass in the url parameter.
 ​
 ```html
-<stencil-route-link url='/profile'>
+<stencil-route-link url="/profile">
   <button>
     Profile page
   </button>
@@ -423,26 +422,26 @@ Congratulations, you now have a PWA with authentication in it, ready to go conqu
 As extra credit, you might want to add some styling to the login form and the profile page. Below is my style sheet for the login page that goes in `app-auth.css`:
 ​
 ```css
-.app-auth{
+.app-auth {
   width: 30%;
   margin: 2rem auto;
 }
-.app-auth .form-item{
+.app-auth .form-item {
   padding: .25rem;
 }
-.app-auth label{
+.app-auth label {
   width: 100%;
   font-size: 1rem;
   color: #999;
 }
 ​
-.app-auth label input{
+.app-auth label input {
   width: 97%;
   border-radius: .25rem;
   font-size: 1.5rem;
 }
 ​
-.app-auth .form-actions{
+.app-auth .form-actions {
   text-align: right;
 }
 ``` 
@@ -454,7 +453,7 @@ Finally, in `app-profile.css` just some simple styles to bold the label of each 
   padding: 10px;
 }
 ​
-.app-profile ul li span{
+.app-profile ul li span {
   font-weight: bold;
 }
 ```
