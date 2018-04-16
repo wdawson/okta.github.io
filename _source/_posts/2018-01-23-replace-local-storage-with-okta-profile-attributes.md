@@ -8,6 +8,7 @@ tweets:
  - "Learn how to use the @okta Java SDK to store custom profile attributes to manage your cryptocurrency portfolio  →"
  - "Did you know that we provide a @java SDK for talking to our REST API? It's pretty slick. This blog post shows you how to use it to manage custom profile attributes."
 ---
+
 Local Storage is a JavaScript API technically known as `localStorage` that arrived with HTML5. It allows you to store information on a user’s browser quickly and easily. There are many debates on the web as to whether it’s better than cookies. Some say it’s faster (because it doesn’t send data with every request like cookies do) and more secure.
 Whether it’s more secure or not is debatable, especially when compared with secure cookies that have an [HttpOnly flag](https://www.owasp.org/index.php/HttpOnly). It does, however, offer the ability to store a lot more data than cookies. Cookies [can hold up to 4KB](http://browsercookielimits.squawky.net/), while local storage [can hold 5MB or more](https://www.html5rocks.com/en/tutorials/offline/quota-research/), depending on your browser.
 
@@ -53,7 +54,7 @@ Use the default values for everything else and click **Save**.
 
 ## Create a Spring Boot App
 
-Head on over to [start.spring.io](https://start.spring.io) and create a new Spring Boot project with a dependency on **Web**. You can use whatever group and artifact coordinates you like, but the code in this tutorial will match the following:
+Head on over to [start.spring.io](https://start.spring.io) and create a new Spring Boot (1.5.x) project with a dependency on **Web**. You can use whatever group and artifact coordinates you like, but the code in this tutorial will match the following:
 
 * Group: `com.okta.developer`
 * Artifact: `holdings-api`
@@ -89,7 +90,7 @@ Open `holdings-api/pom.xml` and add dependencies for the [Okta Spring Boot Start
 ```xml
 <properties>
    ...
-   <okta.version>0.3.0</okta.version>
+   <okta.version>0.4.0</okta.version>
 </properties>
 
 <dependencies>
@@ -112,7 +113,7 @@ Open `holdings-api/pom.xml` and add dependencies for the [Okta Spring Boot Start
        <dependency>
            <groupId>org.springframework.security.oauth</groupId>
            <artifactId>spring-security-oauth2</artifactId>
-           <version>2.2.0.RELEASE</version>
+           <version>2.3.0.RELEASE</version>
        </dependency>
    </dependencies>
 </dependencyManagement>
@@ -416,3 +417,7 @@ I think you'll find the following blog posts useful too!
 * [Add Role-Based Access Control to Your App with Spring Security and Thymeleaf](/blog/2017/10/13/okta-groups-spring-security)
 
 If you love Java too, [follow @oktadev](https://twitter.com/oktadev) on Twitter and let us know if you have any issues with this tutorial. You can also post your questions to the [Okta Developer Forums](https://devforum.okta.com/) or simply leave a comment on this post.
+
+**Changelog:**
+
+* Apr 10, 2018: Updated dependencies in the example app to use Okta Spring Boot Starter and Java SDK version 0.4.0. See the code changes in the [example app on GitHub](https://github.com/oktadeveloper/okta-ionic-crypto-java-sdk/pull/2). Changes to this article can be viewed in [okta/okta.github.io#1941](https://github.com/okta/okta.github.io/pull/1941).
