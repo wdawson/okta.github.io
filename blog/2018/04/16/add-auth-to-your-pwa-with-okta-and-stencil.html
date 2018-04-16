@@ -197,80 +197,73 @@
 
     <div class="BlogPost-content">
         
-	<p><a href="/blog/2017/07/20/the-ultimate-guide-to-progressive-web-applications">Progressive Web Applications</a> (PWAs) are the newest technology on the web dev block and they’ve arrived just in time to solve a growing problem. Many companies are struggling to keep isolated development teams across their organization up-to-date when new features are released. Some companies are even trying to decide if it’s worth the cost to develop both a web app <em>and</em> a mobile application. Not surprisingly, it’s a headache most companies are looking to avoid. PWAs can give companies a lot of the features they need from a mobile app without the need to manage multiple teams and codebases.
-​
-A <a href="https://developers.google.com/web/progressive-web-apps/">PWA</a> performs spectacularly when on a fast connection and still performs well when offline or on Wi-Fi that’s not really fast enough to be called Wi-Fi (sometimes called “Lie-Fi”). It does so via caching and a JavaScript “Service Worker” that intercepts server calls and tries to serve the data from cache first, then when the server finally responds, it will replace the cached data with possibly “fresher” data from the server.
-​
-Recently, the <a href="https://ionicframework.com/">Ionic</a> team released a new project called <a href="https://stenciljs.com/">Stencil</a>. Stencil is a compiler that generates standards-compliant web components. Unlike most JavaScript frameworks, it doesn’t deliver a “framework” of code to the browser. It simply takes the code you write and uses its compiler to create vanilla components. You can also use Stencil’s compiler <em>with</em> your favorite framework. The <a href="https://github.com/ionic-team/stencil-app-starter">Stencil starter project</a> is the easiest way to get started with Stencil and produces a base application that scores nearly a 100% score on <a href="https://developers.google.com/web/tools/lighthouse/">Lighthouse</a>’s progressive web app scorecard.
-​
-To get started building a PWA using Stencil, clone the starter application and detach it from the GitHub remote.
-​
-<strong>WARNING</strong>: Stencil is not at a 1.0 release yet (as of this writing). So be aware that if you continue, you’re in early-adopter territory. If you find bugs, <a href="https://github.com/ionic-team/stencil/issues">submit an issue</a>.
-​</p>
+	<p><a href="/blog/2017/07/20/the-ultimate-guide-to-progressive-web-applications">Progressive Web Applications</a> (PWAs) are the newest technology on the web dev block and they’ve arrived just in time to solve a growing problem. Many companies are struggling to keep isolated development teams across their organization up-to-date when new features are released. Some companies are even trying to decide if it’s worth the cost to develop both a web app <em>and</em> a mobile application. Not surprisingly, it’s a headache most companies are looking to avoid. PWAs can give companies a lot of the features they need from a mobile app without the need to manage multiple teams and codebases.</p>
+
+<p>A <a href="https://developers.google.com/web/progressive-web-apps/">PWA</a> performs spectacularly when on a fast connection and still performs well when offline or on Wi-Fi that’s not really fast enough to be called Wi-Fi (sometimes called “Lie-Fi”). It does so via caching and a JavaScript “Service Worker” that intercepts server calls and tries to serve the data from cache first, then when the server finally responds, it will replace the cached data with possibly “fresher” data from the server.</p>
+
+<p>Recently, the <a href="https://ionicframework.com/">Ionic</a> team released a new project called <a href="https://stenciljs.com/">Stencil</a>. Stencil is a compiler that generates standards-compliant web components. Unlike most JavaScript frameworks, it doesn’t deliver a “framework” of code to the browser. It simply takes the code you write and uses its compiler to create vanilla components. You can also use Stencil’s compiler <em>with</em> your favorite framework. The <a href="https://github.com/ionic-team/stencil-app-starter">Stencil starter project</a> is the easiest way to get started with Stencil and produces a base application that scores nearly a 100% score on <a href="https://developers.google.com/web/tools/lighthouse/">Lighthouse</a>’s progressive web app scorecard.</p>
+
+<p>To get started building a PWA using Stencil, clone the starter application and detach it from the GitHub remote.</p>
+
+<p><strong>WARNING</strong>: Stencil is not at a 1.0 release yet (as of this writing). So be aware that if you continue, you’re in early-adopter territory. If you find bugs, <a href="https://github.com/ionic-team/stencil/issues">submit an issue</a>.</p>
+
 <h2 id="set-up-the-starter-application">Set Up the Starter Application</h2>
-<p>​</p>
+
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/ionic-team/stencil-starter.git first-stencil
 <span class="nb">cd </span>first-stencil
 git remote rm origin
 </code></pre></div></div>
-<p>​
-Then, install all the dependencies that your new Stencil app will need.
-​</p>
+
+<p>Then, install all the dependencies that your new Stencil app will need.</p>
+
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install
 </code></pre></div></div>
-<p>​
-You may see a couple of warnings from <code class="highlighter-rouge">node-pre-gyp</code> around <code class="highlighter-rouge">fsevents</code>. There’s nothing to see here. This is just to get around a <a href="https://github.com/strongloop/fsevents/issues/157">nasty little npm bug</a>.
-​
-Next, add the Okta Auth SDK (via CDN) to the bottom of the <code class="highlighter-rouge">index.html</code> page, right before the closing <code class="highlighter-rouge">&lt;/body&gt;</code> tag.
-​</p>
+
+<p>You may see a couple of warnings from <code class="highlighter-rouge">node-pre-gyp</code> around <code class="highlighter-rouge">fsevents</code>. There’s nothing to see here. This is just to get around a <a href="https://github.com/strongloop/fsevents/issues/157">nasty little npm bug</a>.</p>
+
+<p>Next, add the Okta Auth SDK (via CDN) to the bottom of the <code class="highlighter-rouge">index.html</code> page, right before the closing <code class="highlighter-rouge">&lt;/body&gt;</code> tag.</p>
+
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"https://ok1static.oktacdn.com/assets/js/sdk/okta-auth-js/1.8.0/okta-auth-js.min.js"</span> <span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;&lt;/script&gt;</span>
 </code></pre></div></div>
-<p>​
-While there is an npm package for Okta’s Auth SDK, Stencil has a hard time compiling it. Overall it works better for now if you just use the CDN to include it.
-​
-If you’re like me, the next thing you’ll want to do is run <code class="highlighter-rouge">npm start</code> and check the site with Lighthouse. If you do, you’ll notice that the score is <em>kind of</em> low. In particular, it doesn’t register a service worker or return a 200 when offline, That’s because it’s a <em>development</em> build, and generally, you don’t want the service worker intercepting server calls and returning cached data in development.
-​
-To ensure an accurate depiction of the kind of PWA you get out of the box with Stencil, make sure to run a <em>production</em> build using <code class="highlighter-rouge">npm run build</code>. Once you do, you’ll see a <code class="highlighter-rouge">www</code> folder and inside that folder, you’ll see a <code class="highlighter-rouge">sw.js</code> file. That’s your service worker!
-​</p>
+
+<p>While there is an npm package for Okta’s Auth SDK, Stencil has a hard time compiling it. Overall it works better for now if you just use the CDN to include it.</p>
+
+<p>If you’re like me, the next thing you’ll want to do is run <code class="highlighter-rouge">npm start</code> and check the site with Lighthouse. If you do, you’ll notice that the score is <em>kind of</em> low. In particular, it doesn’t register a service worker or return a 200 when offline, That’s because it’s a <em>development</em> build, and generally, you don’t want the service worker intercepting server calls and returning cached data in development.</p>
+
+<p>To ensure an accurate depiction of the kind of PWA you get out of the box with Stencil, make sure to run a <em>production</em> build using <code class="highlighter-rouge">npm run build</code>. Once you do, you’ll see a <code class="highlighter-rouge">www</code> folder and inside that folder, you’ll see a <code class="highlighter-rouge">sw.js</code> file. That’s your service worker!</p>
+
 <h2 id="set-up-your-okta-application">Set Up Your Okta Application</h2>
 
-<p>If you haven’t already done so, create a free-forever developer account at <a href="https://developer.okta.com/signup/">https://developer.okta.com/signup/</a>.
-​
-Once you’ve registered, click on <strong>Applications</strong> in the top menu. Then click <strong>Add Application</strong>.
-​</p>
+<p>If you haven’t already done so, create a free-forever developer account at <a href="https://developer.okta.com/signup/">https://developer.okta.com/signup/</a>.</p>
+
+<p>Once you’ve registered, click on <strong>Applications</strong> in the top menu. Then click <strong>Add Application</strong>.</p>
 
 <p><img src="/assets/blog/add-auth-to-stencil/ApplicationListingScreen-008adbfcd6aba9acfd19054bca9bbd360a1e1d6f58b20ae85aa7532141c65c3f.png" alt="Application Listing Screen" width="800" class="center-image" /></p>
 
-<p>​
-You will then be taken to the application creation wizard. Choose <strong>Single-Page App</strong> and click <strong>Next</strong> at the bottom.</p>
+<p>You will then be taken to the application creation wizard. Choose <strong>Single-Page App</strong> and click <strong>Next</strong> at the bottom.</p>
 
-<p>​
-<img src="/assets/blog/add-auth-to-stencil/CreateApplicationScreenSPA-64f2eb2b85fdf060d61b602f1e77fca29f3a07c09a9be1224694b91106581647.png" alt="Create Application Screen SPA" width="800" class="center-image" /></p>
+<p><img src="/assets/blog/add-auth-to-stencil/CreateApplicationScreenSPA-64f2eb2b85fdf060d61b602f1e77fca29f3a07c09a9be1224694b91106581647.png" alt="Create Application Screen SPA" width="800" class="center-image" /></p>
 
-<p>On the next screen, you’ll see the default settings provided by the single-page application template. Change the name of the application to something more descriptive, like “Stencil SPA”. Also, change the base URIs and the login redirect URIs settings to use port 3333 because that’s where your application will be running. The rest of the default settings are fine.
-​</p>
+<p>On the next screen, you’ll see the default settings provided by the single-page application template. Change the name of the application to something more descriptive, like “Stencil SPA”. Also, change the base URIs and the login redirect URIs settings to use port 3333 because that’s where your application will be running. The rest of the default settings are fine.</p>
 
 <p><img src="/assets/blog/add-auth-to-stencil/ApplicationSettingStencil-a5ef20862100e81001e35f69cf0c9b7c30155d8f54380e633d33cc1c59ac906b.png" alt="Application Settings Screen" width="800" class="center-image" /></p>
 
-<p>​
-Click <strong>Done</strong> at the bottom.
-​
-Select your newly created application from the listing, and click on the <strong>General</strong> tab to view the general settings.
-​</p>
+<p>Click <strong>Done</strong> at the bottom.</p>
+
+<p>Select your newly created application from the listing, and click on the <strong>General</strong> tab to view the general settings.</p>
 
 <p><img src="/assets/blog/add-auth-to-stencil/GeneralSettingsClientId-f23a50d696788bf92c681465762a32e578ef6e52f733809722d47c32f9518dc9.png" alt="General Settings Client Id" width="800" class="center-image" /></p>
 
-<p>​
-At the bottom, you’ll see a <strong>Client ID</strong> setting (yours won’t be blurred out, obviously). Copy this to use in your Stencil application. You will also need your Okta organization URL, which you can find at the top right of the dashboard page. It will probably look something like “https://dev-XXXXXX.oktapreview.com”. 
-​</p>
+<p>At the bottom, you’ll see a <strong>Client ID</strong> setting (yours won’t be blurred out, obviously). Copy this to use in your Stencil application. You will also need your Okta organization URL, which you can find at the top right of the dashboard page. It will probably look something like “https://dev-XXXXXX.oktapreview.com”.</p>
+
 <h2 id="add-the-authentication-component">Add the Authentication Component</h2>
-<p>​
-In the <code class="highlighter-rouge">components</code> folder, add a new folder called <code class="highlighter-rouge">app-auth</code>. This is where your login page component will go. You can call it whatever you want, I’m just following the naming conventions set out by the starter app here. I’d definitely recommend deciding on a naming convention early and sticking with it.
-​
-Inside the newly created <code class="highlighter-rouge">app-auth</code> folder create two files: <code class="highlighter-rouge">app-auth.css</code> and <code class="highlighter-rouge">app-auth.tsx</code>. Start by creating the shell of the <code class="highlighter-rouge">app-auth.tsx</code> file.
-​</p>
+
+<p>In the <code class="highlighter-rouge">components</code> folder, add a new folder called <code class="highlighter-rouge">app-auth</code>. This is where your login page component will go. You can call it whatever you want, I’m just following the naming conventions set out by the starter app here. I’d definitely recommend deciding on a naming convention early and sticking with it.</p>
+
+<p>Inside the newly created <code class="highlighter-rouge">app-auth</code> folder create two files: <code class="highlighter-rouge">app-auth.css</code> and <code class="highlighter-rouge">app-auth.tsx</code>. Start by creating the shell of the <code class="highlighter-rouge">app-auth.tsx</code> file.</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@stencil/core'</span><span class="p">;</span>
-<span class="err">​</span>
+
 <span class="p">@</span><span class="nd">Component</span><span class="p">({</span>
   <span class="na">tag</span><span class="p">:</span> <span class="s1">'app-auth'</span><span class="p">,</span>
   <span class="na">styleUrl</span><span class="p">:</span> <span class="s1">'app-auth.css'</span>
@@ -281,15 +274,15 @@ Inside the newly created <code class="highlighter-rouge">app-auth</code> folder 
 </span>  <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
-<p>​
-If you are like I was, you might be thinking, “What kind of Frankenstein framework is this?”
-​
-You’ll notice the <code class="highlighter-rouge">@Component</code> decorator over the <code class="highlighter-rouge">AppAuth</code> class declaration like Angular, and then a <code class="highlighter-rouge">render()</code> method at the bottom like React. To me, that’s the beauty of Stencil. It takes some of the best parts of both popular frameworks and uses them to compile reusable components!
-​</p>
+
+<p>If you are like I was, you might be thinking, “What kind of Frankenstein framework is this?”</p>
+
+<p>You’ll notice the <code class="highlighter-rouge">@Component</code> decorator over the <code class="highlighter-rouge">AppAuth</code> class declaration like Angular, and then a <code class="highlighter-rouge">render()</code> method at the bottom like React. To me, that’s the beauty of Stencil. It takes some of the best parts of both popular frameworks and uses them to compile reusable components!</p>
+
 <h2 id="add-a-login-form">Add a Login Form</h2>
-<p>​
-Next, you’ll add the JSX (that’s right, I said it) to the new component. Change the <code class="highlighter-rouge">render()</code> method to:
-​</p>
+
+<p>Next, you’ll add the JSX (that’s right, I said it) to the new component. Change the <code class="highlighter-rouge">render()</code> method to:</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">return</span> <span class="p">(</span>
     <span class="o">&lt;</span><span class="nx">form</span> <span class="kd">class</span><span class="o">=</span><span class="s2">"app-auth"</span><span class="o">&gt;</span>
@@ -318,53 +311,53 @@ Next, you’ll add the JSX (that’s right, I said it) to the new component. Cha
 </span>  <span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div></div>
-<p>​
-This is just a regular JSX form, but the login button’s <code class="highlighter-rouge">onClick</code> event is currently wired to function that doesn’t exist. 
-​</p>
+
+<p>This is just a regular JSX form, but the login button’s <code class="highlighter-rouge">onClick</code> event is currently wired to function that doesn’t exist.</p>
+
 <h2 id="add-the-login-methods-dependencies">Add the Login Method’s Dependencies</h2>
-<p>​
-Before you create that function, you’ll need to set up the <code class="highlighter-rouge">OktaAuth</code> JavaScript object to call the Okta API for authentication. You’ll add the object to the component’s state, so right below the class declaration, add the following line:
-​</p>
+
+<p>Before you create that function, you’ll need to set up the <code class="highlighter-rouge">OktaAuth</code> JavaScript object to call the Okta API for authentication. You’ll add the object to the component’s state, so right below the class declaration, add the following line:</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">@</span><span class="nd">State</span><span class="p">()</span> <span class="nx">authClient</span><span class="p">:</span> <span class="nx">any</span><span class="p">;</span>
 </code></pre></div></div>
-<p>​
-You will also have to import the <code class="highlighter-rouge">@State()</code> decorator. This is is used for values related to the internal state of the component. In the first <code class="highlighter-rouge">import</code> statement add State to the deconstruction list.
-​</p>
+
+<p>You will also have to import the <code class="highlighter-rouge">@State()</code> decorator. This is is used for values related to the internal state of the component. In the first <code class="highlighter-rouge">import</code> statement add State to the deconstruction list.</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">State</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@stencil/core'</span>
 </code></pre></div></div>
-<p>You’ll also need to get the username and password values from the form itself, so add an <code class="highlighter-rouge">@Element()</code> to the code right below that <code class="highlighter-rouge">@State()</code> like you just created, so it read like this:
-​</p>
+<p>You’ll also need to get the username and password values from the form itself, so add an <code class="highlighter-rouge">@Element()</code> to the code right below that <code class="highlighter-rouge">@State()</code> like you just created, so it read like this:</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">@</span><span class="nd">State</span><span class="p">()</span> <span class="nx">authClient</span><span class="p">:</span> <span class="nx">any</span><span class="p">;</span>
 <span class="p">@</span><span class="nd">Element</span><span class="p">()</span> <span class="nx">host</span><span class="p">:</span> <span class="nx">HTMLElement</span><span class="p">;</span>
 </code></pre></div></div>
-<p>​
-Then also add the <code class="highlighter-rouge">@Element()</code> decorator to the import so it reads:
-​</p>
+
+<p>Then also add the <code class="highlighter-rouge">@Element()</code> decorator to the import so it reads:</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">State</span><span class="p">,</span> <span class="nx">Element</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@stencil/core'</span><span class="p">;</span>
 </code></pre></div></div>
-<p>​
-One last thing that the <code class="highlighter-rouge">login()</code> function will need is access to the router, so you can redirect the user to their profile page if their authentication is successful. You’ll need a class property, so add it right below the <code class="highlighter-rouge">@Element</code>.
-​</p>
+
+<p>One last thing that the <code class="highlighter-rouge">login()</code> function will need is access to the router, so you can redirect the user to their profile page if their authentication is successful. You’ll need a class property, so add it right below the <code class="highlighter-rouge">@Element</code>.</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">@</span><span class="nd">State</span><span class="p">()</span> <span class="nx">authClient</span><span class="p">:</span> <span class="nx">any</span><span class="p">;</span>
 <span class="p">@</span><span class="nd">Element</span><span class="p">()</span> <span class="nx">host</span><span class="p">:</span> <span class="nx">HTMLElement</span><span class="p">;</span>
 <span class="p">@</span><span class="nd">Prop</span><span class="p">()</span> <span class="nx">history</span><span class="p">:</span> <span class="nx">RouterHistory</span><span class="p">;</span>
 </code></pre></div></div>
-<p>​
-To import it, add the <code class="highlighter-rouge">@Prop()</code> decorator to the main import and then import the <code class="highlighter-rouge">RouterHistory</code> from <code class="highlighter-rouge">@stencil/router</code> right below the core import statement. The <code class="highlighter-rouge">@Prop</code> decorator is used to define properties that can be passed in to your component. In this case, it’s not a passed in value, but it could be if need be. Your final import section should read:
-​</p>
+
+<p>To import it, add the <code class="highlighter-rouge">@Prop()</code> decorator to the main import and then import the <code class="highlighter-rouge">RouterHistory</code> from <code class="highlighter-rouge">@stencil/router</code> right below the core import statement. The <code class="highlighter-rouge">@Prop</code> decorator is used to define properties that can be passed in to your component. In this case, it’s not a passed in value, but it could be if need be. Your final import section should read:</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">Prop</span><span class="p">,</span> <span class="nx">State</span><span class="p">,</span> <span class="nx">Element</span><span class="p">,</span> <span class="nx">Listen</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@stencil/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">RouterHistory</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@stencil/router'</span><span class="p">;</span>
 </code></pre></div></div>
-<p>​
-Finally, to use the <code class="highlighter-rouge">OktaAuth</code> JavaScript library you brought in from the CDN, add a declaration for it right below the import statements.
-​</p>
+
+<p>Finally, to use the <code class="highlighter-rouge">OktaAuth</code> JavaScript library you brought in from the CDN, add a declaration for it right below the import statements.</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">declare</span> <span class="kd">const</span> <span class="nx">OktaAuth</span><span class="p">:</span> <span class="nx">any</span><span class="p">;</span>
 </code></pre></div></div>
-<p>​</p>
+
 <h2 id="add-the-login-method">Add the Login Method</h2>
-<p>​
-Now you included everything you’ll need to get the login function to authenticate users with your Okta organization. First, set up the <code class="highlighter-rouge">OktaAuth</code> object in the constructor of the <code class="highlighter-rouge">AppAuth</code> class. Right below the property for the <code class="highlighter-rouge">RouterHistory</code> object, add:
-​</p>
+
+<p>Now you included everything you’ll need to get the login function to authenticate users with your Okta organization. First, set up the <code class="highlighter-rouge">OktaAuth</code> object in the constructor of the <code class="highlighter-rouge">AppAuth</code> class. Right below the property for the <code class="highlighter-rouge">RouterHistory</code> object, add:</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">authClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OktaAuth</span><span class="p">({</span>
     <span class="na">clientId</span><span class="p">:</span> <span class="s1">'{yourClientId}'</span><span class="p">,</span>
@@ -373,26 +366,24 @@ Now you included everything you’ll need to get the login function to authentic
   <span class="p">});</span>
 <span class="p">}</span>
 </code></pre></div></div>
-<p>​
-You can get your Client ID from that general settings page of your Okta application.​</p>
 
-<p><img src="/assets/blog/add-auth-to-stencil/GeneralSettingsClientId-f23a50d696788bf92c681465762a32e578ef6e52f733809722d47c32f9518dc9.png" alt="General Settings Client Id" width="800" class="center-image" />
-​</p>
+<p>You can get your Client ID from that general settings page of your Okta application.</p>
 
-<p>You’ll also need your Okta org URL, from the upper-right side of the Okta dashboard page.
-​</p>
+<p><img src="/assets/blog/add-auth-to-stencil/GeneralSettingsClientId-f23a50d696788bf92c681465762a32e578ef6e52f733809722d47c32f9518dc9.png" alt="General Settings Client Id" width="800" class="center-image" /></p>
+
+<p>You’ll also need your Okta org URL, from the upper-right side of the Okta dashboard page.</p>
 
 <p><img src="/assets/blog/add-auth-to-stencil/OktaOrgUrlDashboard-b9283a021008d94d056e5a4ac6d2b130ff00a71e8c4d6a44f7029af95392a8f1.png" alt="Okta Dashboard Org Url" width="800" class="center-image" /></p>
 
-<p>Now everything is set up for the <code class="highlighter-rouge">login()</code> function, so you’ll create that next. Right above the <code class="highlighter-rouge">render()</code> method, add a <code class="highlighter-rouge">login()</code> function.
-​</p>
+<p>Now everything is set up for the <code class="highlighter-rouge">login()</code> function, so you’ll create that next. Right above the <code class="highlighter-rouge">render()</code> method, add a <code class="highlighter-rouge">login()</code> function.</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">login</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">let</span> <span class="nx">inputs</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">host</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="s1">'input'</span><span class="p">);</span>
   <span class="kd">let</span> <span class="nx">user</span> <span class="o">=</span> <span class="p">{</span>
     <span class="na">username</span><span class="p">:</span> <span class="nx">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">value</span><span class="p">,</span>
     <span class="na">password</span><span class="p">:</span> <span class="nx">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">value</span>
   <span class="p">};</span>
-<span class="err">​</span>
+
   <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">authClient</span><span class="p">.</span><span class="nx">signIn</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
     <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">'SUCCESS'</span><span class="p">)</span> <span class="p">{</span>
@@ -419,23 +410,23 @@ You can get your Client ID from that general settings page of your Okta applicat
     <span class="p">});</span>
 <span class="p">}</span>
 </code></pre></div></div>
-<p>​
-Since is really the “meat” of the component, I’ll walk you through what’s going on here.
-​
-The first thing, is getting all the inputs inside the <code class="highlighter-rouge">form</code> element of the component. Then a user object is created with the username and password from their respective inputs.
-​
-Next the <code class="highlighter-rouge">authClient</code> object is used to call the <code class="highlighter-rouge">signIn()</code> method with the user object that was created. It returns a promise, so you handle the <code class="highlighter-rouge">then</code> condition by getting the response and check to see if the response’s status is a 200. If it is, call the <code class="highlighter-rouge">authClient.token</code>’s <code class="highlighter-rouge">getWithoutPrompt()</code> method which also returns a promise. It takes a <code class="highlighter-rouge">responseType</code> property which is set to <code class="highlighter-rouge">id_token</code>, because that’s what you want to get from Okta. You’ve also asked for three scopes that will give you the openid, profile, and email data associated with the newly authenticated user. The method need the session token returned from the <code class="highlighter-rouge">signIn()</code> method’s response. Finally, you’ve told the function to call back to the <code class="highlighter-rouge">redirectUri</code>, which was set as a trusted redirect origin in Okta when you created your application.
-​
-In the <code class="highlighter-rouge">then</code> condition of this promise, you take the id token received and set it in local storage as <code class="highlighter-rouge">okta_id_token</code>. If all that worked, the user is redirected to the profile page.
-​
-If the response had a status of anything other than 200, it merely throws an error that says it can’t handle any other statuses. Finally, the fail condition for the <code class="highlighter-rouge">signIn()</code> method call simply logs any errors to the console.
-​</p>
+
+<p>Since is really the “meat” of the component, I’ll walk you through what’s going on here.</p>
+
+<p>The first thing, is getting all the inputs inside the <code class="highlighter-rouge">form</code> element of the component. Then a user object is created with the username and password from their respective inputs.</p>
+
+<p>Next the <code class="highlighter-rouge">authClient</code> object is used to call the <code class="highlighter-rouge">signIn()</code> method with the user object that was created. It returns a promise, so you handle the <code class="highlighter-rouge">then</code> condition by getting the response and check to see if the response’s status is a 200. If it is, call the <code class="highlighter-rouge">authClient.token</code>’s <code class="highlighter-rouge">getWithoutPrompt()</code> method which also returns a promise. It takes a <code class="highlighter-rouge">responseType</code> property which is set to <code class="highlighter-rouge">id_token</code>, because that’s what you want to get from Okta. You’ve also asked for three scopes that will give you the openid, profile, and email data associated with the newly authenticated user. The method need the session token returned from the <code class="highlighter-rouge">signIn()</code> method’s response. Finally, you’ve told the function to call back to the <code class="highlighter-rouge">redirectUri</code>, which was set as a trusted redirect origin in Okta when you created your application.</p>
+
+<p>In the <code class="highlighter-rouge">then</code> condition of this promise, you take the id token received and set it in local storage as <code class="highlighter-rouge">okta_id_token</code>. If all that worked, the user is redirected to the profile page.</p>
+
+<p>If the response had a status of anything other than 200, it merely throws an error that says it can’t handle any other statuses. Finally, the fail condition for the <code class="highlighter-rouge">signIn()</code> method call simply logs any errors to the console.</p>
+
 <h2 id="simplify-login">Simplify Login</h2>
-<p>​
-While this works, there are two things that would make this component a little nicer: being able to hit enter to log in instead of having to click the login button, and not even showing the login form if the person tries to go the login page when they’re already logged in.
-​
-To achieve this, add a method to take the user directly to the profile page if they’re already logged in. Like React components, Stencil components have lifecycle methods. Instead of <code class="highlighter-rouge">componentWillMount()</code> for React, Stencil has a <code class="highlighter-rouge">componentWillLoad()</code> method, so that’s what you’ll use here.
-​</p>
+
+<p>While this works, there are two things that would make this component a little nicer: being able to hit enter to log in instead of having to click the login button, and not even showing the login form if the person tries to go the login page when they’re already logged in.</p>
+
+<p>To achieve this, add a method to take the user directly to the profile page if they’re already logged in. Like React components, Stencil components have lifecycle methods. Instead of <code class="highlighter-rouge">componentWillMount()</code> for React, Stencil has a <code class="highlighter-rouge">componentWillLoad()</code> method, so that’s what you’ll use here.</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">componentWillLoad</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">let</span> <span class="nx">idToken</span> <span class="o">=</span> <span class="nx">localStorage</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s1">'okta_id_token'</span><span class="p">);</span>
   <span class="k">if</span> <span class="p">(</span><span class="nx">idToken</span><span class="p">)</span> <span class="p">{</span>
@@ -443,28 +434,28 @@ To achieve this, add a method to take the user directly to the profile page if t
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
-<p>​
-Simply put, all you’re doing is reading the token from local storage. If one exists, you’re assuming they are logged in and redirecting them to the profile page.
-​
-The last thing that will make this login form easier to use is to add the ability to submit the form with the enter key. Stencil has some built-in listeners for key presses. In this case, use the ‘keydown.enter’ listener. Import the <code class="highlighter-rouge">@Listen()</code> decorator in the very top import statement where you imported <code class="highlighter-rouge">Component</code>.
-​</p>
+
+<p>Simply put, all you’re doing is reading the token from local storage. If one exists, you’re assuming they are logged in and redirecting them to the profile page.</p>
+
+<p>The last thing that will make this login form easier to use is to add the ability to submit the form with the enter key. Stencil has some built-in listeners for key presses. In this case, use the ‘keydown.enter’ listener. Import the <code class="highlighter-rouge">@Listen()</code> decorator in the very top import statement where you imported <code class="highlighter-rouge">Component</code>.</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">Prop</span><span class="p">,</span> <span class="nx">State</span><span class="p">,</span> <span class="nx">Element</span><span class="p">,</span> <span class="nx">Listen</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@stencil/core'</span><span class="p">;</span>
 </code></pre></div></div>
-<p>​
-Then add a handler for the ‘keydown.enter’ event just below the <code class="highlighter-rouge">componentWillLoad()</code> function.
-​</p>
+
+<p>Then add a handler for the ‘keydown.enter’ event just below the <code class="highlighter-rouge">componentWillLoad()</code> function.</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">@</span><span class="nd">Listen</span><span class="p">(</span><span class="s1">'keydown.enter'</span><span class="p">)</span>
 <span class="nx">handleEnter</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">login</span><span class="p">();</span>
 <span class="p">}</span>
 </code></pre></div></div>
-<p>​</p>
+
 <h2 id="update-the-profile-page">Update the Profile Page</h2>
-<p>​
-Now that you have a nice login page, update the profile page so that it shows the user’s claims once they’re logged in.
-​
-First, you’ll need a type to put the user’s claims in. So create a new file in the <code class="highlighter-rouge">app-profile</code> folder called <code class="highlighter-rouge">AppUser.tsx</code>. The contents are simple, but long. I simply looked at all the claims in the token stored in <code class="highlighter-rouge">localStorage</code> and created an interface that matched it. So the <code class="highlighter-rouge">AppUser.tsx</code> file is as follows:
-​</p>
+
+<p>Now that you have a nice login page, update the profile page so that it shows the user’s claims once they’re logged in.</p>
+
+<p>First, you’ll need a type to put the user’s claims in. So create a new file in the <code class="highlighter-rouge">app-profile</code> folder called <code class="highlighter-rouge">AppUser.tsx</code>. The contents are simple, but long. I simply looked at all the claims in the token stored in <code class="highlighter-rouge">localStorage</code> and created an interface that matched it. So the <code class="highlighter-rouge">AppUser.tsx</code> file is as follows:</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">AppUser</span> <span class="p">{</span>
   <span class="nl">sub</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
   <span class="nl">name</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
@@ -489,25 +480,25 @@ First, you’ll need a type to put the user’s claims in. So create a new file 
   <span class="nl">auth_time</span><span class="p">:</span> <span class="nx">number</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div></div>
-<p>Once you have a type to declare for your profile’s user object, update the <code class="highlighter-rouge">app-profile.tsx</code> file.
-​
-The imports at the top should look like:
-​</p>
+<p>Once you have a type to declare for your profile’s user object, update the <code class="highlighter-rouge">app-profile.tsx</code> file.</p>
+
+<p>The imports at the top should look like:</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">Prop</span><span class="p">,</span> <span class="nx">State</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@stencil/core'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">RouterHistory</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'@stencil/router'</span><span class="p">;</span>
 </code></pre></div></div>
-<p>​
-Remove the <code class="highlighter-rouge">@Prop()</code> line for <code class="highlighter-rouge">match</code> and replace is with:
-​</p>
+
+<p>Remove the <code class="highlighter-rouge">@Prop()</code> line for <code class="highlighter-rouge">match</code> and replace is with:</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">@</span><span class="nd">Prop</span><span class="p">()</span> <span class="nx">history</span><span class="p">:</span> <span class="nx">RouterHistory</span><span class="p">;</span>
 <span class="p">@</span><span class="nd">State</span><span class="p">()</span> <span class="nx">user</span><span class="p">:</span> <span class="nx">AppUser</span><span class="p">;</span>
 <span class="p">@</span><span class="nd">Prop</span><span class="p">({</span> <span class="na">context</span><span class="p">:</span> <span class="s1">'isServer'</span> <span class="p">})</span> <span class="kr">private</span> <span class="nx">isServer</span><span class="p">:</span> <span class="kr">boolean</span><span class="p">;</span>
 </code></pre></div></div>
-<p>​
-The <code class="highlighter-rouge">isServer</code> property is a special property. Because Stencil supports prerendering and <code class="highlighter-rouge">localStorage</code> may not be available during prerender, you’ll need to wrap the <code class="highlighter-rouge">localStorage</code> calls in an <code class="highlighter-rouge">if(!isServer){}</code> to make sure it will build for production. This shouldn’t stop it from working, it’s just a work around for the build process.
-​
-For the <code class="highlighter-rouge">componentWillLoad()</code> method, just read in the user information from the ‘okta_id_token’ in local storage:
-​</p>
+
+<p>The <code class="highlighter-rouge">isServer</code> property is a special property. Because Stencil supports prerendering and <code class="highlighter-rouge">localStorage</code> may not be available during prerender, you’ll need to wrap the <code class="highlighter-rouge">localStorage</code> calls in an <code class="highlighter-rouge">if(!isServer){}</code> to make sure it will build for production. This shouldn’t stop it from working, it’s just a work around for the build process.</p>
+
+<p>For the <code class="highlighter-rouge">componentWillLoad()</code> method, just read in the user information from the ‘okta_id_token’ in local storage:</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">componentWillLoad</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">isServer</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">let</span> <span class="nx">token</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s1">'okta_id_token'</span><span class="p">));</span>
@@ -519,11 +510,11 @@ For the <code class="highlighter-rouge">componentWillLoad()</code> method, just 
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
-<p>​
-This will be your protector for the profile page as well, it just checks if the token exists. If so, it loads the claims from it. If not, it redirects to the login page.
-​
-For the <code class="highlighter-rouge">render()</code> method, change it to display the claims in a list.
-​</p>
+
+<p>This will be your protector for the profile page as well, it just checks if the token exists. If so, it loads the claims from it. If not, it redirects to the login page.</p>
+
+<p>For the <code class="highlighter-rouge">render()</code> method, change it to display the claims in a list.</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">let</span> <span class="nx">keys</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">user</span><span class="p">);</span>
@@ -539,9 +530,9 @@ For the <code class="highlighter-rouge">render()</code> method, change it to dis
 </span>  <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
-<p>​
-The only thing left is to add the <code class="highlighter-rouge">logout()</code> method. This will just remove the token from local storage and reload the page, this will force the <code class="highlighter-rouge">componentWillLoad()</code> to redirect the user to the login page.
-​</p>
+
+<p>The only thing left is to add the <code class="highlighter-rouge">logout()</code> method. This will just remove the token from local storage and reload the page, this will force the <code class="highlighter-rouge">componentWillLoad()</code> to redirect the user to the login page.</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">logout</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">isServer</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">localStorage</span><span class="p">.</span><span class="nx">removeItem</span><span class="p">(</span><span class="s1">'okta_id_token'</span><span class="p">);</span>
@@ -549,37 +540,37 @@ The only thing left is to add the <code class="highlighter-rouge">logout()</code
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
-<p>​</p>
+
 <h2 id="set-up-the-login-route">Set Up the Login Route</h2>
-<p>​
-The only thing left is to add the route to the login component to the application so that users can get there.
-​
-In the <code class="highlighter-rouge">components/my-app/my-app.tsx</code> file add the route inside the <code class="highlighter-rouge">stencil-router</code> component so that the final section looks like this:
-​</p>
+
+<p>The only thing left is to add the route to the login component to the application so that users can get there.</p>
+
+<p>In the <code class="highlighter-rouge">components/my-app/my-app.tsx</code> file add the route inside the <code class="highlighter-rouge">stencil-router</code> component so that the final section looks like this:</p>
+
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;stencil-router&gt;</span>
   <span class="nt">&lt;stencil-route</span> <span class="na">url=</span><span class="s">"/"</span> <span class="na">component=</span><span class="s">"app-home"</span> <span class="na">exact=</span><span class="s">{true}</span> <span class="nt">/&gt;</span>
   <span class="nt">&lt;stencil-route</span> <span class="na">url=</span><span class="s">"/profile"</span> <span class="na">component=</span><span class="s">"app-profile"</span> <span class="nt">/&gt;</span>
   <span class="nt">&lt;stencil-route</span> <span class="na">url=</span><span class="s">"/login"</span> <span class="na">component=</span><span class="s">"app-auth"</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;/stencil-router&gt;</span>
 </code></pre></div></div>
-<p>​
-You’ll also need to update the route for the link on the home page. In <code class="highlighter-rouge">components/app-home/app-home.tsx</code> update the <code class="highlighter-rouge">stencil-route-link</code> element’s url to no longer pass in the url parameter.
-​</p>
+
+<p>You’ll also need to update the route for the link on the home page. In <code class="highlighter-rouge">components/app-home/app-home.tsx</code> update the <code class="highlighter-rouge">stencil-route-link</code> element’s url to no longer pass in the url parameter.</p>
+
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;stencil-route-link</span> <span class="na">url=</span><span class="s">"/profile"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;button&gt;</span>
     Profile page
   <span class="nt">&lt;/button&gt;</span>
 <span class="nt">&lt;/stencil-route-link&gt;</span>
 </code></pre></div></div>
-<p>​
-That’s it! You should now be able to run the app, click on the profile page, get redirected to the login page, and be redirected back to the profile page once you’ve logged in. The profile page should show all your claims after you’ve authenticated.
-​
-Congratulations, you now have a PWA with authentication in it, ready to go conquer the world!
-​</p>
+
+<p>That’s it! You should now be able to run the app, click on the profile page, get redirected to the login page, and be redirected back to the profile page once you’ve logged in. The profile page should show all your claims after you’ve authenticated.</p>
+
+<p>Congratulations, you now have a PWA with authentication in it, ready to go conquer the world!</p>
+
 <h2 id="add-styles">Add Styles</h2>
-<p>​
-As extra credit, you might want to add some styling to the login form and the profile page. Below is my style sheet for the login page that goes in <code class="highlighter-rouge">app-auth.css</code>:
-​</p>
+
+<p>As extra credit, you might want to add some styling to the login form and the profile page. Below is my style sheet for the login page that goes in <code class="highlighter-rouge">app-auth.css</code>:</p>
+
 <div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.app-auth</span> <span class="p">{</span>
   <span class="nl">width</span><span class="p">:</span> <span class="m">30%</span><span class="p">;</span>
   <span class="nl">margin</span><span class="p">:</span> <span class="m">2rem</span> <span class="nb">auto</span><span class="p">;</span>
@@ -592,46 +583,44 @@ As extra credit, you might want to add some styling to the login form and the pr
   <span class="nl">font-size</span><span class="p">:</span> <span class="m">1rem</span><span class="p">;</span>
   <span class="nl">color</span><span class="p">:</span> <span class="m">#999</span><span class="p">;</span>
 <span class="p">}</span>
-<span class="err">​</span>
+
 <span class="nc">.app-auth</span> <span class="nt">label</span> <span class="nt">input</span> <span class="p">{</span>
   <span class="nl">width</span><span class="p">:</span> <span class="m">97%</span><span class="p">;</span>
   <span class="nl">border-radius</span><span class="p">:</span> <span class="m">.25rem</span><span class="p">;</span>
   <span class="nl">font-size</span><span class="p">:</span> <span class="m">1.5rem</span><span class="p">;</span>
 <span class="p">}</span>
-<span class="err">​</span>
+
 <span class="nc">.app-auth</span> <span class="nc">.form-actions</span> <span class="p">{</span>
   <span class="nl">text-align</span><span class="p">:</span> <span class="nb">right</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div></div>
-<p>​
-Finally, in <code class="highlighter-rouge">app-profile.css</code> just some simple styles to bold the label of each item.
-​</p>
+
+<p>Finally, in <code class="highlighter-rouge">app-profile.css</code> just some simple styles to bold the label of each item.</p>
+
 <div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.app-profile</span> <span class="p">{</span>
   <span class="nl">padding</span><span class="p">:</span> <span class="m">10px</span><span class="p">;</span>
 <span class="p">}</span>
-<span class="err">​</span>
+
 <span class="nc">.app-profile</span> <span class="nt">ul</span> <span class="nt">li</span> <span class="nt">span</span> <span class="p">{</span>
   <span class="nl">font-weight</span><span class="p">:</span> <span class="nb">bold</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div></div>
-<p>​
-Now when you run the app, you will see a nicely styled application, ready for the web!
-​</p>
+
+<p>Now when you run the app, you will see a nicely styled application, ready for the web!</p>
 
 <p><img src="/assets/blog/add-auth-to-stencil/StencilAppLoginPage-2790ae37ee773e9a4478da7f266be8908753c6f685a81c3de2618ae76b47d30c.png" alt="Stencil App Login Page" width="800" class="center-image" /></p>
 
-<p>​</p>
 <h2 id="learn-more">Learn More</h2>
-<p>​
-To learn more about PWAs, check out Matt Raible’s <a href="/blog/2017/07/20/the-ultimate-guide-to-progressive-web-applications">ultimate guide to PWAs</a> on the Okta developer blog.
-​
-If you want to know more about Ionic apps, check out Matt’s blog post about <a href="/blog/2017/08/22/build-an-ionic-app-with-user-authentication">building Ionic apps</a>.
-​
-You can learn about building a basic CRUD app with VueJS from <a href="/blog/2018/02/15/build-crud-app-vuejs-node">Brandon Parise’s post</a>.
-​
-Finally, right here you can see <a href="/blog/2018/02/06/build-user-registration-with-node-react-and-okta">how to set up user registration with Node and React</a>!
-​
-As always, if you have any questions you can comment below or  hit me up on Twitter <a href="https://twitter.com/leebrandt">@leebrandt</a> and don’t forget to follow <a href="https://twitter.com/oktadev">@OktaDev</a> for great content from our communities + all the news about Okta’s developer platform!</p>
+
+<p>To learn more about PWAs, check out Matt Raible’s <a href="/blog/2017/07/20/the-ultimate-guide-to-progressive-web-applications">ultimate guide to PWAs</a> on the Okta developer blog.</p>
+
+<p>If you want to know more about Ionic apps, check out Matt’s blog post about <a href="/blog/2017/08/22/build-an-ionic-app-with-user-authentication">building Ionic apps</a>.</p>
+
+<p>You can learn about building a basic CRUD app with VueJS from <a href="/blog/2018/02/15/build-crud-app-vuejs-node">Brandon Parise’s post</a>.</p>
+
+<p>Finally, right here you can see <a href="/blog/2018/02/06/build-user-registration-with-node-react-and-okta">how to set up user registration with Node and React</a>!</p>
+
+<p>As always, if you have any questions you can comment below or  hit me up on Twitter <a href="https://twitter.com/leebrandt">@leebrandt</a> and don’t forget to follow <a href="https://twitter.com/oktadev">@OktaDev</a> for great content from our communities + all the news about Okta’s developer platform!</p>
 
 
     </div>
