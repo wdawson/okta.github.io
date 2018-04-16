@@ -36,7 +36,7 @@ npm install
 ​
 You may see a couple of warnings from `node-pre-gyp` around `fsevents`. There's nothing to see here. This is just to get around a [nasty little npm bug](https://github.com/strongloop/fsevents/issues/157).
 ​
-Next, add the Okta auth.js library (via CDN) to the bottom of the `index.html` page, right before the closing `</body>` tag.
+Next, add the Okta Auth SDK (via CDN) to the bottom of the `index.html` page, right before the closing `</body>` tag.
 ​
 ```html
 <script src="https://ok1static.oktacdn.com/assets/js/sdk/okta-auth-js/1.8.0/okta-auth-js.min.js" type="text/javascript"></script>
