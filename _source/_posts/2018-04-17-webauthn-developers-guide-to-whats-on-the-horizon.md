@@ -52,4 +52,4 @@ The spec itself is currently a W3C "Candidate Recommendation", which is the seco
 * [Using Hardware Token-based 2FA with the WebAuthn API](https://hacks.mozilla.org/2018/01/using-hardware-token-based-2fa-with-the-webauthn-api/)
 * [Web authentication and Windows Hello](https://docs.microsoft.com/en-us/microsoft-edge/dev-guide/device/web-authentication)
 * [FIDO2 Project](https://fidoalliance.org/fido2/)
-
+* Learn more about [Okta's plans to support WebAuthn](https://www.okta.com/blog/2018/04/its-a-new-world-with-webauthn-passwordless-authentication-goes-primetime/)
