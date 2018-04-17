@@ -5,6 +5,9 @@ exampleDescription: ASP.NET 4.x Web API implicit example
 
 ## Okta ASP.NET 4.x Web API Quickstart
 
+If you want a full, working example, head over to the [ASP.NET web API example](https://github.com/oktadeveloper/okta-aspnet-webapi-example) repository and follow the instructions in that readme.
+// TODO: create/update the test project
+
 ### Create a new Web API project
 
 If you don't already have a Web API project, create a new ASP.NET (.NET Framework) project and choose the Web API template. Choose **No Authentication**.
@@ -14,9 +17,9 @@ If you don't already have a Web API project, create a new ASP.NET (.NET Framewor
 First, install these packages with NuGet:
 
 - `Microsoft.Owin.Host.SystemWeb` 4.0.0 or higher (if it isn't already installed)
-- `Microsoft.IdentityModel.Protocols.OpenIdConnect` 5.2.1 or higher
 - `Microsoft.IdentityModel.Tokens` 5.2.1 or higher
 - `Microsoft.Owin.Security.Jwt` 4.0.0 or higher
+- `Okta.AspNet`
 
 
 ### Configure the middleware
@@ -26,13 +29,9 @@ If you don't already have a `Startup.cs` file (OWIN Startup class), create one b
 Make sure you have these `using` statements at the top of your `Startup.cs` file:
 
 ```csharp
-using System.Threading.Tasks;
-using Microsoft.IdentityModel.Protocols;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Microsoft.IdentityModel.Tokens;
+using System.Configuration;
 using Microsoft.Owin;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Jwt;
+using Okta.AspNet.Abstractions;
 using Owin;
 ```
 
@@ -41,32 +40,42 @@ Add the following code to your `Configuration` method:
 ```csharp
 public void Configuration(IAppBuilder app)
 {
-    // Configure JWT Bearer middleware
-    // with an OpenID Connect Authority
-
-    var authority = "https://{yourOktaDomain}.com/oauth2/default";
-
-    var configurationManager = new ConfigurationManager<OpenIdConnectConfiguration>(
-        authority + "/.well-known/openid-configuration",
-        new OpenIdConnectConfigurationRetriever(),
-        new HttpDocumentRetriever());
-
-    app.UseJwtBearerAuthentication(new JwtBearerAuthenticationOptions
-    {
-        AuthenticationMode = AuthenticationMode.Active,
-        TokenValidationParameters = new TokenValidationParameters
+    var orgUrl = ConfigurationManager.AppSettings["okta:OrgUrl"];
+    var clientId = ConfigurationManager.AppSettings["okta:ClientId"];
+    var authorizationServerId = ConfigurationManager.AppSettings["okta:AuthorizationServerId"];
+    app.UseOktaWebApi(new OktaWebApiOptions()
         {
-            ValidAudience = "api://default",
-            ValidIssuer = authority,
-            IssuerSigningKeyResolver = (token, securityToken, identifier, parameters) =>
-            {
-                var discoveryDocument = Task.Run(() => configurationManager.GetConfigurationAsync()).GetAwaiter().GetResult();
-                return discoveryDocument.SigningKeys;
-            }
-        }
-    });
+            OrgUrl = orgUrl,
+            ClientId = clientId,
+            AuthorizationServerId = authorizationServerId
+        });
 }
 ```
+
+### Additional middleware configuration
+
+The `OktaWebApiOptions` class configures the Okta middleware. In the table below you can see all the available options:
+
+| Property                  | Required?    | Details                         |
+|---------------------------|--------------|---------------------------------|
+| OrgUrl                    | **Yes**      | Your Okta domain, i.e https://dev-123456.oktapreview.com  | 
+| ClientId                  | **Yes**      | The client ID of your Okta Application |
+| AuthorizationServerId     | No           | The Okta Authorization Server to use. The default value is `default`. |
+| Audience                  | No           | The expected audience of incoming tokens. The default value is `api://default`. |
+| ClockSkew                 | No           | The clock skew allowed when validating tokens. The default value is 2 minutes. |
+
+### Configure the project
+
+Open the `Web.config` file and add these keys to the `<appSettings>` section:
+
+```csharp
+<!-- 1. Replace these values with your Okta configuration -->
+<add key="okta:OrgUrl" value="https://{YourOktaDomain}.com/" />
+<add key="okta:ClientId" value="{ClientId}" />
+<add key="okta:AuthorizationServerId" value="default" />
+```
+
+Copy the client ID from your Okta application into the appropriate key in `Web.config`, and replace `{yourOktaDomain}` with your Okta domain name. You can find your Okta domain name in the top-right corner of the Dashboard page.
 
 ### Protect application resources
 
@@ -102,7 +111,7 @@ public class MessagesController : ApiController
 
 ### That's it!
 
-The JWT Bearer middleware automatically validates tokens and populates `HttpContext.User` with a limited set of user information.
+The Okta middleware automatically validates tokens and populates `HttpContext.User` with a limited set of user information.
 
 If you want to do more with the user, you can use the [Okta .NET SDK](https://github.com/okta/okta-sdk-dotnet) to get or update the user's details stored in Okta.
 
