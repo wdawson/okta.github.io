@@ -8,6 +8,162 @@
     <atom:link href="https://developer.okta.com/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Use OpenID Connect for Authorization in Your ASP.NET MVC Framework 4.x App</title>
+        <description>&lt;p&gt;A common practice in web applications is to have a restricted area for registered users, and perhaps another for administrators. Whether this restricted access area is premium content, or simply the order history for your e-commerce site’s users, it’s important that it be properly secured. OpenID Connect (OIDC) makes it easy, but it can be tricky to set up in ASP.NET MVC framework. In this post, I’ll show you how to create groups and use the authorization framework that comes with ASP.NET.&lt;/p&gt;
+
+&lt;h2 id=&quot;set-up-the-base-aspnet-mvc-4x-application&quot;&gt;Set Up the Base ASP.NET MVC 4.x Application&lt;/h2&gt;
+
+&lt;p&gt;For the base application, start by downloading our &lt;a href=&quot;https://github.com/oktadeveloper/okta-aspnet-mvc-example&quot;&gt;ASP.NET MVC example from GitHub&lt;/a&gt;. You’ll also need to set up your application in Okta. Start by creating a &lt;a href=&quot;https://developer.okta.com/signup/&quot;&gt;forever-free developer account&lt;/a&gt;, or logging in if you already have one. Once you’re at the dashboard in the Okta developer console, create an application with the following settings:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Application type: Web&lt;/li&gt;
+  &lt;li&gt;Allowed grant types: Authorization Code, Implicit (Hybrid) - Allow ID Token&lt;/li&gt;
+  &lt;li&gt;Login redirect URI: &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080/authorization-code/callback&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Logout redirect URI: &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080/Account/PostLogout&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Then open the Web.config file and add these keys to the &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;appSettings&amp;gt;&lt;/code&gt; section:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 1. Replace these values with your Okta configuration --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;add&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;okta:ClientId&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;{clientId}&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;add&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;okta:ClientSecret&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;{clientSecret}&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;add&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;okta:OrgUri&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 2. Update the Okta application with these values --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;add&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;okta:RedirectUri&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://localhost:8080/authorization-code/callback&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;add&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;okta:PostLogoutRedirectUri&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://localhost:8080/Account/PostLogout&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;add-groups-to-the-id-token&quot;&gt;Add Groups to the ID Token&lt;/h2&gt;
+
+&lt;p&gt;First, add two groups to your new application: &lt;em&gt;Users&lt;/em&gt; and &lt;em&gt;Admins&lt;/em&gt;. From the dashboard, hover over the &lt;strong&gt;Users&lt;/strong&gt; menu item and from the drop-down menu choose &lt;strong&gt;Groups&lt;/strong&gt;. On the groups screen, click &lt;strong&gt;Add Group&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/aspnet-authz/CreateGroupScreenshot-756757ba9bd65152afd4f9f13b2bccee798894b3bdd6b8befbebb0bb9210e4a8.png&quot; alt=&quot;Create Groups Screen&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To add users, click on the &lt;strong&gt;Users&lt;/strong&gt; menu item. Click on &lt;strong&gt;Add User&lt;/strong&gt; and create two new users. The only required information is first name, last name, and email address. The interface will automatically set the username to the primary email.&lt;/p&gt;
+
+&lt;p&gt;Then make sure to select &lt;strong&gt;Set by Admin&lt;/strong&gt; in the &lt;strong&gt;Password&lt;/strong&gt; drop-down, set the password to something simple and then uncheck the &lt;strong&gt;User must change password on the first login&lt;/strong&gt; checkbox. Finally, click the &lt;strong&gt;Save and Add Another&lt;/strong&gt;, and add another user called &lt;em&gt;Jack Daniels&lt;/em&gt; with the same settings.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/aspnet-authz/CreateUserScreenshot-a4e1f2b50a9722d2ca84cc7ee526048156e9dbb34999952b5a70222ce5f69b72.png&quot; alt=&quot;Create User Screen&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Add Jim Beam to the &lt;strong&gt;Users&lt;/strong&gt; group and add Jack Daniels to the Admin group. To do this, go back to the &lt;strong&gt;Groups&lt;/strong&gt; page and select the group you want to add people to. Then, click &lt;strong&gt;Manage People&lt;/strong&gt;. When you hover over each person in the listing of users that are not members on the left, there will be a green plus sign button. Click this button to add that person to the selected group.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/aspnet-authz/AddUserToGroupScreenshot-acb3e85c6c45d93f4806401e164601720730df27ae5e6aff85605669467a1fb8.png&quot; alt=&quot;Add User To Group Screen&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now you just need to add these groups to the token.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Hover over the &lt;strong&gt;API&lt;/strong&gt; menu item and select &lt;strong&gt;Authorization Servers&lt;/strong&gt;.&lt;/li&gt;
+  &lt;li&gt;Select the default authorization server (it was created for you when you created your Okta account).&lt;/li&gt;
+  &lt;li&gt;Choose the Claims tab, and click &lt;strong&gt;Add Claim&lt;/strong&gt;.&lt;/li&gt;
+  &lt;li&gt;The name of the claim will be “groups”, 
+Select &lt;strong&gt;ID Token&lt;/strong&gt; and &lt;strong&gt;Always&lt;/strong&gt; from the &lt;strong&gt;Include in token type&lt;/strong&gt; setting.&lt;/li&gt;
+  &lt;li&gt;Choose &lt;strong&gt;Groups&lt;/strong&gt; from the &lt;strong&gt;Value Type&lt;/strong&gt; setting, and &lt;strong&gt;Regex&lt;/strong&gt; from the &lt;strong&gt;Filter&lt;/strong&gt; setting.&lt;/li&gt;
+  &lt;li&gt;In the text box type &lt;code class=&quot;highlighter-rouge&quot;&gt;.*&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Finally, make sure the &lt;strong&gt;Disable claim&lt;/strong&gt; checkbox is unchecked and that the &lt;strong&gt;Any scope&lt;/strong&gt; radio button is selected in the &lt;strong&gt;Include in&lt;/strong&gt; setting.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/aspnet-authz/AddGroupsToTokenScreenshot-c78196f6d97cb7d76120047046bf9c59468fc758f001e08b175de017db8c58bf.png&quot; alt=&quot;Add Groups to Token Screen&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;map-the-openid-connect-groups-to-roles&quot;&gt;Map the OpenID Connect Groups to Roles&lt;/h2&gt;
+
+&lt;p&gt;Once you’ve got groups in the token, you’ll need to map those to roles, since the authorization attributes in ASP.NET MVC uses roles to restrict access. To do this, open the &lt;code class=&quot;highlighter-rouge&quot;&gt;Startup.cs&lt;/code&gt; file, and add in the &lt;code class=&quot;highlighter-rouge&quot;&gt;ConfigureAuth&lt;/code&gt; method, there’s a section of the code that sets up the OpenID Connect authentication called &lt;code class=&quot;highlighter-rouge&quot;&gt;UseOpenIdConnectAuthentication&lt;/code&gt; that takes an argument of type &lt;code class=&quot;highlighter-rouge&quot;&gt;OpenIdConnectAuthenticationOptions&lt;/code&gt;. Inside the &lt;code class=&quot;highlighter-rouge&quot;&gt;Notification&lt;/code&gt; property, there is a function for &lt;code class=&quot;highlighter-rouge&quot;&gt;AuthorizationCodeReceived&lt;/code&gt;. Below the &lt;code class=&quot;highlighter-rouge&quot;&gt;nameClaim&lt;/code&gt;, add a loop to go through each of the groups in the token and a &lt;code class=&quot;highlighter-rouge&quot;&gt;RoleType&lt;/code&gt; claim to the &lt;code class=&quot;highlighter-rouge&quot;&gt;identity&lt;/code&gt; object.&lt;/p&gt;
+
+&lt;div class=&quot;language-cs highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;group&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;userInfoResponse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Claims&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Type&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;groups&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;identity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;AddClaim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Claim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ClaimTypes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Role&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Now you can use those roles in the authorize attribute.&lt;/p&gt;
+
+&lt;h2 id=&quot;add-restricted-mvc-routes&quot;&gt;Add Restricted MVC Routes&lt;/h2&gt;
+
+&lt;p&gt;To the &lt;code class=&quot;highlighter-rouge&quot;&gt;AccountController&lt;/code&gt;, add some new restricted routes: one for each group.&lt;/p&gt;
+
+&lt;div class=&quot;language-cs highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// previous controller actions removed for brevity&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;[Authorize(Roles = &quot;Enthusiasts&quot;)]&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ActionResult&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Enthusiast&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;View&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+&lt;span class=&quot;na&quot;&gt;[Authorize(Roles = &quot;Admin&quot;)]&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ActionResult&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Admin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;View&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now the authorization should work, but there is one problem. If a user is logged in but does not belong to the correct group, the default &lt;code class=&quot;highlighter-rouge&quot;&gt;AuthorizeAttribute&lt;/code&gt; will attempt to redirect the user to the login screen for authentication. The login screen will determine that the user is already authenticated and will redirect back to the &lt;code class=&quot;highlighter-rouge&quot;&gt;redirectUri&lt;/code&gt; with the token. The &lt;code class=&quot;highlighter-rouge&quot;&gt;redirectUri&lt;/code&gt; will rebuild the &lt;code class=&quot;highlighter-rouge&quot;&gt;ClaimsPrincipal&lt;/code&gt; and try to redirect the user back to the URL they originally requested. The &lt;code class=&quot;highlighter-rouge&quot;&gt;AuthorizeAttribute&lt;/code&gt; will run again and begin the cycle all over again.&lt;/p&gt;
+
+&lt;h2 id=&quot;create-a-custom-aspnet-mvc-attribute&quot;&gt;Create a Custom ASP.NET MVC Attribute&lt;/h2&gt;
+
+&lt;p&gt;To avoid this problem, you’ll need to rewire the default behavior of the default &lt;code class=&quot;highlighter-rouge&quot;&gt;AuthorizeAttribute&lt;/code&gt; by creating a new attribute, and overriding the default behavior when the user is unauthorized. In the main project folder (where the controller folder is), create a new folder called &lt;strong&gt;Helpers&lt;/strong&gt;. Inside that folder create a new C# class called &lt;code class=&quot;highlighter-rouge&quot;&gt;OktaAuthorize&lt;/code&gt;. Change the class so that it inherits from &lt;code class=&quot;highlighter-rouge&quot;&gt;AuthorizeAttribute&lt;/code&gt; and override the &lt;code class=&quot;highlighter-rouge&quot;&gt;HandleUnauthorizedRequest&lt;/code&gt; method like below.&lt;/p&gt;
+
+&lt;div class=&quot;language-cs highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;HandleUnauthorizedRequest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AuthorizationContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;filterContext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filterContext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HttpContext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Identity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IsAuthenticated&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;HandleUnauthorizedRequest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filterContext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;filterContext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Result&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RedirectToRouteResult&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RouteValueDictionary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;controller&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Error&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;action&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;AccessDenied&quot;&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The above code simply checks if the user is logged in. If they are aren’t, the &lt;code class=&quot;highlighter-rouge&quot;&gt;HandleUnauthorizedRequest()&lt;/code&gt; can handle the request just fine. If they are logged in, it redirects to the error controller’s &lt;code class=&quot;highlighter-rouge&quot;&gt;AccessDenied&lt;/code&gt; action.&lt;/p&gt;
+
+&lt;p&gt;Next, you’ll need to create that &lt;code class=&quot;highlighter-rouge&quot;&gt;AccessDenied&lt;/code&gt; action in the &lt;code class=&quot;highlighter-rouge&quot;&gt;ErrorController&lt;/code&gt; so the complete controller looks like below.&lt;/p&gt;
+
+&lt;div class=&quot;language-cs highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ErrorController&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Controller&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// GET: Error&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ActionResult&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;View&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ActionResult&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;AccessDenied&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;View&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Lastly, just create a simple &lt;code class=&quot;highlighter-rouge&quot;&gt;AccessDenied&lt;/code&gt; view for the controller.&lt;/p&gt;
+
+&lt;div class=&quot;language-cs highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;err&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ViewBag&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Title&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;AccessDenied&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AccessDenied&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You should now be able to run the application and see that if you’re logged in with the Jim Beam user, when you try to navigate to the &lt;code class=&quot;highlighter-rouge&quot;&gt;account/admin&lt;/code&gt; action, you get redirected to the &lt;code class=&quot;highlighter-rouge&quot;&gt;AccessDenied&lt;/code&gt; page instead of the “unauthorized loop” that you’d get with the default &lt;code class=&quot;highlighter-rouge&quot;&gt;AuthorizeAttribute&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/aspnet-authz/ApplicationRunningScreenshot-6f255c053d4949560c83dce4ef04c00ac08ba9203822e836c93f3217ddcfcfd7.png&quot; alt=&quot;Application Running&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;learn-more-about-aspnet-and-okta&quot;&gt;Learn More About ASP.NET and Okta&lt;/h2&gt;
+
+&lt;p&gt;If you’d like to learn more about how Okta can ease identity management for your applications, check out &lt;a href=&quot;https://developer.okta.com/documentation/&quot;&gt;Okta’s product documentation&lt;/a&gt;. Interested in learning more about ASP.NET? Check out these resources from our blog::&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://developer.okta.com/blog/2018/02/01/secure-aspnetcore-webapi-token-auth&quot;&gt;How to Secure Your .NET Web API with Token Authentication&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://developer.okta.com/blog/2018/01/31/build-secure-todo-app-vuejs-aspnetcore&quot;&gt;Build a Secure To-Do App with Vue, ASP.NET Core, and Okta&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://developer.okta.com/blog/2018/01/10/build-app-for-ios-android-with-xamarin&quot;&gt;Build an App for iOS and Android with Xamarin&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;And as always, we’d love to hear from you. Hit us up in the comments, or on Twitter &lt;a href=&quot;https://twitter.com/OktaDev&quot;&gt;@oktadev&lt;/a&gt;.&lt;/p&gt;
+</description>
+        <pubDate>Wed, 18 Apr 2018 00:00:00 -0500</pubDate>
+        <link>https://developer.okta.com/blog/2018/04/18/authorization-in-your-aspnet-mvc-4-application</link>
+        <guid isPermaLink="true">https://developer.okta.com/blog/2018/04/18/authorization-in-your-aspnet-mvc-4-application</guid>
+      </item>
+    
+      <item>
         <title>WebAuthn: A Developer's Guide to What's on the Horizon</title>
         <description>&lt;p&gt;There’s been a lot of news lately about the new W3C Web Authentication API, also known as WebAuthn. Want to know what it’s all about? Let’s take a closer look.&lt;/p&gt;
 
@@ -3937,184 +4093,6 @@ Thanks!
         <pubDate>Thu, 01 Mar 2018 00:00:00 -0500</pubDate>
         <link>https://developer.okta.com/blog/2018/03/01/develop-microservices-jhipster-oauth</link>
         <guid isPermaLink="true">https://developer.okta.com/blog/2018/03/01/develop-microservices-jhipster-oauth</guid>
-      </item>
-    
-      <item>
-        <title>A Breakdown of the New SAML Authentication Bypass Vulnerability</title>
-        <description>&lt;p&gt;Several weeks ago a new critical vulnerability was discovered that affects many SAML implementations. This vulnerability was first reported by &lt;a href=&quot;https://twitter.com/kelbyludwig&quot;&gt;Kelby Ludwig&lt;/a&gt; of Duo Security and is particularly interesting to us (as a user management company) as it can be used to bypass authentication in a sinisterly simplistic way.&lt;/p&gt;
-
-&lt;p&gt;In this post, we’ll take an in-depth look at this new SAML vulnerability, what it is, how it works, and what you need to know to protect yourself.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: Just in case you’re wondering whether or not Okta is vulnerable to this new issue: &lt;em&gt;we aren’t&lt;/em&gt; &amp;gt;;)&lt;/p&gt;
-
-&lt;h2 id=&quot;what-is-the-new-saml-authentication-bypass-vulnerability&quot;&gt;What is the New SAML Authentication Bypass Vulnerability?&lt;/h2&gt;
-
-&lt;p&gt;It is a new attack which has the potential to directly affect single sign-on (&lt;a href=&quot;https://wiki.oasis-open.org/security/FrontPage#SAML_V2.0_Standard&quot;&gt;SAML&lt;/a&gt;) security.&lt;/p&gt;
-
-&lt;p&gt;If you’re not familiar with SAML (short for Security Assertion Markup Language), it’s an open standard that allows users to share credentials between multiple web apps, so they don’t need to log in when accessing different web services manually. Many vendors use SAML to handle user authentication and authorization so their users can access web applications without requiring individual credentials for each.&lt;/p&gt;
-
-&lt;p&gt;The new SAML vulnerability allows an attacker to &lt;em&gt;bypass authentication&lt;/em&gt; and directly assume the role of an authenticated user as part of the SAML flow. &lt;strong&gt;This is a BIG DEAL.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;how-the-new-saml-authentication-bypass-vulnerability-works&quot;&gt;How the new SAML Authentication Bypass Vulnerability Works&lt;/h2&gt;
-
-&lt;p&gt;When a user is authenticating to a website using SAML, there are always three parties involved:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;A user in a web browser&lt;/li&gt;
-  &lt;li&gt;A service provider running a website that user is trying to access (e.g., Salesforce)&lt;/li&gt;
-  &lt;li&gt;An identity provider that stores and manages the user’s account and credentials (e.g., Okta)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;At some point during SAML authentication the service provider (e.g., Salesforce) will ask the identity provider (e.g., Okta): who is this person that’s trying to log into me? It’s then the identity provider’s (e.g., Okta) job to generate a SAML assertion (a big XML document) and send it back to the service provider. This SAML assertion contains all the user information necessary for the service provider (e.g., Salesforce) to log this user in without ever needing their password.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: This is an extreme oversimplification of how SAML works, but accurately covers the important bits needed to understand more about the new vulnerability.&lt;/p&gt;
-
-&lt;p&gt;Here’s what a simplified SAML assertion might look like:&lt;/p&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:Assertion&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ID=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;123&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:Issuer&amp;gt;&lt;/span&gt;www.okta.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:Issuer&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:Subject&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:NameID&amp;gt;&lt;/span&gt;randall.degges@okta.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:NameID&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:Subject&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:Conditions&lt;/span&gt;
-                   &lt;span class=&quot;na&quot;&gt;NotBefore=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;2018-02-27T00:00:00Z&quot;&lt;/span&gt;
-                   &lt;span class=&quot;na&quot;&gt;NotOnOrAfter=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;2018-02-28T00:00:00Z&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:AudienceRestriction&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:Audience&amp;gt;&lt;/span&gt;www.salesforce.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:Audience&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:AudienceRestriction&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:Conditions&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:Assertion&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Looking at the XML sample above, one thing stands out above all else: the &lt;code class=&quot;highlighter-rouge&quot;&gt;saml:NameID&lt;/code&gt; element. This element is responsible for identifying the user who’s about to be logged in. In an actual SAML assertion, there’d be a lot of other stuff included. You’d also see things like:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;User attributes (first name, last name, etc.)&lt;/li&gt;
-  &lt;li&gt;User roles/permissions (is this user an admin? can they access a certain feature? etc.)&lt;/li&gt;
-  &lt;li&gt;An XML signature (this is required by almost all SAML vendors). XML signatures are frequently used to cryptographically sign the assertion element so that the service provider (e.g., Salesforce) can ensure the SAML assertion it receives from the identity provider is valid and accurate (and has not been modified by an attacker).&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The service provider (e.g., Salesforce) relies on the data in this XML document to properly authenticate a user, so it’s critical that this information be accurate. Anddddd, as you might suspect, this is exactly where the new vulnerability comes into play.&lt;/p&gt;
-
-&lt;p&gt;It takes advantage of two potential issues in a SAML library implementation:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;XML parsing issues and&lt;/li&gt;
-  &lt;li&gt;Cryptographic signing issues in &lt;a href=&quot;https://www.w3.org/TR/xmldsig-core2/&quot;&gt;XMLDSIG&lt;/a&gt; (a specification which is used to generate and validate XML signatures)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;xml-parsing-issues&quot;&gt;XML Parsing Issues&lt;/h3&gt;
-
-&lt;p&gt;XML can be quite complicated.&lt;/p&gt;
-
-&lt;p&gt;Let’s say, for a moment, that a SAML assertion contains a &lt;code class=&quot;highlighter-rouge&quot;&gt;saml:NameID&lt;/code&gt; element like the one below:&lt;/p&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:NameID&amp;gt;&lt;/span&gt;not-an-admin@okta.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:NameID&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;What do you think happens to the XML tree when this element is parsed? It looks something like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NameID
-|_ Text: not-an-admin@okta.com
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Most SAML libraries will parse the &lt;code class=&quot;highlighter-rouge&quot;&gt;saml:NameID&lt;/code&gt; element out of the XML tree, extracting the last text element inside of it and will use that value to identify the user logging in.&lt;/p&gt;
-
-&lt;p&gt;But… What happens if you break the &lt;code class=&quot;highlighter-rouge&quot;&gt;saml:NameID&lt;/code&gt; element up such that it contains an XML comment?&lt;/p&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:NameID&amp;gt;&lt;/span&gt;not-an-&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- this is a comment --&amp;gt;&lt;/span&gt;admin@okta.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:NameID&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;In this scenario, the XML tree, when parsed, will look like so:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NameID
-|_ Text: not-an-
-|_ Comment: this is a comment
-|_ Text: admin@okta.com
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;And depending on the XML parsing logic used in the SAML library, you can probably see where this is headed: depending on where you insert a comment you can dramatically impact that identity of the user that’s being logged in!&lt;/p&gt;
-
-&lt;p&gt;This is &lt;strong&gt;bad news&lt;/strong&gt; for web security as a simple XML comment can cause a SAML implementation to incorrectly authenticate a user.&lt;/p&gt;
-
-&lt;h3 id=&quot;cryptographic-signing-issues&quot;&gt;Cryptographic Signing Issues&lt;/h3&gt;
-
-&lt;p&gt;The second issue the new SAML vulnerability takes advantage of is the relatively “weak” protection provided by XMLDSIG’s canonicalization algorithms that are used to create and validate XML signatures.&lt;/p&gt;
-
-&lt;p&gt;Typically, when a SAML assertion is created, the assertion element itself is cryptographically signed. This helps the service provider (e.g., Salesforce) trust that the user they’re about to log in is valid. Unfortunately however, there are several different types of canonicalization algorithms that are allowed to be used when XML signatures are created, and most of them are not well-suited for creating tamper-proof data.&lt;/p&gt;
-
-&lt;p&gt;Let’s take some basic XML, for example:&lt;/p&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;     hi        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The XML document above would have the &lt;em&gt;exact same cryptographic signature&lt;/em&gt; as the XML document below:&lt;/p&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;hi&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This is because XML doesn’t care about whitespace. When the XML document is analyzed before a signature is created, space is removed.&lt;/p&gt;
-
-&lt;p&gt;What this new vulnerability takes advantage of, specifically, is the fact that most canonicalization algorithms &lt;em&gt;also&lt;/em&gt; don’t care about comments. This means that the following two XML documents (while vastly different in parseability as noted in the previous section) will have &lt;em&gt;identical&lt;/em&gt; cryptographic signatures: thereby allowing an attacker to sneak a comment into a SAML assertion and bypass authentication without ever raising any red flags in signature checks. :(&lt;/p&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:NameID&amp;gt;&lt;/span&gt;not-an-&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- this is a comment --&amp;gt;&lt;/span&gt;admin@okta.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:NameID&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;and&lt;/p&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;saml:NameID&amp;gt;&lt;/span&gt;not-an-admin@okta.com&lt;span class=&quot;nt&quot;&gt;&amp;lt;/saml:NameID&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;While it is theoretically possible for all SAML vendors to only allow a specific canonicalization algorithm which DOES leave XML documents unmodified (so that they contain things like whitespace, comments, etc.), in practice this would be hard to enforce across vendors and implementations.&lt;/p&gt;
-
-&lt;p&gt;To read more about XML canonicalization issues you might want to check out the &lt;a href=&quot;https://en.wikipedia.org/wiki/XML_Signature#XML_canonicalization&quot;&gt;Wikipedia article&lt;/a&gt; on the topic.&lt;/p&gt;
-
-&lt;h2 id=&quot;how-to-protect-yourself-from-the-new-saml-authentication-bypass-vulnerability&quot;&gt;How to Protect Yourself from the New SAML Authentication Bypass Vulnerability&lt;/h2&gt;
-
-&lt;p&gt;If your company is using SAML, you will want to &lt;em&gt;check with your SAML vendors&lt;/em&gt; to ensure they are not susceptible to this new vulnerability. &lt;a href=&quot;https://developer.okta.com/&quot;&gt;Okta&lt;/a&gt;, by the way, &lt;strong&gt;is not vulnerable&lt;/strong&gt;. &amp;gt;:)&lt;/p&gt;
-
-&lt;p&gt;If you’re a developer building systems to integrate with SAML vendors or single sign-on providers, try to NOT integrate using SAML if possible. Instead: use a more modern identity standard such as OpenID Connect.&lt;/p&gt;
-
-&lt;p&gt;OpenID Connect is a lot simpler than SAML, doesn’t use XML or &lt;a href=&quot;https://www.w3.org/TR/xmldsig-core1/&quot;&gt;XMLDSIG&lt;/a&gt;, and is far less susceptible to attacks like these since it doesn’t rely on XML parsers. There’s a long, complex history with XML and SAML – many of the SAML vulnerabilities that have been found over the last ~15 years are centered around XML parsing (just like this one).&lt;/p&gt;
-
-&lt;p&gt;Take, for instance, &lt;a href=&quot;https://www.youtube.com/watch?v=QLKM4USUlZs&quot;&gt;XML Signature Wrapping&lt;/a&gt; attacks which have been known about since ~2002 but are still finding their way into modern SAML implementations as recently as 2014.&lt;/p&gt;
-
-&lt;p&gt;If possible, avoid SAML and use &lt;a href=&quot;/blog/2017/07/25/oidc-primer-part-1&quot;&gt;OpenID Connect&lt;/a&gt; whenever you can. If you must use SAML, check your SAML library (and its underlying XML parsing/validation/signature libraries) to ensure it is NOT vulnerable to the new attack.&lt;/p&gt;
-
-&lt;p&gt;Duo has graciously audited several popular SAML libraries and found that:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;OneLogin’s &lt;a href=&quot;https://github.com/onelogin/python-saml&quot;&gt;python-saml&lt;/a&gt;,&lt;/li&gt;
-  &lt;li&gt;OneLogin’s &lt;a href=&quot;https://github.com/onelogin/ruby-saml&quot;&gt;ruby-saml&lt;/a&gt;,&lt;/li&gt;
-  &lt;li&gt;Clever’s &lt;a href=&quot;https://github.com/Clever/saml2&quot;&gt;saml2&lt;/a&gt;,&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://github.com/omniauth/omniauth-saml&quot;&gt;omniauth-saml&lt;/a&gt;, and&lt;/li&gt;
-  &lt;li&gt;Shibboleth’s openSAML C++&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;are all vulnerable with many other libraries also likely to be affected.&lt;/p&gt;
-
-&lt;p&gt;If you are the author of a SAML library, there are two important steps you can take immediately to protect your users:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;Look for an option in whatever XML library you’re using to remove all comments when creating and parsing XML documents. By strategically purging all XML comments upfront you’ll be able to avoid this issue entirely by never allowing a comment to leak into your XML tree.&lt;/p&gt;
-
-    &lt;p&gt;If the XML library you’re using doesn’t support purging comments, you can always work with the XML library maintainers to add this functionality or swap to a new XML library.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;When parsing nodes from an XML element tree using your XML parsing library, immediately bail out if you detect more than one child node exists for SAML nodes. This way, if you do stumble across a &lt;code class=&quot;highlighter-rouge&quot;&gt;saml:NameId&lt;/code&gt; node (or any other SAML node) that contains more than one child, you won’t make the mistake of using just the first or last child values.&lt;/p&gt;
-
-    &lt;p&gt;You should also avoid concatenating child values together as there may be a potential way to attack these values in the future.&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Be safe out there.&lt;/p&gt;
-
-&lt;p&gt;If you have any questions, comments, or suggestions: please drop us a note in a comment below or &lt;a href=&quot;https://twitter.com/oktadev&quot;&gt;hit us up&lt;/a&gt; on Twitter.&lt;/p&gt;
-</description>
-        <pubDate>Tue, 27 Feb 2018 00:00:00 -0500</pubDate>
-        <link>https://developer.okta.com/blog/2018/02/27/a-breakdown-of-the-new-saml-authentication-bypass-vulnerability</link>
-        <guid isPermaLink="true">https://developer.okta.com/blog/2018/02/27/a-breakdown-of-the-new-saml-authentication-bypass-vulnerability</guid>
       </item>
     
   </channel>
