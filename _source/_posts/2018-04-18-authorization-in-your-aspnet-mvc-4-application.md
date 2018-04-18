@@ -2,7 +2,7 @@
 layout: blog_post
 title: "Use OpenID Connect for Authorization in Your ASP.NET MVC Framework 4.x App"
 author: leebrandt
-description: "This is a quick tutorial demonstrating how to add authorization to an ASP.NET MVC Application using OpenID Connect and Okta"
+description: "This is a quick tutorial demonstrating how to add authorization to an ASP.NET MVC Application using OpenID Connect and Okta."
 tags: [ASP.NET, ASP.NET MVC, ASP.NET MVC 4.x, OIDC, OpenID Connect]
 tweets:
     - "Quickly add OpenID Connect Authorization to your ASP.NET MVC 4.x Application"
@@ -11,11 +11,11 @@ tweets:
     - "Create user authorization in your ASP.NET MVC 4.x App with OpenID Connect and @OktaDev"
 ---
 
-A common practice in web applications is to have a restricted area for registered users, and perhaps another for administrators. Whether this restricted access area is premium content, or simply the order history for your e-commerce site’s users, it's important that it beproperly secured. OpenID Connect (OIDC) makes it easy, but it can be tricky to set up in ASP.NET MVC framework. In this post, I'll show you how to create groups and use the authorization framework that comes with ASP.NET.
+A common practice in web applications is to have a restricted area for registered users, and perhaps another for administrators. Whether this restricted access area is premium content, or simply the order history for your e-commerce site’s users, it's important that it be properly secured. OpenID Connect (OIDC) makes it easy, but it can be tricky to set up in ASP.NET MVC framework. In this post, I'll show you how to create groups and use the authorization framework that comes with ASP.NET.
 
 ## Set Up the Base ASP.NET MVC 4.x Application
 
-For the base application, start by downloading our [ASP.NET MVC example from GitHub](https://github.com/oktadeveloper/okta-aspnet-mvc-example). You’ll also need to set up your application in Okta. Start by creating a [forever-free developer account](https://developer.okta.com/signup/), or logging in if you already have one.. Once you're at the dashboard in the Okta developer console, create an application with the following settings:
+For the base application, start by downloading our [ASP.NET MVC example from GitHub](https://github.com/oktadeveloper/okta-aspnet-mvc-example). You’ll also need to set up your application in Okta. Start by creating a [forever-free developer account](https://developer.okta.com/signup/), or logging in if you already have one. Once you're at the dashboard in the Okta developer console, create an application with the following settings:
 
 * Application type: Web
 * Allowed grant types: Authorization Code, Implicit (Hybrid) - Allow ID Token
@@ -39,17 +39,17 @@ Then open the Web.config file and add these keys to the `<appSettings>` section:
 
 First, add two groups to your new application: *Users* and *Admins*. From the dashboard, hover over the **Users** menu item and from the drop-down menu choose **Groups**. On the groups screen, click **Add Group**.
 
-{% img blog/aspnet-authz/CreateGroupScreenshot.png alt:"Create Groups Screen" width:"800" %}{: .center-image }
+{% img blog/aspnet-authz/CreateGroupScreenshot.png alt:"Create Groups Screen" width:"600" %}{: .center-image }
 
 To add users, click on the **Users** menu item. Click on **Add User** and create two new users. The only required information is first name, last name, and email address. The interface will automatically set the username to the primary email.
 
 Then make sure to select **Set by Admin** in the **Password** drop-down, set the password to something simple and then uncheck the **User must change password on the first login** checkbox. Finally, click the **Save and Add Another**, and add another user called *Jack Daniels* with the same settings.
 
-{% img blog/aspnet-authz/CreateUserScreenshot.png alt:"Create User Screen" width:"800" %}{: .center-image }
+{% img blog/aspnet-authz/CreateUserScreenshot.png alt:"Create User Screen" width:"600" %}{: .center-image }
 
 Add Jim Beam to the **Users** group and add Jack Daniels to the Admin group. To do this, go back to the **Groups** page and select the group you want to add people to. Then, click **Manage People**. When you hover over each person in the listing of users that are not members on the left, there will be a green plus sign button. Click this button to add that person to the selected group.
 
-{% img blog/aspnet-authz/AddUserToGroupScreenshot.png alt:"Add User To Group Screen" width:"800" %}{: .center-image }
+{% img blog/aspnet-authz/AddUserToGroupScreenshot.png alt:"Add User To Group Screen" width:"600" %}{: .center-image }
 
 Now you just need to add these groups to the token.
 
@@ -62,7 +62,7 @@ Select **ID Token** and **Always** from the **Include in token type** setting.
 * In the text box type `.*`.
 * Finally, make sure the **Disable claim** checkbox is unchecked and that the **Any scope** radio button is selected in the **Include in** setting.
 
-{% img blog/aspnet-authz/AddGroupsToTokenScreenshot.png alt:"Add Groups to Token Screen" width:"800" %}{: .center-image }
+{% img blog/aspnet-authz/AddGroupsToTokenScreenshot.png alt:"Add Groups to Token Screen" width:"600" %}{: .center-image }
 
 ## Map the OpenID Connect Groups to Roles
 
