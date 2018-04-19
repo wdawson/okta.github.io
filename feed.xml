@@ -8,6 +8,336 @@
     <atom:link href="https://developer.okta.com/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Build Server Side Authentication in Grails with OAuth 2.0 and Okta</title>
+        <description>&lt;p&gt;What is Grails, what is Groovy, and why would we choose them over Spring Boot? In this post I’ll walk you through implementing server-side authentication in Grails using OAuth 2.0 and Okta. Before we dive in, however, I want to talk a little bit about why you’d be using Grails + Groovy in the first place, and how it can make your life easier in specific situations.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://grails.org/&quot;&gt;Grails&lt;/a&gt; is an open source “convention over configuration” web application framework built on Groovy. It’s essentially a JVM version of Ruby on Rails. It’s opinionated and full-featured and has a strong emphasis on ORM, templating, and plugins. Grails is built on Spring Boot.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://groovy-lang.org/&quot;&gt;Groovy&lt;/a&gt; is a superset of Java that compiles down to JVM bytecode and interoperable with pure Java, but adds tons of great meta-programming and functional programming features, while also slashing the ceremony code that can plague pure java.&lt;/p&gt;
+
+&lt;h2 id=&quot;why-use-grails-over-spring-boot&quot;&gt;Why Use Grails Over Spring Boot?&lt;/h2&gt;
+
+&lt;p&gt;If Grails is built on Spring Boot, why not just use that? Good question! The answer depends on your goals and your background (ie, do you already know and love Spring?).&lt;/p&gt;
+
+&lt;p&gt;Let’s look at Grails + Groovy:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Grails and Groovy may be easier to dive into if you’re not already familiar with Spring&lt;/li&gt;
+  &lt;li&gt;Grails has a great templating system and full-featured ORM&lt;/li&gt;
+  &lt;li&gt;Grails is built on Spring Boot, so (theoretically, at least) you can get the best of both worlds. In practice this might be easier said than done.&lt;/li&gt;
+  &lt;li&gt;Grails has super easy JSON conversion and test-driven development&lt;/li&gt;
+  &lt;li&gt;Groovy is a super awesome language that’s a pleasure to develop in&lt;/li&gt;
+  &lt;li&gt;Grails may be waning in popularity. The upgrade from 2.x to 3.x was bumpy and caused a lot of grumbling in the community.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Let’s look at Spring:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Spring Boot is great for simple REST API services&lt;/li&gt;
+  &lt;li&gt;Spring Data is super powerful but correspondingly complicated&lt;/li&gt;
+  &lt;li&gt;Templating in Spring is pretty old-fashioned these days&lt;/li&gt;
+  &lt;li&gt;Spring has a HUGE community and massive enterprise support.&lt;/li&gt;
+  &lt;li&gt;Spring also has easy JSON conversion and TDD&lt;/li&gt;
+  &lt;li&gt;The larger Spring architecture is incredibly powerful once you wrap your head around it&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So what’s the verdict? My suggestions are:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;If you’re not already into Spring, and you want to develop a web application quickly, go with Grails. It’s easy and developer friendly by design.&lt;/li&gt;
+  &lt;li&gt;For simple REST services, Spring Boot or Apache Jersey + Shiro might be good alternatives. There’s really no point in using Grails if you’re not going to use the ORM and/or templating capabilities.&lt;/li&gt;
+  &lt;li&gt;If you’re building a large enterprise app or API system and require a guarantee of long term support (many years), or are already deep into Spring, then Spring Boot may be your best bet.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;get-started-with-grails&quot;&gt;Get Started with Grails&lt;/h2&gt;
+
+&lt;p&gt;Let’s start by installing Grails. Groovy and Grails use an install/update manager called SDKMAN. The install is super easy, and we’ll walk you through it below, but if you’d like to see the complete instructions, look &lt;a href=&quot;http://grails.org/download.html&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Install SDKMAN:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# follow instructions to install SDKMAN!&lt;/span&gt;
+curl &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; get.sdkman.io | bash
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Load SDKMAN into your shell:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;source&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$HOME&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/.sdkman/bin/sdkman-init.sh&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Install the latest stable version of Grails:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sdk install grails
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Test the install (should look something like this):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;grails -version
+| Grails Version: 3.3.3
+| Groovy Version: 2.4.14
+| JVM Version: 1.8.0_102
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;create-your-new-grails-application&quot;&gt;Create Your New Grails Application&lt;/h2&gt;
+
+&lt;p&gt;Grails uses a command-line shell similar to Ruby or React. We will be creating a simple app called “OktaCameraKit” that we uses can use to organize their camera lenses.&lt;/p&gt;
+
+&lt;p&gt;In the shell, move to a directory in which you would like the new project generated and enter the following.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;grails create-app OktaCameraKit
+| Application created at /okta/grails/OktaCameraKit
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This should have created your application in the “OktaCameraKit” subdirectory with the following directory structure:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-with-grails/dir-list-a438a6e22b605ca2b1d73364200e5af8c67a9e5d634fcb63939ac743bff22ce5.png&quot; alt=&quot;New Project Directory List&quot; width=&quot;400&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;test-your-new-grails-app&quot;&gt;Test Your New Grails App&lt;/h3&gt;
+
+&lt;p&gt;“cd” into the “OktaCameraKit” directory and run:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;grails run-app
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You should see something like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;| Running application...
+:compileJava NO-SOURCE
+:compileGroovy UP-TO-DATE
+:buildProperties UP-TO-DATE
+:processResources
+:classes
+:findMainClass
+:bootRun
+Grails application running at http://localhost:8080 in environment: development
+&amp;lt;===========--&amp;gt; 85% EXECUTING
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Open your browser to &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt; and you should see the Grails welcome screen.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-with-grails/initial-grails-3fe59d3daedabba5e986d53fb9733075993037cf540a3b0e751224b9c983a3c9.png&quot; alt=&quot;Initial Grails page&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; I heartily suggest downloading and trying out the Community Edition of IntelliJ IDEA. JetBrains products are fantastic, and the free Community Edition of their premier Java development IDE is a godsend. &lt;a href=&quot;http://www.jetbrains.com/idea/&quot;&gt;Check it out!&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;some-basics-on-grails&quot;&gt;Some Basics on Grails&lt;/h3&gt;
+
+&lt;p&gt;The basic idea in Grails is that Controller classes have Action methods that load data from Models and map the data that is presented in Views.&lt;/p&gt;
+
+&lt;p&gt;Grails is opinionated and expects controllers to be in the “controllers” directory and “views” to be in the views directory. DO NOT, UNDER ANY CIRCUMSTANCES, PUT FILES IN THE WRONG PLACE. You will hurt Grails’ feelings and it may not work for you. But seriously, if you’re used to more contemporary Javascript frameworks, you may not be used to the well-defined structure that Grails expects. If you surrender to it, you may learn to love it! A good structure can free you to worry about more important things, like writing your app! You certainly end up with fewer lines of code like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;module&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;resources&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;blah&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;js&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;dont-forget-about-gradle&quot;&gt;Don’t Forget About Gradle&lt;/h3&gt;
+
+&lt;p&gt;What’s with all the “G”s? Yep. There’s a lot of them: Groovy, Grails, Gradle. It’s been scientifically proven that alliteration increases the performance of programming toolkits at developer conferences.&lt;/p&gt;
+
+&lt;p&gt;Gradle is a super powerful build system that “eclipsed” Maven as the build tool of choice in the JVM world. It’s built on Groovy and uses a Domain Specific Language that makes it infinitely powerful. If the universe had been built with Maven, the earth would not be revolving around the sun because we’d still be resolving dependencies. Fortunately, Gradle was invented, and all is well.&lt;/p&gt;
+
+&lt;h2 id=&quot;add-authentication-with-spring-security-and-okta&quot;&gt;Add Authentication with Spring Security and Okta&lt;/h2&gt;
+
+&lt;p&gt;We are going to use the Spring Security Core Plugin and the Spring Security OAuth 2.0 plugin to connect with Okta OAuth. There are, however, a few other options. Apache Shiro has a plugin that integrates nicely with Grails. Shiro is a fine alternative that is worth examining. If you are building an API service that will have client-side authentication, then you might want to look at the &lt;a href=&quot;https://github.com/okta/okta-spring-boot&quot;&gt;Okta Spring Boot Starter&lt;/a&gt;, which makes authentication super simple, and &lt;a href=&quot;https://github.com/ZacharyKlein/grails-react-okta-demo&quot;&gt;Zachary Klein’s Grails + React + Okta demo&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Because we will be using a purely server-side authentication flow, we can’t use the authentication filter method implemented in the Spring Boot Starter.&lt;/p&gt;
+
+&lt;p&gt;Now, you may be tempted to think: “Hey! Grails is just Spring Boot with some bells and whistles. Why can’t I just use Spring authentication, &lt;a href=&quot;/blog/2017/11/20/add-sso-spring-boot-15-min&quot;&gt;like in this great Okta tutorial&lt;/a&gt;?” I know I did. That was what I tried first. Let me save you some time, it doesn’t work.&lt;/p&gt;
+
+&lt;p&gt;Spring Security does a funny thing and uses thrown exceptions to handle the OAuth redirects. These are supposed to propagate up to the Spring servlet context, where they are caught and handled. Unfortunately, Grails has it’s own custom &lt;code class=&quot;highlighter-rouge&quot;&gt;GrailsDispatcherServlet&lt;/code&gt; that overrides this behavior, catching the exceptions before they can be handled by the Spring filters. You could potentially create a subclass of the &lt;code class=&quot;highlighter-rouge&quot;&gt;GrailsDispatcherServlet&lt;/code&gt; that checks for the OAuth exceptions and re-throws them, but Grails 3.0 made this more complicated – and anyway the whole scheme starts to feel pretty “hacky” fighting the framework instead of doing it the “right” way.&lt;/p&gt;
+
+&lt;h3 id=&quot;okta-provider-plugin-for-grails-spring-security-oauth-20&quot;&gt;Okta Provider Plugin for Grails Spring Security OAuth 2.0&lt;/h3&gt;
+
+&lt;p&gt;What’s the “right” way? Writing a provider plugin for the Grails &lt;a href=&quot;http://plugins.grails.org/plugin/matrixcrawler/spring-security-oauth2&quot;&gt;spring-security-oauth2 plugin&lt;/a&gt; that tells Grails how to “talk” to Okta as an OAuth 2.0 provider.&lt;/p&gt;
+
+&lt;p&gt;Fortunately for you, &lt;a href=&quot;https://github.com/moksamedia/okta-oauth2-service&quot;&gt;I’ve already done this&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you don’t already have an account with Okta, now would be a great time to sign up for a &lt;a href=&quot;https://developer.okta.com/&quot;&gt;free developer account&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Don’t forget to note your Okta URL as we’ll need it in a minute.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-with-grails/okta-org-created-7f3cfbf6addba2b0b7c87befcc4df6f0552cd9b50ecffc6252d7dc3c31175dff.png&quot; alt=&quot;Okta organization created&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;create-your-okta-application&quot;&gt;Create Your Okta Application&lt;/h3&gt;
+
+&lt;p&gt;Once you’ve logged into your Okta dashboard, you need to create an Application. You also need an Authorization Server, but fortunately for the purposes of this tutorial we can just use the default one.&lt;/p&gt;
+
+&lt;p&gt;From your Okta admin panel, click on Applications in the top menu and then click “Add Application”&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-with-grails/app-setup-765547de8021265463dbf3529dfdf3d904796c01d8694d9fbaf7021fbb0ceb44.png&quot; alt=&quot;Configure Okta application&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Select the web application icon and then click Next.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-with-grails/add-application-web-1eb94a4cb7e34113c656e2c1b6a811b0f2ffbad3266edebc843da4cf1a226ddb.png&quot; alt=&quot;Add Okta web application&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Next, we need to update the “Login redirect URIs”. OAuth 2.0 requires a whitelisted redirect URI that the OAuth server can direct the app to after successful login. The URL we’ll be using is: &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080/oauth2/okta/callback&lt;/code&gt;. Enter that into the field and then hit “Done!”&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-with-grails/add-application-49ca0086fdd9d319e870f0261d64e620da68e18c1cdb2d1a545f2c4853b63eca.jpg&quot; alt=&quot;Add Okta application&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You’ll need to copy your Client ID and Client Secret to a safe place for later.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-with-grails/client-credentials-f2f84fe583bde297131c542f5f3369a2c034748053dee8a0d8b4ece84cd55613.png&quot; alt=&quot;Remember your credentials&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;That’s it for Okta setup for our purposes. You can certainly dig MUCH deeper into the OAuth rabbit hole with tons of configuration options. &lt;a href=&quot;https://developer.okta.com/standards/OAuth/&quot;&gt;Take a look here to get started.&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;dive-back-into-grails&quot;&gt;Dive Back Into Grails!&lt;/h2&gt;
+
+&lt;p&gt;We need to install three dependencies:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://grails-plugins.github.io/grails-spring-security-core/3.2.x/index.html#installation&quot;&gt;Grails Spring Security Core Plugin.&lt;/a&gt; (adds core Spring Security features)&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/MatrixCrawler/grails-spring-security-oauth2&quot;&gt;Grails Spring Security OAuth2 plugin.&lt;/a&gt; (adds OAuth 2.0 features)&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/moksamedia/okta-oauth2-service&quot;&gt;Okta OAuth 2.0 Provider Plugin&lt;/a&gt; (tells the OAuth plugin how to talk to Okta)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Edit your &lt;code class=&quot;highlighter-rouge&quot;&gt;build.gradle&lt;/code&gt; file, adding the new Maven repository and the three compile can you email brendependencies, as seen below.&lt;/p&gt;
+
+&lt;div class=&quot;language-groovy highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;repositories&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+   &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;maven&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  
+        &lt;span class=&quot;n&quot;&gt;url&lt;/span&gt;  &lt;span class=&quot;s2&quot;&gt;&quot;https://dl.bintray.com/moksamedia/plugins&quot;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;  
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;dependencies&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;compile&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'org.grails.plugins:spring-security-core:3.2.1'&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;compile&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'org.grails.plugins:spring-security-oauth2:1.1.0'&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;compile&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'spring.security.oauth2.okta:spring-security-oauth2-okta:0.1'&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-with-grails/build-config-cf5a3384cbc30f16ef36296185cc96e4c6924a73de5879bdd5fbee7a226c614a.png&quot; alt=&quot;build configuration&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The plugins come with a quickstart script that we need to run to generate some domain files and set up some configurations.&lt;/p&gt;
+
+&lt;p&gt;From your main project directory, run the following command:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;grails s2-quickstart com.oktacamerakit User Role
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This creates your User and Role domain classes and adds some authentication configuration entries in the “grails-app/conf/application.groovy” file.&lt;/p&gt;
+
+&lt;p&gt;Now run the OAuth 2.0 quickstart script:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;grails init-oauth2 com.oktacamerakit User OAuthID
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;The starter script creates an &lt;code class=&quot;highlighter-rouge&quot;&gt;OAuthID&lt;/code&gt; domain class that links the OAuth 2.0 authenticated identities to your local User domain classes, and adds a configuration line to your &lt;code class=&quot;highlighter-rouge&quot;&gt;application.groovy&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;p&gt;These install scripts did a pretty good job of setting things up, be we still need to make some changes.&lt;/p&gt;
+
+&lt;p&gt;You need to add the following line to you &lt;strong&gt;User.groovy&lt;/strong&gt; domain class. It doesn’t matter where you put it as long as it’s within the class definition.&lt;/p&gt;
+
+&lt;div class=&quot;language-groovy highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hasMany&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;oAuthIDs:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OAuthID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We also need to edit the &lt;code class=&quot;highlighter-rouge&quot;&gt;UserRole.groovy&lt;/code&gt; class slightly. Find the create method and change the default value for the flush param to true. (This particular tip cost me about three hours of my life. You get it for free.)&lt;/p&gt;
+
+&lt;div class=&quot;language-groovy highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;UserRole&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Role&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;role&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;flush&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  
+    &lt;span class=&quot;kt&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;UserRole&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;user:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;role:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;role&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  
+    &lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;flush:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;flush&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 
+    &lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt; 
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Finally, we need to add some configuration to the application.yml file. You need to fill in your Client ID for the &lt;code class=&quot;highlighter-rouge&quot;&gt;api_key&lt;/code&gt; and your Client Secret for the &lt;code class=&quot;highlighter-rouge&quot;&gt;api_secret&lt;/code&gt;, as well as your Okta URL in the three URLs.&lt;/p&gt;
+
+&lt;div class=&quot;language-yml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;grails&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; 
+    &lt;span class=&quot;c1&quot;&gt;### other grails config settings ###&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;plugin&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;springsecurity&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;oauth2&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;na&quot;&gt;active&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+                &lt;span class=&quot;na&quot;&gt;registration&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+                    &lt;span class=&quot;na&quot;&gt;roleNames&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;ROLE_USER'&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;]&lt;/span&gt;
+                &lt;span class=&quot;na&quot;&gt;providers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+                    &lt;span class=&quot;na&quot;&gt;okta&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+                        &lt;span class=&quot;na&quot;&gt;api_key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;lt;Okta&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;Client&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;ID&amp;gt;'&lt;/span&gt;         
+                        &lt;span class=&quot;na&quot;&gt;api_secret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;lt;Okta&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;Client&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;Secret&amp;gt;'&lt;/span&gt;
+                        &lt;span class=&quot;na&quot;&gt;userInfoUrl&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/userinfo'&lt;/span&gt;
+                        &lt;span class=&quot;na&quot;&gt;authorizeUrl&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/authorize'&lt;/span&gt;
+                        &lt;span class=&quot;na&quot;&gt;tokenUrl&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/v1/token'&lt;/span&gt;
+                        &lt;span class=&quot;na&quot;&gt;scopes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;profile&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;openid'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;run-the-app-again&quot;&gt;Run the App Again&lt;/h3&gt;
+
+&lt;p&gt;Whew! Lets test all that. Run the app again using &lt;code class=&quot;highlighter-rouge&quot;&gt;grails run-app&lt;/code&gt;. You should see the following. Notice particularly the three new controllers listed below the “Available Controllers” heading.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-with-grails/welcome-to-grails2-78c7c093793d71b1d0802298af0197c28f133b1bd8bc9b46b5721006ffe7f0e5.png&quot; alt=&quot;Run the application again&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;add-a-grails-home-controller&quot;&gt;Add A Grails Home Controller&lt;/h2&gt;
+
+&lt;p&gt;Let’s add a Home controller for the app. Use the Grails CLI to add the controller.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;grails create-controller Home
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Open the &lt;code class=&quot;highlighter-rouge&quot;&gt;HomeController.groovy&lt;/code&gt; file and edit it to match the following. We need to do two things: 1) define our authentication requirement using the &lt;code class=&quot;highlighter-rouge&quot;&gt;@Secured&lt;/code&gt; annotation, and 2) add some output text.&lt;/p&gt;
+
+&lt;div class=&quot;language-groovy highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;grails.plugin.springsecurity.annotation.Secured&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HomeController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  
+    &lt;span class=&quot;nd&quot;&gt;@Secured&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'ROLE_USER'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  
+    &lt;span class=&quot;kt&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  
+        &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Success!!!&quot;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;  
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If you re-start the app and navigate to &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt; now you should see the Home controller listed below the authentication related controllers.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-with-grails/available-controllers-798ea4e5d3b6eec273b4c4cf2b3062e0e13b5c35d2d4d39aeec4f6da4cb2c0cb.png&quot; alt=&quot;List available controllers&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;If you click on the &lt;code class=&quot;highlighter-rouge&quot;&gt;oktacamerakit.HomeController&lt;/code&gt; link at the bottom of the screen, you’ll be taken to a login page. Currently this is a “local” login based on the User domain objects. Since there are no local users, there’s no way to authenticate.&lt;/p&gt;
+
+&lt;p&gt;To fix this, one option would be to add a “Login with Okta” link to the bottom of the login page. This is pretty simple and would require creating a custom login page template and adding the link. We might get back to this in Part II of this tutorial.&lt;/p&gt;
+
+&lt;p&gt;For the moment, we’re going to configure Okta to always redirect to the Okta login page when a user needs to log in. Add the following to you &lt;code class=&quot;highlighter-rouge&quot;&gt;application.groovy&lt;/code&gt; file:&lt;/p&gt;
+
+&lt;div class=&quot;language-groovy highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;grails&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;plugin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;springsecurity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;auth&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;loginFormUrl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/springSecurityOAuth2/authenticate?provider=okta'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;give-your-new-app-a-whirl&quot;&gt;Give Your New App a Whirl!&lt;/h2&gt;
+
+&lt;p&gt;That’s it! You should be all set.&lt;/p&gt;
+
+&lt;p&gt;Go ahead and log into your developer.okta.com admin panel and sign out. This will force you to log in again through the Grails app instead of automatically being authenticated via OAuth.&lt;/p&gt;
+
+&lt;p&gt;Re-start the app, using &lt;code class=&quot;highlighter-rouge&quot;&gt;grails run-app&lt;/code&gt;, and this time navigate to &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080/home/index&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The first screen you’ll see (if you signed out) is the Okta login screen:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-with-grails/okta-login-c7aaa6fb28ad35b26c9a31efad9b70a477f6d1e737463abb5de994d48b1c82c6.png&quot; alt=&quot;Okta Login&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;After logging in, you’ll be redirected back to your Grails app, where you’ll see the screen that allows you to either register a new account or link your OAuth account to an existing user account.&lt;/p&gt;
+
+&lt;p&gt;Fill in the top form to register a new user account.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/okta-with-grails/grails-user-reg-df445af0f13c85b450be810b9891a58b7de33d61c328ec4cd3ff0c982d2e83ed.png&quot; alt=&quot;Grails user registration&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;congrats-you-built-a-grails-app-with-okta-for-authentication&quot;&gt;Congrats! You Built a Grails App with Okta for Authentication&lt;/h2&gt;
+
+&lt;p&gt;Success! We did it! Pretty simple.&lt;/p&gt;
+
+&lt;p&gt;Obviously there’s a lot we can do from here. We’ll look at building out the app more completely in Part 2 of this tutorial. We need to create some domain and controller classes to model our data, set up some views, and hook our authenticated users into a authorization system. I’ll also show you how to run the remote debugger in IntelliJ, configure logging, and set up the database so development data is persisted between sessions (right now it’s recreated every time the app is run, which is why the app will never remember who you are if you restart).&lt;/p&gt;
+
+&lt;h2 id=&quot;learn-more-about-grails-gradle-groovy-and-okta&quot;&gt;Learn More about Grails, Gradle, Groovy, and Okta&lt;/h2&gt;
+
+&lt;p&gt;If you’d like to learn more about Grails to get ready for Part 2 check out the &lt;a href=&quot;http://docs.grails.org/snapshot/guide/single.html&quot;&gt;documentation&lt;/a&gt; and &lt;a href=&quot;http://groovy-lang.org/documentation.html&quot;&gt;Groovy Language Documentation&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;While you’re in the Grails docs, make sure to familiarize yourself with the &lt;a href=&quot;http://docs.grails.org/snapshot/guide/single.html#conventionOverConfiguration&quot;&gt;basic folder structure of the Grails application&lt;/a&gt;. As we saw, it can be touchy.&lt;/p&gt;
+
+&lt;p&gt;You may also want to take a look at &lt;a href=&quot;http://docs.grails.org/latest/guide/theWebLayer.html#understandingControllersAndActions&quot;&gt;Understanding Controllers and Actions&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;And finally, you can &lt;a href=&quot;https://docs.gradle.org/4.6/userguide/userguide.html&quot;&gt;check out the Gradle docs&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you’d like to learn more about Okta, you should definitely be following our team on Twitter &lt;a href=&quot;https://twitter.com/oktadev&quot;&gt;@oktadev&lt;/a&gt;. You can also check out these other cool Java posts:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;/blog/2017/11/20/add-sso-spring-boot-15-min&quot;&gt;Add Single Sign-On to Your Spring Boot Web App in 15 Minutes&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/blog/2018/03/01/develop-microservices-jhipster-oauth&quot;&gt;Develop a Microservices Architecture with OAuth 2.0 and JHipster&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/blog/2017/08/23/five-java-tips&quot;&gt;5 Tips for Building your Java API&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Thu, 19 Apr 2018 00:00:00 -0500</pubDate>
+        <link>https://developer.okta.com/blog/2018/04/19/okta-with-grails</link>
+        <guid isPermaLink="true">https://developer.okta.com/blog/2018/04/19/okta-with-grails</guid>
+      </item>
+    
+      <item>
         <title>Use OpenID Connect for Authorization in Your ASP.NET MVC Framework 4.x App</title>
         <description>&lt;p&gt;A common practice in web applications is to have a restricted area for registered users, and perhaps another for administrators. Whether this restricted access area is premium content, or simply the order history for your e-commerce site’s users, it’s important that it be properly secured. OpenID Connect (OIDC) makes it easy, but it can be tricky to set up in ASP.NET MVC framework. In this post, I’ll show you how to create groups and use the authorization framework that comes with ASP.NET.&lt;/p&gt;
 
@@ -3299,800 +3629,6 @@ npm install
         <pubDate>Tue, 06 Mar 2018 00:00:00 -0500</pubDate>
         <link>https://developer.okta.com/blog/2018/03/06/okta-open-source-samples-and-quickstarts</link>
         <guid isPermaLink="true">https://developer.okta.com/blog/2018/03/06/okta-open-source-samples-and-quickstarts</guid>
-      </item>
-    
-      <item>
-        <title>Develop a Microservices Architecture with OAuth 2.0 and JHipster</title>
-        <description>&lt;p&gt;JHipster is a development platform to generate, develop, and deploy Spring Boot + Angular web applications and Spring microservices. It supports using many types of authentication: JWT, session-based, and OAuth 2.0. In its 5.0 release, it’ll also add React as a UI option. The 5.0 version is under active development and will likely be released in the next few months.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/what-is-jhipster-800981d8ce6a437997c930dd6fe3bdddcbb0df902d044e9577fa1e36609f7b4f.png&quot; alt=&quot;Spring Boot + Angular = JHipster&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;In addition to having two popular UI frameworks, JHipster also has modules that support generating mobile applications. If you like Ionic, which currently leverages Angular, you can use &lt;a href=&quot;/blog/2018/01/30/jhipster-ionic-with-oidc-authentication&quot;&gt;Ionic for JHipster&lt;/a&gt;. If you’re a React aficionado, you can use &lt;a href=&quot;https://github.com/ruddell/ignite-jhipster&quot;&gt;Ignite JHipster&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://www.jhipster.tech&quot;&gt;JHipster&lt;/a&gt; is 🔥, and so are microservices! Follow the instructions in this tutorial to create an API gateway, a blog microservice, and a companion store microservice.&lt;/p&gt;
-
-&lt;h2 id=&quot;install-jhipster&quot;&gt;Install JHipster&lt;/h2&gt;
-
-&lt;p&gt;There are six different ways to &lt;a href=&quot;http://www.jhipster.tech/installation/&quot;&gt;install JHipster&lt;/a&gt;. The first way, &lt;a href=&quot;https://start.jhipster.tech/&quot;&gt;JHipster Online&lt;/a&gt;, doesn’t even require you to install anything. It’ll generate the application and push it to a GitHub repository for you. While this works nicely, I like to have my example apps in a single repository for easier discoverability.&lt;/p&gt;
-
-&lt;p&gt;A local installation with Yarn or npm are other options, as is using a package manager (Homebrew on Mac, Chocalatey on Windows), using a Vagrant-based developer box, or using a Docker container. Since I’m on a Mac, I like to use Homebrew because it allows me to use JHipster with multiple Node versions without installing JHipster again. You can install JHipster on a Mac using the following command:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brew install jhipster
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;On Windows, it’s as simple as:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;choco install jhipster
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Or you can use the standard npm installation:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm install &lt;span class=&quot;nt&quot;&gt;-g&lt;/span&gt; yo generator-jhipster
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Create an &lt;code class=&quot;highlighter-rouge&quot;&gt;okta-jhipster-microservices-oauth-example&lt;/code&gt; directory on your hard drive, or simply &lt;code class=&quot;highlighter-rouge&quot;&gt;apps&lt;/code&gt; if you don’t want to spell it all out.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;One of the most common things to happen with JHipster 4.x app is you’ll start it, and there will be a blank page when you navigate to it in your browser. If that happens to you, you need to rebuild the front end. You can do this by running &lt;code class=&quot;highlighter-rouge&quot;&gt;npm run webpack:build&lt;/code&gt; and restarting your server, or by running &lt;code class=&quot;highlighter-rouge&quot;&gt;yarn start&lt;/code&gt; (which will start an auto-reloading webpack dev server on port 9000).&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;generate-an-api-gateway&quot;&gt;Generate an API Gateway&lt;/h2&gt;
-
-&lt;p&gt;To generate an API Gateway with JHipster, open a terminal window, navigate to &lt;code class=&quot;highlighter-rouge&quot;&gt;okta-jhipster-microservices-oauth-example&lt;/code&gt;, create a &lt;code class=&quot;highlighter-rouge&quot;&gt;gateway&lt;/code&gt; directory, and run &lt;code class=&quot;highlighter-rouge&quot;&gt;jhipster&lt;/code&gt;.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir gateway &amp;amp;&amp;amp; cd gateway &amp;amp;&amp;amp; jhipster
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;JHipster asks a multitude of questions about the application you want to create and what features you’d like to include. Use the following answers to generate a gateway with OAuth 2.0 support.&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Question&lt;/th&gt;
-      &lt;th&gt;Answer&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Type of application?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Microservice gateway&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Name?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;gateway&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Port?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;8080&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Java package name?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;com.okta.developer.gateway&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Which service discovery server?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;JHipster Registry&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Type of authentication?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;OAuth 2.0 / OIDC&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Type of database?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SQL&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Production database?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;PostgreSQL&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Development database?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;H2 with disk-based persistence&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Use Hibernate 2nd level cache?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Yes&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Maven or Gradle?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Maven&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Other technologies?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;blank&amp;gt;&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Client framework?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Angular 5&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Enable SASS support?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;No&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Enable i18n?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Yes&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Native language of application?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;English&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Additional languages?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;blank&amp;gt;&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Additional testing frameworks?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Protractor&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Install other generators?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;No&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;The project generation process will take several minutes to run, depending on your internet connection speed.&lt;/p&gt;
-
-&lt;p&gt;While you’re waiting, you can get started with setting up OAuth with Okta.&lt;/p&gt;
-
-&lt;h3 id=&quot;what-is-oauth-20&quot;&gt;What is OAuth 2.0?&lt;/h3&gt;
-
-&lt;p&gt;The OAuth implementation in JHipster leverages Spring Boot and its OAuth 2.0 support (an &lt;code class=&quot;highlighter-rouge&quot;&gt;@EnableOAuthSso&lt;/code&gt; annotation). If you’re not sure what OAuth and OpenID Connect (OIDC) are, please see &lt;a href=&quot;/blog/2017/06/21/what-the-heck-is-oauth&quot;&gt;What the Heck is OAuth?&lt;/a&gt;. It provides single sign-on (SSO) to JHipster applications. &lt;a href=&quot;/blog/2018/02/13/secure-spring-microservices-with-oauth&quot;&gt;Secure a Spring Microservices Architecture with Spring Security and OAuth 2.0&lt;/a&gt; shows a bare-bones Spring microservices architecture using OAuth. JHipster uses the same setup internally.&lt;/p&gt;
-
-&lt;p&gt;JHipster ships with &lt;a href=&quot;https://keycloak.org&quot;&gt;Keycloak&lt;/a&gt; configured for OAuth by default. To configure your apps to work with Okta, you’ll first need to &lt;a href=&quot;https://developer.okta.com/signup/&quot;&gt;create a free developer account&lt;/a&gt;. After doing so, you’ll get your own Okta domain, which has a name like &lt;code class=&quot;highlighter-rouge&quot;&gt;https://dev-123456.oktapreview.com&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;create-an-openid-connect-application-on-okta&quot;&gt;Create an OpenID Connect Application on Okta&lt;/h3&gt;
-
-&lt;p&gt;Create an OpenID Connect (OIDC) app in Okta to get a client ID and secret. This basically means you’re “registering” your application with Okta. Log in to your Okta Developer account and navigate to &lt;strong&gt;Applications&lt;/strong&gt; &amp;gt; &lt;strong&gt;Add Application&lt;/strong&gt;. Click &lt;strong&gt;Web&lt;/strong&gt; and click the &lt;strong&gt;Next&lt;/strong&gt; . Give the app a name you’ll remember (e.g., &lt;code class=&quot;highlighter-rouge&quot;&gt;JHipster Microservices&lt;/code&gt;), and specify &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt; as a Base URI and &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080/login&lt;/code&gt; as a Login Redirect URI. Click &lt;strong&gt;Done&lt;/strong&gt; and make a note of your client ID and client secret values.&lt;/p&gt;
-
-&lt;p&gt;For the roles coming from Okta to match the default roles in JHipster, you’ll need to create them. Create a &lt;code class=&quot;highlighter-rouge&quot;&gt;ROLE_ADMIN&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;ROLE_USER&lt;/code&gt; group (&lt;strong&gt;Users&lt;/strong&gt; &amp;gt; &lt;strong&gt;Groups&lt;/strong&gt; &amp;gt; &lt;strong&gt;Add Group&lt;/strong&gt;) and add users to them. You can use the account you signed up with, or create a new user (&lt;strong&gt;Users&lt;/strong&gt; &amp;gt; &lt;strong&gt;Add Person&lt;/strong&gt;). Navigate to &lt;strong&gt;API&lt;/strong&gt; &amp;gt; &lt;strong&gt;Authorization Servers&lt;/strong&gt;, click the &lt;strong&gt;Authorization Servers&lt;/strong&gt; tab and edit the default one. Click the &lt;strong&gt;Claims&lt;/strong&gt; tab and &lt;strong&gt;Add Claim&lt;/strong&gt;. Name it &lt;code class=&quot;highlighter-rouge&quot;&gt;roles&lt;/code&gt;, and include it in the ID Token. Set the value type to &lt;code class=&quot;highlighter-rouge&quot;&gt;Groups&lt;/code&gt; and set the filter to be a Regex of &lt;code class=&quot;highlighter-rouge&quot;&gt;.*&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Modify &lt;code class=&quot;highlighter-rouge&quot;&gt;gateway/src/main/resources/config/application.yml&lt;/code&gt; to have the following values:&lt;/p&gt;
-
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;security&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;basic&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;oauth2&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;access-token-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/token&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;user-authorization-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/authorize&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;client-id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;clientId&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;client-secret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;clientSecret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;client-authentication-scheme&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;form&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;scope&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;openid profile email&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;resource&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;filter-order&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;3&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;user-info-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/userinfo&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;token-info-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/introspect&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;prefer-token-info&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; Make sure to remove the &lt;code class=&quot;highlighter-rouge&quot;&gt;security.oauth2.resource.jwt.key-uri&lt;/code&gt; key and value. This property causes Spring Security to retrieve a public key from Keycloak, and Okta doesn’t have this same functionality. I &lt;a href=&quot;https://github.com/jhipster/generator-jhipster/issues/7116&quot;&gt;entered an issue&lt;/a&gt; to fix this in JHipster.&lt;/p&gt;
-
-&lt;p&gt;You can also use environment variables to override the default values. Using this technique is recommend because 1) You don’t need to modify the values in each microservice application and 2) it prevents you from leaking your client secret in a source code repository.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_CLIENT_ACCESS_TOKEN_URI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/token&quot;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/authorize&quot;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_RESOURCE_USER_INFO_URI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/userinfo&quot;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_RESOURCE_TOKEN_INFO_URI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default/v1/introspect&quot;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_CLIENT_CLIENT_ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;{clientId}&quot;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_CLIENT_CLIENT_SECRET&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;{clientSecret}&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;TIP:&lt;/strong&gt; If you’re using JHipster’s Protractor support, you’ll want to add a user to the &lt;code class=&quot;highlighter-rouge&quot;&gt;ROLE_ADMIN&lt;/code&gt; group on Okta and change the credentials in &lt;code class=&quot;highlighter-rouge&quot;&gt;src/test/javascript/e2e/account/account.spec.ts&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;src/test/javascript/e2e/admin/administration.spec.ts&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;install-the-jhipster-registry&quot;&gt;Install the JHipster Registry&lt;/h2&gt;
-
-&lt;p&gt;You’ll need a service discovery server installed before you can start the gateway. In a browser, go to the &lt;a href=&quot;https://github.com/jhipster/jhipster-registry/releases&quot;&gt;JHipster Registry release page&lt;/a&gt; and download the latest release. At the time of this writing, it was v3.2.4.&lt;/p&gt;
-
-&lt;p&gt;Download the WAR and put it alongside your &lt;code class=&quot;highlighter-rouge&quot;&gt;gateway&lt;/code&gt; application. Start it so your apps can register with it.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;java&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;jar&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;jhipster&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;3.2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;war&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Start the &lt;code class=&quot;highlighter-rouge&quot;&gt;gateway&lt;/code&gt; app by navigating to its directory in a terminal and running:&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;./&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mvnw&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;TIP:&lt;/strong&gt; If you already have Maven installed, you can just use &lt;code class=&quot;highlighter-rouge&quot;&gt;mvn&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Open your browser and go to &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8761&lt;/code&gt;. Log in with &lt;code class=&quot;highlighter-rouge&quot;&gt;admin/admin&lt;/code&gt;, and you should see a welcome page that shows the gateway has registered.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/jhipster-registry-with-gateway-1f6ab845196ceb237d0d67262890e9f7a93227be586f518f5656f7c43da0b010.png&quot; alt=&quot;JHipster Registry with Gateway registered&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;generate-a-blog-microservice-application&quot;&gt;Generate a Blog Microservice Application&lt;/h2&gt;
-
-&lt;p&gt;In &lt;code class=&quot;highlighter-rouge&quot;&gt;okta-jhipster-microservices-oauth-example&lt;/code&gt;, create a &lt;code class=&quot;highlighter-rouge&quot;&gt;blog&lt;/code&gt; directory, and run &lt;code class=&quot;highlighter-rouge&quot;&gt;jhipster&lt;/code&gt;.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir blog &amp;amp;&amp;amp; cd blog &amp;amp;&amp;amp; jhipster
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Use the following answers to generate a blog microservice with OAuth 2.0 support.&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Question&lt;/th&gt;
-      &lt;th&gt;Answer&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Type of application?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Microservice application&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Name?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;blog&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Port?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;8081&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Java package name?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;com.okta.developer.blog&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Which service discovery server?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;JHipster Registry&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Type of authentication?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;OAuth 2.0 / OIDC&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Type of database?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SQL&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Production database?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;PostgreSQL&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Development database?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;H2 with disk-based persistence&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Spring cache?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Yes, with Hazelcast&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Use Hibernate 2nd level cache?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Yes&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Maven or Gradle?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Maven&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Other technologies?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Search engine using Elasticsearch&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Enable i18n?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Yes&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Native language of application?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;English&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Additional languages?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;blank&amp;gt;&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Additional testing frameworks?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;blank&amp;gt;&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Install other generators?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;No&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;Create a &lt;code class=&quot;highlighter-rouge&quot;&gt;blog/blog.jh&lt;/code&gt; file and fill it with the following JDL (JHipster Domain Language).&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;entity Blog {
-    name String required minlength(3),
-    handle String required minlength(2)
-}
-
-entity Entry {
-    title String required,
-    content TextBlob required,
-    date ZonedDateTime required
-}
-
-entity Tag {
-    name String required minlength(2)
-}
-
-relationship ManyToOne {
-    Entry{blog(name)} to Blog
-}
-
-relationship ManyToMany {
-    Entry{tag(name)} to Tag{entry}
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; This schema does not have a many-to-one relationship from &lt;code class=&quot;highlighter-rouge&quot;&gt;Blog&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;User&lt;/code&gt; because JHipster’s microservices support for OAuth doesn’t currently have a &lt;code class=&quot;highlighter-rouge&quot;&gt;User&lt;/code&gt; entity. I’m &lt;a href=&quot;https://github.com/jhipster/generator-jhipster/issues/7065&quot;&gt;currently working to improve that&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Run &lt;code class=&quot;highlighter-rouge&quot;&gt;jhipster import-jdl blog.jh&lt;/code&gt; to create the backend API to power this schema. Answer &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; when prompted to overwrite &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/resources/config/liquibase/master.xml&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Change directories into the &lt;code class=&quot;highlighter-rouge&quot;&gt;gateway&lt;/code&gt; application and run &lt;code class=&quot;highlighter-rouge&quot;&gt;jhipster entity blog&lt;/code&gt;. Specify &lt;code class=&quot;highlighter-rouge&quot;&gt;Y&lt;/code&gt; when prompted to generate from an existing microservice. Enter &lt;code class=&quot;highlighter-rouge&quot;&gt;../blog&lt;/code&gt; as the path to the root directory. Select &lt;code class=&quot;highlighter-rouge&quot;&gt;Yes, re-generate the entity&lt;/code&gt; and type &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; when prompted to overwrite &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/webapp/app/entities/entity.module.ts&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Run the following commands to generate the UI for &lt;code class=&quot;highlighter-rouge&quot;&gt;entry&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;tag&lt;/code&gt;.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;jhipster entity entry
-jhipster entity tag
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;generate-a-store-microservice-application&quot;&gt;Generate a Store Microservice Application&lt;/h2&gt;
-
-&lt;p&gt;In &lt;code class=&quot;highlighter-rouge&quot;&gt;okta-jhipster-microservices-oauth-example&lt;/code&gt;, create a &lt;code class=&quot;highlighter-rouge&quot;&gt;store&lt;/code&gt; directory, then run &lt;code class=&quot;highlighter-rouge&quot;&gt;jhipster&lt;/code&gt;.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir store &amp;amp;&amp;amp; cd store &amp;amp;&amp;amp; jhipster
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Use the following answers to generate a store microservice with OAuth 2.0 and MongoDB.&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Question&lt;/th&gt;
-      &lt;th&gt;Answer&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Type of application?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Microservice application&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Name?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;store&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Port?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;8082&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Java package name?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;com.okta.developer.store&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Which service discovery server?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;JHipster Registry&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Type of authentication?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;OAuth 2.0 / OIDC&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Type of database?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;MongoDB&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Spring cache?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Yes, with Hazelcast&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Use Hibernate 2nd level cache?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Yes&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Maven or Gradle?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Maven&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Other technologies?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Search engine using Elasticsearch&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Enable i18n?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Yes&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Native language of application?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;English&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Additional languages?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;blank&amp;gt;&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Additional testing frameworks?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;blank&amp;gt;&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Install other generators?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;No&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;You have an empty microservice, but it needs some entities to manage! Run &lt;code class=&quot;highlighter-rouge&quot;&gt;jhipster entity product&lt;/code&gt; to create a product entity.&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Question&lt;/th&gt;
-      &lt;th&gt;Answer&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Add a field?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Y&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Field name?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;name&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Field type?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Field validation rules?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Y&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Which validation rules?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Required&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Add a field?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Y&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Field name?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;price&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Field type?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Double&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Field validation rules?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Y&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Which validation rules?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Required&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;Minimum&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Field minimum?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;0&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Add a field?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Y&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Field name?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;image&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Field type?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;[BETA] Blob&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;What is the content of the blob field?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;An image&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Field validation rules?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;N&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Add a field?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;N&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Separate service class?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;No&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Pagination on entity?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Yes, with pagination links&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;Change directories into the &lt;code class=&quot;highlighter-rouge&quot;&gt;gateway&lt;/code&gt; application and run &lt;code class=&quot;highlighter-rouge&quot;&gt;jhipster entity product&lt;/code&gt;. Specify &lt;code class=&quot;highlighter-rouge&quot;&gt;Y&lt;/code&gt; when prompted to generate from an existing microservice. Enter &lt;code class=&quot;highlighter-rouge&quot;&gt;../store&lt;/code&gt; as the path to the root directory. Select &lt;code class=&quot;highlighter-rouge&quot;&gt;Yes, re-generate the entity&lt;/code&gt; and type &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; when prompted to overwrite &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/webapp/app/entities/entity.module.ts&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;run-your-microservices-architecture&quot;&gt;Run Your Microservices Architecture&lt;/h2&gt;
-
-&lt;p&gt;There’s a lot of services to start if you want to see all your applications running. The blog application depends on Elasticsearch and PostgreSQL, but only when running in production mode. The store app, however, needs MongoDB running. Luckily, JHipster creates Docker Compose files you can use to start MongoDB.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; Make sure to remove the &lt;code class=&quot;highlighter-rouge&quot;&gt;security.oauth2.resource.jwt.key-uri&lt;/code&gt; key and value from &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/resources/config/application.yml&lt;/code&gt; in the gateway, blog, and store apps before you try to run them.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Restart the gateway app since you added new entity management pages to it.&lt;/li&gt;
-  &lt;li&gt;Start the blog app from the &lt;code class=&quot;highlighter-rouge&quot;&gt;blog&lt;/code&gt; directory by running &lt;code class=&quot;highlighter-rouge&quot;&gt;mvn&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Start a Docker container for MongoDB from the &lt;code class=&quot;highlighter-rouge&quot;&gt;store&lt;/code&gt; directory by running:&lt;/p&gt;
-
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; docker-compose -f src/main/docker/mongodb.yml up
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Start the store app from the &lt;code class=&quot;highlighter-rouge&quot;&gt;store&lt;/code&gt; directory by running &lt;code class=&quot;highlighter-rouge&quot;&gt;mvn&lt;/code&gt;.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Once everything finishes starting, open a browser to &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt; and click &lt;strong&gt;sign in&lt;/strong&gt;. You should be redirected to your Okta org to sign-in, then back to the gateway once you’ve entered valid credentials.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/welcome-jhipster-4673a7e3117a0567d95e71b2b7bf7f7941f90247619e948f407c444ef0485e2e.png&quot; alt=&quot;Welcome, JHipster&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/okta-sign-in-432ed89dd9228f47ad1e62fac9d3c5bacf3f2c54fe6f998e4f8353947d7f6648.png&quot; alt=&quot;Okta Sign-In&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/jhipster-logged-in-ceea5b498efbf586719f709a722655bb32622aa60d0a4cfd7d35a1e19eb987cd.png&quot; alt=&quot;JHipster after Okta SSO&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;You should be able to navigate to &lt;strong&gt;Entities&lt;/strong&gt; &amp;gt; &lt;strong&gt;Blog&lt;/strong&gt; and add a new blog record to your blog microservice.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/new-blog-12cbac80fd545b75fd13848bb374d19b5501db025f5f55ee6ff91abf2f4463a1.png&quot; alt=&quot;New Blog&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Navigate to &lt;strong&gt;Entities&lt;/strong&gt; &amp;gt; &lt;strong&gt;Product&lt;/strong&gt; to prove your product microservice is working. Since you added an image as a property, you’ll be prompted to upload one when creating a new record.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/add-product-dialog-c3928931cf309bb6e0ab5b9c326e7bc32c753f5032c9c7ebbb1a74ae75c403d0.png&quot; alt=&quot;Add Product Dialog&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Click &lt;strong&gt;Save&lt;/strong&gt; and you’ll know it’s correctly using MongoDB based on the generated ID.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/new-product-3b2076c0586a39d31aeee804a850546561df99fa19376d75eee9d8e5a86c07b5.png&quot; alt=&quot;New Product&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;use-docker-compose-to-run-everything&quot;&gt;Use Docker Compose to Run Everything&lt;/h3&gt;
-
-&lt;p&gt;Rather than starting all your services individually, you can also start them all using &lt;a href=&quot;https://docs.docker.com/compose/&quot;&gt;Docker Compose&lt;/a&gt;.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;If you’d like to learn more about Docker Compose, see &lt;a href=&quot;/blog/2017/10/11/developers-guide-to-docker-part-3&quot;&gt;A Developer’s Guide To Docker - Docker Compose&lt;/a&gt;.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Create a &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose&lt;/code&gt; directory in the root directory (&lt;code class=&quot;highlighter-rouge&quot;&gt;okta-jhipster-microservices-oauth-example&lt;/code&gt;) of your applications and run JHipster’s Docker Compose sub-generator.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir docker-compose &amp;amp;&amp;amp; cd docker-compose &amp;amp;&amp;amp; jhipster docker-compose
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Answer as follows when prompted:&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Question&lt;/th&gt;
-      &lt;th&gt;Answer&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Type of application?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Microservice application&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Type of gateway?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;JHipster gateway&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Directory location?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;../&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Applications to include?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;select all&amp;gt;&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Applications with clustered databases?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;blank&amp;gt;&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Setup monitoring?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Yes, with JHipster Console&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Additional technologies?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Zipkin&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Admin password&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;choose your own&amp;gt;&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;You’ll get a warning saying you need to generate Docker images by running the following command in the &lt;code class=&quot;highlighter-rouge&quot;&gt;blog&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;gateway&lt;/code&gt;, and &lt;code class=&quot;highlighter-rouge&quot;&gt;store&lt;/code&gt; directories. Stop all your running processes and build your Docker images before proceeding.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./mvnw verify -Pprod dockerfile:build
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; Building the gateway will likely fail because of &lt;a href=&quot;https://github.com/jhipster/generator-jhipster/issues/7114&quot;&gt;an issue with JavaScript tests&lt;/a&gt;. To workaround this issue, skip the tests with &lt;code class=&quot;highlighter-rouge&quot;&gt;mvn package -Pprod -DskipTests dockerfile:build&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;While you’re waiting for things to build, edit &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose/docker-compose.yml&lt;/code&gt; and change the Spring Security settings from being hard-coded to being environment variables. Make this change for all applications and make sure to add the client ID and secret default settings don’t include those.&lt;/p&gt;
-
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;SECURITY_OAUTH2_CLIENT_ACCESS_TOKEN_URI=${SECURITY_OAUTH2_CLIENT_ACCESS_TOKEN_URI}&lt;/span&gt;
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;SECURITY_OAUTH2_CLIENT_CLIENT_ID=${SECURITY_OAUTH2_CLIENT_CLIENT_ID}&lt;/span&gt;
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=${SECURITY_OAUTH2_CLIENT_CLIENT_SECRET}&lt;/span&gt;
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI=${SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI}&lt;/span&gt;
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;SECURITY_OAUTH2_RESOURCE_USER_INFO_URI=${SECURITY_OAUTH2_RESOURCE_USER_INFO_URI}&lt;/span&gt;
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;SECURITY_OAUTH2_RESOURCE_TOKEN_INFO_URI=${SECURITY_OAUTH2_RESOURCE_TOKEN_INFO_URI}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;TIP:&lt;/strong&gt; You can run &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose config&lt;/code&gt; to verify the environment variables are correctly substituted.&lt;/p&gt;
-
-&lt;p&gt;When everything has finished building, run &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose up -d&lt;/code&gt; from the &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose&lt;/code&gt; directory. It can take a while to start all 14 containers, so now might be a good time to take a break, or go on a run. You can use Docker’s Kitematic to watch the status of your images as they start.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;TIP:&lt;/strong&gt; Before you start everything, make sure you’ve provided adequate CPUs and Memory to Docker. It defaults to one CPU and 2 GB of memory. Not quite enough for 14 containers!&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/kitematic-244f4ceacbc4061f764b2d90780636f46d7087030f9eca6012b7051fe7634ce5.png&quot; alt=&quot;Kitematic&quot; width=&quot;800&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;After you’ve verified everything works, you can stop all your Docker containers using the following command:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker stop &lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;docker ps &lt;span class=&quot;nt&quot;&gt;-a&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-q&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;If you’d like to remove the images too, you can run:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker rm &lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;docker ps &lt;span class=&quot;nt&quot;&gt;-a&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-q&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;deploy-to-heroku&quot;&gt;Deploy to Heroku&lt;/h2&gt;
-
-&lt;p&gt;The founder of JHipster, &lt;a href=&quot;https://twitter.com/juliendubois&quot;&gt;Julien Dubois&lt;/a&gt;, wrote a blog post on the Heroku blog titled &lt;a href=&quot;https://blog.heroku.com/bootstrapping_your_microservices_architecture_with_jhipster_and_spring&quot;&gt;Bootstrapping Your Microservices Architecture with JHipster and Spring&lt;/a&gt;. Here’s an abbreviated set of steps to deploy all your apps to Heroku.&lt;/p&gt;
-
-&lt;h3 id=&quot;deploy-the-jhipster-registry&quot;&gt;Deploy the JHipster Registry&lt;/h3&gt;
-
-&lt;p&gt;Heroku and JHipster have configured a JHipster Registry for you, so you just need to click on the button below to start your own JHipster Registry:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://dashboard.heroku.com/new?&amp;amp;template=https%3A%2F%2Fgithub.com%2Fjhipster%2Fjhipster-registry&quot;&gt;&lt;img src=&quot;https://heroku-blog-files.s3.amazonaws.com/posts/1473343846-68747470733a2f2f7777772e6865726f6b7563646e2e636f6d2f6465706c6f792f627574746f6e2e706e67&quot; alt=&quot;Deploy to Heroku&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;deploy-your-gateway-and-apps&quot;&gt;Deploy Your Gateway and Apps&lt;/h3&gt;
-
-&lt;p&gt;Edit &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/resources/config/application-prod.yml&lt;/code&gt; in your gateway and apps. Remove &lt;code class=&quot;highlighter-rouge&quot;&gt;appname&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;instanceId&lt;/code&gt; and add the following &lt;code class=&quot;highlighter-rouge&quot;&gt;eureka.instance&lt;/code&gt; properties:&lt;/p&gt;
-
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;eureka&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;instance&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;hostname&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;lt;unique-prefix&amp;gt;-&amp;lt;app-name&amp;gt;.herokuapp.com&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;non-secure-port&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;80&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;prefer-ip-address&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;In the gateway, you’ll also need to specify the registry’s password in &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/resources/config/bootstrap-prod.yml&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;In each project, run &lt;code class=&quot;highlighter-rouge&quot;&gt;jhipster heroku&lt;/code&gt; and answer the questions as follows:&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Question&lt;/th&gt;
-      &lt;th&gt;Answer&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Name to deploy as?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;unique-prefix&amp;gt;-&amp;lt;app-name&amp;gt;&lt;/code&gt; (e.g., okta-gateway)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Which region?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;us&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Type of deployment?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Git&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;JHipster Registry URL?&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;https://user:pass@app.herokuapp.com/&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;After each has deployed, you’ll want to run the following so they use Okta for authentication.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;heroku config:set &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_CLIENT_ACCESS_TOKEN_URI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$SECURITY_OAUTH2_CLIENT_ACCESS_TOKEN_URI&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_RESOURCE_USER_INFO_URI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$SECURITY_OAUTH2_RESOURCE_USER_INFO_URI&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_RESOURCE_TOKEN_INFO_URI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$SECURITY_OAUTH2_RESOURCE_TOKEN_INFO_URI&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_CLIENT_CLIENT_ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$SECURITY_OAUTH2_CLIENT_CLIENT_ID&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nv&quot;&gt;SECURITY_OAUTH2_CLIENT_CLIENT_SECRET&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$SECURITY_OAUTH2_CLIENT_CLIENT_SECRET&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;To set the JHipster Registry password on your gateway app, run:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;heroku config:set &lt;span class=&quot;nv&quot;&gt;JHIPSTER_REGISTRY_PASSWORD&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$JHIPSTER_REGISTRY_PASSWORD&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Then update your Okta app to have a &lt;strong&gt;Login redirect URI&lt;/strong&gt; that matches your Heroku app (e.g., &lt;code class=&quot;highlighter-rouge&quot;&gt;https://okta-gateway.herokuapp.com/&lt;/code&gt;). To do this, log in to your Okta account, go to &lt;strong&gt;Applications&lt;/strong&gt; &amp;gt; &lt;strong&gt;JHipster Microservices&lt;/strong&gt; &amp;gt; &lt;strong&gt;General&lt;/strong&gt; &amp;gt; &lt;strong&gt;Edit&lt;/strong&gt;. You’ll also need to add this as a trusted origin in &lt;strong&gt;API&lt;/strong&gt; &amp;gt; &lt;strong&gt;Trusted Origins&lt;/strong&gt; &amp;gt; &lt;strong&gt;Add Origin&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;If you chose Elasticsearch like I did, you’ll need to configure it to be in-memory and use &lt;a href=&quot;http://stackoverflow.com/questions/12416738/how-to-use-herokus-ephemeral-filesystem&quot;&gt;Heroku’s ephemeral filesystem&lt;/a&gt;. Add the following Elasticsearch properties to &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/resources/config/application-heroku.yml&lt;/code&gt; and redeploy your apps using &lt;code class=&quot;highlighter-rouge&quot;&gt;jhipster heroku&lt;/code&gt;. You could also try adding and configuring Heroku’s &lt;a href=&quot;https://elements.heroku.com/addons/searchbox&quot;&gt;Searchbox Elasticsearch add-on&lt;/a&gt;.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;spring:
-    data:
-        elasticsearch:
-            cluster-name:
-            cluster-nodes:
-            properties:
-                path:
-                    logs: target/elasticsearch/log
-                    data: target/elasticsearch/data
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;To see if your apps have started correctly, you can run &lt;code class=&quot;highlighter-rouge&quot;&gt;heroku logs --tail&lt;/code&gt; in each app’s directory. You may see a timeout error:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Error R10 (Boot timeout) -&amp;gt; Web process failed to bind to $PORT within 90 seconds of launch
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;If this happens, go to &lt;a href=&quot;https://help.heroku.com/&quot;&gt;https://help.heroku.com/&lt;/a&gt; and click &lt;strong&gt;Create a ticket&lt;/strong&gt; at the top. Click &lt;strong&gt;Running Applications&lt;/strong&gt; &amp;gt; &lt;strong&gt;Java&lt;/strong&gt;, scroll to the bottom, and click &lt;strong&gt;Create a ticket&lt;/strong&gt;. Enter something like the following for the subject and description, select one of your apps, then submit it.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Subject: JHipster Apps Startup Timeout
-
-Description: Hello, I have three JHipster apps that have the following error on startup:
-
-Error R10 (Boot timeout) -&amp;gt; Web process failed to bind to $PORT within 90 seconds of launch
-
-Their URLs are as follows:
-
-* https://&amp;lt;your-prefix&amp;gt;-gateway.herokuapp.com/
-* https://&amp;lt;your-prefix&amp;gt;-blog.herokuapp.com/
-* https://&amp;lt;your-prefix&amp;gt;-store.herokuapp.com/
-
-Can you please increase the timeouts on these apps?
-
-Thanks!
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Below are screenshots to prove everything worked after I got my timeouts increased. 😊&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/heroku-welcome-fe193656c26bbce138bc35cd8d68716f8e4b1b3f2f888085b191139c73293842.png&quot; alt=&quot;Gateway on Heroku&quot; width=&quot;400&quot; /&gt;&lt;/td&gt;
-      &lt;td&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/heroku-gateway-routes-126508a6a3b3536986ad791cd347056b4e8cbeb3712542fa286eed69bdd49dae.png&quot; alt=&quot;Heroku Gateway Routes&quot; width=&quot;400&quot; /&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/heroku-blog-4e2b7aedba56ae8660e31da97bf7dbc2893312da42004e88079374b500d0be27.png&quot; alt=&quot;Blog on Heroku&quot; width=&quot;400&quot; /&gt;&lt;/td&gt;
-      &lt;td&gt;&lt;img src=&quot;/assets/blog/microservices-jhipster-oauth/heroku-store-aef8aeb4efb9e59e922fe222d68dfe7db0902e87acf9e57a99aa8b02a9bb8857.png&quot; alt=&quot;Store on Heroku&quot; width=&quot;400&quot; /&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;You can find the source code for this example at https://github.com/oktadeveloper/okta-jhipster-microservices-oauth-example.&lt;/p&gt;
-
-&lt;h2 id=&quot;learn-more-about-microservices-oauth-20-and-jhipster&quot;&gt;Learn More about Microservices, OAuth 2.0, and JHipster&lt;/h2&gt;
-
-&lt;p&gt;I hope you’ve enjoyed this whirlwind tour of how to create a microservices architecture with JHipster. Just because JHipster makes microservices easy doesn’t mean you should use them. In the wise words of &lt;a href=&quot;https://martinfowler.com/articles/microservices.html&quot;&gt;Martin Fowler&lt;/a&gt; (March 2014):&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;“You shouldn’t start with a microservices architecture. Instead begin with a monolith, keep it modular, and split it into microservices once the monolith becomes a problem.”&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Using a microservices architecture is a great way to scale development teams. However, if you don’t have a large team, a &lt;a href=&quot;https://m.signalvnoise.com/the-majestic-monolith-29166d022228&quot;&gt;Majestic Monolith&lt;/a&gt; might work better.&lt;/p&gt;
-
-&lt;p&gt;To learn more about microservices, authentication, and JHipster, see the following resources.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;/blog/2017/06/15/build-microservices-architecture-spring-boot&quot;&gt;Build a Microservices Architecture for Microbrews with Spring Boot&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;/blog/2017/06/15/build-microservices-architecture-spring-boot&quot;&gt;Secure a Spring Microservices Architecture with Spring Security, JWTs, Juiser, and Okta&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;/blog/2018/02/13/secure-spring-microservices-with-oauth&quot;&gt;Secure a Spring Microservices Architecture with Spring Security and OAuth 2.0&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;/blog/2017/10/20/oidc-with-jhipster&quot;&gt;Use OpenID Connect Support with JHipster&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.jhipster.tech/security/&quot;&gt;JHipster Security Documentation&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;If you have any feedback, I’d love to hear it! Please leave a comment below, hit me up on Twitter &lt;a href=&quot;https://twitter.com/mraible&quot;&gt;@mraible&lt;/a&gt;, or post a question in our &lt;a href=&quot;https://devforum.okta.com/&quot;&gt;Developer Forums&lt;/a&gt;.&lt;/p&gt;
-
-</description>
-        <pubDate>Thu, 01 Mar 2018 00:00:00 -0500</pubDate>
-        <link>https://developer.okta.com/blog/2018/03/01/develop-microservices-jhipster-oauth</link>
-        <guid isPermaLink="true">https://developer.okta.com/blog/2018/03/01/develop-microservices-jhipster-oauth</guid>
       </item>
     
   </channel>

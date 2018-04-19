@@ -1,0 +1,634 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html class="ie6 no-flexbox"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie7 no-flexbox"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie8 no-flexbox"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie9 no-flexbox"> <![endif]-->
+<!--[if IE 10 ]>    <html class="ie10 no-flexbox"> <![endif]-->
+<!--[if (gt IE 10)|!(IE)]><!--> <html class="modern wf-loading" lang="en"> <!--<![endif]-->
+  <head>
+  <script>
+    var searchDomain = 'https://developer.okta.com';
+    var isProduction = window.location.hostname === 'developer.okta.com';
+    if (isProduction) {
+      // TypeKit
+      (function(d) {
+        var config = {
+          kitId: 'jff5neq',
+          scriptTimeout: 3000,
+          async: true
+        },
+        h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/bwf-loadingb/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+      })(document);
+
+      // Google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-15777010-3', 'auto');
+      ga('send', 'pageview');
+
+      // START Google Tag Manager
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-TJ45R6');
+      // END Google Tag Manager
+
+      // Start Heap Analytics
+      window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var r=t.forceSSL||"https:"===document.location.protocol,a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=(r?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+e+".js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n);for(var o=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["addEventProperties","addUserProperties","clearEventProperties","identify","removeEventProperty","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=o(p[c])};
+      heap.load("3356162945");
+      // End Heap Analytics
+    }
+  </script>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+
+  <link type="text/css" rel="stylesheet" href="https://developer.okta.com/sites/all/themes/developer/css/master.css" media="all" />
+  <meta class="swiftype" name="title" data-type="string" content="Build Server Side Authentication in Grails with OAuth 2.0 and Okta | Okta Developer">
+  <meta class="swiftype" name="summary" data-type="string" content="This is a quick tutorial demonstrating how to add authentication to a Grails application with Okta." />
+
+  <link type="text/css" rel="stylesheet" href="/assets/animate-ec43d72c3ed45e08a460b8a2966d8dba6006aebfa0530935c3973fa493a8771f.css">
+  <link type="text/css" rel="stylesheet" href="/assets/okta-914cad2dd6d069302444327ce911da52da68a3c68755f66cf5a4e92b9a38f3eb.css">
+  
+  
+  <title>Build Server Side Authentication in Grails with OAuth 2.0 and Okta | Okta Developer</title>
+  <meta name="description" content="This is a quick tutorial demonstrating how to add authentication to a Grails application with Okta.">
+  <link rel="alternate" type="application/rss+xml" title="Okta Developer" href="https://developer.okta.com/feed.xml"><!-- GA -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/assets/favicon/manifest.json">
+  <link rel="mask-icon" href="/assets/favicon/safari-pinned-tab.svg" color="#21313a">
+  <meta name="msapplication-config" content="/assets/favicon/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  
+    <body id="blog">
+	
+
+
+
+
+<header class="Header is-fixed">
+
+  <div class="Wrap">
+
+    <a class="Logo" href="https://developer.okta.com">
+      <svg version="1.1" id="OktaLogo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 431.9 151.4" style="enable-background:new 0 0 431.9 151.4;" xml:space="preserve"><g><g><g><path d="M102.2,41.4c-21,0-38.1,17.1-38.1,38.1s17.1,38.1,38.1,38.1s38.1-17.1,38.1-38.1l0,0C140.3,58.5,123.2,41.4,102.2,41.4z M102.2,98.5c-10.5,0-19-8.5-19-19s8.5-19,19-19s19,8.5,19,19c0.1,10.5-8.4,19-18.9,19.1C102.3,98.6,102.2,98.6,102.2,98.5L102.2,98.5z"/><path d="M169.1,92.3c0-1.9,1.5-3.4,3.4-3.4c0.9,0,1.8,0.4,2.4,1c9.5,9.7,25.3,26.3,25.4,26.4c0.4,0.5,0.8,0.8,1.4,0.9l1.6,0.2h17.2c1.8,0,3.3-1.4,3.4-3.2c0-0.8-0.3-1.5-0.8-2.2l-28.6-29.2l-1.5-1.5c-3.2-3.9-2.9-5.4,0.8-9.3l22.6-25.1c1.1-1.4,0.8-3.5-0.6-4.6c-0.6-0.4-1.3-0.7-2-0.7h-17c-0.6,0.2-1.1,0.5-1.5,0.9L175,64.4c-1.3,1.4-3.4,1.5-4.8,0.2c-0.7-0.6-1.1-1.5-1.1-2.5V18.9c0-1.7-1.3-3-3-3c-0.1,0-0.2,0-0.3,0h-12.7c-2.2,0-3.3,1.5-3.3,2.8v95.8c0,2.2,1.8,2.8,3.3,2.8h12.7c1.7,0.1,3.2-1.2,3.3-2.9c0,0,0,0,0,0V92.3z"/><path d="M273,114l-1.4-12.8c-0.2-1.7-1.7-2.9-3.4-2.7c0,0,0,0-0.1,0l-2.9,0.2c-10.1,0-18.5-7.9-19-18c0-0.3,0-0.7,0-1V64.2c-0.1-2,1.5-3.6,3.5-3.7c0,0,0,0,0,0h17c1.7-0.1,3.1-1.5,3-3.2c0,0,0-0.1,0-0.1v-12c0-2.3-1.5-3.6-2.8-3.6h-17.1c-1.9,0.1-3.5-1.5-3.6-3.4c0,0,0,0,0,0V18.9c-0.1-1.7-1.5-3.1-3.2-3c0,0-0.1,0-0.1,0h-12.7c-1.6-0.1-3,1.1-3.1,2.7c0,0.1,0,0.1,0,0.2c0,0,0,61.7,0,62c0.5,21,17.9,37.6,38.9,37c1.4,0,2.9-0.2,4.3-0.3C272,117.2,273.2,115.7,273,114z"/></g><path d="M364.7,98c-10.8,0-12.4-3.8-12.4-18.3l0,0V44.8c0-1.8-1.4-3.2-3.2-3.2c0,0-0.1,0-0.1,0h-12.8c-1.8,0-3.2,1.4-3.3,3.2v1.6C314.6,36,291.3,42.5,281,60.8c-10.4,18.3-3.9,41.6,14.4,51.9c14,7.9,31.4,6.2,43.5-4.2c3.6,5.5,9.3,9.1,18.3,9.1c1.5,0,9.7,0.3,9.7-3.5v-13.6C367,99.2,366,98.1,364.7,98z M314.2,98.6c-10.5,0-19-8.5-19-19s8.5-19,19-19s19,8.5,19,19l0,0C333.2,90.1,324.7,98.6,314.2,98.6z"/></g><path d="M19.4,74c2.2-1.9,4.1-4.1,5.7-6.6c3.5-5.3,5.4-11.5,5.2-17.9V27c0-4.9,0.9-8.4,2.7-10.5c1.8-2.1,4.8-3,9.2-3h12.6c1.2,0,2.1-0.9,2.2-2.1l0,0V2.2C57,1,56,0,54.8,0c0,0,0,0,0,0H41.5c-7.8,0-12.9,2.1-18,7.6s-7.1,12.3-7.1,21.7v14.2c0,2.2-0.1,4-0.2,5.7v2.2c-0.5,3.2-1.8,6.2-3.6,8.9C9.4,64.7,5.1,70.9,0.9,74l0,0l-0.3,0.3l0,0l-0.2,0.3H0.2v0.3l0,0c-0.1,0.3-0.1,0.7,0,1l0,0v0.3h0.1l0.2,0.3l0,0l0.3,0.3l0,0c4.2,3.1,8.5,9.3,11.3,13.7c1.8,2.7,3.1,5.7,3.6,8.9v2.2c0.1,1.6,0.2,3.5,0.2,5.7v14.3c0,9.4,2.4,16.7,7.1,21.7s10.2,7.6,18,7.6h13.8c1.2,0,2.2-1,2.2-2.2V140l0,0c0-1.2-1-2.2-2.2-2.2H42.2c-4.4,0-7.5-1-9.2-3s-2.7-5.6-2.7-10.5v-22.4c0.2-6.4-1.7-12.6-5.2-17.9c-1.6-2.5-3.5-4.7-5.7-6.6l0,0c-0.9-0.7-1.1-2-0.4-2.9C19.2,74.3,19.3,74.2,19.4,74L19.4,74z"/><path d="M412.5,74c-2.2-1.9-4.1-4.1-5.7-6.6c-3.5-5.3-5.4-11.5-5.2-17.9V27c0-4.9-0.9-8.4-2.7-10.5s-4.8-3-9.2-3h-12.6c-1.2,0-2.2-1-2.2-2.2c0,0,0,0,0,0l0,0V2.2c0-1.2,1-2.2,2.2-2.2c0,0,0,0,0,0h13.4c7.8,0,12.9,2.1,18,7.6s7.1,12.3,7.1,21.7v14.2c0,2.2,0.1,4,0.2,5.7v2.2c0.5,3.2,1.8,6.2,3.6,8.9c2.8,4.5,7.1,10.7,11.3,13.7l0,0l0.3,0.3l0,0l0.2,0.3h0.1v0.3l0,0c0.1,0.3,0.1,0.7,0,1l0,0v0.3h-0.1l-0.2,0.3l0,0l-0.3,0.3l0,0c-4.2,3.1-8.5,9.3-11.3,13.7c-1.8,2.7-3.1,5.7-3.6,8.9v2.2c-0.1,1.6-0.2,3.5-0.2,5.7v14.3c0,9.4-2.4,16.7-7.1,21.7s-10.2,7.6-18,7.6h-13.4c-1.2,0-2.2-1-2.2-2.2c0,0,0,0,0,0V140l0,0c0-1.2,1-2.2,2.2-2.2l0,0h12.7c4.4,0,7.5-1,9.2-3s2.7-5.6,2.7-10.5v-22.4c-0.2-6.3,1.6-12.6,5.1-17.9c1.6-2.5,3.5-4.7,5.7-6.6l0,0c0.9-0.7,1.1-2,0.4-2.9C412.7,74.3,412.6,74.2,412.5,74L412.5,74z"/></g></svg>
+    </a>
+
+    <nav class="Header-nav PrimaryNav">
+      <ul class="menu">
+        <li class="first expanded">
+          <a href="https://developer.okta.com/product/">Product</a>
+          <ul class="menu">
+            <li class="first leaf"><a href="https://developer.okta.com/product/">Overview</a></li>
+            <li class="leaf"><a href="https://developer.okta.com/product/authentication/">Authentication</a></li>
+            <li class="leaf"><a href="https://developer.okta.com/product/authorization/">Authorization</a></li>
+            <li class="last leaf"><a href="https://developer.okta.com/product/user-management/">User Management</a></li>
+          </ul>
+        </li>
+        <li class="leaf">
+          <a href="https://developer.okta.com/pricing/">Pricing</a>
+        </li>
+        <li class="leaf">
+          <a href="/blog/" class="active">Blog</a>
+        </li>
+        <li class="leaf">
+          <a href="/documentation/">Docs</a>
+        </li>
+        <li class="last expanded">
+          <span class="nolink">Support</span>
+          <ul class="menu">
+            <li class="first leaf"><a href="https://devforum.okta.com/">Okta Developer Forums</a></li>
+            <li class="last leaf"><a href="mailto:developers@okta.com">developers@okta.com</a></li>
+          </ul>
+        </li>
+      </ul>
+      <a class="PrimaryNav-toggle" href="#">
+        <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g class="MenuIcon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+                <path d="M1,16 L19,16" class="MenuIcon-line1" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,4 L19,4" class="MenuIcon-line2" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,10 L19,10" class="MenuIcon-line3" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,10 L19,10" class="MenuIcon-line4" stroke="#FFFFFF" stroke-width="2"></path>
+            </g>
+        </svg>
+        <svg class="CloseIcon" width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <g id="ALl-Boards" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="Desktop" transform="translate(-915.000000, -235.000000)" fill="#FFFFFF">
+              <g id="Search-bar-Active" transform="translate(30.000000, 26.000000)">
+                <polygon id="Icon/Cross" points="901 210.6 899.4 209 893 215.4 886.6 209 885 210.6 891.4 217 885 223.4 886.6 225 893 218.6 899.4 225 901 223.4 894.6 217"></polygon>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </a>
+
+      <div class="PrimaryNav-cta">
+        <a target="_blank" rel="noopener noreferrer" href="https://login.okta.com/?SAMLRequest=fc%2B7CsJAEAXQXvAflu1NNJUMeZBGELTx1a%2FrYILJTtyZGD%2FfSBRiYzlw77lMnD3rSj3Qc0ku0YtgrhU6S5fSXRN9PKxmS52l00nMpq6iBvJWCrfDe4ss6vStRe9aDzmGIZfo1jsgwyWDMzUyiIV9vt1AH4XGk5ClSvewUgMNa%2BYW%2FVj5jxhm9NLP67QQaSAMu64L6CYmsFSHlnzT4ZlLwTgcL6Sf8%2FeX9AU%3Dhttps://login.okta.com/?SAMLRequest=fc%2B7CsJAEAXQXvAflu1NNJUMeZBGELTx1a%2FrYILJTtyZGD%2FfSBRiYzlw77lMnD3rSj3Qc0ku0YtgrhU6S5fSXRN9PKxmS52l00nMpq6iBvJWCrfDe4ss6vStRe9aDzmGIZfo1jsgwyWDMzUyiIV9vt1AH4XGk5ClSvewUgMNa%2BYW%2FVj5jxhm9NLP67QQaSAMu64L6CYmsFSHlnzT4ZlLwTgcL6Sf8%2FeX9AU%3D" class="Button--redOutline">Login</a>
+        <a href="https://developer.okta.com/signup/" class="Button--red">Sign up</a>
+      </div>
+
+      <a class="SearchIcon" href="#"></a>
+      <form id="form_search" class="SearchBar Formisimo_clocked_69929" method="get" action="https://developer.okta.com/search/" name="form_search" __bizdiag="-784164280" __biza="WJ__">
+        <input type="text" name="stq" autocomplete="off" id="st-search-input-auto" class="st-search-input" placeholder="Search">
+        <input type="submit" name="submit" value="GO">
+      </form>
+
+    </nav>
+
+  </div>
+
+</header>
+
+	<div class="page-content">
+		
+		
+
+
+
+
+
+
+<section class="Blog is-single">
+		
+	<div class="Blog-social">
+		
+		<a href="https://github.com/moksamedia" target="_blank"><i class="fa fa-github"></i></a>
+		
+		
+		
+		
+	</div>
+	
+	
+
+<article class="BlogPost">
+
+    <header class="BlogPost-header">
+
+        <time class="BlogPost-date" datetime="2018-04-19">April 19, 2018</time>
+
+        <h1 class="BlogPost-title">
+            
+            Build Server Side Authentication in Grails with OAuth 2.0 and Okta
+            
+        </h1>
+
+        <div class="BlogPost-attribution">
+            
+            <img src="/assets/avatar-moksamedia-a3fccb20360c93b6a67e73ea6d849d8ab9de87bad7147d27db0f8c4534539499.jpg" alt="avatar-moksamedia.jpg" class="BlogPost-avatar">
+            
+            <span class="BlogPost-author">Andrew Hughes</span>
+        </div>
+
+    </header>
+
+    <div class="BlogPost-content">
+        
+	<p>What is Grails, what is Groovy, and why would we choose them over Spring Boot? In this post I’ll walk you through implementing server-side authentication in Grails using OAuth 2.0 and Okta. Before we dive in, however, I want to talk a little bit about why you’d be using Grails + Groovy in the first place, and how it can make your life easier in specific situations.</p>
+
+<p><a href="https://grails.org/">Grails</a> is an open source “convention over configuration” web application framework built on Groovy. It’s essentially a JVM version of Ruby on Rails. It’s opinionated and full-featured and has a strong emphasis on ORM, templating, and plugins. Grails is built on Spring Boot.</p>
+
+<p><a href="http://groovy-lang.org/">Groovy</a> is a superset of Java that compiles down to JVM bytecode and interoperable with pure Java, but adds tons of great meta-programming and functional programming features, while also slashing the ceremony code that can plague pure java.</p>
+
+<h2 id="why-use-grails-over-spring-boot">Why Use Grails Over Spring Boot?</h2>
+
+<p>If Grails is built on Spring Boot, why not just use that? Good question! The answer depends on your goals and your background (ie, do you already know and love Spring?).</p>
+
+<p>Let’s look at Grails + Groovy:</p>
+<ul>
+  <li>Grails and Groovy may be easier to dive into if you’re not already familiar with Spring</li>
+  <li>Grails has a great templating system and full-featured ORM</li>
+  <li>Grails is built on Spring Boot, so (theoretically, at least) you can get the best of both worlds. In practice this might be easier said than done.</li>
+  <li>Grails has super easy JSON conversion and test-driven development</li>
+  <li>Groovy is a super awesome language that’s a pleasure to develop in</li>
+  <li>Grails may be waning in popularity. The upgrade from 2.x to 3.x was bumpy and caused a lot of grumbling in the community.</li>
+</ul>
+
+<p>Let’s look at Spring:</p>
+<ul>
+  <li>Spring Boot is great for simple REST API services</li>
+  <li>Spring Data is super powerful but correspondingly complicated</li>
+  <li>Templating in Spring is pretty old-fashioned these days</li>
+  <li>Spring has a HUGE community and massive enterprise support.</li>
+  <li>Spring also has easy JSON conversion and TDD</li>
+  <li>The larger Spring architecture is incredibly powerful once you wrap your head around it</li>
+</ul>
+
+<p>So what’s the verdict? My suggestions are:</p>
+<ul>
+  <li>If you’re not already into Spring, and you want to develop a web application quickly, go with Grails. It’s easy and developer friendly by design.</li>
+  <li>For simple REST services, Spring Boot or Apache Jersey + Shiro might be good alternatives. There’s really no point in using Grails if you’re not going to use the ORM and/or templating capabilities.</li>
+  <li>If you’re building a large enterprise app or API system and require a guarantee of long term support (many years), or are already deep into Spring, then Spring Boot may be your best bet.</li>
+</ul>
+
+<h2 id="get-started-with-grails">Get Started with Grails</h2>
+
+<p>Let’s start by installing Grails. Groovy and Grails use an install/update manager called SDKMAN. The install is super easy, and we’ll walk you through it below, but if you’d like to see the complete instructions, look <a href="http://grails.org/download.html">here</a>.</p>
+
+<p>Install SDKMAN:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># follow instructions to install SDKMAN!</span>
+curl <span class="nt">-s</span> get.sdkman.io | bash
+</code></pre></div></div>
+
+<p>Load SDKMAN into your shell:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">source</span> <span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/.sdkman/bin/sdkman-init.sh"</span>
+</code></pre></div></div>
+
+<p>Install the latest stable version of Grails:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sdk install grails
+</code></pre></div></div>
+
+<p>Test the install (should look something like this):</p>
+
+<pre><code class="language-txt">grails -version
+| Grails Version: 3.3.3
+| Groovy Version: 2.4.14
+| JVM Version: 1.8.0_102
+</code></pre>
+
+<h2 id="create-your-new-grails-application">Create Your New Grails Application</h2>
+
+<p>Grails uses a command-line shell similar to Ruby or React. We will be creating a simple app called “OktaCameraKit” that we uses can use to organize their camera lenses.</p>
+
+<p>In the shell, move to a directory in which you would like the new project generated and enter the following.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>grails create-app OktaCameraKit
+| Application created at /okta/grails/OktaCameraKit
+</code></pre></div></div>
+
+<p>This should have created your application in the “OktaCameraKit” subdirectory with the following directory structure:</p>
+
+<p><img src="/assets/blog/okta-with-grails/dir-list-a438a6e22b605ca2b1d73364200e5af8c67a9e5d634fcb63939ac743bff22ce5.png" alt="New Project Directory List" width="400" class="center-image" /></p>
+
+<h3 id="test-your-new-grails-app">Test Your New Grails App</h3>
+
+<p>“cd” into the “OktaCameraKit” directory and run:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>grails run-app
+</code></pre></div></div>
+
+<p>You should see something like this:</p>
+
+<pre><code class="language-txt">| Running application...
+:compileJava NO-SOURCE
+:compileGroovy UP-TO-DATE
+:buildProperties UP-TO-DATE
+:processResources
+:classes
+:findMainClass
+:bootRun
+Grails application running at http://localhost:8080 in environment: development
+&lt;===========--&gt; 85% EXECUTING
+</code></pre>
+<p>Open your browser to <code class="highlighter-rouge">http://localhost:8080</code> and you should see the Grails welcome screen.</p>
+
+<p><img src="/assets/blog/okta-with-grails/initial-grails-3fe59d3daedabba5e986d53fb9733075993037cf540a3b0e751224b9c983a3c9.png" alt="Initial Grails page" width="600" class="center-image" /></p>
+
+<p><strong>NOTE:</strong> I heartily suggest downloading and trying out the Community Edition of IntelliJ IDEA. JetBrains products are fantastic, and the free Community Edition of their premier Java development IDE is a godsend. <a href="http://www.jetbrains.com/idea/">Check it out!</a></p>
+
+<h3 id="some-basics-on-grails">Some Basics on Grails</h3>
+
+<p>The basic idea in Grails is that Controller classes have Action methods that load data from Models and map the data that is presented in Views.</p>
+
+<p>Grails is opinionated and expects controllers to be in the “controllers” directory and “views” to be in the views directory. DO NOT, UNDER ANY CIRCUMSTANCES, PUT FILES IN THE WRONG PLACE. You will hurt Grails’ feelings and it may not work for you. But seriously, if you’re used to more contemporary Javascript frameworks, you may not be used to the well-defined structure that Grails expects. If you surrender to it, you may learn to love it! A good structure can free you to worry about more important things, like writing your app! You certainly end up with fewer lines of code like this:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">..</span><span class="o">/</span><span class="p">..</span><span class="o">/</span><span class="p">..</span><span class="o">/</span><span class="p">..</span><span class="o">/</span><span class="p">..</span><span class="o">/</span><span class="p">..</span><span class="o">/</span><span class="nx">app</span><span class="o">/</span><span class="nx">module</span><span class="o">/</span><span class="nx">resources</span><span class="o">/</span><span class="nx">blah</span><span class="p">.</span><span class="nx">js</span>
+</code></pre></div></div>
+<h3 id="dont-forget-about-gradle">Don’t Forget About Gradle</h3>
+
+<p>What’s with all the “G”s? Yep. There’s a lot of them: Groovy, Grails, Gradle. It’s been scientifically proven that alliteration increases the performance of programming toolkits at developer conferences.</p>
+
+<p>Gradle is a super powerful build system that “eclipsed” Maven as the build tool of choice in the JVM world. It’s built on Groovy and uses a Domain Specific Language that makes it infinitely powerful. If the universe had been built with Maven, the earth would not be revolving around the sun because we’d still be resolving dependencies. Fortunately, Gradle was invented, and all is well.</p>
+
+<h2 id="add-authentication-with-spring-security-and-okta">Add Authentication with Spring Security and Okta</h2>
+
+<p>We are going to use the Spring Security Core Plugin and the Spring Security OAuth 2.0 plugin to connect with Okta OAuth. There are, however, a few other options. Apache Shiro has a plugin that integrates nicely with Grails. Shiro is a fine alternative that is worth examining. If you are building an API service that will have client-side authentication, then you might want to look at the <a href="https://github.com/okta/okta-spring-boot">Okta Spring Boot Starter</a>, which makes authentication super simple, and <a href="https://github.com/ZacharyKlein/grails-react-okta-demo">Zachary Klein’s Grails + React + Okta demo</a>.</p>
+
+<p>Because we will be using a purely server-side authentication flow, we can’t use the authentication filter method implemented in the Spring Boot Starter.</p>
+
+<p>Now, you may be tempted to think: “Hey! Grails is just Spring Boot with some bells and whistles. Why can’t I just use Spring authentication, <a href="/blog/2017/11/20/add-sso-spring-boot-15-min">like in this great Okta tutorial</a>?” I know I did. That was what I tried first. Let me save you some time, it doesn’t work.</p>
+
+<p>Spring Security does a funny thing and uses thrown exceptions to handle the OAuth redirects. These are supposed to propagate up to the Spring servlet context, where they are caught and handled. Unfortunately, Grails has it’s own custom <code class="highlighter-rouge">GrailsDispatcherServlet</code> that overrides this behavior, catching the exceptions before they can be handled by the Spring filters. You could potentially create a subclass of the <code class="highlighter-rouge">GrailsDispatcherServlet</code> that checks for the OAuth exceptions and re-throws them, but Grails 3.0 made this more complicated – and anyway the whole scheme starts to feel pretty “hacky” fighting the framework instead of doing it the “right” way.</p>
+
+<h3 id="okta-provider-plugin-for-grails-spring-security-oauth-20">Okta Provider Plugin for Grails Spring Security OAuth 2.0</h3>
+
+<p>What’s the “right” way? Writing a provider plugin for the Grails <a href="http://plugins.grails.org/plugin/matrixcrawler/spring-security-oauth2">spring-security-oauth2 plugin</a> that tells Grails how to “talk” to Okta as an OAuth 2.0 provider.</p>
+
+<p>Fortunately for you, <a href="https://github.com/moksamedia/okta-oauth2-service">I’ve already done this</a>.</p>
+
+<p>If you don’t already have an account with Okta, now would be a great time to sign up for a <a href="https://developer.okta.com/">free developer account</a>.</p>
+
+<p>Don’t forget to note your Okta URL as we’ll need it in a minute.</p>
+
+<p><img src="/assets/blog/okta-with-grails/okta-org-created-7f3cfbf6addba2b0b7c87befcc4df6f0552cd9b50ecffc6252d7dc3c31175dff.png" alt="Okta organization created" width="600" class="center-image" /></p>
+
+<h3 id="create-your-okta-application">Create Your Okta Application</h3>
+
+<p>Once you’ve logged into your Okta dashboard, you need to create an Application. You also need an Authorization Server, but fortunately for the purposes of this tutorial we can just use the default one.</p>
+
+<p>From your Okta admin panel, click on Applications in the top menu and then click “Add Application”</p>
+
+<p><img src="/assets/blog/okta-with-grails/app-setup-765547de8021265463dbf3529dfdf3d904796c01d8694d9fbaf7021fbb0ceb44.png" alt="Configure Okta application" width="600" class="center-image" /></p>
+
+<p>Select the web application icon and then click Next.</p>
+
+<p><img src="/assets/blog/okta-with-grails/add-application-web-1eb94a4cb7e34113c656e2c1b6a811b0f2ffbad3266edebc843da4cf1a226ddb.png" alt="Add Okta web application" width="600" class="center-image" /></p>
+
+<p>Next, we need to update the “Login redirect URIs”. OAuth 2.0 requires a whitelisted redirect URI that the OAuth server can direct the app to after successful login. The URL we’ll be using is: <code class="highlighter-rouge">http://localhost:8080/oauth2/okta/callback</code>. Enter that into the field and then hit “Done!”</p>
+
+<p><img src="/assets/blog/okta-with-grails/add-application-49ca0086fdd9d319e870f0261d64e620da68e18c1cdb2d1a545f2c4853b63eca.jpg" alt="Add Okta application" width="600" class="center-image" /></p>
+
+<p>You’ll need to copy your Client ID and Client Secret to a safe place for later.</p>
+
+<p><img src="/assets/blog/okta-with-grails/client-credentials-f2f84fe583bde297131c542f5f3369a2c034748053dee8a0d8b4ece84cd55613.png" alt="Remember your credentials" width="600" class="center-image" /></p>
+
+<p>That’s it for Okta setup for our purposes. You can certainly dig MUCH deeper into the OAuth rabbit hole with tons of configuration options. <a href="https://developer.okta.com/standards/OAuth/">Take a look here to get started.</a></p>
+
+<h2 id="dive-back-into-grails">Dive Back Into Grails!</h2>
+
+<p>We need to install three dependencies:</p>
+<ul>
+  <li><a href="https://grails-plugins.github.io/grails-spring-security-core/3.2.x/index.html#installation">Grails Spring Security Core Plugin.</a> (adds core Spring Security features)</li>
+  <li><a href="https://github.com/MatrixCrawler/grails-spring-security-oauth2">Grails Spring Security OAuth2 plugin.</a> (adds OAuth 2.0 features)</li>
+  <li><a href="https://github.com/moksamedia/okta-oauth2-service">Okta OAuth 2.0 Provider Plugin</a> (tells the OAuth plugin how to talk to Okta)</li>
+</ul>
+
+<p>Edit your <code class="highlighter-rouge">build.gradle</code> file, adding the new Maven repository and the three compile can you email brendependencies, as seen below.</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">repositories</span> <span class="o">{</span>
+   <span class="o">...</span>
+    <span class="n">maven</span> <span class="o">{</span>  
+        <span class="n">url</span>  <span class="s2">"https://dl.bintray.com/moksamedia/plugins"</span>
+    <span class="o">}</span>  
+<span class="o">}</span>
+
+<span class="n">dependencies</span> <span class="o">{</span>
+    <span class="n">compile</span> <span class="s1">'org.grails.plugins:spring-security-core:3.2.1'</span>
+    <span class="n">compile</span> <span class="s1">'org.grails.plugins:spring-security-oauth2:1.1.0'</span>
+    <span class="n">compile</span> <span class="s1">'spring.security.oauth2.okta:spring-security-oauth2-okta:0.1'</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><img src="/assets/blog/okta-with-grails/build-config-cf5a3384cbc30f16ef36296185cc96e4c6924a73de5879bdd5fbee7a226c614a.png" alt="build configuration" width="600" class="center-image" /></p>
+
+<p>The plugins come with a quickstart script that we need to run to generate some domain files and set up some configurations.</p>
+
+<p>From your main project directory, run the following command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>grails s2-quickstart com.oktacamerakit User Role
+</code></pre></div></div>
+
+<p>This creates your User and Role domain classes and adds some authentication configuration entries in the “grails-app/conf/application.groovy” file.</p>
+
+<p>Now run the OAuth 2.0 quickstart script:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>grails init-oauth2 com.oktacamerakit User OAuthID
+</code></pre></div></div>
+<p>The starter script creates an <code class="highlighter-rouge">OAuthID</code> domain class that links the OAuth 2.0 authenticated identities to your local User domain classes, and adds a configuration line to your <code class="highlighter-rouge">application.groovy</code> file.</p>
+
+<p>These install scripts did a pretty good job of setting things up, be we still need to make some changes.</p>
+
+<p>You need to add the following line to you <strong>User.groovy</strong> domain class. It doesn’t matter where you put it as long as it’s within the class definition.</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">static</span> <span class="n">hasMany</span> <span class="o">=</span> <span class="o">[</span><span class="nl">oAuthIDs:</span> <span class="n">OAuthID</span><span class="o">]</span>
+</code></pre></div></div>
+
+<p>We also need to edit the <code class="highlighter-rouge">UserRole.groovy</code> class slightly. Find the create method and change the default value for the flush param to true. (This particular tip cost me about three hours of my life. You get it for free.)</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">static</span> <span class="n">UserRole</span> <span class="nf">create</span><span class="o">(</span><span class="n">User</span> <span class="n">user</span><span class="o">,</span> <span class="n">Role</span> <span class="n">role</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">flush</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span>
+<span class="o">{</span>  
+    <span class="kt">def</span> <span class="n">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="n">UserRole</span><span class="o">(</span><span class="nl">user:</span> <span class="n">user</span><span class="o">,</span> <span class="nl">role:</span> <span class="n">role</span><span class="o">)</span>  
+    <span class="n">instance</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="nl">flush:</span> <span class="n">flush</span><span class="o">)</span> 
+    <span class="n">instance</span> 
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Finally, we need to add some configuration to the application.yml file. You need to fill in your Client ID for the <code class="highlighter-rouge">api_key</code> and your Client Secret for the <code class="highlighter-rouge">api_secret</code>, as well as your Okta URL in the three URLs.</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">grails</span><span class="pi">:</span> 
+    <span class="c1">### other grails config settings ###</span>
+    <span class="na">plugin</span><span class="pi">:</span>
+        <span class="na">springsecurity</span><span class="pi">:</span>
+            <span class="na">oauth2</span><span class="pi">:</span>
+                <span class="na">active</span><span class="pi">:</span> <span class="no">true</span>
+                <span class="na">registration</span><span class="pi">:</span>
+                    <span class="na">roleNames</span><span class="pi">:</span> <span class="pi">[</span><span class="s1">'</span><span class="s">ROLE_USER'</span><span class="pi">]</span>
+                <span class="na">providers</span><span class="pi">:</span>
+                    <span class="na">okta</span><span class="pi">:</span>
+                        <span class="na">api_key</span><span class="pi">:</span> <span class="s1">'</span><span class="s">&lt;Okta</span><span class="nv"> </span><span class="s">Client</span><span class="nv"> </span><span class="s">ID&gt;'</span>         
+                        <span class="na">api_secret</span><span class="pi">:</span> <span class="s1">'</span><span class="s">&lt;Okta</span><span class="nv"> </span><span class="s">Client</span><span class="nv"> </span><span class="s">Secret&gt;'</span>
+                        <span class="na">userInfoUrl</span><span class="pi">:</span> <span class="s1">'</span><span class="s"><span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>/oauth2/v1/userinfo'</span>
+                        <span class="na">authorizeUrl</span><span class="pi">:</span> <span class="s1">'</span><span class="s"><span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>/oauth2/v1/authorize'</span>
+                        <span class="na">tokenUrl</span><span class="pi">:</span> <span class="s1">'</span><span class="s"><span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>/oauth2/v1/token'</span>
+                        <span class="na">scopes</span><span class="pi">:</span> <span class="s1">'</span><span class="s">email</span><span class="nv"> </span><span class="s">profile</span><span class="nv"> </span><span class="s">openid'</span>
+</code></pre></div></div>
+
+<h3 id="run-the-app-again">Run the App Again</h3>
+
+<p>Whew! Lets test all that. Run the app again using <code class="highlighter-rouge">grails run-app</code>. You should see the following. Notice particularly the three new controllers listed below the “Available Controllers” heading.</p>
+
+<p><img src="/assets/blog/okta-with-grails/welcome-to-grails2-78c7c093793d71b1d0802298af0197c28f133b1bd8bc9b46b5721006ffe7f0e5.png" alt="Run the application again" width="600" class="center-image" /></p>
+
+<h2 id="add-a-grails-home-controller">Add A Grails Home Controller</h2>
+
+<p>Let’s add a Home controller for the app. Use the Grails CLI to add the controller.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>grails create-controller Home
+</code></pre></div></div>
+
+<p>Open the <code class="highlighter-rouge">HomeController.groovy</code> file and edit it to match the following. We need to do two things: 1) define our authentication requirement using the <code class="highlighter-rouge">@Secured</code> annotation, and 2) add some output text.</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">grails.plugin.springsecurity.annotation.Secured</span>
+
+<span class="kd">class</span> <span class="nc">HomeController</span> <span class="o">{</span>  
+    <span class="nd">@Secured</span><span class="o">(</span><span class="s1">'ROLE_USER'</span><span class="o">)</span>  
+    <span class="kt">def</span> <span class="nf">index</span><span class="o">()</span> <span class="o">{</span>  
+        <span class="n">render</span> <span class="s2">"Success!!!"</span>
+    <span class="o">}</span>  
+<span class="o">}</span>  
+</code></pre></div></div>
+
+<p>If you re-start the app and navigate to <code class="highlighter-rouge">http://localhost:8080</code> now you should see the Home controller listed below the authentication related controllers.</p>
+
+<p><img src="/assets/blog/okta-with-grails/available-controllers-798ea4e5d3b6eec273b4c4cf2b3062e0e13b5c35d2d4d39aeec4f6da4cb2c0cb.png" alt="List available controllers" width="600" class="center-image" /></p>
+
+<p>If you click on the <code class="highlighter-rouge">oktacamerakit.HomeController</code> link at the bottom of the screen, you’ll be taken to a login page. Currently this is a “local” login based on the User domain objects. Since there are no local users, there’s no way to authenticate.</p>
+
+<p>To fix this, one option would be to add a “Login with Okta” link to the bottom of the login page. This is pretty simple and would require creating a custom login page template and adding the link. We might get back to this in Part II of this tutorial.</p>
+
+<p>For the moment, we’re going to configure Okta to always redirect to the Okta login page when a user needs to log in. Add the following to you <code class="highlighter-rouge">application.groovy</code> file:</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">grails</span><span class="o">.</span><span class="na">plugin</span><span class="o">.</span><span class="na">springsecurity</span><span class="o">.</span><span class="na">auth</span><span class="o">.</span><span class="na">loginFormUrl</span> <span class="o">=</span> <span class="s1">'/springSecurityOAuth2/authenticate?provider=okta'</span>
+</code></pre></div></div>
+
+<h2 id="give-your-new-app-a-whirl">Give Your New App a Whirl!</h2>
+
+<p>That’s it! You should be all set.</p>
+
+<p>Go ahead and log into your developer.okta.com admin panel and sign out. This will force you to log in again through the Grails app instead of automatically being authenticated via OAuth.</p>
+
+<p>Re-start the app, using <code class="highlighter-rouge">grails run-app</code>, and this time navigate to <code class="highlighter-rouge">http://localhost:8080/home/index</code>.</p>
+
+<p>The first screen you’ll see (if you signed out) is the Okta login screen:</p>
+
+<p><img src="/assets/blog/okta-with-grails/okta-login-c7aaa6fb28ad35b26c9a31efad9b70a477f6d1e737463abb5de994d48b1c82c6.png" alt="Okta Login" width="600" class="center-image" /></p>
+
+<p>After logging in, you’ll be redirected back to your Grails app, where you’ll see the screen that allows you to either register a new account or link your OAuth account to an existing user account.</p>
+
+<p>Fill in the top form to register a new user account.</p>
+
+<p><img src="/assets/blog/okta-with-grails/grails-user-reg-df445af0f13c85b450be810b9891a58b7de33d61c328ec4cd3ff0c982d2e83ed.png" alt="Grails user registration" width="600" class="center-image" /></p>
+
+<h2 id="congrats-you-built-a-grails-app-with-okta-for-authentication">Congrats! You Built a Grails App with Okta for Authentication</h2>
+
+<p>Success! We did it! Pretty simple.</p>
+
+<p>Obviously there’s a lot we can do from here. We’ll look at building out the app more completely in Part 2 of this tutorial. We need to create some domain and controller classes to model our data, set up some views, and hook our authenticated users into a authorization system. I’ll also show you how to run the remote debugger in IntelliJ, configure logging, and set up the database so development data is persisted between sessions (right now it’s recreated every time the app is run, which is why the app will never remember who you are if you restart).</p>
+
+<h2 id="learn-more-about-grails-gradle-groovy-and-okta">Learn More about Grails, Gradle, Groovy, and Okta</h2>
+
+<p>If you’d like to learn more about Grails to get ready for Part 2 check out the <a href="http://docs.grails.org/snapshot/guide/single.html">documentation</a> and <a href="http://groovy-lang.org/documentation.html">Groovy Language Documentation</a>.</p>
+
+<p>While you’re in the Grails docs, make sure to familiarize yourself with the <a href="http://docs.grails.org/snapshot/guide/single.html#conventionOverConfiguration">basic folder structure of the Grails application</a>. As we saw, it can be touchy.</p>
+
+<p>You may also want to take a look at <a href="http://docs.grails.org/latest/guide/theWebLayer.html#understandingControllersAndActions">Understanding Controllers and Actions</a>.</p>
+
+<p>And finally, you can <a href="https://docs.gradle.org/4.6/userguide/userguide.html">check out the Gradle docs</a>.</p>
+
+<p>If you’d like to learn more about Okta, you should definitely be following our team on Twitter <a href="https://twitter.com/oktadev">@oktadev</a>. You can also check out these other cool Java posts:</p>
+
+<ul>
+  <li><a href="/blog/2017/11/20/add-sso-spring-boot-15-min">Add Single Sign-On to Your Spring Boot Web App in 15 Minutes</a></li>
+  <li><a href="/blog/2018/03/01/develop-microservices-jhipster-oauth">Develop a Microservices Architecture with OAuth 2.0 and JHipster</a></li>
+  <li><a href="/blog/2017/08/23/five-java-tips">5 Tips for Building your Java API</a></li>
+</ul>
+
+
+    </div>
+
+    
+    <div id="disqus">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_title = "Build Server Side Authentication in Grails with OAuth 2.0 and Okta";
+            var disqus_url = 'https://developer.okta.com/blog/2018/04/19/okta-with-grails';
+
+            (function () {
+                var dsq = document.createElement('script');
+                dsq.async = true;
+                dsq.type = 'text/javascript';
+                dsq.src = '//oktadevblog.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+          </script>
+          <noscript>
+              Please enable JavaScript to view the
+              <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus</a>.
+         </noscript>
+    </div>
+    
+</article>
+
+		
+</section>
+
+		
+	</div>
+	<footer class="Footer">
+    <div class="Wrap">
+
+        <div class="Row">
+
+            <div class="Column--3 Column--medium-6 Column--xSmall-12">
+                <a href="https://www.okta.com/" target="_blank" rel="noopener noreferrer">
+                    <div class="Logo">
+                        <img src="https://developer.okta.com/sites/all/themes/developer/images/logo-footer.png" alt="Okta">
+                    </div>
+                    <p>Visit okta.com</p>
+                </a>
+            </div>
+
+            <div class="Column--3 Column--medium-12 Column--xSmall-12">
+                <h4>Social</h4>
+                <ul class="Footer-links Footer-links--social">
+                    <li><a class="Footer-links--github" target="_blank" rel="noopener noreferrer" href="http://github.com/oktadeveloper">Github</a></li>
+                    <li><a class="Footer-links--twitter" target="_blank" rel="noopener noreferrer" href="http://twitter.com/OktaDev">Twitter</a></li>
+                    <li><a class="Footer-links--forum" target="_blank" rel="noopener noreferrer" href="https://devforum.okta.com/">Forum</a></li>
+                    <li><a class="Footer-links--rss" target="_blank" rel="noopener noreferrer" href="http://feeds.feedburner.com/OktaBlog">RSS Blog</a></li>
+                </ul>
+            </div>
+
+            <div class="Column--3 Column--medium-6 Column--small-12">
+                <h4>More Info</h4>
+                <ul class="Footer-links">
+                    <li><a target="_blank" href="https://developer.okta.com/integrate-with-okta/">Integrate with Okta</a></li>
+                    <li><a href="/blog/">Blog</a></li>
+                    <li><a href="/docs/change-log/">Change Log</a></li>
+                    <li><a href="/3rd_party_notices/">3rd Party Notices</a></li>
+                </ul>
+            </div>
+
+            <div class="Column--3 Column--medium-6 Column--small-12">
+                <h4>Contact &amp; Legal</h4>
+                <ul class="Footer-links">
+                    <li><a href="https://developer.okta.com/contact/">Contact Sales</a></li>
+                    <li><a target="_blank" rel="noopener noreferrer" href="mailto:developers@okta.com">Contact Support</a></li>
+                    <li><a href="https://developer.okta.com/terms/">Terms &amp; Conditions</a></li>
+                    <li><a href="https://developer.okta.com/privacy/">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script type="text/javascript" src="/assets/master-aa397c892d9083236c5cb20732dde679021b9236c8142ce78177b8b184567a02.js"></script>
+    <script type="text/javascript" src="/assets/myOkta-911cbafbbe079b7a5522d9cbe15bd2a5f44e1582531e88393934bec69f97696b.js"></script>
+    
+    
+    
+    
+      <script type="text/javascript" src="/assets/blog-6e32dad27404131cc8630a5282264bed2ab4c08c91ac86fa496b75c53aa4f681.js"></script>
+    
+
+  <!-- START Post Footer -->
+  
+  <!-- START Google Tag Manager -->
+  <!-- https://support.google.com/tagmanager/answer/6103696?hl=en -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TJ45R6" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- END Google Tag Manager -->
+  <!-- START Google Remarketing Tag -->
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var google_conversion_id = 1006913831;
+    var google_custom_params = window.google_tag_params;
+    var google_remarketing_only = true;
+    /* ]]> */
+  </script>
+  <div style="display:none;"><script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script></div>
+  <noscript><div style="display:inline;"><img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1006913831/?value=0&amp;guid=ON&amp;script=0"></div></noscript>
+  <!-- END Google Remarketing Tag -->
+  <!-- START Crazy Egg Tracking -->
+  <script type="text/javascript">
+    setTimeout(function(){var a=document.createElement("script");
+    var b=document.getElementsByTagName("script")[0];
+    a.src=document.location.protocol+"//script.crazyegg.com/pages/scripts/0021/9333.js?"+Math.floor(new Date().getTime()/3600000);
+    a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+  </script>
+  <!-- END Crazy Egg Tracking -->
+
+  <!-- END Post Footer -->
+</body>
+</html>
