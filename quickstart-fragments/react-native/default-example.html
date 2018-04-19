@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en" dir="ltr">
+<head>
+    <meta name="robots" content="noindex">
+</head>
+<body>
+    <h2 id="okta-react-native-quickstart">Okta React Native Quickstart</h2>
+
+<p>This guide will walk you through integrating authentication into a React Native app with Okta by performing these steps:</p>
+
+<ol>
+  <li>Add an OpenID Connect Client in Okta</li>
+  <li>Install the Okta React Native SDK</li>
+  <li>Provide the Login and Logout Buttons</li>
+  <li>Using the AccessToken</li>
+</ol>
+
+<p>At the end of the React Native instructions you can choose your server type to learn more about post-authentication workflows, such as verifying tokens that your React Native application can send to your server.</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<ul>
+  <li>If you do not already have a <strong>Developer Edition Account</strong>, you can create one at <a href="https://developer.okta.com/signup/">https://developer.okta.com/signup/</a>.</li>
+  <li>If you don’t have a React Native app, or are new to React Native, please continue with the <a href="https://github.com/react-community/create-react-native-app#getting-started">React Native Quickstart</a> guide. It will walk you through the creation of a React Native app and other application development essentials.</li>
+  <li>If you are developing with an Android device emulator, make sure to check out the <a href="https://facebook.github.io/react-native/docs/getting-started.html#android-development-environment">React Native - Android Development</a> setup instructions.</li>
+</ul>
+
+<h2 id="add-an-openid-connect-client-in-okta">Add an OpenID Connect Client in Okta</h2>
+
+<p>In Okta, applications are OpenID Connect clients that can use Okta Authorization servers to authenticate users.  Your Okta Org already has a default authorization server, so you just need to create an OIDC client that will use it.</p>
+
+<ul>
+  <li>Log into the Okta Developer Dashboard, click <strong>Applications</strong> then <strong>Add Application</strong>.</li>
+  <li>Choose <strong>Native app</strong> as the platform, then populate your new OpenID Connect application with values suitable for your app. If you are running this locally and using the defaults from the <a href="https://github.com/react-community/create-react-native-app#getting-started">React Native Quickstart</a>, your <code class="highlighter-rouge">port</code> will be <code class="highlighter-rouge">19000</code>:</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>Setting</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>App Name</td>
+      <td>My Native App</td>
+    </tr>
+    <tr>
+      <td>Login redirect URIs</td>
+      <td>com.oktapreview.{orgName}:/+expo-auth-session</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>exp://localhost:{port}/+expo-auth-session</td>
+    </tr>
+    <tr>
+      <td>Grant Types Allowed</td>
+      <td>Authorization Code, Refresh Token</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>After you have created the application there are two more values you will need to gather:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Setting</th>
+      <th>Where to Find</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Client ID</td>
+      <td>In the applications list, or on the “General” tab of a specific application.</td>
+    </tr>
+    <tr>
+      <td>Org URL</td>
+      <td>On the home screen of the developer dashboard, in the upper right.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>These values will be used in your React Native application to setup the OpenID Connect flow with Okta.</p>
+
+<h2 id="install-the-okta-react-native-sdk">Install the Okta React Native SDK</h2>
+
+<p>You will need to use the <a href="https://github.com/okta/okta-oidc-js/tree/master/packages/okta-react-native">Okta React Native SDK</a> library to sign in the user by redirecting to the authorization endpoint on your Okta Org. You can install it via npm:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install <span class="nt">--save</span> @okta/okta-react-native
+</code></pre></div></div>
+
+<h3 id="configuration">Configuration</h3>
+
+<p>You will need the values from the OIDC client that you created in the previous step to instantiate the client. You will also need to know your Okta Org URL, which you can see on the home page of the Okta Developer console.</p>
+
+<p>Assuming you’re using an app created with <code class="highlighter-rouge">create-react-native-app</code>, modify your <code class="highlighter-rouge">app.json</code> to add a <code class="highlighter-rouge">scheme</code>:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+  <span class="s2">"expo"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"scheme"</span><span class="p">:</span> <span class="s2">"com.oktapreview.{orgName}"</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In your application’s controller, create a new instance of the <code class="highlighter-rouge">TokenClient</code>:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// App.js</span>
+
+<span class="k">import</span> <span class="nx">TokenClient</span> <span class="k">from</span> <span class="s1">'@okta/okta-react-native'</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">tokenClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TokenClient</span><span class="p">({</span>
+  <span class="na">issuer</span><span class="p">:</span> <span class="s1">'<span class="okta-preview-domain">https://{yourOktaDomain}.com</span>/oauth2/default'</span><span class="p">,</span>
+  <span class="na">client_id</span><span class="p">:</span> <span class="s1">'{clientId}'</span><span class="p">,</span>
+  <span class="na">scope</span><span class="p">:</span> <span class="s1">'openid profile'</span><span class="p">,</span>
+  <span class="na">redirect_uri</span><span class="p">:</span> <span class="nx">__DEV__</span> <span class="p">?</span>
+    <span class="s1">'exp://localhost:{port}/+expo-auth-session'</span> <span class="p">:</span>
+    <span class="s1">'com.oktapreview.{orgName}:/+expo-auth-session'</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h2 id="provide-the-login-and-logout-buttons">Provide the Login and Logout Buttons</h2>
+
+<p>In the relevant location in your application, you will want to provide <code class="highlighter-rouge">Login</code> and <code class="highlighter-rouge">Logout</code> buttons for the user. You can show/hide the correct button by using the <code class="highlighter-rouge">isAuthenticated()</code> method. For example:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="s1">'react'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Button</span><span class="p">,</span> <span class="nx">Text</span><span class="p">,</span> <span class="nx">View</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'react-native'</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">TokenClient</span> <span class="k">from</span> <span class="s1">'@okta/okta-react-native'</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">tokenClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TokenClient</span><span class="p">({</span>
+  <span class="c1">// See configuration above</span>
+<span class="p">});</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="kd">class</span> <span class="nx">App</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">();</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span> <span class="na">authenticated</span><span class="p">:</span> <span class="kc">false</span> <span class="p">};</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">login</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">login</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">logout</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">logout</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">async</span> <span class="nx">componentDidMount</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kr">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">async</span> <span class="nx">checkAuthentication</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">authenticated</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">tokenClient</span><span class="p">.</span><span class="nx">isAuthenticated</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">authenticated</span> <span class="o">!==</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">authenticated</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">authenticated</span><span class="p">:</span> <span class="nx">authenticated</span> <span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">async</span> <span class="nx">login</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kr">await</span> <span class="nx">tokenClient</span><span class="p">.</span><span class="nx">signInWithRedirect</span><span class="p">();</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">async</span> <span class="nx">logout</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kr">await</span> <span class="nx">tokenClient</span><span class="p">.</span><span class="nx">signOut</span><span class="p">();</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">checkAuthentication</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">View</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">Text</span><span class="o">&gt;</span><span class="nx">Okta</span> <span class="o">+</span> <span class="nx">React</span> <span class="nx">Native</span><span class="o">&lt;</span><span class="sr">/Text</span><span class="err">&gt;
+</span>        <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">authenticated</span> <span class="p">?</span>
+          <span class="o">&lt;</span><span class="nx">Button</span>
+            <span class="nx">onPress</span><span class="o">=</span><span class="p">{</span><span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">logout</span><span class="p">()}}</span>
+            <span class="nx">title</span><span class="o">=</span><span class="s2">"Logout"</span>
+          <span class="o">/&gt;</span> <span class="p">:</span>
+          <span class="o">&lt;</span><span class="nx">Button</span>
+            <span class="nx">onPress</span><span class="o">=</span><span class="p">{</span><span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">login</span><span class="p">()}}</span>
+            <span class="nx">title</span><span class="o">=</span><span class="s2">"Login"</span>
+          <span class="o">/&gt;</span>
+        <span class="p">}</span>
+      <span class="o">&lt;</span><span class="sr">/View</span><span class="err">&gt;
+</span>    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="using-the-access-token">Using the Access Token</h2>
+
+<p>Your React Native application now has an access token in <a href="https://docs.expo.io/versions/latest/sdk/securestore">secure storage</a> that was issued by your Okta Authorization server. You can use this token to authenticate requests for resources on your server or API. As a hypothetical example, let’s say that you have an API that gives us messages for our user.  You could create a <code class="highlighter-rouge">MessageList</code> component that gets the access token from secure storage, and use it to make an authenticated request to your resource server.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="nx">getMessages</span><span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">fetch</span><span class="p">(</span><span class="s1">'http://localhost:{serverPort}/api/messages'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">method</span><span class="p">:</span> <span class="s1">'GET'</span><span class="p">,</span>
+    <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">Authorization</span><span class="p">:</span> <span class="s2">`Bearer </span><span class="p">${</span><span class="kr">await</span> <span class="nx">tokenClient</span><span class="p">.</span><span class="nx">getAccessToken</span><span class="p">()}</span><span class="s2">`</span><span class="p">,</span>
+      <span class="s1">'Content-Type'</span><span class="p">:</span> <span class="s1">'application/json'</span><span class="p">,</span>
+    <span class="p">}</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">json</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span>
+      <span class="na">messages</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">json</span><span class="p">.</span><span class="nx">messages</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Please continue down to the next section, Server Setup, to learn about access token validation on the server.</p>
+
+</body>
+</html>
