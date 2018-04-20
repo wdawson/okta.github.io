@@ -2,10 +2,10 @@
 layout: blog_post
 title: "Hello, Okta. It’s me, Dave"
 author: drnugent
-description: "Welcoming Dave Nugent to the Okta team"
+description: "Welcoming Dave Nugent to the Okta team."
 tags: [javascript, okta, forwardjs, team]
 tweets:
-- "Welcome @drnugent to the @oktadev team "
+- "Welcome @drnugent to the @oktadev team"
 ---
 
 I’m excited to announce that I have joined Okta’s developer relations team as a full-time Senior Developer Advocate. I will focus on the JavaScript community, including Node.js, Vue, and React.
