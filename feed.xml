@@ -8,6 +8,721 @@
     <atom:link href="https://developer.okta.com/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Simple Node Authentication</title>
+        <description>&lt;p&gt;Authenticating users for Node.js/Express.js web apps can be difficult. You have to set up a database, define a user schema (or use something more flexible like NoSQL), write code to handle password hashing, etc. It’s annoying.&lt;/p&gt;
+
+&lt;p&gt;Using Okta’s API service, however, you can easily register and log in users to your Node website using our OpenID Connect integration.&lt;/p&gt;
+
+&lt;h2 id=&quot;set-up-your-node-environment&quot;&gt;Set Up Your Node Environment&lt;/h2&gt;
+
+&lt;p&gt;If you’re new to Node and don’t already have it installed, you’ll need to do that first. To keep things simple, let’s assume a *nix-based environment (e.g. Mac, *nix, or &lt;a href=&quot;https://docs.microsoft.com/en-us/windows/wsl/about&quot;&gt;Linux on Windows&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;There’s a great tool called &lt;code class=&quot;highlighter-rouge&quot;&gt;nvm&lt;/code&gt;, which makes it very simple to install various versions of Node and switch on the fly if you need to test with another version. It will also make sure you have the latest version of node installed and ready to go. Run the following command to install Node via &lt;code class=&quot;highlighter-rouge&quot;&gt;nvm&lt;/code&gt; and get your environment fully set up.&lt;/p&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;go&quot;&gt;curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.9/install.sh | bash
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If you run into trouble installing, you can find more information on the &lt;a href=&quot;https://github.com/creationix/nvm#installation&quot;&gt;installation section of the &lt;code class=&quot;highlighter-rouge&quot;&gt;nvm&lt;/code&gt; README&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;create-a-simple-node-application&quot;&gt;Create a Simple Node Application&lt;/h2&gt;
+
+&lt;p&gt;Now that you have Node installed, let’s get started writing an app.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: If you want to skip the tutorial and jump straight to the finished product you can &lt;a href=&quot;https://github.com/oktadeveloper/okta-node-express-example&quot;&gt;check out this sample app on GitHub&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In the Node ecosystem, the most popular web server is &lt;a href=&quot;https://expressjs.com/&quot;&gt;Express&lt;/a&gt;. Luckily for you, the Express team has also created a nifty &lt;a href=&quot;https://expressjs.com/en/starter/generator.html&quot;&gt;command line tool&lt;/a&gt; which helps bootstrap Express web applications. You can always customize the bootstrapped project &lt;code class=&quot;highlighter-rouge&quot;&gt;express-generator&lt;/code&gt; generates, but let’s start with that to get up and running quickly.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;npm i &lt;span class=&quot;nt&quot;&gt;-g&lt;/span&gt; express-generator@4.16.0
+/Users/bmk/.nvm/versions/node/v9.5.0/bin/express -&amp;gt; /Users/bmk/.nvm/versions/node/v9.5.0/lib/node_modules/express-generator/bin/expr
+ess-cli.js
++ express-generator@4.16.0
+added 10 packages &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;4.175s
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;express &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; hbs &lt;span class=&quot;nt&quot;&gt;--git&lt;/span&gt; simple-node-authentication
+
+   create : simple-node-authentication/
+   create : simple-node-authentication/public/
+   create : simple-node-authentication/public/javascripts/
+   create : simple-node-authentication/public/images/
+   create : simple-node-authentication/public/stylesheets/
+   create : simple-node-authentication/public/stylesheets/style.css
+   create : simple-node-authentication/routes/
+   create : simple-node-authentication/routes/index.js
+   create : simple-node-authentication/routes/users.js
+   create : simple-node-authentication/views/
+   create : simple-node-authentication/views/error.hbs
+   create : simple-node-authentication/views/index.hbs
+   create : simple-node-authentication/views/layout.hbs
+   create : simple-node-authentication/.gitignore
+   create : simple-node-authentication/app.js
+   create : simple-node-authentication/package.json
+   create : simple-node-authentication/bin/
+   create : simple-node-authentication/bin/www
+
+   change directory:
+     &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;simple-node-authentication
+
+   install dependencies:
+     &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;npm install
+
+   run the app:
+     &lt;span class=&quot;nv&quot;&gt;$ DEBUG&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;simple-node-authentication:&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; npm start
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;simple-node-authentication/
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git init
+Initialized empty Git repository &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; /Users/bmk/code/simple-node-authentication/.git/
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;npm i
+npm notice created a lockfile as package-lock.json. You should commit this file.
+added 81 packages &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;3.09s
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;npm start
+
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; simple-node-authentication@0.0.0 start /Users/bmk/code/simple-node-authentication
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; node ./bin/www
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;npm i -g express-generator&lt;/code&gt;: installs the Express Generator&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;express -v hbs --git simple-node-authentication&lt;/code&gt;: generates a skeleton for our app
+    &lt;ul&gt;
+      &lt;li&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;-v hbs&lt;/code&gt; option tells the generator to use &lt;code class=&quot;highlighter-rouge&quot;&gt;handlebars&lt;/code&gt; as the view engine instead of &lt;code class=&quot;highlighter-rouge&quot;&gt;pug&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;--git&lt;/code&gt; option will create a &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitignore&lt;/code&gt; file with some useful defaults&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;cd simple-node-authentication&lt;/code&gt;: navigate to the app folder&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git init &amp;amp;&amp;amp; git add . &amp;amp;&amp;amp; git commit -m 'bootstrap with express-generator'&lt;/code&gt;: make sure to keep track of changes
+    &lt;ul&gt;
+      &lt;li&gt;This will set up a git repository and save all the generated files in the initial commit.
+  From now on, you will just be tracking your changes&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;npm i&lt;/code&gt;: this installs the dependencies to the &lt;code class=&quot;highlighter-rouge&quot;&gt;node_modules&lt;/code&gt; directory. The &lt;code class=&quot;highlighter-rouge&quot;&gt;i&lt;/code&gt; command is short for &lt;code class=&quot;highlighter-rouge&quot;&gt;install&lt;/code&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;strong&gt;Note:&lt;/strong&gt; The &lt;code class=&quot;highlighter-rouge&quot;&gt;node_modules&lt;/code&gt; directory can get notoriously large, and there is a &lt;code class=&quot;highlighter-rouge&quot;&gt;package-lock.json&lt;/code&gt; filethat keeps track of the exact versions of each dependency you’re using. Because of this, best practice is to ignore this folder from source control (e.g. &lt;code class=&quot;highlighter-rouge&quot;&gt;echo node_modules/ &amp;gt;&amp;gt; .gitignore&lt;/code&gt;). If you ever feel your &lt;code class=&quot;highlighter-rouge&quot;&gt;node_modules&lt;/code&gt; is corrupted, you can simply &lt;code class=&quot;highlighter-rouge&quot;&gt;rm -rf node_modules &amp;amp;&amp;amp; npm i&lt;/code&gt; to restore the dependencies&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;npm start&lt;/code&gt;: This is the Node standard command to start a server
+    &lt;ul&gt;
+      &lt;li&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;start&lt;/code&gt; script is actually defined inside &lt;code class=&quot;highlighter-rouge&quot;&gt;package.json&lt;/code&gt;. By default it would be the equivalent of running &lt;code class=&quot;highlighter-rouge&quot;&gt;node index.js&lt;/code&gt;, but in our case, it is really running &lt;code class=&quot;highlighter-rouge&quot;&gt;node ./bin/www&lt;/code&gt;.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;…&lt;/li&gt;
+  &lt;li&gt;Profit!&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Your server is now running at http://localhost:3000. Right now it’s just a basic “Hello World” app, but you’re going to make it a little more useful in a moment.&lt;/p&gt;
+
+&lt;h2 id=&quot;monitor-code-changes-in-your-node-application&quot;&gt;Monitor Code Changes in Your Node Application&lt;/h2&gt;
+
+&lt;p&gt;Having your web server restart automatically each time you make a code change can save you a ton of time as you’re developing your web applications. To accomplish this, you can use &lt;code class=&quot;highlighter-rouge&quot;&gt;nodemon&lt;/code&gt;. To add it to the project, type &lt;code class=&quot;highlighter-rouge&quot;&gt;npm i nodemon&lt;/code&gt;. Once you’ve installed &lt;code class=&quot;highlighter-rouge&quot;&gt;nodemon&lt;/code&gt;, you’ll add a &lt;code class=&quot;highlighter-rouge&quot;&gt;dev&lt;/code&gt; script to your &lt;code class=&quot;highlighter-rouge&quot;&gt;package.json&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-diff highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;   &quot;scripts&quot;: {
+&lt;span class=&quot;gi&quot;&gt;+    &quot;dev&quot;: &quot;nodemon node ./bin/www&quot;,
+&lt;/span&gt;     &quot;start&quot;: &quot;node ./bin/www&quot;
+   },
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;From now on, instead of running &lt;code class=&quot;highlighter-rouge&quot;&gt;npm start&lt;/code&gt; to boot up your development server, you can run &lt;code class=&quot;highlighter-rouge&quot;&gt;npm run dev&lt;/code&gt; and any code changes you make will automatically trigger a web server restart.&lt;/p&gt;
+
+&lt;h2 id=&quot;configure-code-linting&quot;&gt;Configure Code Linting&lt;/h2&gt;
+
+&lt;p&gt;Linters help catch bugs while you’re coding rather than waiting for them to crop up in production. They also help keep code styling consistent when collaborating with other contributors. One of the most common linters is &lt;code class=&quot;highlighter-rouge&quot;&gt;eslint&lt;/code&gt;, which is incredibly configurable. There are many presets out there, but my favorite is called &lt;code class=&quot;highlighter-rouge&quot;&gt;standard&lt;/code&gt;. They actually have their own tool, based on &lt;code class=&quot;highlighter-rouge&quot;&gt;eslint&lt;/code&gt;, but it’s not possible to customize that, so in this example, I’ll go with &lt;code class=&quot;highlighter-rouge&quot;&gt;eslint&lt;/code&gt; and make a few modifications to the &lt;code class=&quot;highlighter-rouge&quot;&gt;standard&lt;/code&gt; config.&lt;/p&gt;
+
+&lt;p&gt;To do this, create a file in the project root named &lt;code class=&quot;highlighter-rouge&quot;&gt;.eslintrc&lt;/code&gt; with the following:&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;extends&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;standard&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;rules&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;comma-dangle&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;error&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;always-multiline&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;no-var&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;error&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;prefer-const&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;error&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now you need to install a few dev dependencies (the &lt;code class=&quot;highlighter-rouge&quot;&gt;-D&lt;/code&gt; flag is for dev dependencies).&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  npm i &lt;span class=&quot;nt&quot;&gt;-D&lt;/span&gt; eslint eslint-config-standard eslint-plugin-standard eslint-plugin-promise eslint-plugin-import eslint-plugin-node
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I added a few rules I like. You can tweak these to your liking:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://eslint.org/docs/rules/comma-dangle&quot;&gt;comma-dangle&lt;/a&gt; is really just a style preference. I like that if I add a new line to the end of a list, the git history won’t show the previously last line as
+code I modified&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://eslint.org/docs/rules/no-var&quot;&gt;no-var&lt;/a&gt; forces us to use the newer &lt;code class=&quot;highlighter-rouge&quot;&gt;let&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;const&lt;/code&gt; keywords
+for declaring variables. They have proper scoping and tend to be safer to use&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://eslint.org/docs/rules/prefer-const&quot;&gt;prefer-const&lt;/a&gt; will have you use &lt;code class=&quot;highlighter-rouge&quot;&gt;const&lt;/code&gt; by default, and only use &lt;code class=&quot;highlighter-rouge&quot;&gt;let&lt;/code&gt; if the variable is going to be re-assigned later&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You’ll want to add another script to &lt;code class=&quot;highlighter-rouge&quot;&gt;package.json&lt;/code&gt; for testing:&lt;/p&gt;
+
+&lt;div class=&quot;language-diff highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;   &quot;scripts&quot;: {
+     &quot;dev&quot;: &quot;nodemon node ./bin/www&quot;,
+&lt;span class=&quot;gi&quot;&gt;+    &quot;test&quot;: &quot;eslint . ./bin/www&quot;,
+&lt;/span&gt;     &quot;start&quot;: &quot;node ./bin/www&quot;
+   },
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You can now test your codebase at any time using &lt;code class=&quot;highlighter-rouge&quot;&gt;npm test&lt;/code&gt;. The first time around, there will be quite a few errors because the code from &lt;code class=&quot;highlighter-rouge&quot;&gt;express-generator&lt;/code&gt; wasn’t written using the same config. To fix them in bulk run &lt;code class=&quot;highlighter-rouge&quot;&gt;./node_modules/.bin/eslint . ./bin/www --fix&lt;/code&gt; from the root of your project.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;.&lt;/code&gt; says to check the current directory tree for any &lt;code class=&quot;highlighter-rouge&quot;&gt;.js&lt;/code&gt; files. Since &lt;code class=&quot;highlighter-rouge&quot;&gt;./bin/www&lt;/code&gt; doesn’t have a &lt;code class=&quot;highlighter-rouge&quot;&gt;.js&lt;/code&gt; extension, but is a JavaScript file as well, you need to add that for it to be scanned.&lt;/p&gt;
+
+&lt;p&gt;It turns out &lt;code class=&quot;highlighter-rouge&quot;&gt;bin/www&lt;/code&gt; actually has some unreachable code that can’t be automatically fixed. Let’s go fix that real quick. Since &lt;code class=&quot;highlighter-rouge&quot;&gt;process.exit&lt;/code&gt; will actually end the node process, the &lt;code class=&quot;highlighter-rouge&quot;&gt;break&lt;/code&gt; keywords are a bit redundant, so you can just remove those.&lt;/p&gt;
+
+&lt;div class=&quot;language-diff highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gu&quot;&gt;@@ -67,11 +67,9 @@ function onError (error) {
+&lt;/span&gt;     case 'EACCES':
+       console.error(bind + ' requires elevated privileges')
+       process.exit(1)
+&lt;span class=&quot;gd&quot;&gt;-      break
+&lt;/span&gt;     case 'EADDRINUSE':
+       console.error(bind + ' is already in use')
+       process.exit(1)
+&lt;span class=&quot;gd&quot;&gt;-      break
+&lt;/span&gt;     default:
+       throw error
+   }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;There’s pretty good support for using &lt;code class=&quot;highlighter-rouge&quot;&gt;eslint&lt;/code&gt; within most text editors which allows you to see the errors as you’re typing the code. Most of the time, you won’t even need to run &lt;code class=&quot;highlighter-rouge&quot;&gt;npm test&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;You might need to install a plugin to get this to work. To see if your editor is supported,
+&lt;a href=&quot;https://eslint.org/docs/user-guide/integrations#editors&quot;&gt;check here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;add-authentication-with-okta&quot;&gt;Add Authentication With Okta&lt;/h2&gt;
+
+&lt;p&gt;The Express generator created a skeleton for you to get started. Now, let’s add authentication. Traditionally, there is a lot to think about when it comes to creating a safe, secure application. For example, what are best practices for storing hashed passwords? Do these best practices change often? Should you use multi-factor authentication? To say there’s a lot of research to do this right is an understatement.&lt;/p&gt;
+
+&lt;p&gt;Luckily, Okta makes this really easy by offloading authentication and letting you focus on what makes your app unique. To get started &lt;a href=&quot;https://developer.okta.com/signup/&quot;&gt;sign up for a free Okta Developer account&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;You’ll get a link to your own Okta Org URL which you’ll use to sign in from now on, so you should save it for later. It’ll look something like &lt;code class=&quot;highlighter-rouge&quot;&gt;https://dev-123456.oktapreview.com&lt;/code&gt;. In order to log in, check your email for a temporary password.&lt;/p&gt;
+
+&lt;p&gt;After logging into the dev console, click on the &lt;strong&gt;Applications&lt;/strong&gt; tab, then click &lt;strong&gt;Add Application&lt;/strong&gt;. For this example, you should use the &lt;strong&gt;Web&lt;/strong&gt; option.&lt;/p&gt;
+
+&lt;p&gt;Express uses port 3000 by default. Here you should name your application and change the ports, but leave all the other settings the same for now. Eventually, you’ll want to add URIs for a custom domain, but &lt;code class=&quot;highlighter-rouge&quot;&gt;localhost&lt;/code&gt; is fine for testing.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/simple-node-authentication/create-web-app-settings-a97eff4b0ac34c5a601cd2f909529bf672ae21b88f5b4615f80e575e45608ad2.png&quot; alt=&quot;Okta Create Web App Settings&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;After creating your application, you’ll get access to your client credentials. Save the client ID
+and client secret for the next step.&lt;/p&gt;
+
+&lt;h2 id=&quot;add-the-openid-connect-middleware-to-expressjs&quot;&gt;Add the OpenID Connect Middleware to Express.js&lt;/h2&gt;
+
+&lt;p&gt;Now for some real code. Okta provides Express middleware to make authentication simple in Node.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm i @okta/oidc-middleware@0.1.2 express-session@1.15.6
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;In your &lt;code class=&quot;highlighter-rouge&quot;&gt;app.js&lt;/code&gt; file you’ll want to set up support for sessions and add the OIDC middleware. You’ll need to reference the &lt;code class=&quot;highlighter-rouge&quot;&gt;oidc&lt;/code&gt; middleware in the &lt;code class=&quot;highlighter-rouge&quot;&gt;bin/www&lt;/code&gt; file, so you should export that as well.&lt;/p&gt;
+
+&lt;div class=&quot;language-diff highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gh&quot;&gt;diff --git a/app.js b/app.js
+index 1cf250f..f5ad0ab 100644
+&lt;/span&gt;&lt;span class=&quot;gd&quot;&gt;--- a/app.js
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+++ b/app.js
+&lt;/span&gt;&lt;span class=&quot;gu&quot;&gt;@@ -3,12 +3,22 @@ const express = require('express')
+&lt;/span&gt; const path = require('path')
+ const cookieParser = require('cookie-parser')
+ const logger = require('morgan')
+&lt;span class=&quot;gi&quot;&gt;+const session = require('express-session')
++const { ExpressOIDC } = require('@okta/oidc-middleware')
+&lt;/span&gt;
+ const indexRouter = require('./routes/index')
+&lt;span class=&quot;gd&quot;&gt;-const usersRouter = require('./routes/users')
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+const dashboardRouter = require('./routes/dashboard')
+&lt;/span&gt;
+ const app = express()
+
+&lt;span class=&quot;gi&quot;&gt;+const oidc = new ExpressOIDC({
++  issuer: `${process.env.ORG_URL}/oauth2/default`,
++  client_id: process.env.CLIENT_ID,
++  client_secret: process.env.CLIENT_SECRET,
++  redirect_uri: `${process.env.HOST_URL}/authorization-code/callback`,
++  scope: 'openid profile',
++})
++
+&lt;/span&gt; // view engine setup
+ app.set('views', path.join(__dirname, 'views'))
+ app.set('view engine', 'hbs')
+&lt;span class=&quot;gu&quot;&gt;@@ -19,8 +29,19 @@ app.use(express.urlencoded({ extended: false }))
+&lt;/span&gt; app.use(cookieParser())
+ app.use(express.static(path.join(__dirname, 'public')))
+
+&lt;span class=&quot;gi&quot;&gt;+app.use(session({
++  secret: process.env.APP_SECRET,
++  resave: true,
++  saveUninitialized: false,
++}))
++
++app.use(oidc.router)
+&lt;/span&gt; app.use('/', indexRouter)
+&lt;span class=&quot;gd&quot;&gt;-app.use('/users', usersRouter)
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+app.use('/dashboard', oidc.ensureAuthenticated(), dashboardRouter)
++app.get('/logout', (req, res) =&amp;gt; {
++  req.logout()
++  res.redirect('/')
++})
+&lt;/span&gt;
+ // catch 404 and forward to error handler
+ app.use(function (req, res, next) {
+&lt;span class=&quot;gu&quot;&gt;@@ -38,4 +59,4 @@ app.use(function (err, req, res, next) {
+&lt;/span&gt;   res.render('error')
+ })
+
+&lt;span class=&quot;gd&quot;&gt;-module.exports = app
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+module.exports = { app, oidc }
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The Okta middleware adds a &lt;code class=&quot;highlighter-rouge&quot;&gt;logout&lt;/code&gt; function to the request object, so you can log users out with a call to &lt;code class=&quot;highlighter-rouge&quot;&gt;req.logout()&lt;/code&gt;. That was added above as a route, so you just need a link to &lt;code class=&quot;highlighter-rouge&quot;&gt;/logout&lt;/code&gt; in order to sign out, which I’ll show you a bit later.&lt;/p&gt;
+
+&lt;p&gt;For this example you’re not going to be using the &lt;code class=&quot;highlighter-rouge&quot;&gt;users&lt;/code&gt; route that came with the skeleton either, so you can remove that by running &lt;code class=&quot;highlighter-rouge&quot;&gt;git rm routes/users.js&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;You might be wondering where all the &lt;code class=&quot;highlighter-rouge&quot;&gt;process.env&lt;/code&gt; variables are coming from. It’s a best practice not to store sensitive information in source control, so you can instead use &lt;code class=&quot;highlighter-rouge&quot;&gt;dotenv&lt;/code&gt;. This lets you keep things like your client secret in a file that you ignore from source control. It also lets you define different variables depending on whether you’re running in development or production.&lt;/p&gt;
+
+&lt;p&gt;For now, install the package with &lt;code class=&quot;highlighter-rouge&quot;&gt;npm i dotenv&lt;/code&gt;, then create a &lt;code class=&quot;highlighter-rouge&quot;&gt;.env&lt;/code&gt; file in the root of the project.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;ORG_URL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;https://dev-123456.oktapreview.com
+&lt;span class=&quot;nv&quot;&gt;HOST_URL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;http://localhost:3000
+&lt;span class=&quot;nv&quot;&gt;CLIENT_ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;okta-application-client-id
+&lt;span class=&quot;nv&quot;&gt;CLIENT_SECRET&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;okta-application-client-secret
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;For &lt;code class=&quot;highlighter-rouge&quot;&gt;APP_SECRET&lt;/code&gt; we just need something random, which can be generated with this command:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;APP_SECRET=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;openssl rand &lt;span class=&quot;nt&quot;&gt;-base64&lt;/span&gt; 32&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; .env
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You still need to tell your code to use environment variables via &lt;code class=&quot;highlighter-rouge&quot;&gt;dotenv&lt;/code&gt;, and change the way you start the server to work with Okta’s middleware. You need the &lt;code class=&quot;highlighter-rouge&quot;&gt;dotenv&lt;/code&gt; import to be the first code your app comes across to make sure the environment variables are set up properly.&lt;/p&gt;
+
+&lt;p&gt;These are the changes you need to make in &lt;code class=&quot;highlighter-rouge&quot;&gt;bin/www&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-diff highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gh&quot;&gt;diff --git a/bin/www b/bin/www
+index 48c4fc5..414ca9a 100755
+&lt;/span&gt;&lt;span class=&quot;gd&quot;&gt;--- a/bin/www
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+++ b/bin/www
+&lt;/span&gt;&lt;span class=&quot;gu&quot;&gt;@@ -4,7 +4,8 @@
+&lt;/span&gt;  * Module dependencies.
+  */
+
+&lt;span class=&quot;gd&quot;&gt;-const app = require('../app')
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+require('dotenv').config()
++const { app, oidc } = require('../app')
+&lt;/span&gt; const debug = require('debug')('simple-node-authentication:server')
+ const http = require('http')
+
+&lt;span class=&quot;gu&quot;&gt;@@ -25,7 +26,10 @@ const server = http.createServer(app)
+&lt;/span&gt;  * Listen on provided port, on all network interfaces.
+  */
+
+&lt;span class=&quot;gd&quot;&gt;-server.listen(port)
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+oidc.on('ready', () =&amp;gt; {
++  server.listen(port)
++})
++oidc.on('error', onError)
+&lt;/span&gt; server.on('error', onError)
+ server.on('listening', onListening)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;add-a-dashboard-and-login-page&quot;&gt;Add a Dashboard and Login Page&lt;/h2&gt;
+
+&lt;p&gt;Let’s create a private dashboard that’s only accessible for logged in users. In &lt;code class=&quot;highlighter-rouge&quot;&gt;app.js&lt;/code&gt; you already added the reference to your dashboard’s router, so you’ll need to add that in &lt;code class=&quot;highlighter-rouge&quot;&gt;routes/dashboard.js&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'express'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;startCase&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'lodash'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;router&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Router&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'/'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;descriptionList&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;keys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;userinfo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;term&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;startCase&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;details&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'updated_at'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;userinfo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;userinfo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]),&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}))&lt;/span&gt;
+
+  &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'dashboard'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Dashboard'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;descriptionList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;userinfo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;module&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;exports&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;router&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I added &lt;code class=&quot;highlighter-rouge&quot;&gt;lodash&lt;/code&gt;, so you’ll need to install that as a dependency with &lt;code class=&quot;highlighter-rouge&quot;&gt;npm i lodash@4.17.5&lt;/code&gt;. You’ll also want to add a view to describe how to render the data in &lt;code class=&quot;highlighter-rouge&quot;&gt;views/dashboard.hbs&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-hbs highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;h1&amp;gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;{{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;userinfo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;given_name&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}&lt;/span&gt;'s Dashboard&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h1&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;Here's where you would put something useful. How about your profile info?&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;dl&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;{{#&lt;/span&gt;&lt;span class=&quot;nn&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;descriptionList&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;dt&amp;gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;{{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;term&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dt&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;dd&amp;gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;{{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;details&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dd&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;{{/&lt;/span&gt;&lt;span class=&quot;nn&quot;&gt;each&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dl&amp;gt;&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;clean-up-the-styling&quot;&gt;Clean Up the Styling&lt;/h2&gt;
+
+&lt;p&gt;You can add a header in &lt;code class=&quot;highlighter-rouge&quot;&gt;views/layout.hbs&lt;/code&gt; that will be visible on every page. As long as the routers pass in &lt;code class=&quot;highlighter-rouge&quot;&gt;userinfo&lt;/code&gt; to the &lt;code class=&quot;highlighter-rouge&quot;&gt;render&lt;/code&gt; function, you’ll know if the user is signed in. You also want to pass in &lt;code class=&quot;highlighter-rouge&quot;&gt;title&lt;/code&gt; to set the page’s title and set the header.&lt;/p&gt;
+
+&lt;div class=&quot;language-hbs highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;{{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'stylesheet'&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'/stylesheets/style.css'&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;header&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;h1&amp;gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;{{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h1&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;{{#if&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;userinfo&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&amp;gt;&lt;/span&gt;
+          Signed in as &lt;span class=&quot;k&quot;&gt;{{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;userinfo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;{{/if}}&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;{{#if&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;userinfo&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/logout&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Sign out&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;{{else}}&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/login&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Sign in&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;{{/if}}&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/header&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;main&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;{{{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}}&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/main&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The CSS lives in &lt;code class=&quot;highlighter-rouge&quot;&gt;public/stylesheets/style.css&lt;/code&gt;. Here’s how mine looks after making a few changes.&lt;/p&gt;
+
+&lt;div class=&quot;language-css highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;padding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;margin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;font&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;14px&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&quot;Lucida Grande&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Helvetica&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Arial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sans-serif&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;#208075&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;header&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;display&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;flex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;justify-content&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;space-between&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;align-items&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;center&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;background-color&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;#208075&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;white&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;font-size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;16px&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;header&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;#d1e5e1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;header&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;main&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;padding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;50px&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;dt&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;padding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;4px&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;font-weight&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;bold&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;add-a-login-page&quot;&gt;Add a Login Page&lt;/h2&gt;
+
+&lt;p&gt;It turns out there’s not really much to do here. Okta’s middleware adds a &lt;code class=&quot;highlighter-rouge&quot;&gt;/login&lt;/code&gt; route for you, so all you really need to do is add a link. In fact, you don’t even need to link to the &lt;code class=&quot;highlighter-rouge&quot;&gt;/login&lt;/code&gt; page directly. Since your dashboard page uses the &lt;code class=&quot;highlighter-rouge&quot;&gt;oidc.ensureAuthenticated()&lt;/code&gt; middleware, any time a user tries to go to the dashboard, they will first be directed to log in. After logging in, they’ll be redirected back to the intended page.&lt;/p&gt;
+
+&lt;p&gt;In &lt;code class=&quot;highlighter-rouge&quot;&gt;routes/index.js&lt;/code&gt; you want to know if the user’s authenticated or not, so you can pass that info to the view with &lt;code class=&quot;highlighter-rouge&quot;&gt;req.userinfo&lt;/code&gt;. While you’re at it, go ahead and change the default title from &lt;code class=&quot;highlighter-rouge&quot;&gt;Express&lt;/code&gt; to the name of your app.&lt;/p&gt;
+
+&lt;div class=&quot;language-diff highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;gd&quot;&gt;-  res.render('index', { title: 'Express' })
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+  res.render('index', {
++    title: 'Simple Node Authentication',
++    userinfo: req.userinfo,
++  })
+&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;In &lt;code class=&quot;highlighter-rouge&quot;&gt;views/index.hbs&lt;/code&gt;, let’s add a link to the dashboard.&lt;/p&gt;
+
+&lt;div class=&quot;language-hbs highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;Welcome to &lt;span class=&quot;k&quot;&gt;{{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;
+  To access your dashboard,
+  &lt;span class=&quot;k&quot;&gt;{{#if&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;userinfo&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/dashboard&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;click here&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;.
+  &lt;span class=&quot;k&quot;&gt;{{else}}&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/dashboard&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;sign in&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;.
+  &lt;span class=&quot;k&quot;&gt;{{/if}}&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now when you run the app, you get a page that looks like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/simple-node-authentication/simple-node-auth-homepage-ab0991d295b1edd137414262fe99ae6c803c8fa3dfc950d99354d18a763f1ab1.png&quot; alt=&quot;Simple Node Auth Homepage&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Clicking the &lt;code class=&quot;highlighter-rouge&quot;&gt;log in&lt;/code&gt; link will take you to Okta’s sign in page. After signing in, you’ll be directed to a dashboard page with your profile info.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/simple-node-authentication/simple-node-auth-dashboard-98c19578b5fcab1ac996a498fe8137ec26f70a58f259a6adb6afd6b09fddc055.png&quot; alt=&quot;Simple Node Auth Dashboard&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;add-user-registration&quot;&gt;Add User Registration&lt;/h2&gt;
+
+&lt;p&gt;You should have a functional app now with authentication and protected pages, created with only a few additions to the basic skeleton app. You don’t have any way to add new users though.&lt;/p&gt;
+
+&lt;p&gt;Let’s create a simple registration page. For this, we’ll be using the &lt;a href=&quot;https://github.com/okta/okta-sdk-nodejs&quot;&gt;Okta Node.js SDK&lt;/a&gt;, which you can install with &lt;code class=&quot;highlighter-rouge&quot;&gt;npm i @okta/okta-sdk-nodejs@1.1.0&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;You’ll also need an API token from Okta to be able to create a user. After logging in to your developer console, select &lt;strong&gt;API&lt;/strong&gt; &amp;gt; &lt;strong&gt;Tokens&lt;/strong&gt; from the menu.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/simple-node-authentication/okta-api-tokens-0f71c43a9ce1919444a99d2e5bf88eafad75374d1f3f809ba44ee8af44926729.png&quot; alt=&quot;Okta API Tokens&quot; width=&quot;600&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Create a token with a useful name, like &lt;code class=&quot;highlighter-rouge&quot;&gt;registration&lt;/code&gt;, then save the value in &lt;code class=&quot;highlighter-rouge&quot;&gt;.env&lt;/code&gt; as &lt;code class=&quot;highlighter-rouge&quot;&gt;REGISTRATION_TOKEN&lt;/code&gt;. The value of the token will only be displayed once, so if you lose it you’ll need to create a new one.&lt;/p&gt;
+
+&lt;p&gt;Now you’ll need to create a view and a router for the registration page.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;routes/register.js&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;okta&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'@okta/okta-sdk-nodejs'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'express'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;router&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Router&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;client&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;okta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;orgUrl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;process&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ORG_URL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;process&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;REGISTRATION_TOKEN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Create an account'&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'/'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;userinfo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Logged in users shouldn't be able to register&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;redirect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'/'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'register'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'/'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kr&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;createUser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;profile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;firstName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;firstName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;lastName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;lastName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;login&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;credentials&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+
+    &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;redirect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'/dashboard'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;({&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;errorCauses&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;errors&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;errorCauses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;reduce&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;summary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;errorSummary&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/Password/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;errorSummary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;assign&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;errorSummary&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+      &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;error&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/^&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;.+&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;?)&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;: &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;.+&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;$/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;exec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;errorSummary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;assign&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;error&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;summary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{})&lt;/span&gt;
+
+    &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'register'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;errors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;module&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;exports&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;router&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;When initially loading the page, the fields will be blank. If the &lt;code class=&quot;highlighter-rouge&quot;&gt;createUser&lt;/code&gt; function throws an error, you’ll want to keep the user on the page and display those errors inline. You can pre-populate the fields with the data they entered last time, so they don’t have to type everything in again.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;views/register.hbs&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-hbs highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;h4&amp;gt;&lt;/span&gt;After creating your account, you will be asked to sign in and provide a security question.&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h4&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;form&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;method=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;post&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;label&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;for=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;firstname&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    First Name
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;firstname&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;firstName&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;required&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;{{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;firstName&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;label&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;error&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;{{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;errors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;firstName&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/label&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/label&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;label&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;for=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;lastname&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    Last Name
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;lastname&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;lastName&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;required&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;{{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;lastName&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;label&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;error&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;{{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;errors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;lastName&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/label&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/label&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;label&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;for=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;email&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    Email address
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;email&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;email&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;email&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;required&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;{{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;label&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;error&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;{{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;errors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/label&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;label&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;error&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;{{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;errors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;login&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/label&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/label&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;label&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;for=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;password&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    Password
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;password&quot;&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;password&quot;&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;required&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;{{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;label&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;error&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;{{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;errors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/label&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/label&amp;gt;&lt;/span&gt;
+
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;button&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;submit&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Register&lt;span class=&quot;nt&quot;&gt;&amp;lt;/button&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/form&amp;gt;&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You can now add a link to the homepage in &lt;code class=&quot;highlighter-rouge&quot;&gt;views/index.hbs&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-diff highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+     &amp;lt;a href=&quot;/dashboard&quot;&amp;gt;click here&amp;lt;/a&amp;gt;.
+   {{else}}
+     &amp;lt;a href=&quot;/dashboard&quot;&amp;gt;sign in&amp;lt;/a&amp;gt;.
+&lt;span class=&quot;gi&quot;&gt;+  &amp;lt;/p&amp;gt;
++  &amp;lt;p&amp;gt;
++    If you don't have an account, you can
++    &amp;lt;a href=&quot;/register&quot;&amp;gt;register for free&amp;lt;/a&amp;gt;.
+&lt;/span&gt;   {{/if}}
+ &amp;lt;/p&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now if you navigate to http://localhost:3000/register, you’ll find a registration page.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/simple-node-authentication/create-account-40e52df68da95026259677ab53d2924772bdf1557e1704f331041f857f75a4ad.png&quot; alt=&quot;Create Account&quot; width=&quot;400&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;If Okta returns any errors, they will be shown in the form.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/simple-node-authentication/account-already-exists-3a66750f1fd70c7311e0f1c4ad6478bae834e11ea4c805a2a23b3fa0a6032796.png&quot; alt=&quot;Account Already Exists&quot; width=&quot;400&quot; class=&quot;center-image&quot; /&gt;
+&lt;img src=&quot;/assets/blog/simple-node-authentication/account-password-requirements-c6538ce7d0b4bd57237019373d9af966bfacbdf82ba8e97f9c0b317eb56b160f.png&quot; alt=&quot;Account Password Requirements&quot; width=&quot;400&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;add-credential-recovery&quot;&gt;Add Credential Recovery&lt;/h2&gt;
+
+&lt;p&gt;If a user forgets their password, they will need a way to reset it. Okta’s API allows you to send a recovery link to a user’s email address. You just need a simple page to ask the user for their email address.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;views/reset-password.hbs&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;p&quot;&gt;{{&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;success&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}}&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;h4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Please&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;check&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;your&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;inbox&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;recovery&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/h4&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{{&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}}&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;h4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Enter&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;your&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;email&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;address&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;have&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;password&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;recovery&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;email&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sent&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;you&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/h4&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{{&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/if}&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;}
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;form&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;method&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;post&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;label&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;email&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;Email&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;address&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;input&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;autofocus&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;email&quot;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;email&quot;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;email&quot;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;required&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;{{body.email}}&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;label&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;error&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/label&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/label&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;button&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;submit&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Send&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Recovery&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/button&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/form&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;routes/reset-password.js&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;okta&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'@okta/okta-sdk-nodejs'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'express'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;router&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Router&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;client&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;okta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;orgUrl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;process&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ORG_URL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;process&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;REGISTRATION_TOKEN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Password Recovery'&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'/'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'reset-password'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;router&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'/'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getUser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;kr&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;resetPassword&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+    &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'reset-password'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;success&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'reset-password'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Could not find an account with that email address'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;module&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;exports&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;router&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;views/index.hbs&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-diff highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+   &amp;lt;p&amp;gt;
+     If you don't have an account, you can
+     &amp;lt;a href=&quot;/register&quot;&amp;gt;register for free&amp;lt;/a&amp;gt;.
+&lt;span class=&quot;gi&quot;&gt;+  &amp;lt;/p&amp;gt;
++  &amp;lt;p&amp;gt;
++    If you have an account, but forgot your password,
++    &amp;lt;a href=&quot;/reset-password&quot;&amp;gt;click here&amp;lt;/a&amp;gt; to
++    send a recovery link to your email address.
+&lt;/span&gt;   {{/if}}
+ &amp;lt;/p&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;app.js&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-diff highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gu&quot;&gt;@@ -9,6 +9,7 @@ const { ExpressOIDC } = require('@okta/oidc-middleware')
+&lt;/span&gt; const indexRouter = require('./routes/index')
+ const dashboardRouter = require('./routes/dashboard')
+ const registrationRouter = require('./routes/register')
+&lt;span class=&quot;gi&quot;&gt;+const resetPassword = require('./routes/reset-password')
+&lt;/span&gt;
+ const app = express()
+
+&lt;span class=&quot;gu&quot;&gt;@@ -40,6 +41,7 @@ app.use(oidc.router)
+&lt;/span&gt; app.use('/', indexRouter)
+ app.use('/dashboard', oidc.ensureAuthenticated(), dashboardRouter)
+ app.use('/register', registrationRouter)
+&lt;span class=&quot;gi&quot;&gt;+app.use('/reset-password', resetPassword)
+&lt;/span&gt; app.get('/logout', (req, res) =&amp;gt; {
+   req.logout()
+   res.redirect('/')
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/simple-node-authentication/password-recovery-59ee56373bf6c0c251a066856ed92b0cc3894165175853a49869d82ad2d32b7c.png&quot; alt=&quot;Password Recovery&quot; width=&quot;400&quot; class=&quot;center-image&quot; /&gt;
+&lt;img src=&quot;/assets/blog/simple-node-authentication/password-recovery-invalid-email-282e9ed6c78ede7da05e2cc2cb0cb64020a8809bac00075d44045eecaa7ba572.png&quot; alt=&quot;Password Recovery Invalid Email&quot; width=&quot;400&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;learn-more-about-node-and-secure-user-management-with-okta&quot;&gt;Learn More About Node and Secure User Management with Okta&lt;/h2&gt;
+
+&lt;p&gt;Now you have a fully functioning web application with user registration, authentication, and credential recovery, without having to has a single password or manage a single user. You can have your cake, and eat it too!&lt;/p&gt;
+
+&lt;p&gt;OK, the cake is a lie, but you can now focus on what makes your application great and unique while offloading the complications of user management to Okta. If you’d like to learn more about Node, Okta, authentication, or application security, I’d encourage you to check out the rest of the Okta developer blog, and specifically these great resources:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://developer.okta.com/code/nodejs/&quot;&gt;Our Node SDK Documentation&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/okta/okta-oidc-js/tree/master/packages/oidc-middleware&quot;&gt;Okta OIDC Middleware Documentation&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/blog/2018/02/06/build-user-registration-with-node-react-and-okta&quot;&gt;Build User Registration with Node, React, and Okta&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/blog/2018/02/15/build-crud-app-vuejs-node&quot;&gt;Build a Basic CRUD App with Vue.js and Node&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/blog/2017/06/21/what-the-heck-is-oauth&quot;&gt;What the Heck is OAuth?&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=0VWkQMr7r_c&amp;amp;t=4276s&quot;&gt;VIDEO: OAuth 2.0 and OpenID Connect in Plain English&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;And as always, we’d love to hear from you. Hit us up with questions or feedback in the comments, or on Twitter &lt;a href=&quot;https://twitter.com/OktaDev&quot;&gt;@oktadev&lt;/a&gt;.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 24 Apr 2018 00:00:00 -0500</pubDate>
+        <link>https://developer.okta.com/blog/2018/04/24/simple-node-authentication</link>
+        <guid isPermaLink="true">https://developer.okta.com/blog/2018/04/24/simple-node-authentication</guid>
+      </item>
+    
+      <item>
         <title>Hello, Okta. It’s me, Dave</title>
         <description>&lt;p&gt;I’m excited to announce that I have joined Okta’s developer relations team as a full-time Senior Developer Advocate. I will focus on the JavaScript community, including Node.js, Vue, and React.&lt;/p&gt;
 
@@ -3324,167 +4039,6 @@ git checkout okta
         <pubDate>Fri, 16 Mar 2018 00:00:00 -0500</pubDate>
         <link>https://developer.okta.com/blog/2018/03/16/build-react-native-authentication-oauth-2</link>
         <guid isPermaLink="true">https://developer.okta.com/blog/2018/03/16/build-react-native-authentication-oauth-2</guid>
-      </item>
-    
-      <item>
-        <title>Hosting Our First Developer Conference, Iterate</title>
-        <description>&lt;p&gt;&lt;img src=&quot;/assets/blog/iterate/iterate-front-wall-51b370aab015285f58682e4dceefa6fedde6b7bf6f1fb785917dd5c02dc81c4b.jpg&quot; alt=&quot;Iterate Front Wall&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;A couple weeks ago (Tuesday, Feb. 27) &lt;a href=&quot;https://twitter.com/oktadev&quot;&gt;we&lt;/a&gt; officially ran the very first &lt;a href=&quot;https://www.iterateconf.io/&quot;&gt;Iterate Developer Conference&lt;/a&gt;. Not only did we have a ton of fun throwing a developer conference, but it was also a huge success and succeeded in hitting all of our goals.&lt;/p&gt;
-
-&lt;p&gt;In this post I’ll recap the Iterate experience from start to finish, including some interesting things I learned along the way.&lt;/p&gt;
-
-&lt;p&gt;If you weren’t lucky enough to attend Iterate, don’t worry – we’ll most definitely be running another one next year. &lt;!--In fact, if you’d like to be notified about next year’s Iterate conference you can give us your email on our [Iterate website](https://www.iterateconf.io/) and we’ll email you as we figure things out.--&gt;&lt;/p&gt;
-
-&lt;p&gt;Want to know what Iterate was like? Check out our cool new recap video!&lt;/p&gt;
-
-&lt;div style=&quot;text-align: center&quot;&gt;&lt;iframe style=&quot;max-width: 100%&quot; width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/R4P_8bi8s9M&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;why-host-a-developer-conference&quot;&gt;Why Host a Developer Conference?&lt;/h2&gt;
-
-&lt;p&gt;Hosting a conference is a &lt;strong&gt;lot&lt;/strong&gt; of work. If you’re considering hosting a developer conference of your own, you should sit down and clearly think about the end goal: why are you considering hosting a developer conference in the first place? It’s going to be a lot of work, a lot of stress, and a lot of money. Return on investment is not guaranteed and tracking ROI can be murky at best.&lt;/p&gt;
-
-&lt;p&gt;What it essentially boils down to is this: have a strong purpose and goal in mind before you dive into running a big event like a conference that will consume a massive amount of time and resources.&lt;/p&gt;
-
-&lt;p&gt;So, &lt;em&gt;why&lt;/em&gt; did we decide to host a developer conference? Good question! ;) Okta, after all, already runs a large and successful conference called &lt;a href=&quot;https://www.okta.com/oktane18/&quot;&gt;Oktane&lt;/a&gt; each year. Why add another one?&lt;/p&gt;
-
-&lt;p&gt;Oktane is primarily focused on Okta’s IT business and customers. While Oktane is a great event (Barack Obama AND Kumail Nanjiani will be &lt;a href=&quot;https://www.okta.com/oktane18/&quot;&gt;speaking there this year&lt;/a&gt;!) we wanted to host a separate conference that would truly embody the developer spirit and serve as a tribute to hackers everywhere.&lt;/p&gt;
-
-&lt;p&gt;We wanted to host a conference that would:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Exist to serve developers and no one else.&lt;/li&gt;
-  &lt;li&gt;Not be about marketing, sales, or self promotion. We wanted our new conference to be 100% genuine and authentic to the developer community in a way that is simply not possible when the goal of your event is to make money.&lt;/li&gt;
-  &lt;li&gt;Motivate developers to improve themselves: get better at their craft, become more effective in their jobs and businesses, find new ways to keep their passions alive, and realize their full potential.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;We decided upfront that we’d track our success through post-event surveys with carefully selected questions and gauge our success against a rubric.&lt;/p&gt;
-
-&lt;p&gt;Once we had the goal in mind, we thought about what sort of event we wanted to craft that would allow us to succeed in our mission.&lt;/p&gt;
-
-&lt;h2 id=&quot;building-a-mindful-developer-conference&quot;&gt;Building a Mindful Developer Conference&lt;/h2&gt;
-
-&lt;p&gt;I’ve attended a ton of developer conferences in my life, both as an attendee and speaker. And while I absolutely love technology conferences – I’ve always felt like they’re typically missing something.&lt;/p&gt;
-
-&lt;p&gt;Most developer conferences focus on a particular piece of technology (Pycon for Python, GopherCon for Go), but to my knowledge there are no developer conferences that focus on &lt;em&gt;all&lt;/em&gt; the skills you need to be an awesome developer.&lt;/p&gt;
-
-&lt;p&gt;Being a great developer is about a whole lot more than just staying up-to-date with the latest frameworks and tools. It’s about staying passionate over many years, continuously automating and improving all aspects of your work (even when you’re busy), helping out your co-workers and collaborators, and many other &lt;em&gt;soft skills&lt;/em&gt; that are absolutely necessary to those of us seeking the topmost tiers of performance.&lt;/p&gt;
-
-&lt;h3 id=&quot;picking-a-theme&quot;&gt;Picking a Theme&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/iterate/iterate-nate-847085f631790aa556ffc293f966b33e48a3b6982d499734eb3f11351a7831fc.jpg&quot; alt=&quot;Iterate Nate&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;To ensure Iterate was an event we could all be proud of, &lt;a href=&quot;https://twitter.com/rdegges&quot;&gt;the&lt;/a&gt; &lt;a href=&quot;https://twitter.com/nbarbettini&quot;&gt;four&lt;/a&gt; &lt;a href=&quot;https://twitter.com/LindsayB610&quot;&gt;of&lt;/a&gt; &lt;a href=&quot;https://twitter.com/Alyssa_C&quot;&gt;us&lt;/a&gt; sat down to discuss our ideas and decided to build Iterate around the theme of constant improvement: &lt;em&gt;Iteration&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;From there we decided to have two talk tracks at Iterate: Build and Evolve.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/iterate/iterate-build-agenda-b78fcbafbbd5d7b9396fb7b475ebc151d058ce352c031ee021941ef2b8233b4b.jpg&quot; alt=&quot;Iterate Build Agenda&quot; width=&quot;300&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Build was our technical track consisting of four carefully selected topics that educated the audience about what’s happening at the bleeding edge of technology. What are the latest and most important things to know for frontend developers and backend developers? What should developers know about security to stay relevant and build secure applications? What are other important aspects of development that are rapidly changing?&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/iterate/iterate-evolve-agenda-ddd493392c80209e2badc71ec0094c20b3c8ee3d74020d2f5eda1ca86a594f81.jpg&quot; alt=&quot;Iterate Evolve Agenda&quot; width=&quot;300&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Evolve was our culture track that consisted of four talks about improving yourself as a developer in non-technical ways: measuring and automating your life so you can tweak what doesn’t work and double down on what does, how to stay passionate over the long haul, how to build a team and culture at your company that enables &lt;em&gt;everyone&lt;/em&gt; to be a 10x developer, and also how to be massively productive by discarding management norms and working in innovative ways.&lt;/p&gt;
-
-&lt;h3 id=&quot;making-your-conference-feel-special&quot;&gt;Making Your Conference Feel Special&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/iterate/iterate-fun-536d8564d4c0e352dbda38ddb98482709ea156b4a5cd92f1731bb4ac21308750.jpg&quot; alt=&quot;Iterate Fun&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Once we had our tracks defined and topics planned out in a way that made sense, we started working on all the details that would make Iterate truly unique. We pulled in ideas from the best conferences we’ve attended in the past, and threw in some new ideas of our own.&lt;/p&gt;
-
-&lt;p&gt;I, for instance, was really adamant about starting the conference around lunch time (something that Heroku did with their &lt;a href=&quot;https://blog.heroku.com/waza-2013&quot;&gt;Waza&lt;/a&gt; conference, hands down the best developer event of all time). I abhor waking up early to make it to events that start at 8 or 9am.&lt;/p&gt;
-
-&lt;p&gt;We wanted our attendees to show up to Iterate awake and refreshed, not sluggish from just waking up and commuting to the venue. Starting with lunch would give attendees a chance to make friends and hang out before diving into technical talks and intense focus.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/iterate/iterate-zoltar-6632cda2be2d0190aa9d046bd413885fa42cc3cb723b9924470665cb98515b09.jpg&quot; alt=&quot;Iterate Zoltar&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;To stay true to our mission of being authentic and focusing on building a hacker friendly event, we also decided to not do any self promotion: we didn’t have typical vendor booths and we didn’t focus on lead collection activities.&lt;/p&gt;
-
-&lt;p&gt;Instead: we partnered with some of the best developer companies on the planet: &lt;a href=&quot;https://www.twilio.com/&quot;&gt;Twilio&lt;/a&gt;, &lt;a href=&quot;https://www.algolia.com/&quot;&gt;Algolia&lt;/a&gt;, &lt;a href=&quot;https://www.atlassian.com/&quot;&gt;Atlassian&lt;/a&gt;, and the &lt;a href=&quot;https://js.foundation/&quot;&gt;JS Foundation&lt;/a&gt; who each crafted their own “experiences” for attendees to enjoy.&lt;/p&gt;
-
-&lt;p&gt;Each of our partner companies really &lt;em&gt;understand&lt;/em&gt; developers and what we were trying to do which helped make the event really special. &amp;gt;:) We only work with the best!&lt;/p&gt;
-
-&lt;p&gt;In short: we tried our best to make Iterate something truly unique and appealing to our audience.&lt;/p&gt;
-
-&lt;h2 id=&quot;the-iterate-experience&quot;&gt;The Iterate Experience&lt;/h2&gt;
-
-&lt;p&gt;When the big day finally came, everything really came together nicely.&lt;/p&gt;
-
-&lt;p&gt;After lunch, we started the conference off in the main room. Every attendee found a copy of Jeff Atwood’s book, &lt;a href=&quot;http://amzn.to/2Hni9SE&quot;&gt;Effective Programming: More Than Writing Code&lt;/a&gt;, on their seat. This is &lt;em&gt;the book&lt;/em&gt; on writing quality software.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/iterate/iterate-jeff-atwood-book-888dbf0aa1816db328dbbddbde5c5f70248d0a81ac9f515f0ab819d349a382a2.jpg&quot; alt=&quot;Jeff Atwood's Book at Iterate &quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;We opened the conference up with an AWESOME intro video (which we’ll upload soon) set to the &lt;a href=&quot;https://www.youtube.com/watch?v=vlEN8svyHj8&quot;&gt;best programming music ever made&lt;/a&gt; and a great talk by &lt;a href=&quot;https://twitter.com/salatzar&quot;&gt;Alex Salazar&lt;/a&gt; introducing the conference and setting the tone.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/iterate/iterate-alex-f301a7d265a676c018c2f927457c16cabdcbd17bb16494c6b4fd2aaea64ba2a9.jpg&quot; alt=&quot;Iterate Alex&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The intro video is a story in and of itself, but imagine a huge LED wall and a pitch black stage. Then imagine a terminal tinted green (like those old school CRT monitors). After a few seconds you see some typing and a programmer opens a file and starts writing cryptic Python code. A moment later the program is finished and the newly created program runs. Queue a stream of slowly printing ASCII art which prints a welcome message and has some hidden hacker emblems. =) Finally, the program introduces the first speaker of the day and slowly fades away. It was pretty epic.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/iterate/iterate-jeff-atwood-1c69010c25e78c79670b19c6bbb0c26444991141abb88867093612b35aec3f8a.jpg&quot; alt=&quot;Iterate Jeff Atwood&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://blog.codinghorror.com/&quot;&gt;Jeff Atwood&lt;/a&gt;, co-founder of &lt;a href=&quot;https://stackoverflow.com/&quot;&gt;StackOverflow&lt;/a&gt; and &lt;a href=&quot;https://www.discourse.org/&quot;&gt;Discourse&lt;/a&gt;, as well as one of the most influential developers of all time then gave an &lt;a href=&quot;https://www.youtube.com/watch?v=vrKTSg5gWN4&quot;&gt;amazing keynote&lt;/a&gt; about crafting software. If you’re a software developer, you really owe it to yourself to watch his talk: it was absolutely fantastic for anyone who’s building programs that people interact with.&lt;/p&gt;
-
-&lt;div style=&quot;text-align: center&quot;&gt;&lt;iframe style=&quot;max-width: 100%&quot; width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/vrKTSg5gWN4&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;&lt;/div&gt;
-
-&lt;p&gt;Once the keynote had finished, attendees split up into the two tracks (Build and Evolve) and the first round of talks got started.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/iterate/iterate-attendees-e08ea981203a4c15fec3b241739082bc71ae30662e4f97410d9d944fcc3b4141.jpg&quot; alt=&quot;Iterate Attendees&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;During breaks attendees went out into the main hall to grab snacks (&lt;em&gt;we had awesome food!&lt;/em&gt;) and partake in the partner experiences:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Twilio had baristas&lt;/li&gt;
-  &lt;li&gt;Algolia brought a massive Zoltar machine that spat out developer fortunes&lt;/li&gt;
-  &lt;li&gt;Atlassian built a programmer trivia game and gave away prizes&lt;/li&gt;
-  &lt;li&gt;The JS Foundation had popcorn and puns&lt;/li&gt;
-  &lt;li&gt;We (Okta) hosted a really fun photo booth&lt;/li&gt;
-  &lt;li&gt;We (&lt;a href=&quot;https://www.okta.com/okta-for-good/&quot;&gt;Okta For Good&lt;/a&gt;) also hosted a donation station where developers could pledge to either:
-    &lt;ul&gt;
-      &lt;li&gt;Donate money to the &lt;a href=&quot;https://opencollective.com/opensource&quot;&gt;Open Source Collective&lt;/a&gt;, a fund that distributes money to open source projects in need of funding&lt;/li&gt;
-      &lt;li&gt;Donate their time towards contributing to an open source project: writing docs, fixing bugs, or adding features&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Once the conference talks were over (each track consisted of four talks), we turned the main conference hall into a big party. Everyone hung out, made friends, and had a good time.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/iterate/iterate-google-home-a62c34b39285c817940041162e93eef101f14f688a9e8458a1ef8c73322718fb.jpg&quot; alt=&quot;Iterate Google Home&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Throughout the day, attendees also got a pretty cool Iterate t-shirt and Google Home Mini to take home with them as a thank you for coming. People loved this.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;PS&lt;/strong&gt;: If you want to watch some of the Iterate talks, you should go check them out on our &lt;a href=&quot;https://www.youtube.com/watch?v=vrKTSg5gWN4&amp;amp;list=PLshTZo9V1-aGWLr7Yu--kxr9x7P8OzSHX&quot;&gt;Developer YouTube Channel&lt;/a&gt;!&lt;/p&gt;
-
-&lt;h2 id=&quot;the-review&quot;&gt;The Review&lt;/h2&gt;
-
-&lt;p&gt;Once Iterate was all wrapped up the following week, the conference team got together to discuss the event, what worked well and what didn’t.&lt;/p&gt;
-
-&lt;p&gt;Based on what we heard from attendees, we succeeded in doing what we set out to do: throw an authentic developer conference that got attendees excited and motivated to continue fine-tuning their craft.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/iterate/iterate-group-383a79e0bc29a5b2a8d3c9f79746d449037ff74c890917779c01585aaa816eb9.jpg&quot; alt=&quot;Iterate Group&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;In my personal Iterate experience, I could see that all the attendees had a really good time. Everyone I spoke with said they loved the conference, the talks, the “vibe”, and had a great time. I heard at least 20 different developers say they were really motivated and hyped to go write some software – that made me happy. One awesome attendee even wrote up a &lt;a href=&quot;http://codyo.com/blog/attending-oktas-iterate-conf&quot;&gt;recap of the event&lt;/a&gt;!&lt;/p&gt;
-
-&lt;p&gt;While there were a few minor things we all thought we could do better next time, the overall sentiment was very positive. Looking over the event and all the responses from attendees, we all felt pretty damn proud being part of the Iterate team. =)&lt;/p&gt;
-
-&lt;p&gt;Iterate was a ton of fun, and all of us helping put it together had a blast. I want to give a massive shout-out to some of the core crewmembers who really made it all happen (in no particular order):&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://twitter.com/Alyssa_C&quot;&gt;Alyssa Smrekar&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://twitter.com/LindsayB610&quot;&gt;Lindsay Brunner&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://twitter.com/nbarbettini&quot;&gt;Nate Barbettini&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.linkedin.com/in/rebecca-haugen-gagnon-14bb9158/&quot;&gt;Rebecca Gagnon&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;And &lt;a href=&quot;https://twitter.com/BattenKatie&quot;&gt;Katie Batten&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/blog/iterate/iterate-staff-251efee0281c352ceca56556f9713bf0da9be79ed950bac21c4b0d903b55bd80.jpg&quot; alt=&quot;Iterate Staff&quot; width=&quot;500&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Y’all are awesome &amp;gt;:D&lt;/p&gt;
-
-&lt;p&gt;If you’re thinking about throwing a conference of your own, feel free to drop a comment below or &lt;a href=&quot;mailto:randall.degges@okta.com&quot;&gt;shoot me&lt;/a&gt; an email.&lt;/p&gt;
-</description>
-        <pubDate>Wed, 14 Mar 2018 00:00:00 -0500</pubDate>
-        <link>https://developer.okta.com/blog/2018/03/14/hosting-our-first-developer-conference-iterate</link>
-        <guid isPermaLink="true">https://developer.okta.com/blog/2018/03/14/hosting-our-first-developer-conference-iterate</guid>
       </item>
     
   </channel>
