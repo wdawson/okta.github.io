@@ -347,7 +347,7 @@ router.get('/', (req, res, next) => {
 module.exports = router
 ```
 
-I added `lodash`, so you'll need to install that as a dependency with `npm i lodash`. You'll also want to add a view to describe how to render the data in `views/dashboard.hbs`.
+I added `lodash`, so you'll need to install that as a dependency with `npm i lodash@4.17.5`. You'll also want to add a view to describe how to render the data in `views/dashboard.hbs`.
 
 ```hbs
 {% raw %}
