@@ -2,7 +2,7 @@
 layout: blog_post
 title: "Simple Node Authentication"
 author: bkelley
-description: "Welcoming Dave Nugent to the Okta team."
+description: "Learn how to build authentication and registration into your Node.js application with Okta."
 tags: [javascript, nodejs, authentication, security]
 tweets:
 - "Building authentication into your Node.js apps doesn't have to be hard. Check out our latest article on the subject:"
@@ -29,19 +29,17 @@ If you run into trouble installing, you can find more information on the [instal
 
 Now that you have Node installed, let's get started writing an app.
 
-**PS**: If you want to skip the tutorial and jump straight to the finished product you can check out this sample app on GitHub here: https://github.com/oktadeveloper/okta-node-express-example
+**NOTE**: If you want to skip the tutorial and jump straight to the finished product you can [check out this sample app on GitHub](https://github.com/oktadeveloper/okta-node-express-example).
 
-In the Node ecosystem, the most popular web server is [`Express`](https://expressjs.com/). Luckily for you, the Express team has also created a nifty [command line tool](https://expressjs.com/en/starter/generator.html) which helps bootstrap Express web applications. You can always customize the bootstrapped project `express-generator` generates, but let's start with that to get up and running quickly.
+In the Node ecosystem, the most popular web server is [Express](https://expressjs.com/). Luckily for you, the Express team has also created a nifty [command line tool](https://expressjs.com/en/starter/generator.html) which helps bootstrap Express web applications. You can always customize the bootstrapped project `express-generator` generates, but let's start with that to get up and running quickly.
 
 ```bash
-bmk@redmbp ~/code
-$ npm i -g express-generator
+$ npm i -g express-generator@4.16.0
 /Users/bmk/.nvm/versions/node/v9.5.0/bin/express -> /Users/bmk/.nvm/versions/node/v9.5.0/lib/node_modules/express-generator/bin/expr
 ess-cli.js
 + express-generator@4.16.0
 added 10 packages in 4.175s
 
-bmk@redmbp ~/code
 $ express -v hbs --git simple-node-authentication
 
    create : simple-node-authentication/
@@ -72,20 +70,15 @@ $ express -v hbs --git simple-node-authentication
    run the app:
      $ DEBUG=simple-node-authentication:* npm start
 
-
-bmk@redmbp ~/code
 $ cd simple-node-authentication/
 
-bmk@redmbp ~/code/simple-node-authentication
 $ git init
 Initialized empty Git repository in /Users/bmk/code/simple-node-authentication/.git/
 
-bmk@redmbp ~/code/simple-node-authentication
 $ npm i
 npm notice created a lockfile as package-lock.json. You should commit this file.
 added 81 packages in 3.09s
 
-bmk@redmbp ~/code/simple-node-authentication
 $ npm start
 
 > simple-node-authentication@0.0.0 start /Users/bmk/code/simple-node-authentication
@@ -197,7 +190,7 @@ Luckily, Okta makes this really easy by offloading authentication and letting yo
 
 You'll get a link to your own Okta Org URL which you'll use to sign in from now on, so you should save it for later. It'll look something like `https://dev-123456.oktapreview.com`. In order to log in, check your email for a temporary password.
 
-After logging into the dev console, click on the `Applications` tab, then click `Add Application`. For this example, you should use the `Web` option.
+After logging into the dev console, click on the **Applications** tab, then click **Add Application**. For this example, you should use the **Web** option.
 
 Express uses port 3000 by default. Here you should name your application and change the ports, but leave all the other settings the same for now. Eventually, you'll want to add URIs for a custom domain, but `localhost` is fine for testing.
 
@@ -211,7 +204,7 @@ and client secret for the next step.
 Now for some real code. Okta provides Express middleware to make authentication simple in Node.
 
 ```
-npm i @okta/oidc-middleware express-session
+npm i @okta/oidc-middleware@0.1.2 express-session@1.15.6
 ```
 
 In your `app.js` file you'll want to set up support for sessions and add the OIDC middleware. You'll need to reference the `oidc` middleware in the `bin/www` file, so you should export that as well.
@@ -329,7 +322,7 @@ index 48c4fc5..414ca9a 100755
 
 ## Add a Dashboard and Login Page
 
-Let'screate a private dashboard that's only accessible for logged in users. In  `app.js` you already added the reference to your dashboard's router, so you'll need to add that in `routes/dashboard.js`.
+Let's create a private dashboard that's only accessible for logged in users. In `app.js` you already added the reference to your dashboard's router, so you'll need to add that in `routes/dashboard.js`.
 
 ```javascript
 const express = require('express')
@@ -485,9 +478,9 @@ Clicking the `log in` link will take you to Okta's sign in page. After signing i
 
 You should have a functional app now with authentication and protected pages, created with only a few additions to the basic skeleton app. You don't have any way to add new users though.
 
-Let's create a simple registration page. For this, we'll be using the [Okta Node.js SDK](https://github.com/okta/okta-sdk-nodejs), which you can install with `npm i @okta/okta-sdk-nodejs`.
+Let's create a simple registration page. For this, we'll be using the [Okta Node.js SDK](https://github.com/okta/okta-sdk-nodejs), which you can install with `npm i @okta/okta-sdk-nodejs@1.1.0`.
 
-You'll also need an API token from Okta to be able to create a user. After logging in to your developer console, select API -> Tokens from the menu.
+You'll also need an API token from Okta to be able to create a user. After logging in to your developer console, select **API** > **Tokens** from the menu.
 
 {% img blog/simple-node-authentication/okta-api-tokens.png alt:"Okta API Tokens" width:"600" %}{: .center-image }
 
@@ -724,9 +717,9 @@ OK, the cake is a lie, but you can now focus on what makes your application grea
 
 * [Our Node SDK Documentation](https://developer.okta.com/code/nodejs/)
 * [Okta OIDC Middleware Documentation](https://github.com/okta/okta-oidc-js/tree/master/packages/oidc-middleware)
-* [Build User Registration with Node, React, and Okta](https://developer.okta.com/blog/2018/02/06/build-user-registration-with-node-react-and-okta)
-* [Build a Basic CRUD App with Vue.js and Node](https://developer.okta.com/blog/2018/02/15/build-crud-app-vuejs-node)
-* [What the Heck is OAuth?](https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth)
+* [Build User Registration with Node, React, and Okta](/blog/2018/02/06/build-user-registration-with-node-react-and-okta)
+* [Build a Basic CRUD App with Vue.js and Node](/blog/2018/02/15/build-crud-app-vuejs-node)
+* [What the Heck is OAuth?](/blog/2017/06/21/what-the-heck-is-oauth)
 * [VIDEO: OAuth 2.0 and OpenID Connect in Plain English](https://www.youtube.com/watch?v=0VWkQMr7r_c&t=4276s)
 
 And as always, we'd love to hear from you. Hit us up with questions or feedback in the comments, or on Twitter [@oktadev](https://twitter.com/OktaDev).
