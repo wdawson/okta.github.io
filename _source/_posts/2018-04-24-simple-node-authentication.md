@@ -15,7 +15,7 @@ Using Okta's API service, however, you can easily register and log in users to y
 
 ## Set Up Your Node Environment
 
-If you're new to Node and don't already have it installed, you'll need to do that first. To keep things simple, let's assume a \*nix-based environment (e.g. Mac, Linux, or [Linux on Windows](https://docs.microsoft.com/en-us/windows/wsl/about)).
+If you're new to Node and don't already have it installed, you'll need to do that first. To keep things simple, let's assume a \*nix-based environment (e.g. Mac, \*nix, or [Linux on Windows](https://docs.microsoft.com/en-us/windows/wsl/about)).
 
 There's a great tool called `nvm`, which makes it very simple to install various versions of Node and switch on the fly if you need to test with another version. It will also make sure you have the latest version of node installed and ready to go. Run the following command to install Node via `nvm` and get your environment fully set up.
 
