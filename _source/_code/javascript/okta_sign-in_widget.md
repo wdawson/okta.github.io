@@ -222,7 +222,7 @@ Here is an example of an error handler that adds an error message to the top of 
 ~~~javascript
 function error(err) {
   var errorEl = document.createElement('div');
-  errorEl.innerHTML = 'Error! ' + errorEl.textContent;
+  errorEl.textContent = 'Error! ' + err.message;
   document.body.insertBefore(
     errorEl,
     document.body.firstChild
@@ -415,7 +415,7 @@ var config = {
 };
 ~~~
 
-For more information about these configuration options, see the [Okta Sign-In Widget Reference page]([)https://github.com/okta/okta-signin-widget#okta-sign-in-widget).
+For more information about these configuration options, see the [Okta Sign-In Widget Reference page](https://github.com/okta/okta-signin-widget#okta-sign-in-widget).
 
 #### Internationalization
 
