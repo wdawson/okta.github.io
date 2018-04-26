@@ -505,6 +505,7 @@ export class AppModule { }
 Next, build the HTML that will display the actual data on screen. You can add a column that will display average speed. Edit the template of the GridJogging component (```grid-jogging-component.html```):
 
 {% raw %}
+```html
 <a href="#" id="new-button">New</a>
 <table>
 <thead>
@@ -529,6 +530,7 @@ Next, build the HTML that will display the actual data on screen. You can add a 
     </tr>
 </tbody>
 </table>
+```
 {% endraw %}
 
 The `{{handlebars}}` are just a placeholder for data populated by Angular. You can also do some basic calculations in there. 
@@ -1005,7 +1007,7 @@ When you open the app and are not logged in, you'll see the demo text and the "L
 
 When you click "Login" you should get to an Okta login interface:
 
-{% img blog/build-crud-app-aspnetcore-angular/app-with-login.png alt:"Okta login screen" width:"600" %}{: .center-image }
+{% img blog/build-crud-app-aspnetcore-angular/okta-login.jpg alt:"Okta login screen" width:"600" %}{: .center-image }
 
 Sign in and you're in the app and can see the grid and the component to add or update records.
 
