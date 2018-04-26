@@ -807,7 +807,7 @@ So, now you have a cool little application for tracking your workouts. But your 
 ## Add Okta for User Authentication
 OpenID Connect (OIDC) is built on top of the OAuth 2.0 protocol and allows clients to verify the identity of the user as well as to obtain users' basic profile information. Okta uses OpenID Connect to make it easy to add authentication and user management to your applications.
 
-To integrate Okta for user authentication, you'll first need to [sign up for a free developer account](https://developer.okta.com/signup) and create an Okta application.
+To integrate Okta for user authentication, you'll first need to [sign up for a free developer account](https://developer.okta.com/signup/) and create an Okta application.
 
 Log in to your Okta account, or create one if you don't have one. Navigate to Applications and click on Add Application. Set your application up like this:
 
