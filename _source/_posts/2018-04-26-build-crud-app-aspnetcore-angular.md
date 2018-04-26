@@ -1,7 +1,7 @@
 ---
 layout: blog_post
 title: "Build a CRUD app with ASP.NET Core and Angular"
-author: 
+author: team_okta
 description: "ASP.NET Core and Angular are powerful frameworks for backend and frontend development. Learn how to put them together to build a modern web app, and secure it with Okta."
 tags: [asp.net, aspnetcore, angular]
 tweets:
@@ -1188,7 +1188,7 @@ In the end you should have a basic jogging diary app:
 
 Now you just need some people, and to get jogging!
 
-## Build More Cool Projects with ASP.NET Core and Angular
+## Build More with ASP.NET Core and Angular
 
 Interested in digging in deeper with ASP.NET Core, Angular, or Okta? We've got you covered. Check out the following resources for more cool projects:
 * [Add Authentication to Your Angular PWA](https://developer.okta.com/blog/2017/06/13/add-authentication-angular-pwa)
