@@ -14,10 +14,7 @@ If you don't already have an ASP.NET project, create one using the ASP.NET Web A
 
 Install these packages in the new project:
 
-* [Microsoft.Owin.Host.SystemWeb](https://www.nuget.org/packages/Microsoft.Owin.Host.SystemWeb) 4.0.0 or higher
 * [Microsoft.Owin.Security.Cookies](https://www.nuget.org/packages/Microsoft.Owin.Security.Cookies) 4.0.0 or higher
-* [Microsoft.Owin.Security.OpenIdConnect](https://www.nuget.org/packages/Microsoft.Owin.Security.OpenIdConnect) 4.0.0 or higher
-* [IdentityModel](https://www.nuget.org/packages/IdentityModel) 3.3.1 or higher
 * [Okta.AspNet](//TODO: nuget package)
 
 
@@ -41,17 +38,14 @@ public class Startup
     {
         app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
         app.UseCookieAuthentication(new CookieAuthenticationOptions());
-        app.UseOktaMvc
-        (
-            new OktaMvcOptions()
-            {
-                ClientId = clientId,
-                ClientSecret = clientSecret,
-                OrgUrl = orgUrl,
-                RedirectUri = redirectUri,
-                PostLogoutRedirectUri = postLogoutRedirectUri
-            }
-        );
+        app.UseOktaMvc(new OktaMvcOptions()
+        {
+            ClientId = clientId,
+            ClientSecret = clientSecret,
+            OrgUrl = orgUrl,
+            RedirectUri = redirectUri,
+            PostLogoutRedirectUri = postLogoutRedirectUri
+        });
     }
 }
 ```
@@ -78,20 +72,7 @@ using Owin;
 
 ### Additional middleware configuration
 
-The `OktaMvcOptions` class configures the Okta middleware. In the table below you can see all the available options:
-
-
-| Property                  | Required?    | Details                         |
-|---------------------------|--------------|---------------------------------|
-| OrgUrl                    | **Yes**      | Your Okta domain, i.e https://dev-123456.oktapreview.com  | 
-| ClientId                  | **Yes**      | The client ID of your Okta Application |
-| ClientSecret              | **Yes**      | The client secret of your Okta Application |
-| RedirectUri               | **Yes**      | The location Okta should redirect to process a login. This is typically `http://{yourApp}/authorization-code/callback`. No matter the value, the redirect is handled automatically by this package, so you don't need to write any custom code to handle this route. |
-| AuthorizationServerId     | No           | The Okta Authorization Server to use. The default value is `default`. |
-| PostLogoutRedirectUri     | No           | The location Okta should redirect to after logout. If blank, Okta will redirect to the Okta login page. |
-| Scope                     | No           | The OAuth 2.0/OpenID Connect scopes to request when logging in. The default value is `openid profile`. |
-| GetClaimsFromUserInfoEndpoint | No       | Whether to retrieve additional claims from the UserInfo endpoint after login (not usually necessary). The default value is `false`. |
-| ClockSkew                 | No           | The clock skew allowed when validating tokens. The default value is 2 minutes. |
+The `OktaMvcOptions` class configures the Okta middleware. You can see all the available options in the [project's GitHub](https://github.com/okta/okta-aspnet/blob/master/README.md).
 
 ### Configure the application in Okta
 
@@ -122,7 +103,7 @@ Open the `Web.config` file and add these keys to the `<appSettings>` section:
 <!-- 1. Replace these values with your Okta configuration -->
 <add key="okta:ClientId" value="{ClientId}" />
 <add key="okta:ClientSecret" value="{ClientSecret}" />
-<add key="okta:OrgUrl" value="https://{YourOktaDomain}.com" />
+<add key="okta:OrgUrl" value="https://{yourOktaDomain}.com" />
 
 <!-- 2. Update the Okta application with these values -->
 <add key="okta:RedirectUri" value="http://localhost:8080/authorization-code/callback" />
@@ -188,8 +169,6 @@ Add these using statements at the top of the `AccountController.cs` file:
 ```csharp
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
-using System.Web;
-using System.Web.Mvc;
 ```
 
 You can also update your views to show whether the user is logged in. Add this code to `_Layout.cshtml`:

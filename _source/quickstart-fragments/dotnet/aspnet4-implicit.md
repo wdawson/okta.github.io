@@ -17,8 +17,6 @@ If you don't already have a Web API project, create a new ASP.NET (.NET Framewor
 First, install these packages with NuGet:
 
 - `Microsoft.Owin.Host.SystemWeb` 4.0.0 or higher (if it isn't already installed)
-- `Microsoft.IdentityModel.Tokens` 5.2.1 or higher
-- `Microsoft.Owin.Security.Jwt` 4.0.0 or higher
 - `Okta.AspNet`
 
 
@@ -42,40 +40,23 @@ public void Configuration(IAppBuilder app)
 {
     var orgUrl = ConfigurationManager.AppSettings["okta:OrgUrl"];
     var clientId = ConfigurationManager.AppSettings["okta:ClientId"];
-    var authorizationServerId = ConfigurationManager.AppSettings["okta:AuthorizationServerId"];
+    
     app.UseOktaWebApi(new OktaWebApiOptions()
-        {
-            OrgUrl = orgUrl,
-            ClientId = clientId,
-            AuthorizationServerId = authorizationServerId
-        });
+    {
+        OrgUrl = orgUrl,
+        ClientId = clientId
+    });
 }
 ```
 
 ### Additional middleware configuration
 
-The `OktaWebApiOptions` class configures the Okta middleware. In the table below you can see all the available options:
-
-| Property                  | Required?    | Details                         |
-|---------------------------|--------------|---------------------------------|
-| OrgUrl                    | **Yes**      | Your Okta domain, i.e https://dev-123456.oktapreview.com  | 
-| ClientId                  | **Yes**      | The client ID of your Okta Application |
-| AuthorizationServerId     | No           | The Okta Authorization Server to use. The default value is `default`. |
-| Audience                  | No           | The expected audience of incoming tokens. The default value is `api://default`. |
-| ClockSkew                 | No           | The clock skew allowed when validating tokens. The default value is 2 minutes. |
+The `OktaWebApiOptions` class configures the Okta middleware. You can see all the available options in the [project's GitHub](https://github.com/okta/okta-aspnet/blob/master/README.md).
 
 ### Configure the project
 
-Open the `Web.config` file and add these keys to the `<appSettings>` section:
-
-```csharp
-<!-- 1. Replace these values with your Okta configuration -->
-<add key="okta:OrgUrl" value="https://{YourOktaDomain}.com/" />
-<add key="okta:ClientId" value="{ClientId}" />
-<add key="okta:AuthorizationServerId" value="default" />
-```
-
-Copy the client ID from your Okta application into the appropriate key in `Web.config`, and replace `{yourOktaDomain}` with your Okta domain name. You can find your Okta domain name in the top-right corner of the Dashboard page.
+Open the `Web.config` file and add your Okta configuration to the `<appSettings>` section.
+Check out the [project's GitHub](https://github.com/okta/okta-aspnet/blob/master/README.md) to see more details about this step.
 
 ### Protect application resources
 
