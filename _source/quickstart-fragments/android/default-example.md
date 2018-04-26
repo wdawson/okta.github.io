@@ -25,8 +25,8 @@ If you do not already have a **Developer Edition Account**, you can create one a
 | Setting             | Value                                               |
 | ------------------- | --------------------------------------------------- |
 | Application Name    | My Android App                                      |
-| Login redirect URIs | com.oktapreview.{yourOrg}:/callback                 |
-| Logout redirect URIs| com.oktapreview.{yourOrg}:/logout                   |
+| Login redirect URIs | com.oktapreview.{orgName}:/callback                 |
+| Logout redirect URIs| com.oktapreview.{orgName}:/logout                   |
 
 After you have created the application there are two more values you will need to gather:
 
@@ -71,6 +71,12 @@ android.defaultConfig.manifestPlaceholders = [
 ```
 
 Make sure this is consistent with the redirect URI used in `okta_app_auth_config.json`. For example, if your **Login Redirect URI** is `com.okta.example:/callback`, the **AppAuth Redirect Scheme** will be `com.okta.example`.
+
+#### Chrome Custom Tabs `ERR_UNKNOWN_URL_SCHEME`
+
+There is a [known issue](https://github.com/okta/okta-sdk-appauth-android/issues/8) when redirecting back to a URI scheme from the browser via Chrome Custom Tabs. This is due to Chrome **not supporting** JavaScript initiated redirects back to native applications.
+
+More information on this topic is recorded in [this issue](https://github.com/okta/okta-sdk-appauth-android/issues/8).
 
 ## Implement Okta Sign-In
 Users can sign in to your Android application a number of different ways.
