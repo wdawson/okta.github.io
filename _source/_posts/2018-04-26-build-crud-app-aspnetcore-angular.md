@@ -1,6 +1,6 @@
 ---
 layout: blog_post
-title: "Build a CRUD app with ASP.NET Core and Angular"
+title: "Build a CRUD App with ASP.NET Core and Angular"
 author: team_okta
 description: "ASP.NET Core and Angular are powerful frameworks for backend and frontend development. Learn how to put them together to build a modern web app, and secure it with Okta."
 tags: [asp.net, aspnetcore, angular]
