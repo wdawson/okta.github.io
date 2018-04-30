@@ -367,7 +367,8 @@
 <ul>
   <li><a href="#primary-authentication-with-public-application">Primary Authentication with Public Application</a>—<a href="#request-example-for-primary-authentication-with-public-application">Request Example</a></li>
   <li><a href="#primary-authentication-with-trusted-application">Primary Authentication with Trusted Application</a>—<a href="#request-example-for-trusted-application">Request Example</a></li>
-  <li><a href="#primary-authentication-with-activation-token">Primary Authentication with activationToken</a>—<a href="#request-example-for-activation-token">Request Example</a></li>
+  <li><a href="#primary-authentication-with-activation-token">Primary Authentication with Activation Token</a>—<a href="#request-example-for-activation-token">Request Example</a></li>
+  <li><a href="#primary-authentication-with-device-fingerprinting">Primary Authentication with Device Fingerprinting</a>—<a href="#request-example-for-device-fingerprinting">Request Example</a></li>
   <li><a href="#primary-authentication-with-password-expiration-warning">Primary Authentication with Password Expiration Warning</a>—<a href="#request-example-for-password-expiration-warning">Request Example</a></li>
 </ul>
 
@@ -1015,7 +1016,7 @@
 
 <h4 id="primary-authentication-with-activation-token">Primary Authentication with Activation Token</h4>
 
-<p>Authenticates a user via a <a href="#trusted-application">trusted application</a> or proxy that overrides <a href="/docs/api/getting_started/design_principles#client-request-context">client request context</a>.</p>
+<p>Authenticates a user via a <a href="#trusted-application">trusted application</a> or proxy that overrides the <a href="/docs/api/getting_started/design_principles#client-request-context">client request context</a>.</p>
 
 <p>Note:</p>
 
@@ -1264,6 +1265,64 @@
   </span><span class="s2">"errorLink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E0000004"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"errorId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oae2fYYJmkuTg-NyozqBkb3sw"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"errorCauses"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h4 id="primary-authentication-with-device-fingerprinting">Primary Authentication with Device Fingerprinting</h4>
+
+<p>Authenticates a user via a <a href="#trusted-application">trusted application</a> or proxy that overrides the <a href="/docs/api/getting_started/design_principles#client-request-context">client request context</a>.</p>
+
+<p>Include the <code class="highlighter-rouge">X-Device-Fingerprint</code> header to supply a device fingerprint.</p>
+
+<p>Note:</p>
+
+<ul>
+  <li>Specifying your own <code class="highlighter-rouge">deviceToken</code> or device fingerprint is a highly privileged operation limited to trusted web applications and requires making authentication requests with a valid <em>API token</em>.</li>
+  <li>The <strong>public IP address</strong> of your <a href="#trusted-application">trusted application</a> must be <a href="/docs/api/getting_started/design_principles#ip-address">whitelisted as a gateway IP address</a> to forward the user agent’s original IP address with the <code class="highlighter-rouge">X-Forwarded-For</code> HTTP header.</li>
+  <li>To use device fingerprinting for the unknown-device email notification feature, include the <code class="highlighter-rouge">User-Agent</code> header in the request. For more information, see the <a href="https://support.okta.com/help/blogdetail?id=a67F0000000L2MkIAK">Beta documentation</a>.</li>
+  <li>For more information about security behavior detection, see the <a href="https://help.okta.com/en/prod/Content/Topics/Security/proc-security-behavior-detection.htm?">EA documentation</a>.</li>
+</ul>
+
+<h5 class="api api-request api-request-example" id="request-example-for-device-fingerprinting">Request Example for Device Fingerprinting</h5>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-X</span> POST <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'Accept: application/json'</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'Authorization: SSWS ${api_token}'</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'Cache-Control: no-cache'</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'X-Fowarded-For: 23.235.46.133'</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'X-Device-Fingerprint: ${device_fingerprint}'</span> <span class="se">\</span>
+  <span class="nt">-d</span> <span class="s1">'{
+  "username": "${username}",
+  "password" : "${password}",
+  "relayState": "http://example.com",
+  "context": {
+    "deviceToken": "${device_token}"
+  }
+}  '</span> https://<span class="k">${</span><span class="nv">yourOktaDomain</span><span class="k">}</span>.com/api/v1/authn <span class="se">\</span>
+</code></pre></div></div>
+
+<h5 class="api api-response api-response-example" id="response-example-for-device-fingerprinting">Response Example for Device Fingerprinting</h5>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-04-26T17:14:17.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"relayState"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/my/uri"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"sessionToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20111Il76Eaub0eKNkLGwMUDg5D7dBSN9d_FO-0o7eHKQMyqV7VoqzZ"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"_embedded"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00ue5f54sbR7dFr9i0h7"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"passwordChanged"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-04-26T17:06:07.000Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"login"</span><span class="p">:</span><span class="w"> </span><span class="s2">"saml.jackson@stark.com"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"firstName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Saml"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Jackson"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"locale"</span><span class="p">:</span><span class="w"> </span><span class="s2">"en"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"timeZone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"America/Los_Angeles"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div></div>
 
