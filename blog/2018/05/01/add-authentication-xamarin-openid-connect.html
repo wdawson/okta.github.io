@@ -1,0 +1,909 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html class="ie6 no-flexbox"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie7 no-flexbox"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie8 no-flexbox"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie9 no-flexbox"> <![endif]-->
+<!--[if IE 10 ]>    <html class="ie10 no-flexbox"> <![endif]-->
+<!--[if (gt IE 10)|!(IE)]><!--> <html class="modern wf-loading" lang="en"> <!--<![endif]-->
+  <head>
+  <script>
+    var searchDomain = 'https://developer.okta.com';
+    var isProduction = window.location.hostname === 'developer.okta.com';
+    if (isProduction) {
+      // TypeKit
+      (function(d) {
+        var config = {
+          kitId: 'jff5neq',
+          scriptTimeout: 3000,
+          async: true
+        },
+        h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/bwf-loadingb/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+      })(document);
+
+      // Google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-15777010-3', 'auto');
+      ga('send', 'pageview');
+
+      // START Google Tag Manager
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-TJ45R6');
+      // END Google Tag Manager
+
+      // Start Heap Analytics
+      window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var r=t.forceSSL||"https:"===document.location.protocol,a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=(r?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+e+".js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n);for(var o=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["addEventProperties","addUserProperties","clearEventProperties","identify","removeEventProperty","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=o(p[c])};
+      heap.load("3356162945");
+      // End Heap Analytics
+    }
+  </script>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+
+  <link type="text/css" rel="stylesheet" href="https://developer.okta.com/sites/all/themes/developer/css/master.css" media="all" />
+  <meta class="swiftype" name="title" data-type="string" content="Add Authentication to Your Xamarin App with OpenID Connect | Okta Developer">
+  <meta class="swiftype" name="summary" data-type="string" content="This tutorial shows you how to build secure authentication with Xamarin Forms and OpenID Connect." />
+
+  <link type="text/css" rel="stylesheet" href="/assets/animate-ec43d72c3ed45e08a460b8a2966d8dba6006aebfa0530935c3973fa493a8771f.css">
+  <link type="text/css" rel="stylesheet" href="/assets/okta-914cad2dd6d069302444327ce911da52da68a3c68755f66cf5a4e92b9a38f3eb.css">
+  
+  
+  <title>Add Authentication to Your Xamarin App with OpenID Connect | Okta Developer</title>
+  <meta name="description" content="This tutorial shows you how to build secure authentication with Xamarin Forms and OpenID Connect.">
+  <link rel="alternate" type="application/rss+xml" title="Okta Developer" href="https://developer.okta.com/feed.xml"><!-- GA -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/assets/favicon/manifest.json">
+  <link rel="mask-icon" href="/assets/favicon/safari-pinned-tab.svg" color="#21313a">
+  <meta name="msapplication-config" content="/assets/favicon/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  
+    <body id="blog">
+	
+
+
+
+
+<header class="Header is-fixed">
+
+  <div class="Wrap">
+
+    <a class="Logo" href="https://developer.okta.com">
+      <svg version="1.1" id="OktaLogo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 431.9 151.4" style="enable-background:new 0 0 431.9 151.4;" xml:space="preserve"><g><g><g><path d="M102.2,41.4c-21,0-38.1,17.1-38.1,38.1s17.1,38.1,38.1,38.1s38.1-17.1,38.1-38.1l0,0C140.3,58.5,123.2,41.4,102.2,41.4z M102.2,98.5c-10.5,0-19-8.5-19-19s8.5-19,19-19s19,8.5,19,19c0.1,10.5-8.4,19-18.9,19.1C102.3,98.6,102.2,98.6,102.2,98.5L102.2,98.5z"/><path d="M169.1,92.3c0-1.9,1.5-3.4,3.4-3.4c0.9,0,1.8,0.4,2.4,1c9.5,9.7,25.3,26.3,25.4,26.4c0.4,0.5,0.8,0.8,1.4,0.9l1.6,0.2h17.2c1.8,0,3.3-1.4,3.4-3.2c0-0.8-0.3-1.5-0.8-2.2l-28.6-29.2l-1.5-1.5c-3.2-3.9-2.9-5.4,0.8-9.3l22.6-25.1c1.1-1.4,0.8-3.5-0.6-4.6c-0.6-0.4-1.3-0.7-2-0.7h-17c-0.6,0.2-1.1,0.5-1.5,0.9L175,64.4c-1.3,1.4-3.4,1.5-4.8,0.2c-0.7-0.6-1.1-1.5-1.1-2.5V18.9c0-1.7-1.3-3-3-3c-0.1,0-0.2,0-0.3,0h-12.7c-2.2,0-3.3,1.5-3.3,2.8v95.8c0,2.2,1.8,2.8,3.3,2.8h12.7c1.7,0.1,3.2-1.2,3.3-2.9c0,0,0,0,0,0V92.3z"/><path d="M273,114l-1.4-12.8c-0.2-1.7-1.7-2.9-3.4-2.7c0,0,0,0-0.1,0l-2.9,0.2c-10.1,0-18.5-7.9-19-18c0-0.3,0-0.7,0-1V64.2c-0.1-2,1.5-3.6,3.5-3.7c0,0,0,0,0,0h17c1.7-0.1,3.1-1.5,3-3.2c0,0,0-0.1,0-0.1v-12c0-2.3-1.5-3.6-2.8-3.6h-17.1c-1.9,0.1-3.5-1.5-3.6-3.4c0,0,0,0,0,0V18.9c-0.1-1.7-1.5-3.1-3.2-3c0,0-0.1,0-0.1,0h-12.7c-1.6-0.1-3,1.1-3.1,2.7c0,0.1,0,0.1,0,0.2c0,0,0,61.7,0,62c0.5,21,17.9,37.6,38.9,37c1.4,0,2.9-0.2,4.3-0.3C272,117.2,273.2,115.7,273,114z"/></g><path d="M364.7,98c-10.8,0-12.4-3.8-12.4-18.3l0,0V44.8c0-1.8-1.4-3.2-3.2-3.2c0,0-0.1,0-0.1,0h-12.8c-1.8,0-3.2,1.4-3.3,3.2v1.6C314.6,36,291.3,42.5,281,60.8c-10.4,18.3-3.9,41.6,14.4,51.9c14,7.9,31.4,6.2,43.5-4.2c3.6,5.5,9.3,9.1,18.3,9.1c1.5,0,9.7,0.3,9.7-3.5v-13.6C367,99.2,366,98.1,364.7,98z M314.2,98.6c-10.5,0-19-8.5-19-19s8.5-19,19-19s19,8.5,19,19l0,0C333.2,90.1,324.7,98.6,314.2,98.6z"/></g><path d="M19.4,74c2.2-1.9,4.1-4.1,5.7-6.6c3.5-5.3,5.4-11.5,5.2-17.9V27c0-4.9,0.9-8.4,2.7-10.5c1.8-2.1,4.8-3,9.2-3h12.6c1.2,0,2.1-0.9,2.2-2.1l0,0V2.2C57,1,56,0,54.8,0c0,0,0,0,0,0H41.5c-7.8,0-12.9,2.1-18,7.6s-7.1,12.3-7.1,21.7v14.2c0,2.2-0.1,4-0.2,5.7v2.2c-0.5,3.2-1.8,6.2-3.6,8.9C9.4,64.7,5.1,70.9,0.9,74l0,0l-0.3,0.3l0,0l-0.2,0.3H0.2v0.3l0,0c-0.1,0.3-0.1,0.7,0,1l0,0v0.3h0.1l0.2,0.3l0,0l0.3,0.3l0,0c4.2,3.1,8.5,9.3,11.3,13.7c1.8,2.7,3.1,5.7,3.6,8.9v2.2c0.1,1.6,0.2,3.5,0.2,5.7v14.3c0,9.4,2.4,16.7,7.1,21.7s10.2,7.6,18,7.6h13.8c1.2,0,2.2-1,2.2-2.2V140l0,0c0-1.2-1-2.2-2.2-2.2H42.2c-4.4,0-7.5-1-9.2-3s-2.7-5.6-2.7-10.5v-22.4c0.2-6.4-1.7-12.6-5.2-17.9c-1.6-2.5-3.5-4.7-5.7-6.6l0,0c-0.9-0.7-1.1-2-0.4-2.9C19.2,74.3,19.3,74.2,19.4,74L19.4,74z"/><path d="M412.5,74c-2.2-1.9-4.1-4.1-5.7-6.6c-3.5-5.3-5.4-11.5-5.2-17.9V27c0-4.9-0.9-8.4-2.7-10.5s-4.8-3-9.2-3h-12.6c-1.2,0-2.2-1-2.2-2.2c0,0,0,0,0,0l0,0V2.2c0-1.2,1-2.2,2.2-2.2c0,0,0,0,0,0h13.4c7.8,0,12.9,2.1,18,7.6s7.1,12.3,7.1,21.7v14.2c0,2.2,0.1,4,0.2,5.7v2.2c0.5,3.2,1.8,6.2,3.6,8.9c2.8,4.5,7.1,10.7,11.3,13.7l0,0l0.3,0.3l0,0l0.2,0.3h0.1v0.3l0,0c0.1,0.3,0.1,0.7,0,1l0,0v0.3h-0.1l-0.2,0.3l0,0l-0.3,0.3l0,0c-4.2,3.1-8.5,9.3-11.3,13.7c-1.8,2.7-3.1,5.7-3.6,8.9v2.2c-0.1,1.6-0.2,3.5-0.2,5.7v14.3c0,9.4-2.4,16.7-7.1,21.7s-10.2,7.6-18,7.6h-13.4c-1.2,0-2.2-1-2.2-2.2c0,0,0,0,0,0V140l0,0c0-1.2,1-2.2,2.2-2.2l0,0h12.7c4.4,0,7.5-1,9.2-3s2.7-5.6,2.7-10.5v-22.4c-0.2-6.3,1.6-12.6,5.1-17.9c1.6-2.5,3.5-4.7,5.7-6.6l0,0c0.9-0.7,1.1-2,0.4-2.9C412.7,74.3,412.6,74.2,412.5,74L412.5,74z"/></g></svg>
+    </a>
+
+    <nav class="Header-nav PrimaryNav">
+      <ul class="menu">
+        <li class="first expanded">
+          <a href="https://developer.okta.com/product/">Product</a>
+          <ul class="menu">
+            <li class="first leaf"><a href="https://developer.okta.com/product/">Overview</a></li>
+            <li class="leaf"><a href="https://developer.okta.com/product/authentication/">Authentication</a></li>
+            <li class="leaf"><a href="https://developer.okta.com/product/authorization/">Authorization</a></li>
+            <li class="last leaf"><a href="https://developer.okta.com/product/user-management/">User Management</a></li>
+          </ul>
+        </li>
+        <li class="leaf">
+          <a href="https://developer.okta.com/pricing/">Pricing</a>
+        </li>
+        <li class="leaf">
+          <a href="/blog/" class="active">Blog</a>
+        </li>
+        <li class="leaf">
+          <a href="/documentation/">Docs</a>
+        </li>
+        <li class="last expanded">
+          <span class="nolink">Support</span>
+          <ul class="menu">
+            <li class="first leaf"><a href="https://devforum.okta.com/">Okta Developer Forums</a></li>
+            <li class="last leaf"><a href="mailto:developers@okta.com">developers@okta.com</a></li>
+          </ul>
+        </li>
+      </ul>
+      <a class="PrimaryNav-toggle" href="#">
+        <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g class="MenuIcon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+                <path d="M1,16 L19,16" class="MenuIcon-line1" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,4 L19,4" class="MenuIcon-line2" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,10 L19,10" class="MenuIcon-line3" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M1,10 L19,10" class="MenuIcon-line4" stroke="#FFFFFF" stroke-width="2"></path>
+            </g>
+        </svg>
+        <svg class="CloseIcon" width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <g id="ALl-Boards" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="Desktop" transform="translate(-915.000000, -235.000000)" fill="#FFFFFF">
+              <g id="Search-bar-Active" transform="translate(30.000000, 26.000000)">
+                <polygon id="Icon/Cross" points="901 210.6 899.4 209 893 215.4 886.6 209 885 210.6 891.4 217 885 223.4 886.6 225 893 218.6 899.4 225 901 223.4 894.6 217"></polygon>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </a>
+
+      <div class="PrimaryNav-cta">
+        <a target="_blank" rel="noopener noreferrer" href="https://login.okta.com/?SAMLRequest=fc%2B7CsJAEAXQXvAflu1NNJUMeZBGELTx1a%2FrYILJTtyZGD%2FfSBRiYzlw77lMnD3rSj3Qc0ku0YtgrhU6S5fSXRN9PKxmS52l00nMpq6iBvJWCrfDe4ss6vStRe9aDzmGIZfo1jsgwyWDMzUyiIV9vt1AH4XGk5ClSvewUgMNa%2BYW%2FVj5jxhm9NLP67QQaSAMu64L6CYmsFSHlnzT4ZlLwTgcL6Sf8%2FeX9AU%3Dhttps://login.okta.com/?SAMLRequest=fc%2B7CsJAEAXQXvAflu1NNJUMeZBGELTx1a%2FrYILJTtyZGD%2FfSBRiYzlw77lMnD3rSj3Qc0ku0YtgrhU6S5fSXRN9PKxmS52l00nMpq6iBvJWCrfDe4ss6vStRe9aDzmGIZfo1jsgwyWDMzUyiIV9vt1AH4XGk5ClSvewUgMNa%2BYW%2FVj5jxhm9NLP67QQaSAMu64L6CYmsFSHlnzT4ZlLwTgcL6Sf8%2FeX9AU%3D" class="Button--redOutline">Login</a>
+        <a href="https://developer.okta.com/signup/" class="Button--red">Sign up</a>
+      </div>
+
+      <a class="SearchIcon" href="#"></a>
+      <form id="form_search" class="SearchBar Formisimo_clocked_69929" method="get" action="https://developer.okta.com/search/" name="form_search" __bizdiag="-784164280" __biza="WJ__">
+        <input type="text" name="stq" autocomplete="off" id="st-search-input-auto" class="st-search-input" placeholder="Search">
+        <input type="submit" name="submit" value="GO">
+      </form>
+
+    </nav>
+
+  </div>
+
+</header>
+
+	<div class="page-content">
+		
+		
+
+
+
+
+
+
+<section class="Blog is-single">
+		
+	<div class="Blog-social">
+		
+		<a href="https://github.com/oktadeveloper" target="_blank"><i class="fa fa-github"></i></a>
+		
+		
+		
+		
+	</div>
+	
+	
+
+<article class="BlogPost">
+
+    <header class="BlogPost-header">
+
+        <time class="BlogPost-date" datetime="2018-05-01">May 1, 2018</time>
+
+        <h1 class="BlogPost-title">
+            
+            Add Authentication to Your Xamarin App with OpenID Connect
+            
+        </h1>
+
+        <div class="BlogPost-attribution">
+            
+            <img src="/assets/avatar-oktadev-de250fc0e9347b4dcf0087b9ec1a0e3aee8092b2f516e45fce0529926a5cde0f.png" alt="avatar-oktadev.png" class="BlogPost-avatar">
+            
+            <span class="BlogPost-author">Team Okta</span>
+        </div>
+
+    </header>
+
+    <div class="BlogPost-content">
+        
+	<p>Here at Okta we ❤️ Xamarin – it’s so much fun to build with! If you’re a Xamarin developer today, there’s a solid chance you’ll have to develop an app that requires users to sign in. Once you start doing that, you need to keep two things in mind: keep the authentication process simple for users, and keep their personal information secure. It would be nice if those things were easy, but it’s not always straightforward. Adding authentication to your Xamarin app with OpenID Connect assures that you achieve both.</p>
+
+<p>If you’ve built a web or mobile app before, you know that all the user management pieces are a royal pain. With Okta, you can have all that <a href="/documentation/">user management “stuff” out-of-the-box</a> so you can get on with what you really care about – your app! By the time you’re done with this tutorial (less than 30 minutes, I promise), you’ll have a fully-working Xamarin app with authentication via OpenID Connect.</p>
+
+<p>This blog post focuses on developing a Xamarin.Forms mobile app, with authentication via Okta, OpenID Connect, and AppAuth. If you aren’t familiar with Xamarin, follow our <a href="/blog/2018/01/10/build-app-for-ios-android-with-xamarin">post about building a simple app</a> to learn the basics. Since the app will run on both iOS and Android, we’ll need to write our Xamarin authentication code for both platforms, and this can be hard to do from scratch. As you’ll see, <a href="/standards/OIDC/">OpenID Connect and Okta</a> make this easy!</p>
+
+<p>Although we’ll develop a Xamarin.Forms solution that uses Okta, the authentication code can be easily copy-pasted into a traditional (non-Forms) Xamarin app, too.</p>
+
+<p>If you want to skip straight to a demo, you can download our whole <a href="https://github.com/oktadeveloper/okta-appauth-xamarin-example">Xamarin authentication with OpenID Connect example from GitHub</a>!</p>
+
+<p>Let’s get started. First, you’ll need to create an Okta developer account to store your users.</p>
+
+<h2 id="what-is-okta">What is Okta?</h2>
+
+<p>Okta is an API service that allows developers to create, edit, and securely store user accounts and user account data, and connect them with one or multiple applications. Our API enables you to:</p>
+
+<ul>
+  <li><a href="https://developer.okta.com/product/authentication/">Authenticate</a> and <a href="https://developer.okta.com/product/authorization/">authorize</a> your users</li>
+  <li>Store data about your users</li>
+  <li>Perform password-based and <a href="https://developer.okta.com/authentication-guide/social-login/">social login</a></li>
+  <li>Secure your application with <a href="https://developer.okta.com/use_cases/mfa/">multi-factor authentication</a></li>
+  <li>And much more! Check out our <a href="https://developer.okta.com/documentation/">Product Documentation</a></li>
+</ul>
+
+<p>In short: we make <a href="https://developer.okta.com/product/user-management/">user account management</a> a lot easier, more secure, and more scalable than what you’re probably used to.</p>
+
+<p>This blog post focuses on developing a Xamarin.Forms mobile app, with authentication via Okta, OpenID Connect, and AppAuth. If you aren’t familiar with Xamarin, check out our <a href="/blog/2018/01/10/build-app-for-ios-android-with-xamarin">post about building a simple app to learn the basics</a>.</p>
+
+<p>Since the app will run on both iOS and Android, we’ll need to write our Xamarin authentication code for both platforms, and this can be hard to do from scratch. As you’ll see, OpenID Connect and Okta make this easy! Although we’ll develop a Xamarin.Forms solution that uses Okta, the authentication code can be easily copy-pasted into a traditional (non-Forms) Xamarin app, too.</p>
+
+<p>Ready to get started? <a href="https://developer.okta.com/signup/">Register for a free developer account!</a></p>
+
+<h2 id="get-started-with-xamarin-forms-add-okta-for-authentication">Get Started with Xamarin Forms: Add Okta for Authentication</h2>
+
+<p>Once you’re in your account, create a new native app in the Applications tab. From there you need to collect these values which you’ll need when implementing authentication in your mobile app:</p>
+
+<ul>
+  <li><strong>Client ID:</strong> get this from the “General” tab of the app you’ve made.</li>
+  <li><strong>Redirect URI:</strong> you can also get this from the “General” tab of the app you’ve made. Example: <code class="highlighter-rouge">com.oktapreview.dev-224943:/callback</code></li>
+  <li><strong>Redirect Scheme</strong>: this is the <strong>Redirect URI</strong> without the “:/callback” suffix. Example: <code class="highlighter-rouge">com.oktapreview.dev-224943</code></li>
+  <li>The <strong>Org URL</strong> value from the Okta Dashboard page. Example: <code class="highlighter-rouge">https://dev-224943.oktapreview.com</code></li>
+</ul>
+
+<p><img src="/assets/blog/xamarin-oidc/okta-dashboard-e16182a3ded713c9e5551fac80f6ab4de597ade32fcd8a5c2e64e07f4f34ca27.png" alt="Okta Dashboard" width="800" class="center-image" /></p>
+
+<h2 id="appauth-for-authentication-in-xamarin-forms">AppAuth for Authentication in Xamarin Forms</h2>
+
+<p>Next, you need to create a new Xamarin Forms project, with Android and iOS support. You can read more about these steps in our <a href="/blog/2018/01/10/build-app-for-ios-android-with-xamarin">getting started with Xamarin blog post</a>. For this tutorial, choose the .NET Standard code sharing strategy.</p>
+
+<p>Once you have the project ready, you need to install the <a href="https://www.nuget.org/packages/System.IdentityModel.Tokens.Jwt"><code class="highlighter-rouge">System.IdentityModel.Tokens.Jwt</code></a> package in the shared project. You’ll need it to extract the data from token you receive once the user logs in.</p>
+
+<p>You’ll be using a library called <a href="https://appauth.io/">AppAuth</a> to help you perform the actual authentication flow on each platform. AppAuth makes it easy to use industry-standard best practices for OpenID Connect in Xamarin. You don’t have to worry about differences between device versions, OS versions, etc. You just use the AppAuth library. AppAuth is compatible with OIDC, so it’s also compatible with Okta!</p>
+
+<p>Since you have to implement the authentication process on each platform separately, and the AppAuth response is a different type on each platform, you’ll declare a class with enough info for your sample to return authentication process results to your shared code.</p>
+
+<p>Create an <code class="highlighter-rouge">AuthInfo</code> class in the shared project:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">AuthInfo</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">bool</span> <span class="n">IsAuthorized</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">AccessToken</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">RefreshToken</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Scope</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">IdToken</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Now that you’ve declared the AuthInfo class, you can declare the interface that is an essential part of the whole exercise. This interface will be implemented with platform-specific code on each platform.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">interface</span> <span class="nc">ILoginProvider</span>
+<span class="p">{</span>
+    <span class="n">Task</span><span class="p">&lt;</span><span class="n">AuthInfo</span><span class="p">&gt;</span> <span class="nf">LoginAsync</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Our sample consists of two pages. The first has a button that starts the authentication process, and the second displays data about the user after they log in. You can take a look at their source code on <a href="https://github.com/oktadeveloper/okta-appauth-xamarin-example/tree/master/OktaDemo.XF/OktaDemo.XF/Pages">GitHub</a>.</p>
+
+<p>On iOS, it looks like:</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td><a href="/assets/blog/xamarin-oidc/ios-0-7dc5371655e7e953350d3cb14b4ac8897a92e558099d957a13ba6c5be1fdfc94.png"><img src="/assets/blog/xamarin-oidc/ios-0-7dc5371655e7e953350d3cb14b4ac8897a92e558099d957a13ba6c5be1fdfc94.png" alt="iOS Demo" width="280" /></a></td>
+      <td><a href="/assets/blog/xamarin-oidc/ios-1-265456b1883319e877f8b7f87b877cdeb62a6c106d089458bbe7f9019b21f3ef.png"><img src="/assets/blog/xamarin-oidc/ios-1-265456b1883319e877f8b7f87b877cdeb62a6c106d089458bbe7f9019b21f3ef.png" alt="Okta Login" width="280" /></a></td>
+      <td><a href="/assets/blog/xamarin-oidc/ios-2-5f6237bab34daf6430ed4c9bcd93701802823a856634e569d3bf811aefaa254e.png"><img src="/assets/blog/xamarin-oidc/ios-2-5f6237bab34daf6430ed4c9bcd93701802823a856634e569d3bf811aefaa254e.png" alt="iOS Success" width="280" /></a></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>On Android, it looks like:</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td><a href="/assets/blog/xamarin-oidc/android-0-147b447e1608b9658c6154e64f5375b4a9289349b02888cf5959ca8307750f9d.png"><img src="/assets/blog/xamarin-oidc/android-0-147b447e1608b9658c6154e64f5375b4a9289349b02888cf5959ca8307750f9d.png" alt="Android Demo" width="280" /></a></td>
+      <td><a href="/assets/blog/xamarin-oidc/android-1-99714df5acb915c35e68148e0001086e9cc90de1a803e1bd0410660eb4764c08.png"><img src="/assets/blog/xamarin-oidc/android-1-99714df5acb915c35e68148e0001086e9cc90de1a803e1bd0410660eb4764c08.png" alt="Okta Login" width="280" /></a></td>
+      <td><a href="/assets/blog/xamarin-oidc/android-2-2bcdcbc83582a565d637629cd8b32102383f3b86c2f4a88c48e9efbde13c02b9.png"><img src="/assets/blog/xamarin-oidc/android-2-2bcdcbc83582a565d637629cd8b32102383f3b86c2f4a88c48e9efbde13c02b9.png" alt="Android Success" width="280" /></a></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The only important code snippet from those two pages is the one that gets triggered when someone clicks on <code class="highlighter-rouge">Log in</code>. In that code snippet you’re using the <code class="highlighter-rouge">DependencyService</code> to get an instance of a class that implemented your <code class="highlighter-rouge">ILoginProvider</code> interface. After that, you call the <code class="highlighter-rouge">LoginAsync</code> method, and await the result. If the process was a success you’ll use the <code class="highlighter-rouge">JwtSecurityTokenHandler</code> package to decode the JWTs you’ve received from Okta, and try to extract some info about the user from them.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="k">async</span> <span class="k">void</span> <span class="nf">OnLogInButtonClicked</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">loginProvider</span> <span class="p">=</span> <span class="n">DependencyService</span><span class="p">.</span><span class="n">Get</span><span class="p">&lt;</span><span class="n">ILoginProvider</span><span class="p">&gt;();</span>
+    <span class="n">IsBusy</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">authInfo</span> <span class="p">=</span> <span class="k">await</span> <span class="n">loginProvider</span><span class="p">.</span><span class="nf">LoginAsync</span><span class="p">();</span>
+    <span class="n">IsBusy</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrWhiteSpace</span><span class="p">(</span><span class="n">authInfo</span><span class="p">.</span><span class="n">AccessToken</span><span class="p">)</span> <span class="p">||</span> <span class="p">!</span><span class="n">authInfo</span><span class="p">.</span><span class="n">IsAuthorized</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Device</span><span class="p">.</span><span class="nf">BeginInvokeOnMainThread</span><span class="p">(</span><span class="k">async</span> <span class="p">()</span> <span class="p">=&gt;</span>
+        <span class="p">{</span>
+            <span class="k">await</span> <span class="nf">DisplayAlert</span><span class="p">(</span><span class="s">"Error"</span><span class="p">,</span> <span class="s">"The app can't authenticate you"</span><span class="p">,</span> <span class="s">"OK"</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="c1">//TODO: Save the access and refresh tokens somewhere secure</span>
+
+        <span class="kt">var</span> <span class="n">handler</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">JwtSecurityTokenHandler</span><span class="p">();</span>
+        <span class="kt">var</span> <span class="n">jsonToken</span> <span class="p">=</span> <span class="n">handler</span><span class="p">.</span><span class="nf">ReadJwtToken</span><span class="p">(</span><span class="n">authInfo</span><span class="p">.</span><span class="n">IdToken</span><span class="p">);</span>
+        <span class="kt">var</span> <span class="n">claims</span> <span class="p">=</span> <span class="n">jsonToken</span><span class="p">?.</span><span class="n">Payload</span><span class="p">?.</span><span class="n">Claims</span><span class="p">;</span>
+
+        <span class="kt">var</span> <span class="n">name</span> <span class="p">=</span> <span class="n">claims</span><span class="p">?.</span><span class="nf">FirstOrDefault</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Type</span> <span class="p">==</span> <span class="s">"name"</span><span class="p">)?.</span><span class="n">Value</span><span class="p">;</span>
+        <span class="kt">var</span> <span class="n">email</span> <span class="p">=</span> <span class="n">claims</span><span class="p">?.</span><span class="nf">FirstOrDefault</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Type</span> <span class="p">==</span> <span class="s">"email"</span><span class="p">)?.</span><span class="n">Value</span><span class="p">;</span>
+        <span class="kt">var</span> <span class="n">preferredUsername</span> <span class="p">=</span> <span class="n">claims</span><span class="p">?</span>
+            <span class="p">.</span><span class="nf">FirstOrDefault</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Type</span> <span class="p">==</span> <span class="s">"preferred_username"</span><span class="p">)?.</span><span class="n">Value</span><span class="p">;</span>
+
+        <span class="n">Device</span><span class="p">.</span><span class="nf">BeginInvokeOnMainThread</span><span class="p">(</span><span class="k">async</span> <span class="p">()</span> <span class="p">=&gt;</span>
+        <span class="p">{</span>
+            <span class="k">await</span> <span class="n">Navigation</span><span class="p">.</span><span class="nf">PushAsync</span><span class="p">(</span><span class="k">new</span> <span class="nf">AuthInfoPage</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">preferredUsername</span><span class="p">));</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>You also need to declare a class with constants that are used in the authentication process. Create another class in the shared project called <code class="highlighter-rouge">Constants</code>:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Constants</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">const</span> <span class="kt">string</span> <span class="n">AuthStateKey</span> <span class="p">=</span> <span class="s">"authState"</span><span class="p">;</span>
+    <span class="k">public</span> <span class="k">const</span> <span class="kt">string</span> <span class="n">AuthServiceDiscoveryKey</span> <span class="p">=</span> <span class="s">"authServiceDiscovery"</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">const</span> <span class="kt">string</span> <span class="n">ClientId</span> <span class="p">=</span> <span class="s">"{clientId}"</span><span class="p">;</span>
+    <span class="k">public</span> <span class="k">const</span> <span class="kt">string</span> <span class="n">RedirectUri</span> <span class="p">=</span> <span class="s">"{redirectUri}"</span><span class="p">;</span>
+    <span class="k">public</span> <span class="k">const</span> <span class="kt">string</span> <span class="n">OrgUrl</span> <span class="p">=</span> <span class="s">"<span class="okta-preview-domain"><span class="okta-preview-domain">https://{yourOktaDomain}.com</span></span>"</span><span class="p">;</span>
+    <span class="k">public</span> <span class="k">const</span> <span class="kt">string</span> <span class="n">AuthorizationServerId</span> <span class="p">=</span> <span class="s">"default"</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">static</span> <span class="k">readonly</span> <span class="kt">string</span> <span class="n">DiscoveryEndpoint</span> <span class="p">=</span>
+        <span class="s">$"</span><span class="p">{</span><span class="n">OrgUrl</span><span class="p">}</span><span class="s">/oauth2/</span><span class="p">{</span><span class="n">AuthorizationServerId</span><span class="p">}</span><span class="s">/.well-known/openid-configuration"</span><span class="p">;</span>
+
+
+    <span class="k">public</span> <span class="k">static</span> <span class="k">readonly</span> <span class="kt">string</span><span class="p">[]</span> <span class="n">Scopes</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">string</span><span class="p">[]</span> <span class="p">{</span>
+        <span class="s">"openid"</span><span class="p">,</span> <span class="s">"profile"</span><span class="p">,</span> <span class="s">"email"</span><span class="p">,</span> <span class="s">"offline_access"</span> <span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="xamarin-authentication-on-android">Xamarin Authentication on Android</h2>
+
+<p>First of all, we need to install three NuGet packages:</p>
+
+<ul>
+  <li>Nito.AsyncEx</li>
+  <li>Xamarin.Android.Support.CustomTabs</li>
+  <li>Xamarin.OpenId.AppAuth.Android</li>
+</ul>
+
+<p>You’ll start by creating a class that implements the <code class="highlighter-rouge">ILoginProvider</code> interface from the shared project. One important thing to note is the attribute above the namespace line, which you’ll use to register this implementation with the <code class="highlighter-rouge">DependencyService</code>.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[assembly: Xamarin.Forms.Dependency(typeof(LoginProvider))]</span>
+<span class="k">namespace</span> <span class="nn">OktaDemo.XF.Droid.Implementations</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">LoginProvider</span> <span class="p">:</span> <span class="n">ILoginProvider</span>
+    <span class="p">{</span>
+        <span class="k">private</span> <span class="k">readonly</span> <span class="n">AuthorizationService</span> <span class="n">_authService</span><span class="p">;</span>
+        <span class="k">private</span> <span class="n">AuthState</span> <span class="n">_authState</span><span class="p">;</span>
+        <span class="k">internal</span> <span class="k">static</span> <span class="n">LoginProvider</span> <span class="n">Current</span><span class="p">;</span>
+        <span class="k">private</span> <span class="k">readonly</span> <span class="n">AsyncAutoResetEvent</span> <span class="n">_loginResultWaitHandle</span>
+            <span class="p">=</span> <span class="k">new</span> <span class="nf">AsyncAutoResetEvent</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+
+        <span class="k">public</span> <span class="nf">LoginProvider</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">Current</span> <span class="p">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="n">_authService</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AuthorizationService</span><span class="p">(</span><span class="n">MainActivity</span><span class="p">.</span><span class="n">Instance</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">AuthInfo</span><span class="p">&gt;</span> <span class="nf">LoginAsync</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="c1">// TODO</span>
+        <span class="p">}</span>
+
+        <span class="k">private</span> <span class="k">void</span> <span class="nf">MakeAuthRequest</span><span class="p">(</span>
+            <span class="n">AuthorizationServiceConfiguration</span> <span class="n">serviceConfig</span>
+            <span class="n">AuthState</span> <span class="n">authState</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// TODO</span>
+        <span class="p">}</span>
+
+
+        <span class="k">private</span> <span class="n">PendingIntent</span> <span class="nf">CreatePostAuthorizationIntent</span><span class="p">(</span>
+            <span class="n">Context</span> <span class="n">context</span><span class="p">,</span>
+            <span class="n">AuthorizationRequest</span> <span class="n">request</span><span class="p">,</span>
+            <span class="n">AuthorizationServiceDiscovery</span> <span class="n">discoveryDoc</span><span class="p">,</span>
+            <span class="n">AuthState</span> <span class="n">authState</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// TODO</span>
+        <span class="p">}</span>
+
+        <span class="k">internal</span> <span class="k">void</span> <span class="nf">NotifyOfCallback</span><span class="p">(</span><span class="n">Intent</span> <span class="n">intent</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// TODO</span>
+        <span class="p">}</span>
+
+        <span class="k">private</span> <span class="k">void</span> <span class="nf">ReceivedTokenResponse</span><span class="p">(</span>
+            <span class="n">TokenResponse</span> <span class="n">tokenResponse</span><span class="p">,</span>
+            <span class="n">AuthorizationException</span> <span class="n">authException</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// TODO</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The whole process starts when you call <code class="highlighter-rouge">LoginAsync</code>. The workflow is to fetch a service configuration using the discovery endpoint, make an authentication request, and await the result.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">AuthInfo</span><span class="p">&gt;</span> <span class="nf">LoginAsync</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">try</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">serviceConfiguration</span> <span class="p">=</span> <span class="k">await</span> <span class="n">AuthorizationServiceConfiguration</span><span class="p">.</span><span class="nf">FetchFromUrlAsync</span><span class="p">(</span>
+            <span class="n">Android</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">Uri</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="n">Constants</span><span class="p">.</span><span class="n">DiscoveryEndpoint</span><span class="p">));</span>
+
+        <span class="nf">MakeAuthRequest</span><span class="p">(</span><span class="n">serviceConfiguration</span><span class="p">,</span> <span class="k">new</span> <span class="nf">AuthState</span><span class="p">());</span>
+        <span class="k">await</span> <span class="n">_loginResultWaitHandle</span><span class="p">.</span><span class="nf">WaitAsync</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="n">AuthorizationException</span> <span class="n">ex</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Failed to retrieve configuration:"</span> <span class="p">+</span> <span class="n">ex</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="k">new</span> <span class="nf">AuthInfo</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">IsAuthorized</span> <span class="p">=</span> <span class="n">_authState</span><span class="p">?.</span><span class="n">IsAuthorized</span> <span class="p">??</span> <span class="k">false</span><span class="p">,</span>
+        <span class="n">AccessToken</span> <span class="p">=</span> <span class="n">_authState</span><span class="p">?.</span><span class="n">AccessToken</span><span class="p">,</span>
+        <span class="n">IdToken</span> <span class="p">=</span> <span class="n">_authState</span><span class="p">?.</span><span class="n">IdToken</span><span class="p">,</span>
+        <span class="n">RefreshToken</span> <span class="p">=</span> <span class="n">_authState</span><span class="p">?.</span><span class="n">RefreshToken</span><span class="p">,</span>
+        <span class="n">Scope</span> <span class="p">=</span> <span class="n">_authState</span><span class="p">?.</span><span class="n">Scope</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The previous method relies on <code class="highlighter-rouge">MakeAuthRequest()</code>, which creates an authentication request, creates an intent using it, and starts the authentication request:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="k">void</span> <span class="nf">MakeAuthRequest</span><span class="p">(</span>
+    <span class="n">AuthorizationServiceConfiguration</span> <span class="n">serviceConfig</span><span class="p">,</span>
+    <span class="n">AuthState</span> <span class="n">authState</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">authRequest</span> <span class="p">=</span> <span class="k">new</span> <span class="n">AuthorizationRequest</span><span class="p">.</span><span class="nf">Builder</span><span class="p">(</span>
+            <span class="n">serviceConfig</span><span class="p">,</span> <span class="n">Constants</span><span class="p">.</span><span class="n">ClientId</span><span class="p">,</span>
+            <span class="n">ResponseTypeValues</span><span class="p">.</span><span class="n">Code</span><span class="p">,</span>
+            <span class="n">Android</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">Uri</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="n">Constants</span><span class="p">.</span><span class="n">RedirectUri</span><span class="p">))</span>
+        <span class="p">.</span><span class="nf">SetScope</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="s">" "</span><span class="p">,</span> <span class="n">Constants</span><span class="p">.</span><span class="n">Scopes</span><span class="p">))</span>
+        <span class="p">.</span><span class="nf">Build</span><span class="p">();</span>
+
+    <span class="kt">var</span> <span class="n">postAuthorizationIntent</span> <span class="p">=</span> <span class="nf">CreatePostAuthorizationIntent</span><span class="p">(</span>
+        <span class="n">MainActivity</span><span class="p">.</span><span class="n">Instance</span><span class="p">,</span> <span class="n">authRequest</span><span class="p">,</span> <span class="n">serviceConfig</span><span class="p">.</span><span class="n">DiscoveryDoc</span><span class="p">,</span> <span class="n">authState</span><span class="p">);</span>
+
+    <span class="n">_authService</span><span class="p">.</span><span class="nf">PerformAuthorizationRequest</span><span class="p">(</span><span class="n">authRequest</span><span class="p">,</span> <span class="n">postAuthorizationIntent</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">MakeAuthRequest()</code> method calls the <code class="highlighter-rouge">CreatePostAuthorizationIntent()</code> method to create an Intent that will guide us back to our app, after Okta logs the user in:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="n">PendingIntent</span> <span class="nf">CreatePostAuthorizationIntent</span><span class="p">(</span>
+    <span class="n">Context</span> <span class="n">context</span><span class="p">,</span>
+    <span class="n">AuthorizationRequest</span> <span class="n">request</span><span class="p">,</span>
+    <span class="n">AuthorizationServiceDiscovery</span> <span class="n">discoveryDoc</span><span class="p">,</span>
+    <span class="n">AuthState</span> <span class="n">authState</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">intent</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Intent</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="k">typeof</span><span class="p">(</span><span class="n">MainActivity</span><span class="p">));</span>
+    <span class="n">intent</span><span class="p">.</span><span class="nf">PutExtra</span><span class="p">(</span><span class="n">Constants</span><span class="p">.</span><span class="n">AuthStateKey</span><span class="p">,</span> <span class="n">authState</span><span class="p">.</span><span class="nf">JsonSerializeString</span><span class="p">());</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">discoveryDoc</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">intent</span><span class="p">.</span><span class="nf">PutExtra</span><span class="p">(</span>
+            <span class="n">Constants</span><span class="p">.</span><span class="n">AuthServiceDiscoveryKey</span><span class="p">,</span>
+            <span class="n">discoveryDoc</span><span class="p">.</span><span class="n">DocJson</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">PendingIntent</span><span class="p">.</span><span class="nf">GetActivity</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="nf">GetHashCode</span><span class="p">(),</span> <span class="n">intent</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The redirect from Okta back to your Xamarin app will happen using a custom URL scheme. This means the OS will switch back to your app, which needs to be be able to handle the incoming callback from Okta. This will be handled by the <code class="highlighter-rouge">NotifyOfCallback</code> method (and some code you’ll write later):</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">internal</span> <span class="k">void</span> <span class="nf">NotifyOfCallback</span><span class="p">(</span><span class="n">Intent</span> <span class="n">intent</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">try</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="n">intent</span><span class="p">.</span><span class="nf">HasExtra</span><span class="p">(</span><span class="n">Constants</span><span class="p">.</span><span class="n">AuthStateKey</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">_authState</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="k">try</span>
+            <span class="p">{</span>
+                <span class="n">_authState</span> <span class="p">=</span> <span class="n">AuthState</span><span class="p">.</span><span class="nf">JsonDeserialize</span><span class="p">(</span><span class="n">intent</span><span class="p">.</span><span class="nf">GetStringExtra</span><span class="p">(</span><span class="n">Constants</span><span class="p">.</span><span class="n">AuthStateKey</span><span class="p">));</span>
+            <span class="p">}</span>
+            <span class="k">catch</span> <span class="p">(</span><span class="n">JSONException</span> <span class="n">ex</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Malformed AuthState JSON saved: "</span> <span class="p">+</span> <span class="n">ex</span><span class="p">);</span>
+                <span class="n">_authState</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">_authState</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">AuthorizationResponse</span> <span class="n">response</span> <span class="p">=</span> <span class="n">AuthorizationResponse</span><span class="p">.</span><span class="nf">FromIntent</span><span class="p">(</span><span class="n">intent</span><span class="p">);</span>
+            <span class="n">AuthorizationException</span> <span class="n">authEx</span> <span class="p">=</span> <span class="n">AuthorizationException</span><span class="p">.</span><span class="nf">FromIntent</span><span class="p">(</span><span class="n">intent</span><span class="p">);</span>
+            <span class="n">_authState</span><span class="p">.</span><span class="nf">Update</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">authEx</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">response</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Received AuthorizationResponse."</span><span class="p">);</span>
+                <span class="k">try</span>
+                <span class="p">{</span>
+                    <span class="kt">var</span> <span class="n">clientAuthentication</span> <span class="p">=</span> <span class="n">_authState</span><span class="p">.</span><span class="n">ClientAuthentication</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">catch</span> <span class="p">(</span><span class="n">ClientAuthenticationUnsupportedAuthenticationMethod</span> <span class="n">ex</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">_loginResultWaitHandle</span><span class="p">.</span><span class="nf">Set</span><span class="p">();</span>
+
+                    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span>
+                        <span class="s">"Token request cannot be made, client authentication for the token endpoint could not be constructed: "</span> <span class="p">+</span>
+                        <span class="n">ex</span><span class="p">);</span>
+
+                    <span class="k">return</span><span class="p">;</span>
+                <span class="p">}</span>
+
+                <span class="n">_authService</span><span class="p">.</span><span class="nf">PerformTokenRequest</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="nf">CreateTokenExchangeRequest</span><span class="p">(),</span> <span class="n">ReceivedTokenResponse</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Authorization failed: "</span> <span class="p">+</span> <span class="n">authEx</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">_loginResultWaitHandle</span><span class="p">.</span><span class="nf">Set</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_loginResultWaitHandle</span><span class="p">.</span><span class="nf">Set</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The final method to write is <code class="highlighter-rouge">ReceivedTokenResponse()</code>, where you try updating the AuthState, and finally tell the <code class="highlighter-rouge">LoginAsync</code> method that it may proceed with returning the result.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="k">void</span> <span class="nf">ReceivedTokenResponse</span><span class="p">(</span><span class="n">TokenResponse</span> <span class="n">tokenResponse</span><span class="p">,</span> <span class="n">AuthorizationException</span> <span class="n">authException</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">try</span>
+    <span class="p">{</span>
+        <span class="n">_authState</span><span class="p">.</span><span class="nf">Update</span><span class="p">(</span><span class="n">tokenResponse</span><span class="p">,</span> <span class="n">authException</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Exception: </span><span class="p">{</span><span class="n">ex</span><span class="p">.</span><span class="n">Message</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">finally</span>
+    <span class="p">{</span>
+        <span class="n">_loginResultWaitHandle</span><span class="p">.</span><span class="nf">Set</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Next, you need to refactor our <code class="highlighter-rouge">MainActivity</code> a bit. Since we don’t instantiate a new <code class="highlighter-rouge">MainActivity</code> when Okta calls back to your app, you need to set the <code class="highlighter-rouge">LaunchMode</code> to <code class="highlighter-rouge">SingleTask</code> in the attribute above your <code class="highlighter-rouge">MainActivity</code> class. The <code class="highlighter-rouge">LoginProvider</code> implementation needs access to your <code class="highlighter-rouge">MainActivity</code>, so you’re going to add a static property to <code class="highlighter-rouge">MainActivity</code> to your class, which will be a “pointer” to your <code class="highlighter-rouge">MainActivity</code> instance:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="nf">Activity</span><span class="p">(</span><span class="n">Label</span> <span class="p">=</span> <span class="s">"OktaDemo.XF"</span><span class="p">,</span> <span class="n">Icon</span> <span class="p">=</span> <span class="s">"@drawable/icon"</span><span class="p">,</span> <span class="n">Theme</span> <span class="p">=</span> <span class="s">"@style/MainTheme"</span><span class="p">,</span> <span class="n">MainLauncher</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">ConfigurationChanges</span> <span class="p">=</span> <span class="n">ConfigChanges</span><span class="p">.</span><span class="n">ScreenSize</span> <span class="p">|</span> <span class="n">ConfigChanges</span><span class="p">.</span><span class="n">Orientation</span><span class="p">,</span>
+    <span class="n">LaunchMode</span> <span class="p">=</span> <span class="n">LaunchMode</span><span class="p">.</span><span class="n">SingleTask</span><span class="p">)]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">MainActivity</span> <span class="p">:</span> <span class="k">global</span><span class="p">::</span><span class="n">Xamarin</span><span class="p">.</span><span class="n">Forms</span><span class="p">.</span><span class="n">Platform</span><span class="p">.</span><span class="n">Android</span><span class="p">.</span><span class="n">FormsAppCompatActivity</span>
+<span class="p">{</span>
+    <span class="k">internal</span> <span class="k">static</span> <span class="n">MainActivity</span> <span class="n">Instance</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">OnCreate</span><span class="p">(</span><span class="n">Bundle</span> <span class="n">bundle</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Instance</span> <span class="p">=</span> <span class="k">this</span><span class="p">;</span>
+
+        <span class="c1">// Rest of code...</span>
+    <span class="p">}</span>
+
+    <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">OnNewIntent</span><span class="p">(</span><span class="n">Intent</span> <span class="n">intent</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// TODO</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>You need to override the <code class="highlighter-rouge">OnNewIntent</code> method, so that you can forward the Intent to <code class="highlighter-rouge">NotifyOfCallback</code> method in your LoginProvider:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">OnNewIntent</span><span class="p">(</span><span class="n">Intent</span> <span class="n">intent</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">base</span><span class="p">.</span><span class="nf">OnNewIntent</span><span class="p">(</span><span class="n">intent</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">intent</span> <span class="p">!=</span> <span class="k">null</span> <span class="p">&amp;&amp;</span> <span class="n">LoginProvider</span><span class="p">.</span><span class="n">Current</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">LoginProvider</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="nf">NotifyOfCallback</span><span class="p">(</span><span class="n">intent</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The last thing you need to tweak on Android is the <code class="highlighter-rouge">AndroidManifest.xml</code> file in which you need to add details about the AppAuth activity under your application node, and set the Okta callback scheme:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;manifest</span> <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span> <span class="na">android:versionCode=</span><span class="s">"1"</span> <span class="na">android:versionName=</span><span class="s">"1.0"</span> <span class="na">package=</span><span class="s">"com.companyname.OktaDemo.XF"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;uses-sdk</span> <span class="na">android:minSdkVersion=</span><span class="s">"15"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;application</span> <span class="na">android:label=</span><span class="s">"OktaDemo.XF.Android"</span><span class="nt">&gt;</span>
+	  <span class="c">&lt;!-- Callback from authentication screen --&gt;</span>
+    <span class="nt">&lt;activity</span> <span class="na">android:name=</span><span class="s">"net.openid.appauth.RedirectUriReceiverActivity"</span><span class="nt">&gt;</span>
+      <span class="c">&lt;!-- Filter which captures custom scheme based redirects for Okta authorization requests. --&gt;</span>
+      <span class="nt">&lt;intent-filter&gt;</span>
+        <span class="nt">&lt;action</span> <span class="na">android:name=</span><span class="s">"android.intent.action.VIEW"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">"android.intent.category.DEFAULT"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">"android.intent.category.BROWSABLE"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;data</span> <span class="na">android:scheme=</span><span class="s">"{reverseDomainName}"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;/intent-filter&gt;</span>
+    <span class="nt">&lt;/activity&gt;</span>
+  <span class="nt">&lt;/application&gt;</span>
+<span class="nt">&lt;/manifest&gt;</span>
+</code></pre></div></div>
+
+<p>That’s it! You can test the Android project in an emulator to see how the authentication flow works.</p>
+
+<p><strong>NOTE:</strong> There is a known issue with native redirects on Android. For more information, see <a href="https://github.com/okta/okta-sdk-appauth-android/issues/8">this issue</a>.</p>
+
+<h2 id="xamarin-authentication-on-ios">Xamarin Authentication on iOS</h2>
+
+<p>For Xamarin authentication for iOS with OpenID Connect you only need to install two packages:</p>
+
+<ul>
+  <li>Nito.AsyncEx</li>
+  <li>Xamarin.OpenId.AppAuth.iOS</li>
+</ul>
+
+<p>On iOS, you’ll start by modifying the <code class="highlighter-rouge">AppDelegate</code> class. You need to add a property of type <code class="highlighter-rouge">IAuthorizationFlowSession</code> which you’ll use to resume the authentication process, and you need to override the <code class="highlighter-rouge">OpenUrl</code> method to resume the authentication flow:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="p">[</span><span class="nf">Register</span><span class="p">(</span><span class="s">"AppDelegate"</span><span class="p">)]</span>
+    <span class="k">public</span> <span class="k">partial</span> <span class="k">class</span> <span class="nc">AppDelegate</span> <span class="p">:</span> <span class="k">global</span><span class="p">::</span><span class="n">Xamarin</span><span class="p">.</span><span class="n">Forms</span><span class="p">.</span><span class="n">Platform</span><span class="p">.</span><span class="n">iOS</span><span class="p">.</span><span class="n">FormsApplicationDelegate</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="n">IAuthorizationFlowSession</span> <span class="n">CurrentAuthorizationFlow</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+
+        <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">FinishedLaunching</span><span class="p">(</span><span class="n">UIApplication</span> <span class="n">app</span><span class="p">,</span> <span class="n">NSDictionary</span> <span class="n">options</span><span class="p">)</span>
+        <span class="c1">// … (existing code</span>
+
+        <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">OpenUrl</span><span class="p">(</span>
+            <span class="n">UIApplication</span> <span class="n">application</span><span class="p">,</span> <span class="n">NSUrl</span> <span class="n">url</span><span class="p">,</span>
+            <span class="kt">string</span> <span class="n">sourceApplication</span><span class="p">,</span> <span class="n">NSObject</span> <span class="n">annotation</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">CurrentAuthorizationFlow</span><span class="p">?.</span><span class="nf">ResumeAuthorizationFlow</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="p">==</span> <span class="k">true</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="c1">// Your additional URL handling (if any) goes here.</span>
+
+            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>You’ll continue by creating a class that implements the <code class="highlighter-rouge">ILoginProvider</code> interface, with the <code class="highlighter-rouge">Dependency</code> attribute at the top that registers it with the <code class="highlighter-rouge">DependencyService</code>:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[assembly: Xamarin.Forms.Dependency(typeof(LoginProvider))]</span>
+<span class="k">namespace</span> <span class="nn">OktaDemo.XF.iOS.Implementations</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">LoginProvider</span> <span class="p">:</span> <span class="n">IAuthStateChangeDelegate</span><span class="p">,</span> <span class="n">IAuthStateErrorDelegate</span><span class="p">,</span> <span class="n">ILoginProvider</span>
+    <span class="p">{</span>
+        <span class="k">private</span> <span class="n">AuthState</span> <span class="n">_authState</span><span class="p">;</span>
+
+        <span class="k">private</span> <span class="k">readonly</span> <span class="n">AsyncAutoResetEvent</span> <span class="n">_loginResultWaitHandle</span>
+            <span class="p">=</span> <span class="k">new</span> <span class="nf">AsyncAutoResetEvent</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+
+        <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">AuthInfo</span><span class="p">&gt;</span> <span class="nf">LoginAsync</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">redirectUri</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">NSUrl</span><span class="p">(</span><span class="n">Constants</span><span class="p">.</span><span class="n">RedirectUri</span><span class="p">);</span>
+
+            <span class="k">try</span>
+            <span class="p">{</span>
+                <span class="kt">var</span> <span class="n">configuration</span> <span class="p">=</span> <span class="k">await</span> <span class="n">AuthorizationService</span>
+                    <span class="p">.</span><span class="nf">DiscoverServiceConfigurationForDiscoveryAsync</span><span class="p">(</span>
+                        <span class="k">new</span> <span class="nf">NSUrl</span><span class="p">(</span><span class="n">Constants</span><span class="p">.</span><span class="n">DiscoveryEndpoint</span><span class="p">));</span>
+
+                <span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AuthorizationRequest</span><span class="p">(</span>
+                    <span class="n">configuration</span><span class="p">,</span> <span class="n">Constants</span><span class="p">.</span><span class="n">ClientId</span><span class="p">,</span>
+                    <span class="n">Constants</span><span class="p">.</span><span class="n">Scopes</span><span class="p">,</span> <span class="n">redirectUri</span><span class="p">,</span> <span class="n">ResponseType</span><span class="p">.</span><span class="n">Code</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span>
+
+                <span class="c1">// Performs authentication request</span>
+                <span class="kt">var</span> <span class="n">appDelegate</span> <span class="p">=</span> <span class="p">(</span><span class="n">AppDelegate</span><span class="p">)</span> <span class="n">UIApplication</span><span class="p">.</span><span class="n">SharedApplication</span><span class="p">.</span><span class="n">Delegate</span><span class="p">;</span>
+                <span class="n">appDelegate</span><span class="p">.</span><span class="n">CurrentAuthorizationFlow</span> <span class="p">=</span> <span class="n">AuthState</span><span class="p">.</span><span class="nf">PresentAuthorizationRequest</span><span class="p">(</span><span class="n">request</span><span class="p">,</span>
+                    <span class="n">UIKit</span><span class="p">.</span><span class="n">UIApplication</span><span class="p">.</span><span class="n">SharedApplication</span><span class="p">.</span><span class="n">KeyWindow</span><span class="p">.</span><span class="n">RootViewController</span><span class="p">,</span> <span class="p">(</span><span class="n">authState</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span> <span class="p">=&gt;</span>
+                    <span class="p">{</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">authState</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+                        <span class="p">{</span>
+                            <span class="n">_authState</span> <span class="p">=</span> <span class="n">authState</span><span class="p">;</span>
+                        <span class="p">}</span>
+                        <span class="k">else</span>
+                        <span class="p">{</span>
+                            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Authorization error: </span><span class="p">{</span><span class="n">error</span><span class="p">.</span><span class="n">LocalizedDescription</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+                            <span class="n">_authState</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+                        <span class="p">}</span>
+
+                        <span class="n">_loginResultWaitHandle</span><span class="p">.</span><span class="nf">Set</span><span class="p">();</span>
+                    <span class="p">});</span>
+            <span class="p">}</span>
+            <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span>
+            <span class="p">{</span>
+
+                <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Error retrieving discovery document: </span><span class="p">{</span><span class="n">ex</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+                <span class="n">_authState</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+                <span class="n">_loginResultWaitHandle</span><span class="p">.</span><span class="nf">Set</span><span class="p">();</span>
+            <span class="p">}</span>
+
+            <span class="k">await</span> <span class="n">_loginResultWaitHandle</span><span class="p">.</span><span class="nf">WaitAsync</span><span class="p">();</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">AuthInfo</span><span class="p">()</span>
+            <span class="p">{</span>
+                <span class="n">IsAuthorized</span> <span class="p">=</span> <span class="n">_authState</span><span class="p">?.</span><span class="n">IsAuthorized</span> <span class="p">??</span> <span class="k">false</span><span class="p">,</span>
+                <span class="n">AccessToken</span> <span class="p">=</span> <span class="n">_authState</span><span class="p">?.</span><span class="n">LastTokenResponse</span><span class="p">?.</span><span class="n">AccessToken</span><span class="p">,</span>
+                <span class="n">IdToken</span> <span class="p">=</span> <span class="n">_authState</span><span class="p">?.</span><span class="n">LastTokenResponse</span><span class="p">?.</span><span class="n">IdToken</span><span class="p">,</span>
+                <span class="n">RefreshToken</span> <span class="p">=</span> <span class="n">_authState</span><span class="p">?.</span><span class="n">LastTokenResponse</span><span class="p">?.</span><span class="n">RefreshToken</span><span class="p">,</span>
+                <span class="n">Scope</span> <span class="p">=</span> <span class="n">_authState</span><span class="p">?.</span><span class="n">LastTokenResponse</span><span class="p">?.</span><span class="n">Scope</span>
+            <span class="p">};</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="n">IntPtr</span> <span class="n">Handle</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">Dispose</span><span class="p">()</span>
+        <span class="p">{</span>
+        <span class="p">}</span>
+
+        <span class="k">void</span> <span class="n">IAuthStateChangeDelegate</span><span class="p">.</span><span class="nf">DidChangeState</span><span class="p">(</span><span class="n">AuthState</span> <span class="n">state</span><span class="p">)</span>
+        <span class="p">{</span>
+        <span class="p">}</span>
+
+        <span class="k">void</span> <span class="n">IAuthStateErrorDelegate</span><span class="p">.</span><span class="nf">DidEncounterAuthorizationError</span><span class="p">(</span><span class="n">AuthState</span> <span class="n">state</span><span class="p">,</span> <span class="n">NSError</span> <span class="n">error</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Received authorization error: </span><span class="p">{</span><span class="n">error</span><span class="p">}</span><span class="s">."</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The whole process starts when we call <code class="highlighter-rouge">LoginAsync</code>. The workflow is to create a service configuration using the discovery endpoint, make an authentication request, register a callback on the <code class="highlighter-rouge">IAuthorizationFlowSession</code> property in <code class="highlighter-rouge">AppDelegate</code>, and await the result. Once the callback executes, the <code class="highlighter-rouge">LoginAsync</code> method will return the authentication result to the its caller.</p>
+
+<p>The last thing you need to do is to add a code snippet to the <code class="highlighter-rouge">Info.plist</code> file so that iOS knows to which app should it return the results from our Okta authentication process:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;key&gt;</span>CFBundleURLTypes<span class="nt">&lt;/key&gt;</span>
+<span class="nt">&lt;array&gt;</span>
+    <span class="nt">&lt;dict&gt;</span>
+        <span class="nt">&lt;key&gt;</span>CFBundleTypeRole<span class="nt">&lt;/key&gt;</span>
+        <span class="nt">&lt;string&gt;</span>Editor<span class="nt">&lt;/string&gt;</span>
+        <span class="nt">&lt;key&gt;</span>CFBundleURLSchemes<span class="nt">&lt;/key&gt;</span>
+        <span class="nt">&lt;array&gt;</span>
+            <span class="nt">&lt;string&gt;</span>{reverseDomainName}<span class="nt">&lt;/string&gt;</span>
+        <span class="nt">&lt;/array&gt;</span>
+    <span class="nt">&lt;/dict&gt;</span>
+<span class="nt">&lt;/array&gt;</span>
+</code></pre></div></div>
+
+<p>That’s it! You can test the iOS project in iOS Simulator to see how the authentication flow works.</p>
+
+<h2 id="learn-more-about-xamarin-authentication-and-openid-connect-with-okta">Learn More About Xamarin Authentication, and OpenID Connect with Okta</h2>
+
+<p>The samples presented here are the basis for implementing authentication into your Xamarin Forms app, as well as “traditional” Xamarin mobile apps. All you have to do to use the code in a non-Forms Xamarin apps is to remove the Xamarin Forms UI, and add your own which will call the same methods.</p>
+
+<p>You can get the full sample code <a href="https://github.com/oktadeveloper/okta-appauth-xamarin-example">for this Xamarin authentication project from GitHub</a>.</p>
+
+<p>To learn more about Xamarin authentication, OpenID Connect with Xamarin, and Okta, we encourage you to check out the following resources from our developer blog:</p>
+
+<ul>
+  <li><a href="/blog/2018/01/10/build-app-for-ios-android-with-xamarin">Build an App for iOS and Android with Xamarin</a></li>
+  <li><a href="/blog/2018/04/26/build-crud-app-aspnetcore-angular">Build a CRUD App with ASP.NET Core and Angular</a></li>
+  <li><a href="/blog/2018/04/18/authorization-in-your-aspnet-mvc-4-application">Use OpenID Connect for Authorization in Your ASP.NET Core MVC 4.x App</a></li>
+  <li>Our OpenID Connect Primer in three parts:
+    <ul>
+      <li><a href="/blog/2017/07/25/oidc-primer-part-1">Part 1: Identity, Claims, and Tokens</a></li>
+      <li><a href="/blog/2017/07/25/oidc-primer-part-2">Part 2: OIDC in Action</a></li>
+      <li><a href="/blog/2017/08/01/oidc-primer-part-3">Part 3: What’s in a Token?</a></li>
+    </ul>
+  </li>
+  <li><a href="/blog/2018/03/23/token-authentication-aspnetcore-complete-guide">Token Authentication in ASP.NET Core – A Complete Guide</a></li>
+</ul>
+
+<p>Happy authenticating! 😉</p>
+
+
+    </div>
+
+    
+    <div id="disqus">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_title = "Add Authentication to Your Xamarin App with OpenID Connect";
+            var disqus_url = 'https://developer.okta.com/blog/2018/05/01/add-authentication-xamarin-openid-connect';
+
+            (function () {
+                var dsq = document.createElement('script');
+                dsq.async = true;
+                dsq.type = 'text/javascript';
+                dsq.src = '//oktadevblog.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+          </script>
+          <noscript>
+              Please enable JavaScript to view the
+              <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus</a>.
+         </noscript>
+    </div>
+    
+</article>
+
+		
+</section>
+
+		
+	</div>
+	<footer class="Footer">
+    <div class="Wrap">
+
+        <div class="Row">
+
+            <div class="Column--3 Column--medium-6 Column--xSmall-12">
+                <a href="https://www.okta.com/" target="_blank" rel="noopener noreferrer">
+                    <div class="Logo">
+                        <img src="https://developer.okta.com/sites/all/themes/developer/images/logo-footer.png" alt="Okta">
+                    </div>
+                    <p>Visit okta.com</p>
+                </a>
+            </div>
+
+            <div class="Column--3 Column--medium-12 Column--xSmall-12">
+                <h4>Social</h4>
+                <ul class="Footer-links Footer-links--social">
+                    <li><a class="Footer-links--github" target="_blank" rel="noopener noreferrer" href="http://github.com/oktadeveloper">Github</a></li>
+                    <li><a class="Footer-links--twitter" target="_blank" rel="noopener noreferrer" href="http://twitter.com/OktaDev">Twitter</a></li>
+                    <li><a class="Footer-links--forum" target="_blank" rel="noopener noreferrer" href="https://devforum.okta.com/">Forum</a></li>
+                    <li><a class="Footer-links--rss" target="_blank" rel="noopener noreferrer" href="http://feeds.feedburner.com/OktaBlog">RSS Blog</a></li>
+                </ul>
+            </div>
+
+            <div class="Column--3 Column--medium-6 Column--small-12">
+                <h4>More Info</h4>
+                <ul class="Footer-links">
+                    <li><a target="_blank" href="https://developer.okta.com/integrate-with-okta/">Integrate with Okta</a></li>
+                    <li><a href="/blog/">Blog</a></li>
+                    <li><a href="/docs/change-log/">Change Log</a></li>
+                    <li><a href="/3rd_party_notices/">3rd Party Notices</a></li>
+                </ul>
+            </div>
+
+            <div class="Column--3 Column--medium-6 Column--small-12">
+                <h4>Contact &amp; Legal</h4>
+                <ul class="Footer-links">
+                    <li><a href="https://developer.okta.com/contact/">Contact Sales</a></li>
+                    <li><a target="_blank" rel="noopener noreferrer" href="mailto:developers@okta.com">Contact Support</a></li>
+                    <li><a href="https://developer.okta.com/terms/">Terms &amp; Conditions</a></li>
+                    <li><a href="https://developer.okta.com/privacy/">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script type="text/javascript" src="/assets/master-aa397c892d9083236c5cb20732dde679021b9236c8142ce78177b8b184567a02.js"></script>
+    <script type="text/javascript" src="/assets/myOkta-911cbafbbe079b7a5522d9cbe15bd2a5f44e1582531e88393934bec69f97696b.js"></script>
+    
+    
+    
+    
+      <script type="text/javascript" src="/assets/blog-6e32dad27404131cc8630a5282264bed2ab4c08c91ac86fa496b75c53aa4f681.js"></script>
+    
+
+  <!-- START Post Footer -->
+  
+  <!-- START Google Tag Manager -->
+  <!-- https://support.google.com/tagmanager/answer/6103696?hl=en -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TJ45R6" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- END Google Tag Manager -->
+  <!-- START Google Remarketing Tag -->
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var google_conversion_id = 1006913831;
+    var google_custom_params = window.google_tag_params;
+    var google_remarketing_only = true;
+    /* ]]> */
+  </script>
+  <div style="display:none;"><script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script></div>
+  <noscript><div style="display:inline;"><img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1006913831/?value=0&amp;guid=ON&amp;script=0"></div></noscript>
+  <!-- END Google Remarketing Tag -->
+  <!-- START Crazy Egg Tracking -->
+  <script type="text/javascript">
+    setTimeout(function(){var a=document.createElement("script");
+    var b=document.getElementsByTagName("script")[0];
+    a.src=document.location.protocol+"//script.crazyegg.com/pages/scripts/0021/9333.js?"+Math.floor(new Date().getTime()/3600000);
+    a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+  </script>
+  <!-- END Crazy Egg Tracking -->
+
+  <!-- END Post Footer -->
+</body>
+</html>
