@@ -1082,7 +1082,7 @@ Here's what this process looks like for me:
 
 In just a few short seconds I'm able to sync my GitHub repo with Netlify so that it auto-deploys my website live to its CDN (over SSL) — pretty amazing, right? From this point forward, each time you push a new commit to your repo (depending on how you've configured Netlify) it will automatically deploy your static site to its CDN.
 
-And… o0nce you've gotten your site all setup in Netlify, the next thing you'll want to do is optimize it! Netlify has some great functionality that will automatically optimize your images, CSS, HTML, etc. each time you push new code.
+And… once you've gotten your site all setup in Netlify, the next thing you'll want to do is optimize it! Netlify has some great functionality that will automatically optimize your images, CSS, HTML, etc. each time you push new code.
 
 To enable this functionality you can visit the **Site settings** -> **Build & deploy** menu:
 
