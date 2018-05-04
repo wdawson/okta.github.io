@@ -5,6 +5,8 @@ exampleDescription: Java Implicit Example
 
 ## Okta Java Quickstart
 
+Now that your users can sign in with the Implicit flow, let's check for authentication on your server.
+
 ### Include the dependency
 
 For Apache Maven:
