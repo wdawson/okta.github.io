@@ -2,7 +2,7 @@
 layout: blog_post
 title: Build a Video Chat Service with JavaScript, WebRTC, and Okta
 author: rdegges
-description: "This post will demonstrate how to build a video chat service with JavaScript, WebRTC, and Okta."
+description: "This post shows how to build a video chat service with JavaScript, WebRTC, and Okta."
 tags: [video chat, JavaScript, WebRTC, Okta, chat service, saas, tutorial]
 tweets:
   - "Learn how to build a video conference service with WebRTC, JavaScript, and @okta >"
@@ -11,11 +11,11 @@ tweets:
 
 As recently as seven short years ago, building video applications on the web was a massive pain. Remember the days of using Flash and proprietary codecs (*which often required licensing*)? Yuck. In the last few years, video chat technology has dramatically improved and Flash is no longer required.
 
-Today, the video chat landscape is much simpler thanks to [WebRTC](https://webrtc.org/): an open source project built and maintained by Google, Mozilla, Opera and others. WebRTC allows you to easily build real-time communication software in your browser and is being standardized at the W3C & IETF levels. Using WebRTC, you can build real-time video chat applications in the browser that actually work *well*! It's pretty amazing.
+Today, the video chat landscape is much simpler thanks to [WebRTC](https://webrtc.org/): an open source project built and maintained by Google, Mozilla, Opera, and others. WebRTC allows you to easily build real-time communication software in your browser and is being standardized at the W3C and IETF levels. Using WebRTC, you can build real-time video chat applications in the browser that actually work *well*! It's pretty amazing.
 
-Today, I thought it'd be fun to walk you through the process of using WebRTC and [Okta](https://synd.co/2HqdyAk) to build a simple video chat service that allows users to create a chatroom and share the link around to anyone they want who can then join the room and chat with them in real-time.
+Today, I thought it'd be fun to walk you through the process of using WebRTC and [Okta](https://developer.okta.com/signup/) to build a simple video chat service that allows users to create a chatroom and share the link around to anyone they want who can then join the room and chat with them in real-time.
 
-The application you'll be building today will use [Okta](https://synd.co/2HqdyAk) (a free authentication service) to handle user login and access control and WebRTC for powering all the video functionality. You'll also use pure JavaScript to create the web application.
+The application you'll be building today will use [Okta](https://developer.okta.com/signup/) (a free authentication service) to handle user login and access control and WebRTC for powering all the video functionality. You'll also use pure JavaScript to create the web application.
 
 By the time you've gone through this guide, you'll have a much better understanding of how both web authentication and real-time video chat works in a pure JavaScript environment.
 
@@ -194,9 +194,9 @@ I won't go into detail explaining each CSS rule (*as I won't want to bore you to
 
 ## Set Up Okta
 
-Now that you've got a simple web page with some styling on it, let's setup the user login component using Okta. If you don't already have an Okta developer account, go create one now then come back (it should only take a second): https://developer.okta.com/signup/
+Now that you've got a simple web page with some styling on it, let's set up the user login component using Okta. If you don't already have an Okta developer account, go create one now then come back (it should only take a second): https://developer.okta.com/signup/
 
-Once you've got your Okta account and you're logged into the Okta dashboard, you'll need to create a new Okta Application (this is how Okta knows what type of app you're building and what type of authentication to allow).
+Once you've got your Okta account and you're logged into the Okta dashboard, you'll need to create a new Okta application (this is how Okta knows what type of app you're building and what type of authentication to allow).
 
 To do this, navigate to the **Applications** tab from your dashboard and click the **Add Application** button. Once there, click the **Single-Page App** icon (because you are building a SPA) then click **Next**.
 
@@ -238,8 +238,9 @@ You'll also need to view the Application you created earlier to grab the **Clien
 
 {% img blog/vchat-app/okta-app-credentials.png alt:"Okta app credentials" width:"800" %}{: .center-image }
 
-Now that you have the necessary credentials, let's get started plugging the widget into your web app. Open the `index.html` file you were working on previously and import the Okta Sign-In widget dependencies as well as initialize the widget at the bottom of the page in a script tag. Be sure to substitute `{{OKTA_ORG_URL}}` and `{{CLIENT_ID}}` with the appropriate values for your app.
+Now that you have the necessary credentials, let's get started plugging the widget into your web app. Open the `index.html` file you were working on previously and import the Okta Sign-In widget dependencies as well as initialize the widget at the bottom of the page in a script tag. Be sure to substitute {%raw%}`{{OKTA_ORG_URL}}`{%endraw%} and {%raw%}`{{CLIENT_ID}}`{%endraw%} with the appropriate values for your app.
 
+{%raw%}
 ```html
 <!-- snip -->
 
@@ -317,10 +318,11 @@ stylesheet"/>
   handleLogin();
 </script>
 ```
+{%endraw%}
 
 The code above initializes the Okta widget, handles user authentication, and logs some messages to the developer console to help you understand what's going on.
 
-The `okta` object you create above controls the widget's functionality: by creating a new instance of the `OktaSignIn` class and giving it your app-specific details, you're essentially telling Okta where your OpenID Connect server is and how to use it (Okta uses the [OpenID Connect protocol](https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1) behind the scenes to power this login widget).
+The `okta` object you create above controls the widget's functionality: by creating a new instance of the `OktaSignIn` class and giving it your app-specific details, you're essentially telling Okta where your OpenID Connect server is and how to use it (Okta uses the [OpenID Connect protocol](/blog/2017/07/25/oidc-primer-part-1) behind the scenes to power this login widget).
 
 The `handleLogin` function you see above is what controls the session management in your app. If a user has just logged in (as part of the OIDC flow) then the user's access and ID tokens will be stored in HTML local storage so your app can remember who the user is. If the user was already logged in but is viewing the page, a message will be echoed to the console. And if the user is not logged in at all, then the login form will be rendered (via the `showLogin` function).
 
@@ -328,14 +330,13 @@ Now that you've got the widget hooked up to your app, if you view your app in a 
 
 {% img blog/vchat-app/vchat-test-okta-login.gif alt:"vchat test Okta login" width:"800" %}{: .center-image }
 
-
 ## Configure State Management 
 
 The next thing you will need to do is configure state management for the app. But before we dive into that, let's talk about how the app is going to work.
 
 The video chat app you're building will give each registered user their own dedicated chat room that they can use at any time and that can be shared with any external person. When another person joins one of these dedicated chat rooms they'll be instantly put into the video chat session without needing an account on the site.
 
-To make this functionality work in a simple manner, you'll structure the app such that each registered user will have a dedicated chat room whose URL is `{{YOUR_SITE_URL}}?room={{email}}`. This way, if my email address is `r@rdegges.com` then I'll have a dedicated chat room my friends can join that is `{{YOUR_SITE_URL}}?room=r@rdegges.com` — easy to remember and easy to share.
+To make this functionality work in a simple manner, you'll structure the app such that each registered user will have a dedicated chat room whose URL is {%raw%}`{{YOUR_SITE_URL}}?room={{email}}`{%endraw%}. This way, if my email address is `r@rdegges.com` then I'll have a dedicated chat room my friends can join that is {%raw%}`{{YOUR_SITE_URL}}?room=r@rdegges.com`{%endraw%} — easy to remember and easy to share.
 
 If a user is on a page with the `room` querystring, you'll know that they are trying to join a specific video chat room and will use that querystring value to put them into the right room. If the user is visiting the homepage of the site (without any querystring), you'll know that they're likely trying to log into the app and that you should therefore show them the login form.
 
@@ -372,7 +373,7 @@ function getRoomURL() {
 
 Now that you've got some useful helper functions, you'll want to modify the `handleLogin` function from before to:
 
-- Redirect logged in users to their dedicated chat room (`{{YOUR_SITE_URL}}?room={{email}}`
+- Redirect logged in users to their dedicated chat room ({%raw%}`{{YOUR_SITE_URL}}?room={{email}}`{%endraw%}
 - Notify users who aren't logged in (but are in a video chat room) that they can log in if they want to
 
 ```javascript
@@ -1079,16 +1080,15 @@ Here's what this process looks like for me:
 
 {% img blog/vchat-app/netlify-init.gif alt:"netlify initialization" width:"800" %}{: .center-image }
 
-
 In just a few short seconds I'm able to sync my GitHub repo with Netlify so that it auto-deploys my website live to its CDN (over SSL) — pretty amazing, right? From this point forward, each time you push a new commit to your repo (depending on how you've configured Netlify) it will automatically deploy your static site to its CDN.
 
-And… Once you've gotten your site all setup in Netlify, the next thing you'll want to do is optimize it! Netlify has some great functionality that will automatically optimize your images, CSS, HTML, etc. each time you push new code.
+And… o0nce you've gotten your site all setup in Netlify, the next thing you'll want to do is optimize it! Netlify has some great functionality that will automatically optimize your images, CSS, HTML, etc. each time you push new code.
 
 To enable this functionality you can visit the **Site settings** -> **Build & deploy** menu:
 
 {% img blog/vchat-app/netlify-optimize.gif alt:"netlify optimize" width:"800" %}{: .center-image }
 
-WIth just a few clicks you're able to speed up your site dramatically by compressing all your images, JS, CSS, etc.
+With just a few clicks you're able to speed up your site dramatically by compressing all your images, JS, and CSS.
 
 If you'd like to use a real URL instead of the Netlify default project URL, you can easily do that through the **Domain management** tab which allows you to do things like setup your own DNS, generate SSL certs for free, etc.
 
