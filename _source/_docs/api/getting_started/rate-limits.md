@@ -1,7 +1,7 @@
 ---
 layout: docs_page
 title: Rate Limiting at Okta
-weight: 3
+weight: 4
 redirect_from:
   - "/docs/getting_started/design_principles"
 excerpt: Understand rate limits at Okta and learn how to design for efficient use of resources
@@ -55,7 +55,7 @@ API endpoints that take username and password credentials, including the [Authen
 | Authenticate the same user | `/api/v1/authn/`           |      4 |
 
 ### Okta Rate Limits for All Other Endpoints
-Finally, for all endpoints not listed in the tables above, the API rate limit is a combined 10,000 requests per minute. 
+Finally, for all endpoints not listed in the tables above, the API rate limit is a combined 10,000 requests per minute.
 
 ### Okta Home Page Endpoints and Per-Minute Limits
 
@@ -77,10 +77,10 @@ The following endpoints are used by the Okta home page for authentication and si
 
 ### End-User Rate Limit
 
-Okta limits the number of requests from the administrator UI to 40 requests per user per 10 seconds per endpoint. This rate limit protects users from each other, and from other API requests in the system. 
+Okta limits the number of requests from the administrator UI to 40 requests per user per 10 seconds per endpoint. This rate limit protects users from each other, and from other API requests in the system.
 
 If a user exceeds this limit, they receive an HTTP 429 response without affecting other users in your org.
-A message is written to the System Log indicating that the end-user rate limit was encountered. 
+A message is written to the System Log indicating that the end-user rate limit was encountered.
 
 ## Concurrent Rate Limits
 
@@ -100,7 +100,7 @@ The first request to exceed the concurrent limit returns an HTTP 429 error, and 
 
 ## Check Your Rate Limits with Okta's Rate Limit Headers
 
-Okta provides three headers in each response to report on both concurrent and org-wide rate limits. 
+Okta provides three headers in each response to report on both concurrent and org-wide rate limits.
 
 For org-wide rate limits, the three headers show the limit that is being enforced, when it resets, and how close you are to hitting the limit:
 * `X-Rate-Limit-Limit` - the rate limit ceiling that is applicable for the current request.
@@ -121,7 +121,7 @@ API request. Rather, it typically reports completed or attempted real-world even
 The System Log doesn’t report the rate at which you’ve been calling the API.
 
 Instead of the accumulated counts for time-based rate limits, when a request exceeds the limit for concurrent requests,
-`X-Rate-Limit-Limit`, `X-Rate-Limit-Remaining`, and `X-Rate-Limit-Reset` report the concurrent values. 
+`X-Rate-Limit-Limit`, `X-Rate-Limit-Remaining`, and `X-Rate-Limit-Reset` report the concurrent values.
 
 The three headers behave a little differently for concurrent rate limits: when the number of unfinished requests is below the concurrent rate limit, request headers only report org-wide rate limits.
 When you exceed a concurrent rate limit threshold, the headers report that the limit has been exceeded. When you drop back down below the concurrent rate limit, the headers  switch back to reporting the time-based rate limits.
@@ -132,7 +132,7 @@ Additionally, the `X-Rate-Limit-Reset` time for concurrent rate limits is only a
 This example shows the relevant portion of a rate limit header being returned with  for a request that hasn't exceeded the org-wide rate limit for the `/api/v1/users` endpoint:
 
 ~~~http
-HTTP/1.1 200 
+HTTP/1.1 200
 Date: Tue, 27 Jan 2018 21:33:25 GMT
 X-Rate-Limit-Limit: 600
 X-Rate-Limit-Remaining: 598
@@ -142,7 +142,7 @@ X-Rate-Limit-Reset: 1516308901
 The following example show a rate limit header being returned for a request that has exceeded the rate limit for the `/api/v1/users` endpoint:
 
 ~~~http
-HTTP/1.1 429 
+HTTP/1.1 429
 Date: Tue, 27 Jan 2018 21:33:25 GMT
 X-Rate-Limit-Limit: 600
 X-Rate-Limit-Remaining: 0
@@ -154,7 +154,7 @@ X-Rate-Limit-Reset: 1516308966
 This example shows the relevant portion of a rate limit header being returned with the error for a request that exceeded the concurrent rate limit. If the rate limit wasn't being exceeded, the headers would contain information about the org-wide rate limit. You won't ever see non-error concurrent rate limits in the headers.
 
 ~~~http
-HTTP/1.1 429 
+HTTP/1.1 429
 Date: Tue, 26 Jan 2018 21:33:25 GMT
 X-Rate-Limit-Limit: 0
 X-Rate-Limit-Remaining: 0

@@ -1,0 +1,55 @@
+---
+layout: section_index
+title: API Reference
+---
+
+<h1>API Reference</h1>
+<ul class="list--with-horizontal-icons">
+  <li>
+    <a href="/docs/api/getting_started/design_principles">{% img icons/icon--docs-apiconcepts.svg %}<span>API Concepts</span></a>
+  </li>
+  <li>
+    <a href="/reference/error_codes/">{% img icons/icon--docs-errorcodes.svg %}<span>Error Codes</span></a>
+  </li>
+  <li>
+    <a href="/reference/okta_expression_language/">{% img icons/icon--docs-expressionlang.svg %}<span>Okta Expression Language</span></a>
+  </li>
+  <li>
+    <a href="/reference/postman_collections/">{% img icons/icon--docs-postman.svg %}<span>Postman Collections</span></a>
+  </li>
+</ul>
+<div class="Row">
+  <div class="Column--6 Column--small-12">
+    <h2>Sign in Your Users</h2>
+    <p>API endpoints to authenticate your users, challenge for factors, recover passwords, and more. <a href="/authentication-guide/auth-overview/#authentication-api-vs-oauth-20-vs-openid-connect">Learn about which APIs to use.</a></p>
+    <ul class="list--with-descriptions">
+      <li>
+        <a href="/docs/api/resources/oidc">OpenID Connect & OAuth 2.0</a>
+        <br>
+        <span class="description">Control user access to your applications.</span>
+      </li>
+      <li>
+        <a href="/docs/api/resources/authn">Authentication</a>
+        <br>
+        <span class="description">Control user access to Okta.</span>
+      </li>
+    </ul>
+  </div>
+  <div class="Column--6 Column--small-12">
+    <h2>Manage Okta Resources</h2>
+    <p>REST endpoints to configure resources such as users, apps, sessions, and factors whenever you need.</p>
+    {% assign api_references = "/docs/api/resources/apps,/docs/api/resources/authorization-servers,/docs/api/resources/events,/docs/api/resources/oauth-clients,/docs/api/resources/factor_admin,/docs/api/resources/factors,/docs/api/resources/groups,/docs/api/resources/idps,/docs/api/resources/linked-objects,/docs/api/resources/policy,/docs/api/resources/roles,/docs/api/resources/schemas,/docs/api/resources/sessions,/docs/api/resources/system_log,/docs/api/resources/templates,/docs/api/resources/tokens,/docs/api/resources/trusted-origins,/docs/api/resources/users,/docs/api/resources/zones" | split: "," %}
+    <ul class="list--multicolumn">
+      {% assign docs = site.docs %}
+      {% assign docids = api_references %}
+      {% for docid in docids %}
+        {% for doc in docs %}
+          {% unless doc.id == docid %}
+            {% continue %}
+          {% endunless %}
+          <li><a href="{{ doc.url }}">{{ doc.title }}</a></li>
+        {% endfor %}
+      {% endfor %}
+    </ul>
+  </div>
+</div>

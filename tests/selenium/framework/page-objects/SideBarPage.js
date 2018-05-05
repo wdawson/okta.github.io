@@ -13,8 +13,8 @@ class SideBarPage extends BasePage {
     this.$referenceNav = this.$$sideBarNav.get(1);
     this.$standardsNav = this.$$sideBarNav.get(2);
 
-    this.$authenticationReferenceLink = element(by.linkText('Authentication API'));
-    this.$apiReferenceLink = element(by.linkText('Management API'));
+    this.$authenticationReferenceLink = element(by.linkText('Sign in Your Users'));
+    this.$apiReferenceLink = element(by.linkText('Manage Okta Resources'));
 
     this.$$sideBarReferences = $$('#Sidebar_References li.is-active');
     this.$$sideBarResources = $$('#Sidebar_Resources li.is-active');
@@ -28,7 +28,7 @@ class SideBarPage extends BasePage {
   clickAuthenticationReferenceLink() {
     this.$authenticationReferenceLink.click();
   }
-  
+
   clickAPIReferenceLink() {
     this.$apiReferenceLink.click();
   }

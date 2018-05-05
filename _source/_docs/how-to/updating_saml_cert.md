@@ -43,7 +43,7 @@ To update existing app integrations, there are four steps to follow.
 
 Although unlikely, if your ISV does not accept the SHA256 certificate, you can revert the procedure to use a SHA1 certificate.
 
-For information on using the Postman REST API test client for these steps, see [API Test Client](/docs/api/getting_started/api_test_client).
+For information on using the Postman REST API test client for these steps, see [Get Started with the Okta REST APIs](/code/rest/).
 
 #### Step 1: List your apps and get the app id, name, and label for each app to update.
 

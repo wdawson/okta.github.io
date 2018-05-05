@@ -1,7 +1,8 @@
 ---
-layout: docs_page
-weight: 1
-title: Getting Started With the Okta APIs
+layout: software
+title: Get Started with the Okta REST APIs
+language: rest
+integration: server
 redirect_from:
   - "/docs/getting_started/api_test_client.html"
   - "/docs/api/getting_started/index.html"
@@ -9,7 +10,7 @@ redirect_from:
   - "/docs/api/getting_started/"
 ---
 
-# Overview
+# Get Started with the Okta REST APIs
 
 A great way to learn an API is to issue requests and inspect the responses. You can easily use our Postman collections to do just that.
 
@@ -27,7 +28,7 @@ If you need organizations with guaranteed SLAs or enterprise features, [let us k
 
 ## Set Up Your Environment
 
-1. [Create an API token](getting_a_token){:target="_blank"} for your org.
+1. [Create an API token](/docs/api/getting_started/getting_a_token){:target="_blank"} for your org.
 1. [Install the Postman app](https://www.getpostman.com/apps){:target="_blank"}.
 1. Launch Postman and click the **Import** button. Select **Import From Link**, and paste this link into the textbox: `https://developer.okta.com/docs/api/postman/example.oktapreview.com.environment`
     {% img import_enviro.png alt:"Importing the Okta Example Environment" %}
@@ -53,7 +54,7 @@ If you have Postman installed, clicking the button above gives you the option of
 You can also import the collection by following the Web View link and downloading the collection as a JSON file. Import that file into Postman by clicking the **Import** button and browsing to your download location.
 
 > Note: You can import and work with the rest of the Okta API using the link at the top of each API reference page,
-or use the [Collections Quick Reference](#collections-quick-reference). This tutorial only requires the Users API collection.
+or see [all Postman collections](/reference/postman_collections/). This tutorial only requires the Users API collection.
 
 ## Send a Request
 
@@ -68,30 +69,6 @@ To make sure everything works, send a request to list all the users in your org:
 If you receive an error, it's likely that one of the values in the environment isn't set correctly. Check the values and try again.
 
 Once you have completed this simple request, you're ready to explore the Okta API!
-
-## Collections Quick Reference
-
-Import any Okta API collection for Postman from the following list:
-
-| Collections                               | Click to Run                                                                                                                            |
-|:------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------|
-| Authentication                            |   [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/f9684487e584101f25a3){:target="_blank"} |
-| API Access Management (OAuth 2.0)         |   [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/e4d286b1af2294bb14a0){:target="_blank"} |
-| OpenID Connect                            |   [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/fd92d7c1ab0fbfdecab2){:target="_blank"} |
-| Client Registration                   |   [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/291ba43cde74844dd4a7){:target="_blank"} |
-| Sessions                                  |   [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/b2e06a22c396bcc94530){:target="_blank"} |
-| Apps                                      |   [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/4857222012c11cf5e8cd){:target="_blank"} |
-| Events                                    |   [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/f990a71f061a7a16d0bf){:target="_blank"} |
-| Factors                                   |   [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/9fdda657d134039fcaba){:target="_blank"} |
-| Groups                                    |   [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/0bb414f9594ed93672a0){:target="_blank"} |
-| Identity Providers (IdP)                  |   [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/00a7a643fc0ab3bb54c8){:target="_blank"} |
-| Logs                                      |   [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/9cfb0dd661a5432a77c6){:target="_blank"} |
-| Administrator Roles                               |   [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/04f5ec85685ac6f2827e){:target="_blank"} |
-| Schemas                                   |   [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/443242e60287fb4b8d6d){:target="_blank"} |
-| Users                                     |   [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/1755573c5cf5fbf7968b){:target="_blank"} |
-| Custom SMS Templates                      |   [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/d71f7946d8d56ccdaa06){:target="_blank"} |
-
-These buttons are also available at the top of each API reference page in [developer.okta.com](/docs/api/resources/apps).
 
 ## Tips
 
