@@ -1,6 +1,7 @@
 ---
 layout: docs_page
 title: Users
+category: management
 redirect_from:
  - "/docs/api/rest/users.html"
  - "/docs/api/resources/user"

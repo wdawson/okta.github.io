@@ -1,6 +1,7 @@
 ---
 layout: docs_page
 title: Apps
+category: management
 redirect_from:
  - "/docs/api/"
  - "/docs/api/resources/"
@@ -1065,7 +1066,7 @@ curl -v -X POST \
     "signOnMode": "OPENID_CONNECT",
     "credentials": {
       "oauthClient": {
-        "client_id":"0oa1hm4POxgJM6CPu0g4", 
+        "client_id":"0oa1hm4POxgJM6CPu0g4",
         "autoKeyRotation": true,
         "token_endpoint_auth_method": "client_secret_post"
       }

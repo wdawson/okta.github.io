@@ -1,6 +1,7 @@
 ---
 layout: docs_page
 title: Groups
+category: management
 redirect_from: "/docs/api/rest/groups.html"
 ---
 

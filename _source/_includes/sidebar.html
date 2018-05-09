@@ -95,19 +95,28 @@
 
     <h3 class="Sidebar-title">API Reference</h3>
     <ul class="Sidebar-nav">
-      {% assign auth_references = "/docs/api/resources/oauth2,/docs/api/resources/oidc,/docs/api/resources/authn,/docs/api/resources/social_authentication" | split: "," %}
-      {% assign api_references = "/docs/api/resources/apps,/docs/api/resources/authorization-servers,/docs/api/resources/events,/docs/api/resources/oauth-clients,/docs/api/resources/factor_admin,/docs/api/resources/factors,/docs/api/resources/groups,/docs/api/resources/idps,/docs/api/resources/linked-objects,/docs/api/resources/policy,/docs/api/resources/roles,/docs/api/resources/schemas,/docs/api/resources/sessions,/docs/api/resources/system_log,/docs/api/resources/templates,/docs/api/resources/tokens,/docs/api/resources/trusted-origins,/docs/api/resources/users,/docs/api/resources/zones" | split: "," %}
       <li>
-        <a href="/docs/api/resources/oidc">Sign in Your Users</a>{% if page.id contains "docs/api/resources" %}
-        <ul id="Sidebar_References" class="Sidebar-hide">{% assign docs = site.docs %}{% assign docids = auth_references %}{% for docid in docids %}{% for doc in docs %}{% unless doc.id == docid %}{% continue %}{% endunless %}
-          <li{% if doc.title == page.title%} class="is-active"{% endif %}><a href="{{ doc.url }}">{{ doc.title }}</a></li>{% endfor %}{% endfor %}
-        </ul>{% endif %}
+        <a href="/docs/api/resources/oidc">Sign in Your Users</a>
+        {% if page.id contains "docs/api/resources" %}
+          <ul id="Sidebar_References" class="Sidebar-hide">
+            {% assign auth_references = site.docs | where: 'category', 'authentication' | sort: 'weight' %}
+            {% for doc in auth_references %}
+              <li{% if doc.title == page.title%} class="is-active"{% endif %}><a href="{{ doc.url }}">{{ doc.title }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
       </li>
       <li>
-        <a href="/docs/api/resources/apps">Manage Okta Resources</a>{% if page.id contains "docs/api/resources" %}
-        <ul id="Sidebar_Resources" class="Sidebar-hide">{% assign docs = site.docs %}{% assign docids = api_references %}{% for docid in docids %}{% for doc in docs %}{% if doc.beta %}{% continue %}{% endif %}{% unless doc.id == docid %}{% continue %}{% endunless %}
-          <li{% if doc.title == page.title%} class="is-active"{% endif %}><a href="{{ doc.url }}">{{ doc.title }}</a></li>{% endfor %}{% endfor %}
-        </ul>{% endif %}
+        <a href="/docs/api/resources/roles">Manage Okta Resources</a>
+        {% if page.id contains "docs/api/resources" %}
+          <ul id="Sidebar_Resources" class="Sidebar-hide">
+            {% assign api_references = site.docs | where: 'category', 'management' | sort: 'title' %}
+            {% for doc in api_references %}
+              {% if doc.beta %}{% continue %}{% endif %}
+              <li{% if doc.title == page.title%} class="is-active"{% endif %}><a href="{{ doc.url }}">{{ doc.title }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
       </li>
       <li{% if page.title contains '/getting_started' %} class="is-active"{% endif %}>
         <a href="/docs/api/getting_started/design_principles">API Concepts</a>{% if page.id contains "docs/api/getting_started" %}

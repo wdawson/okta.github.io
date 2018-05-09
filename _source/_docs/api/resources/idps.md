@@ -1,6 +1,7 @@
 ---
 layout: docs_page
 title: Identity Providers
+category: management
 redirect_from: "docs/api/rest/idps.html"
 ---
 
@@ -2108,13 +2109,13 @@ curl -v -X POST \
 
 Operations for just-in-time provisioning or account linking with a `callout` action (webhook)
 
-All transaction operations require a transaction ID which is obtained as part of the authentication call. 
+All transaction operations require a transaction ID which is obtained as part of the authentication call.
 
 Use `callout` actions when you need to retrieve information from the profile of a user when you link or create them, or to perform other tasks that must be done before the link or create is completed.
 
 Before you can use transaction operations, set up the following:
 
-1. Add or create an app in Okta with settings that support `callout`: 
+1. Add or create an app in Okta with settings that support `callout`:
   * **Allowed grant types** must include one or more **Client acting on behalf of a user** options selected.
 2. Configure a social IdP with settings that support `callout`:
   * Be sure to complete the setup instructions in the **View Setup Instructions** link
@@ -3784,7 +3785,7 @@ Content-Type: application/json
 }
 ~~~
 
-### Get a Linked Identity Provider User 
+### Get a Linked Identity Provider User
 {:.api .api-operation}
 
 {% api_operation GET /api/v1/idps/${idpId}/users/${userId} %}
@@ -3990,7 +3991,7 @@ curl -v -X DELETE \
 
 {% api_operation GET /api/v1/idps/${idpId}/users/${userId}/credentials/tokens %}
 
-Okta doesn't import all the user information from a social provider. If the app needs information which isn't imported, it can get the user token from this endpoint, then make an API call to the social provider with the token to request the additional information. 
+Okta doesn't import all the user information from a social provider. If the app needs information which isn't imported, it can get the user token from this endpoint, then make an API call to the social provider with the token to request the additional information.
 
 ##### Request Parameters
 {:.api .api-request .api-request-params}
@@ -5073,7 +5074,7 @@ The account link action for an IdP user during authentication:
 Specifies group memberships to restrict which users are available for account linking by an IdP.
 
 |--------- | ------------------------------------------------ | ----------------------------------------------------------------------- | -------- | -------- |
-| Property | Description                                      | DataType                                                                | Nullable | Readonly 
+| Property | Description                                      | DataType                                                                | Nullable | Readonly
 | -------- | ------------------------------------------------ | ----------------------------------------------------------------------- | -------- | -------- |
 | groups   | Group memberships to determine link candidates   | [Groups Account Link Filter Object](#groups-account-link-filter-object) | TRUE     | FALSE    |
 
@@ -5624,7 +5625,7 @@ The CSR model for IdP defines a certificate signing request for a signature or d
 
 ## Identity Provider Social Authentication Token Model
 
-The Social Authentication Token Model provides the tokens and associated metadata provided by social providers during social authentication. However, Okta doesn't import all the user information from a social provider. If the app needs information which isn't imported, it can get athe user token from this endpoint, then make an API call to the social provider with the token to request the additional information. 
+The Social Authentication Token Model provides the tokens and associated metadata provided by social providers during social authentication. However, Okta doesn't import all the user information from a social provider. If the app needs information which isn't imported, it can get athe user token from this endpoint, then make an API call to the social provider with the token to request the additional information.
 
 ### Example
 

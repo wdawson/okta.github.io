@@ -1,6 +1,9 @@
 ---
 layout: docs_page
 title: Authentication
+category: authentication
+weight: 20
+excerpt: Control user access to Okta.
 redirect_from:
   - "/docs/api/rest/authn.html"
   - "/docs/api/resources/index.html"
@@ -2784,7 +2787,7 @@ curl -v -X POST \
 
 Enrolls a user with a U2F factor.  The enrollment process starts with getting an `appId` and `nonce` from Okta and using those to get registration information from the U2F key using the U2F javascript API.
 
-Note: 
+Note:
 
 The `appId` property in Okta U2F enroll/verify API response is the [origin](https://www.ietf.org/rfc/rfc6454.txt) of
 the web page that triggers the API request (assuming the origin has been configured to be trusted by Okta). According to
@@ -4500,7 +4503,7 @@ curl -v -X POST \
 
 {% api_operation post /api/v1/authn/factors/${factorId}/verify %}
 
-Note: 
+Note:
 
 The `appId` property in Okta U2F enroll/verify API response is the [origin](https://www.ietf.org/rfc/rfc6454.txt) of
 the web page that triggers the API request (assuming the origin has been configured to be trusted by Okta). According to

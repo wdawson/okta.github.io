@@ -1,6 +1,7 @@
 ---
 layout: docs_page
 title: System Log
+category: management
 ---
 
 # System Log API
@@ -9,10 +10,10 @@ title: System Log
 
 The Okta System Log records system events related to your organization in order to provide an audit trail that can be used to understand platform activity and to diagnose problems.
 
-The Okta System Log API provides near real-time read-only access to your organization's system log and is the programmatic counterpart of the [System Log UI](https://help.okta.com/en/prod/Content/Topics/Reports/Reports_SysLog.htm). 
+The Okta System Log API provides near real-time read-only access to your organization's system log and is the programmatic counterpart of the [System Log UI](https://help.okta.com/en/prod/Content/Topics/Reports/Reports_SysLog.htm).
 
 Often the terms "event" and "log event" are used interchangeably. In the context of this API, an "event" is an occurrence of interest within the system and "log" or "log event" is the recorded fact.  
- 
+
 Notes on the System Log API:
 
 * It contains much more [structured data](#logevent-object) than the [Events API](/docs/api/resources/events#event-model).
@@ -22,7 +23,7 @@ Notes on the System Log API:
   * System monitoring.
   * Development debugging.
   * Event introspection and audit.
-* It is not intended to be used as a Database as a Service (DBaaS), or otherwise directly serve data to downstream consumers without an intermediate data store. 
+* It is not intended to be used as a Database as a Service (DBaaS), or otherwise directly serve data to downstream consumers without an intermediate data store.
 
 ## Getting Started
 
@@ -32,7 +33,7 @@ The System Log API has one endpoint:
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/9cfb0dd661a5432a77c6){:target="_blank"}
 
-This collection resource is backed by a [LogEvent object](#logevent-object) model and associated [event types](#event-types). 
+This collection resource is backed by a [LogEvent object](#logevent-object) model and associated [event types](#event-types).
 
 See [Examples](#examples) for ways you can use the System Log API. For common use cases see [Useful System Log Queries](https://support.okta.com/help/Documentation/Knowledge_Article/Useful-System-Log-Queries).
 
@@ -812,4 +813,4 @@ curl -v -X GET \
 
 and retrieve the next page of events through the [`Link` response header](/docs/api/getting_started/design_principles#link-header) value with the `next` link relation. Continue this process until no events are returned.
 
-> Do not attempt to transfer data by manually paginating using `since` and `until` as this may lead to skipped or duplicated events. Instead, always follow the `next` links. 
+> Do not attempt to transfer data by manually paginating using `since` and `until` as this may lead to skipped or duplicated events. Instead, always follow the `next` links.

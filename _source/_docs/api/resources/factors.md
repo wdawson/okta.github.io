@@ -1,6 +1,7 @@
 ---
 layout: docs_page
 title: Factors
+category: management
 redirect_from: "/docs/api/rest/factors.html"
 ---
 
@@ -1942,7 +1943,7 @@ Activates an `email` factor by verifying the OTP.
 {:.api .api-request .api-request-params}
 
 Parameter    | Description                                         | Param Type | DataType | Required
------------- | --------------------------------------------------- | ---------- | -------- | -------- 
+------------ | --------------------------------------------------- | ---------- | -------- | --------
 userId          | `id` of a user                                        | URL        | String   | TRUE     
 factorId          | `id` of a factor returned from enrollment             | URL        | String   | TRUE     
 passCode     | OTP sent to email                           | Body       | String   | TRUE     

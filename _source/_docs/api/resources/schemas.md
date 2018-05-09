@@ -1,6 +1,7 @@
 ---
 layout: docs_page
 title: Schemas
+category: management
 excerpt: The Schemas API defines custom user profiles for Okta users and applications.
 ---
 
@@ -1316,9 +1317,9 @@ User profile schema properties have the following standard [JSON Schema Draft 6]
 
 ##### Description Details
 
- * `enum`: The value of the property is limited to one of the values specified in the enum definition. 
+ * `enum`: The value of the property is limited to one of the values specified in the enum definition.
  The list of values for the enum has to be made up of unique elements.
- 
+
  * `oneOf`: Okta only supports `oneOf` for specifying display names for an `enum`, each schema has the following format.  
  ~~~json
 {
@@ -1569,10 +1570,10 @@ User profile schema properties have the following standard [JSON Schema Draft 6]
 
 ##### Description Details
 
- * `enum`: The value of the property is limited to one of the values specified in the enum definition. 
+ * `enum`: The value of the property is limited to one of the values specified in the enum definition.
  The list of values for the enum has to be made up of unique elements.
- 
- * `oneOf`: Okta only supports `oneOf` for specifying display names for an `enum`, each schema has the following format. 
+
+ * `oneOf`: Okta only supports `oneOf` for specifying display names for an `enum`, each schema has the following format.
  ~~~json
 {
   "const": "enumValue",

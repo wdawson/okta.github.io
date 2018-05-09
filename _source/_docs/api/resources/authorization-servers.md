@@ -1,6 +1,7 @@
 ---
 layout: docs_page
 title: Authorization Servers
+category: management
 ---
 
 # Authorization Servers
@@ -1353,7 +1354,7 @@ Token limits:
     | `CONSENT`         | `TRUSTED`                        | `IMPLICIT`                  | Not prompted |
     | `NONE`            | `TRUSTED`                        | `REQUIRED` or `IMPLICIT`    | Not prompted |
     | `NONE`            | `REQUIRED`                       | `REQUIRED`                  | Prompted     |
-    | `NONE`            | `REQUIRED`                       | `IMPLICIT`                  | Not prompted | 
+    | `NONE`            | `REQUIRED`                       | `IMPLICIT`                  | Not prompted |
 
 > Notes:
   * Apps created on `/api/v1/apps` default to `consent_method=TRUSTED`, while those created on `/api/v1/clients` default to `consent_method=REQUIRED`.

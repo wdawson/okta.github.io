@@ -1,6 +1,7 @@
 ---
 layout: docs_page
 title: Administrator Roles
+category: management
 ---
 
 # Administrator Roles API
@@ -230,7 +231,7 @@ curl -v -X GET \
       }
     }
   }
-] 
+]
 ~~~
 
 #### Add Group Target to Group Administrator Role
