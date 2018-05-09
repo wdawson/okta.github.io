@@ -23,7 +23,7 @@ describe('sidebar navigation spec', () => {
     expect(sideBarPage.APIReferenceHasLinks()).toBe(false);
 
     sideBarPage.clickAPIReferenceLink();
-    expect(sideBarPage.getCurrentURL()).toBe('/docs/api/resources/apps');
+    expect(sideBarPage.getCurrentURL()).toBe('/docs/api/resources/roles');
     expect(sideBarPage.authenticationReferenceHasLinks()).toBe(false);
     expect(sideBarPage.APIReferenceHasLinks()).toBe(true);
   });
