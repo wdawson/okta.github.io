@@ -26,7 +26,7 @@ And much more! Check out our Product Documentation
 
 In short: we make user account management a lot easier, more secure, and more scalable than what you’re probably used to.
 
-Ready to get started? Register for a [free developer account](/signup/)!
+Ready to get started? Register for a [free developer account](https://developer.okta.com/signup/)!
 
 ## Role-Based Authorization in ASP.NET Core
 
