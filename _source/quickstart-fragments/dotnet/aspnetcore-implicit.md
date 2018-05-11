@@ -4,33 +4,50 @@ exampleDescription: ASP.NET Core 2.0 API implicit example
 ---
 
 ## Okta ASP.NET Core Web API Quickstart
+// TODO: Update exmaple GitHub url
+If you want a full, working example, head over to the [ASP.NET Core WEB API example](...) repository.
 
 ### Create a new project
 
 If you don't already have an ASP.NET Core 2.0 project, create one using `dotnet new mvc` or the ASP.NET Core Web Application template in Visual Studio. Choose **No Authentication** if necessary.
 
+Install these packages in the new project:
+* [Microsoft.AspNetCore.All](https://www.nuget.org/packages/Microsoft.AspNetCore.All) it includes all the dependecies you need (and more!). 
+* [Okta.AspNetCore](TODO:// nuget package)
 
 ### Configure the middleware
 
 Make sure you have these `using` statements at the top of your `Startup.cs` file:
 
 ```csharp
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Okta.AspNet.Abstractions;
 ```
 
-In the `ConfigureServices` method, add this `UseAuthentication` block and configure it using the information from the Okta application you just created:
+Replace the `ConfigureServices` method with the following code block and configure it using the information from your Okta application:
 
 ```csharp
-services.AddAuthentication(sharedOptions =>
+public void ConfigureServices(IServiceCollection services)
 {
-    sharedOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    sharedOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options => {
-    options.Authority = "https://{yourOktaDomain}.com/oauth2/default";
-    options.Audience = "api://default";
-});
+    var oktaMvcOptions = new OktaMvcOptions();
+    Configuration.GetSection("Okta").Bind(oktaMvcOptions);
+
+    services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+    })
+    .AddCookie()
+    .AddOktaMvc(oktaMvcOptions);
+
+    services.AddMvc();
+}
 ```
 
 Then, in the `Configure` method, add this line **above** the `UseMvc` line:
@@ -44,23 +61,24 @@ app.UseAuthentication();
 Use the `[Authorize]` attribute on controllers or actions to require an authenticated user. For example, create an `/api/messages` route in a new controller that returns secret messages if a token is present:
 
 ```csharp
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
+[Produces("application/json")]
 [Authorize]
-[Route("/api")]
-public class MessagesController : Controller
+public class MessageController : Controller
 {
     [HttpGet]
-    [Route("messages")]
-    public IEnumerable<string> GetPrivateMessages()
+    [Route("~/api/messages")]
+    public IEnumerable<string> Get()
     {
-        var login = User.Claims
+        var principal = HttpContext.User.Identity as ClaimsIdentity;
+
+        var login = principal.Claims
             .SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
             ?.Value;
 
@@ -75,7 +93,7 @@ public class MessagesController : Controller
 
 ### That's it!
 
-The JWT Bearer middleware automatically validates tokens and populates `HttpContext.User` with a limited set of user information.
+The Okta middleware automatically validates tokens and populates `HttpContext.User` with a limited set of user information.
 
 If you want to do more with the user, you can use the [Okta .NET SDK](https://github.com/okta/okta-sdk-dotnet) to get or update the user's details stored in Okta.
 
