@@ -2,7 +2,7 @@
 layout: blog_post
 title: "Policy-Based Authorization in ASP.NET Core"
 author: leebrandt
-description: "This post shows how policy-based authorization works in ASP.NET Core, and how it differs from role-based authorization"
+description: "This post shows how policy-based authorization works in ASP.NET Core, and how it differs from role-based authorization."
 tags: [asp.net, asp.net core, aspnetcore, policy, policy-based authorization, authorization]
 tweets:
  - "Want to see how policy-based authorization works in ASP.NET Core? Check it out >>"
@@ -18,11 +18,12 @@ _Just getting started with authentication in ASP.NET Core? Check out our [quick 
 ## Why Okta?
 
 Before we dig into building our project, I want to tell you a little more about why Okta is the right choice for your ASP.NET Core app. Okta is an API service that allows developers to create, edit, and securely store user accounts and user account data, and connect them with one or multiple applications. Our API enables you to:
-Authenticate and authorize your users
-Store data about your users
-Perform password-based and social login
-Secure your application with multi-factor authentication
-And much more! Check out our Product Documentation
+
+* Authenticate and authorize your users
+* Store data about your users
+* Perform password-based and social login
+* Secure your application with multi-factor authentication
+* And much more! Check out our [Product Documentation](https://developer.okta.com/documentation/)
 
 In short: we make user account management a lot easier, more secure, and more scalable than what you’re probably used to.
 
@@ -176,7 +177,7 @@ But you may ask, why didn’t it fail when it didn’t find the `DateOfBirth` cl
 
 For this reason, the typical pattern is to return from the handler without explicitly failing, unless you want to guarantee a failure regardless of any other handlers. Of course, if the it succeeds, it should indicate success!
 
-The next step is to register your policy in the Authorization service configuration in the ConfigureServices method of the Startup class.
+The next step is to register your policy in the Authorization service configuration in the `ConfigureServices()` method of the `Startup` class.
 
 Also, you have to register the handler to be injected later on by the framework:
 
@@ -208,7 +209,7 @@ This approach is better than the role-based approach because the security code i
 
 It’s also more flexible, as you can easily change what the minimum age required is because the logic is encapsulated in a single place. You can go further, and make a separated library with your company requirements and reuse it in all the applications of the company. Also, you can write your unit tests for your different handlers. Isn’t it awesome?!
 
-Note: Check out the [unit tests written by the ASP.NET Core Team](https://github.com/aspnet/Security/tree/dev/test/Microsoft.AspNetCore.Authorization.Test).
+> Check out the [unit tests written by the ASP.NET Core Team](https://github.com/aspnet/Security/tree/dev/test/Microsoft.AspNetCore.Authorization.Test).
 
 ## Policy-Based Authorization in ASP.NET Core with Okta
 
@@ -374,4 +375,4 @@ As you can see, this new approach to authorization in ASP.NET Core allows you to
 
 Didn't get enough ASP.NET Core goodness? Check out our other cool posts about [ASP.NET Core with Angular](/blog/2018/04/26/build-crud-app-aspnetcore-angular), [Token Authentication in ASP.NET Core 2](/blog/2018/03/23/token-authentication-aspnetcore-complete-guide), and a more in-depth look at [roles-based authorization in ASP.NET Core](/blog/2017/10/04/aspnet-authorization). Don't forget to checkout [Microsoft's Documentation on policy-based authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/policies?view=aspnetcore-2.1)! 
 
-As usual, feel free to leave a comment below, and don't foget to follow us on Twitter [@OktaDev](https://twitter.com/oktadev) and on [YouTube](https://www.youtube.com/channel/UC5AMiWqFVFxF1q9Ya1FuZ_Q)!
+As usual, feel free to leave a comment below, and don't foget to follow us on Twitter [@OktaDev](https://twitter.com/oktadev) and on [YouTube](https://www.youtube.com/channel/UC5AMiWqFVFxF1q9Ya1FuZ_Q) too!
