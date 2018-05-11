@@ -6,8 +6,8 @@ description: "Secure a Spring microservices architecture with Spring Security an
 tags: [spring, spring boot, microservices, oauth 2.0, spring security, java]
 tweets:
 - "Did you know you can secure your @springboot microservices using OAuth and Okta? → "
-- "Feel the heat? A lot of the 🔥 in the #Java ecosystem is coming from Spring Boot. Learn how to 🔒 it down with @SpringSecurity, OAuth, and Okta!"
-- "Spring Boot Microservices + @SpringSecurity + @oauth_2 + @okta = 😀!"
+- "Feel the heat? A lot of the 🔥 in the #Java ecosystem is coming from Spring Boot 2.0. Learn how to 🔒 it down with @SpringSecurity, OAuth, and Okta!"
+- "Spring Boot 2.0 Microservices + @SpringSecurity + @oauth_2 + @okta APIs = 😀!"
 ---
 
 Building a microservices architecture with Spring Boot and Spring Cloud can allow your team to scale and develop software faster. It can add resilience and elasticity to your architecture that will enable it to fail gracefully and scale infinitely. All this is great, but you need continuous deployment and excellent security to ensure your system stays up-to-date, healthy, and safe for years to come.
@@ -80,7 +80,7 @@ import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth
 public class EdgeServiceApplication {
 ```
 
-Adding `@EnableOAuth2Sso` causes Spring Security to look for a number of properties. Add the following properties to `edge-service/src/main/resources/application.properties`. 
+Adding `@EnableOAuth2Sso` causes Spring Security to look for a number of properties. Add the following properties to `edge-service/src/main/resources/application.properties`.
 
 ```properties
 security.oauth2.client.client-id={yourClientId}
@@ -258,7 +258,7 @@ Create a `home.html` template in `beer-catalog-service/src/main/resources/templa
 </html>
 ```
 
-Create a `ResourceServerConfig.java` class in the same package as `HomeController`. This class configures Spring Security so it secures all endpoints, except those accessed with an `Authorization` header.
+Create a `ResourceServerConfig.java` class in the same package as `HomeController`. This class configures Spring Security, so it secures all endpoints, except those accessed with an `Authorization` header.
 
 ```java
 package com.example.beercatalogservice;
@@ -388,7 +388,7 @@ Restart your Edge Server application, navigate to `http://localhost:8081/home` a
 
 ### Protecting Downstream Services in Spring Boot 2.0
 
-With Spring Boot 1.5.x, including Actuator as a dependency would trigger [Actuator Security](https://docs.spring.io/spring-boot/docs/2.0.2.RELEASE/reference/htmlsingle/#boot-features-security-actuator) and make it so the `http://localhost:8080` is protected. In Spring Boot 2.x, having a `WebSecurityConfigurerAdapter` causes Actuator security to back off. In the Beer Catalog Service app, the `ResourceServerConfig` causes this behavior.
+With Spring Boot 1.5.x, including Actuator as a dependency would trigger [Actuator Security](https://docs.spring.io/spring-boot/docs/2.0.2.RELEASE/reference/htmlsingle/#boot-features-security-actuator) and cause `http://localhost:8080` to be secured. In Spring Boot 2.x, having a `WebSecurityConfigurerAdapter` causes actuator security to back off. In the Beer Catalog Service app, the `ResourceServerConfig` causes this behavior.
 
 To secure Actuator endpoints and make it so you can't access `http://localhost:8080` directly, add the endpoints you want to expose in `beer-catalog-service/src/main/resources/application.properties`:
 
@@ -754,4 +754,4 @@ Learn more about Okta and its APIs at [developer.okta.com/product](https://devel
 
 **Changelog:**
 
-* May 11, 2018: Updated to use Spring Boot 2.0 and Okta Sign-In Widget 2.0.8. See the example app changes in [spring-boot-microservices-example#17](https://github.com/oktadeveloper/spring-boot-microservices-example/pull/17); changes to this post can be viewed in [okta.github.io#2049](https://github.com/okta/okta.github.io/pull/2049).
+* May 11, 2018: Updated to use Spring Boot 2.0 and Okta Sign-In Widget 2.0.8. See the example app changes in [spring-boot-microservices-example#17](https://github.com/oktadeveloper/spring-boot-microservices-example/pull/17); changes to this post can seen in [okta.github.io#2049](https://github.com/okta/okta.github.io/pull/2049).
