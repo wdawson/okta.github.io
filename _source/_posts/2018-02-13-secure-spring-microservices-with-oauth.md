@@ -70,7 +70,7 @@ zuul.routes.home.path=/home
 zuul.routes.home.url=http://localhost:8080
 ```
 
-Open `edge-service/src/main/java/com/example/EdgeServiceApplication.java` and add `@EnableOAuth2Sso` to enable authentication with OAuth.
+Open `edge-service/src/main/java/com/example/edgeservice/EdgeServiceApplication.java` and add `@EnableOAuth2Sso` to enable authentication with OAuth.
 
 ```java
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
@@ -80,7 +80,7 @@ import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth
 public class EdgeServiceApplication {
 ```
 
-Adding `@EnableOAuth2Sso` causes Spring Security to look for a number of properties. Add the following properties to `edge-service/src/main/resources/application.properties`. 
+Adding `@EnableOAuth2Sso` causes Spring Security to look for a number of properties. Add the following properties to `edge-service/src/main/resources/application.properties`.
 
 ```properties
 security.oauth2.client.client-id={yourClientId}
@@ -258,7 +258,7 @@ Create a `home.html` template in `beer-catalog-service/src/main/resources/templa
 </html>
 ```
 
-Create a `ResourceServerConfig.java` class in the same package as `HomeController`. This class configures Spring Security so it secures all endpoints, except those accessed with an `Authorization` header.
+Create a `ResourceServerConfig.java` class in the same package as `HomeController`. This class configures Spring Security, so it secures all endpoints, except those accessed with an `Authorization` header.
 
 ```java
 package com.example.beercatalogservice;

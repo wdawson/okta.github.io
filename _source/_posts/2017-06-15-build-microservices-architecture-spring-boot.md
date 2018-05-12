@@ -135,7 +135,7 @@ server.port=8761
 eureka.client.register-with-eureka=false
 ```
 
-Open `eureka-service/src/main/java/com/example/EurekaServiceApplication.java` and add `@EnableEurekaServer` above `@SpringBootApplication`.
+Open `eureka-service/src/main/java/com/example/eurekaservice/EurekaServiceApplication.java` and add `@EnableEurekaServer` above `@SpringBootApplication`.
 
 ```java
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
