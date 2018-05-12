@@ -70,7 +70,7 @@ zuul.routes.home.path=/home
 zuul.routes.home.url=http://localhost:8080
 ```
 
-Open `edge-service/src/main/java/com/example/EdgeServiceApplication.java` and add `@EnableOAuth2Sso` to enable authentication with OAuth.
+Open `edge-service/src/main/java/com/example/edgeservice/EdgeServiceApplication.java` and add `@EnableOAuth2Sso` to enable authentication with OAuth.
 
 ```java
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
