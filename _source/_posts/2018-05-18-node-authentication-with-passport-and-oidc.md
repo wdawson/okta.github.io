@@ -29,7 +29,9 @@ In short: we make [user account management](https://developer.okta.com/product/u
 Sound amazing? [Register for a free developer account](https://developer.okta.com/signup/), and when you’re done, come on back so we can learn more about building secure authentication in Node. 
 
 Now, let’s dive in!
+
 ## Use Express to Scaffold the Base Node Authentication Project
+
 Start by installing the [Express application generator](https://expressjs.com/en/starter/generator.html) if you don't already have it installed.
 
 ```bash
@@ -148,6 +150,7 @@ passport.use('oidc', new OidcStrategy({
   return done(null, profile);
 }));
 ```
+
 The code above sets the name of the strategy as 'oidc' and set all the URLs that the strategy needs to know to pull off the authorization code flow for OpenID Connect. The issuer is the URL for your authorization server that was created for you when you signed up for an Okta developer account. You can view it by clicking on **API** in your Okta dashboard and choosing the **Authorization Servers** tab. To find the `authorizationURL`, `tokenURL` and `userInfoURL` settings, you can click on the default authorization server and view its settings. There is a **Metadata URI** setting that, by clicking on the link, will show you the `.well-known` document. This document tells anyone using this authorization server about the information and endpoints it can provide.
 
 {% img blog/node-passport/default-authorization-server-settings.png alt:"The default authorization server settings" width:"800" %}{: .center-image }
