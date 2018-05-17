@@ -2,7 +2,7 @@
 layout: blog_post
 title: "Build Secure Node Authentication with Passport.js and OpenID Connect"
 author: leebrandt
-description: "This post demonstrates how to set up OpenID Connect authentication in Node with Passport.js"
+description: "This post demonstrates how to set up OpenID Connect authentication in Node with Passport.js."
 tags: [nodejs, node, passportjs, passport.js, authentication, openid connect, oidc]
 tweets:
  - "Checkout @nodejs authentication using @passportjs and OpenID Connect from @leebrandt! >>"
@@ -22,7 +22,7 @@ Okta is a cloud service that allows developers to create, edit, and securely sto
 * Store data about your users
 * Perform password-based and [social login](https://developer.okta.com/authentication-guide/social-login/)
 * Secure your application with (multi-factor authentication](https://developer.okta.com/use_cases/mfa/)
-* And much more! Check out our [Product Documentation](https://developer.okta.com/documentation/)
+* And much more! Check out our [product documentation](https://developer.okta.com/documentation/)
 
 In short: we make [user account management](https://developer.okta.com/product/user-management/) a lot easier, more secure, and more scalable than what you’re probably used to.
 
@@ -138,10 +138,10 @@ Now you'll configure Passport.js to use Okta as your Identity Provider (IdP). To
 ```js
 // set up passport
 passport.use('oidc', new OidcStrategy({
-  issuer: '{yourOktaDomain}/oauth2/default',
-  authorizationURL: '{yourOktaDomain}/oauth2/default/v1/authorize',
-  tokenURL: '{yourOktaDomain}/oauth2/default/v1/token',
-  userInfoURL: '{yourOktaDomain}/oauth2/default/v1/userinfo',
+  issuer: 'https://{yourOktaDomain}/oauth2/default',
+  authorizationURL: 'https://{yourOktaDomain}/oauth2/default/v1/authorize',
+  tokenURL: 'https://{yourOktaDomain}/oauth2/default/v1/token',
+  userInfoURL: 'https://{yourOktaDomain}/oauth2/default/v1/userinfo',
   clientID: '{ClientID}',
   clientSecret: '{ClientSecret}',
   callbackURL: 'http://localhost:3000/authorization-code/callback',
