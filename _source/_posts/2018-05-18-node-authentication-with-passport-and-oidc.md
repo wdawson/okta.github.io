@@ -121,7 +121,7 @@ app.use(passport.session());
 
 ## Create an Okta Application to Support Node Authentication
 
-If you don't already have an account (and didn’t create one at the start of this tutorial), [it’s time to sign up for one](https://developer.okta.com/signup)! Once you're logged into your Okta dashboard, click on the **Applications** menu item and click **Add Application**. From the wizard, choose **Web** and click **Next**.
+If you don't already have an account (and didn’t create one at the start of this tutorial), [it’s time to sign up for one](https://developer.okta.com/signup/)! Once you're logged into your Okta dashboard, click on the **Applications** menu item and click **Add Application**. From the wizard, choose **Web** and click **Next**.
 
 {% img blog/node-passport/create-web-application.png alt:"Create web application" width:"800" %}{: .center-image }
 
