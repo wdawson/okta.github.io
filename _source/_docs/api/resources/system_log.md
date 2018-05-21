@@ -527,7 +527,7 @@ The following sections outline the major event types captured by the system log.
 
 Rate limit warnings are sent at different times, depending on the org type. For One App and Enterprise orgs, the warning is sent when the org is at 60% of its limit.
 
-> Note: For orgs created before 2018-05-22, the warning is sent at 90%.
+> Note: For orgs created before 2018-05-17, the warning is sent at 90%.
 
 Rate limit violations are sent when a rate limit is exceeded.
 
