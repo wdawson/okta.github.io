@@ -31,27 +31,34 @@ Rate limits differ depending on the level of service you have purchased from Okt
 
 Note that limits for more specific endpoints override the limits for less specific endpoints. For example, the limit for getting an application by ID (second row) is higher than the more general limit for the `/api/v1/apps` endpoint (first row).
 
-| Action and Okta API Endpoint | Developer (free) | Developer (paid) & One App | Enterprise |
-|----------------------------- | ---------------- | -------------------------- | ---------- |
-| **Creating or listing applications:**<br>`/api/v1/apps` except `/api/v1/apps/{id}`        | 20 | 25 |  50 |
-| **Get, update, or delete an application by ID:**<br>`/api/v1/apps/{id}` only              | 100 | 300 | 600 |
-| **Get System Log data:**<br>`/api/v1/logs`                                                | 20 | 25 | 50 |
-| **Get System Log data:**<br>`/api/v1/events`                                              | 20 | 25 | 50 |
-| **Creating, updating, or deleting users:**<br>`/api/v1/users` except `/api/v1/users/{login}`  | 100  | 300 | 600 |
-| **Get a user by login:**<br>`/api/v1/users/{login}` only                                  | 100 | 300 | 1000 |
-| **Create an organization:**<br>`/api/v1/orgs`                                             | N/A | N/A | 50 |
-| **Authentication with a custom Authorization Server:**<br>`/oauth2/{authServerId}/v1/authorize` and `/oauth2/{authServerId}/v1/token` | 100 | 300 | 600 |
-| **All other actions:**<br>`/api/v1/`                                                      | 100 | 300 | 600 |
+| Action and Okta API Endpoint | Developer (free) | Developer (paid) & One App | Enterprise     |
+|----------------------------- | ---------------- | -------------------------- | -------------- |
+| **Create or list applications:**<br>`/api/v1/apps` except `/api/v1/apps/{id}`                     | 20  | 25  | 50   |
+| **Get, update, or delete an application by ID:**<br>`/api/v1/apps/{id}` only                      | 100 | 300 | 600  |
+| **Authenticate different end users**<br>`/api/v1/authn`                                           | 100 | 300 | 600  |
+| **Verify factors**:<br>`/api/v1/authn/factors/{id}/verify` only                                   | 100 | 300 | 600  |
+| **Create or list groups**:<br>`/api/v1/groups` except `/api/v1/groups/{id}`                       | 100 | 300 | 600  |
+| **Get, update, or delete a group by ID**:<br>`/api/v1/groups/{id}` only                           | 100 | 300 | 600  |
+| **Create or list users**:<br>Only GET or POST to `/api/v1/users`                                  | 100 | 300 | 600  |
+| **Get a user by ID or login**:<br>Only GET to `/api/v1/users/{idOrLogin}`                         | 100 | 300 | 1000 |
+| **Update or delete a user by ID or login**:<br>Only PUT or DELETE to `/api/v1/users/{idOrLogin}`  | 100 | 300 | 600  |
+| **Get System Log data:**<br>`/api/v1/logs`                                                        | 20  | 25  | 50   |
+| **Get System Log data:**<br>`/api/v1/events`                                                      | 20  | 25  | 50   |
+| **Get session information:**<br>`/api/v1/sessions`                                                | 100 | 300 | 600  |
+| **Create an organization:**<br>`/api/v1/orgs`                                                     | N/A | N/A | 50   |
+| **Authorize request to a custom Authorization Server:**<br>`/oauth2/{authServerId}/v1/authorize`  | 100 | 300 | 600  |
+| **Token request to a custom Authorization Server:**<br>`/oauth2/{authServerId}/v1/token`          | 100 | 300 | 600  |
+| **All other actions:**<br>`/api/v1/`                                                              | 100 | 300 | 600  |
 
-These rate limits apply to all new Okta organizations. For orgs created before 2018-05-22, the [previous rate limits](#okta-api) still apply.
+These rate limits apply to all new Okta organizations. For orgs created before 2018-05-17, the [previous rate limits](#okta-api) still apply.
 
 ### Okta API Endpoints and Per-User Limits
 API endpoints that take username and password credentials, including the [Authentication API](/docs/api/resources/authn) and the [OAuth 2.0 resource owner password flow](/authentication-guide/implementing-authentication/password), have a per-username rate limit to prevent brute force attacks with the user's password:
 
 | Action                                                                      | Okta API Endpoint  | Per User Limits (All Orgs) |
 | --------------------------------------------------------------------------- | ------------------ | -------------------------: |
-| Generate or refresh an OAuth 2.0 token for the resource owner password flow | `/oauth2/v1/token` | 4 per second               |
 | Authenticate the same user                                                  | `/api/v1/authn`    | 4 per second               |
+| Generate or refresh an OAuth 2.0 token for the resource owner password flow | `/oauth2/v1/token` | 4 per second               |
 
 ### Okta Rate Limits for All Other Endpoints
 
@@ -61,27 +68,27 @@ Finally, for all endpoints not listed in the tables above, the API rate limit is
 | ---------------- | ----------------------------- | ---------- |
 | 1000             | 3,000                         | 6,000      |
 
-For organizations created before 2018-05-22, and all IT Products orgs, the limit is 10,000 requests per minute.
+For organizations created before 2018-05-17, the limit is 10,000 requests per minute.
 
 ### Okta Home Page Endpoints and Per-Minute Limits
 
 The following endpoints are used by the Okta home page for authentication and sign on, and have org-wide rate limits:
 
-| Okta Home Page Endpoints                 | Developer (free) | Developer (paid) & One App | Enterprise |
-| ---------------------------------------- | ---------------- | -------------------------- | ---------- |
-| `/app/{app}/{key}/sso/saml`              | 100              | 300                     | 600           |
-| `/app/office365/{key}/sso/wsfed/active`  | N/A              | N/A                     | 2000          |
-| `/app/office365/{key}/sso/wsfed/passive` | N/A              | N/A                     | 250           |
-| `/app/template_saml_2_0/{key}/sso/saml`  | 100              | 300                     | 600           |
-| `/login/do-login`                        | 100              | 300                     | 600           |
-| `/login/login.htm`                       | 100              | 300                     | 600           |
-| `/login/sso_iwa_auth`                    | 100              | 300                     | 600           |
-| `/api/plugin/{protocolVersion}/form-cred/{appUserIds}/{formSiteOption}` | 100 | 300   | 600           |
-| `/api/plugin/{protocolVersion}/sites`    | 20               | 50                      | 100           |
-| `/bc/image/fileStoreRecord`              | 100              | 300                     | 600           |
-| `/bc/globalFileStoreRecord`              | 100              | 300                     | 600           |
+| Okta Home Page Endpoints                 | Developer (free) | Developer (paid) & One App | Enterprise    |
+| ---------------------------------------- | ---------------- | -------------------------- | ------------- |
+| `/app/{app}/{key}/sso/saml`              | 100              | 300                        | 600           |
+| `/app/office365/{key}/sso/wsfed/active`  | N/A              | N/A                        | 2000          |
+| `/app/office365/{key}/sso/wsfed/passive` | N/A              | N/A                        | 250           |
+| `/app/template_saml_2_0/{key}/sso/saml`  | 100              | 300                        | 600           |
+| `/login/do-login`                        | 100              | 300                        | 600           |
+| `/login/login.htm`                       | 100              | 300                        | 600           |
+| `/login/sso_iwa_auth`                    | 100              | 300                        | 600           |
+| `/api/plugin/{protocolVersion}/form-cred/{appUserIds}/{formSiteOption}` | 100 | 300      | 600           |
+| `/api/plugin/{protocolVersion}/sites`    | 20               | 50                         | 100           |
+| `/bc/image/fileStoreRecord`              | 100              | 300                        | 600           |
+| `/bc/globalFileStoreRecord`              | 100              | 300                        | 600           |
 
-These rate limits apply to all new Okta organizations. For orgs created before 2018-05-22, the [previous rate limits](#home-page-endpoints) still apply.
+These rate limits apply to all new Okta organizations. For orgs created before 2018-05-17, the [previous rate limits](#home-page-endpoints) still apply.
 
 ### End-User Rate Limit
 
@@ -300,7 +307,7 @@ To request an exception, {{site.contact_support_lc}} 10 days before you need the
 
 ## Legacy Enterprise Limits
 
-These are the rate limits for orgs created before 2018-05-22.
+These are the rate limits for orgs created before 2018-05-17.
 
 ### Okta API
 
