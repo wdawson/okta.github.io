@@ -10,9 +10,22 @@ If you're building a web application, chances are you're going to want to serve 
 
 Maybe you implement some requirements to say your users must have uppercase and lowercase characters, a number, a special character, and at least 10 characters total, but you can't keep them from writing their password down on a sticky note next to their computer. What happens when they reuse the same username and password on every site and one of those sites has a database leak? Or perhaps they access your site from a public computer that has a password manager, and now their really secure password is there for the next person to use.
 
-This is where Multi-Factor Authentication (MFA) comes in to play. By adding an extra level of security, even if someone manages to phish your user's login information, they still won't be able to sign in without access to another device such as their mobile phone or a U2F key. You might be thinking, _managing passwords is hard enough, keeping track of various devices in a secure way will be a nightmare_.
+This is where multi-factor authentication (MFA) comes in to play. By adding an extra level of security, even if someone manages to phish your user's login information, they still won't be able to sign in without access to another device such as their mobile phone or a U2F key. You might be thinking, _managing passwords is hard enough, keeping track of various devices in a secure way will be a nightmare_.
 
-Luckily, Okta makes this all ridiculously easy. Not only can you add basic authentication in a breeze, but you can add push notification verifications, SMS authentication, Google Authentication, security questions, and more, just by clicking a few checkboxes. In this quick tutorial, I'll walk you through creating a simple app in Node that implements a few forms of MFA.
+To make that simpler, we’re going to use Okta to add basic authentication and MFA. Before we dive in, I’d like to give you a quick overview of what Okta does, and how it can simplify the development process for you, while ensuring best-in-class security for both you and your users.
+
+## What is Okta?
+
+Okta is a cloud service that allows developers to create, edit, and securely store user accounts and user account data, and connect them with one or multiple applications. Our API enables you to:
+
+* [Authenticate](https://developer.okta.com/product/authentication/) and [authorize](https://developer.okta.com/product/authorization/) your users
+* Store data about your users
+* Perform password-based and [social login](https://developer.okta.com/authentication-guide/social-login/)
+* Secure your application with (multi-factor authentication](https://developer.okta.com/use_cases/mfa/)
+* And much more! Check out our [product documentation](https://developer.okta.com/documentation/)
+
+In short: we make [user account management](https://developer.okta.com/product/user-management/) a lot easier, more secure, and more scalable than what you’re probably used to. It’s super easy to [register for a free developer account](https://developer.okta.com/signup/), and when you’re done, come on back so we can learn more about building secure authentication in Node and implementing MFA with Okta.
+
 
 ## Set Up the Express Application
 
@@ -33,8 +46,7 @@ Inside the new directory, `npm install` adds all the dependencies needed for the
 
 The last command, `npm start`, starts the application. You can now go to <http://localhost:8080> to see a very simple welcome page. You can use `ctrl-c` at any time to stop the Node app and return to the terminal.
 
-## Create an Okta Application
-
+## Create an Okta Application to Support Adding Multi-Factor Authentication to Your Node App
 In order to add authentication, your app will need a few configuration variables. To keep these private, store them in a file named `.env` in the root of your project. The `.gitignore` file created earlier already says to ignore this file from git, so these won't end up in source control (this is especially important on an open source project where you wouldn't want people to have full access to your configuration settings).
 
 One thing you will need in your `.env` file is an application secret, which should be random. One way to do this is with the following command:
@@ -43,7 +55,7 @@ One thing you will need in your `.env` file is an application secret, which shou
 echo "APP_SECRET=`openssl rand -base64 32`" >> .env
 ```
 
-For the next step, you need to [sign up for a free Okta Developer account](https://developer.okta.com/signup/). Once you sign up, you'll be given a unique Okta Org URL that looks similar to `https://dev-123456.oktapreview.com`. This is how you'll sign in to your account to make admin changes, so make sure to save it. You'll also need to save this in your `.env` file. Each line should have a separate environment variable with syntax like `ORG_URL=https://dev-123456.oktapreview.com`.
+For the next step, you need to [sign up for a free Okta Developer account](https://developer.okta.com/signup/), if you haven’t already. Once you sign up, you'll be given a unique Okta Org URL that looks similar to `https://dev-123456.oktapreview.com`. This is how you'll sign in to your account to make admin changes, so make sure to save it. You'll also need to save this in your `.env` file. Each line should have a separate environment variable with syntax like `ORG_URL=https://dev-123456.oktapreview.com`.
 
 After logging into your dev console, click the **Applications** tab, click **Add Application**, then select the **Web** option. You can keep all these settings at their default for now, and just change the name. If you already know the URI(s) where you will be hosting your application, this is where you would add them. You can always come back here later.
 
@@ -61,7 +73,7 @@ CLIENT_SECRET=your-client-secret
 
 By keeping these variables in a separate file, it not only keeps them private, but also makes it easy to deploy the same code to different environments (e.g. development, staging, and production) by just swapping out one file.
 
-## Adding a Protected Dashboard
+## Add a Protected Dashboard to Support MFA in Your Node Application
 
 Your application is currently public, which is great for the homepage. To add a protected route for after your users log in, you can create a couple new files:
 
@@ -100,7 +112,6 @@ The place where all this ties together is in `app.js`. You need to add `/dashboa
 
 **app.js**
 ```javascript
-
 
 // This code should come after the following line:
 // var app = express()
@@ -148,7 +159,7 @@ Test that the app works by visiting the dashboard. If you notice it takes you th
 
 {% img blog/simple-multifactor-authentication-in-node/dashboard.png alt:"Dashboard" width:"300" %}{: .center-image }
 
-## Adding Multi-Factor Authentication
+## Add Multi-Factor Authentication to Your Node Application
 
 The real bread-and-butter behind this tutorial is adding MFA. It turns out Okta makes this extremely simple as well! Now that you have your Okta Developer account already set up and hooked into a Node app, you don't even need to change any of your code around. From this point on, it's just a matter of changing some configuration settings inside Okta.
 
@@ -156,7 +167,7 @@ From inside your developer portal, the default view is `Developer Console`. In o
 
 {% img blog/simple-multifactor-authentication-in-node/switch-to-classic-ui.png alt:"Switch to classic UI" width:"300" %}{: .center-image }
 
-Once you’ve enabled the Classic UI, you can click on the **Security** tab, then click **Multifactor**  to select some factor types to enable. You can choose which applications will use MFA, but this step is required to enable it on any of them. There are quite a few options, but for now choose Okta Verify, Google Authenticator, and SMS Authentication.
+Once you’ve enabled the Classic UI, you can click on the **Security** tab, then click **Multifactor** to select some factor types to enable. You can choose which applications will use MFA, but this step is required to enable it on any of them. There are quite a few options, but for now choose Okta Verify, Google Authenticator, and SMS Authentication.
 
 {% img blog/simple-multifactor-authentication-in-node/factor-types.png alt:"Multi-factor Authentication Factor Types" width:"800" %}{: .center-image }
 
@@ -166,14 +177,13 @@ Click on `Add Rule` to create a new rule. You have a lot of flexibility here. Fo
 
 {% img blog/simple-multifactor-authentication-in-node/app-sign-on-rule.png alt:"App Sign On Rule" width:"800" %}{: .center-image }
 
+Head back to your Node app running at `http://localhost:8080` and sign in. This time you'll be prompted to sign up for a form of Multifactor Authentication. By default, all the forms we allowed are optional, so you can choose which of the three you want to use. If you want to change which ones are required and which are optional, you can do this back in **Security** → **Multifactor** under the `Factor Enrollment` tab. Like the sign on policies, you also have the option of setting different rules for different groups of users.
 
-Head back to your Node app running at <http://localhost:8080> and sign in. This time you'll be prompted to sign up for a form of Multifactor Authentication. By default, all the forms we allowed are optional, so you can choose which of the three you want to use. If you want to change which ones are required and which are optional, you can do this back in **Security** → **Multifactor** under the `Factor Enrollment` tab. Like the sign on policies, you also have the option of setting different rules for different groups of users.
-
-# Learn More About Node and Secure User Management with Okta
+## Learn More About Node and Secure Multi-Factor Authentication with Okta
 
 If you've learned anything today, hopefully it's that securing your application doesn't need to be scary. You can add really robust user sign on with multi-factor authentication in a single afternoon without breaking a sweat! Your users can rest assured that their data is in good hands.
 
-If you'd like to learn more about Node, Okta, and authentication, take a look at these resources, as well as the rest of the Okta developer blog:
+If you'd like to learn more about Node, Okta, and authentication or MFA, take a look at these resources, as well as the rest of the Okta developer blog:
 
 * [More detail about the different factor types](https://support.okta.com/help/Documentation/Knowledge_Article/Multifactor-Authentication-1320134400)
 * [Okta Multi-Factor Authentication Use Cases](https://developer.okta.com/use_cases/mfa/)
@@ -181,3 +191,5 @@ If you'd like to learn more about Node, Okta, and authentication, take a look at
 * [Two-Factor Authentication vs. Multi-Factor Authentication: What Are the Risks?](https://www.okta.com/blog/2016/12/two-factor-authentication-vs-multi-factor-authentication-what-are-the-risks/)
 * [Build User Registration with Node, React, and Okta](https://developer.okta.com/blog/2018/02/06/build-user-registration-with-node-react-and-okta)
 * [Okta OIDC Middleware Documentation](https://github.com/okta/okta-oidc-js/tree/master/packages/oidc-middleware)
+
+And as always, we’d love your feedback! Hit us up in the comments below, or on Twitter [@oktadev](https://twitter.com/OktaDev).
