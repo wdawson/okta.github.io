@@ -5,7 +5,7 @@ exampleDescription: ASP.NET 4.x Web API implicit example
 
 ## Okta ASP.NET 4.x Web API Quickstart
 
-Now that your users can sign in with the Implicit flow, let's check for authentication on your server.
+Now that your clients can get tokens, let's validate those tokens on your server.
 
 ### Create a new Web API project
 

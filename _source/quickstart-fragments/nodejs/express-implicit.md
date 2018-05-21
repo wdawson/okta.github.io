@@ -5,7 +5,7 @@ exampleDescription: Express.js Implicit Flow Example
 
 ## Okta Node.js/Express.js Quickstart
 
-Now that your users can sign in with the Implicit flow, let's check for authentication on your server. We'll show you how to use the [Okta JWT Verifier](https://www.npmjs.com/package/@okta/jwt-verifier) to create a simple Express middleware function that can prevent a request from completing if the request is not authenticated with a valid access token.
+Now that your clients can get tokens, let's validate those tokens on your server. We'll show you how to use the [Okta JWT Verifier](https://www.npmjs.com/package/@okta/jwt-verifier) to create a simple Express middleware function that can prevent a request from completing if the request is not authenticated with a valid access token.
 
 To learn more about validating Okta access tokens, please see [Validating Access Tokens](/standards/OAuth/#validating-access-tokens).
 

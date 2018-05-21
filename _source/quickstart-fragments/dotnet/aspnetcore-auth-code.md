@@ -5,7 +5,7 @@ exampleDescription: ASP.NET Core 2.0 MVC authorization code example
 
 ## Okta ASP.NET Core MVC Quickstart
 
-Now that we know your users will sign in with the Authorization Code flow, let's add authentication to your server.
+Now that your users can sign in, let's add authentication to your server.
 
 > If you would prefer to download a complete sample application instead, please visit [ASP.NET Core MVC Example](https://github.com/oktadeveloper/okta-aspnetcore-mvc-example) and follow those instructions.
 

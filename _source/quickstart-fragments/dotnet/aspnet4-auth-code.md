@@ -5,7 +5,7 @@ exampleDescription: ASP.NET 4.x MVC authorization code example
 
 ## Okta ASP.NET 4.x MVC Quickstart
 
-Now that we know your users will sign in with the Authorization Code flow, let's add authentication to your server.
+Now that your users can sign in, let's add authentication to your server.
 
 > If you would prefer to download a complete sample application instead, please visit [ASP.NET MVC Example](https://github.com/oktadeveloper/okta-aspnet-mvc-example) and follow those instructions.
 

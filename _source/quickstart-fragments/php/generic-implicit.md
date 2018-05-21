@@ -5,7 +5,7 @@ exampleDescription: PHP Implicit Example
 
 ## Okta PHP Quickstart
 
-Now that your users can sign in with the Implicit flow, let's check for authentication on your server.
+Now that your clients can get tokens, let's validate those tokens on your server.
 
 When a request is made to the messages api of your PHP application, we need to get the bearer token from the
 authorization header and validate that the token. If the token is valid, we can reply with the messages we want to
