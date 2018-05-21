@@ -44,7 +44,6 @@ Our client side application is going to be sending us a call to an api endpoint 
 
 Our first step is to include the composer autoload file.  In your new `messages.php` file, add the following:
 
-
 > NOTE: All code blocks will be added progressively to the file. The full file is provided at the end of this quickstart.
 
 ```php?start_inline=true
@@ -98,6 +97,7 @@ try {
     // Setup the JWT Verifier.
     $jwtVerifier = ( new \Okta\JwtVerifier\JwtVerifierBuilder() )
         ->setAdaptor( new \Okta\JwtVerifier\Adaptors\SpomkyLabsJose() )
+        ->setClientId( '{clientId}' )
         ->setIssuer( 'https://{yourOktaDomain}.com/oauth2/default' )
         ->build();
 
@@ -105,16 +105,6 @@ try {
     $jwt = $jwtVerifier->verify( $authData );
 } catch (\Exception $e) {
     // We encountered an error, return a 401.
-    return http_response_code( 401 );
-}
-```
-
-If the verify method was successful, we will now have access to all the claims of the token. We need to check and
-make sure that the `cid` (ClientId) from the token matches what our ClientId is from the authoriztation server.
-
-```php?start_inline=true
-// Check to make sure the client id is valid.
-if( $jwt->getClaims()['cid'] != '{clientId}') {
     return http_response_code( 401 );
 }
 ```
@@ -179,6 +169,7 @@ try {
     // Setup the JWT Verifier.
     $jwtVerifier = ( new \Okta\JwtVerifier\JwtVerifierBuilder() )
         ->setAdaptor( new \Okta\JwtVerifier\Adaptors\SpomkyLabsJose() )
+        ->setClientId( '{clientId}' )
         ->setIssuer( 'https://{yourOktaDomain}.com/oauth2/default' )
         ->build();
 
@@ -190,11 +181,6 @@ try {
     return http_response_code( 401 );
 }
 
-// Check to make sure the client id is valid.
-if( $jwt->getClaims()['cid'] != '{clientId}') {
-    return http_response_code( 401 );
-}
-
 //JWT is valid!
 print json_encode([
     'messages' => [
@@ -202,7 +188,6 @@ print json_encode([
         'message 2'
     ]
 ]);
-
 ```
 
 [PHP Sample Applications for Okta]: https://github.com/okta/samples-php
