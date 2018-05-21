@@ -381,6 +381,80 @@ Note: `force=True` is set because Okta sends
 `application/scim+json` as the `Content-Type` and the `.get_json()`
 method expects `application/json`.
 
+###### SCIM 1.1
+
+Below is a sample request from Okta:
+```
+POST /v1/Users HTTP/1.1
+Accept: application/json
+Accept-Charset: utf-8
+Content-Type: application/json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 321
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+	"schemas": ["urn:scim:schemas:core:1.0"],
+	"userName": "jane.doe@example.com",
+	"name": {
+		"givenName": "Jane",
+		"familyName": "Doe"
+	},
+	"emails": [{
+		"primary": true,
+		"value": "jane.doe@example.com",
+		"type": "work"
+	}],
+	"displayName": "Jane Doe",
+	"locale": "en_US",
+	"externalId": "00uv931EiyRsnwOGa0g3",
+	"groups": [],
+	"password": "4a9XuKkx",
+	"active": true
+}
+```
+
+For more information, see [section 3.1](http://www.simplecloud.info/specs/draft-scim-api-01.html#create-resource) of the [SCIM 1.1 Protocol Specification](http://www.simplecloud.info/specs/draft-scim-api-01.html).
+
+###### SCIM 2.0
+
+Below is a sample request from Okta:
+```
+POST /v2/Users HTTP/1.1
+Accept: application/scim+json
+Accept-Charset: utf-8
+Content-Type: application/scim+json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 348
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+	"schemas": ["urn:ietf:params:scim:schemas:core:2.0:User"],
+	"userName": "jane.doe@example.com",
+	"name": {
+		"givenName": "Jane",
+		"familyName": "Doe"
+	},
+	"emails": [{
+		"primary": true,
+		"value": "jane.doe@example.com",
+		"type": "work"
+	}],
+	"displayName": "Jane Doe",
+	"locale": "en_US",
+	"externalId": "00uv931EiyRsnwOGa0g3",
+	"groups": [],
+	"password": "4a9XuKkx",
+	"active": true
+}
+```
+
 For more information on user creation via the `/Users` SCIM
 endpoint, see [section 3.3](https://tools.ietf.org/html/rfc7644#section-3.3) of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
 
@@ -428,9 +502,7 @@ with support for filtering and pagination:
 > the query, add this code after the `query` statement that you want
 > to see: `print(str(query.statement))`
 
-For more details on the `/Users` SCIM endpoint, see [section 3.4.2](https://tools.ietf.org/html/rfc7644#section-3.4.2)
-of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
-
+Below is a sample request from Okta:
 ```
 GET /v2/Users?startIndex=1&count=2 HTTP/1.1
 Accept: application/scim+json
@@ -441,6 +513,9 @@ Host: scimapp.okta1.com:1910
 Connection: Keep-Alive
 Accept-Encoding: gzip,deflate
 ```
+
+For more details on the `/Users` SCIM endpoint, see [section 3.4.2](https://tools.ietf.org/html/rfc7644#section-3.4.2)
+of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
 
 ##### Read Account Details: GET /Users/{id}
 
@@ -460,9 +535,7 @@ by `user_id`:
 If we don't find a user, we return a HTTP status 404 ("Not found")
 with SCIM error message.
 
-For more details on the `/Users/{id}` SCIM endpoint, see [section 3.4.1](https://tools.ietf.org/html/rfc7644#section-3.4.1)
-of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
-
+Below is a sample request from Okta:
 ```
 GET /v2/Users/{id} HTTP/1.1
 Accept: application/scim+json
@@ -473,6 +546,9 @@ Host: scimapp.okta1.com:1910
 Connection: Keep-Alive
 Accept-Encoding: gzip,deflate
 ```
+
+For more details on the `/Users/{id}` SCIM endpoint, see [section 3.4.1](https://tools.ietf.org/html/rfc7644#section-3.4.1)
+of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
 
 ##### Update Account Details: PUT /Users/{id}
 
@@ -500,9 +576,53 @@ Below is how the sample application handles account profile updates:
         db.session.commit()
         return render_json(user)
 
-For more details on updates to the `/Users/{id}` SCIM endpoint, see [section 3.5.1](https://tools.ietf.org/html/rfc7644#section-3.5.1)
-of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
+###### SCIM 1.1
 
+Below is a sample request from Okta:
+```
+PUT /v1/Users/8ff680f1c7064d518b3a05545f8155cb HTTP/1.1
+Accept: application/json
+Accept-Charset: utf-8
+Content-Type: application/json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 464
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+	"id": "8ff680f1c7064d518b3a05545f8155cb",
+	"externalId": "00uv931EiyRsnwOGa0g3",
+	"meta": {
+		"created": "05-17-2018 00:00:00",
+		"lastModified": "05-17-2018 00:00:00",
+		"version": "v1.0"
+	},
+	"schemas": ["urn:scim:schemas:core:1.0"],
+	"userName": "jane.doe@example.com",
+	"displayName": "Jane Doe",
+	"locale": "en_US",
+	"active": true,
+	"password": "TkdFNVdIVkxhM2c9",
+	"emails": [{
+		"value": "jane.doe@example.com",
+		"type": "work",
+		"primary": true
+	}],
+	"name": {
+		"familyName": "Doe",
+		"givenName": "Jane"
+	},
+	"groups": []
+}
+```
+
+For more details, see [section 3.3.1](http://www.simplecloud.info/specs/draft-scim-api-01.html#edit-resource-with-put) of the [SCIM 1.1 Protocol Specification](http://www.simplecloud.info/specs/draft-scim-api-01.html).
+
+###### SCIM 2.0
+
+Below is a sample request from Okta:
 ```
 PUT /v2/Users/{id} HTTP/1.1
 Accept: application/scim+json
@@ -525,23 +645,26 @@ Accept-Encoding: gzip,deflate
 		"version": "v1.0"
 	},
 	"schemas": ["urn:ietf:params:scim:schemas:core:2.0:User"],
-	"userName": "bob@ad.oktatest.com",
-	"displayName": "Bob Minion",
-	"locale": "en-US",
+	"userName": "jane.doe@example.com",
+	"displayName": "Jane Doe",
+	"locale": "en_US",
 	"active": true,
-	"password": "TlVGM056SkRjamM9",
+	"password": "TkdFNVdIVkxhM2c9",
 	"emails": [{
-		"value": "bob@ad.oktatest.com",
+		"value": "jane.doe@example.com",
 		"type": "work",
 		"primary": true
 	}],
 	"name": {
-		"familyName": "Minion",
-		"givenName": "Bobb"
+		"familyName": "Doe",
+		"givenName": "Jane"
 	},
 	"groups": []
 }
 ```
+
+For more details on updates to the `/Users/{id}` SCIM endpoint, see [section 3.5.1](https://tools.ietf.org/html/rfc7644#section-3.5.1)
+of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
 
 ##### Deactivate Account: PATCH /Users/{id}
 
@@ -587,9 +710,31 @@ Below is how the sample application handles account deactivation:
         db.session.commit()
         return render_json(user)
 
-For more details on user attribute updates to `/Users/{id}` SCIM endpoint, see [section 3.5.2](https://tools.ietf.org/html/rfc7644#section-3.5.2)
-of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
+###### SCIM 1.1
 
+Below is a sample request from Okta:
+```
+PATCH /v1/Users/2fabb15c24a2440c93a0214599603bcb HTTP/1.1
+Accept: application/json
+Accept-Charset: utf-8
+Content-Type: application/json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 111
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+	"schemas": ["urn:scim:schemas:core:1.0"],
+	"id": "8ff680f1c7064d518b3a05545f8155cb",
+	"active": false
+}
+```
+
+###### SCIM 2.0
+
+Below is a sample request from Okta:
 ```
 PATCH /v2/Users/{id} HTTP/1.1
 Accept: application/scim+json
@@ -613,49 +758,8 @@ Accept-Encoding: gzip,deflate
 }
 ```
 
-Or, if using PUT:
-
-```
-PUT /v2/Users/{id} HTTP/1.1
-Accept: application/scim+json
-Accept-Charset: utf-8
-Content-Type: application/scim+json; charset=utf-8
-User-Agent: Okta SCIM Client 1.0.0
-Authorization: Bearer {token}
-Content-Length: 564
-Host: scimapp.okta1.com:1910
-Connection: Keep-Alive
-Accept-Encoding: gzip,deflate
-
-{
-	"id": "{id}",
-	"externalId": "00uq2kqg7YTkFo3cY0g3",
-	"meta": {
-		"resourceType": "User",
-		"created": "04-16-2018 00:00:00",
-		"lastModified": "04-16-2018 00:00:00",
-		"version": "v1.0"
-	},
-	"schemas": ["urn:ietf:params:scim:schemas:core:2.0:User"],
-	"userName": "bob@ad.oktatest.com",
-	"displayName": "Bob Minion",
-	"preferredLanguage": "en",
-	"locale": "en-US",
-	"timezone": "America/Los_Angeles",
-	"active": false,
-	"password": "Y1ZneE1HazNORTQ9",
-	"emails": [{
-		"value": "bob@ad.oktatest.com",
-		"type": "work",
-		"primary": true
-	}],
-	"groups": [],
-	"name": {
-		"familyName": "Minion",
-		"givenName": "Bob"
-	}
-}
-```
+For more details on user attribute updates to `/Users/{id}` SCIM endpoint, see [section 3.5.2](https://tools.ietf.org/html/rfc7644#section-3.5.2)
+of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
 
 ##### Filtering on `userName eq` (Required)
 
@@ -690,9 +794,8 @@ Here is an example of how to implement SCIM filtering in Python:
         search_key = getattr(User, search_key_name)
         query = query.filter(search_key == search_value)
 
-For more details on filtering in SCIM 2.0, see [section 3.4.2.2](https://tools.ietf.org/html/rfc7644#section-3.4.2.2)
-of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
 
+Below is a sample request from Okta:
 ```
 GET /v2/Users?filter=userName+eq+%22jane.doe%40example.com%22&startIndex=1&count=100 HTTP/1.1
 Accept: application/scim+json
@@ -703,6 +806,9 @@ Host: scimapp.okta1.com:1910
 Connection: Keep-Alive
 Accept-Encoding: gzip,deflate
 ```
+
+For more details on filtering in SCIM 2.0, see [section 3.4.2.2](https://tools.ietf.org/html/rfc7644#section-3.4.2.2)
+of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
 
 ##### Filtering on Additional Parameters (Optional)
 
@@ -825,7 +931,7 @@ requests are made to your API.
 For more details on rate limiting requests using the HTTP 429
 status code, see [section 4](https://tools.ietf.org/html/rfc6585#section-4) of [RFC 6585](https://tools.ietf.org/html/rfc6585).
 
-##### GET /groups API Endpoint
+##### GET /Groups API Endpoint
 
 Okta currently supports the /groups endpoint for GET /groups of a SCIM API. This is usually done to check for groups data and is not mandatory for SCIM to work. The minimum check we require is for the resources to be of JSON. check example below.
 
@@ -863,6 +969,7 @@ Example:
 }
 ```
 
+Below is a sample request from Okta:
 ```
 GET /v2/Groups?startIndex=1&count=100 HTTP/1.1
 Accept: application/scim+json
@@ -874,12 +981,43 @@ Connection: Keep-Alive
 Accept-Encoding: gzip,deflate
 ```
 
-##### Create Group: POST /groups
+##### Create Group: POST /Groups
 
 {% api_lifecycle beta %}
 
 With Group Push Beta, Okta now supports creation of a Group along with its user memberships in the downstream SCIM enabled application if your SCIM 2.0 API supports it. The caveat is that the users must already be provisioned in your SCIM enabled application.
 
+###### SCIM 1.1
+
+Below is a sample request from Okta:
+```
+POST /v1/Groups HTTP/1.1
+Accept: application/json
+Accept-Charset: utf-8
+Content-Type: application/json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 236
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+	"schemas": ["urn:scim:schemas:core:1.0"],
+	"displayName": "Example Group",
+	"members": [{
+		"value": "85467bb36e1c4f8991750501bf491962",
+		"display": "steve@ad.oktatest.com"
+	}, {
+		"value": "2fabb15c24a2440c93a0214599603bcb",
+		"display": "bob@ad.oktatest.com"
+	}]
+}
+```
+
+###### SCIM 2.0
+
+Below is a sample request from Okta:
 ```
 POST /v2/Groups HTTP/1.1
 Accept: application/scim+json
@@ -894,17 +1032,26 @@ Accept-Encoding: gzip,deflate
 
 {
 	"schemas": ["urn:ietf:params:scim:schemas:core:2.0:Group"],
-	"displayName": "{groupName}",
-	"members": []
+	"displayName": "Example Group",
+	"members": [{
+		"value": "85467bb36e1c4f8991750501bf491962",
+		"display": "steve@ad.oktatest.com"
+	}, {
+		"value": "2fabb15c24a2440c93a0214599603bcb",
+		"display": "bob@ad.oktatest.com"
+	}]
 }
 ```
 
-##### Read Group Details: GET /groups/{id}
+For more details, see [section 3.3](https://tools.ietf.org/html/rfc7644#section-3.3) of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
+
+##### Read Group Details: GET /Groups/{id}
 
 {% api_lifecycle beta %}
 
-With Group Push Beta, Okta now supports reading the Group's details by group id along with the membership details. If a Group is not found, your SCIM application may return a HTTP status 404("not found").For more details on the `/groups/{id}` SCIM endpoint, see [section 3.4.1](https://tools.ietf.org/html/rfc7644#section-3.4.1) of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
+With Group Push Beta, Okta now supports reading the Group's details by group id along with the membership details. If a Group is not found, your SCIM application may return a HTTP status 404("not found").
 
+Below is a sample SCIM 2.0 request from Okta:
 ```
 GET /v2/Groups/{id} HTTP/1.1
 Accept: application/scim+json
@@ -916,7 +1063,10 @@ Connection: Keep-Alive
 Accept-Encoding: gzip,deflate
 ```
 
-##### Update Group Details: PUT /groups/{id}
+For more details on the `/Groups/{id}` SCIM endpoint, see [section 3.4.1](https://tools.ietf.org/html/rfc7644#section-3.4.1) of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
+
+
+##### Update Group Details: PUT /Groups/{id}
 
 {% api_lifecycle beta %}
 
@@ -928,6 +1078,38 @@ With Group Push Beta, any updates to the Group profile and memberships in Okta c
 * Take the resource returned from your SCIM API and update only the attributes that need to be updated.
 * Make a PUT request against `/groups/{id}` in your SCIM API with the updated resource as the payload.
 
+###### SCIM 1.1
+
+Below is a sample request from Okta:
+```
+PUT /v1/Groups/8599fdac3d3142d6beebfc363d2e01a9 HTTP/1.1
+Accept: application/json
+Accept-Charset: utf-8
+Content-Type: application/json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 276
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+	"schemas": ["urn:scim:schemas:core:1.0"],
+	"displayName": "SCIM_test1",
+	"id": "8599fdac3d3142d6beebfc363d2e01a9",
+	"members": [{
+		"value": "978dc5c3d4aa4014a3678e9d30ef093a",
+		"display": "bob@ad.oktatest.com"
+	}, {
+		"value": "54c76a50f48c42e38c10f350f8e6055e",
+		"display": "pete@ad.oktatest.com"
+	}]
+}
+```
+
+###### SCIM 2.0
+
+Below is a sample request from Okta:
 ```
 PUT /v2/Groups/{id} HTTP/1.1
 Accept: application/scim+json
@@ -954,15 +1136,120 @@ Accept-Encoding: gzip,deflate
 }
 ```
 
-##### Update Group Details: PATCH /groups/{id}
+For more details, see [section 3.5.1](https://tools.ietf.org/html/rfc7644#section-3.5.1) of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
+
+##### Update Group Details: PATCH /Groups/{id}
 
 {% api_lifecycle beta %}
 
 > Starting May 31st 2018, Okta will **only** support updating groups via PATCH. Please reach out to <developers@okta.com> for any questions.
 
-This is an alternative way to update group details, mainly to update the group membership. It is strongly encouraged to implement PATCH.
+###### SCIM 1.1
 
-Remove and add users:
+Below is a sample request from Okta to update group details:
+```
+PATCH /v1/Groups/8599fdac3d3142d6beebfc363d2e01a9 HTTP/1.1
+Accept: application/json
+Accept-Charset: utf-8
+Content-Type: application/json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 108
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+	"schemas": ["urn:scim:schemas:core:1.0"],
+	"id": "8599fdac3d3142d6beebfc363d2e01a9",
+	"displayName": "New Group Name"
+}
+```
+
+Below is a sample request from Okta to remove and add group members:
+```
+PATCH /v1/Groups/8599fdac3d3142d6beebfc363d2e01a9 HTTP/1.1
+Accept: application/json
+Accept-Charset: utf-8
+Content-Type: application/json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 131
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+	"schemas": ["urn:scim:schemas:core:1.0"],
+	"members": [{
+		"value": "6629838e056045b7a23fb55816c644eb",
+		"display": "dave@ad.oktatest.com"
+	}, {
+		"value": "85467bb36e1c4f8991750501bf491962",
+		"display": "steve@ad.oktatest.com",
+		"operation": "delete"
+	}]
+}
+```
+
+Below is a sample request from Okta to replace all group members in case of a full push:
+```
+PATCH /v1/Groups/8599fdac3d3142d6beebfc363d2e01a9 HTTP/1.1
+Accept: application/json
+Accept-Charset: utf-8
+Content-Type: application/json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 243
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+	"schemas": ["urn:scim:schemas:core:1.0"],
+	"meta": {
+		"attributes": ["members"]
+	},
+	"members": [{
+		"value": "bcfa9b1f143741929df70a571c6b4b47",
+		"display": "inca@clouditude.net"
+	}, {
+		"value": "85467bb36e1c4f8991750501bf491962",
+		"display": "steve@ad.oktatest.com"
+	}]
+}
+```
+
+For more details, see [section 3.3.2](http://www.simplecloud.info/specs/draft-scim-api-01.html#edit-resource-with-patch) of the [SCIM 1.1 Protocol Specification](http://www.simplecloud.info/specs/draft-scim-api-01.html).
+
+###### SCIM 2.0
+
+Below is a sample request from Okta to update group details:
+```
+PATCH /v2/Groups/619435534e58458c8c92e86d1e07d2f8 HTTP/1.1
+Accept: application/scim+json
+Accept-Charset: utf-8
+Content-Type: application/scim+json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 170
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+	"schemas": ["urn:ietf:params:scim:api:messages:2.0:PatchOp"],
+	"Operations": [{
+		"op": "replace",
+		"value": {
+			"id": "619435534e58458c8c92e86d1e07d2f8",
+			"displayName": "New Group Name"
+		}
+	}]
+}
+```
+
+Below is a sample request from Okta to remove and add group members:
 ```
 PATCH /v2/Groups/{id} HTTP/1.1
 Accept: application/scim+json
@@ -1006,7 +1293,7 @@ Accept-Encoding: gzip,deflate
 }
 ```
 
-Replace all members in a group:
+Below is a sample request from Okta to replace all group members in case of a full push:
 ```
 PATCH /v2/Groups/{id} HTTP/1.1
 Accept: application/scim+json
@@ -1042,12 +1329,15 @@ Accept-Encoding: gzip,deflate
 }
 ```
 
-##### Delete Group: DELETE /groups/{id}
+For more details, see [section 3.5.2](https://tools.ietf.org/html/rfc7644#section-3.5.2) of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
+
+##### Delete Group: DELETE /Groups/{id}
 
 {% api_lifecycle beta %}
 
 With Group Push Beta, Okta can delete the Group in your SCIM enabled application. For more details on deleting resources, see section [3.6](https://tools.ietf.org/html/rfc7644#section-3.6) of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
 
+Below is a sample request from Okta:
 ```
 DELETE /v2/Groups/{id} HTTP/1.1
 Accept: application/scim+json
@@ -1059,6 +1349,8 @@ Host: scimapp.okta1.com:1910
 Connection: Keep-Alive
 Accept-Encoding: gzip,deflate
 ```
+
+For more details, see [section 3.6](https://tools.ietf.org/html/rfc7644#section-3.6) of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
 
 ### SCIM Features Not Implemented by Okta
 
