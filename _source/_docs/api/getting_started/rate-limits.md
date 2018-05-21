@@ -88,7 +88,7 @@ The following endpoints are used by the Okta home page for authentication and si
 | `/bc/image/fileStoreRecord`              | 100              | 300              | 300     | 600           |
 | `/bc/globalFileStoreRecord`              | 100              | 300              | 300     | 600           |
 
-These rate limits apply to all new Okta organizations. For orgs created before 2018-05-17, the [previous rate limits](#home-page-endpoints) still apply.
+These rate limits apply to all new Okta organizations. For orgs created before 2018-05-17, the [previous rate limits](#previous-rate-limits) still apply.
 
 ### End-User Rate Limit
 
