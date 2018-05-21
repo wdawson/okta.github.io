@@ -4,7 +4,8 @@ title: Get Started with the Okta REST APIs
 language: rest
 integration: server
 redirect_from:
-  - "/docs/getting_started/api_test_client.html"
+  - "/docs/api/getting_started/api_test_client.html"
+  - "/docs/api/getting_started/api_test_client"
   - "/docs/api/getting_started/index.html"
   - "/docs/api/getting_started/index"
   - "/docs/api/getting_started/"
