@@ -11,7 +11,6 @@
     { name: 'dotnet', label: '.NET' },
     { name: 'nodejs', label: 'Node.js' },
     { name: 'php', label: 'PHP' },
-    { name: 'python', label: 'Python' },
     { name: 'rest', label: 'REST' }
   ];
 

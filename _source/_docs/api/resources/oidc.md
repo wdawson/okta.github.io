@@ -281,7 +281,7 @@ Based on the scopes requested. Generally speaking, the scopes specified in a req
 | access_token  | An [access token](#access-token).                                                     | String  |
 | token_type    | The audience of the token.                                                            | String  |
 | expires_in    | The expiration time of the access token in seconds.                                   | Integer |
-| scope         | The scopes contianed in the access token.                                             | String  |
+| scope         | The scopes contained in the access token.                                             | String  |
 | refresh_token | An opaque refresh token. This is returned if the `offline_access` scope is granted.   | String  |
 | id_token      | An [ID token](#id-token). This is returned if the `openid` scope is granted.          | String  |
 
@@ -1350,7 +1350,7 @@ The system log contains detailed information about why a request was denied and 
         * ID token expires after one hour.
         * Access token expiration is configured in a policy, but is always between five minutes and one day.
         * Refresh Token expiration depends on two factors: 1) Expiration is configured in an Access Policy, no limits,
-          but must be greater than or equal to the access aoken lifetime, and 2) Revocation if the Refresh Token
+          but must be greater than or equal to the access token lifetime, and 2) Revocation if the Refresh Token
           isn't exercised within a specified time. Configure the specified time in an Access Policy, with a minimum of ten minutes.
 
     * Revocation happens when a configuration is changed or deleted:
