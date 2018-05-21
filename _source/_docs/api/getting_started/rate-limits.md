@@ -29,7 +29,7 @@ Rate limits differ depending on the level of service you have purchased from Okt
 
 ### Okta API Endpoints and Per Minute Limits
 
-Note that limits for more specific endpoints override the limits for less specific endpoints. For example, the limit for getting an application by ID (second row) is higher than the more general limit for the `/api/v1/apps` endpoint (first row).
+Note that limits for more specific endpoints override the limits for less specific endpoints. For example, the limit for getting an application by ID is higher than the more general limit for the `/api/v1/apps` endpoint.
 
 | Action and Okta API Endpoint | Developer (free) | Developer (paid) | One App | Enterprise     |
 |----------------------------- | ---------------- | ---------------- | ------- | -------------- |
@@ -50,7 +50,7 @@ Note that limits for more specific endpoints override the limits for less specif
 | **Token request to a custom Authorization Server:**<br>`/oauth2/{authServerId}/v1/token`              | 100 | 300 | 300 | 600  |
 | **All other actions:**<br>`/api/v1/`                                                                  | 100 | 300 | 300 | 600  |
 
-These rate limits apply to all new Okta organizations. For orgs created before 2018-05-17, the [previous rate limits](#okta-api) still apply.
+These rate limits apply to all new Okta organizations. For orgs created before 2018-05-17, the [previous rate limits](#previous-rate-limits) still apply.
 
 ### Okta API Endpoints and Per-User Limits
 API endpoints that take username and password credentials, including the [Authentication API](/docs/api/resources/authn) and the [OAuth 2.0 resource owner password flow](/authentication-guide/implementing-authentication/password), have a per-username rate limit to prevent brute force attacks with the user's password:
@@ -113,7 +113,9 @@ For concurrent rate limits, traffic is measured in three different areas. Counts
 
 The first request to exceed the concurrent limit returns an HTTP 429 error, and the first error every sixty seconds is written to the log. Reporting concurrent rate limits once a minute keeps log volume manageable.
 
-> Important: Under normal circumstances, customers don't exceed the concurrency limits. Exceeding them may be an indication of a problem which requires investigation.
+> Under normal circumstances, customers don't exceed the concurrency limits. Exceeding them may be an indication of a problem which requires investigation.
+
+These rate limits apply to all new Okta organizations. For orgs created before 2018-05-17, the [previous rate limits](#previous-rate-limits) still apply.
 
 ## Check Your Rate Limits with Okta's Rate Limit Headers
 
@@ -305,11 +307,11 @@ To request an exception, {{site.contact_support_lc}} 10 days before you need the
 * End date and time
 * Business justification: why you need the temporary increase
 
-## Legacy Enterprise Limits
+## Previous Rate Limits
 
 These are the rate limits for orgs created before 2018-05-17.
 
-### Okta API
+### Org-Wide Rate Limits (Older Orgs)
 
 Extensions to the base URLs listed below are included in the specified limit, unless the URL is followed by "only." For example, `/api/v1/apps/{id}` has a per-minute rate limit of `500` as listed in the second line in the table. However, `/api/v1/apps/{id}/users` falls under the more general first line of the table. This pattern applies to all the URLs.
 
@@ -328,7 +330,11 @@ Extensions to the base URLs listed below are included in the specified limit, un
 | Create an org (ISVs only)           | `/api/v1/orgs`                          |   50 |
 | All other actions | `/api/v1/`                                               |  1200 |
 
-### Home Page Endpoints
+### Concurrent Rate Limits (Older Orgs)
+
+For older orgs, the limit is 75 concurrent transactions.
+
+### Home Page Endpoint Limits (Older Orgs)
 
 The following endpoints are used by the Okta home page for authentication and sign on, and have org-wide rate limits:
 
