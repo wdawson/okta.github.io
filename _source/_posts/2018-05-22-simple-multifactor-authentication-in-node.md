@@ -4,6 +4,9 @@ title: "Simple Multifactor Authentication in Node"
 author: bkelley
 description: "This post explains multi-factor authentication and some challenges that developers face with it."
 tags: [multi-factor, authentication, developer, nodejs]
+tweets:
+- "Who knew how easy adding multi-factor authentication to your #Node app is! #mfa #javascript"
+- "Learn how to quickly add multi-factor authentication to your #Node app! #mfa #javascript"
 ---
 
 If you're building a web application, chances are you're going to want to serve different content depending on the user. Authenticating users can be difficult for a number of reasons. The simplest route is to allow users to sign in with a username and password. The problem with this is, no matter how strongly you hash passwords, there's no stopping someone from guessing that your user's password is `hunter2`, `letmein`, or `correct horse battery staple`.
@@ -32,7 +35,7 @@ In short: we make [user account management](https://developer.okta.com/product/u
 To keep things simple, I'll assume you already have Node installed. You can get a quick boilerplate web app up and running using the [Express Generator](https://expressjs.com/en/starter/generator.html).
 
 ```bash
-npm install -g express-generator
+npm install -g express-generator@4.16.0
 express --git simple-multifactor-auth
 cd simple-multifactor-auth
 npm install
@@ -44,7 +47,7 @@ This installs the generator globally as a command line tool and creates a new ap
 
 Inside the new directory, `npm install` adds all the dependencies needed for the application, and `npm start` runs the app. The `git` commands save the current state so that it's easier to track changes you make going forward.
 
-The last command, `npm start`, starts the application. You can now go to <http://localhost:8080> to see a very simple welcome page. You can use `ctrl-c` at any time to stop the Node app and return to the terminal.
+The last command, `npm start`, starts the application. You can now go to `http://localhost:8080` to see a very simple welcome page. You can use `ctrl-c` at any time to stop the Node app and return to the terminal.
 
 ## Create an Okta Application to Support Adding Multi-Factor Authentication to Your Node App
 In order to add authentication, your app will need a few configuration variables. To keep these private, store them in a file named `.env` in the root of your project. The `.gitignore` file created earlier already says to ignore this file from git, so these won't end up in source control (this is especially important on an open source project where you wouldn't want people to have full access to your configuration settings).
