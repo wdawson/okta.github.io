@@ -11,6 +11,7 @@ class BlogPage extends BasePage {
     this.$pagination = $('.Blog-pagination');
     this.$nextLink = element(by.partialLinkText('Next'));
     this.$prevLink = element(by.partialLinkText('Prev'));
+    this.$$promoBannerLabel = $$('.DocsPromoBanner');
     this.setPageLoad(this.$blog);
   }
 
@@ -50,6 +51,10 @@ class BlogPage extends BasePage {
     const blogPost = this.$$blogPost.get(post);
     const title = blogPost.element(by.css('h1 a'));
     return title.getAttribute('href');
+  }
+
+  hasPromoBanner() {
+    return this.hasElements(this.$$promoBannerLabel);
   }
 }
 
