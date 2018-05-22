@@ -31,24 +31,24 @@ The way PassProtect works is simple, by including a single JavaScript tag in you
   </head>
   <body>
     <!-- ... -->
-    <script src="https://unpkg.com/passprotect@0.1.0/umd/passprotect.min.js"></script>
+    <script src="https://cdn.passprotect.io/passprotect.min.js"></script>
   </body>
 </html>
 ```
 
 What do users see? An informative notification that gives them the information they need to make a good choice:
 
-{% img blog/passprotect/passprotect-demo.gif alt:"PassProtect Demo" %}
+{% img blog/passprotect/passprotect-demo.gif alt:"PassProtect Demo" %}{: .center-image }
 
 PassProtect is built with casual users in mind, and provides simple but informative notifications. To avoid being annoying, PassProtect uses smart caching to ensure notifications are never repeated in a single session in any way that would hurt user experience.
 
 Furthermore, PassProtect piggybacks off the fabulous [Have I Been Pwned?](https://haveibeenpwned.com/) service, the largest database of breached credentials on the internet (created by our friend, [Troy Hunt](https://www.troyhunt.com/)).
 
-And because the data PassProtect works with is so sensitive (user passwords), we ensure that PassProtect never stores, collects, or send any password data over the network. Instead, PassProtect relies on [k-anonymity](https://blog.cloudflare.com/validating-leaked-passwords-with-k-anonymity/) (created by our friends at Cloudflare), which just so happens to be the best way to verify that a password exists in a remote database without ever sending that password (or the full hash of that password) over a network =)
+And because the data PassProtect works with is so sensitive (user passwords), we ensure that PassProtect never stores, collects, or send any password data over the network. Instead, PassProtect relies on [k-anonymity](https://blog.cloudflare.com/validating-leaked-passwords-with-k-anonymity/) (created by our friends at Cloudflare), which just so happens to be the best way to verify that a password exists in a remote database without ever sending that password (or the full hash of that password) over a network. =)
 
 Don't believe me? Check out [the source](https://github.com/oktasecuritylabs/passprotect-js)!
 
-This all sounds great, right!? The only problem is that our goal of dramatically improving the security of casual web users will only be realized if every developer embeds PassProtect in their websites. This is why I also went ahead and built a Chromeextension for PassProtect as well. Firefox support will be coming soon.
+This all sounds great, right!? The only problem is that our goal of dramatically improving the security of casual web users will only be realized if every developer embeds PassProtect in their websites. This is why I also went ahead and built a Chrome Extension for PassProtect as well. Firefox support will be coming soon.
 
 This way, web users who want to go ahead and take advantage of PassProtect directly can do so—this way *every* website they visit will instantly inherit PassProtect's functionality automatically!
 
@@ -56,7 +56,7 @@ It's a fact that nothing is truly secure. At some point or another, all systems 
 
 We sincerely hope that PassProtect will help make the negatives (data breaches) a lot more positive by empowering individual users to reset their credentials when necessary and take charge of their personal data security.
 
-If you'd like to get PassProtect for your website, please check out our [GitHub page](https://github.com/oktasecuritylabs/passprotect-js) (which contains far more information). If you'd like to use PassProtect in your browser, please check out our [Chrome Extension](https://chrome.google.com/webstore/detail/passprotect/cpimldclklpfifolmdnicjnfbjdepjnf).
+If you'd like to get PassProtect for your website, please check out our [GitHub repo](https://github.com/oktasecuritylabs/passprotect-js) (which contains far more information). If you'd like to use PassProtect in your browser, please check out our [Chrome Extension](https://chrome.google.com/webstore/detail/passprotect/cpimldclklpfifolmdnicjnfbjdepjnf).
 
 Be safe out there! &lt;3
 
