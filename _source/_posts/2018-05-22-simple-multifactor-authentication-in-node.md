@@ -23,8 +23,8 @@ Okta is a cloud service that allows developers to create, edit, and securely sto
 
 * [Authenticate](https://developer.okta.com/product/authentication/) and [authorize](https://developer.okta.com/product/authorization/) your users
 * Store data about your users
-* Perform password-based and [social login](https://developer.okta.com/authentication-guide/social-login/)
-* Secure your application with (multi-factor authentication](https://developer.okta.com/use_cases/mfa/)
+* Perform password-based and [social login](/authentication-guide/social-login/)
+* Secure your application with (multi-factor authentication](/use_cases/mfa/)
 * And much more! Check out our [product documentation](https://developer.okta.com/documentation/)
 
 In short: we make [user account management](https://developer.okta.com/product/user-management/) a lot easier, more secure, and more scalable than what you’re probably used to. It’s super easy to [register for a free developer account](https://developer.okta.com/signup/), and when you’re done, come on back so we can learn more about building secure authentication in Node and implementing MFA with Okta.
@@ -67,7 +67,7 @@ After logging into your dev console, click the **Applications** tab, click **Add
 Once you create the application, you will get a **Client ID** and **Client Secret**. You'll save these variables along with the **Base URI** you just entered in the last screen. Your `.env` file should now look something like this:
 
 ```bash
-APP_SECRET=TOnuhckhtwXEC+GTVhkojQKvZ/XpNCSu9y72PzOA24c=
+APP_SECRET=super-secret-string
 ORG_URL=https://dev-123456.oktapreview.com
 HOST_URL=http://localhost:8080
 CLIENT_ID=your-client-id
@@ -189,10 +189,10 @@ If you've learned anything today, hopefully it's that securing your application 
 If you'd like to learn more about Node, Okta, and authentication or MFA, take a look at these resources, as well as the rest of the Okta developer blog:
 
 * [More detail about the different factor types](https://support.okta.com/help/Documentation/Knowledge_Article/Multifactor-Authentication-1320134400)
-* [Okta Multi-Factor Authentication Use Cases](https://developer.okta.com/use_cases/mfa/)
+* [Okta Multi-Factor Authentication Use Cases](/use_cases/mfa/)
 * [Multi-factor Authentication: Because Phishing Happens](https://www.okta.com/security-blog/2018/04/multi-factor-authentication-because-phishing-happens/)
 * [Two-Factor Authentication vs. Multi-Factor Authentication: What Are the Risks?](https://www.okta.com/blog/2016/12/two-factor-authentication-vs-multi-factor-authentication-what-are-the-risks/)
-* [Build User Registration with Node, React, and Okta](https://developer.okta.com/blog/2018/02/06/build-user-registration-with-node-react-and-okta)
+* [Build User Registration with Node, React, and Okta](/blog/2018/02/06/build-user-registration-with-node-react-and-okta)
 * [Okta OIDC Middleware Documentation](https://github.com/okta/okta-oidc-js/tree/master/packages/oidc-middleware)
 
 And as always, we’d love your feedback! Hit us up in the comments below, or on Twitter [@oktadev](https://twitter.com/OktaDev).
