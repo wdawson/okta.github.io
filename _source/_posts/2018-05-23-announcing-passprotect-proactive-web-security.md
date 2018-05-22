@@ -59,3 +59,5 @@ We sincerely hope that PassProtect will help make the negatives (data breaches) 
 If you'd like to get PassProtect for your website, please check out our [GitHub page](https://github.com/oktasecuritylabs/passprotect-js) (which contains far more information). If you'd like to use PassProtect in your browser, please check out our [Chrome Extension](https://chrome.google.com/webstore/detail/passprotect/cpimldclklpfifolmdnicjnfbjdepjnf).
 
 Be safe out there! &lt;3
+
+**PS**: If you've had a chance to play around with [PassProtect](https://www.passprotect.io) please let me know what you think!  Leave a comment down below or shoot me [an email](mailto:randall.degges@okta.com).
