@@ -52,7 +52,7 @@ This all sounds great, right!? The only problem is that our goal of dramatically
 
 This way, web users who want to go ahead and take advantage of PassProtect directly can do so—this way *every* website they visit will instantly inherit PassProtect's functionality automatically!
 
-It's a fact that nothing is truly secure. At some point or another, all systems will be subject to a vulnerability of some sort. Security will always be a cat-and-mouse game between attackers and defenders, and to win you need to hope for the best but prepare for the worst.
+Nothing is truly secure. At some point or another, all systems will be subject to a vulnerability of some sort. Security will always be a cat-and-mouse game between attackers and defenders, and to win you need to hope for the best but prepare for the worst.
 
 We sincerely hope that PassProtect will help make the negatives (data breaches) a lot more positive by empowering individual users to reset their credentials when necessary and take charge of their personal data security.
 
