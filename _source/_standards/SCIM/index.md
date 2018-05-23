@@ -1599,7 +1599,7 @@ We recommend completing these five steps before actual submission, with detailed
 4. Prepare the customer-facing configuration guide.
 5. Create a demo video showing working integration (optional)
 
-After performing these steps, navigate to the OIN Manager at [https://oanmanager.okta.com/](https://oanmanager.okta.com/) to complete the submission form and track review status.
+After performing these steps, navigate to the OIN Manager at [https://oinmanager.okta.com/](https://oinmanager.okta.com/) to complete the submission form and track review status.
 
 #### Check the Profile Attributes for your Application
 
@@ -1674,7 +1674,7 @@ We recommend preparing the customer-facing configuration guide before beginning 
 This guide will be exposed externally in the administrator UI to end customers.
 For more details, see the [configuration guide guidelines](http://saml-doc.okta.com/Provisioning_Docs/SCIM_Configuration_Guide_Instructions.pdf).
 
-Note: When you are ready, use [this form](https://oanmanager.okta.com/) to submit for Okta review.
+Note: When you are ready, use [this form](https://oinmanager.okta.com/) to submit for Okta review.
 
 ### Step 4. Publish to Okta Integration Network (OIN) in Partner-Built EA
 
