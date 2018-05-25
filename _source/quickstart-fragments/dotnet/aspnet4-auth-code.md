@@ -30,7 +30,7 @@ public class Startup
     // These values are stored in Web.config. Make sure you update them!
     private readonly string clientId = ConfigurationManager.AppSettings["okta:ClientId"];
     private readonly string redirectUri = ConfigurationManager.AppSettings["okta:RedirectUri"];
-    private readonly string orgUrl = ConfigurationManager.AppSettings["okta:OrgUrl"];
+    private readonly string oktaDomain = ConfigurationManager.AppSettings["okta:OktaDomain"];
     private readonly string clientSecret = ConfigurationManager.AppSettings["okta:ClientSecret"];
     private readonly string postLogoutRedirectUri = ConfigurationManager.AppSettings["okta:PostLogoutRedirectUri"];
 
@@ -42,7 +42,7 @@ public class Startup
         {
             ClientId = clientId,
             ClientSecret = clientSecret,
-            OrgUrl = orgUrl,
+            OktaDomain = oktaDomain,
             RedirectUri = redirectUri,
             PostLogoutRedirectUri = postLogoutRedirectUri
         });
@@ -103,7 +103,7 @@ Open the `Web.config` file and add these keys to the `<appSettings>` section:
 <!-- 1. Replace these values with your Okta configuration -->
 <add key="okta:ClientId" value="{ClientId}" />
 <add key="okta:ClientSecret" value="{ClientSecret}" />
-<add key="okta:OrgUrl" value="https://{yourOktaDomain}.com" />
+<add key="okta:OktaDomain" value="https://{yourOktaDomain}" />
 
 <!-- 2. Update the Okta application with these values -->
 <add key="okta:RedirectUri" value="http://localhost:8080/authorization-code/callback" />

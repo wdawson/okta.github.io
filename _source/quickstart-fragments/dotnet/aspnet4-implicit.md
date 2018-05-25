@@ -38,12 +38,12 @@ Add the following code to your `Configuration` method:
 ```csharp
 public void Configuration(IAppBuilder app)
 {
-    var orgUrl = ConfigurationManager.AppSettings["okta:OrgUrl"];
+    var oktaDomain = ConfigurationManager.AppSettings["okta:OktaDomain"];
     var clientId = ConfigurationManager.AppSettings["okta:ClientId"];
     
     app.UseOktaWebApi(new OktaWebApiOptions()
     {
-        OrgUrl = orgUrl,
+        OktaDomain = oktaDomain,
         ClientId = clientId
     });
 }
