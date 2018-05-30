@@ -1,6 +1,7 @@
 ---
 layout: docs_page
 title: Dynamic Client Registration
+category: management
 redirect_from: "/docs/api/rest/oauth-clients.html"
 excerpt: Operations to register and manage client applications for use with Okta's OAuth 2.0 and OpenID Connect endpoints
 ---
@@ -308,7 +309,7 @@ Header links for pagination:
 <https://{yourOktaDomain}.com/oauth2/v1/clients?after=xfnIflwIn2TkbpNBs6JQ&limit=1>; rel="next"
 ~~~
 
-Response body: 
+Response body:
 
 ~~~json
 [
@@ -746,4 +747,3 @@ Property Details
     available to a client influence the `response_types` that the client is allowed to use, and vice versa. For instance, a `grant_types`
     value that includes `authorization_code` implies a `response_types` value that includes `code`, as both values are defined as part of
     the OAuth 2.0 authorization code grant.
-

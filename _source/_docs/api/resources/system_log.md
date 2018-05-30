@@ -1,6 +1,7 @@
 ---
 layout: docs_page
 title: System Log
+category: management
 ---
 
 # System Log API

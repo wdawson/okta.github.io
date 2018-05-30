@@ -1,6 +1,7 @@
 ---
 layout: docs_page
 title: Policy
+category: management
 redirect_from: "/docs/getting_started/policy.html"
 ---
 
@@ -1333,5 +1334,3 @@ The following conditions may be applied to the rules associated with Password Po
 <a href="#PeopleObject">People Condition</a>
 
 <a href="#NetworkConditionObject">Network Condition</a>
-
-

@@ -1,6 +1,7 @@
 ---
 layout: docs_page
 title: Templates
+category: management
 redirect_from: "/docs/api/rest/templates.html"
 ---
 

@@ -42,7 +42,7 @@ To follow along with this guide, you will need to have your own Okta Developer E
 2.  Setting up the Postman API client
     After you have logged in to your account in your Okta Developer
     Edition org, follow the
-    [instructions on the Okta Developer Documentation page for setting up Postman](/docs/getting_started/api_test_client).
+    [instructions on the Okta Developer Documentation page for setting up Postman](/code/rest/).
 
 # Overview of API calls used for multi-factor authentication
 
@@ -94,7 +94,7 @@ org](/docs/api/getting_started/getting_a_token).
 ### Set up Postman
 
 If you haven't set up Postman already, you will need to do that
-now. Here are [instructions for setting up Postman to work with Okta](/docs/getting_started/api_test_client).
+now. Here are [instructions for setting up Postman to work with Okta](/code/rest/).
 
 ### Test Postman
 

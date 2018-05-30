@@ -1,6 +1,7 @@
 ---
 layout: docs_page
 title: Events
+category: management
 redirect_from: "/docs/api/rest/events.html"
 ---
 
@@ -55,7 +56,7 @@ The general sequence of steps to leverage the `after` parameter:
 1. Retrieve the next page of events through the [`Link` response header](/docs/api/getting_started/design_principles#link-header) value with the `next` link relation
 1. Optionally include a `filter` parameter to narrow the returned results
 1. Issue the paginated request
-1. Retrieve the next page of events through the `Link` response header value with the `next` link relation 
+1. Retrieve the next page of events through the `Link` response header value with the `next` link relation
 1. Pause and repeat the previous step
 
 Note that if no data is returned, this typically indicates you have caught up with the event stream. To avoid issues with [rate limiting](/docs/api/getting_started/rate-limits), ensure your polling frequency is sufficiently long.
