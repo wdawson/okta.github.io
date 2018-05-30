@@ -14,7 +14,7 @@ excerpt: OIN FAQs
 * For SAML, follow the steps [here](/use_cases/integrate_with_okta/sso-with-saml) to get started with the integration process using the [App Integration Wizard](https://help.okta.com/en/prod/Content/Topics/Apps/Apps_App_Integration_Wizard.htm).
 * For SCIM, follow the steps [here](/standards/SCIM/#publishing-your-scim-based-provisioning-integration) to get started with the integration process using our SCIM templates.
 
-Once your application is ready for Okta's review, submit it to us via the [OIN Manager](https://oanmanager.okta.com/), where you can also track review status. Get stuck or have questions? Email <developers@okta.com>.
+Once your application is ready for Okta's review, submit it to us via the [OIN Manager](https://oinmanager.okta.com/), where you can also track review status. Get stuck or have questions? Email <developers@okta.com>.
 
 **Q:  I am an ISV whose app is already listed in the OIN. How do I request changes/updates to the existing integration?**
 
@@ -50,11 +50,11 @@ Once your application is ready for Okta's review, submit it to us via the [OIN M
 
 **A:**  Once your submit your app integration, it goes through a review cycle - Okta (OIN Operations team) reviews and tests your integration. We will reach out to you directly if your integration does not pass the review, requires re-submission, or we need additional information from you. Once the review is completed, the integration is promoted to the public Okta Integration Network. Typical review time is two weeks. and you can track the progress of each submission in the OIN Manager. 
 
-Have you submitted an app but have not seen a change in review status in the [OIN Manager](https://oanmanager.okta.com)? Email <developers@okta.com>.
+Have you submitted an app but have not seen a change in review status in the [OIN Manager](https://oinmanager.okta.com)? Email <developers@okta.com>.
 
 **Q: I’m an ISV setting up a SAML 2.0 app using the App Wizard and we have different domains for each customer. How do you manage these types of situations?**
 
-**A:** Currently, the App Wizard does not support custom domains, but public facing integrations can still have this functionality. Create an app integration as you normally would using the [App Wizard](https://help.okta.com/en/prod/Content/Topics/Apps/Apps_App_Integration_Wizard.htm). Once you get to the step of submitting your app integration via the [OIN Manager](https://oanmanager.okta.com), you will be asked to fill out a form (see image below); be sure to select "No" and provide all relevant information. We will add the ability for customers to set a custom domain in the customer facing integration.
+**A:** Currently, the App Wizard does not support custom domains, but public facing integrations can still have this functionality. Create an app integration as you normally would using the [App Wizard](https://help.okta.com/en/prod/Content/Topics/Apps/Apps_App_Integration_Wizard.htm). Once you get to the step of submitting your app integration via the [OIN Manager](https://oinmanager.okta.com), you will be asked to fill out a form (see image below); be sure to select "No" and provide all relevant information. We will add the ability for customers to set a custom domain in the customer facing integration.
 
 {% img oin-mgr-app-integration.png alt: "Custom domain choice in app integration form" %}
 

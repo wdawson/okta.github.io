@@ -12,7 +12,7 @@ The Okta System Log records system events related to your organization in order 
 
 The Okta System Log API provides near real-time read-only access to your organization's system log and is the programmatic counterpart of the [System Log UI](https://help.okta.com/en/prod/Content/Topics/Reports/Reports_SysLog.htm).
 
-Often the terms "event" and "log event" are used interchangeably. In the context of this API, an "event" is an occurrence of interest within the system and "log" or "log event" is the recorded fact.  
+Often the terms "event" and "log event" are used interchangeably. In the context of this API, an "event" is an occurrence of interest within the system and "log" or "log event" is the recorded fact.
 
 Notes on the System Log API:
 
@@ -519,6 +519,19 @@ The following sections outline the major event types captured by the system log.
 * `policy.evaluate_sign_on` provides context on the values used and evaluated in the context of the Okta sign on policy. For example, you can determine which network zones were matched for this event.
 * For `policy.lifecycle` and `policy.rule` events, the corresponding policy is listed in the target object.
 
+### System Events
+
+| Event              | Description                         |
+|:-------------------|:------------------------------------|
+| system.org.rate_limit.warning | An endpoint is near its [rate limit](/docs/api/getting_started/rate-limits).  |
+| system.org.rate_limit.violation | An endpoint has exceeded its [rate limit](/docs/api/getting_started/rate-limits). |
+
+Rate limit warnings are sent at different times, depending on the org type. For One App and Enterprise orgs, the warning is sent when the org is at 60% of its limit.
+
+> Note: For orgs created before 2018-05-17, the warning is sent at 90%.
+
+Rate limit violations are sent when a rate limit is exceeded.
+
 ### User Events
 
 | Event                     | Description                                               |
@@ -595,7 +608,7 @@ The table below summarizes the supported query parameters:
 
 ###### Expression Filter
 
-An expression filter is useful for performing structured queries where constraints on LogEvent attribute values can be explicitly targeted.  
+An expression filter is useful for performing structured queries where constraints on LogEvent attribute values can be explicitly targeted.
 
 The following expressions are supported for events with the `filter` query parameter:
 
