@@ -1,6 +1,7 @@
 ---
 layout: docs_page
 title: Zones
+category: management
 ---
 
 # Zones API

@@ -1,6 +1,7 @@
 ---
 layout: docs_page
 title: Users
+category: management
 redirect_from:
  - "/docs/api/rest/users.html"
  - "/docs/api/resources/user"
@@ -1938,10 +1939,10 @@ Users that don't have a password must complete the flow by completing [Reset Pas
 ##### Request Parameters
 {:.api .api-request .api-request-params}
 
-Parameter | Description                                     | Param Type | DataType | Required | Default
---------- | ----------------------------------------------- | ---------- | -------- | -------- | -------
-id        | `id` of user                                    | URL        | String   | TRUE     |
-sendEmail | Sends an activation email to the user if `true` | Query      | Boolean  | FALSE    | TRUE
+Parameter | Description                                                                | Param Type | DataType | Required |
+--------- | -------------------------------------------------------------------------- | ---------- | -------- | -------- |
+id        | `id` of user                                                               | URL        | String   | TRUE     |
+sendEmail | Sends an activation email to the user if `true`. Default value is `false`. | Query      | Boolean  | FALSE    |
 
 ##### Response Parameters
 {:.api .api-response .api-response-params}

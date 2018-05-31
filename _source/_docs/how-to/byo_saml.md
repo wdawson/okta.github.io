@@ -28,7 +28,7 @@ The general procedure is the same for Outbound and Inbound SAML application; how
 
 > **Important:** In the third step, use your own process to sign the CSR. You can't move to step four until the process is completed.
 
-For information on using the Postman REST API test client for these steps, see [API Test Client](/docs/api/getting_started/api_test_client).
+For information on using the Postman REST API test client for these steps, see [Get Started with the Okta REST APIs](/code/rest/).
 
 #### Step 1: List your apps
 
@@ -351,4 +351,3 @@ For Outbound SAML, complete the following four steps.
 4. Perform the setup for your app again, using the instructions provided. During this setup, you will upload the certificate in a specified format, the metadata, or the certificate fingerprint.
 
 For Inbound SAML, follow the existing procedures for your setup.
-

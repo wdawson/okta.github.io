@@ -1,6 +1,7 @@
 ---
 layout: docs_page
 title: Linked Objects
+category: management
 excerpt: The Linked Objects API helps you create relationships between pairs of users, such as Manager and Subordinate.
 ---
 
@@ -467,7 +468,7 @@ HTTP/1.1 204 No Content
 
 ## Linked Object Model
 
-The following model contains example values for each attribute. 
+The following model contains example values for each attribute.
 
 ~~~sh
 {
@@ -503,4 +504,4 @@ The following model contains example values for each attribute.
 | associated.description | Description of the `associated` relationship | String | FALSE |
 | associated.type | The object type for this `associated` relationship. Valid value: `USER` | Enum | TRUE |
 
-> The primary.type and associated.type are created as Enums to allow Okta to add more object types in the future. This is not a guarantee that Okta will do so. 
+> The primary.type and associated.type are created as Enums to allow Okta to add more object types in the future. This is not a guarantee that Okta will do so.

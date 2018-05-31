@@ -1,6 +1,9 @@
 ---
 layout: docs_page
 title: Authentication
+category: authentication
+weight: 20
+excerpt: Control user access to Okta.
 redirect_from:
   - "/docs/api/rest/authn.html"
   - "/docs/api/resources/index.html"
@@ -37,7 +40,7 @@ Trusted applications are backend applications that act as authentication broker 
 ## Getting Started with Authentication
 
 1. Make sure you need the API. Check out the [Okta Sign-In Widget](/docs/guides/okta_sign-in_widget) which is built on the Authentication API. The Sign-In Widget is easier to use and supports basic use cases.
-2. For more advanced use cases, learn [the Okta API basics](/docs/api/getting_started/api_test_client).
+2. For more advanced use cases, learn [the Okta API basics](/code/rest/).
 3. Explore the Authentication API:
 
     [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/f9684487e584101f25a3)
@@ -876,7 +879,7 @@ Note:
 
 * Specifying your own `deviceToken` or device fingerprint is a highly privileged operation limited to trusted web applications and requires making authentication requests with a valid *API token*.
 * The **public IP address** of your [trusted application](#trusted-application) must be [whitelisted as a gateway IP address](/docs/api/getting_started/design_principles#ip-address) to forward the user agent's original IP address with the `X-Forwarded-For` HTTP header.
-* To use device fingerprinting for the unknown-device email notification feature, include the `User-Agent` header in the request. For more information, see the [Beta documentation](https://support.okta.com/help/blogdetail?id=a67F0000000L2MkIAK). 
+* To use device fingerprinting for the unknown-device email notification feature, include the `User-Agent` header in the request. For more information, see the [Beta documentation](https://support.okta.com/help/blogdetail?id=a67F0000000L2MkIAK).
 * For more information about security behavior detection, see the [EA documentation](https://help.okta.com/en/prod/Content/Topics/Security/proc-security-behavior-detection.htm?).
 
 ##### Request Example for Device Fingerprinting
@@ -1023,14 +1026,14 @@ curl -v -X POST \
 ### SP-initiated Step-up Authentication
 {:.api .api-operation}
 
-{% api_lifecycle ea %} 
- 
+{% api_lifecycle ea %}
+
 Note:
 
 * This endpoint is currently supported only for SAML-based apps.
 * You must first enable custom login page for the application before using this API.
 
-Every step-up transaction starts with user accessing an application. 
+Every step-up transaction starts with user accessing an application.
 If step-up authentication is required, Okta redirects the user to the custom login page with state token as a request parameter.
 
 For example, if the custom login page is set as **https://login.example.com**
@@ -1102,7 +1105,7 @@ curl -v -X POST \
 ##### Request Example  for Step-up Authentication Without Okta Session (Perform Primary Authentication)
 {:.api .api-request .api-request-example}
 
-Primary authentication has to be completed by using the value of **stateToken** request parameter passed to custom login page. 
+Primary authentication has to be completed by using the value of **stateToken** request parameter passed to custom login page.
 
 > Okta Sign-On Policy and the related App Sign-On Policy will be evaluated after successful primary authentication.
 
@@ -2784,7 +2787,7 @@ curl -v -X POST \
 
 Enrolls a user with a U2F factor.  The enrollment process starts with getting an `appId` and `nonce` from Okta and using those to get registration information from the U2F key using the U2F javascript API.
 
-Note: 
+Note:
 
 The `appId` property in Okta U2F enroll/verify API response is the [origin](https://www.ietf.org/rfc/rfc6454.txt) of
 the web page that triggers the API request (assuming the origin has been configured to be trusted by Okta). According to
@@ -4052,7 +4055,7 @@ autoPush       | user's decision to send push to device automatically | URL | Bo
 * If you pass the `autoPush` query param when verifying an Okta Verify Push factor, Okta saves this value as the user's preference to have the push notification sent automatically if the verification is successful (the user presses "Approve" on their phone).
 * If there is already a saved Auto-Push preference, the successful verify call overrides the current preference if it is different from the value of `autoPush`.
 * This saved Auto-Push preference is always returned in the `/api/v1/authn/` response's `autoPushEnabled` field if the user is enrolled for the Okta Verify Push factor [example here](#response-example-for-factor-challenge-for-step-up-authentication-with-okta-session).  If the user's Auto-Push preference has not explicitly been set before, `autoPushEnabled` has a value of false.
-* The Auto-Push preference is stored in a cookie value and users that clear their cookies remove that preference. 
+* The Auto-Push preference is stored in a cookie value and users that clear their cookies remove that preference.
 * Please note, the `autoPush` flag will have no effect when trying to verify a factor other than Okta Verify Push (factorId prefix = "opf").
 
 
@@ -4500,7 +4503,7 @@ curl -v -X POST \
 
 {% api_operation post /api/v1/authn/factors/${factorId}/verify %}
 
-Note: 
+Note:
 
 The `appId` property in Okta U2F enroll/verify API response is the [origin](https://www.ietf.org/rfc/rfc6454.txt) of
 the web page that triggers the API request (assuming the origin has been configured to be trusted by Okta). According to

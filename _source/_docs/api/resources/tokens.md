@@ -2,6 +2,7 @@
 layout: docs_page
 title: Tokens
 beta: true
+category: management
 redirect_from: "/docs/getting_started/tokens.html"
 ---
 

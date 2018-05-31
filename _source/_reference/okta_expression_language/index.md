@@ -2,7 +2,7 @@
 layout: docs_page
 weight: 5
 title: Okta Expression Language
-excerpt: Use Okta's Expression Language throughout the administrator UI and API.
+excerpt: Read and transform attributes in our APIs and admin UI.
 redirect_from:
     - "/docs/getting_started/okta_expression_lang"
     - "/docs/api/getting_started/okta_expression_lang"
@@ -174,7 +174,7 @@ Use this function to retrieve properties about the user identified with the spec
     * Parameters: (String primaryName, String userAttribute)
     * Return Type: User
     * Example: `user.getLinkedObject("manager").lastName`
-    * Example Result: `Gates` 
+    * Example Result: `Gates`
 
 * Function: `user.getLinkedObject().appuser().$attribute`
     * Parameters: (String primaryName) (String appName) (String userAttribute)
@@ -382,7 +382,7 @@ Okta supports the use of the following time zone codes:
 | -07:00 | Etc/GMT+7 | |
 | -07:00 | MST | |
 | -07:00 | MST7MDT | |
-| -06:00 | America/Bahia_Banderas | 
+| -06:00 | America/Bahia_Banderas |
 | -06:00 | America/Belize | |
 | -06:00 | America/Cancun | |
 | -06:00 | America/Chicago | US/Central |
@@ -523,19 +523,19 @@ Okta supports the use of the following time zone codes:
 | +00:00 | Africa/Casablanca | |
 | +00:00 | Africa/Conakry | |
 | +00:00 | Africa/Dakar | |
-| +00:00 | Africa/El_Aaiun | 
-| +00:00 | Africa/Freetown | 
-| +00:00 | Africa/Lome | 
-| +00:00 | Africa/Monrovia | 
-| +00:00 | Africa/Nouakchott | 
-| +00:00 | Africa/Ouagadougou | 
-| +00:00 | Africa/Sao_Tome | 
-| +00:00 | America/Danmarkshavn | 
-| +00:00 | Atlantic/Canary | 
+| +00:00 | Africa/El_Aaiun |
+| +00:00 | Africa/Freetown |
+| +00:00 | Africa/Lome |
+| +00:00 | Africa/Monrovia |
+| +00:00 | Africa/Nouakchott |
+| +00:00 | Africa/Ouagadougou |
+| +00:00 | Africa/Sao_Tome |
+| +00:00 | America/Danmarkshavn |
+| +00:00 | Atlantic/Canary |
 | +00:00 | Atlantic/Faroe | Atlantic/Faeroe |
-| +00:00 | Atlantic/Madeira | 
+| +00:00 | Atlantic/Madeira |
 | +00:00 | Atlantic/Reykjavik | Iceland |
-| +00:00 | Atlantic/St_Helena | 
+| +00:00 | Atlantic/St_Helena |
 | +00:00 | Etc/GMT | Etc/GMT+0, Etc/GMT-0, Etc/GMT0, Etc/Greenwich, GMT, GMT+0, GMT-0, GMT0, Greenwich |
 | +00:00 | Etc/UCT | UCT |
 | +00:00 | Etc/UTC | Etc/Universal, Etc/Zulu, Universal, Zulu |

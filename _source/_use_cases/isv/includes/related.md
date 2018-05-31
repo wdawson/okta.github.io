@@ -9,7 +9,7 @@
 [Embedded OCC]: embedded-occ "Embedded OCC"
 [ISV Syslog References]: isv-syslog-references "ISV Syslog References"
 [Common Guidance]: #common-guidance-and-requirements "Common Guidance"
-[API Test Client]: /docs/api/getting_started/api_test_client "test client"
+[Get Started with the Okta REST APIs]: /code/rest "test client"
 [Auth Principals]: /docs/api/getting_started/design_principles#authentication "Authentication"
 [User Agent]: /docs/api/getting_started/design_principles#user-agent "User-Agent"
 [Pagination]: /docs/api/getting_started/design_principles#pagination "Pagination"

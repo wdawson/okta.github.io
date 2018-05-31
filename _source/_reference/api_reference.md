@@ -1,7 +1,7 @@
 ---
 layout: docs_page
-weight: 3
-title: Management API
+weight: 2
+title: Manage Okta Resources
 link: /docs/api/resources/apps
-excerpt: Manage Okta resources such as users, groups, and factors with REST endpoints.
+excerpt: REST endpoints to configure resources such as users, apps, sessions, and factors whenever you need.
 ---

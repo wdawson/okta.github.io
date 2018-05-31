@@ -1,6 +1,7 @@
 ---
 layout: docs_page
 title: Trusted Origins
+category: management
 ---
 
 # Trusted Origins API

@@ -1,6 +1,6 @@
 ---
 layout: docs_page
-weight: 4
+weight: 1
 title: Design Principles
 redirect_from:
   - "/docs/getting_started/design_principles.html"
@@ -96,11 +96,11 @@ The **public IP address** of your application will be automatically used as the 
 
 ### Accept Language
 
-The `Accept-Language` HTTP header advertises which languages the client is able to understand, for example `Accept-Language: en-US'. Include it if it is available.
+The `Accept-Language` HTTP header advertises which languages the client is able to understand, for example `Accept-Language: en-US`. Include it if it is available.
 
 ### Device Fingerprint
 
-The `X-Device-Fingerprint` HTTP header supplies the device fingerprint used in an authentication request. 
+The `X-Device-Fingerprint` HTTP header supplies the device fingerprint used in an authentication request.
 
 ## Errors
 

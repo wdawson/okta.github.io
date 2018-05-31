@@ -1,6 +1,7 @@
 ---
 layout: docs_page
 title: Sessions
+category: management
 redirect_from: "/docs/api/rest/sessions.html"
 ---
 

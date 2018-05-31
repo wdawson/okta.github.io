@@ -1,7 +1,10 @@
 ---
 layout: docs_page
 title: OpenID Connect & OAuth 2.0 API
-redirect_from: 
+category: authentication
+weight: 10
+excerpt: Control user access to your applications.
+redirect_from:
     - "/docs/api/resources/oauth2"
     - "/docs/how-to/beta-auth-service/api-access-management-troubleshooting"
 ---
