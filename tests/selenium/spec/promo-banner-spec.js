@@ -1,5 +1,5 @@
 const DocsPage = require('../framework/page-objects/DocsPage');
-const BlogPage = require('../framework/page-objects/BlogPage');
+const CodePage = require('../framework/page-objects/CodePage');
 
 describe('promo banner spec', () => {
   it('shows the promo banner on docs pages', () => {
@@ -8,9 +8,9 @@ describe('promo banner spec', () => {
     expect(docsPage.hasPromoBanner()).toBe(true);
   });
 
-  it('does not show promo banner on blog pages', () => {
-    const blogPage = new BlogPage('/blog/');
-    blogPage.load();
-    expect(blogPage.hasPromoBanner()).toBe(false);
+  it('does not show promo banner on code pages', () => {
+    const codePage = new CodePage('/code/java/');
+    codePage.load();
+    expect(codePage.hasPromoBanner()).toBe(false);
   });
 })
