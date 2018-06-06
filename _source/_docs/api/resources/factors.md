@@ -489,6 +489,7 @@ Enrolls a user with a supported [factor](#list-factors-to-enroll)
 - [Enroll Symantec VIP Factor](#enroll-symantec-vip-factor)
 - [Enroll YubiKey Factor](#enroll-yubikey-factor)
 - [Enroll Okta Email Factor](#enroll-okta-email-factor)
+- [Enroll U2F Factor](#enroll-u2f-factor)
 
 ##### Request Parameters
 {:.api .api-request .api-request-params}
@@ -1499,6 +1500,75 @@ curl -v -X POST \
   }' "https://{yourOktaDomain}.com/api/v1/users/00u15s1KDETTQMQYABRL/factors?activate=true"
 ~~~
 
+#### Enroll U2F Factor
+{:.api .api-operation}
+
+Enrolls a user with a U2F factor. The enrollment process starts with getting a nonce from Okta and using that to get registration information from the U2F key using the U2F Javascript API.
+
+
+##### Enroll U2F Request Example
+{:.api .api-request .api-request-example}
+
+~~~sh
+curl -v -X POST \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-H "Authorization: SSWS ${api_token}" \
+-d '{
+  "factorType": "u2f",
+  "provider": "FIDO"
+  }' "https://{yourOktaDomain}.com/api/v1/users/00u15s1KDETTQMQYABRL/factors"
+~~~
+
+##### Enroll U2F Response Example
+{:.api .api-response .api-response-example}
+
+~~~json
+{  
+  "id":"fuf2rovRxogXJ0nDy0g4",
+  "factorType":"u2f",
+  "provider":"FIDO",
+  "vendorName":"FIDO",
+  "status":"PENDING_ACTIVATION",
+  "created":"2018-05-24T20:43:19.000Z",
+  "lastUpdated":"2018-05-24T20:43:19.000Z",
+  "_links":{  
+    "activate":{  
+      "href":"https://{yourOktaDomain}.com/api/v1/users/00u15s1KDETTQMQYABRL/factors/fuf2rovRxogXJ0nDy0g4/lifecycle/activate",
+      "hints":{  
+        "allow":[  
+          "POST"
+        ]
+      }
+    },
+    "self":{  
+      "href":"https://{yourOktaDomain}.com/api/v1/users/00u15s1KDETTQMQYABRL/factors/fuf2rovRxogXJ0nDy0g4",
+      "hints":{  
+        "allow":[  
+          "GET"
+        ]
+      }
+    },
+    "user":{  
+      "href":"https://{yourOktaDomain}.com/api/v1/users/00u15s1KDETTQMQYABRL",
+      "hints":{  
+        "allow":[  
+          "GET"
+        ]
+      }
+    }
+  },
+  "_embedded":{  
+    "activation":{  
+      "version":"U2F_V2",
+      "nonce":"9DmGJDLvaU6KWxJbfrZ0",
+      "timeoutSeconds":20
+    }
+  }
+}
+~~~
+
+
 ### Activate Factor
 {:.api .api-operation}
 
@@ -1511,6 +1581,8 @@ The `sms` and `token:software:totp` [factor types](#factor-type) require activat
 - [Activate Call Factor](#activate-call-factor)
 - [Activate Push Factor](#activate-push-factor)
 - [Activate Email Factor](#activate-email-factor)
+- [Activate U2F Factor](#activate-u2f-factor)
+
 
 #### Activate TOTP Factor
 {:.api .api-operation}
@@ -2025,6 +2097,103 @@ curl -v -X POST \
 }
 ~~~
 
+#### Activate U2F Factor
+
+Activation gets the registration information from the U2F token using the API and passes it to Okta.
+
+##### Get registration information from U2F token by calling the U2F Javascript API
+{:.api .api-response .api-response-example}
+
+~~~html
+<!-- Get the u2f-api.js from https://github.com/google/u2f-ref-code/tree/master/u2f-gae-demo/war/js -->
+<script src="/u2f-api.js"></script>
+<script>
+  // Use the origin of your app that is calling the factors API
+  var appId = "https://foo.example.com";
+
+  // Use the version and nonce from the activation object
+  var registerRequests = [
+    {
+      version: response._embedded.activation.version,
+      challenge: response._embedded.activation.nonce
+    }
+  ];
+
+  u2f.register(appId, registerRequests, [], function (data) {
+    if (data.errorCode && data.errorCode !== 0) {
+      // Error from U2F platform
+    } else {
+      // Get the registrationData from the callback result
+      var registrationData = data.registrationData;
+
+      // Get the clientData from the callback result
+      var clientData = data.clientData;
+    }
+  });
+</script>
+~~~
+
+Activate a U2F factor by verifying the registration data and client data.
+
+##### Activate U2F Request Parameters
+{:.api .api-request .api-request-params}
+
+~~~sh
+curl -v -X POST \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-H "Authorization: SSWS ${api_token}" \
+-d '{  
+      "registrationData":"BQTEMUyOM8h1TiZG4DL-RdMr-tYgTYSf62Y52AmwEFTiSYWIRVO5L-MwWdRJOthmV3J3JrqpmGfmFb820-awx1YIQFlTvkMhxItHlpkzahEqicpw7SIH9yMfTn2kaDcC6JaLKPfV5ds0vzuxF1JJj3gCM01bRC-HWI4nCVgc-zaaoRgwggEcMIHDoAMCAQICCwD52fCSMoNczORdMAoGCCqGSM49BAMCMBUxEzARBgNVBAMTClUyRiBJc3N1ZXIwGhcLMDAwMTAxMDAwMFoXCzAwMDEwMTAwMDBaMBUxEzARBgNVBAMTClUyRiBEZXZpY2UwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAAQFKJupuUgPQcRHUphaW5JPfLvkkwlEwlHKk_ntSp7MS4aTHJyGnpziqncrjiTC_oUVtb-wN-y_t_IMIjueGkhxMAoGCCqGSM49BAMCA0gAMEUCIQDBo6aOLxanIUYnBX9iu3KMngPnobpi0EZSTkVtLC8_cwIgC1945RGqGBKfbyNtkhMifZK05n7fU-gW37Bdnci5D94wRQIhAJv3VvclbRkHAQhaUR8rr8qFTg9iF-GtHoXU95vWaQdyAiAbEr-440U4dQAZF-Sj8G2fxgh5DkgkkWpyUHZhz7N9ew",
+      "clientData":"eyJ0eXAiOiJuYXZpZ2F0b3IuaWQuZmluaXNoRW5yb2xsbWVudCIsImNoYWxsZW5nZSI6IlhxR0h0RTBoUkxuVEoxYUF5U1oyIiwib3JpZ2luIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6MzAwMCIsImNpZF9wdWJrZXkiOiJ1bnVzZWQifQ"
+}' "https://{yourOktaDomain}.com/api/v1/users/users/00u15s1KDETTQMQYABRL/factors/fuf2rovRxogXJ0nDy0g4/lifecycle/activate"
+~~~
+
+##### Activate U2F Response Parameters
+{:.api .api-response .api-response-params}
+
+~~~json
+{  
+  "id":"fuf2rovRxogXJ0nDy0g4",
+  "factorType":"u2f",
+  "provider":"FIDO",
+  "vendorName":"FIDO",
+  "status":"ACTIVE",
+  "created":"2018-05-24T20:43:19.000Z",
+  "lastUpdated":"2018-05-24T21:43:32.000Z",
+  "profile":{  
+    "credentialId":"WVO-QyHEi0eWmTNqESqJynDtIgf3Ix9OfaRoNwLoloso99Xl2zS_O7EXUkmPeAIzTVtEL4dYjicJWBz7NpqhGA",
+    "version":"U2F_V2"
+  },
+  "_links":{  
+    "self":{  
+      "href":"https://{yourOktaDomain}.com/api/v1/users/00u15s1KDETTQMQYABRL/factors/fuf2rovRxogXJ0nDy0g4",
+      "hints":{  
+        "allow":[  
+          "GET",
+          "DELETE"
+        ]
+      }
+    },
+    "verify":{  
+      "href":"https://{yourOktaDomain}.com/api/v1/users/00u15s1KDETTQMQYABRL/factors/fuf2rovRxogXJ0nDy0g4/verify",
+      "hints":{  
+        "allow":[  
+          "POST"
+        ]
+      }
+    },
+    "user":{  
+      "href":"https://{yourOktaDomain}.com/api/v1/users/00u15s1KDETTQMQYABRL",
+      "hints":{  
+        "allow":[  
+          "GET"
+        ]
+      }
+    }
+  }
+}
+~~~
 
 ### Reset Factor
 {:.api .api-operation}
@@ -2694,6 +2863,136 @@ curl -v -X POST \
 ~~~json
 {
   "factorResult": "SUCCESS"
+}
+~~~
+
+### Verify U2F Factor
+{:.api .api-operation}
+
+<span class="api-uri-template api-uri-post"><span class="api-label">POST</span> /api/v1/users/${userId}/factors/${factorId}/verify</span>
+
+Note: 
+
+According to
+[FIDO
+spec](https://fidoalliance.org/specs/fido-u2f-v1.2-ps-20170411/fido-appid-and-facets-v1.2-ps-20170411.html#h2_the-appid-and-facetid-assertions), activating and verifying a U2F device with appIds in different DNS zone is not allowed. For example, if a user activated a U2F device via the Factors API from a server hosted at `https://foo.example.com`, the user can verify the U2F factor from `https://foo.example.com`, but will not be able to verify it from Okta portal `https://company.okta.com`.  Here, the U2F device would return error code 4 - `DEVICE_INELIGIBLE`.
+
+##### Start Verification to Get Challenge Nonce
+
+Verification of the U2F factor starts with getting the challenge nonce and U2F token details and then using the client-side
+JavaScript API to get the signed assertion from the U2F token.
+
+##### Request Example for Verify U2F Factor
+{:.api .api-request .api-request-example}
+
+~~~sh
+curl -v -X POST \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-H "Authorization: SSWS ${api_token}" \
+"https://{yourOktaDomain}.com/api/v1/users/00u15s1KDETTQMQYABRL/factors/fuf2rovRxogXJ0nDy0g4/verify"
+~~~
+
+##### Response Example for Verify U2F Factor
+{:.api .api-response .api-response-example}
+
+~~~json
+{  
+  "factorResult":"CHALLENGE",
+  "profile":{  
+    "credentialId":"GAiiLsVab2m3-zL1Fi3bVtNrM9G6_MntUITHKjxkV24ktGKjLSCRnz72wCEdHCe18IvC69Aia0sE4UpsO0HpFQ",
+    "version":"U2F_V2"
+  },
+  "_links":{  
+    "verify":{  
+      "href":"https://{yourOktaDomain}.com/api/v1/users/00u15s1KDETTQMQYABRL/factors/fuf2rovRxogXJ0nDy0g4/verify",
+      "hints":{  
+        "allow":[  
+          "POST"
+        ]
+      }
+    },
+    "factor":{  
+      "href":"https://{yourOktaDomain}.com/api/v1/users/00u15s1KDETTQMQYABRL/factors/fuf2rovRxogXJ0nDy0g4",
+      "hints":{  
+        "allow":[  
+          "GET",
+          "DELETE"
+        ]
+      }
+    }
+  },
+  "_embedded":{  
+    "challenge":{  
+      "nonce":"vQFwTt6zKzMV7HFPzjS2",
+      "timeoutSeconds":20
+    }
+  }
+}
+~~~
+
+##### Get the Signed Assertion from the U2F Token by calling the U2F Javascript API
+{:.api .api-response .api-response-example}
+
+~~~html
+<!-- Get the u2f-api.js from https://github.com/google/u2f-ref-code/tree/master/u2f-gae-demo/war/js -->
+<script src="/u2f-api.js"></script>
+<script>
+  // Use the nonce from the challenge object
+  var challengeNonce = response._embedded.challenge.nonce;
+
+  // Use the origin of your app that is calling the factors API
+  var appId = "https://foo.example.com";
+
+  // Use the version and credentialId from factor profile object
+  var registeredKeys = [
+    {
+      version: factor.profile.version,
+      keyHandle: factor.profile.credentialId
+    }
+  ];
+
+  // Call the U2F javascript API to get signed assertion from the U2F token
+  u2f.sign(appId, factorData.challenge.nonce, registeredKeys, function (data) {
+    if (data.errorCode && data.errorCode !== 0) {
+      // Error from U2F platform
+    } else {
+      // Get the client data from callback result
+      var clientData = data.clientData;
+
+      // Get the signature data from callback result
+      var signatureData = data.signatureData;
+    }
+  });
+</script>
+~~~
+
+##### Post the Signed Assertion to Okta to Complete Verification
+
+##### Request Example for Signed Assertion
+{:.api .api-request .api-request-example}
+
+~~~sh
+curl -v -X POST \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-H "Authorization: SSWS ${api_token}" \
+-d '{  
+  "clientData":"eyJ0eXAiOiJuYXZpZ2F0b3IuaWQuZ2V0QXNzZXJ0aW9uIiwiY2hhbGxlbmdlIjoiS2NCLXRqUFU0NDY0ZThuVFBudXIiLCJvcmlnaW4iOiJodHRwczovL2xvY2FsaG9zdDozMDAwIiwiY2lkX3B1YmtleSI6InVudXNlZCJ9",
+  "signatureData":"AQAAACYwRgIhAKPktdpH0T5mlPSm_9uGW5w-VaUy-LhI9tIacexpgItkAiEAncRVZURVPOq7zDwIw-OM5LtSkdAxOkfv0ZDVUx3UFHc"
+}' "https://{yourOktaDomain}.com/api/v1/users/00u15s1KDETTQMQYABRL/factors/fuf2rovRxogXJ0nDy0g4/verify"
+~~~
+
+##### Response of U2F Verification Example
+{:.api .api-response .api-response-example}
+
+~~~json
+{  
+  "factorResult":"SUCCESS",
+  "profile":{  
+    "credentialId":"h1bFwJFU9wnelYkexJuQfoUHZ5lX3CgQMTZk4H3I8kM9Nn6XALiQ-BIab4P5EE0GQrA7VD-kAwgnG950aXkhBw",
+    "version":"U2F_V2"
+  }
 }
 ~~~
 
