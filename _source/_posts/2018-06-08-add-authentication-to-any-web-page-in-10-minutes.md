@@ -35,19 +35,19 @@ Once you've got your shiny new Okta account and you've logged into the dashboard
 
 {% img blog/add-authentication-to-any-web-page-in-10-minutes/okta-org-url.png alt:"Okta Org URL" %}{: .center-image }
 
-**NOTE**: If you were curious about how I was going to teach you to add authentication to any web page in 10 minutes: *I'm going to cheat*. I'm going to show you how to do it using Okta which makes the entire process thoughtless. If I wanted to show you how to add authentication into any web page *without* using something like Okta, it would take me about two full days. I'd have to explain sessions, [JSON Web Tokens](https://developer.okta.com/blog/2017/08/17/why-jwts-suck-as-session-tokens), [OpenID Connect](https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1), database schema design, database management, API patterns (to expose the users), and much more.
+**NOTE**: If you were curious about how I was going to teach you to add authentication to any web page in 10 minutes: *I'm going to cheat*. I'm going to show you how to do it using Okta which makes the entire process thoughtless. If I wanted to show you how to add authentication into any web page *without* using something like Okta, it would take me about two full days. I'd have to explain sessions, [JSON Web Tokens](/blog/2017/08/17/why-jwts-suck-as-session-tokens), [OpenID Connect](/blog/2017/07/25/oidc-primer-part-1), database schema design, database management, API patterns (to expose the users), and much more.
 
 ## Create an Okta Application
 
-The next thing you need to do is create an Okta Application. Okta allows you to secure as many different websites, mobile apps, and API services as you want, so you'll need to create an Application for each so you know which users can log into which apps. To do this, click the **Applications** tab at the top of the screen and then create **Add Application**. 
+The next thing you need to do is create an Okta application. Okta allows you to secure as many different websites, mobile apps, and API services as you want, so you'll need to create an application for each so you know which users can log into which apps. To do this, click the **Applications** tab at the top of the screen and then create **Add Application**. 
 
 {% img blog/add-authentication-to-any-web-page-in-10-minutes/okta-create-app.gif alt:"Okta Create App" %}{: .center-image }
 
 Once you've reached the app creation page, you'll want to select the **Single-Page App** box (because I'm going to show you how to quickly add authentication to a single-page web app), then click **Next**. To finish creating the app, you'll want to then fill in the following values:
 
 - **Name**: The name of your app.
-- **Base URIs**: The URLs that your app will run under. For instance, the app I'm going to secure in this guide will run on localhost port 8080, so I'll leave the default value of `http://localhost:8080` alone. If my website were running as `https://www.coolsite.com`, I'd use that value instead. You can have as many Base URI values as you need.
-- **Login Redirect URIs**: The URLs that your app should redirect back to once a user has authenticated. For 99% of you, this should be the same value as the Base URI.
+- **Base URIs**: The URLs that your app will run under. For instance, the app I'm going to secure in this guide will run on localhost port 8080, so I'll leave the default value of `http://localhost:8080` alone. If my website were running as `https://www.coolsite.com`, I'd use that value instead. You can have as many Base URI values as you need (you can have multiple URIs in there for development, staging, production, etc.).
+- **Login Redirect URIs**: The URLs that your app should redirect back to once a user has authenticated. For 99% of you, this should be the same value as the Base URI. If you do change this from the default value, you will need to go to the **API** -> **Trusted Origins** dropdown and add your new URI as a trusted origin. This lets your browser-based app access the Okta API from this location.
 
 Once you've got all the settings specified, click **Done** to create your new app.
 
@@ -140,22 +140,23 @@ css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGv
     }
   </style>
   <!-- widget stuff here -->
-  <script src="https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/2.6.0/js/okta-sign-in.
+  <script src="https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/2.9.0/js/okta-sign-in.
 min.js" type="text/javascript"></script>
-  <link href="https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/2.6.0/css/okta-sign-in.
+  <link href="https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/2.9.0/css/okta-sign-in.
 min.css" type="text/css" rel="stylesheet"/>
-  <link href="https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/2.6.0/css/okta-theme.cs
+  <link href="https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/2.9.0/css/okta-theme.cs
 s" type="text/css" rel="stylesheet"/>
 </head>
 ```
 
 Once you've got the Okta widget loaded up, the last thing you need to do is initialize the widget, give it some configuration data, and tell it what to do. Copy the code below into the bottom of your HTML page, directly above the closing `body` tag:
 
+{% raw %}
 ```html
 <!-- use the Okta widget to power authentication! -->
 <script type="text/javascript">
   var oktaSignIn = new OktaSignIn({
-    baseUrl: "{{ YOUR_ORG_URL }}",
+    baseUrl: "{{ yourOktaDomain }}",
     clientId: "{{ YOUR_APP_CLIENT_ID }}",
     authParams: {
       issuer: "{{ YOUR_ORG_URL }}/oauth2/default",
@@ -201,8 +202,9 @@ Once you've got the Okta widget loaded up, the last thing you need to do is init
   }
 </script>
 ```
+{% endraw %}
 
-**NOTE**: Don't forget to replace `{{ YOUR_ORG_URL }}` and `{{ YOUR_CLIENT_ID}}` with your **Org URL** and **Client ID** values that you copied down earlier when you set up Okta.
+**NOTE**: Don't forget to replace {% raw %}`{{ YOUR_ORG_URL }}`{% endraw %} and {% raw %}`{{ YOUR_CLIENT_ID}}`{% endraw %} with your **Org URL** and **Client ID** values that you copied down earlier when you set up Okta.
 
 If you now go ahead and view the page again, you'll see a shiny new login form on your page:
 
@@ -220,12 +222,13 @@ You might be thinking to yourself, "Wow, that really was easy! But how does it a
 
 The way the Okta widget works is by looking in HTML Local Storage for authentication tokens that determine whether or not there is an active user session. If there's no session, the widget knows you aren't logged in, so it displays a login form.
 
-Once you've entered your user credentials, your login data will be sent to the Okta API service which will securely log you in using the [OpenID Connect](https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1) protocol (which, FYI, is the recommended way to handle modern web authentication).
+Once you've entered your user credentials, your login data will be sent to the Okta API service which will securely log you in using the [OpenID Connect](/blog/2017/07/25/oidc-primer-part-1) protocol (which, FYI, is the recommended way to handle modern web authentication).
 
 After you've been logged in with Okta, the widget will then store your authentication tokens (JSON Web Tokens) in HTML Local Storage for later retrieval.
 
 If you needed to securely communicate from your web page to a backend API, for example, you could extract your `accessToken` out of HTML Local Storage and use it to hit your API service securely. For example:
 
+{% raw %}
 ```javascript
 function callMessagesApi() {
   var accessToken = oktaSignIn.tokenManager.get("accessToken");
@@ -249,6 +252,7 @@ function callMessagesApi() {
   });
 }
 ```
+{% endraw %}
 
 ## Want More Authentication Awesomeness?
 
@@ -262,9 +266,9 @@ I hope you enjoyed learning how you can quickly add authentication to any web pa
 
 If you liked this, you might want to [follow Okta on Twitter](https://twitter.com/oktadev) and check out some other interesting articles that walk you through building interesting apps:
 
-- [Simple Node Authentication](https://developer.okta.com/blog/2018/04/24/simple-node-authentication)
-- [Add Auth to your PWA with Okta and Stencil.js](https://developer.okta.com/blog/2018/04/16/add-auth-to-your-pwa-with-okta-and-stencil)
-- [Build a React Native Application and Authenticate with OAuth 2.0](https://developer.okta.com/blog/2018/03/16/build-react-native-authentication-oauth-2)
-- [Build a Basic CRUD App with Vue.js and Node](https://developer.okta.com/blog/2018/02/15/build-crud-app-vuejs-node)
+- [Simple Node Authentication](/blog/2018/04/24/simple-node-authentication)
+- [Add Auth to your PWA with Okta and Stencil.js](/blog/2018/04/16/add-auth-to-your-pwa-with-okta-and-stencil)
+- [Build a React Native Application and Authenticate with OAuth 2.0](/blog/2018/03/16/build-react-native-authentication-oauth-2)
+- [Build a Basic CRUD App with Vue.js and Node](/blog/2018/02/15/build-crud-app-vuejs-node)
 
 Until next time!
