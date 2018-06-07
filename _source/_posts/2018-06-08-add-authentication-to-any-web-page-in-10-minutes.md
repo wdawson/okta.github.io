@@ -156,7 +156,7 @@ Once you've got the Okta widget loaded up, the last thing you need to do is init
 <!-- use the Okta widget to power authentication! -->
 <script type="text/javascript">
   var oktaSignIn = new OktaSignIn({
-    baseUrl: "{{ yourOktaDomain }}",
+    baseUrl: "{{ YOUR_ORG_URL }}",
     clientId: "{{ YOUR_APP_CLIENT_ID }}",
     authParams: {
       issuer: "{{ YOUR_ORG_URL }}/oauth2/default",
@@ -264,7 +264,7 @@ I hope you enjoyed learning how you can quickly add authentication to any web pa
 - Protect your API endpoints
 - And lots more...
 
-If you liked this, you might want to [follow Okta on Twitter](https://twitter.com/oktadev) and check out some other interesting articles that walk you through building interesting apps:
+If you liked this, you might want to [follow @oktadev on Twitter](https://twitter.com/oktadev) and check out some other interesting articles that walk you through building interesting apps:
 
 - [Simple Node Authentication](/blog/2018/04/24/simple-node-authentication)
 - [Add Auth to your PWA with Okta and Stencil.js](/blog/2018/04/16/add-auth-to-your-pwa-with-okta-and-stencil)
