@@ -2783,8 +2783,6 @@ curl -v -X POST \
 #### Enroll U2F Factor
 {:.api .api-operation}
 
-{% api_lifecycle ea %}
-
 Enrolls a user with a U2F factor.  The enrollment process starts with getting an `appId` and `nonce` from Okta and using those to get registration information from the U2F key using the U2F javascript API.
 
 Note:
@@ -3585,8 +3583,6 @@ curl -v -X POST \
 
 #### Activate U2F Factor
 {:.api .api-operation}
-
-{% api_lifecycle ea %}
 
 Activation gets the registration information from the U2F token using the API and passes it to Okta.
 
