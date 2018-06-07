@@ -34,7 +34,7 @@ This is **much** faster and simpler.
 
 ## Static Sites are Secure
 
-CMS systems (especially those built on PHP like Wordpress and Drupal) have abysmal security records. The quality of their codebase is so low (I'm generalizing here, but please bear with me), and the size of their projects is so large, that there are often many security issues associated with running these CMS systems.
+CMS systems (especially those built on PHP like Wordpress and Drupal) have abysmal security records. It can be incredibly difficult to maintain a CMS, keep it up-to-date, and constantly apply security patches to ensure it won't be easily abused by attackers. Unless you're an expert in the CMS and spend all your time managing it, security issues are bound to crop up.
 
 Google "Drupal hack" or "Wordpress hack" to see what I mean. Millions of Drupal and Wordpress sites are compromised *all the time*. Here are some examples:
 
