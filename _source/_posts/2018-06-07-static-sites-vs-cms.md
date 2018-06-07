@@ -236,6 +236,6 @@ Using a static site generator provides numerous benefits over what any CMS can p
 
 If this post was helpful, you might really enjoy taking a look at our service, Okta: [https://developer.okta.com](/).
 
-We're an API company that stores user accounts and handles things like authentication, authorization, social login, single sign-on, etc. It's easy to get started and we have an **epic** free plan for developers (like you). If you want to give it a go, you can create a free account here: [https://developer.okta.com/signup](https://developer.okta.com/signup). 
+We're an API company that stores user accounts and handles things like authentication, authorization, social login, single sign-on, etc. It's easy to get started and we have an **epic** free plan for developers (like you). If you want to give it a go, you can create a free account here: [https://developer.okta.com/signup/](https://developer.okta.com/signup/). 
 
 And just in case you're wondering, the answer is **yes**. The blog you're currently reading is powered by a static site generator (and open source on GitHub). We're currently built using Jekyll but are transitioning to Hugo. =)
