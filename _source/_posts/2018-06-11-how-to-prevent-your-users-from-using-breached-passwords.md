@@ -29,20 +29,20 @@ To combat this, the officially recommended NIST solution is that you check each 
 
 The only problem with the NIST recommendation is that it is *hard to implement*. In order to check a user's password against a list of breached passwords you need to have a massive database of every set of leaked credentials. This is not only impractical, but a risk on many levels (security, legal, compliance).
 
-To help developers adopt this new NIST recommendation, [Troy Hunt](https://www.troyhunt.com/) created the free service [Have I Been Pwned?](https://haveibeenpwned.com/) which aggregates all data breaches into a massive database.
+To help developers adopt this new NIST recommendation, [Troy Hunt](https://www.troyhunt.com/) created the free service [Have I Been Pwned](https://haveibeenpwned.com/) which aggregates all data breaches into a massive database.
 
-Have I Been Pwned? allows you to access breached data by either:
+Have I Been Pwned allows you to access breached data by either:
 
 - Downloading the breached data hashes directly: https://haveibeenpwned.com/Passwords (scroll down on the page to find the download links), or
 - Using the free and anonymous API: https://haveibeenpwned.com/API/v2
 
-The Have I Been Pwned? API allows you to make as many requests as you want, which makes it particularly useful for checking to see if your users' passwords have been breached.
+The Have I Been Pwned API allows you to make as many requests as you want, which makes it particularly useful for checking to see if your users' passwords have been breached.
 
 ## How to Easily Check Your Users' Passwords
 
-In order to make it easy for you to check your users' passwords against the Have I Been Pwned? database, we recently created the [passprotect-js](https://github.com/OktaSecurityLabs/passprotect-js) developer library.
+In order to make it easy for you to check your users' passwords against the Have I Been Pwned database, we recently created the [passprotect-js](https://github.com/OktaSecurityLabs/passprotect-js) developer library.
 
-It's designed as a simple JavaScript library that can be dropped into any web page (anywhere on the page), that will check your users' passwords against the Have I Been Pwned? API service and inform the user if the password they're using has been involved in a breach:
+It's designed as a simple JavaScript library that can be dropped into any web page (anywhere on the page), that will check your users' passwords against the Have I Been Pwned API service and inform the user if the password they're using has been involved in a breach:
 
 {% img blog/how-to-prevent-your-users-from-using-breached-passwords/passprotect.gif alt:"PassProtect Demo" %}{: .center-image }
 
