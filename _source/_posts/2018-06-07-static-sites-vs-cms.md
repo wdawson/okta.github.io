@@ -38,11 +38,11 @@ CMS systems (especially those built on PHP like Wordpress and Drupal) have abysm
 
 Google "Drupal hack" or "Wordpress hack" to see what I mean. Millions of Drupal and Wordpress sites are compromised *all the time*. Here are some examples:
 
-Millions of Websites Hit by Drupal Hack (BBC)
-Drupal Patches Critical Password Reset Vulnerability
-Drupal SQL Injection Vulnerability Leave Millions of Websites Open to Hackers
-Your Drupal site got hacked. Now what?
-etc...
+- Millions of Websites Hit by Drupal Hack (BBC)
+- Drupal Patches Critical Password Reset Vulnerability
+- Drupal SQL Injection Vulnerability Leave Millions of Websites Open to Hackers
+- Your Drupal site got hacked. Now what?
+- Etc...
 
 There are hundreds of tools that anyone can easily download and run which attempt to compromise existing Wordpress and Drupal sites automatically, by trying all previously known vulnerabilities against the CMS systems, looking for holes.
 
@@ -67,10 +67,10 @@ Most developers enjoy working with static site generators, and are much happier 
 
 For more info: google "Drupal sucks" and "Wordpress sucks". Here are some examples:
 
-Top 6 Reasons Drupal Sucks
-Why a Drupal Developer Stopped Using Drupal
-Why I Hate Drupal
-Etc…
+- Top 6 Reasons Drupal Sucks
+- Why a Drupal Developer Stopped Using Drupal
+- Why I Hate Drupal
+- Etc…
 
 **PS**: Don’t even bother looking at [HackerNews](https://news.ycombinator.com/) comments about Drupal. They are savage.
 
@@ -175,10 +175,10 @@ These things are significantly more powerful using static sites as you can autom
 
 In regards to more advanced SEO editing (for instance, using HTML5 medata (which Google includes in their search algorithm rankings): a static site generator is your only choice. CMS systems like Wordpress and Drupal don’t support this level of customization at all (uinless you're willing to manually edit each and every article's raw HTML), because you’re essentially controlling the output of the program directly. With static site generators, however, there are numerous ways to accomplish this, to ensure that things like:
 
-Dates are correctly formatted and marked up with HTML5.
-Time ranges are correctly formatted and marked up with HTML5.
-Assets that need to be preloaded or prefetched can be included to speed up rendering of complex code samples / media.
-Etc.
+- Dates are correctly formatted and marked up with HTML5.
+- Time ranges are correctly formatted and marked up with HTML5.
+- Assets that need to be preloaded or prefetched can be included to speed up rendering of complex code samples / media.
+- Etc.
 
 Overall: there is nothing more customizable / powerful than a static site generator for contributors or editors to use.
 
@@ -210,9 +210,9 @@ Compare this with static site generators like Jekyll and Hugo: your content is s
 
 One of the major reasons companies prefer static site generators is reliability. Using a static site generator like Jekyll or Hugo allows you do things like:
 
-Automatically test articles for broken URLs.
-Automatically find broken images and image links.
-Look for broken style rules and obvious UI errors.
+- Automatically test articles for broken URLs.
+- Automatically find broken images and image links.
+- Look for broken style rules and obvious UI errors.
 
 Doing these things with a CMS system requires heavy customization and is very brittle.
 
