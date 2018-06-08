@@ -30,7 +30,7 @@ When you use a static site generator like Jekyll or Hugo, however, these tools t
 
 This is **much** faster and simpler.
 
-**Fun Fact**: *Googlebot and all of Google’s search ranking algorithms heavily favor fast websites over slow ones.* When two sites have similar content, but one is faster: the faster one will usually have a higher page rank. See: https://moz.com/blog/how-website-speed-actually-impacts-search-ranking for details.
+**Fun Fact**: *Googlebot and all of Google’s search ranking algorithms heavily favor fast websites over slow ones.* When two sites have similar content, but one is faster: the faster one will usually have a higher page rank. See: [https://moz.com/blog/how-website-speed-actually-impacts-search-ranking](https://moz.com/blog/how-website-speed-actually-impacts-search-ranking) for details.
 
 ## Static Sites are Secure
 
@@ -38,11 +38,11 @@ CMS systems (especially those built on PHP like Wordpress and Drupal) have abysm
 
 Google "Drupal hack" or "Wordpress hack" to see what I mean. Millions of Drupal and Wordpress sites are compromised *all the time*. Here are some examples:
 
-- Millions of Websites Hit by Drupal Hack (BBC)
-- Drupal Patches Critical Password Reset Vulnerability
-- Drupal SQL Injection Vulnerability Leave Millions of Websites Open to Hackers
-- Your Drupal site got hacked. Now what?
-- Etc...
+- [Millions of Websites Hit by Drupal Hack (BBC)](http://www.bbc.com/news/technology-29846539)
+- [Drupal Patches Critical Password Reset Vulnerability](https://thehackernews.com/2015/03/hacking-drupal-website.html)
+- [Drupal SQL Injection Vulnerability Leave Millions of Websites Open to Hackers](https://thehackernews.com/2014/11/drupal-sql-injection-vulnerability_2.html)
+- [Your Drupal site got hacked. Now what?](https://www.drupal.org/docs/develop/security/your-drupal-site-got-hacked-now-what)
+- [Etc...](https://duckduckgo.com/?q=drupal+hack&atb=v18&ia=web)
 
 There are hundreds of tools that anyone can easily download and run which attempt to compromise existing Wordpress and Drupal sites automatically, by trying all previously known vulnerabilities against the CMS systems, looking for holes.
 
@@ -67,12 +67,12 @@ Most developers enjoy working with static site generators, and are much happier 
 
 For more info: google "Drupal sucks" and "Wordpress sucks". Here are some examples:
 
-- Top 6 Reasons Drupal Sucks
-- Why a Drupal Developer Stopped Using Drupal
-- Why I Hate Drupal
-- Etc…
+- [Top 6 Reasons Drupal Sucks](https://www.freelock.com/blog/john-locke/2011-10/top-6-reasons-drupal-really-sucks-developer-edition)
+- [The Death of the CMS](https://medium.com/@davide.borsatto/the-death-of-the-cms-cec078a0d1b9)
+- [Why I Hate Drupal](https://www.slideshare.net/owenbrierley/why-i-hate-drupal-with-a-nod-to-james-wagner)
+- [Etc…](https://duckduckgo.com/?q=drupal+sucks&atb=v18&ia=web)
 
-**PS**: Don’t even bother looking at [HackerNews](https://news.ycombinator.com/) comments about Drupal. They are savage.
+**PS**: Don’t even bother looking at [HackerNews](https://news.ycombinator.com/) comments about Drupal. They're savage.
 
 ## Static Sites Provide Simple Permissioning
 
@@ -173,7 +173,7 @@ Another huge part of customization is SEO. This is always a concern. For instanc
 
 These things are significantly more powerful using static sites as you can automate these items and codify rules around them. You don’t need to install third-party plugins and learn new flows: you can codify this behavior and instantly enforce it across the entire project.
 
-In regards to more advanced SEO editing (for instance, using HTML5 medata which Google includes in their search algorithm rankings): a static site generator is your only choice. CMS systems like Wordpress and Drupal don’t support this level of customization at all (unless you're willing to manually edit each and every article's raw HTML), because you’re essentially controlling the output of the program directly. With static site generators, however, there are numerous ways to accomplish this, to ensure that things like:
+In regards to more advanced SEO editing (for instance, using HTML5 metadata which Google includes in their search algorithm rankings): a static site generator is your only choice. CMS systems like Wordpress and Drupal don’t support this level of customization at all (unless you're willing to manually edit each and every article's raw HTML), because you’re essentially controlling the output of the program directly. With static site generators, however, there are numerous ways to accomplish this, to ensure that things like:
 
 - Dates are correctly formatted and marked up with HTML5.
 - Time ranges are correctly formatted and marked up with HTML5.
