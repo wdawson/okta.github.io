@@ -6,7 +6,7 @@ book_chapter: "gateways"
 book_section: "gateways-comparison"
 ---
 
-<div style="font-size: 0.9em; margin-bottom: -20px;"><a href="../">&larr; API Gateways</a></div>
+<div style="font-size: 0.9em; margin-bottom: -20px;"><a href="/books/api-security/gateways/">&larr; API Gateways</a></div>
 
 ## API Management Platform Comparison {#gateways-comparison}
 

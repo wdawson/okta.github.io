@@ -6,7 +6,7 @@ book_chapter: "api-keys"
 book_section: "api-keys-keep-keys-private"
 ---
 
-<div style="font-size: 0.9em; margin-bottom: -20px;"><a href="../">&larr; Managing API Credentials</a></div>
+<div style="font-size: 0.9em; margin-bottom: -20px;"><a href="/books/api-security/api-keys/">&larr; Managing API Credentials</a></div>
 
 ## Keep Your Credentials Private {#api-keys-keep-keys-private}
 

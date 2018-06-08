@@ -6,7 +6,7 @@ book_chapter: "api-keys"
 book_section: "api-keys-advanced"
 ---
 
-<div style="font-size: 0.9em; margin-bottom: -20px;"><a href="../">&larr; Managing API Credentials</a></div>
+<div style="font-size: 0.9em; margin-bottom: -20px;"><a href="/books/api-security/api-keys/">&larr; Managing API Credentials</a></div>
 
 ## Advanced API Token Considerations {#api-keys-advanced}
 Using OAuth 2.0 with OIDC, or just a JWT as a Bearer token is a significant milestone in the ongoing task of keeping your API secure. Depending on use case, type of data, and type of operations your API provides, you may need to consider additional steps to secure your API. Keep in mind that these extra considerations might not be appropriate for every kind of API. If your API is a fan-made API that gives programmatic access to Star Wars data (like swapi.co), simple API keys are probably sufficient. However, if your API deals with things in the real world or any form of sensitive data, you should consider the options below and choose the combination appropriate for your API and fits your compliance requirements.

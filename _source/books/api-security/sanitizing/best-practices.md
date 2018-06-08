@@ -6,7 +6,7 @@ book_chapter: "sanitizing"
 book_section: "sanitizing-best-practices"
 ---
 
-<div style="font-size: 0.9em; margin-bottom: -20px;"><a href="../">&larr; Sanitizing Data</a></div>
+<div style="font-size: 0.9em; margin-bottom: -20px;"><a href="/books/api-security/sanitizing/">&larr; Sanitizing Data</a></div>
 
 ## Best Practices for Secure Data {#sanitizing-best-practices}
 

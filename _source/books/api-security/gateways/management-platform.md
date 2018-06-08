@@ -6,7 +6,7 @@ book_chapter: "gateways"
 book_section: "gateways-management-platform"
 ---
 
-<div style="font-size: 0.9em; margin-bottom: -20px;"><a href="../">&larr; API Gateways</a></div>
+<div style="font-size: 0.9em; margin-bottom: -20px;"><a href="/books/api-security/gateways/">&larr; API Gateways</a></div>
 
 ## The Role of an API Management Platform {#gateways-management-platform}
 

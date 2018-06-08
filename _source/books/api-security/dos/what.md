@@ -6,7 +6,7 @@ book_chapter: "dos"
 book_section: "dos-what"
 ---
 
-<div style="font-size: 0.9em; margin-bottom: -20px;"><a href="../">&larr; DOS Mitigation Strategies</a></div>
+<div style="font-size: 0.9em; margin-bottom: -20px;"><a href="/books/api-security/dos/">&larr; DOS Mitigation Strategies</a></div>
 
 ## Types of Denial of Service Attacks {#dos-what}
 

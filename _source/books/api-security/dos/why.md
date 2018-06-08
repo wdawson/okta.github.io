@@ -6,7 +6,7 @@ book_chapter: "dos"
 book_section: "dos-why"
 ---
 
-<div style="font-size: 0.9em; margin-bottom: -20px;"><a href="../">&larr; DOS Mitigation Strategies</a></div>
+<div style="font-size: 0.9em; margin-bottom: -20px;"><a href="/books/api-security/dos/">&larr; DOS Mitigation Strategies</a></div>
 
 ## Why are DoS Attacks So Prevalent? {#dos-why}
 There are several reasons why someone might perform a DoS attack on a network or service. Most frequently, DoS attacks are carried out for profit. There are several ways to make money by staging a DoS attack. For instance, competitors of Amazon might find it beneficial if Amazon’s service were slow or offline. This form of industrial sabotage may encourage customers to search for alternatives, increasing profits for competing businesses who aren’t suffering the effects of a DoS attack.

@@ -6,7 +6,7 @@ book_chapter: "gateways"
 book_section: "gateways-problems-they-will-not-solve"
 ---
 
-<div style="font-size: 0.9em; margin-bottom: -20px;"><a href="../">&larr; API Gateways</a></div>
+<div style="font-size: 0.9em; margin-bottom: -20px;"><a href="/books/api-security/gateways/">&larr; API Gateways</a></div>
 
 ## Problems Your API Management Platform Won't Solve {#gateways-problems-they-will-not-solve}
 

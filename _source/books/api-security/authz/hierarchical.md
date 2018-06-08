@@ -6,7 +6,7 @@ book_chapter: "authz"
 book_section: "authz-hierarchical"
 ---
 
-<div style="font-size: 0.9em; margin-bottom: -20px;"><a href="../">&larr; Authorization</a></div>
+<div style="font-size: 0.9em; margin-bottom: -20px;"><a href="/books/api-security/authz/">&larr; Authorization</a></div>
 
 ## Hierarchical {#authz-hierarchical}
 

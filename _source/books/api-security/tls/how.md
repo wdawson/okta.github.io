@@ -6,7 +6,7 @@ book_chapter: "tls"
 book_section: "tls-how"
 ---
 
-<div style="font-size: 0.9em; margin-bottom: -20px;"><a href="../">&larr; Transport Layer Security</a></div>
+<div style="font-size: 0.9em; margin-bottom: -20px;"><a href="/books/api-security/tls/">&larr; Transport Layer Security</a></div>
 
 ## Establishing a SSL/TLS Session {#tls-how}
 
