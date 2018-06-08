@@ -13,7 +13,7 @@ book_section: "tls-history"
 Today we take for granted our ability to send data over the internet securely. When we purchase an item from Amazon or complete our taxes online, we place our trust in the infrastructure of the internet to securely share our data with only the systems and parties we intend.
 
 <figure id="fig_tls_siggaba">
-  <img src="../images/SIGABA-labelled-2.jpg" alt=""/>
+  <img src="./images/SIGABA-labelled-2.jpg" alt=""/>
   <figcaption style="font-size: 0.8em;">The SIGABA, a cipher machine used by the US during World War II</figcaption>
 </figure>
 

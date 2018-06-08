@@ -16,4 +16,4 @@ Unfortunately, there’s no way to *completely* prevent Denial of Service (DoS) 
 
 
 
-<section class="chapter-subsection-list"><ul><li><a href="/books/api-security/dos/what-is/">What Is a DoS Attack?</a></li><li><a href="/books/api-security/dos/why/">Why are DoS Attacks So Prevalent?</a></li><li><a href="/books/api-security/dos/what/">Types of Denial of Service Attacks</a></li><li><a href="/books/api-security/dos/how/">How to Mitigate DoS Attacks</a></li><li><a href="/books/api-security/dos/parting/">Parting Shots</a></li></ul></section>
+<section class="chapter-subsection-list"><ul><li><a href="/books/api-security/dos/what-is">What Is a DoS Attack?</a></li><li><a href="/books/api-security/dos/why">Why are DoS Attacks So Prevalent?</a></li><li><a href="/books/api-security/dos/what">Types of Denial of Service Attacks</a></li><li><a href="/books/api-security/dos/how">How to Mitigate DoS Attacks</a></li><li><a href="/books/api-security/dos/parting">Parting Shots</a></li></ul></section>
