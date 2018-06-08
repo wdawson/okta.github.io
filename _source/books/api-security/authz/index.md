@@ -20,4 +20,4 @@ While each authorization type has its pros/cons, the goal is to convey when to u
 
 
 
-<section class="chapter-subsection-list"><ul><li><a href="/books/api-security/authz/hierarchical/">Hierarchical</a></li><li><a href="/books/api-security/authz/role-based/">Role-Based Access Control</a></li><li><a href="/books/api-security/authz/attribute-based/">Attribute-Based Access Control</a></li><li><a href="/books/api-security/authz/takeaways/">Key Takeaways</a></li></ul></section>
+<section class="chapter-subsection-list"><ul><li><a href="/books/api-security/authz/hierarchical">Hierarchical</a></li><li><a href="/books/api-security/authz/role-based">Role-Based Access Control</a></li><li><a href="/books/api-security/authz/attribute-based">Attribute-Based Access Control</a></li><li><a href="/books/api-security/authz/takeaways">Key Takeaways</a></li></ul></section>

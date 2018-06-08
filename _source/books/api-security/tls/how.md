@@ -25,7 +25,7 @@ Your client (browser or application) will initiate a TCP connection with the ser
 The SSL/TLS handshake takes place once a TCP connection is established.
 
 <figure id="fig_tls_sequence_diagram">
-  <img src="../images/tls-sequence-diagram.png" alt=""/>
+  <img src="./images/tls-sequence-diagram.png" alt=""/>
   <figcaption>TLS Sequence Diagram</figcaption>
 </figure>
 
