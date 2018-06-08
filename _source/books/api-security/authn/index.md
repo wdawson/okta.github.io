@@ -21,4 +21,4 @@ HTTP-based APIs are the most common, so let’s begin by talking about some opti
 
 
 
-<section class="chapter-subsection-list"><ul><li><a href="/books/api-security/authn/api-authentication-options/">API Authentication Options</a></li><li><a href="/books/api-security/authn/federated/">Federated Identity</a></li><li><a href="/books/api-security/authn/best-practices/">Recommended Best Practices for Authentication</a></li></ul></section>
+<section class="chapter-subsection-list"><ul><li><a href="/books/api-security/authn/api-authentication-options">API Authentication Options</a></li><li><a href="/books/api-security/authn/federated">Federated Identity</a></li><li><a href="/books/api-security/authn/best-practices">Recommended Best Practices for Authentication</a></li></ul></section>

@@ -21,7 +21,7 @@ It’s unlikely that the server’s certificate is signed directly by a root cer
 For each intermediate certificate, the client completes the same process: it verifies the issuer’s name matches the certificate owner’s name, and uses the signature and public key to verify that the certificate is properly signed.
 
 <figure id="fig_tls_certificate_chain">
-  <img src="../images/certificate-chain.png" alt=""/>
+  <img src="./images/certificate-chain.png" alt=""/>
   <figcaption>Illustrating the chain of trust from a root CA through an intermediate certificate</figcaption>
 </figure>
 
