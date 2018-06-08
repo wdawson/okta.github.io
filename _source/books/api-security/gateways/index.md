@@ -22,4 +22,4 @@ When you’re building and deploying your API, you need to address each of these
 
 
 
-<section class="chapter-subsection-list"><ul><li><a href="/books/api-security/gateways/management-platform/">The Role of an API Management Platform</a></li><li><a href="/books/api-security/gateways/solutions/">Solutions Provided by an API Management Platform</a></li><li><a href="/books/api-security/gateways/problems-they-will-not-solve/">Problems Your API Management Platform Won't Solve</a></li><li><a href="/books/api-security/gateways/comparison/">API Management Platform Comparison</a></li></ul></section>
+<section class="chapter-subsection-list"><ul><li><a href="/books/api-security/gateways/management-platform">The Role of an API Management Platform</a></li><li><a href="/books/api-security/gateways/solutions">Solutions Provided by an API Management Platform</a></li><li><a href="/books/api-security/gateways/problems-they-will-not-solve">Problems Your API Management Platform Won't Solve</a></li><li><a href="/books/api-security/gateways/comparison">API Management Platform Comparison</a></li></ul></section>
