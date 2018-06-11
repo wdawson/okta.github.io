@@ -33,8 +33,8 @@ To help developers adopt this new NIST recommendation, [Troy Hunt](https://www.t
 
 Have I Been Pwned allows you to access breached data by either:
 
-- Downloading the breached data hashes directly: https://haveibeenpwned.com/Passwords (scroll down on the page to find the download links), or
-- Using the free and anonymous API: https://haveibeenpwned.com/API/v2
+- Downloading the breached data hashes directly: [https://haveibeenpwned.com/Passwords](https://haveibeenpwned.com/Passwords) (scroll down on the page to find the download links), or
+- Using the free and anonymous API: [https://haveibeenpwned.com/API/v2](https://haveibeenpwned.com/API/v2)
 
 The Have I Been Pwned API allows you to make as many requests as you want, which makes it particularly useful for checking to see if your users' passwords have been breached.
 
