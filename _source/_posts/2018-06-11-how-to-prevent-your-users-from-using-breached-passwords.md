@@ -64,4 +64,6 @@ We hope that by providing some simple tooling we can help developers adopt the n
 
 Please [hit us up](https://twitter.com/oktadev) if you have any questions or comments!
 
-**PS**: If you'd like to enable PassProtect's functionality on every single website you use, you can always go install the [PassProtect Chrome extension](https://chrome.google.com/webstore/detail/passprotect/cpimldclklpfifolmdnicjnfbjdepjnf)
+**PS**: If you'd like to enable PassProtect's functionality on every single website you use, you can always go install the [PassProtect Chrome extension](https://chrome.google.com/webstore/detail/passprotect/cpimldclklpfifolmdnicjnfbjdepjnf).
+
+And... If you like PassProtect, you might also like [our API service](https://developer.okta.com/). The Okta API stores user accounts for the websites, mobile apps, and API services you're building and makes it easy to handle things like authentication, authorization, etc. It has an awesome free plan for developers (like you), and you can create a new Okta account and give it a try here: [https://developer.okta.com/signup/](https://developer.okta.com/signup/).
