@@ -923,7 +923,7 @@ export default {
 
 The application is fully functional at this stage. As a next step, we need to clean up the code as there is a lot of repetition (especially in the handling of AJAX requests at the frontend). However, I’ll leave that for another article.
 
-You can see the full source code on GitHub at [https://github.com/oktadeveloper/okta-php-symfony-vue-crud-example]().
+You can see the full source code on GitHub at [https://github.com/oktadeveloper/okta-php-symfony-vue-crud-example](https://github.com/oktadeveloper/okta-php-symfony-vue-crud-example).
 
 ## Learn More About Secure Authentication in Vue
 * [Our Vue Samples and Quickstarts](https://developer.okta.com/code/vue/)
