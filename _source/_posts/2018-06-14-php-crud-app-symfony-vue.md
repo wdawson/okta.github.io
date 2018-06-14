@@ -275,7 +275,7 @@ Now we can set up our entity. We need the Doctrine ORM pack and the maker-bundle
 
 Now we have an entity, a migration, and the database schema has been migrated. We can create our API endpoints and test them via Postman or a similar client. In a real project, we'd need proper validation, CSRF protection, pagination of the results, etc., but for this demo we'll use a quick and dirty solution.
 
-Let's add API transformers for an individual movie and a movie collection to the MovieRepository.php file:
+Let's add API transformers for an individual movie and a movie collection to the `MovieRepository.php` file:
 
 ```php
 public function transform(Movie $movie)
