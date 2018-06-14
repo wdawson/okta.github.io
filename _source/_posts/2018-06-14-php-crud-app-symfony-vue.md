@@ -41,6 +41,7 @@ Let’s get started by inspecting our tools. Symfony 4 is the latest release of 
 ## Create a new Symfony 4 Project
 
 Let's create a new skeleton Symfony 4 project and run the server:
+
 ```
 composer create-project symfony/skeleton bad-puns-tracker-server
 cd bad-puns-tracker-server
@@ -48,6 +49,7 @@ php -S 127.0.0.1:8000 -t public
 ```
 
 Let’s also create a new Vue.js project using vue-cli (using the default presets):
+
 ```
 npm install -g @vue/cli
 vue create bad-puns-tracker-client
@@ -95,9 +97,10 @@ class MovieController
 
 Now loading [`http://localhost:8000/movies`]() returns a status code of 200 OK and a JSON response. Building our response in every controller action can become tiresome, so let's create an API controller with some useful methods and make our `MovieController` extend from it:
 
-```php
-src/Controller/ApiController.php
 
+`src/Controller/ApiController.php`
+
+```php
 <?php
 namespace App\Controller;
 
@@ -176,9 +179,11 @@ class ApiController
         return $this->setStatusCode(401)->respondWithErrors($message);
     }
 }
+```
 
-src/Controller/MovieController.php
+`src/Controller/MovieController.php`
 
+```php
 <?php
 namespace App\Controller;
 
@@ -213,7 +218,6 @@ CREATE DATABASE bad_puns_counter CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_c
 GRANT ALL on bad_puns_counter.* to bpcuser@127.0.0.1 identified by 'temppass123';
 quit
 ```
-
 
 Enter the database connection string using the credentials you just created in the `DATABASE_URL` variable in the `.env` file:
 
@@ -300,7 +304,7 @@ public function transformAll()
 }
 ```
 
-We'll also add some additional methods to our ApiController:
+We'll also add some additional methods to our `ApiController`:
 
 ```php
 /**
@@ -430,9 +434,7 @@ class MovieController extends ApiController
             'count' => $movie->getCount()
         ]);
     }
-
 }
-
 ```
 
 ## Create a Frontend in Vue
@@ -450,14 +452,13 @@ npm i --save axios
 
 Let's clean up the default content and show the list of movies on our home page (we're working on the client application now). Delete src/components/HelloWorld.vue and App.vue. Now we have a nice blank page. Let's create a Dashboard component which will simply display a table of the movies data.
 
-```javascript
-main.js
+`main.js`
 
+```js
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 Vue.config.productionTip = false
-
 
 Vue.use(VueRouter)
 
@@ -478,7 +479,8 @@ new Vue({
 }).$mount('#app')
 ```
 
-```
+{% raw %}
+```html
 components/Dashboard.vue
 
 <template>
@@ -516,18 +518,20 @@ export default {
 }
 </script>
 ```
+{% endraw %}
 
 It doesn't look very nice, and we should probably extract the MovieList and MovieItem into separate components, but it displays our data. Let's make it look a bit better: we'll load the Bulma CSS framework from a CDN and update our table.
 
-```html
-public/index.html
+`public/index.html`
 
+```html
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
 ```
 
-```
-components/Dashboard.vue
+`components/Dashboard.vue`
 
+{% raw %}
+```html
 <template>
     <div class="container">
         <table class="table">
@@ -552,6 +556,7 @@ components/Dashboard.vue
     </div>
 </template>
 ```
+{% endraw %}
 
 Much better! We won't link the button yet (we’ll replace it with a MovieForm component soon, and we’ll also extract the table with the movies into a MoviesList component on the next step).
 
@@ -565,9 +570,9 @@ When done with the prerequisites, we can install the Okta Vue SDK and modify our
 npm install @okta/okta-vue --save
 ```
 
-```javascript
-main.js
+`main.js`
 
+```javascript
 import Dashboard from './components/Dashboard.vue';
 import MoviesList from './components/MoviesList.vue';
 
@@ -586,9 +591,9 @@ const routes = [
 ]
 ```
 
-```
-components/Dashboard.vue
+`components/Dashboard.vue`
 
+```html
 <template>
     <div class="container">
         <button v-if='authenticated' v-on:click='logout' id='logout-button'> Logout </button>
@@ -630,9 +635,10 @@ export default {
 </script>
 ```
 
-```
-components/MoviesList.vue
+`components/MoviesList.vue`
 
+{% raw %}
+```html
 <template>
     <div>
         <table class="table">
@@ -678,6 +684,7 @@ export default {
 }
 </script>
 ```
+{% endraw %}
 
 The next step is to secure the backend API. We'll install the dependencies and then modify our API Controller by adding a method to perform the authorization and return 401 Unauthorized if it fails. Don’t forget to replace the Okta parameters with your own data!
 
@@ -685,9 +692,9 @@ The next step is to secure the backend API. We'll install the dependencies and t
 composer require okta/jwt-verifier spomky-labs/jose guzzlehttp/psr7
 ```
 
-```php
-ApiController.php
+`ApiController.php`
 
+```php
 /**
  * Attempt authorization using jwt-verifier
  *
@@ -712,7 +719,6 @@ public function isAuthorized(): bool
 
     // Attempt authorization with the provided token
     try {
-
         // Setup the JWT Verifier
         $jwtVerifier = (new \Okta\JwtVerifier\JwtVerifierBuilder())
                         ->setAdaptor(new \Okta\JwtVerifier\Adaptors\SpomkyLabsJose())
@@ -743,14 +749,15 @@ if (! $this->isAuthorized()) {
 
 This isn't very DRY (obviously) but it’s OK for our demo. Now we'll fix our dashboard so it has a separate Home Page and Movies Page (only showing if we're authorized), and we’ll use a navbar for the top menu.
 
-```
-main.js (add to routes):
+Add to routes in `main.js`:
+
+```js
 { path: '/movies', component: MoviesList },
 ```
 
-```
-components/Dashboard.vue:
+`components/Dashboard.vue`
 
+```html
 <template>
     <section class="section">
         <div class="container">
@@ -772,9 +779,10 @@ components/Dashboard.vue:
 
 We are ready to proceed with the form to add a new movie and the button to update the pun count.
 
-```
-components/MoviesList.vue
+`components/MoviesList.vue`
 
+{% raw %}
+```html
 <template>
     <div>
         <span class="help is-info"  v-if="isLoading">Loading...</span>
@@ -859,10 +867,11 @@ export default {
 }
 </script>
 ```
+{% endraw %}
 
-```
-components/MovieForm.vue
+`components/MovieForm.vue`
 
+```html
 <template>
     <form @submit.prevent="onSubmit">
         <span class="help is-danger" v-text="errors"></span>
@@ -918,7 +927,7 @@ You can see the full source code on GitHub at [https://github.com/oktadeveloper/
 
 ## Learn More About Secure Authentication in Vue
 * [Our Vue Samples and Quickstarts](https://developer.okta.com/code/vue/)
-* [The Lazy Developer’s Guide to Authentication with Vue.js](/2017/09/14/lazy-developers-guide-to-auth-with-vue)
+* [The Lazy Developer’s Guide to Authentication with Vue.js](/blog/2017/09/14/lazy-developers-guide-to-auth-with-vue)
 * [Build a Cryptocurrency Comparison Site with Vue.js](/blog/2017/09/06/build-a-cryptocurrency-comparison-site-with-vuejs)
 * [Build a Basic CRUD App with Vue.js and Node](/blog/2018/02/15/build-crud-app-vuejs-node)
 * [Build a Secure To-Do App with Vue, ASP.NET Core, and Okta](/blog/2018/01/31/build-secure-todo-app-vuejs-aspnetcore)
