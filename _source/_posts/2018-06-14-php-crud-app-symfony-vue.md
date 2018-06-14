@@ -42,17 +42,17 @@ Let’s get started by inspecting our tools. Symfony 4 is the latest release of 
 
 Let's create a new skeleton Symfony 4 project and run the server:
 ```
-$ composer create-project symfony/skeleton bad-puns-tracker-server
-$ cd bad-puns-tracker-server
-$ php -S 127.0.0.1:8000 -t public
+composer create-project symfony/skeleton bad-puns-tracker-server
+cd bad-puns-tracker-server
+php -S 127.0.0.1:8000 -t public
 ```
 
 Let’s also create a new Vue.js project using vue-cli (using the default presets):
 ```
-$ npm install -g @vue/cli
-$ vue create bad-puns-tracker-client
-$ cd bad-puns-tracker-client
-$ yarn serve
+npm install -g @vue/cli
+vue create bad-puns-tracker-client
+cd bad-puns-tracker-client
+yarn serve
 ```
 
 Loading `http://localhost:8080/` now shows the default VueJS app and `http://localhost:8000/` shows the default Symfony 4 page.
@@ -63,7 +63,7 @@ The modern way to build an API in Symfony 4 would be to use [API Platform](https
 
 Let's create a new MovieController and a basic GET route. We'll add support for annotated routes:
 ```
-$ composer require sensio/framework-extra-bundle
+composer require sensio/framework-extra-bundle
 ```
 and create our controller in src/Controller/MovieController.php:
 ```
@@ -205,10 +205,10 @@ This looks better. Now we can use the `respond()` method to return a JSON respon
 Let’s quickly create a MySQL database and user to use for our project (you can of course use a different database engine like PostgreSQL or Sqlite if you prefer):
 
 ```
-$ mysql -uroot -p
-$ CREATE DATABASE bad_puns_counter CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-$ GRANT ALL on bad_puns_counter.* to bpcuser@127.0.0.1 identified by 'temppass123';
-$ quit
+mysql -uroot -p
+CREATE DATABASE bad_puns_counter CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+GRANT ALL on bad_puns_counter.* to bpcuser@127.0.0.1 identified by 'temppass123';
+quit
 ```
 
 
@@ -221,10 +221,11 @@ DATABASE_URL=mysql://bpcuser:temppass123@127.0.0.1:3306/bad_puns_counter
 Now we can set up our entity. We need the Doctrine ORM pack and the maker-bundle which can help us generate some code.
 
 ```
-$ composer require symfony/orm-pack
-$ composer require symfony/maker-bundle --dev
+ composer require symfony/orm-pack
+ composer require symfony/maker-bundle --dev
 
-$ php bin/console make:entity
+ php bin/console make:entity
+
  Class name of the entity to create or update (e.g. VictoriousElephant):
  > Movie
 
@@ -262,11 +263,11 @@ $ php bin/console make:entity
  Add another property? Enter the property name (or press <return> to stop adding fields):
  >
 
-Success!
-Next: When you're ready, create a migration with make:migration
+ Success!
+ Next: When you're ready, create a migration with make:migration
 
-$ php bin/console make:migration
-$ php bin/console doctrine:migrations:migrate
+ php bin/console make:migration
+ php bin/console doctrine:migrations:migrate
 ```
 
 Now we have an entity, a migration, and the database schema has been migrated. We can create our API endpoints and test them via Postman or a similar client. In a real project, we'd need proper validation, CSRF protection, pagination of the results, etc., but for this demo we'll use a quick and dirty solution.
@@ -437,11 +438,11 @@ We are ready to set up the client app, but first, we'll add a CORS bundle so our
 
 ```
 (server app directory)
-$ composer require nelmio/cors-bundle
+composer require nelmio/cors-bundle
 
 (client app directory)
-$ npm install vue-router
-$ npm i --save axios
+npm install vue-router
+npm i --save axios
 ```
 
 Let's clean up the default content and show the list of movies on our home page (we're working on the client application now). Delete src/components/HelloWorld.vue and App.vue. Now we have a nice blank page. Let's create a Dashboard component which will simply display a table of the movies data.
@@ -556,8 +557,10 @@ Let's add some authentication to our app now and make sure that only logged in u
 When done with the prerequisites, we can install the Okta Vue SDK and modify our Dashboard to include a Login or Logout link depending on the authentication state. Don’t forget to replace the Okta parameters with your own data!
 
 ```
-$ npm install @okta/okta-vue --save
+npm install @okta/okta-vue --save
+```
 
+```
 main.js
 
 import Dashboard from './components/Dashboard.vue';
@@ -618,7 +621,9 @@ export default {
     }
 }
 </script>
+```
 
+```
 components/MoviesList.vue
 
 <template>
@@ -670,8 +675,10 @@ export default {
 The next step is to secure the backend API. We'll install the dependencies and then modify our API Controller by adding a method to perform the authorization and return 401 Unauthorized if it fails. Don’t forget to replace the Okta parameters with your own data!
 
 ```
-$ composer require okta/jwt-verifier spomky-labs/jose guzzlehttp/psr7
+composer require okta/jwt-verifier spomky-labs/jose guzzlehttp/psr7
+```
 
+```
 ApiController.php
 
 /**
@@ -732,7 +739,9 @@ This isn't very DRY (obviously) but it’s OK for our demo. Now we'll fix our da
 ```
 main.js (add to routes):
 { path: '/movies', component: MoviesList },
+```
 
+```
 components/Dashboard.vue:
 
 <template>
@@ -842,7 +851,9 @@ export default {
     }
 }
 </script>
+```
 
+```
 components/MovieForm.vue
 
 <template>
