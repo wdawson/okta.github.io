@@ -61,12 +61,15 @@ Loading `http://localhost:8080/` now shows the default VueJS app and `http://loc
 
 The modern way to build an API in Symfony 4 would be to use [API Platform](https://api-platform.com/) which includes an API skeleton with the Symfony 4 framework, Doctrine ORM, code-generation tools for admins and Progressive web apps, a Docker-based setup, and other useful features out-of-the-box. However, I will show you the basics of setting up an API without any dependencies apart from the micro framework we already installed.
 
-Let's create a new MovieController and a basic GET route. We'll add support for annotated routes:
+Let's create a new `MovieController` and a basic GET route. We'll add support for annotated routes:
+
 ```
 composer require sensio/framework-extra-bundle
 ```
-and create our controller in src/Controller/MovieController.php:
-```
+
+and create our controller in `src/Controller/MovieController.php`:
+
+```php
 <?php
 namespace App\Controller;
 
@@ -90,9 +93,9 @@ class MovieController
 }
 ```
 
-Now loading [http://localhost:8000/movies]() returns a status code of 200 OK and a JSON response. Building our response in every controller action can become tiresome, so let's create an API controller with some useful methods and make our MovieController extend from it:
+Now loading [`http://localhost:8000/movies`]() returns a status code of 200 OK and a JSON response. Building our response in every controller action can become tiresome, so let's create an API controller with some useful methods and make our `MovieController` extend from it:
 
-```
+```php
 src/Controller/ApiController.php
 
 <?php
@@ -274,7 +277,7 @@ Now we have an entity, a migration, and the database schema has been migrated. W
 
 Let's add API transformers for an individual movie and a movie collection to the MovieRepository.php file:
 
-```
+```php
 public function transform(Movie $movie)
 {
     return [
@@ -299,7 +302,7 @@ public function transformAll()
 
 We'll also add some additional methods to our ApiController:
 
-```
+```php
 /**
  * Returns a 422 Unprocessable Entity
  *
@@ -339,7 +342,7 @@ public function respondCreated($data = [])
 
 Here’s our simplified and not entirely clean API controller (in `src/Controllers/MovieController.php` in the server code repository):
 
-```
+```php
 <?php
 namespace App\Controller;
 
@@ -447,7 +450,7 @@ npm i --save axios
 
 Let's clean up the default content and show the list of movies on our home page (we're working on the client application now). Delete src/components/HelloWorld.vue and App.vue. Now we have a nice blank page. Let's create a Dashboard component which will simply display a table of the movies data.
 
-```
+```javascript
 main.js
 
 import Vue from 'vue'
@@ -516,11 +519,13 @@ export default {
 
 It doesn't look very nice, and we should probably extract the MovieList and MovieItem into separate components, but it displays our data. Let's make it look a bit better: we'll load the Bulma CSS framework from a CDN and update our table.
 
-```
+```html
 public/index.html
 
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+```
 
+```
 components/Dashboard.vue
 
 <template>
@@ -560,7 +565,7 @@ When done with the prerequisites, we can install the Okta Vue SDK and modify our
 npm install @okta/okta-vue --save
 ```
 
-```
+```javascript
 main.js
 
 import Dashboard from './components/Dashboard.vue';
@@ -579,7 +584,9 @@ const routes = [
   { path: '/implicit/callback', component: Auth.handleCallback() },
   { path: '/', component: MoviesList },
 ]
+```
 
+```
 components/Dashboard.vue
 
 <template>
@@ -678,7 +685,7 @@ The next step is to secure the backend API. We'll install the dependencies and t
 composer require okta/jwt-verifier spomky-labs/jose guzzlehttp/psr7
 ```
 
-```
+```php
 ApiController.php
 
 /**
@@ -726,9 +733,9 @@ public function isAuthorized(): bool
 }
 ```
 
-Now we need to secure our controller methods. Usually, we’d use Symfony’s security firewall and extract our authorization method into a custom provider, or we can use ‘before’ filters to perform the token authentication. However, for now, we’ll simply add a check to all MoviesController methods that require authorization:
+Now we need to secure our controller methods. Usually, we’d use Symfony’s security firewall and extract our authorization method into a custom provider, or we can use ‘before’ filters to perform the token authentication. However, for now, we’ll simply add a check to all `MovieController` methods that require authorization:
 
-```
+```php
 if (! $this->isAuthorized()) {
     return $this->respondUnauthorized();
 }
@@ -911,9 +918,9 @@ You can see the full source code on GitHub at [https://github.com/oktadeveloper/
 
 ## Learn More About Secure Authentication in Vue
 * [Our Vue Samples and Quickstarts](https://developer.okta.com/code/vue/)
-* [The Lazy Developer’s Guide to Authentication with Vue.js](https://developer.okta.com/blog/2017/09/14/lazy-developers-guide-to-auth-with-vue)
-* [Build a Cryptocurrency Comparison Site with Vue.js](https://developer.okta.com/blog/2017/09/06/build-a-cryptocurrency-comparison-site-with-vuejs)
-* [Build a Basic CRUD App with Vue.js and Node](https://developer.okta.com/blog/2018/02/15/build-crud-app-vuejs-node)
-* [Build a Secure To-Do App with Vue, ASP.NET Core, and Okta](https://developer.okta.com/blog/2018/01/31/build-secure-todo-app-vuejs-aspnetcore)
+* [The Lazy Developer’s Guide to Authentication with Vue.js](/2017/09/14/lazy-developers-guide-to-auth-with-vue)
+* [Build a Cryptocurrency Comparison Site with Vue.js](/blog/2017/09/06/build-a-cryptocurrency-comparison-site-with-vuejs)
+* [Build a Basic CRUD App with Vue.js and Node](/blog/2018/02/15/build-crud-app-vuejs-node)
+* [Build a Secure To-Do App with Vue, ASP.NET Core, and Okta](/blog/2018/01/31/build-secure-todo-app-vuejs-aspnetcore)
 
 As always, we’d love to hear from you about this post, or really anything else! Hit us up in the comments, or on Twitter [@oktadev](https://twitter.com/OktaDev)!
