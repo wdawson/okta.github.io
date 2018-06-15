@@ -4130,7 +4130,7 @@ Because the plain text password is not specified when a hashed password is provi
 
 #### Recovery Question Object
 
-Specifies a secret question and answer that is validated when a user forgets their password or unlocks their account.  The answer property is **write-only**.
+Specifies a secret question and answer that is validated (case insensitive) when a user forgets their password or unlocks their account.  The answer property is **write-only**.
 
 | Property  | DataType | Nullable | Unique | Readonly | MinLength | MaxLength |
 | --------- | -------- | -------- | ------ | -------- | --------- | --------- |
