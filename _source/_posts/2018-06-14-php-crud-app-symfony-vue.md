@@ -479,10 +479,10 @@ new Vue({
 }).$mount('#app')
 ```
 
+`components/Dashboard.vue`
+
 {% raw %}
 ```html
-components/Dashboard.vue
-
 <template>
     <table>
         <tbody>
@@ -580,7 +580,7 @@ import Auth from '@okta/okta-vue'
 
 Vue.use(Auth, {
   issuer: 'https://{yourOktaDomain}.com/oauth2/default',
-  client_id: ‘{YOUR_CLIENT_ID}’,
+  client_id: '{YOUR_CLIENT_ID}',
   redirect_uri: 'http://localhost:8080/implicit/callback',
   scope: 'openid profile email'
 })
