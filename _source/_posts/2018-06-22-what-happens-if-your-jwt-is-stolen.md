@@ -19,14 +19,14 @@ All of us know what happens if our user credentials (email and password) are dis
 
 To help explain the concepts fully, I'll walk you through what tokens are, how they're used, and what happens when they're stolen. Finally: I'll cover what you should actually do if your token has been stolen, and how to prevent this in the future.
 
-This question was prompted by my response to this [StackOverflow question](https://stackoverflow.com/questions/34259248/what-if-jwt-is-stolen) about what happens if a JWT is stolen is one of my most popular responses on StackOverflow.
+This post was inspired by this [StackOverflow question](https://stackoverflow.com/questions/34259248/what-if-jwt-is-stolen). My response to that question has become one of my most popular responses on StackOverflow to date!
 
 
 ## What is a Token?
 
 {% img blog/what-happens-if-your-jwt-is-stolen/shrug.jpg alt:"Shrug" width:"600" %}{: .center-image }
 
-A token is nothing more than an arbitrary value that represents a session. Tokens can be strings like "abc123" or randomly generated IDs like "48ff796e-8c8a-46b9-9f25-f883c14734ea".
+A token in the context of web development is nothing more than an arbitrary value that represents a session. Tokens can be strings like "abc123" or randomly generated IDs like "48ff796e-8c8a-46b9-9f25-f883c14734ea".
 
 A token's purpose is to help a server remember who somebody is. Take API services, for example: if you have an API key that lets you talk to an API service from your server-side application, that API key is what the API service uses to "remember" who you are, look up your account details, and allow (or disallow) you from making a request. In this example, your API key is your "token", and it allows you to access the API.
 
@@ -38,7 +38,11 @@ However, when most people talk about tokens today, they're actually referring to
 
 [JSON Web Tokens](https://tools.ietf.org/html/rfc7519) are special types of tokens that are structured in such a way that makes them convenient to use over the web. They have a handful of defining traits:
 
-- **They are represented as normal strings.** Here's a real JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IlJhbmRhbGwgRGVnZ2VzIiwiaWF0IjoxNTE2MjM5MDIyfQ.sNMELyC8ohN8WF_WRnRtdHMItOVizcscPiWsQJX9hmw`. Because JWTs are just URL safe strings, they're easy to pass around via URL parameters, etc.
+- **They are represented as normal strings.** Here's a real JWT:
+  ```
+  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IlJhbmRhbGwgRGVnZ2VzIiwiaWF0IjoxNTE2MjM5MDIyfQ.sNMELyC8ohN8WF_WRnRtdHMItOVizcscPiWsQJX9hmw`.
+  ```
+  Because JWTs are just URL safe strings, they're easy to pass around via URL parameters, etc.
 - **They contain JSON-encoded data.** This means you can have your JWT store as much JSON data as you want, and you can decode your token string into a JSON object. This makes them convenient for embedding information.
 - **They're cryptographically signed.** Understanding how this works is a [topic unto itself](https://en.wikipedia.org/wiki/Digital_signature). For now, just know that it means any trusted party who has a JWT can tell whether or not the token has been modified or changed. This means if your application or API service generates a token that says someone is a "free" user and someone later alters the token to say they are an "admin" user, you'll be able to detect this and act accordingly. This property makes JWTs useful for sharing information between parties over the web where trust is difficult to come by.
 
@@ -100,8 +104,8 @@ JWTs are typically used as session identifiers for web applications, mobile appl
 
 The principal reason JWTs have become popular in recent years (having only been around since 2014) is that they can contain arbitrary JSON data. The touted benefit of a JWT over a traditional session ID is that:
 
-JWTs are stateless and can contain user data directly
-Because JWTs are stateless, no server-side session needs to be implemented (no session database, session cache, etc.)
+- JWTs are stateless and can contain user data directly
+- Because JWTs are stateless, no server-side session needs to be implemented (no session database, session cache, etc.)
 
 Because JWTs are stateless, when a server-side application receives a JWT, it can validate it using only the "secret key" that was used to create it — thereby avoiding the performance penalty of talking to a database or cache on the backend, which adds latency to each request.
 
