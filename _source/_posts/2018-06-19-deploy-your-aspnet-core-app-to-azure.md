@@ -185,7 +185,7 @@ In the Azure portal, click on the **App Services** menu item on the left, then c
 
 Choose a name for your application, choose Windows as the **OS** setting (even if you're developing on macOS or Linux). Check the **Pin to Dashboard** checkbox and click **Create**. 
 
-You'll be redirected to the dashboard. It may take a bit to create the web application. When it is done, go to the information tab for the newly created app and copy the URL for the app. Then go to the Okta dashboard and to your application and add it to the **Login redirect URIs** list, keeping the `/authorization-code/callback` part of the localhost URI. Then add it to the **Logout redirect URIs** keeping the `signout-callback-oidc` portion in the **General Settings** tab of you Okta application.
+You'll be redirected to the dashboard. It may take a bit to create the web application. When it is done, go to the information tab for the newly created app and copy the URL for the app. Then go to the Okta dashboard and to your application and add it to the **Login redirect URIs** list, keeping the `/authorization-code/callback` part of the localhost URI. Then add it to the **Logout redirect URIs** keeping the `signout-callback-oidc` portion in the **General Settings** tab of your Okta application.
 
 
 ## Set the Azure Environment Variables
