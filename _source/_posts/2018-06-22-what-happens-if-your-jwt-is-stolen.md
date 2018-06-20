@@ -40,7 +40,7 @@ However, when most people talk about tokens today, they're actually referring to
 
 - **They are represented as normal strings.** Here's a real JWT:
   ```
-  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IlJhbmRhbGwgRGVnZ2VzIiwiaWF0IjoxNTE2MjM5MDIyfQ.sNMELyC8ohN8WF_WRnRtdHMItOVizcscPiWsQJX9hmw`.
+  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IlJhbmRhbGwgRGVnZ2VzIiwiaWF0IjoxNTE2MjM5MDIyfQ.sNMELyC8ohN8WF_WRnRtdHMItOVizcscPiWsQJX9hmw
   ```
   Because JWTs are just URL safe strings, they're easy to pass around via URL parameters, etc.
 - **They contain JSON-encoded data.** This means you can have your JWT store as much JSON data as you want, and you can decode your token string into a JSON object. This makes them convenient for embedding information.
