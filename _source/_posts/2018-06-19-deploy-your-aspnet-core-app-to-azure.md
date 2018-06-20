@@ -115,11 +115,11 @@ First, move the settings for Okta in your `appsettings.json` file to the `appset
       "Microsoft": "Information"
     }
   },
-  "OKTA_ORG_URL": "https://{yourOktaDomain}.com",
+  "OKTA_ORG_URL": "https://{yourOktaDomain}",
   "OKTA_CLIENT_ID": "{yourClientId}",
   "OKTA_CLIENT_SECRET": "{yourClientSecret}",
   "OKTA_API_TOKEN": "{yourApiToken}",
-  "OKTA_ISSUER": "https://{yourOktaDomain}.com"
+  "OKTA_ISSUER": "https://{yourOktaDomain}"
 }
 ```
 
