@@ -31,7 +31,7 @@ The only real prerequisite to following this tutorial is `node` (I'll also assum
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 ```
 
-One of the great things about open source code is you don't need to write everything from scratch. I've already written a starter app as part of [another blog post](/blog/2018/04/24/simple-node-authentication/), so we can continue where that left off by cloning the associated repository. Building off the existing app will allow you to focus on user management.
+One of the great things about open source code is you don't need to write everything from scratch. I've already written a starter app as part of [another blog post](/blog/2018/04/24/simple-node-authentication), so we can continue where that left off by cloning the associated repository. Building off the existing app will allow you to focus on user management.
 
 ```bash
 # Clone the repository using SSH into a new folder called manage-users
