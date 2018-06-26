@@ -117,7 +117,7 @@ npm install
 npm run dev
 ```
 
-Whenever you make code changes now, the app will automatically restart. All you will need to do is refresh the page to see the changes appear. Open up <http://localhost:3000> to see the app in action.
+Whenever you make code changes now, the app will automatically restart. All you will need to do is refresh the page to see the changes appear. Open up `http://localhost:3000` to see the app in action.
 
 Okta's Node SDK provides a simple way to fetch and modify user profiles, and Express allows you to modify the behavior of all your endpoints by adding middleware. Combining these tools, you can make it so that all routes have access to the user's profile if they are authenticated. This will be similar to how `req.userinfo` already contains some user info, but this will have more detail.
 
