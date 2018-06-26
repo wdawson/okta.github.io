@@ -425,7 +425,7 @@ If you'd like to learn more about Node and Secure User Management with Okta, I'd
 
 * [Simple Node Authentication](/blog/2018/04/24/simple-node-authentication) (used as a starting point for this tutorial)
 * [Use Okta (Instead of Local Storage) to Store Your User’s Data Securely](/blog/2018/01/23/replace-local-storage-with-okta-profile-attributes)
-* [Build User Registration with Node, React, and Okta](blog/2018/02/06/build-user-registration-with-node-react-and-okta)
+* [Build User Registration with Node, React, and Okta](/blog/2018/02/06/build-user-registration-with-node-react-and-okta)
 * [Build Secure Node Authentication with Passport.js and OpenID Connect](/blog/2018/05/18/node-authentication-with-passport-and-oidc)
 * [Add Authentication to Any Web Page in 10 Minutes](/blog/2018/06/08/add-authentication-to-any-web-page-in-10-minutes)
 
