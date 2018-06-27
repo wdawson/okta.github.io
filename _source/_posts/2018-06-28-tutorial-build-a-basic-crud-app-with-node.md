@@ -13,7 +13,7 @@ tweets:
 
 Node.js is eating the world. Many of the largest companies are building more and more of their websites and API services with Node.js, and there's no sign of a slowdown. I've been working with Node.js since 2012 and have been excited to see the community and tooling grow and evolve — there's no better time to get started with Node.js development than right now.
 
-This tutorial will take you step-by-step through building a fully functional Node.js website. Along the way you'll learn about Express.js, the most popular web framework, user authentication with [OpenID Connect](https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1), locking down routes to enforce login restrictions, and performing CRUD operations with a database (creating, updating, and deleting data). This tutorial uses the following technologies but doesn't require any prior experience:
+This tutorial will take you step-by-step through building a fully functional Node.js website. Along the way you'll learn about Express.js, the most popular web framework, user authentication with [OpenID Connect](https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1), locking down routes to enforce login restrictions, and performing CRUD operations with a database (creating, reading, updating, and deleting data). This tutorial uses the following technologies but doesn't require any prior experience:
 
 - [Node.js](https://nodejs.org/en/)
 - [Express.js](https://expressjs.com/) and [Pug](https://pugjs.org/api/getting-started.html)
@@ -101,9 +101,7 @@ Finally, create a new authentication token. This will allow your app to talk to 
 
 ## Install Dependencies
 
-The first thing you need to do in order to initialize your Express.js app is install all of the required dependencies. If you don't have Node.js installed on your computer already, please go [install it now](https://nodejs.org/en/download/package-manager/).
-
-Now install the dependencies required for this application.
+The first thing you need to do in order to initialize your Express.js app is install all of the required dependencies.
 
 ```bash
 npm install express@4.16.3
