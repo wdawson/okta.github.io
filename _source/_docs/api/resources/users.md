@@ -2753,19 +2753,11 @@ curl -v -X GET \
         "status": "ACTIVE",
         "created": "2017-10-30T22:06:53.000Z",
         "lastUpdated": "2017-10-30T22:06:53.000Z",
-        "issuerId": "ausain6z9zIedDCxB0h7",
+        "issuer": "https://{yourOktaDomain}/oauth2/ausain6z9zIedDCxB0h7",
         "clientId": "0oabskvc6442nkvQO0h7",
         "userId": "00u5t60iloOHN9pBi0h7",
         "scopeId": "scpCmCCV1DpxVkCaye2X",
         "_links": {
-            "revoke": {
-                "href": "https://{yourOktaDomain}/api/v1/users/00u5t60iloOHN9pBi0h7/grants/oag3ih1zrm1cBFOiq0h6",
-                "hints": {
-                    "allow": [
-                        "DELETE"
-                    ]
-                }
-            },
             "app": {
                 "href": "https://{yourOktaDomain}/api/v1/apps/0oabskvc6442nkvQO0h7",
                 "title": "My App"
@@ -2778,12 +2770,14 @@ curl -v -X GET \
                 "href": "https://{yourOktaDomain}/oauth2/v1/clients/0oabskvc6442nkvQO0h7",
                 "title": "My App"
             },
-            "issuer": {
-                "href": "https://{yourOktaDomain}/api/v1/authorizationServers/ausain6z9zIedDCxB0h7",
-                "title": "My Custom Authorization Server"
-            },
             "self": {
-                "href": "https://{yourOktaDomain}/api/v1/users/00u5t60iloOHN9pBi0h7/grants/oag3ih1zrm1cBFOiq0h6"
+                "href": "https://{yourOktaDomain}/api/v1/users/00u5t60iloOHN9pBi0h7/grants/oag3ih1zrm1cBFOiq0h6",
+                "hints": {
+                    "allow": [
+                        "GET",
+                        "DELETE"
+                    ]
+                }
             },
             "user": {
                 "href": "https://{yourOktaDomain}/api/v1/users/00u5t60iloOHN9pBi0h7",
@@ -2836,19 +2830,11 @@ curl -v -X GET \
     "status": "ACTIVE",
     "created": "2017-10-30T22:06:53.000Z",
     "lastUpdated": "2017-10-30T22:06:53.000Z",
-    "issuerId": "ausain6z9zIedDCxB0h7",
+    "issuer": "https://{yourOktaDomain}/oauth2/ausain6z9zIedDCxB0h7",
     "clientId": "0oabskvc6442nkvQO0h7",
     "userId": "00u5t60iloOHN9pBi0h7",
     "scopeId": "scpCmCCV1DpxVkCaye2X",
     "_links": {
-        "revoke": {
-            "href": "https://{yourOktaDomain}/api/v1/users/00u5t60iloOHN9pBi0h7/grants/oag3ih1zrm1cBFOiq0h6",
-            "hints": {
-                "allow": [
-                    "DELETE"
-                ]
-            }
-        },
         "app": {
             "href": "https://{yourOktaDomain}/api/v1/apps/0oabskvc6442nkvQO0h7",
             "title": "My App"
@@ -2861,12 +2847,14 @@ curl -v -X GET \
             "href": "https://{yourOktaDomain}/oauth2/v1/clients/0oabskvc6442nkvQO0h7",
             "title": "My App"
         },
-        "issuer": {
-            "href": "https://{yourOktaDomain}/api/v1/authorizationServers/ausain6z9zIedDCxB0h7",
-            "title": "My Custom Authorization Server"
-        },
         "self": {
-            "href": "https://{yourOktaDomain}/api/v1/users/00u5t60iloOHN9pBi0h7/grants/oag3ih1zrm1cBFOiq0h6"
+            "href": "https://{yourOktaDomain}/api/v1/users/00u5t60iloOHN9pBi0h7/grants/oag3ih1zrm1cBFOiq0h6",
+            "hints": {
+                "allow": [
+                    "GET",
+                    "DELETE"
+                ]
+            }
         },
         "user": {
             "href": "https://{yourOktaDomain}/api/v1/users/00u5t60iloOHN9pBi0h7",
@@ -2921,7 +2909,7 @@ curl -v -X GET \
         "status": "ACTIVE",
         "created": "2017-11-03T03:34:17.000Z",
         "lastUpdated": "2017-11-03T03:34:17.000Z",
-        "issuerId": "ausain6z9zIedDCxB0h7",
+        "issuer": "https://{yourOktaDomain}/oauth2/ausain6z9zIedDCxB0h7",
         "clientId": "0oabskvc6442nkvQO0h7",
         "userId": "00u5t60iloOHN9pBi0h7",
         "scopeId": "scpCmCCV1DpxVkCaye2X",
@@ -2935,12 +2923,10 @@ curl -v -X GET \
                 "title": "Your phone"
             },
             "self": {
-                "href": "https://{yourOktaDomain}/api/v1/users/00u5t60iloOHN9pBi0h7/grants/oag3j3j33ILN7OFqP0h6"
-            },
-            "revoke": {
                 "href": "https://{yourOktaDomain}/api/v1/users/00u5t60iloOHN9pBi0h7/grants/oag3j3j33ILN7OFqP0h6",
                 "hints": {
                     "allow": [
+                        "GET",
                         "DELETE"
                     ]
                 }
@@ -2952,10 +2938,6 @@ curl -v -X GET \
             "user": {
                 "href": "https://{yourOktaDomain}/api/v1/users/00u5t60iloOHN9pBi0h7",
                 "title": "Saml Jackson"
-            },
-            "issuer": {
-                "href": "https://{yourOktaDomain}/api/v1/authorizationServers/ausain6z9zIedDCxB0h7",
-                "title": "Example Authorization Server"
             },
             "authorizationServer": {
                 "href": "https://{yourOktaDomain}/api/v1/authorizationServers/ausain6z9zIedDCxB0h7",
@@ -4193,7 +4175,7 @@ Here are some links that may be available on a User, as determined by your polic
     "status": "ACTIVE",
     "created": "2017-11-07T21:46:36.000Z",
     "lastUpdated": "2017-11-07T21:46:36.000Z",
-    "issuerId": "ausoxdmNlCV4Rw9Ec0g3",
+    "issuer": "https://{yourOktaDomain}/oauth2/ausain6z9zIedDCxB0h7",
     "clientId": "customClientIdNative",
     "userId": "00uol9oQZaWN47WQZ0g3",
     "scopeId": "scpp4bmzfCV7dHf8y0g3",
@@ -4214,12 +4196,10 @@ Here are some links that may be available on a User, as determined by your polic
             "title": "test"
         },
         "self": {
-            "href": "https://{yourOktaDomain}:1802/api/v1/users/00uol9oQZaWN47WQZ0g3/grants/oag2n8HU1vTmvCdQ50g3"
-        },
-        "revoke": {
             "href": "https://{yourOktaDomain}:1802/api/v1/users/00uol9oQZaWN47WQZ0g3/grants/oag2n8HU1vTmvCdQ50g3",
             "hints": {
                 "allow": [
+                    "GET",
                     "DELETE"
                 ]
             }
@@ -4231,10 +4211,6 @@ Here are some links that may be available on a User, as determined by your polic
         "user": {
             "href": "https://{yourOktaDomain}:1802/api/v1/users/00uol9oQZaWN47WQZ0g3",
             "title": "Saml Jackson"
-        },
-        "issuer": {
-            "href": "https://{yourOktaDomain}:1802/api/v1/authorizationServers/default",
-            "title": "default"
         },
         "authorizationServer": {
             "href": "https://{yourOktaDomain}/api/v1/authorizationServers/ausain6z9zIedDCxB0h7",
@@ -4254,7 +4230,7 @@ Here are some links that may be available on a User, as determined by your polic
 | status      | Status of the grant. Valid values: `ACTIVE`, `REVOKED` or `EXPIRED`                                                            | String                                                          |
 | created     | Timestamp when the grant was created                                                                                           | Date                                                            |
 | lastUpdated | Timestamp when the grant was last updated                                                                                      | Date                                                            |
-| issuerId    | ID of the authorization server for this grant                                                                                  | String                                                          |
+| issuer      | The complete URL of the authorization server for this grant                                                                    | String                                                          |
 | clientId    | ID of the client for this grant                                                                                                | String                                                          |
 | userId      | ID of the user who consented to this grant                                                                                     | String                                                          |
 | scopeId     | ID of the scope to which this grant applies                                                                                    | String                                                          |
