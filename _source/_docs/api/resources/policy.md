@@ -42,7 +42,7 @@ curl -v -X GET \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/policies/{policyId}"
+"https://{yourOktaDomain}/api/v1/policies/{policyId}"
 ~~~
 
 ##### Response Example
@@ -69,7 +69,7 @@ curl -v -X GET \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/policies/{policyId}?expand=rules"
+"https://{yourOktaDomain}/api/v1/policies/{policyId}?expand=rules"
 ~~~
 
 ##### Response Types
@@ -97,7 +97,7 @@ curl -v -X GET \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/policies?type={type}"
+"https://{yourOktaDomain}/api/v1/policies?type={type}"
 ~~~
 
 ##### Response Types
@@ -125,7 +125,7 @@ curl -v -X DELETE \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/policies/{policyId}"
+"https://{yourOktaDomain}/api/v1/policies/{policyId}"
 ~~~
 
 ##### Response Types
@@ -167,7 +167,7 @@ curl -v -X PUT \
          }
         }
      }, \
-"https://{yourOktaDomain}.com/api/v1/policies/{policyId}"
+"https://{yourOktaDomain}/api/v1/policies/{policyId}"
 ~~~
 
 ##### Response Types
@@ -207,7 +207,7 @@ curl -v -X POST \
           }
         }
       }, \
-"https://{yourOktaDomain}.com/api/v1/policies"
+"https://{yourOktaDomain}/api/v1/policies"
 ~~~
 
 ##### Response Types
@@ -233,7 +233,7 @@ curl -v -X POST \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/policies/{policyId}/lifecycle/activate"
+"https://{yourOktaDomain}/api/v1/policies/{policyId}/lifecycle/activate"
 ~~~
 
 ##### Response Types
@@ -259,7 +259,7 @@ curl -v -X POST \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/policies/{policyId}/lifecycle/deactivate"
+"https://{yourOktaDomain}/api/v1/policies/{policyId}/lifecycle/deactivate"
 ~~~
 
 ##### Response Types
@@ -287,7 +287,7 @@ curl -v -X GET \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/policies/{policyId}/rules"
+"https://{yourOktaDomain}/api/v1/policies/{policyId}/rules"
 ~~~
 
 ##### Response Types
@@ -337,7 +337,7 @@ curl -v -X POST \
       "access": "ALLOW"
     }
   }' \
-"https://{yourOktaDomain}.com/api/v1/policies/{policyId}/rules"
+"https://{yourOktaDomain}/api/v1/policies/{policyId}/rules"
 ~~~
 
 ##### Response Types
@@ -363,7 +363,7 @@ curl -v -X DELETE \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/policies/{policyId}/rules/{ruleId}"
+"https://{yourOktaDomain}/api/v1/policies/{policyId}/rules/{ruleId}"
 ~~~
 
 ##### Response Types
@@ -389,7 +389,7 @@ curl -v -X GET \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/policies/{policyId}/rules/{ruleId}"
+"https://{yourOktaDomain}/api/v1/policies/{policyId}/rules/{ruleId}"
 ~~~
 
 ##### Response Types
@@ -440,7 +440,7 @@ curl -v -X PUT \
     }
   }
 }' \
-"https://{yourOktaDomain}.com/api/v1/policies/{policyId}/rules/{ruleId}"
+"https://{yourOktaDomain}/api/v1/policies/{policyId}/rules/{ruleId}"
 ~~~
 
 ##### Response Types
@@ -466,7 +466,7 @@ curl -v -X POST \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/policies/{policyId}/rules/{ruleId}/lifecycle/activate"
+"https://{yourOktaDomain}/api/v1/policies/{policyId}/rules/{ruleId}/lifecycle/activate"
 ~~~
 
 ##### Response Types
@@ -492,7 +492,7 @@ curl -v -X POST \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/policies/{policyId}/rules/{ruleId}/lifecycle/deactivate"
+"https://{yourOktaDomain}/api/v1/policies/{policyId}/rules/{ruleId}/lifecycle/deactivate"
 ~~~
 
 ##### Response Types
@@ -830,11 +830,10 @@ Specific zone ids to include or exclude are enumerated in the respective arrays.
 
 Parameter | Description | Data Type | Required |
 | --- | --- | --- | ---
-connection | Network selection mode | `ANYWHERE`, `ZONE`, `ON_NETWORK`, or `OFF_NETWORK` | No |
+connection | Network selection mode | `ANYWHERE`, `ZONE` | No |
 include | The zones to include | Array | Only if connection data type is `ZONE` |
 exclude | The zones to exclude | Array | Only if connection data type is `ZONE` |
 
-> The `ON_NETWORK` and `OFF_NETWORK` data types are part of a {% api_lifecycle deprecated %} feature. Backward compatibility is maintained, but using `ZONE` is preferred.
 > The connection parameter may be set to the `ZONE` data type to select individual network zones.
 
 #### Network Condition Object Example
@@ -848,6 +847,21 @@ exclude | The zones to exclude | Array | Only if connection data type is `ZONE` 
     ]
   }
 ~~~
+
+If you want to include or exclude all zones, you should pass in "ALL_ZONES" as the only element in the include or exclude array
+
+#### Network Condition Object Example (exclude all zones)
+{: #NetworkConditionObjectExample }
+
+~~~json
+  "network": {
+    "connection": "ZONE",
+    "exclude": [
+      "ALL_ZONES"
+    ]
+  }
+~~~
+
 
 #### Authentication Provider Condition Object
 {: #AuthProviderConditionObject }
@@ -983,13 +997,20 @@ Note that policy settings are included only for those factors which have been en
 
 Parameter | Description | Data Type | Required
 | --- | --- | --- | ---
+duo | Duo Security | <a href="#PolicyFactorObject">Policy MFA Factor Object</a> | No
+fido_u2f | FIDO U2F | <a href="#PolicyFactorObject">Policy MFA Factor Object</a> | No
+fido_webauthn | Windows Hello | <a href="#PolicyFactorObject">Policy MFA Factor Object</a> | No
 google_otp | Google Authenticator | <a href="#PolicyFactorObject">Policy MFA Factor Object</a> | No
+okta_call | Okta Voice Call | <a href="#PolicyFactorObject">Policy MFA Factor Object</a> | No
+okta_email | Okta Email | <a href="#PolicyFactorObject">Policy MFA Factor Object</a> | No
 okta_otp | Okta Verify TOTP | <a href="#PolicyFactorObject">Policy MFA Factor Object</a> | No
+okta_password | Okta Password | <a href="#PolicyFactorObject">Policy MFA Factor Object</a> | No
 okta_push | Okta Verify Push | <a href="#PolicyFactorObject">Policy MFA Factor Object</a> | No
 okta_question | Okta Security Question | <a href="#PolicyFactorObject">Policy MFA Factor Object</a> | No
 okta_sms | Okta SMS | <a href="#PolicyFactorObject">Policy MFA Factor Object</a> | No
 rsa_token | RSA Token | <a href="#PolicyFactorObject">Policy MFA Factor Object</a> | No
-symantec_vip | Symantic VIP | <a href="#PolicyFactorObject">Policy MFA Factor Object</a> | No
+symantec_vip | Symantec VIP | <a href="#PolicyFactorObject">Policy MFA Factor Object</a> | No
+yubikey_token | Yubikey Token | <a href="#PolicyFactorObject">Policy MFA Factor Object</a> | No
 
 #### Policy MFA Factor Object
 {: #PolicyFactorObject }
