@@ -1207,7 +1207,7 @@ You now have a fully functioning Single Page App, connected to a REST API server
 
 Go ahead and test out the app now. If they're not already running, make sure to start the server and the frontend. In your terminal run `yarn start` from your project directory.
 
-Navigate to <http://localhost:3000>. You should be able to add, edit, view, and delete posts to your heart's desire!
+Navigate to `http://localhost:3000`. You should be able to add, edit, view, and delete posts to your heart's desire!
 
 {% img blog/node-react-crud/new-post.png alt:"new post" width:"700" %}{: .center-image }
 
