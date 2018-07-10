@@ -244,7 +244,7 @@ Click **Done** to save your app, then copy your **Client ID** and paste it as a 
 **.env.local**
 ```bash
 REACT_APP_OKTA_CLIENT_ID={yourClientId}
-REACT_APP_OKTA_ORG_URL=https://{yourOktaOrgUrl}
+REACT_APP_OKTA_ORG_URL=https://{yourOktaDomain}
 ```
 
 The easiest way to add Authentication with Okta to a React app is to use [Okta's React SDK](https://github.com/okta/okta-oidc-js/tree/master/packages/okta-react). You'll also need to add routes, which can be done using [React Router](https://reacttraining.com/react-router/). I'll also have you start adding icons to the app (for now as an avatar icon to show you're logged in). Material UI provides Material Icons, but in another package, so you'll need to add that too. Run the following command to add these new dependencies:
