@@ -1220,13 +1220,13 @@ Hopefully you found this article helpful. If you're new to React, maybe you're o
 
 If you’d like to view the source code for the example application in this post, you can find it at [https://github.com/oktadeveloper/okta-react-node-example](https://github.com/oktadeveloper/okta-react-node-example).
 
-If you're still aching for more content, there is a plethora of great posts on the Okta developer blog. This post was not-so-loosely based on [Build a Basic CRUD App with Vue.js and Node](https://developer.okta.com/blog/2018/02/15/build-crud-app-vuejs-node), which I would definitely recommend checking out if you're interested in learning more about Vue.js. Here are some other great articles to check out as well:
+If you're still aching for more content, there is a plethora of great posts on the Okta developer blog. This post was not-so-loosely based on [Build a Basic CRUD App with Vue.js and Node](/blog/2018/02/15/build-crud-app-vuejs-node), which I would definitely recommend checking out if you're interested in learning more about Vue.js. Here are some other great articles to check out as well:
 
-* [The Ultimate Guide to Progressive Web Applications](https://developer.okta.com/blog/2017/07/20/the-ultimate-guide-to-progressive-web-applications)
-* [Build User Registration with Node, React, and Okta](https://developer.okta.com/blog/2018/02/06/build-user-registration-with-node-react-and-okta)
-* [Build a React Application with User Authentication in 15 Minutes](https://developer.okta.com/blog/2017/03/30/react-okta-sign-in-widget)
-* [Build a React Native Application and Authenticate with OAuth 2.0](https://developer.okta.com/blog/2018/03/16/build-react-native-authentication-oauth-2)
-* [Tutorial: Build a Basic CRUD App with Node.js](https://developer.okta.com/blog/2018/06/28/tutorial-build-a-basic-crud-app-with-node)
+* [The Ultimate Guide to Progressive Web Applications](/blog/2017/07/20/the-ultimate-guide-to-progressive-web-applications)
+* [Build User Registration with Node, React, and Okta](/blog/2018/02/06/build-user-registration-with-node-react-and-okta)
+* [Build a React Application with User Authentication in 15 Minutes](/blog/2017/03/30/react-okta-sign-in-widget)
+* [Build a React Native Application and Authenticate with OAuth 2.0](/blog/2018/03/16/build-react-native-authentication-oauth-2)
+* [Tutorial: Build a Basic CRUD App with Node.js](/blog/2018/06/28/tutorial-build-a-basic-crud-app-with-node)
 
 And as always, we’d love to hear from you. Hit us up with questions or feedback in the comments, or on Twitter [@oktadev](https://twitter.com/oktadev).
 
