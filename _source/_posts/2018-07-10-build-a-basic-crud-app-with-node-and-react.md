@@ -454,7 +454,7 @@ class LoginButton extends Component {
 }
 ```
 
-All React components must have a `render` function. This is what tells React what to display on the screen, even if it shouldn't display anything (in which case you can return `null`).
+All React components must have a `render()` function. This is what tells React what to display on the screen, even if it shouldn't display anything (in which case you can return `null`).
 
 When you're not sure of the authentication state yet, you can just return `null` so the button isn't rendered at all. Once Okta `this.props.auth.isAuthenticated()` returns, the value will either be `true` or `false`. If it's `false`, you'll want to provide a `Login` button. If the user is logged in, you can instead display an avatar icon that has a dropdown menu with a Logout button.
 
@@ -989,7 +989,7 @@ Here you're setting up a simple helper function to send a request to the server.
 This also sets some headers to tell the backend that any body it sends will be in JSON format, and it sets the authorization header by fetching the access token from Okta.
 
 
-```jsx
+```javascript
 class PostsManager extends Component {
   // ...
 
@@ -1024,7 +1024,7 @@ The last function is to delete a post. The `confirm` function actually blocks th
 
 After saving or deleting a post, the `getPosts` command is called again to make sure that all the posts are up to date.
 
-```jsx
+```javascript
 class PostsManager extends Component {
   // ...
 
