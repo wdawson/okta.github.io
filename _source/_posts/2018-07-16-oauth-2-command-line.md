@@ -63,7 +63,7 @@ function http($url, $params=false) {
 
 ## Start the OAuth 2.0 Flow
 
-We're ready to start the OAuth flow now. First we generate a random “state” value for added security. Since we're building this in a command line script, we don't need to worry about storing it in a session or anything, since we'll generate it and then use it and then be done with it.
+We're ready to start the OAuth flow now. First we generate a random "state" value for added security. Since we're building this in a command line script, we don't need to worry about storing it in a session or anything, since we'll generate it and then use it and then be done with it.
 
 ```php
 $state = bin2hex(random_bytes(5));
