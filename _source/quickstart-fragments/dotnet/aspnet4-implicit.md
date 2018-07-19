@@ -16,8 +16,8 @@ If you don't already have a Web API project, create a new ASP.NET (.NET Framewor
 
 First, install these packages with NuGet:
 
-- `Microsoft.Owin.Host.SystemWeb` 4.0.0 or higher (if it isn't already installed)
-- `Okta.AspNet`
+* [Okta.AspNet](https://nuget.org/packages/Okta.AspNet)
+* [Microsot.Owin.Host.SystemWeb](https://www.nuget.org/packages/Microsoft.Owin.Host.SystemWeb) 4.0.0 or higher
 
 
 ### Configure the middleware
@@ -27,10 +27,10 @@ If you don't already have a `Startup.cs` file (OWIN Startup class), create one b
 Make sure you have these `using` statements at the top of your `Startup.cs` file:
 
 ```csharp
-using System.Configuration;
 using Microsoft.Owin;
-using Okta.AspNet.Abstractions;
+using Okta.AspNet;
 using Owin;
+using System.Configuration;
 ```
 
 Add the following code to your `Configuration` method:
@@ -38,13 +38,10 @@ Add the following code to your `Configuration` method:
 ```csharp
 public void Configuration(IAppBuilder app)
 {
-    var oktaDomain = ConfigurationManager.AppSettings["okta:OktaDomain"];
-    var clientId = ConfigurationManager.AppSettings["okta:ClientId"];
-    
     app.UseOktaWebApi(new OktaWebApiOptions()
     {
-        OktaDomain = oktaDomain,
-        ClientId = clientId
+        OktaDomain = ConfigurationManager.AppSettings["okta:OktaDomain"],
+        ClientId = ConfigurationManager.AppSettings["okta:ClientId"]
     });
 }
 ```

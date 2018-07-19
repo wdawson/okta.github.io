@@ -1,6 +1,7 @@
 ---
 layout: docs_page
 title: Linked Objects
+category: management
 excerpt: The Linked Objects API helps you create relationships between pairs of users, such as Manager and Subordinate.
 ---
 
@@ -22,7 +23,12 @@ For each relationship:
 For details, see the [Linked Object Model](#linked-object-model).
 
 The Expression Language function for [linked objects](/reference/okta_expression_language/#linked-object-function) provides access to the details about a linked user.
-<!-- Hiding this until the collection is ready, hopefully GA  ## Getting Started Explore the Linked Objects API: [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/create-collection-from-jira) (link doesn't work yet) -->
+
+## Getting Started 
+
+Explore the Linked Objects API:
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/ed4c5606d25d1014b7ea){:target="_blank"}
 
 ## Link Definition Operations
 
@@ -72,7 +78,7 @@ curl -X POST \
         "description": "Subordinate link property",
         "type": "USER"
     }
-}' "https://{yourOktaDomain}.com/api/v1/meta/schemas/user/default/linkedObjects"
+}' "https://{yourOktaDomain}/api/v1/meta/schemas/user/default/linkedObjects"
 ~~~
 
 ##### Response Example
@@ -95,7 +101,7 @@ HTTP/1.1 201 Created
     },
     "_links": {
         "self": {
-            "href": "https://{yourOktaDomain}.com/api/v1/meta/schemas/user/default/linkedObjects/manager"
+            "href": "https://{yourOktaDomain}/api/v1/meta/schemas/user/default/linkedObjects/manager"
         }
     }
 }
@@ -130,7 +136,7 @@ curl -X POST \
   -H 'Accept: application/json' \
   -H 'Authorization: SSWS ${api_token}' \
   -H 'Content-Type: application/json' \
-  -d "https://{yourOktaDomain}.com/api/v1/meta/schemas/user/default/linkedObjects/manager"
+  -d "https://{yourOktaDomain}/api/v1/meta/schemas/user/default/linkedObjects/manager"
 ~~~
 
 ##### Response Example
@@ -154,7 +160,7 @@ HTTP/1.1 200 OK
     },
     "_links": {
         "self": {
-            "href": "https://{yourOktaDomain}.com/api/v1/meta/schemas/user/default/linkedObjects/manager"
+            "href": "https://{yourOktaDomain}/api/v1/meta/schemas/user/default/linkedObjects/manager"
         }
     }
 }
@@ -186,7 +192,7 @@ curl -v -X GET \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/meta/schemas/user/default/linkedObjects"
+"https://{yourOktaDomain}/api/v1/meta/schemas/user/default/linkedObjects"
 ~~~
 
 ##### Response Example
@@ -209,7 +215,7 @@ curl -v -X GET \
         },
         "_links": {
             "self": {
-                "href": "https://{yourOktaDomain}.com/api/v1/meta/schemas/user/default/linkedObjects/manager"
+                "href": "https://{yourOktaDomain}/api/v1/meta/schemas/user/default/linkedObjects/manager"
             }
         }
     },
@@ -228,7 +234,7 @@ curl -v -X GET \
         },
         "_links": {
             "self": {
-                "href": "https://{yourOktaDomain}.com/api/v1/meta/schemas/user/default/linkedObjects/mother"
+                "href": "https://{yourOktaDomain}/api/v1/meta/schemas/user/default/linkedObjects/mother"
             }
         }
     }
@@ -262,7 +268,7 @@ curl -v -X DELETE \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/meta/schemas/user/default/linkedObjects/mother"
+"https://{yourOktaDomain}/api/v1/meta/schemas/user/default/linkedObjects/mother"
 ~~~
 
 ##### Response Example
@@ -310,7 +316,7 @@ curl -v -X PUT \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/users/${associated.userId}/linkedObjects/${primary.name}/${primary.userId}"
+"https://{yourOktaDomain}/api/v1/users/${associated.userId}/linkedObjects/${primary.name}/${primary.userId}"
 ~~~
 
 ##### Response Example
@@ -349,7 +355,7 @@ curl -v -X GET \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/users/00u5zex6ztMbOZhF50h7/linkedObjects/manager"
+"https://{yourOktaDomain}/api/v1/users/00u5zex6ztMbOZhF50h7/linkedObjects/manager"
 ~~~
 
 ##### Response Example
@@ -360,7 +366,7 @@ curl -v -X GET \
     {
         "_links": {
             "self": {
-                "href": "https://{yourOktaDomain}.com/api/v1/users/00u5t60iloOHN9pBi0h7"
+                "href": "https://{yourOktaDomain}/api/v1/users/00u5t60iloOHN9pBi0h7"
             }
         }
     }
@@ -396,7 +402,7 @@ curl -v -X GET \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/users/00u5t60iloOHN9pBi0h7/linkedObjects/subordinate"
+"https://{yourOktaDomain}/api/v1/users/00u5t60iloOHN9pBi0h7/linkedObjects/subordinate"
 ~~~
 
 ##### Response Example
@@ -407,7 +413,7 @@ curl -v -X GET \
     {
         "_links": {
             "self": {
-                "href": "https://{yourOktaDomain}.com/api/v1/users/00u5zex6ztMbOZhF50h7"
+                "href": "https://{yourOktaDomain}/api/v1/users/00u5zex6ztMbOZhF50h7"
             }
         }
     }
@@ -450,7 +456,7 @@ curl -v -X GET \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com//api/v1/users/00u5t60iloOHN9pBi0h7/linkedObjects/manager"
+"https://{yourOktaDomain}//api/v1/users/00u5t60iloOHN9pBi0h7/linkedObjects/manager"
 ~~~
 
 ##### Response Example
@@ -462,7 +468,7 @@ HTTP/1.1 204 No Content
 
 ## Linked Object Model
 
-The following model contains example values for each attribute. 
+The following model contains example values for each attribute.
 
 ~~~sh
 {
@@ -480,7 +486,7 @@ The following model contains example values for each attribute.
     },
     "_links": {
           "self": {
-               "href": "https://{yourOktaDomain}.com/api/v1/meta/schemas/user/default/linkedObjects/manager"
+               "href": "https://{yourOktaDomain}/api/v1/meta/schemas/user/default/linkedObjects/manager"
           }
     }
 }
@@ -498,4 +504,4 @@ The following model contains example values for each attribute.
 | associated.description | Description of the `associated` relationship | String | FALSE |
 | associated.type | The object type for this `associated` relationship. Valid value: `USER` | Enum | TRUE |
 
-> The primary.type and associated.type are created as Enums to allow Okta to add more object types in the future. This is not a guarantee that Okta will do so. 
+> The primary.type and associated.type are created as Enums to allow Okta to add more object types in the future. This is not a guarantee that Okta will do so.

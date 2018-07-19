@@ -5,7 +5,7 @@ exampleDescription: Express.js Auth Code Example
 
 ## Okta Node.js/Express.js Quickstart
 
-Your Express server will need to handle the authentication callback from Okta.  In this section we'll show you how to install and configure the [@okta/oidc-middleware](https://github.com/okta/okta-oidc-js/tree/master/packages/oidc-middleware) library, referred to below as ExpressOIDC, to do this automatically.
+Now that your users can sign in, let's handle the authentication callback from Okta in your Express server. We'll show you how to install and configure the [@okta/oidc-middleware](https://github.com/okta/okta-oidc-js/tree/master/packages/oidc-middleware) library, referred to below as ExpressOIDC, to do this automatically.
 
 > If you would prefer to download a complete sample application instead, please visit [Express Sample Applications for Okta][] and follow those instructions.
 
@@ -33,7 +33,7 @@ app.use(session({
 }));
 
 const oidc = new ExpressOIDC({
-  issuer: 'https://{yourOktaDomain}.com/oauth2/default',
+  issuer: 'https://{yourOktaDomain}/oauth2/default',
   client_id: '{clientId}',
   client_secret: '{clientSecret}',
   redirect_uri: 'http://localhost:3000/authorization-code/callback',
@@ -46,7 +46,7 @@ app.use(oidc.router);
 
 ### Protect Your Routes
 
-If you want to require authentication for certain routes, add the `oidc.ensureAuthenticated()` middleware.  If the user is not authenticated, they will be redirected to the login page:
+If you require authentication for certain routes, add the `oidc.ensureAuthenticated()` middleware.  If the user is not authenticated, they will be redirected to the login page:
 
 ```javascript
 app.get('/protected', oidc.ensureAuthenticated(), (req, res) => {
@@ -68,7 +68,7 @@ app.get('/', (req, res) => {
 
 ### Starting Your Server
 
-When you create an instance of ExpressOIDC, some initial communication is made to the issuer (your Okta Org) to ensure that the provided client credentials are correct.  Because this is asynchronous you will need to wait for ExpressOIDC to be ready, then you can tell your Express app to start listening:
+When you create an instance of ExpressOIDC, some initial communication is made to the issuer (your Okta org) to ensure that the provided client credentials are correct.  Because this is asynchronous you will need to wait for ExpressOIDC to be ready, then you can tell your Express app to start listening:
 
 ```javascript
 oidc.on('ready', () => {

@@ -2,36 +2,12 @@
 
 source "${0%/*}/helpers.sh"
 
-if ! check_sample_code_orgs ;
-then
-    echo "Failed URL consistency check. Please use https://{yourOktaDomain}.com"
-    exit 1;
-else
-    echo -e "\xE2\x9C\x94 Passed check_sample_code_orgs"
-fi
-
-if ! check_index_links ;
-then
-    echo "Failed index href check. Please use the proper file type"
-    exit 1;
-else
-    echo -e "\xE2\x9C\x94 Passed check_index_links"
-fi
-
 if ! header_checker ;
 then
     echo "Failed header checker!"
     exit 1;
 else
     echo -e "\xE2\x9C\x94 Passed header_checker"
-fi
-
-if ! check_for_all_localhost_links ;
-then
-    echo "Failed localhost checker! Please remove all localhost links"
-    exit 1;
-else
-    echo -e "\xE2\x9C\x94 Passed check_for_all_localhost_links"
 fi
 
 if ! check_for_quickstart_pages_in_sitemap ;
@@ -63,4 +39,20 @@ then
     exit 1
 else
     echo -e "\xE2\x9C\x94 Passed missing slashes validation"
+fi
+
+if ! bundle exec ./scripts/htmlproofer.rb false;
+then
+    echo "Failed HTML link validation."
+    exit 1;
+else
+    echo -e "\xE2\x9C\x94 No broken internal links!"
+fi
+
+if ! removeHTMLExtensions;
+then
+    echo "Failed removing .html extensions"
+    exit 1;
+else
+    echo -e "\xE2\x9C\x94 Removed .html extensions and setup redirects"
 fi

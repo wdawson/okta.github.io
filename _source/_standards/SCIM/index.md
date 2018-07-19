@@ -21,7 +21,7 @@ This article describes:
 
 ### The Value of Provisioning
 
-With the proliferation of cloud apps, today’s IT organizations are faced with the prospect of managing user accounts
+With the proliferation of cloud apps, today's IT organizations are faced with the prospect of managing user accounts
 in an ever-expanding number of administrator consoles for each app. This is not a problem if an enterprise has one or two cloud apps,
 but as the number grows, the situation quickly becomes unmanageable. Cloud app vendors hoping to sell into enterprises
 need to have an answer to this concern.
@@ -38,7 +38,7 @@ companies can cut costs, allow new employees to be immediately productive, and r
 
 Provisioning consists of a set of actions between Okta and the cloud app.
 These actions are building blocks that combine to solve end-to-end use cases.
-As the developer, you’ll need to define the use cases that your target customer wants
+As the developer, you'll need to define the use cases that your target customer wants
 and the corresponding actions to build into your integration.
 
 The set of actions that an integration can do under the Provisioning umbrella
@@ -56,21 +56,21 @@ Import users & groups from the downstream application in order to match them to 
 #### Update Users
 
 For an application user that is affiliated with an Okta user,
-update the downstream user’s attributes when the Okta user is updated.
+update the downstream user's attributes when the Okta user is updated.
 Or, update the Okta user attributes if the application functions as the [master](#profile-mastering-users) for the full Okta user profile or specific attributes.
 
 #### Deprovision (Deactivate) Users
 
 Deprovisioning the application user removes access to the downstream application.
 This can take many forms, such as user disabled, user access permissions changed, or user license pulled.
-Each application may choose different methods for deactivating a user’s access.
+Each application may choose different methods for deactivating a user's access.
 
 For audit purposes, Okta users are never deleted; they are deactivated instead.
 Because of this, Okta doesn't make delete requests to the user APIs in downstream applications.
 
 #### Sync Password
 
-Okta sets the user’s password to either match the Okta password or to be a randomly generated password.
+Okta sets the user's password to either match the Okta password or to be a randomly generated password.
 Learn more about the overall use case in [Using Sync Password: Active Directory Environments](https://help.okta.com/en/prod/Content/Topics/Security/Security_Using_Sync_Password.htm).
 
 #### Profile Mastering Users
@@ -78,7 +78,7 @@ Learn more about the overall use case in [Using Sync Password: Active Directory 
 Mastering is a more sophisticated version of read (import) Users.
 Mastering defines the flow and maintenance of user-object attributes and their lifecycle state.
 When a profile is mastered from a given resource (application or directory),
-the Okta user profile’s attributes and lifecycle state are derived exclusively from that resource.
+the Okta user profile's attributes and lifecycle state are derived exclusively from that resource.
 In other words, an Okta user mastered by Active Directory (or HR system) has an Okta profile.
 However, the profile isn't editable in Okta by the user or Okta admin, and derives its information exclusively from Active Directory.
 If the lifecycle state of the user in Active Directory moves to Disabled,
@@ -96,7 +96,7 @@ In many enterprises, Active Directory (or LDAP) is the system of record for empl
 Okta has developed a powerful, lightweight agent to sync with Active Directory to populate employee and group information.
 Within Okta, IT admins can leverage features such as [Universal Directory](https://help.okta.com/en/prod/Content/Topics/Directory/About_Universal_Directory.htm) and [group membership rules](https://help.okta.com/en/prod/Content/Topics/Directory/About_Universal_Directory.htm) to map that information when provisioning accounts and permissions in downstream apps.
 
-Subsequently, any updates to an employee’s profile, such as a change in department, in either Active Directory or Okta flow into the downstream app.
+Subsequently, any updates to an employee's profile, such as a change in department, in either Active Directory or Okta flow into the downstream app.
 Similarly, removing or deactivating an employee from Active Directory triggers deactivation in the downstream app as well.
 
 Okta supports these common Provisioning use cases:
@@ -116,7 +116,7 @@ In this scenario, the HR app, not Active Directory, feeds employee profile detai
 
 <!-- More info on configuring app-as-master in Okta is [here](). Note: link was missing from source -->
 
-> Note: Integrations for the “App-as-Master” use case are significantly more complex than the Directory-as-Master use case and take more time to build and support.
+> Note: Integrations for the "App-as-Master" use case are significantly more complex than the Directory-as-Master use case and take more time to build and support.
 This is because these integrations sync a larger number of attributes and lifecycle states, and more directly impact the Okta user profile and downstream apps.
 
 #### Advanced App-as-Master Use Cases
@@ -126,15 +126,15 @@ Until then, consider out-of-band processes that work around these use cases.
 
 * Attribute-level mastering: The app wants to be the master for some employee attributes like phone number, while letting Okta or another app master other attributes. We call this attribute-level mastering.
 
-* Pre-hire interval: In an HR-as-Master use case, there is sometimes a desire to import the new employee into Okta from the HR app a few days prior to the hire/start date. This gives IT time to set up the employee’s apps in advance. A pre-hire interval configuration would specify how many days before the employee’s hire date Okta should import the employee.
+* Pre-hire interval: In an HR-as-Master use case, there is sometimes a desire to import the new employee into Okta from the HR app a few days prior to the hire/start date. This gives IT time to set up the employee's apps in advance. A pre-hire interval configuration would specify how many days before the employee's hire date Okta should import the employee.
 
-* Real-time sync/termination: In an HR-as-Master use case, a change in employee status within the HR system may need to be immediately reflected in Okta. Involuntary terminations is one scenario where an employee’s access to sensitive apps and content via Okta needs to be cut off within minutes.
+* Real-time sync/termination: In an HR-as-Master use case, a change in employee status within the HR system may need to be immediately reflected in Okta. Involuntary terminations is one scenario where an employee's access to sensitive apps and content via Okta needs to be cut off within minutes.
 
 * Incremental/delta import: Importing a large number of user profiles from an app into Okta can take minutes, even hours. This can become a major performance and timing issue if frequent updates are needed. Currently, the SCIM-Based Provisioning option doesn't support the ability to import only those user profiles that have changed since the last import. In the future, we may support this via filtering on `meta.lastModified`. ([More information](#filtering-on-metalastmodified))
 
 ## Ways to Build Provisioning
 
-Now that you understand the most common provisioning actions and use cases, let’s review your options to support provisioning as an app developer.
+Now that you understand the most common provisioning actions and use cases, let's review your options to support provisioning as an app developer.
 While we outline a few different methods below, Okta recommends all ISVs support [the SCIM standard](http://www.simplecloud.info/).
 
 ### Provisioning Options Matrix
@@ -146,18 +146,18 @@ Okta has doubled down on our investment in our SCIM client and launched our own 
 |:--|:--|:--|
 | SCIM  | **Recommended**  | Supports all of the use cases above.  |
 | SAML JIT (Just-in-Time)  | Not Recommended - Limited Functionality  | Just-in-Time Provisioning (JIT) is part of the SAML spec. Supports user/group Create and Update (upon user sign-on) but does not support Deactivate, Read, or Sync Password  |
-| Okta API  | Not Recommended - Not Verified by Okta  | Poll Okta API for user & group CRUD operations. Polling Okta API is resource intensive, so provisioning won’t be real-time. Poor administrator experience: cannot centralize within Okta  |
+| Okta API  | Not Recommended - Not Verified by Okta  | Poll Okta API for user & group CRUD operations. Polling Okta API is resource intensive, so provisioning won't be real-time. Poor administrator experience: cannot centralize within Okta  |
 
 ### Provisioning to On-Premise Apps
 
 The options above are geared towards cloud apps but we have a solution for on-premise applications as well.
-See [the product documentation](https://support.okta.com/help/Documentation/Knowledge_Article/46749316-On-Premises-Provisioning-Deployment-Guide) for details about Okta’s agent-based provisioning solution.
+See [the product documentation](https://support.okta.com/help/Documentation/Knowledge_Article/46749316-On-Premises-Provisioning-Deployment-Guide) for details about Okta's agent-based provisioning solution.
 
 ### SCIM Facade
 
 Sometimes it isn't feasible for the cloud app to natively support a SCIM Server API.
 An alternative option is to build and host a SCIM facade middleware that translates
-between the Okta SCIM Client and the cloud app’s proprietary API. The Okta integration would be to this SCIM facade.
+between the Okta SCIM Client and the cloud app's proprietary API. The Okta integration would be to this SCIM facade.
 
 > Have questions? Need help? Email us at <developers@okta.com> or post your question on [Stack Overflow](http://stackoverflow.com/search?q=okta,scim).
 
@@ -244,6 +244,19 @@ the following methods:
 1. [OAuth 2.0 Authorization Code Grant Flow](https://tools.ietf.org/html/rfc6749#section-4.1)
 2. [Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication)
 3. Custom HTTP Header
+
+> After a user successfully authorizes Okta using OAuth 2.0, the authorization server of your app will redirect the user back to Okta with either an authorization code or access token.
+>
+> Okta requires all SCIM applications to support all the following [redirect URI's](https://tools.ietf.org/html/rfc6749#section-3.1.2):
+> - [http://system-admin.okta1.com:1802/admin/app/cpc/{appName}/oauth/callback](http://system-admin.okta1.com:1802/admin/app/cpc/{appName}/oauth/callback)
+> - [https://system-admin.trexcloud.com/admin/app/cpc/{appName}/oauth/callback](https://system-admin.trexcloud.com/admin/app/cpc/{appName}/oauth/callback)
+> - [https://system-admin.oktapreview.com/admin/app/cpc/{appName}/oauth/callback](https://system-admin.oktapreview.com/admin/app/cpc/{appName}/oauth/callback)
+> - [https://system-admin.okta.com/admin/app/cpc/{appName}/oauth/callback](https://system-admin.okta.com/admin/app/cpc/{appName}/oauth/callback)
+> - [https://system-admin.okta-emea.com/admin/app/cpc/{appName}/oauth/callback](https://system-admin.okta-emea.com/admin/app/cpc/{appName}/oauth/callback)
+>
+> where `{appName}` will be provided after the submission is processed.
+>
+> Your app MUST support all the redirect URI's listed above.
 
 > Okta doesn't support OAuth 2.0 [Resource Owner Password Credentials grant flows](https://tools.ietf.org/html/rfc6749#section-1.3.3).
 
@@ -381,6 +394,80 @@ Note: `force=True` is set because Okta sends
 `application/scim+json` as the `Content-Type` and the `.get_json()`
 method expects `application/json`.
 
+###### SCIM 1.1
+
+Below is a sample request from Okta:
+```
+POST /v1/Users HTTP/1.1
+Accept: application/json
+Accept-Charset: utf-8
+Content-Type: application/json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 321
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+	"schemas": ["urn:scim:schemas:core:1.0"],
+	"userName": "jane.doe@example.com",
+	"name": {
+		"givenName": "Jane",
+		"familyName": "Doe"
+	},
+	"emails": [{
+		"primary": true,
+		"value": "jane.doe@example.com",
+		"type": "work"
+	}],
+	"displayName": "Jane Doe",
+	"locale": "en_US",
+	"externalId": "00uv931EiyRsnwOGa0g3",
+	"groups": [],
+	"password": "4a9XuKkx",
+	"active": true
+}
+```
+
+For more information, see [section 3.1](http://www.simplecloud.info/specs/draft-scim-api-01.html#create-resource) of the [SCIM 1.1 Protocol Specification](http://www.simplecloud.info/specs/draft-scim-api-01.html).
+
+###### SCIM 2.0
+
+Below is a sample request from Okta:
+```
+POST /v2/Users HTTP/1.1
+Accept: application/scim+json
+Accept-Charset: utf-8
+Content-Type: application/scim+json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 348
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+	"schemas": ["urn:ietf:params:scim:schemas:core:2.0:User"],
+	"userName": "jane.doe@example.com",
+	"name": {
+		"givenName": "Jane",
+		"familyName": "Doe"
+	},
+	"emails": [{
+		"primary": true,
+		"value": "jane.doe@example.com",
+		"type": "work"
+	}],
+	"displayName": "Jane Doe",
+	"locale": "en_US",
+	"externalId": "00uv931EiyRsnwOGa0g3",
+	"groups": [],
+	"password": "4a9XuKkx",
+	"active": true
+}
+```
+
 For more information on user creation via the `/Users` SCIM
 endpoint, see [section 3.3](https://tools.ietf.org/html/rfc7644#section-3.3) of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
 
@@ -428,11 +515,8 @@ with support for filtering and pagination:
 > the query, add this code after the `query` statement that you want
 > to see: `print(str(query.statement))`
 
-For more details on the `/Users` SCIM endpoint, see [section 3.4.2](https://tools.ietf.org/html/rfc7644#section-3.4.2)
-of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
-
-###### Example
-```http request
+Below is a sample request from Okta:
+```
 GET /v2/Users?startIndex=1&count=2 HTTP/1.1
 Accept: application/scim+json
 Accept-Charset: utf-8
@@ -442,6 +526,9 @@ Host: scimapp.okta1.com:1910
 Connection: Keep-Alive
 Accept-Encoding: gzip,deflate
 ```
+
+For more details on the `/Users` SCIM endpoint, see [section 3.4.2](https://tools.ietf.org/html/rfc7644#section-3.4.2)
+of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
 
 ##### Read Account Details: GET /Users/{id}
 
@@ -461,11 +548,8 @@ by `user_id`:
 If we don't find a user, we return a HTTP status 404 ("Not found")
 with SCIM error message.
 
-For more details on the `/Users/{id}` SCIM endpoint, see [section 3.4.1](https://tools.ietf.org/html/rfc7644#section-3.4.1)
-of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
-
-###### Example
-```http request
+Below is a sample request from Okta:
+```
 GET /v2/Users/{id} HTTP/1.1
 Accept: application/scim+json
 Accept-Charset: utf-8
@@ -475,6 +559,9 @@ Host: scimapp.okta1.com:1910
 Connection: Keep-Alive
 Accept-Encoding: gzip,deflate
 ```
+
+For more details on the `/Users/{id}` SCIM endpoint, see [section 3.4.1](https://tools.ietf.org/html/rfc7644#section-3.4.1)
+of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
 
 ##### Update Account Details: PUT /Users/{id}
 
@@ -502,11 +589,54 @@ Below is how the sample application handles account profile updates:
         db.session.commit()
         return render_json(user)
 
-For more details on updates to the `/Users/{id}` SCIM endpoint, see [section 3.5.1](https://tools.ietf.org/html/rfc7644#section-3.5.1)
-of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
+###### SCIM 1.1
 
-###### Example
-```http request
+Below is a sample request from Okta:
+```
+PUT /v1/Users/8ff680f1c7064d518b3a05545f8155cb HTTP/1.1
+Accept: application/json
+Accept-Charset: utf-8
+Content-Type: application/json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 464
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+	"id": "8ff680f1c7064d518b3a05545f8155cb",
+	"externalId": "00uv931EiyRsnwOGa0g3",
+	"meta": {
+		"created": "05-17-2018 00:00:00",
+		"lastModified": "05-17-2018 00:00:00",
+		"version": "v1.0"
+	},
+	"schemas": ["urn:scim:schemas:core:1.0"],
+	"userName": "jane.doe@example.com",
+	"displayName": "Jane Doe",
+	"locale": "en_US",
+	"active": true,
+	"password": "TkdFNVdIVkxhM2c9",
+	"emails": [{
+		"value": "jane.doe@example.com",
+		"type": "work",
+		"primary": true
+	}],
+	"name": {
+		"familyName": "Doe",
+		"givenName": "Jane"
+	},
+	"groups": []
+}
+```
+
+For more details, see [section 3.3.1](http://www.simplecloud.info/specs/draft-scim-api-01.html#edit-resource-with-put) of the [SCIM 1.1 Protocol Specification](http://www.simplecloud.info/specs/draft-scim-api-01.html).
+
+###### SCIM 2.0
+
+Below is a sample request from Okta:
+```
 PUT /v2/Users/{id} HTTP/1.1
 Accept: application/scim+json
 Accept-Charset: utf-8
@@ -528,23 +658,26 @@ Accept-Encoding: gzip,deflate
 		"version": "v1.0"
 	},
 	"schemas": ["urn:ietf:params:scim:schemas:core:2.0:User"],
-	"userName": "bob@ad.oktatest.com",
-	"displayName": "Bob Minion",
-	"locale": "en-US",
+	"userName": "jane.doe@example.com",
+	"displayName": "Jane Doe",
+	"locale": "en_US",
 	"active": true,
-	"password": "TlVGM056SkRjamM9",
+	"password": "TkdFNVdIVkxhM2c9",
 	"emails": [{
-		"value": "bob@ad.oktatest.com",
+		"value": "jane.doe@example.com",
 		"type": "work",
 		"primary": true
 	}],
 	"name": {
-		"familyName": "Minion",
-		"givenName": "Bobb"
+		"familyName": "Doe",
+		"givenName": "Jane"
 	},
 	"groups": []
 }
 ```
+
+For more details on updates to the `/Users/{id}` SCIM endpoint, see [section 3.5.1](https://tools.ietf.org/html/rfc7644#section-3.5.1)
+of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
 
 ##### Deactivate Account: PATCH /Users/{id}
 
@@ -590,11 +723,32 @@ Below is how the sample application handles account deactivation:
         db.session.commit()
         return render_json(user)
 
-For more details on user attribute updates to `/Users/{id}` SCIM endpoint, see [section 3.5.2](https://tools.ietf.org/html/rfc7644#section-3.5.2)
-of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
+###### SCIM 1.1
 
-###### Example
-```http request
+Below is a sample request from Okta:
+```
+PATCH /v1/Users/2fabb15c24a2440c93a0214599603bcb HTTP/1.1
+Accept: application/json
+Accept-Charset: utf-8
+Content-Type: application/json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 111
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+	"schemas": ["urn:scim:schemas:core:1.0"],
+	"id": "8ff680f1c7064d518b3a05545f8155cb",
+	"active": false
+}
+```
+
+###### SCIM 2.0
+
+Below is a sample request from Okta:
+```
 PATCH /v2/Users/{id} HTTP/1.1
 Accept: application/scim+json
 Accept-Charset: utf-8
@@ -617,49 +771,8 @@ Accept-Encoding: gzip,deflate
 }
 ```
 
-Or, if using PUT:
-
-```http request
-PUT /v2/Users/{id} HTTP/1.1
-Accept: application/scim+json
-Accept-Charset: utf-8
-Content-Type: application/scim+json; charset=utf-8
-User-Agent: Okta SCIM Client 1.0.0
-Authorization: Bearer {token}
-Content-Length: 564
-Host: scimapp.okta1.com:1910
-Connection: Keep-Alive
-Accept-Encoding: gzip,deflate
-
-{
-	"id": "{id}",
-	"externalId": "00uq2kqg7YTkFo3cY0g3",
-	"meta": {
-		"resourceType": "User",
-		"created": "04-16-2018 00:00:00",
-		"lastModified": "04-16-2018 00:00:00",
-		"version": "v1.0"
-	},
-	"schemas": ["urn:ietf:params:scim:schemas:core:2.0:User"],
-	"userName": "bob@ad.oktatest.com",
-	"displayName": "Bob Minion",
-	"preferredLanguage": "en",
-	"locale": "en-US",
-	"timezone": "America/Los_Angeles",
-	"active": false,
-	"password": "Y1ZneE1HazNORTQ9",
-	"emails": [{
-		"value": "bob@ad.oktatest.com",
-		"type": "work",
-		"primary": true
-	}],
-	"groups": [],
-	"name": {
-		"familyName": "Minion",
-		"givenName": "Bob"
-	}
-}
-```
+For more details on user attribute updates to `/Users/{id}` SCIM endpoint, see [section 3.5.2](https://tools.ietf.org/html/rfc7644#section-3.5.2)
+of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
 
 ##### Filtering on `userName eq` (Required)
 
@@ -677,11 +790,11 @@ system.
 Examples of filters that Okta might send to your SCIM API are as
 follows:
 
-~~~bash
+```bash
 userName eq "jane.doe"
 
 userName eq "jane.doe@example.com"
-~~~
+```
 
 Here is an example of how to implement SCIM filtering in Python:
 
@@ -694,11 +807,9 @@ Here is an example of how to implement SCIM filtering in Python:
         search_key = getattr(User, search_key_name)
         query = query.filter(search_key == search_value)
 
-For more details on filtering in SCIM 2.0, see [section 3.4.2.2](https://tools.ietf.org/html/rfc7644#section-3.4.2.2)
-of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
 
-###### Example
-```http request
+Below is a sample request from Okta:
+```
 GET /v2/Users?filter=userName+eq+%22jane.doe%40example.com%22&startIndex=1&count=100 HTTP/1.1
 Accept: application/scim+json
 Accept-Charset: utf-8
@@ -708,6 +819,9 @@ Host: scimapp.okta1.com:1910
 Connection: Keep-Alive
 Accept-Encoding: gzip,deflate
 ```
+
+For more details on filtering in SCIM 2.0, see [section 3.4.2.2](https://tools.ietf.org/html/rfc7644#section-3.4.2.2)
+of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
 
 ##### Filtering on Additional Parameters (Optional)
 
@@ -725,9 +839,9 @@ example:
 Here is an example of an `externalId` filter that might be sent to
 your application:
 
-~~~bash
+```bash
 externalId eq "00u1abcdefGHIJKLMNOP"
-~~~
+```
 
 For details about supporting `externalId`, see
 [section 3.1](https://tools.ietf.org/html/rfc7643#section-3.1) of [RFC 7643](https://tools.ietf.org/html/rfc7643), excerpted below.
@@ -830,13 +944,13 @@ requests are made to your API.
 For more details on rate limiting requests using the HTTP 429
 status code, see [section 4](https://tools.ietf.org/html/rfc6585#section-4) of [RFC 6585](https://tools.ietf.org/html/rfc6585).
 
-##### GET /groups API Endpoint
+##### GET /Groups API Endpoint
 
 Okta currently supports the /groups endpoint for GET /groups of a SCIM API. This is usually done to check for groups data and is not mandatory for SCIM to work. The minimum check we require is for the resources to be of JSON. check example below.
 
 Example:
 
-~~~sh
+```sh
 {
   "schemas": [
     "urn:ietf:params:scim:api:messages:2.0:ListResponse"
@@ -866,10 +980,10 @@ Example:
     }
   ]
 }
-~~~
+```
 
-###### Example
-```http request
+Below is a sample request from Okta:
+```
 GET /v2/Groups?startIndex=1&count=100 HTTP/1.1
 Accept: application/scim+json
 Accept-Charset: utf-8
@@ -880,12 +994,44 @@ Connection: Keep-Alive
 Accept-Encoding: gzip,deflate
 ```
 
-##### Create Group: POST /groups
+##### Create Group: POST /Groups
+
+{% api_lifecycle beta %}
 
 With Group Push Beta, Okta now supports creation of a Group along with its user memberships in the downstream SCIM enabled application if your SCIM 2.0 API supports it. The caveat is that the users must already be provisioned in your SCIM enabled application.
 
-###### Example
-```http request
+###### SCIM 1.1
+
+Below is a sample request from Okta:
+```
+POST /v1/Groups HTTP/1.1
+Accept: application/json
+Accept-Charset: utf-8
+Content-Type: application/json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 236
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+	"schemas": ["urn:scim:schemas:core:1.0"],
+	"displayName": "Example Group",
+	"members": [{
+		"value": "85467bb36e1c4f8991750501bf491962",
+		"display": "steve@ad.oktatest.com"
+	}, {
+		"value": "2fabb15c24a2440c93a0214599603bcb",
+		"display": "bob@ad.oktatest.com"
+	}]
+}
+```
+
+###### SCIM 2.0
+
+Below is a sample request from Okta:
+```
 POST /v2/Groups HTTP/1.1
 Accept: application/scim+json
 Accept-Charset: utf-8
@@ -899,17 +1045,27 @@ Accept-Encoding: gzip,deflate
 
 {
 	"schemas": ["urn:ietf:params:scim:schemas:core:2.0:Group"],
-	"displayName": "{groupName}",
-	"members": []
+	"displayName": "Example Group",
+	"members": [{
+		"value": "85467bb36e1c4f8991750501bf491962",
+		"display": "steve@ad.oktatest.com"
+	}, {
+		"value": "2fabb15c24a2440c93a0214599603bcb",
+		"display": "bob@ad.oktatest.com"
+	}]
 }
 ```
 
-##### Read Group Details: GET /groups/{id}
+For more details, see [section 3.3](https://tools.ietf.org/html/rfc7644#section-3.3) of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
 
-With Group Push Beta, Okta now supports reading the Group's details by group id along with the membership details. If a Group is not found, your SCIM application may return a HTTP status 404("not found").For more details on the `/groups/{id}` SCIM endpoint, see [section 3.4.1](https://tools.ietf.org/html/rfc7644#section-3.4.1) of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
+##### Read Group Details: GET /Groups/{id}
 
-###### Example
-```http request
+{% api_lifecycle beta %}
+
+With Group Push Beta, Okta now supports reading the Group's details by group id along with the membership details. If a Group is not found, your SCIM application may return a HTTP status 404("not found").
+
+Below is a sample SCIM 2.0 request from Okta:
+```
 GET /v2/Groups/{id} HTTP/1.1
 Accept: application/scim+json
 Accept-Charset: utf-8
@@ -920,7 +1076,14 @@ Connection: Keep-Alive
 Accept-Encoding: gzip,deflate
 ```
 
-##### Update Group Details: PUT /groups/{id}
+For more details on the `/Groups/{id}` SCIM endpoint, see [section 3.4.1](https://tools.ietf.org/html/rfc7644#section-3.4.1) of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
+
+
+##### Update Group Details: PUT /Groups/{id}
+
+{% api_lifecycle beta %}
+
+> **Warning:** Updating groups via PUT request will be deprecated on May 31st, 2018. ISV's currently implementing SCIM need to implement [patch support](#update-group-details-patch-groupsid) prior to submitting their integration for review.
 
 With Group Push Beta, any updates to the Group profile and memberships in Okta can now be reflected into your SCIM application. Okta will do the following to make the Group changes effective:
 
@@ -928,8 +1091,39 @@ With Group Push Beta, any updates to the Group profile and memberships in Okta c
 * Take the resource returned from your SCIM API and update only the attributes that need to be updated.
 * Make a PUT request against `/groups/{id}` in your SCIM API with the updated resource as the payload.
 
-###### Example
-```http request
+###### SCIM 1.1
+
+Below is a sample request from Okta:
+```
+PUT /v1/Groups/8599fdac3d3142d6beebfc363d2e01a9 HTTP/1.1
+Accept: application/json
+Accept-Charset: utf-8
+Content-Type: application/json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 276
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+	"schemas": ["urn:scim:schemas:core:1.0"],
+	"displayName": "SCIM_test1",
+	"id": "8599fdac3d3142d6beebfc363d2e01a9",
+	"members": [{
+		"value": "978dc5c3d4aa4014a3678e9d30ef093a",
+		"display": "bob@ad.oktatest.com"
+	}, {
+		"value": "54c76a50f48c42e38c10f350f8e6055e",
+		"display": "pete@ad.oktatest.com"
+	}]
+}
+```
+
+###### SCIM 2.0
+
+Below is a sample request from Okta:
+```
 PUT /v2/Groups/{id} HTTP/1.1
 Accept: application/scim+json
 Accept-Charset: utf-8
@@ -955,12 +1149,209 @@ Accept-Encoding: gzip,deflate
 }
 ```
 
-##### Delete Group: DELETE /groups/{id}
+For more details, see [section 3.5.1](https://tools.ietf.org/html/rfc7644#section-3.5.1) of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
+
+##### Update Group Details: PATCH /Groups/{id}
+
+{% api_lifecycle beta %}
+
+> Starting May 31st 2018, Okta will **only** support updating groups via PATCH. Please reach out to <developers@okta.com> for any questions.
+
+###### SCIM 1.1
+
+Below is a sample request from Okta to update group details:
+```
+PATCH /v1/Groups/8599fdac3d3142d6beebfc363d2e01a9 HTTP/1.1
+Accept: application/json
+Accept-Charset: utf-8
+Content-Type: application/json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 108
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+	"schemas": ["urn:scim:schemas:core:1.0"],
+	"id": "8599fdac3d3142d6beebfc363d2e01a9",
+	"displayName": "New Group Name"
+}
+```
+
+Below is a sample request from Okta to remove and add group members:
+```
+PATCH /v1/Groups/8599fdac3d3142d6beebfc363d2e01a9 HTTP/1.1
+Accept: application/json
+Accept-Charset: utf-8
+Content-Type: application/json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 131
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+	"schemas": ["urn:scim:schemas:core:1.0"],
+	"members": [{
+		"value": "6629838e056045b7a23fb55816c644eb",
+		"display": "dave@ad.oktatest.com"
+	}, {
+		"value": "85467bb36e1c4f8991750501bf491962",
+		"display": "steve@ad.oktatest.com",
+		"operation": "delete"
+	}]
+}
+```
+
+Below is a sample request from Okta to replace all group members in case of a full push:
+```
+PATCH /v1/Groups/8599fdac3d3142d6beebfc363d2e01a9 HTTP/1.1
+Accept: application/json
+Accept-Charset: utf-8
+Content-Type: application/json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 243
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+	"schemas": ["urn:scim:schemas:core:1.0"],
+	"meta": {
+		"attributes": ["members"]
+	},
+	"members": [{
+		"value": "bcfa9b1f143741929df70a571c6b4b47",
+		"display": "inca@clouditude.net"
+	}, {
+		"value": "85467bb36e1c4f8991750501bf491962",
+		"display": "steve@ad.oktatest.com"
+	}]
+}
+```
+
+For more details, see [section 3.3.2](http://www.simplecloud.info/specs/draft-scim-api-01.html#edit-resource-with-patch) of the [SCIM 1.1 Protocol Specification](http://www.simplecloud.info/specs/draft-scim-api-01.html).
+
+###### SCIM 2.0
+
+Below is a sample request from Okta to update group details:
+```
+PATCH /v2/Groups/619435534e58458c8c92e86d1e07d2f8 HTTP/1.1
+Accept: application/scim+json
+Accept-Charset: utf-8
+Content-Type: application/scim+json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 170
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+	"schemas": ["urn:ietf:params:scim:api:messages:2.0:PatchOp"],
+	"Operations": [{
+		"op": "replace",
+		"value": {
+			"id": "619435534e58458c8c92e86d1e07d2f8",
+			"displayName": "New Group Name"
+		}
+	}]
+}
+```
+
+Below is a sample request from Okta to remove and add group members:
+```
+PATCH /v2/Groups/{id} HTTP/1.1
+Accept: application/scim+json
+Accept-Charset: utf-8
+Content-Type: application/scim+json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 293
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+  "schemas": [
+    "urn:ietf:params:scim:api:messages:2.0:PatchOp"
+  ],
+  "Operations": [
+    {
+      "op": "remove",
+      "path": "members[value eq \"removeUser1\"]"
+    },
+    {
+      "op": "remove",
+      "path": "members[value eq \"removeUser2\"]"
+    },
+    {
+      "op": "add",
+      "path": "members",
+      "value": [
+        {
+          "value": "addUser1",
+          "display": "addUser1@example.com"
+        },
+        {
+          "value": "addUser2",
+          "display": "addUser2@example.com"
+        }
+      ]
+    }
+  ]
+}
+```
+
+Below is a sample request from Okta to replace all group members in case of a full push:
+```
+PATCH /v2/Groups/{id} HTTP/1.1
+Accept: application/scim+json
+Accept-Charset: utf-8
+Content-Type: application/scim+json; charset=utf-8
+User-Agent: Okta SCIM Client 1.0.0
+Authorization: Bearer {token}
+Content-Length: 293
+Host: scimapp.okta1.com:1910
+Connection: Keep-Alive
+Accept-Encoding: gzip,deflate
+
+{
+  "schemas": [
+    "urn:ietf:params:scim:api:messages:2.0:PatchOp"
+  ],
+  "Operations": [
+    {
+      "op": "replace",
+      "path": "members",
+      "value": [
+        {
+          "value": "addUser1",
+          "display": "addUser1@example.com"
+        },
+        {
+          "value": "addUser2",
+          "display": "addUser2@example.com"
+        }
+      ]
+    }
+  ]
+}
+```
+
+For more details, see [section 3.5.2](https://tools.ietf.org/html/rfc7644#section-3.5.2) of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
+
+##### Delete Group: DELETE /Groups/{id}
+
+{% api_lifecycle beta %}
 
 With Group Push Beta, Okta can delete the Group in your SCIM enabled application. For more details on deleting resources, see section [3.6](https://tools.ietf.org/html/rfc7644#section-3.6) of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
 
-###### Example
-```http request
+Below is a sample request from Okta:
+```
 DELETE /v2/Groups/{id} HTTP/1.1
 Accept: application/scim+json
 Accept-Charset: utf-8
@@ -971,6 +1362,8 @@ Host: scimapp.okta1.com:1910
 Connection: Keep-Alive
 Accept-Encoding: gzip,deflate
 ```
+
+For more details, see [section 3.6](https://tools.ietf.org/html/rfc7644#section-3.6) of the [SCIM 2.0 Protocol Specification](https://tools.ietf.org/html/rfc7644).
 
 ### SCIM Features Not Implemented by Okta
 
@@ -1069,11 +1462,11 @@ example:
 ## Publishing Your SCIM-Based Provisioning Integration
 
 In order to allow customers to use your SCIM provisioning integration with Okta,
-you’ll need to get your app published in [the Okta Integration Network](https://www.okta.com/resources/find-your-apps/).
+you'll need to get your app published in [the Okta Integration Network](https://www.okta.com/resources/find-your-apps/).
 
 Follow the steps below to test and submit your application for Okta review:
 
-1. [Review Okta’s SCIM Docs and Prepare Your App](#step-1-review-oktas-scim-docs-and-prepare-your-app)
+1. [Review Okta's SCIM Docs and Prepare Your App](#step-1-review-oktas-scim-docs-and-prepare-your-app)
 2. [Test Your SCIM Server](#step-2-test-your-scim-server)
 3. [Submit for Okta Review and Testing](#step-3-submit-for-okta-review-and-testing)
 4. [Publish to Okta Integration Network (OIN) in Partner-Built EA](#step-4-publish-to-okta-integration-network-oin-in-partner-built-ea)
@@ -1081,13 +1474,13 @@ Follow the steps below to test and submit your application for Okta review:
 
 > Have questions? Need help? Email us at <developers@okta.com> or post your question on [Stack Overflow](http://stackoverflow.com/search?q=okta,scim).
 
-**Note:** The OIN is for making an integration publicly discoverable and accessible to all Okta customers. However, you can also just use the integration privately within a few named orgs, called the Private App Option. This could be the case if you are a system integrator, customer, or Okta PS integrating to a custom app. If this is the case, follow steps 1-3 and you will be able to indicate in step 3 that you don’t want to publish in OIN. Okta will create the submitted integration per usual and assign it to Orgs that you specify as a private app. Note that you cannot use the SCIM template app used for prototyping, as it has limitations that prevent it from being used in production.
+**Note:** The OIN is for making an integration publicly discoverable and accessible to all Okta customers. However, you can also just use the integration privately within a few named orgs, called the Private App Option. This could be the case if you are a system integrator, customer, or Okta PS integrating to a custom app. If this is the case, follow steps 1-3 and you will be able to indicate in step 3 that you don't want to publish in OIN. Okta will create the submitted integration per usual and assign it to Orgs that you specify as a private app. Note that you cannot use the SCIM template app used for prototyping, as it has limitations that prevent it from being used in production.
 
-### Step 1. Review Okta’s SCIM Docs and Prepare Your App
+### Step 1. Review Okta's SCIM Docs and Prepare Your App
 
 The first step is to build a compliant SCIM server.
-Even if you already support SCIM, it is important that you review Okta’s SCIM docs above,
-especially the following sections, to understand the specifics of Okta’s support for the SCIM standard:
+Even if you already support SCIM, it is important that you review Okta's SCIM docs above,
+especially the following sections, to understand the specifics of Okta's support for the SCIM standard:
 
 * [Understanding User Provisioning in Okta](#understanding-user-provisioning-in-okta)
 * [Required SCIM Server Capabilities](#required-scim-server-capabilities)
@@ -1200,7 +1593,7 @@ Please request this in your email to <developers@okta.com>.
 2. Click **Applications**, then **Add Application**.
     {% img scim-apps.png alt:"Admin Button" %}
 
-3. Search for “SCIM”. You’ll see three different SCIM template applications for each SCIM version (1.1 and 2.0) based off of the various authentication methods you could choose to support (Header Auth, Basic Auth, or Bearer Token).
+3. Search for "SCIM". You'll see three different SCIM template applications for each SCIM version (1.1 and 2.0) based off of the various authentication methods you could choose to support (Header Auth, Basic Auth, or Bearer Token).
     {% img scim-templates.png alt:"Admin Button" %}
 
 Your QA team should test the use cases in this downloadable spreadsheet: [Okta SCIM Test Plan](SCIMFiles/okta-scim-test-plan.xls).
@@ -1219,7 +1612,7 @@ We recommend completing these five steps before actual submission, with detailed
 4. Prepare the customer-facing configuration guide.
 5. Create a demo video showing working integration (optional)
 
-After performing these steps, navigate to the OIN Manager at [https://oanmanager.okta.com/](https://oanmanager.okta.com/) to complete the submission form and track review status.
+After performing these steps, navigate to the OIN Manager at [https://oinmanager.okta.com/](https://oinmanager.okta.com/) to complete the submission form and track review status.
 
 #### Check the Profile Attributes for your Application
 
@@ -1294,7 +1687,7 @@ We recommend preparing the customer-facing configuration guide before beginning 
 This guide will be exposed externally in the administrator UI to end customers.
 For more details, see the [configuration guide guidelines](http://saml-doc.okta.com/Provisioning_Docs/SCIM_Configuration_Guide_Instructions.pdf).
 
-Note: When you are ready, use [this form](https://oanmanager.okta.com/) to submit for Okta review.
+Note: When you are ready, use [this form](https://oinmanager.okta.com/) to submit for Okta review.
 
 ### Step 4. Publish to Okta Integration Network (OIN) in Partner-Built EA
 
@@ -1378,11 +1771,11 @@ Whether Partner-Built EA or Okta-Verified, when issues arise related to the SCIM
 
 **Our API is similar to SCIM, but is not 100% compliant. Can we still integrate with Okta?**
 
-Unfortunately, your app’s SCIM server API must be fully SCIM compliant in order to integrate with Okta.
-Okta’s SCIM client endpoints are hard coded into a template which adhere directly to [the SCIM spec](http://www.simplecloud.info/).
+Unfortunately, your app's SCIM server API must be fully SCIM compliant in order to integrate with Okta.
+Okta's SCIM client endpoints are hard coded into a template which adhere directly to [the SCIM spec](http://www.simplecloud.info/).
 Not all capabilities of the SCIM spec need to be supported (see [Required SCIM Server Capabilities](#required-scim-server-capabilities) in our SCIM Technical Reference) but the core schema and features do need to be supported.
 
-**SCIM is a new standard. How broadly is it being adopted by cloud app vendors and how confident can I be in the SCIM standard’s long-term viability?**
+**SCIM is a new standard. How broadly is it being adopted by cloud app vendors and how confident can I be in the SCIM standard's long-term viability?**
 
 Okta has seen significant SCIM momentum in the market amongst our network of app developers over the past year.
 Hot new apps like [Slack](https://api.slack.com/scim)
@@ -1396,7 +1789,7 @@ The SCIM standards is strong and is run by Salesforce, Google, and Sailpoint (Ok
 
 **How should I be managing authentication to my SCIM API?**
 
-Okta recommends using the OAuth 2.0 Authorization Code Grant Flow (aka “three-legged OAuth).
+Okta recommends using the OAuth 2.0 Authorization Code Grant Flow (aka "three-legged OAuth).
 Okta doesn't support the Client Credentials or Resource Owner Password Credentials Authorization grant flows.
 The Authorization Code Grant Flow is more common in SaaS/cloud and is also more secure.
 In addition to OAuth, Okta also supports basic auth and header token auth options.
@@ -1415,8 +1808,8 @@ This subdomain field can be configured with Okta after you submit your app for O
 
 The SCIM User Profile allows for an array of emails. The only way to differentiate between emails is to use the `type` sub-attribute.
 
-* When returning multi-valued attributes, service providers SHOULD canonicalize the value returned (e.g., by returning a value for the sub-attribute “type”, such as “home” or “work”) when appropriate (e.g., for email addresses and URLs).
-* Service providers MAY return element objects with the same “value” sub-attribute more than once with a different `type` sub-attribute (e.g., the same email address may be used for work and home) but SHOULD NOT return the same (type, value) combination more than once per attribute, as this complicates processing by the client.
+* When returning multi-valued attributes, service providers SHOULD canonicalize the value returned (e.g., by returning a value for the sub-attribute "type", such as "home" or "work") when appropriate (e.g., for email addresses and URLs).
+* Service providers MAY return element objects with the same "value" sub-attribute more than once with a different `type` sub-attribute (e.g., the same email address may be used for work and home) but SHOULD NOT return the same (type, value) combination more than once per attribute, as this complicates processing by the client.
 * When defining schema for multi-valued attributes, it is considered a good practice to provide a `type` attribute that MAY be used for the purpose of canonicalization of values. In the schema definition for an attribute, the service provider MAY define the recommended canonical values (see [RFC 7643 Section 7](https://tools.ietf.org/html/rfc7643#section-7)).
 
 See [Section 2.4 of RFC 7643](https://tools.ietf.org/html/rfc7643#section-2.4) for more details.
@@ -1427,16 +1820,16 @@ Yes, the you must return these fields in an array, which is specified in the SCI
 
 **Why doesn't Okta support DELETE /Users?**
 
-Okta users are never deleted for compliance and audit purposes; they are deactivated instead. Because of this, Okta never makes an HTTP DELETE request to a user resource on your SCIM API. Instead, Okta makes an HTTP PATCH request to set the active setting to false. You’ll need to support the concept of an “active” and “inactive” user in your app.
+Okta users are never deleted for compliance and audit purposes; they are deactivated instead. Because of this, Okta never makes an HTTP DELETE request to a user resource on your SCIM API. Instead, Okta makes an HTTP PATCH request to set the active setting to false. You'll need to support the concept of an "active" and "inactive" user in your app.
 
 **Will Okta be supporting the /groups SCIM endpoint? When?**
 
-Yes, Okta will eventually support the /groups endpoint of the SCIM API. We are targeting early 2017 for this feature. In the meantime, to support the setting licensing / entitlements in your app without groups, you can use custom attributes in Okta to manage this. For examples, Lucidchart was able to support this use case with a user attribute called "License Type". See the “Extensibility” section of Lucidchart’s blog post for more details.
+Yes, Okta will eventually support the /groups endpoint of the SCIM API. We are targeting early 2017 for this feature. In the meantime, to support the setting licensing / entitlements in your app without groups, you can use custom attributes in Okta to manage this. For examples, Lucidchart was able to support this use case with a user attribute called "License Type". See the "Extensibility" section of Lucidchart's blog post for more details.
 
 **How does data validation work with SCIM provisioning? For example, if my app requires phone number in a specific format, how do I ensure that Okta passes the attribute in that format? If a data validation error issue occurs how does error reporting work?**
 
 The SCIM spec specifies valid data formats for a given user profile attribute, however Okta does not rigorously validate that the customer has inputted values meeting those requirements to preserve flexibility.
-Therefore, data validation should be handled by your app’s SCIM Server. In other words, when Okta provisions user profile to your app, it should check that the data is valid per their special requirements. Error messages sent in the response from your app will be surfaced to the Okta administrator via alerts and tasks in the Okta interface. You should also specify your data requirements in your config guide.
+Therefore, data validation should be handled by your app's SCIM Server. In other words, when Okta provisions user profile to your app, it should check that the data is valid per their special requirements. Error messages sent in the response from your app will be surfaced to the Okta administrator via alerts and tasks in the Okta interface. You should also specify your data requirements in your config guide.
 
 **How much filtering support is needed?**
 
@@ -1451,7 +1844,7 @@ Yes. Add a new app instance in your dev org to test the new attributes and email
 
 **Once my app has been published, and I add additional attributes, how do I republish my app? Can I republish frequently?**
 
-Yes, you can republish your app, but we recommend you don’t do it frequently. Your app goes through Okta’s QA process every time you add additional attributes.
+Yes, you can republish your app, but we recommend you don't do it frequently. Your app goes through Okta's QA process every time you add additional attributes.
 
 ### Dev Doc Examples
 

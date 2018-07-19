@@ -1,6 +1,6 @@
 ---
 layout: docs_page
-weight: 4
+weight: 1
 title: Design Principles
 redirect_from:
   - "/docs/getting_started/design_principles.html"
@@ -96,7 +96,11 @@ The **public IP address** of your application will be automatically used as the 
 
 ### Accept Language
 
-The `Accept-Language` HTTP header advertises which languages the client is able to understand, for example `Accept-Language: en-US'. Include it if it is available.
+The `Accept-Language` HTTP header advertises which languages the client is able to understand, for example `Accept-Language: en-US`. Include it if it is available.
+
+### Device Fingerprint
+
+The `X-Device-Fingerprint` HTTP header supplies the device fingerprint used in an authentication request.
 
 ## Errors
 
@@ -133,7 +137,7 @@ See [Error Codes](error_codes) for a list of API error codes.
 
 The Okta API currently requires the custom HTTP authentication scheme `SSWS` for authentication. All requests must have a valid API key specified in the HTTP `Authorization` header with the `SSWS` scheme.
 
-    Authorization: SSWS 00QCjAl4MlV-WPXM…0HmjFx-vbGua
+    Authorization: SSWS 00QCjAl4MlV-WPXM...0HmjFx-vbGua
 
 > See [Obtaining a token](getting_a_token) for instructions on how to get an API key for your organization.
 
@@ -157,8 +161,8 @@ Pagination links are included in the [Link header](http://tools.ietf.org/html/rf
 
 ~~~ http
 HTTP/1.1 200 OK
-Link: <https://{yourOktaDomain}.com/api/v1/users?after=00ubfjQEMYBLRUWIEDKK>; rel="next",
-  <https://{yourOktaDomain}.com/api/v1/users?after=00ub4tTFYKXCCZJSGFKM>; rel="self"
+Link: <https://{yourOktaDomain}/api/v1/users?after=00ubfjQEMYBLRUWIEDKK>; rel="next",
+  <https://{yourOktaDomain}/api/v1/users?after=00ub4tTFYKXCCZJSGFKM>; rel="self"
 ~~~
 
 The possible `rel` values are:
@@ -259,12 +263,12 @@ Object whose property names are link relation types (as defined by [RFC5988](htt
         "logo": [
             {
               "name": "medium",
-              "href": "https://{yourOktaDomain}.com/assets/img/logos/groups/active_directory-medium.b3959116154f9d44bd4d0f6b2ae31ea6.png",
+              "href": "https://{yourOktaDomain}/assets/img/logos/groups/active_directory-medium.b3959116154f9d44bd4d0f6b2ae31ea6.png",
               "type": "image/png"
             },
             {
               "name": "large",
-              "href": "https://{yourOktaDomain}.com/assets/img/logos/groups/active_directory-large.0e7a58559ac90c4bbc7b33fa14018c50.png",
+              "href": "https://{yourOktaDomain}/assets/img/logos/groups/active_directory-large.0e7a58559ac90c4bbc7b33fa14018c50.png",
               "type": "image/png"
             }
          ],
@@ -304,7 +308,7 @@ In Okta, CORS allows JavaScript hosted on your websites to make an XHR to the Ok
 
 ### API Support
 
-The Okta API supports CORS on an API by API basis. If you’re building an application that needs CORS, please check that the specific operation supports CORS for your use case. APIs that support CORS are marked with the following icon <span class="api-label api-label-small api-label-cors"><i class="fa fa-cloud-download"></i> CORS</span>.
+The Okta API supports CORS on an API by API basis. If you're building an application that needs CORS, please check that the specific operation supports CORS for your use case. APIs that support CORS are marked with the following icon <span class="api-label api-label-small api-label-cors"><i class="fa fa-cloud-download"></i> CORS</span>.
 
 ## Additional Help
 

@@ -19,8 +19,6 @@ require_env_var "REPO"
 # Get the Runscope trigger ID
 get_secret prod/tokens/runscope_trigger_id RUNSCOPE_TRIGGER_ID
 
-STAGING_BASE_URL_RUNSCOPE="https://developer.okta.com"
-
 export TEST_SUITE_TYPE="build"
 
 # `cd` to the path where Okta's build system has this repository
@@ -33,29 +31,17 @@ then
     exit ${BUILD_FAILURE};
 fi
 
-if ! removeHTMLExtensions;
+# Run markdown lint checker
+if ! npm run markdown-lint;
 then
-    echo "Failed removing .html extensions"
-    exit ${BUILD_FAILURE};
+    echo "Failed markdown lint"
+    exit ${BUILD_FAILURE}
 fi
 
-# Run Lint checker
+# Run /dist lint checker
 if ! npm run post-build-lint;
 then
-    exit ${BUILD_FAILURE}
-fi
-
-# Run find-missing-slashes to find links that will redirect to okta.github.io
-if ! npm run find-missing-slashes;
-then
-    exit ${BUILD_FAILURE}
-fi
-
-# Run htmlproofer to validate links, scripts, and images
-#   -  Passing in the argument 'false' to prevent adding an '.html' extension to
-#      extension-less files.
-if ! bundle exec ./scripts/htmlproofer.rb false;
-then
+    echo "Failed post-build-lint"
     exit ${BUILD_FAILURE}
 fi
 
@@ -123,6 +109,13 @@ if ! send_promotion_message "${DEPLOY_ENVIRONMENT}" "${ARTIFACT}" "${DEPLOY_VERS
 fi
 
 # Trigger Runscope tests
+if [[ "${BRANCH}" == "${DEPLOY_BRANCH}" ]];
+then
+    STAGING_BASE_URL_RUNSCOPE="https://developer.trexcloud.com";
+else
+    STAGING_BASE_URL_RUNSCOPE="https://developer.okta.com";
+fi
+
 curl -I -X GET "https://api.runscope.com/radar/bucket/$RUNSCOPE_TRIGGER_ID/trigger?base_url=$STAGING_BASE_URL_RUNSCOPE"
 
 exit $SUCCESS

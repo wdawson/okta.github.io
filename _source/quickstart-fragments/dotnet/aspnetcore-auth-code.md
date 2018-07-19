@@ -5,7 +5,9 @@ exampleDescription: ASP.NET Core 2.0 MVC authorization code example
 
 ## Okta ASP.NET Core MVC Quickstart
 
-If you want a full, working example, head over to the [ASP.NET Core MVC example](https://github.com/oktadeveloper/okta-aspnetcore-mvc-example) repository.
+Now that your users can sign in, let's add authentication to your server.
+
+> If you would prefer to download a complete sample application instead, please visit [ASP.NET Core MVC Example](https://github.com/oktadeveloper/okta-aspnetcore-mvc-example) and follow those instructions.
 
 ### Create a new project
 
@@ -49,7 +51,7 @@ services.AddAuthentication(sharedOptions =>
 {
     options.ClientId = "{clientId}";
     options.ClientSecret = "{clientSecret}";
-    options.Authority = "https://{yourOktaDomain}.com/oauth2/default";
+    options.Authority = "https://{yourOktaDomain}/oauth2/default";
     options.CallbackPath = "/authorization-code/callback";
     options.ResponseType = "code";
     options.SaveTokens = true;
@@ -135,4 +137,3 @@ ASP.NET Core automatically populates `HttpContext.User` with the information Okt
 The [full example project](https://github.com/oktadeveloper/okta-aspnetcore-mvc-example) has more examples of authenticating and interacting with the user's information (claims).
 
 If you want to do more with the user, you can use the [Okta .NET SDK](https://github.com/okta/okta-sdk-dotnet) to get or update the user's details stored in Okta.
-

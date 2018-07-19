@@ -132,7 +132,7 @@ import PostsManager from '@/components/PostsManager'
 import Auth from '@okta/okta-vue'
 
 Vue.use(Auth, {
-  issuer: 'https://{yourOktaDomain}.com/oauth2/default',
+  issuer: 'https://{yourOktaDomain}/oauth2/default',
   client_id: '{yourClientId}',
   redirect_uri: 'http://localhost:8080/implicit/callback',
   scope: 'openid profile email'
@@ -172,7 +172,7 @@ You'll need to replace `{yourOktaDomain}` and `{yourClientId}` which can be foun
 
 ```javascript
 Vue.use(Auth, {
-  issuer: 'https://{yourOktaDomain}.com/oauth2/default',
+  issuer: 'https://{yourOktaDomain}/oauth2/default',
   client_id: '{yourClientId}',
   redirect_uri: 'http://localhost:8080/implicit/callback',
   scope: 'openid profile email'
@@ -188,7 +188,7 @@ The final step of Okta's authentication flow is redirecting the user back to you
 }
 ```
 
-You also need to lock down protected routes from being access by unauthenticated users. This is accomplished by implementing a [navigation guard](https://router.vuejs.org/en/advanced/navigation-guards). As the name suggests, [navigation guards](https://router.vuejs.org/en/advanced/navigation-guards) are primarily used to guard navigations either by redirecting or canceling.
+You also need to lock down protected routes from being accessed by unauthenticated users. This is accomplished by implementing a [navigation guard](https://router.vuejs.org/guide/advanced/navigation-guards.html). As the name suggests, navigation guards are primarily used to guard navigations either by redirecting or canceling.
 
 The SDK comes with the method `auth.authRedirectGuard()` that checks matched routes' metadata for the key `requiresAuth` and redirects the user to the authentication flow if they are not authenticated.
 
@@ -367,7 +367,7 @@ const OktaJwtVerifier = require('@okta/jwt-verifier')
 
 const oktaJwtVerifier = new OktaJwtVerifier({
   clientId: '{yourClientId}',
-  issuer: 'https://{yourOktaDomain}.com/oauth2/default'
+  issuer: 'https://{yourOktaDomain}/oauth2/default'
 })
 
 let app = express()

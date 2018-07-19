@@ -23,7 +23,7 @@ A high-level overview of OpenID Connect can be found [here](/authentication-guid
 
 The ID tokens are in JSON Web Token (JWT) format, the specification for which can be found here: <https://tools.ietf.org/html/rfc7519>. They are signed using private JSON Web Keys (JWK), the specification for which you can find here: <https://tools.ietf.org/html/rfc7517>.
 
-More information about Okta's ID tokens can be found here: <https://developer.okta.com/standards/OIDC/#id-token>
+More information about Okta's ID tokens can be found in the [OIDC & OAuth 2.0 API Reference](/docs/api/resources/oidc#id-token)
 
 ## ID Tokens vs Access Tokens
 
@@ -91,6 +91,7 @@ This incurs a network request which is slower to do verification, but can be use
 
 The Okta JWT Verifier is available for the following languages:
 
+- [Golang](https://github.com/okta/okta-jwt-verifier-golang)
 - [Java](https://github.com/okta/okta-jwt-verifier-java)
 - [Node.js](https://github.com/okta/okta-oidc-js/tree/master/packages/jwt-verifier)
 - [PHP](https://github.com/okta/okta-jwt-verifier-php)

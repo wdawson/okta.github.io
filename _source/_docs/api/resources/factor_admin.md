@@ -2,6 +2,7 @@
 layout: docs_page
 title: Factors Administration
 beta: true
+category: management
 redirect_from: "/docs/getting_started/factor_admin.html"
 ---
 
@@ -99,7 +100,7 @@ Optionally, you can add a filter, based on the status. If desired, add the text 
 curl -v -H "Authorization: SSWS yourtoken" \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
--X GET "https://{yourOktaDomain}.com/api/v1/org/factors"
+-X GET "https://{yourOktaDomain}/api/v1/org/factors"
 ~~~
 
 #### Response Example
@@ -113,7 +114,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
         "status": "ACTIVE",
         "_links": {
             "self": {
-                "href": "https://{yourOktaDomain}.com/api/v1/org/factors/google_otp",
+                "href": "https://{yourOktaDomain}/api/v1/org/factors/google_otp",
                 "hints": {
                     "allow": [
                         "GET"
@@ -121,7 +122,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
                 }
             },
             "deactivate": {
-                "href": "https://{yourOktaDomain}.com/api/v1/org/factors/google_otp/lifecycle/deactivate",
+                "href": "https://{yourOktaDomain}/api/v1/org/factors/google_otp/lifecycle/deactivate",
                 "hints": {
                     "allow": [
                         "POST"
@@ -137,7 +138,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
         "status": "INACTIVE",
         "_links": {
             "activate": {
-                "href": "https://{yourOktaDomain}.com/api/v1/org/factors/okta_question/lifecycle/activate",
+                "href": "https://{yourOktaDomain}/api/v1/org/factors/okta_question/lifecycle/activate",
                 "hints": {
                     "allow": [
                         "POST"
@@ -145,7 +146,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
                 }
             },
             "self": {
-                "href": "https://{yourOktaDomain}.com/api/v1/org/factors/okta_question",
+                "href": "https://{yourOktaDomain}/api/v1/org/factors/okta_question",
                 "hints": {
                     "allow": [
                         "GET"
@@ -161,7 +162,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
         "status": "ACTIVE",
         "_links": {
             "self": {
-                "href": "https://{yourOktaDomain}.com/api/v1/org/factors/okta_otp",
+                "href": "https://{yourOktaDomain}/api/v1/org/factors/okta_otp",
                 "hints": {
                     "allow": [
                         "GET"
@@ -185,7 +186,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
         "status": "ACTIVE",
         "_links": {
             "self": {
-                "href": "https://{yourOktaDomain}.com/api/v1/org/factors/okta_sms",
+                "href": "https://{yourOktaDomain}/api/v1/org/factors/okta_sms",
                 "hints": {
                     "allow": [
                         "GET"
@@ -193,7 +194,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
                 }
             },
             "deactivate": {
-                "href": "https://{yourOktaDomain}.com/api/v1/org/factors/okta_sms/lifecycle/deactivate",
+                "href": "https://{yourOktaDomain}/api/v1/org/factors/okta_sms/lifecycle/deactivate",
                 "hints": {
                     "allow": [
                         "POST"
@@ -217,7 +218,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
                 }
             },
             "self": {
-                "href": "https://{yourOktaDomain}.com/api/v1/org/factors/symantec_vip",
+                "href": "https://{yourOktaDomain}/api/v1/org/factors/symantec_vip",
                 "hints": {
                     "allow": [
                         "GET"
@@ -233,7 +234,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
         "status": "NOT_SETUP",
         "_links": {
             "activate": {
-                "href": "https://{yourOktaDomain}.com/api/v1/org/factors/rsa_token/lifecycle/activate",
+                "href": "https://{yourOktaDomain}/api/v1/org/factors/rsa_token/lifecycle/activate",
                 "hints": {
                     "allow": [
                         "POST"
@@ -241,7 +242,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
                 }
             },
             "self": {
-                "href": "https://{yourOktaDomain}.com/api/v1/org/factors/rsa_token",
+                "href": "https://{yourOktaDomain}/api/v1/org/factors/rsa_token",
                 "hints": {
                     "allow": [
                         "GET"
@@ -271,7 +272,7 @@ None.
 curl -v -H "Authorization: SSWS yourtoken" \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
--X POST "https://{yourOktaDomain}.com/api/v1/org/factors/okta_sms/lifecycle/activate"
+-X POST "https://{yourOktaDomain}/api/v1/org/factors/okta_sms/lifecycle/activate"
 ~~~
 
 #### Response Example
@@ -285,7 +286,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
     "status": "ACTIVE",
     "_links": {
         "self": {
-            "href": "https://{yourOktaDomain}.com/api/v1/org/factors/okta_sms",
+            "href": "https://{yourOktaDomain}/api/v1/org/factors/okta_sms",
             "hints": {
                 "allow": [
                     "GET"
@@ -293,7 +294,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
             }
         },
         "deactivate": {
-            "href": "https://{yourOktaDomain}.com/api/v1/org/factors/okta_sms/lifecycle/deactivate",
+            "href": "https://{yourOktaDomain}/api/v1/org/factors/okta_sms/lifecycle/deactivate",
             "hints": {
                 "allow": [
                     "POST"
@@ -323,7 +324,7 @@ None.
 curl -v -H "Authorization: SSWS yourtoken" \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
--X POST "https://{yourOktaDomain}.com/api/v1/org/factors/okta_sms/lifecycle/deactivate"
+-X POST "https://{yourOktaDomain}/api/v1/org/factors/okta_sms/lifecycle/deactivate"
 ~~~
 
 #### Response Example
@@ -337,7 +338,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
     "status": "INACTIVE",
     "_links": {
         "activate": {
-            "href": "https://{yourOktaDomain}.com/api/v1/org/factors/okta_sms/lifecycle/activate",
+            "href": "https://{yourOktaDomain}/api/v1/org/factors/okta_sms/lifecycle/activate",
             "hints": {
                 "allow": [
                     "POST"
@@ -345,7 +346,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
             }
         },
         "self": {
-            "href": "https://{yourOktaDomain}.com/api/v1/org/factors/okta_sms",
+            "href": "https://{yourOktaDomain}/api/v1/org/factors/okta_sms",
             "hints": {
                 "allow": [
                     "GET"
@@ -375,7 +376,7 @@ None.
 curl -v -H "Authorization: SSWS yourtoken" \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
--X POST "https://{yourOktaDomain}.com/api/v1/org/factors/okta_otp/lifecycle/activate"
+-X POST "https://{yourOktaDomain}/api/v1/org/factors/okta_otp/lifecycle/activate"
 ~~~
 
 #### Response Example
@@ -389,7 +390,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
     "status": "ACTIVE",
     "_links": {
         "self": {
-            "href": "https://{yourOktaDomain}.com/api/v1/org/factors/okta_otp",
+            "href": "https://{yourOktaDomain}/api/v1/org/factors/okta_otp",
             "hints": {
                 "allow": [
                     "GET"
@@ -397,7 +398,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
             }
         },
         "deactivate": {
-            "href": "https://{yourOktaDomain}.com/api/v1/org/factors/okta_otp/lifecycle/deactivate",
+            "href": "https://{yourOktaDomain}/api/v1/org/factors/okta_otp/lifecycle/deactivate",
             "hints": {
                 "allow": [
                     "POST"
@@ -427,7 +428,7 @@ None.
 curl -v -H "Authorization: SSWS yourtoken" \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
--X POST "https://{yourOktaDomain}.com/api/v1/org/factors/okta_otp/lifecycle/deactivate"
+-X POST "https://{yourOktaDomain}/api/v1/org/factors/okta_otp/lifecycle/deactivate"
 ~~~
 
 #### Response Example
@@ -441,7 +442,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
     "status": "INACTIVE",
     "_links": {
         "activate": {
-            "href": "https://{yourOktaDomain}.com/api/v1/org/factors/okta_otp/lifecycle/activate",
+            "href": "https://{yourOktaDomain}/api/v1/org/factors/okta_otp/lifecycle/activate",
             "hints": {
                 "allow": [
                     "POST"
@@ -449,7 +450,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
             }
         },
         "self": {
-            "href": "https://{yourOktaDomain}.com/api/v1/org/factors/okta_otp",
+            "href": "https://{yourOktaDomain}/api/v1/org/factors/okta_otp",
             "hints": {
                 "allow": [
                     "GET"

@@ -15,7 +15,8 @@ If you don't already have an ASP.NET project, create one using the ASP.NET Web A
 Install these packages in the new project:
 
 * [Microsoft.Owin.Security.Cookies](https://www.nuget.org/packages/Microsoft.Owin.Security.Cookies) 4.0.0 or higher
-* [Okta.AspNet](//TODO: nuget package)
+* [Okta.AspNet](https://nuget.org/packages/Okta.AspNet)
+* [Microsot.Owin.Host.SystemWeb](https://www.nuget.org/packages/Microsoft.Owin.Host.SystemWeb) 4.0.0 or higher
 
 
 ### Add a Startup class
@@ -27,24 +28,18 @@ Paste this code into the new class:
 ```csharp
 public class Startup
 {
-    // These values are stored in Web.config. Make sure you update them!
-    private readonly string clientId = ConfigurationManager.AppSettings["okta:ClientId"];
-    private readonly string redirectUri = ConfigurationManager.AppSettings["okta:RedirectUri"];
-    private readonly string oktaDomain = ConfigurationManager.AppSettings["okta:OktaDomain"];
-    private readonly string clientSecret = ConfigurationManager.AppSettings["okta:ClientSecret"];
-    private readonly string postLogoutRedirectUri = ConfigurationManager.AppSettings["okta:PostLogoutRedirectUri"];
-
     public void Configuration(IAppBuilder app)
     {
         app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
         app.UseCookieAuthentication(new CookieAuthenticationOptions());
         app.UseOktaMvc(new OktaMvcOptions()
         {
-            ClientId = clientId,
-            ClientSecret = clientSecret,
-            OktaDomain = oktaDomain,
-            RedirectUri = redirectUri,
-            PostLogoutRedirectUri = postLogoutRedirectUri
+            // These values are stored in Web.config. Make sure you update them!
+            ClientId = ConfigurationManager.AppSettings["okta:ClientId"],
+            ClientSecret = ConfigurationManager.AppSettings["okta:ClientSecret"],
+            OktaDomain = ConfigurationManager.AppSettings["okta:OktaDomain"],
+            RedirectUri = ConfigurationManager.AppSettings["okta:RedirectUri"],
+            PostLogoutRedirectUri = ConfigurationManager.AppSettings["okta:PostLogoutRedirectUri"]
         });
     }
 }
@@ -60,13 +55,11 @@ ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 Add these using statements at the top of the file:
 
 ```csharp
-using System;
 using System.Configuration;
-using System.Threading.Tasks;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
-using Okta.AspNet.Abstractions;
+using Okta.AspNet;
 using Owin;
 ```
 
@@ -106,8 +99,8 @@ Open the `Web.config` file and add these keys to the `<appSettings>` section:
 <add key="okta:OktaDomain" value="https://{yourOktaDomain}" />
 
 <!-- 2. Update the Okta application with these values -->
-<add key="okta:RedirectUri" value="http://localhost:8080/authorization-code/callback" />
-<add key="okta:PostLogoutRedirectUri" value="http://localhost:8080/Account/PostLogout" />
+<add key="okta:RedirectUri" value="http://localhost:{yourProjectPort}/authorization-code/callback" />
+<add key="okta:PostLogoutRedirectUri" value="http://localhost:{yourProjectPort}/Account/PostLogout" />
 ```
 
 Copy the client ID and client secret from your Okta application into the appropriate keys in `Web.config`, and replace `{yourOktaDomain}` with your Okta domain name. You can find your Okta domain name in the top-right corner of the Dashboard page.
@@ -169,6 +162,8 @@ Add these using statements at the top of the `AccountController.cs` file:
 ```csharp
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
+using System.Web;
+using System.Web.Mvc;
 ```
 
 You can also update your views to show whether the user is logged in. Add this code to `_Layout.cshtml`:

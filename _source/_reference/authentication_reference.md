@@ -1,7 +1,7 @@
 ---
 layout: docs_page
-weight: 2
-title: Authentication API
-link: /docs/api/resources/authn.html
-excerpt: Authenticate users with REST endpoints.
+weight: 1
+title: Sign in Your Users
+link: /docs/api/resources/oidc.html
+excerpt: API endpoints to authenticate your users, challenge for factors, recover passwords, and more.
 ---

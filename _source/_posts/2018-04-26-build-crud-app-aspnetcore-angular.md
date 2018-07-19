@@ -1,6 +1,6 @@
 ---
 layout: blog_post
-title: "Build a CRUD app with ASP.NET Core and Angular"
+title: "Build a CRUD App with ASP.NET Core and Angular"
 author: team_okta
 description: "ASP.NET Core and Angular are powerful frameworks for backend and frontend development. Learn how to put them together to build a modern web app, and secure it with Okta."
 tags: [asp.net, aspnetcore, angular]
@@ -505,6 +505,7 @@ export class AppModule { }
 Next, build the HTML that will display the actual data on screen. You can add a column that will display average speed. Edit the template of the GridJogging component (```grid-jogging-component.html```):
 
 {% raw %}
+```html
 <a href="#" id="new-button">New</a>
 <table>
 <thead>
@@ -529,9 +530,10 @@ Next, build the HTML that will display the actual data on screen. You can add a 
     </tr>
 </tbody>
 </table>
+```
 {% endraw %}
 
-The `{{handlebars}}` are just a placeholder for data populated by Angular. You can also do some basic calculations in there. 
+The {% raw %}`{{handlebars}}`{% endraw %} are just a placeholder for data populated by Angular. You can also do some basic calculations in there. 
 
 `*ngFor` is an Angular directive that makes this particular block repeat itself for every array member of `joggingData`. In each iteration, the current object will be referenced as `joggingInfo`. So, we are just printing a row of a table with data for each array member. 
 
@@ -805,7 +807,7 @@ So, now you have a cool little application for tracking your workouts. But your 
 ## Add Okta for User Authentication
 OpenID Connect (OIDC) is built on top of the OAuth 2.0 protocol and allows clients to verify the identity of the user as well as to obtain users' basic profile information. Okta uses OpenID Connect to make it easy to add authentication and user management to your applications.
 
-To integrate Okta for user authentication, you'll first need to [sign up for a free developer account](https://developer.okta.com/signup) and create an Okta application.
+To integrate Okta for user authentication, you'll first need to [sign up for a free developer account](https://developer.okta.com/signup/) and create an Okta application.
 
 Log in to your Okta account, or create one if you don't have one. Navigate to Applications and click on Add Application. Set your application up like this:
 
@@ -826,7 +828,7 @@ You need to provide the data form your application set up in Okta into your root
 
 ```javascript
 const config = {
-  issuer: 'https://{yourOktaDomain}.com/oauth2/default',
+  issuer: 'https://{yourOktaDomain}/oauth2/default',
   redirectUri: 'http://localhost:4200/implicit/callback',
   clientId: '{clientId}',
   scope: 'openid profile email'
@@ -1005,7 +1007,7 @@ When you open the app and are not logged in, you'll see the demo text and the "L
 
 When you click "Login" you should get to an Okta login interface:
 
-{% img blog/build-crud-app-aspnetcore-angular/app-with-login.png alt:"Okta login screen" width:"600" %}{: .center-image }
+{% img blog/build-crud-app-aspnetcore-angular/okta-login.jpg alt:"Okta login screen" width:"600" %}{: .center-image }
 
 Sign in and you're in the app and can see the grid and the component to add or update records.
 
@@ -1020,7 +1022,7 @@ Add the `JwtBearer` authentication in `Startup.cs`.
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = "https://{yourOktaDomain}.com/oauth2/default";
+        options.Authority = "https://{yourOktaDomain}/oauth2/default";
         options.Audience = "api://default";
     });
 ```

@@ -5,6 +5,8 @@ exampleDescription: ASP.NET Core 2.0 API implicit example
 
 ## Okta ASP.NET Core Web API Quickstart
 
+Now that your clients can get tokens, let's validate those tokens on your server.
+
 ### Create a new project
 
 If you don't already have an ASP.NET Core 2.0 project, create one using `dotnet new mvc` or the ASP.NET Core Web Application template in Visual Studio. Choose **No Authentication** if necessary.
@@ -28,7 +30,7 @@ services.AddAuthentication(sharedOptions =>
     sharedOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
 .AddJwtBearer(options => {
-    options.Authority = "https://{yourOktaDomain}.com/oauth2/default";
+    options.Authority = "https://{yourOktaDomain}/oauth2/default";
     options.Audience = "api://default";
 });
 ```

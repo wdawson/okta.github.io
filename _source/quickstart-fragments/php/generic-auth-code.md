@@ -5,6 +5,8 @@ exampleDescription: PHP Auth Code Example
 
 ## Okta PHP Quickstart
 
+Now that your users can sign in, let's add authentication to your server.
+
 ## Redirecting to Authorization Endpoint
 First you need to generate a URL to the authorization endpoint for the Authorization Server and redirect the user.
 
@@ -21,7 +23,7 @@ $query = http_build_query([
     'nonce' => $nonce
 ]);
 
-header('Location: ' . 'https://{yourOktaDomain}.com/oauth2/default/v1/authorize?'.$query);
+header('Location: ' . 'https://{yourOktaDomain}/oauth2/default/v1/authorize?'.$query);
 ```
 > The `nonce` should be a generated string such as UUID, and the `state` can be any string representing state of the
 application.
@@ -56,7 +58,7 @@ function exchangeCode($code) {
         'Connection: close',
         'Content-Length: 0'
     ];
-    $url = 'https://{yourOktaDomain}.com/oauth2/default/v1/token?' . $query;
+    $url = 'https://{yourOktaDomain}/oauth2/default/v1/token?' . $query;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

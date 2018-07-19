@@ -1,6 +1,7 @@
 ---
 layout: docs_page
 title: Administrator Roles
+category: management
 ---
 
 # Administrator Roles API
@@ -40,7 +41,7 @@ curl -v -X GET \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/users/00u6fud33CXDPBXULRNG/roles"
+"https://{yourOktaDomain}/api/v1/users/00u6fud33CXDPBXULRNG/roles"
 ~~~
 
 ##### Response Example
@@ -97,7 +98,7 @@ curl -v -X POST \
 -H "Authorization: SSWS ${api_token}" \
 -d '{
       "type": "SUPER_ADMIN"
-}' "https://{yourOktaDomain}.com/api/v1/users/00u6fud33CXDPBXULRNG/roles"
+}' "https://{yourOktaDomain}/api/v1/users/00u6fud33CXDPBXULRNG/roles"
 ~~~
 
 ##### Response Example
@@ -144,7 +145,7 @@ curl -v -X DELETE \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/users/00u6fud33CXDPBXULRNG/roles/ra1b8anIk7rx7em7L0g4"
+"https://{yourOktaDomain}/api/v1/users/00u6fud33CXDPBXULRNG/roles/ra1b8anIk7rx7em7L0g4"
 ~~~
 
 ##### Response Example
@@ -192,7 +193,7 @@ curl -v -X GET \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/users/00u6fud33CXDPBXULRNG/roles/KVJUKUS7IFCE2SKO/targets/groups"
+"https://{yourOktaDomain}/api/v1/users/00u6fud33CXDPBXULRNG/roles/KVJUKUS7IFCE2SKO/targets/groups"
 ~~~
 
 ##### Response Example
@@ -212,25 +213,25 @@ curl -v -X GET \
     "_links": {
       "logo": [
         {
-          "href": "https://{yourOktaDomain}.com/img/logos/groups/okta-medium.png",
+          "href": "https://{yourOktaDomain}/img/logos/groups/okta-medium.png",
           "name": "medium",
           "type": "image/png"
         },
         {
-          "href": "https://{yourOktaDomain}.com/img/logos/groups/okta-large.png",
+          "href": "https://{yourOktaDomain}/img/logos/groups/okta-large.png",
           "name": "large",
           "type": "image/png"
         }
       ],
       "users": {
-        "href": "https://{yourOktaDomain}.com/api/v1/groups/00g1emaKYZTWRYYRRTSK/users"
+        "href": "https://{yourOktaDomain}/api/v1/groups/00g1emaKYZTWRYYRRTSK/users"
       },
       "apps": {
-        "href": "https://{yourOktaDomain}.com/api/v1/groups/00g1emaKYZTWRYYRRTSK/apps"
+        "href": "https://{yourOktaDomain}/api/v1/groups/00g1emaKYZTWRYYRRTSK/apps"
       }
     }
   }
-] 
+]
 ~~~
 
 #### Add Group Target to Group Administrator Role
@@ -266,7 +267,7 @@ curl -v -X PUT \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/users/00u6fud33CXDPBXULRNG/roles/KVJUKUS7IFCE2SKO/targets/groups/00garkxjAHDYPFcsP0g4"
+"https://{yourOktaDomain}/api/v1/users/00u6fud33CXDPBXULRNG/roles/KVJUKUS7IFCE2SKO/targets/groups/00garkxjAHDYPFcsP0g4"
 ~~~
 
 ##### Response Example
@@ -309,7 +310,7 @@ curl -v -X DELETE \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/users/00u6fud33CXDPBXULRNG/roles/KVJUKUS7IFCE2SKO/targets/groups/00garkxjAHDYPFcsP0g4"
+"https://{yourOktaDomain}/api/v1/users/00u6fud33CXDPBXULRNG/roles/KVJUKUS7IFCE2SKO/targets/groups/00garkxjAHDYPFcsP0g4"
 ~~~
 
 ##### Response Example
@@ -355,7 +356,7 @@ curl -v -X GET \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/users/00u6fud33CXDPBXULRNG/roles/KVJUKUS7IFCE2SKO/targets/catalog/apps"
+"https://{yourOktaDomain}/api/v1/users/00u6fud33CXDPBXULRNG/roles/KVJUKUS7IFCE2SKO/targets/catalog/apps"
 ~~~
 
 ##### Response Example
@@ -392,12 +393,12 @@ The example shows two applications and two instances. Note the response for inst
       "logo": [
         {
           "name": "medium",
-          "href": "https://{yourOktaDomain}.com/img/logos/salesforce_logo.png",
+          "href": "https://{yourOktaDomain}/img/logos/salesforce_logo.png",
           "type": "image/png"
         }
       ],
       "self": {
-          "href": "https://{yourOktaDomain}.com/api/v1/catalog/apps/salesforce"
+          "href": "https://{yourOktaDomain}/api/v1/catalog/apps/salesforce"
       }
     }
   },
@@ -426,12 +427,12 @@ The example shows two applications and two instances. Note the response for inst
       "logo": [
         {
           "name": "medium",
-          "href": "https://{yourOktaDomain}.com/img/logos/box.png",
+          "href": "https://{yourOktaDomain}/img/logos/box.png",
           "type": "image/png"
         }
       ],
       "self": {
-          "href": "https://{yourOktaDomain}.com/api/v1/catalog/apps/boxnet"
+          "href": "https://{yourOktaDomain}/api/v1/catalog/apps/boxnet"
       }
     }
   },
@@ -441,7 +442,7 @@ The example shows two applications and two instances. Note the response for inst
     "id": "0oapsqQ5dv19pqyEo0g3",
     "_links": {
       "self": {
-          "href": "https://{yourOktaDomain}.com/api/v1/apps/0oapsqQ5dv19pqyEo0g3"
+          "href": "https://{yourOktaDomain}/api/v1/apps/0oapsqQ5dv19pqyEo0g3"
       }
     }
   },
@@ -451,7 +452,7 @@ The example shows two applications and two instances. Note the response for inst
     "id": "0obdfgrQ5dv29pqyQo0f5",
     "_links": {
        "self": {
-           "href": "https://{yourOktaDomain}.com/api/v1/apps/0obdfgrQ5dv29pqyQo0f5"
+           "href": "https://{yourOktaDomain}/api/v1/apps/0obdfgrQ5dv29pqyQo0f5"
        }
     }
   }
@@ -494,7 +495,7 @@ curl -v -X PUT \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/users/00u6fud33CXDPBXULRNG/roles/KVJUKUS7IFCE2SKO/targets/catalog/apps/amazon_aws"
+"https://{yourOktaDomain}/api/v1/users/00u6fud33CXDPBXULRNG/roles/KVJUKUS7IFCE2SKO/targets/catalog/apps/amazon_aws"
 ~~~
 
 ##### Response Example
@@ -541,7 +542,7 @@ curl -v -X PUT \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/users/00u6fud33CXDPBXULRNG/roles/KVJUKUS7IFCE2SKO/targets/catalog/apps/amazon_aws"
+"https://{yourOktaDomain}/api/v1/users/00u6fud33CXDPBXULRNG/roles/KVJUKUS7IFCE2SKO/targets/catalog/apps/amazon_aws"
 ~~~
 
 ##### Response Example
@@ -584,7 +585,7 @@ curl -v -X DELETE \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/users/00u6fud33CXDPBXULRNG/roles/KVJUKUS7IFCE2SKO/targets/catalog/apps/amazon_aws"
+"https://{yourOktaDomain}/api/v1/users/00u6fud33CXDPBXULRNG/roles/KVJUKUS7IFCE2SKO/targets/catalog/apps/amazon_aws"
 ~~~
 
 ##### Response Example
@@ -628,7 +629,7 @@ curl -v -X DELETE \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}.com/api/v1/users/00u6fud33CXDPBXULRNG/roles/KVJUKUS7IFCE2SKO/targets/catalog/apps/amazon_aws"
+"https://{yourOktaDomain}/api/v1/users/00u6fud33CXDPBXULRNG/roles/KVJUKUS7IFCE2SKO/targets/catalog/apps/amazon_aws"
 ~~~
 
 ##### Response Example
