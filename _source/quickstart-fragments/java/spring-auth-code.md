@@ -5,6 +5,8 @@ exampleDescription: Spring Auth Code Example
 
 ## Okta Java/Spring Quickstart
 
+Now that your users can sign in, let's add authentication to your server.
+
 ### Include the dependencies
 
 For Apache Maven:
@@ -27,7 +29,7 @@ You can configure your applications properties with environment variables, syste
 An example `application.properties` file would look like:
 
 ```properties
-okta.oauth2.issuer=https://{yourOktaDomain}.com/oauth2/default
+okta.oauth2.issuer=https://{yourOktaDomain}/oauth2/default
 okta.oauth2.clientId={yourClientId}
 okta.oauth2.clientSecret={yourClientSecret}
 # Configure the callback URL to match the previous section

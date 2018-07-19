@@ -28,7 +28,7 @@ The general procedure is the same for Outbound and Inbound SAML application; how
 
 > **Important:** In the third step, use your own process to sign the CSR. You can't move to step four until the process is completed.
 
-For information on using the Postman REST API test client for these steps, see [API Test Client](/docs/api/getting_started/api_test_client).
+For information on using the Postman REST API test client for these steps, see [Get Started with the Okta REST APIs](/code/rest/).
 
 #### Step 1: List your apps
 
@@ -129,7 +129,7 @@ Content-Type: application/json
 }
 
 201 Created
-Location: https://{yourOktaDomain}.com/api/v1/apps/00000id1U3iyFqLu0g4/credentials/csrs/abckutaSe7fZX0SwN1GqDApofgD1OW8g2B5l2azh000
+Location: https://{yourOktaDomain}/api/v1/apps/00000id1U3iyFqLu0g4/credentials/csrs/abckutaSe7fZX0SwN1GqDApofgD1OW8g2B5l2azh000
 
 {
   "id": "abckutaSe7fZX0SwN1GqDApofgD1OW8g2B5l2azh000",
@@ -138,7 +138,7 @@ Location: https://{yourOktaDomain}.com/api/v1/apps/00000id1U3iyFqLu0g4/credentia
   "kty": "RSA",
   "_links": {
     "self": {
-      "href": "https://{yourOktaDomain}.com/api/v1/apps/00000id1U3iyFqLu0g4/credentials/csrs/abckutaSe7fZX0SwN1GqDApofgD1OW8g2B5l2azh000",
+      "href": "https://{yourOktaDomain}/api/v1/apps/00000id1U3iyFqLu0g4/credentials/csrs/abckutaSe7fZX0SwN1GqDApofgD1OW8g2B5l2azh000",
       "hints": {
         "allow": [
           "GET",
@@ -147,7 +147,7 @@ Location: https://{yourOktaDomain}.com/api/v1/apps/00000id1U3iyFqLu0g4/credentia
       }
     },
     "publish": {
-      "href": "https://{yourOktaDomain}.com/api/v1/apps/00000id1U3iyFqLu0g4/credentials/csrs/abckutaSe7fZX0SwN1GqDApofgD1OW8g2B5l2azh000/lifecycle/publish",
+      "href": "https://{yourOktaDomain}/api/v1/apps/00000id1U3iyFqLu0g4/credentials/csrs/abckutaSe7fZX0SwN1GqDApofgD1OW8g2B5l2azh000/lifecycle/publish",
       "hints": {
         "allow": [
           "POST"
@@ -193,7 +193,7 @@ ZRUaagvFUo1EO9m1xnjpLDIa7+M=
 
 
 201 Created
-Location: https://{yourOktaDomain}.com/api/v1/apps/0oa1ysid1U3iyFqLu0g4/credentials/keys/ElsCzR8nbPamANBFu7QPRvtLD6Q3O1KQNJ92zkfFJNw
+Location: https://{yourOktaDomain}/api/v1/apps/0oa1ysid1U3iyFqLu0g4/credentials/keys/ElsCzR8nbPamANBFu7QPRvtLD6Q3O1KQNJ92zkfFJNw
 Content-Type: application/json;charset=UTF-8
 
 {
@@ -351,4 +351,3 @@ For Outbound SAML, complete the following four steps.
 4. Perform the setup for your app again, using the instructions provided. During this setup, you will upload the certificate in a specified format, the metadata, or the certificate fingerprint.
 
 For Inbound SAML, follow the existing procedures for your setup.
-

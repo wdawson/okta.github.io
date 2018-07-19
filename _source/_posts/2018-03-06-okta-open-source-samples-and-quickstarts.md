@@ -24,8 +24,6 @@ If you [search for "-sample"](https://github.com/okta?utf8=%E2%9C%93&q=-sample&t
 * [samples-js-angular-1](https://github.com/okta/samples-js-angular-1)
 * [samples-js-react](https://github.com/okta/samples-js-react)
 * [samples-nodejs-express-4](https://github.com/okta/samples-nodejs-express-4)
-* [samples-python-django](https://github.com/okta/samples-python-django)
-* [samples-python-flask](https://github.com/okta/samples-python-flask)
 * [samples-js-vue](https://github.com/okta/samples-js-vue)
 
 ## Try the Okta Framework Samples
@@ -77,7 +75,7 @@ To set up the Spring Boot resource server, clone that sample's repository and ru
 ```bash
 git clone https://github.com/okta/samples-java-spring.git
 cd samples-java-spring/resource-server
-./mvnw -Dokta.oauth2.issuer=https://{yourOktaDomain}.com/oauth2/default
+./mvnw -Dokta.oauth2.issuer=https://{yourOktaDomain}/oauth2/default
 ```
 
 {% img blog/samples-and-quickstarts/react-sample-messages.png alt:"React Sample - Messages" width:"800" %}{: .center-image }

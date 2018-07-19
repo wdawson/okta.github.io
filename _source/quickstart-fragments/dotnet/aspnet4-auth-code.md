@@ -5,7 +5,9 @@ exampleDescription: ASP.NET 4.x MVC authorization code example
 
 ## Okta ASP.NET 4.x MVC Quickstart
 
-If you want a full, working example, head over to the [ASP.NET MVC example](https://github.com/oktadeveloper/okta-aspnet-mvc-example) repository and follow the instructions in that readme.
+Now that your users can sign in, let's add authentication to your server.
+
+> If you would prefer to download a complete sample application instead, please visit [ASP.NET MVC Example](https://github.com/oktadeveloper/okta-aspnet-mvc-example) and follow those instructions.
 
 ### Create a new project
 
@@ -61,7 +63,7 @@ public class Startup
 
             Notifications = new OpenIdConnectAuthenticationNotifications
             {
-                AuthorizationCodeReceived = async n => 
+                AuthorizationCodeReceived = async n =>
                 {
                     // Exchange code for access and ID tokens
                     var tokenClient = new TokenClient(authority + "/v1/token", clientId, clientSecret);
@@ -165,7 +167,7 @@ Open the `Web.config` file and add these keys to the `<appSettings>` section:
 <!-- 1. Replace these values with your Okta configuration -->
 <add key="okta:ClientId" value="{clientId}" />
 <add key="okta:ClientSecret" value="{clientSecret}" />
-<add key="okta:OrgUri" value="https://{yourOktaDomain}.com/oauth2/default" />
+<add key="okta:OrgUri" value="https://{yourOktaDomain}/oauth2/default" />
 
 <!-- 2. Update the Okta application with these values -->
 <add key="okta:RedirectUri" value="http://localhost:8080/authorization-code/callback" />

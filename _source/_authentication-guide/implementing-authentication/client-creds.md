@@ -30,7 +30,7 @@ Your Client Application will need to have its client ID and secret stored in a s
 
 ```
 curl --request POST \
-  --url https://{yourOktaDomain}.com/oauth2/default/v1/token \
+  --url https://{yourOktaDomain}/oauth2/default/v1/token \
   --header 'accept: application/json' \
   --header 'authorization: Basic MG9hY...' \
   --header 'cache-control: no-cache' \
@@ -39,7 +39,7 @@ curl --request POST \
   scope=customScope'
 ```
 
-> NOTE: The Client ID and Secret aren’t included in the POST body, but rather are placed in the HTTP Authorization header following the rules of HTTP Basic Auth.
+> NOTE: The Client ID and Secret aren't included in the POST body, but rather are placed in the HTTP Authorization header following the rules of HTTP Basic Auth.
 
 Note the parameters that are being passed:
 

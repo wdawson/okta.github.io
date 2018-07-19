@@ -5,6 +5,8 @@ exampleDescription: Java Implicit Example
 
 ## Okta Java Quickstart
 
+Now that your clients can get tokens, let's validate those tokens on your server.
+
 ### Include the dependency
 
 For Apache Maven:
@@ -36,7 +38,7 @@ public static class OktaAccessTokenFilter implements Filter {
 
         try {
             this.jwtVerifier = new JwtHelper()
-                    .setIssuerUrl("https://{yourOktaDomain}.com/oauth2/default"))
+                    .setIssuerUrl("https://{yourOktaDomain}/oauth2/default"))
                     .setAudience("api://default")
                     .build();
 
