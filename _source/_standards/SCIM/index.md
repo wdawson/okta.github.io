@@ -1083,8 +1083,6 @@ For more details on the `/Groups/{id}` SCIM endpoint, see [section 3.4.1](https:
 
 {% api_lifecycle beta %}
 
-> **Warning:** Updating groups via PUT request will be deprecated on May 31st, 2018. ISV's currently implementing SCIM need to implement [patch support](#update-group-details-patch-groupsid) prior to submitting their integration for review.
-
 With Group Push Beta, any updates to the Group profile and memberships in Okta can now be reflected into your SCIM application. Okta will do the following to make the Group changes effective:
 
 * Make a GET request against `/groups/{id}` on your SCIM API for the group to update.
@@ -1154,8 +1152,6 @@ For more details, see [section 3.5.1](https://tools.ietf.org/html/rfc7644#sectio
 ##### Update Group Details: PATCH /Groups/{id}
 
 {% api_lifecycle beta %}
-
-> Starting May 31st 2018, Okta will **only** support updating groups via PATCH. Please reach out to <developers@okta.com> for any questions.
 
 ###### SCIM 1.1
 
