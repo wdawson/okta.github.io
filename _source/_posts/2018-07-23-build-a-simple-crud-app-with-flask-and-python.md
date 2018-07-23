@@ -374,7 +374,7 @@ You may have also noticed the special blog tags:
 ```html
 <title>Blog | {% block title %}{% endblock %}</title>
 
-<!-- … →
+<!-- … -->
 
 {% block body %}{% endblock %}
 ```
