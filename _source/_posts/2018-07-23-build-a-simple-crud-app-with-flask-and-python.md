@@ -374,7 +374,7 @@ You may have also noticed the special blog tags:
 ```html
 <title>Blog | {% block title %}{% endblock %}</title>
 
-<!-- … -->
+<!-- ... -->
 
 {% block body %}{% endblock %}
 ```
@@ -465,7 +465,7 @@ Now copy the following code into the `blog/templates/blog/index.html` file. This
 {% endraw %}
 
 
-Note that this template uses the `for` tag to loop through an array of `post` objects, and then generates links to each of the blog posts by using the `post` object properties, e.g. `post.author_name`, `post.title`, etc. Using the {% raw %}`{{ … }}`{% endraw %} syntax allows you to output a variable's value into the HTML of the page.
+Note that this template uses the `for` tag to loop through an array of `post` objects, and then generates links to each of the blog posts by using the `post` object properties, e.g. `post.author_name`, `post.title`, etc. Using the {% raw %}`{{ ... }}`{% endraw %} syntax allows you to output a variable's value into the HTML of the page.
 
 Now copy the following code into the `blog/templates/blog/dashboard.html` file. This will be the dashboard that authors can use to manage their articles. It will allow them to create articles, edit articles, and delete articles.
 
@@ -674,7 +674,7 @@ For almost all Flask apps, you'll at some point need to specify some configurati
 
 In this case, we're specifying a setting that Flask-SQLAlchemy requires, `SQLALCHEMY_DATABASE_URI`, which basically tells it what type of database we're using and how to access it. In this case, we're going to be storing the SQLite database in a file called `database.sqlite` in the root of our project folder.
 
-For this blog app, we'll be using the [SQLite database](https://www.sqlite.org/index.html). SQLite is an incredibly popular database that stores all of its data in a single file on the disk. This makes it ideal for building portable applications. If you are building something that requires high levels of throughput and data processing, SQLite may not be the best fit… But for just about everything else, it's not only simple — it's very convenient, as you don't even need a database server!
+For this blog app, we'll be using the [SQLite database](https://www.sqlite.org/index.html). SQLite is an incredibly popular database that stores all of its data in a single file on the disk. This makes it ideal for building portable applications. If you are building something that requires high levels of throughput and data processing, SQLite may not be the best fit... But for just about everything else, it's not only simple — it's very convenient, as you don't even need a database server!
 
 Now, if you go back and re-run your Flask application, you'll notice that it should run fine. The only problem is that we still haven't accomplished anything yet other than initializing the database.
 
@@ -1199,7 +1199,7 @@ This view function allows users to delete a post. This function will run each ti
 * Look in the database for a blog post with the slug specified in the URL. If one can be found, it'll delete the post from the database (assuming the user has the correct permissions). If the user doesn't have the correct permissions, they'll be shown a 403 page.
 * If no matching blog post can be found, the user will see a 404 page and nothing more
 
-And… That's it!
+And... That's it!
 
 ## Test Your New Flask + Python App
 
