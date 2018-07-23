@@ -111,7 +111,7 @@ Hover over the **Classic UI** button at the top right of the page and select the
 
 ## Install Python and Flask Dependencies
 
-The first thing you need to do to initialize your Flask app is install all of the required dependencies. If you don't have Python installed on your computer already, please go [install it now](https://www.python.org/downloads/). 
+The first thing you need to do to initialize your Flask app is install all of the required dependencies. If you don't have Python installed on your computer already, please go [install it now](https://www.python.org/downloads/). Be sure to use the latest Python 3+ release.
 
 **NOTE**: I also strongly recommend you get familiar with [pipenv](https://docs.pipenv.org/) when you get some time. It's a great tool that makes managing Python dependencies very simple.
 
@@ -880,7 +880,7 @@ Congratulations, you've now fully integrated user registration, login, and user 
 
 ## Define the Blog Views in Flask
 
-We're building a blog. So far, we've built the front-end templates, created the database models, and wired up user authentication. The one thing we haven't done, however, is define the core *behavior* for our application: the views!
+So far, we've built the front-end templates, created the database models, and wired up user authentication. The one thing we haven't done, however, is define the core *behavior* for our application: the views!
 
 In Flask, views are functions that run when a user visits a particular URL. If a user visits `/dashboard`, for example, Flask needs to know what function to run and what to do to display the dashboard page to the user.
 
@@ -1062,7 +1062,7 @@ def get_posts(author_id):
     return Post.query.filter_by(author_id=author_id).order_by(Post.created.desc())
 ```
 
-This function is designed as a helper. What it does is query the database, looking for any posts written by a specific author, and returning them ordered by date.
+This function is designed as a helper. What it does is query the database, looking for any posts written by a specific author, and returns them in descending order by date.
 
 This will be useful later when displaying the user dashboard page, as we'll only want to show users blog posts *they've* created on their dashboard page. This function allows us to easily get a list of those posts without duplicating code.
 
@@ -1087,10 +1087,10 @@ def index():
 
 This view function is the homepage of the site. This function will run each time a user visits the `/` URL. What it does is:
 
-* Get a list of all blog posts on the site, ordered by date
-* It loops through each post and extracts the author's ID
-* It then uses the Okta Python library to retrieve the corresponding user's first name and last name (this will allow us to display the author's information to blog readers)
-* Finally, it renders the `blog/index.html` template we created much earlier, which displays a list of all blog posts, and who wrote them
+* Get a list of all blog posts on the site, ordered by date descending
+* Loops through each post and extracts the author's ID
+* Uses the Okta Python library to retrieve the corresponding user's first name and last name (this will allow us to display the author's information to blog readers)
+* Renders the `blog/index.html` template we created much earlier, which displays a list of all blog posts, and who wrote them
 
 ### The dashboard View
 
