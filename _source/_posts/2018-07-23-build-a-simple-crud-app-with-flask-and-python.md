@@ -31,7 +31,7 @@ Okta is a free-to-use API service that stores user accounts and makes handling u
 
 In this tutorial, you'll use Okta to store the user accounts for your web app, and you'll use OpenID Connect to talk to Okta to handle the logistics around authentication and authorization.
 
-To get started, you first need to create a free Okta developer account: [https://developer.okta.com/signup/](/signup/). Once you've created your account and logged in, follow the steps below configure Okta, and then you'll be ready to write some code!
+To get started, you first need to create a free Okta developer account: [https://developer.okta.com/signup/](https://developer.okta.com/signup/). Once you've created your account and logged in, follow the steps below configure Okta, and then you'll be ready to write some code!
 
 {% img blog/build-a-simple-crud-app-with-python-and-flask/okta-registration-page.png alt:"Okta registration page" width:"700" %}{: .center-image }
 
