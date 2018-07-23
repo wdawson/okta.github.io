@@ -568,5 +568,6 @@ If you're interested in learning more about web authentication and security, you
 
 Here are two of my favorites:
 
+* [Build a Simple CRUD App with Flask and Python](/blog/2018/07/23/build-a-simple-crud-app-with-flask-and-python)
 * [Add Authentication to Any Web Page in 10 Minutes](/blog/2018/06/08/add-authentication-to-any-web-page-in-10-minutes)
 * [What Happens if Your JWT is Stolen?](/blog/2018/06/20/what-happens-if-your-jwt-is-stolen)
