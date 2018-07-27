@@ -9,17 +9,17 @@ tweets:
 - "Need to learn the basics of @aspnet framework 4 and @angular 6? We've got you covered. <3"
 ---
 
-Even with all the hype around ASP.NET Core, many .NET developers continue to develop applications with ASP.NET 4.x. The ASP.NET 4.X framework is still being developed, and will be supported for a long time to come. I''s a battle-tested web framework that has existed for over 15 years and is supported by a mature ecosystem.
+Even with all the hype around ASP.NET Core, many .NET developers continue to develop applications with ASP.NET 4.x. The ASP.NET 4.X framework is still being developed, and will be supported for a long time to come. It's a battle-tested web framework that has existed for over 15 years and is supported by a mature ecosystem.
 
 On the client side, many developers prefer Angular, and it is outstanding for building enterprise-level, feature rich, applications.
 
-The application we will be creating is a simple CRUD Sugar Level Tracker. First, we will learn how to build a REST service with our framework of choice, ASP.NET Web API 2. After that, we will implement SPA that will consume our API. Also, le''s not forget about security! We will learn how to easily secure our application with an external provider like Okta. In the end, we will have fully functional, and secure application for measuring sugar level.
+The application we will be creating is a simple CRUD Sugar Level Tracker. First, we will learn how to build a REST service with our framework of choice, ASP.NET Web API 2. After that, we will implement SPA that will consume our API. Also, let's not forget about security! We will learn how to easily secure our application with an external provider like Okta. In the end, we will have fully functional, and secure application for measuring sugar level.
 
 We will be using .NET Framework 4.7.1 and Visual Studio 2017. Also, you should have Node and npm installed.
 
 ## Get Started with ASP.NET
 
-First, le''s create an API using a built-in template within Visual Studio. Le''s start from a scratch.
+First, let's create an API using a built-in template within Visual Studio. Let's start from a scratch.
 
 In Visual Studio, select File -> New Project
 
@@ -27,11 +27,11 @@ In Visual Studio, select File -> New Project
 
 {% img blog/aspnet-framework-angular-crud/CreateWebApiDialog.png alt:"Dialog to choose Web API as project type." width:"800" %}{: .center-image }
 
-At this moment, we have a lot of boilerplate code that we really do''t need in our application.
+At this moment, we have a lot of boilerplate code that we really don't need in our application.
 
-Le''s clean up the boilerplate code and remove all redundant files and NuGet packages.
+Let's clean up the boilerplate code and remove all redundant files and NuGet packages.
 
-Since we are building an API, we do''t need UI related files or folders. We can remove all the following:
+Since we are building an API, we don't need UI related files or folders. We can remove all the following:
 
 {% img blog/aspnet-framework-angular-crud/RemoveFoldersFromProject.png alt:"Project file tree with items to be removed highlighted." width:"300" %}{: .center-image }
 
@@ -69,7 +69,7 @@ After finishing we should have a clean project solution and perfect starting gro
 
 ## Install ASP.NET API Project Dependencies
 
-Now, that we have a clean solution le''s install all necessary packages and project dependencies. Later we will learn about each of the packages. Again, we will do it using the Package Manager Console by executing the following:
+Now, that we have a clean solution let's install all necessary packages and project dependencies. Later we will learn about each of the packages. Again, we will do it using the Package Manager Console by executing the following:
 
 ```
 Install-Package Microsoft.Owin.Host.SystemWeb -Version 4.0.0
@@ -85,7 +85,7 @@ Install-Package Microsoft.AspNet.Identity.Owin -Version 2.2.1
 
 Entity Framework 6 is a mature ORM, built and supported by Microsoft. It allows us to interact with the database without the need to know or execute SQL queries. The classes from our code will map to database tables and will basically define database structure. EntityFramework has a migration concept, which allows us to track changes within our DB models which reflect database structure.
 
-Le''s now set up our database connection. We will add a connection string to Web.Config. Make sure to add it inside of `<configuration>`, after `<configSections></configSections>`
+Let's now set up our database connection. We will add a connection string to Web.Config. Make sure to add it inside of `<configuration>`, after `<configSections></configSections>`
 
 ```cs
 <connectionStrings>
@@ -122,7 +122,7 @@ namespace SugarLevelTracker.Models
 
 As you can see, we have standard property for unique identifier - Id, which will be picked up by Entity Framework and used as primary key. We need Value to store our trackings and Description to associate a name with it. We will also use `MeasuredAt` to indicate when we measured our sugar level.
 
-Le''s create our `ApplicationDbContext` class, inside of new folder called `Data`. It will be pretty simple:
+Let's create our `ApplicationDbContext` class, inside of new folder called `Data`. It will be pretty simple:
 
 ```cs
 using System.Data.Entity;
@@ -185,7 +185,7 @@ Since we are building a RESTful API for simple CRUD functionality, we will have 
 
 - Delete existing sugar level
 
-Le''s create a controller that will bring to life our endpoints. We will use scaffolding, a powerful feature that comes with Visual Studio. It will create a controller with CRUD actions, based on our model and DbContext.
+Let's create a controller that will bring to life our endpoints. We will use scaffolding, a powerful feature that comes with Visual Studio. It will create a controller with CRUD actions, based on our model and DbContext.
 
 Right click on Controllers folder, and choose Add -> Controller:
 
@@ -232,7 +232,7 @@ config.Formatters.Remove(config.Formatters.XmlFormatter);
 jsonFormatter.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc;
 ```
 
-Yo''ll also need to add the using statement for the JSON serializer to the file:
+You'll also need to add the using statement for the JSON serializer to the file:
 
 ```cs
 using Newtonsoft.Json.Serialization;
@@ -242,7 +242,7 @@ We also want to specify the port the API will be running on so that the Angular 
 
 ## Build SPA application with Angular
 
-First, le''s begin by using Angular CLI to create our application. Angular CLI is a great tool when it comes to creating angular apps without spending a considerable amount of time and effort configuring our application. We are not required to be experts at Webpack or waste time configuring project structure, module loaders, environment, and libraries before ever starting to write any code. Angular CLI does all of this for us, so we can focus on building SPA applications. For more information on Angular CLI you can check their [documentation](https://github.com/angular/angular-cli/wiki).
+First, let's begin by using Angular CLI to create our application. Angular CLI is a great tool when it comes to creating angular apps without spending a considerable amount of time and effort configuring our application. We are not required to be experts at Webpack or waste time configuring project structure, module loaders, environment, and libraries before ever starting to write any code. Angular CLI does all of this for us, so we can focus on building SPA applications. For more information on Angular CLI you can check their [documentation](https://github.com/angular/angular-cli/wiki).
 
 First we need to install Angular CLI globally by running the following command within Powershell or Command Prompt:
 
@@ -267,7 +267,7 @@ ng serve
 
 Now we can start building our SPA.
 
-First, le''s install the following packages: Angular Material, Angular CDK, Angular Date Time Picker, RxJS Compat
+First, let's install the following packages: Angular Material, Angular CDK, Angular Date Time Picker, RxJS Compat
 
 ```sh
 npm install @angular/material @angular/cdk ng-pick-datetime rxjs-compat --save
@@ -284,7 +284,7 @@ To bring in the styles for Angular Material and the Owl DateTime Picker, put the
 
 Our app contains only one root module, `AppModule`, and one component AppComponent. The application we are making is a very simple one. Hence, we will use existing AppModule. If later our application gets more complex we can introduce features, routing and shared modules to better organize our code. Since our application will be able to track sugar level we will need to create an appropriate service: SugarLevelService, and components for listing and editing the sugar levels.
 
-It would be nice to also create a TypeScript model for sugar level, to make it easier for us to work with sugar level objects. Le''s first create a folder `shared` inside of our `app` folder, which is part of Angular application that gets created by Angular CLI. Inside of the `shared` folder create a new folder called `models`, and this is where we will create the `SugarLevel.ts` file:
+It would be nice to also create a TypeScript model for sugar level, to make it easier for us to work with sugar level objects. Let's first create a folder `shared` inside of our `app` folder, which is part of Angular application that gets created by Angular CLI. Inside of the `shared` folder create a new folder called `models`, and this is where we will create the `SugarLevel.ts` file:
 
 ```ts
 export default class SugarLevel {
@@ -295,7 +295,7 @@ export default class SugarLevel {
 }
 ```
 
-After this, le''s create `api` folder inside of `shared` folder, and inside of it a new file called `sugar-level.service.ts`:
+After this, let's create `api` folder inside of `shared` folder, and inside of it a new file called `sugar-level.service.ts`:
 
 ```ts
 import { Injectable } from '@angular/core';
@@ -524,7 +524,7 @@ Code for `sugarlevel-edit.component.html`:
 
 After adding components we will need to navigate between them by implementing routing. First, we will import the `RouterModule` module and `Routes` type. Then we will create a route configuration of Routes type, and after, we will register RouterModule with route configuration on the root level.
 
-Inside of `app.module.ts`, le''s add the routing configuration right at the top, below the import statements:
+Inside of `app.module.ts`, let's add the routing configuration right at the top, below the import statements:
 
 ```ts
 const appRoutes: Routes = [
@@ -548,7 +548,7 @@ Inside of `imports` array, we will add the following:
 
 `RouterModule.forRoot(appRoutes)`
 
-Yo''ll also need to import some components from the `@angular/router`, `@angular/material` and the `ng-pick-datetime` packages for the HTML files that were added.
+You'll also need to import some components from the `@angular/router`, `@angular/material` and the `ng-pick-datetime` packages for the HTML files that were added.
 
 This is how `app.module.ts` file should look after all this:
 
@@ -615,15 +615,15 @@ const appRoutes: Routes = [
 export class AppModule {}
 ```
 
-We will use the service, SugarLevelService to enable our components to communicate with our REST API. Also, i''s important to note that Angular HttpClient uses RxJS observables instead of promises, so the sooner we learn RxJS the better. `SugarLevelService` is registered in the `AppModule`, as a singleton service and is available everywhere across our app.
+We will use the service, SugarLevelService to enable our components to communicate with our REST API. Also, it's important to note that Angular HttpClient uses RxJS observables instead of promises, so the sooner we learn RxJS the better. `SugarLevelService` is registered in the `AppModule`, as a singleton service and is available everywhere across our app.
 
 ## Create an Okta Application
 
-Dealing with user authentication in web apps is a massive pain for every developer. This is where Okta shines: it helps you secure your web applications with minimal effort. To get started, yo''ll need to create an OpenID Connect application in Okta. Sign up for a forever-free developer account (or log in if you already have one).
+Dealing with user authentication in web apps is a massive pain for every developer. This is where Okta shines: it helps you secure your web applications with minimal effort. To get started, you'll need to create an OpenID Connect application in Okta. Sign up for a forever-free developer account (or log in if you already have one).
 
 {% img blog/aspnet-framework-angular-crud/OktaSignup.png alt:"Okta Signup Page" width:"800" %}{: .center-image }
 
-Once yo''ve logged in and landed on the dashboard page, copy down the Org URL pictured below. You will need this later.
+Once you've logged in and landed on the dashboard page, copy down the Org URL pictured below. You will need this later.
 
 {% img blog/aspnet-framework-angular-crud/OktaDashboardOrgUrl.png alt:"Okta dashboard with org url highlighted." width:"800" %}{: .center-image }
 
@@ -641,13 +641,13 @@ You can leave the other values unchanged, and click **Done**.
 
 {% img blog/aspnet-framework-angular-crud/CreateSpaSettings.png alt:"New Project Dialog" width:"800" %}{: .center-image }
 
-Now that your application has been created, copy down the Client ID and Client secret values on the following page, yo''ll need them soon (of course, yours will be different).
+Now that your application has been created, copy down the Client ID and Client secret values on the following page, you'll need them soon (of course, yours will be different).
 
 {% img blog/aspnet-framework-angular-crud/ClientCredentialsScreenshot.png alt:"Okta client credentials screenshot dialog." width:"800" %}{: .center-image }
 
 ## Secure Your ASP.NET Core + Angular Application
 
-If you do''t already have a Startup.cs file (OWIN Startup class), create one by right-clicking on your project and choosing Add - Class. Pick the OWIN Startup template and name the new class Startup.
+If you don't already have a Startup.cs file (OWIN Startup class), create one by right-clicking on your project and choosing Add - Class. Pick the OWIN Startup template and name the new class Startup.
 
 Make sure you have these using statements at the top of your Startup.cs file:
 
@@ -696,11 +696,11 @@ public void Configuration(IAppBuilder app)
 
 ## Protect Your ASP.NET API Endpoints
 
-Now i''s time to protect all our endpoints for SugarLevel controller. Since we want to protect all actions we will simply apply the Authorize attribute at the controller level. We could also apply the attribute to specific actions, or even globally for all controllers and actions. If we applied it globally, we could exclude Authorize on specific actions and controllers by using the AllowAnonymous attribute.
+Now it's time to protect all our endpoints for SugarLevel controller. Since we want to protect all actions we will simply apply the Authorize attribute at the controller level. We could also apply the attribute to specific actions, or even globally for all controllers and actions. If we applied it globally, we could exclude Authorize on specific actions and controllers by using the AllowAnonymous attribute.
 
 ## Implement Authentication in Angular
 
-To add authentication to our Angular app we will use Okt''s Angular SDK.
+To add authentication to our Angular app we will use Okta's Angular SDK.
 
 ```sh
 npm install @okta/okta-angular --save
@@ -778,7 +778,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 And then add the interceptor to the providers:
 
-On AppComponent and HomeComponent initialization we use Okt''s authentication state and provide a callback that will be executed any time state is updated. If our app is''t authenticated HomeComponent will render Login button with a link to redirect URL for us to authenticate. If the user is authenticated our HomeComponent will redirect the user to SugarLevelListComponent.
+On AppComponent and HomeComponent initialization we use Okta's authentication state and provide a callback that will be executed any time state is updated. If our app isn't authenticated HomeComponent will render Login button with a link to redirect URL for us to authenticate. If the user is authenticated our HomeComponent will redirect the user to SugarLevelListComponent.
 
 Generate the home component as before:
 
@@ -847,7 +847,7 @@ Then replace the component handling the '' path with the home component in the r
 { path: '', component: HomeComponent, pathMatch: 'full' },
 ```
 
-Also, import the OktaCallbackComponent from Okt''s Angular SDK and add the callback route to the app component:
+Also, import the OktaCallbackComponent from Okta's Angular SDK and add the callback route to the app component:
 
 ```ts
 { path: 'implicit/callback', component: OktaCallbackComponent }
@@ -931,15 +931,15 @@ const config = {
 export class AppModule {}
 ```
 
-By using Okta to handle authorization we do''t need to keep auth state ourselves, which makes building app much simpler.
+By using Okta to handle authorization we don't need to keep auth state ourselves, which makes building app much simpler.
 
-And now yo''re done! You have a secure ASP.NET Web API with an Angular frontend to track sugar levels (or whatever else you might want to track!). The complete and working sample that backs this tutorial is available on GitHub as [SugarLevelTracker](https://github.com/Ibro/SugarLevelTracker)
+And now you're done! You have a secure ASP.NET Web API with an Angular frontend to track sugar levels (or whatever else you might want to track!). The complete and working sample that backs this tutorial is available on GitHub as [SugarLevelTracker](https://github.com/Ibro/SugarLevelTracker)
 
 ## Learn More About ASP.NET Core and Angular
 
 If you enjoyed building this ASP.NET Core API with Angular, check out more full-stack CRUD posts from Okta.
 
-- [Angular 6 – Wha''s New and Why Upgrade?](https://developer.okta.com/blog/2018/05/09/upgrade-to-angular-6)
+- [Angular 6 – What's New and Why Upgrade?](https://developer.okta.com/blog/2018/05/09/upgrade-to-angular-6)
 - [Token Authentication in ASP.NET Core – A Complete Guide](https://developer.okta.com/blog/2018/03/23/token-authentication-aspnetcore-complete-guide)
 - [Build a Secure CRUD App with ASP.NET Core and React](https://developer.okta.com/blog/2018/07/02/build-a-secure-crud-app-with-aspnetcore-and-react)
 
