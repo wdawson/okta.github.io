@@ -5,8 +5,7 @@ exampleDescription: ASP.NET 4.x MVC authorization code example
 
 ## Okta ASP.NET 4.x MVC Quickstart
 
-If you want a full, working example, head over to the [ASP.NET MVC example](https://github.com/oktadeveloper/okta-aspnet-mvc-example) repository and follow the instructions in that readme.
-// TODO: update the test project
+If you want a full, working example, head over to the [ASP.NET MVC example] repository and follow the readme instructions.
 
 ### Create a new project
 
@@ -14,9 +13,9 @@ If you don't already have an ASP.NET project, create one using the ASP.NET Web A
 
 Install these packages in the new project:
 
-* [Microsoft.Owin.Security.Cookies](https://www.nuget.org/packages/Microsoft.Owin.Security.Cookies) 4.0.0 or higher
-* [Okta.AspNet](https://nuget.org/packages/Okta.AspNet)
-* [Microsot.Owin.Host.SystemWeb](https://www.nuget.org/packages/Microsoft.Owin.Host.SystemWeb) 4.0.0 or higher
+* [Microsoft.Owin.Security.Cookies] 4.0.0 or higher
+* [Okta.AspNet]
+* [Microsot.Owin.Host.SystemWeb] 4.0.0 or higher
 
 
 ### Add a Startup class
@@ -55,6 +54,7 @@ ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 Add these using statements at the top of the file:
 
 ```csharp
+using System.Collections.Generic;
 using System.Configuration;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
@@ -65,7 +65,7 @@ using Owin;
 
 ### Additional middleware configuration
 
-The `OktaMvcOptions` class configures the Okta middleware. You can see all the available options in the [project's GitHub](https://github.com/okta/okta-aspnet/blob/master/README.md).
+The `OktaMvcOptions` class configures the Okta middleware. You can see all the available options in the [project's GitHub].
 
 ### Configure the application in Okta
 
@@ -90,22 +90,8 @@ If you want to use a different port update the URIs in Okta and in `Web.config` 
 
 ### Configure the project
 
-Open the `Web.config` file and add these keys to the `<appSettings>` section:
-
-```xml
-<!-- 1. Replace these values with your Okta configuration -->
-<add key="okta:ClientId" value="{ClientId}" />
-<add key="okta:ClientSecret" value="{ClientSecret}" />
-<add key="okta:OktaDomain" value="https://{yourOktaDomain}" />
-
-<!-- 2. Update the Okta application with these values -->
-<add key="okta:RedirectUri" value="http://localhost:{yourProjectPort}/authorization-code/callback" />
-<add key="okta:PostLogoutRedirectUri" value="http://localhost:{yourProjectPort}/Account/PostLogout" />
-```
-
-Copy the client ID and client secret from your Okta application into the appropriate keys in `Web.config`, and replace `{yourOktaDomain}` with your Okta domain name. You can find your Okta domain name in the top-right corner of the Dashboard page.
-
-**Note**: The value of `{yourOktaDomain}` should be something like `dev-123456.oktapreview.com`. Make sure you don't include `-admin` in the value!
+Open the `Web.config` file and add your Okta configuration to the `<appSettings>` section.
+Check out the [project's GitHub] to see more details about this step.
 
 ### Secure your application
 
@@ -204,6 +190,15 @@ Start the project in Visual Studio and try logging in or navigating to a route t
 
 ASP.NET automatically populates `HttpContext.User` with the information Okta sends back about the user. You can check whether the user is logged in with `User.Identity.IsAuthenticated` in your actions or views.
 
-The [full example project](https://github.com/oktadeveloper/okta-aspnet-mvc-example) has more examples of authenticating and interacting with the user's information (claims).
+The [full example project] has more examples of authenticating and interacting with the user's information (claims).
 
-If you want to do more with the user, you can use the [Okta .NET SDK](https://github.com/okta/okta-sdk-dotnet) to get or update the user's details stored in Okta.
+If you want to do more with the user, you can use the [Okta .NET SDK] to get or update the user's details stored in Okta.
+
+
+[ASP.NET MVC example]: https://github.com/okta/samples-aspnet/okta-hosted-login
+[full example project]: https://github.com/okta/samples-aspnet/okta-hosted-login
+[Microsoft.Owin.Security.Cookies]: https://www.nuget.org/packages/Microsoft.Owin.Security.Cookies
+[Okta.AspNet]: https://nuget.org/packages/Okta.AspNet
+[Microsot.Owin.Host.SystemWeb]: https://www.nuget.org/packages/Microsoft.Owin.Host.SystemWeb
+[project's GitHub]: https://github.com/okta/okta-aspnet/blob/master/README.md
+[Okta .NET SDK]: https://github.com/okta/okta-sdk-dotnet

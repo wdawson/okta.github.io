@@ -5,8 +5,7 @@ exampleDescription: ASP.NET 4.x Web API implicit example
 
 ## Okta ASP.NET 4.x Web API Quickstart
 
-If you want a full, working example, head over to the [ASP.NET web API example](https://github.com/oktadeveloper/okta-aspnet-webapi-example) repository and follow the instructions in that readme.
-// TODO: create/update the test project
+If you want a full, working example, head over to the [ASP.NET Web API example] repository and follow the readme instructions.
 
 ### Create a new Web API project
 
@@ -16,13 +15,13 @@ If you don't already have a Web API project, create a new ASP.NET (.NET Framewor
 
 First, install these packages with NuGet:
 
-* [Okta.AspNet](https://nuget.org/packages/Okta.AspNet)
-* [Microsot.Owin.Host.SystemWeb](https://www.nuget.org/packages/Microsoft.Owin.Host.SystemWeb) 4.0.0 or higher
+* [Okta.AspNet]
+* [Microsot.Owin.Host.SystemWeb] 4.0.0 or higher
 
 
 ### Configure the middleware
 
-If you don't already have a `Startup.cs` file (OWIN Startup class), create one by right-clicking on your project and choosing **Add** - **Class**. Pick the **OWIN Startup** template and name the new class `Startup`.
+If you don't already have a `Startup.cs` file (OWIN Startup class), create one by right-clicking on your project and choosing **Add** > **OWIN Startup Class**.
 
 Make sure you have these `using` statements at the top of your `Startup.cs` file:
 
@@ -48,12 +47,12 @@ public void Configuration(IAppBuilder app)
 
 ### Additional middleware configuration
 
-The `OktaWebApiOptions` class configures the Okta middleware. You can see all the available options in the [project's GitHub](https://github.com/okta/okta-aspnet/blob/master/README.md).
+The `OktaWebApiOptions` class configures the Okta middleware. You can see all the available options in the [project's GitHub].
 
 ### Configure the project
 
 Open the `Web.config` file and add your Okta configuration to the `<appSettings>` section.
-Check out the [project's GitHub](https://github.com/okta/okta-aspnet/blob/master/README.md) to see more details about this step.
+Check out the [project's GitHub] to see more details about this step.
 
 ### Protect application resources
 
@@ -70,18 +69,18 @@ public class MessagesController : ApiController
 {
     [HttpGet]
     [Route("~/api/messages")]
-    public IEnumerable<string> Get()
+    public IEnumerable<dynamic> Get()
     {
         var principal = RequestContext.Principal.Identity as ClaimsIdentity;
 
         var login = principal.Claims
-            .SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
+            .SingleOrDefault(c => c.Type == System.IdentityModel.Claims.ClaimTypes.NameIdentifier)
             ?.Value;
 
-        return new string[]
+        return new dynamic[]
         {
-            $"For {login ?? "your"} eyes only",
-            "Your mission, should you choose to accept it..."
+            new { Date = DateTime.Now, Text = "I am a Robot." },
+            new { Date = DateTime.Now, Text = "Hello, world!" },
         };
     }
 }
@@ -91,6 +90,14 @@ public class MessagesController : ApiController
 
 The Okta middleware automatically validates tokens and populates `HttpContext.User` with a limited set of user information.
 
-If you want to do more with the user, you can use the [Okta .NET SDK](https://github.com/okta/okta-sdk-dotnet) to get or update the user's details stored in Okta.
+If you want to do more with the user, you can use the [Okta .NET SDK] to get or update the user's details stored in Okta.
 
-> Note: If your client application is running on a different server (or port) than your ASP.NET Core server, you'll need to add [CORS middleware](https://docs.microsoft.com/en-us/aspnet/core/security/cors) to the pipeline as well.
+> Note: If your client application is running on a different server (or port) than your ASP.NET Core server, you'll need to add [CORS middleware] to the pipeline as well.
+
+
+[ASP.NET Web API example]: https://github.com/okta/samples-aspnet/resource-server
+[Okta.AspNet]: https://nuget.org/packages/Okta.AspNet
+[Microsot.Owin.Host.SystemWeb]: https://www.nuget.org/packages/Microsoft.Owin.Host.SystemWeb
+[project's GitHub]: https://github.com/okta/okta-aspnet/blob/master/README.md
+[Okta .NET SDK]: https://github.com/okta/okta-sdk-dotnet
+[CORS middleware]: https://docs.microsoft.com/en-us/aspnet/core/security/cors
