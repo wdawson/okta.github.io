@@ -159,7 +159,7 @@ Sometimes it isn't feasible for the cloud app to natively support a SCIM Server 
 An alternative option is to build and host a SCIM facade middleware that translates
 between the Okta SCIM Client and the cloud app's proprietary API. The Okta integration would be to this SCIM facade.
 
-> Have questions? Need help? Email us at <developers@okta.com> or post your question on [Stack Overflow](http://stackoverflow.com/search?q=okta,scim).
+> Need help? Post a question on the [Developer Forum][devforum] or email us at <developers@okta.com>.
 
 ## SCIM-Based Provisioning Integration
 
@@ -1083,8 +1083,6 @@ For more details on the `/Groups/{id}` SCIM endpoint, see [section 3.4.1](https:
 
 {% api_lifecycle beta %}
 
-> **Warning:** Updating groups via PUT request will be deprecated on May 31st, 2018. ISV's currently implementing SCIM need to implement [patch support](#update-group-details-patch-groupsid) prior to submitting their integration for review.
-
 With Group Push Beta, any updates to the Group profile and memberships in Okta can now be reflected into your SCIM application. Okta will do the following to make the Group changes effective:
 
 * Make a GET request against `/groups/{id}` on your SCIM API for the group to update.
@@ -1154,8 +1152,6 @@ For more details, see [section 3.5.1](https://tools.ietf.org/html/rfc7644#sectio
 ##### Update Group Details: PATCH /Groups/{id}
 
 {% api_lifecycle beta %}
-
-> Starting May 31st 2018, Okta will **only** support updating groups via PATCH. Please reach out to <developers@okta.com> for any questions.
 
 ###### SCIM 1.1
 
@@ -1472,7 +1468,7 @@ Follow the steps below to test and submit your application for Okta review:
 4. [Publish to Okta Integration Network (OIN) in Partner-Built EA](#step-4-publish-to-okta-integration-network-oin-in-partner-built-ea)
 5. [Become Okta-Verified in the OIN](#step-5-become-okta-verified-in-the-oin)
 
-> Have questions? Need help? Email us at <developers@okta.com> or post your question on [Stack Overflow](http://stackoverflow.com/search?q=okta,scim).
+> Need help? Post a question on the [Developer Forum][devforum] or email us at <developers@okta.com>.
 
 **Note:** The OIN is for making an integration publicly discoverable and accessible to all Okta customers. However, you can also just use the integration privately within a few named orgs, called the Private App Option. This could be the case if you are a system integrator, customer, or Okta PS integrating to a custom app. If this is the case, follow steps 1-3 and you will be able to indicate in step 3 that you don't want to publish in OIN. Okta will create the submitted integration per usual and assign it to Orgs that you specify as a private app. Note that you cannot use the SCIM template app used for prototyping, as it has limitations that prevent it from being used in production.
 
@@ -2137,3 +2133,5 @@ This code also includes a `try/catch` block that creates all tables of the `User
             db.create_all()
         app.debug = True
         socketio.run(app)
+
+[devforum]: https://devforum.okta.com
