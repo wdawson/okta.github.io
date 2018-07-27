@@ -4,29 +4,28 @@ exampleDescription: ASP.NET Core 2.0 API implicit example
 ---
 
 ## Okta ASP.NET Core Web API Quickstart
-// TODO: Update exmaple GitHub url
-If you want a full, working example, head over to the [ASP.NET Core WEB API example](...) repository.
+
+If you want a full, working example, head over to the [ASP.NET Core WEB API example] repository.
 
 ### Create a new project
 
 If you don't already have an ASP.NET Core 2.0 project, create one using `dotnet new mvc` or the ASP.NET Core Web Application template in Visual Studio. Choose **No Authentication** if necessary.
 
 Install these packages in the new project:
-* [Microsoft.AspNetCore.All](https://www.nuget.org/packages/Microsoft.AspNetCore.All) it includes all the dependecies you need (and more!). 
-* [Okta.AspNetCore](TODO:// nuget package)
+* [Microsoft.AspNetCore.All] it includes all the dependecies you need (and more!). 
+* [Okta.AspNetCore]
 
 ### Configure the middleware
 
 Make sure you have these `using` statements at the top of your `Startup.cs` file:
 
 ```csharp
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Okta.AspNet.Abstractions;
+using Okta.AspNetCore;
 ```
 
 Replace the `ConfigureServices` method with the following code block and configure it using the information from your Okta application:
@@ -34,17 +33,17 @@ Replace the `ConfigureServices` method with the following code block and configu
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
-    var oktaMvcOptions = new OktaMvcOptions();
-    Configuration.GetSection("Okta").Bind(oktaMvcOptions);
-
     services.AddAuthentication(options =>
     {
-        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
     })
-    .AddCookie()
-    .AddOktaMvc(oktaMvcOptions);
+    .AddOktaWebApi(new OktaWebApiOptions()
+    {
+        ClientId = Configuration["Okta:ClientId"],
+        OktaDomain = Configuration["Okta:OktaDomain"],
+    });
 
     services.AddMvc();
 }
@@ -61,20 +60,20 @@ app.UseAuthentication();
 Use the `[Authorize]` attribute on controllers or actions to require an authenticated user. For example, create an `/api/messages` route in a new controller that returns secret messages if a token is present:
 
 ```csharp
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 [Produces("application/json")]
 [Authorize]
-public class MessageController : Controller
+public class MessagesController : Controller
 {
     [HttpGet]
     [Route("~/api/messages")]
-    public IEnumerable<string> Get()
+    public IEnumerable<dynamic> Get()
     {
         var principal = HttpContext.User.Identity as ClaimsIdentity;
 
@@ -82,10 +81,10 @@ public class MessageController : Controller
             .SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
             ?.Value;
 
-        return new string[]
+        return new dynamic[]
         {
-            $"For {login ?? "your"} eyes only",
-            "Your mission, should you choose to accept it..."
+            new { Date = DateTime.Now, Text = "I am a Robot." },
+            new { Date = DateTime.Now, Text = "Hello, world!" },
         };
     }
 }
@@ -95,6 +94,12 @@ public class MessageController : Controller
 
 The Okta middleware automatically validates tokens and populates `HttpContext.User` with a limited set of user information.
 
-If you want to do more with the user, you can use the [Okta .NET SDK](https://github.com/okta/okta-sdk-dotnet) to get or update the user's details stored in Okta.
+If you want to do more with the user, you can use the [Okta .NET SDK] to get or update the user's details stored in Okta.
 
 > Note: If your client application is running on a different server (or port) than your ASP.NET Core server, you'll need to add [CORS middleware](https://docs.microsoft.com/en-us/aspnet/core/security/cors) to the pipeline as well.
+
+
+[ASP.NET Core WEB API example]: https://github.com/okta/samples-aspnetcore/resource-server
+[Microsoft.AspNetCore.All]: https://www.nuget.org/packages/Microsoft.AspNetCore.All 
+[Okta.AspNetCore]: https://www.nuget.org/packages/Okta.AspNetCore
+[Okta .NET SDK]: https://github.com/okta/okta-sdk-dotnet
