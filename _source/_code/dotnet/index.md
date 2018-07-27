@@ -16,16 +16,33 @@ New to Okta? Our Quick Start Guide will walk you through adding user authenticat
     </a>
   </li>
   <li>
-    <a href='https://github.com/oktadeveloper/okta-aspnetcore-mvc-example' class='code-button'>
-      <span class='fa fa-github'></span><span>ASP.NET Core 2.0 MVC example</span>
+    <a href='https://github.com/okta/samples-aspnetcore' class='code-button'>
+      <span class='fa fa-github'></span><span>ASP.NET Core MVC/ Web API examples</span>
     </a>
   </li>
   <li>
-    <a href='https://github.com/oktadeveloper/okta-aspnet-mvc-example' class='code-button'>
-      <span class='fa fa-github'></span><span>ASP.NET 4.x MVC example</span>
+    <a href='https://github.com/okta/samples-aspnet' class='code-button'>
+      <span class='fa fa-github'></span><span>ASP.NET 4.x MVC/ Web API examples</span>
     </a>
   </li>
 </ul>
+
+## ASP.NET 4.x/ Core Middleware
+
+Use our Okta OIDC middleware in your ASP.NET MVC 4.x/Core applications.
+
+<ul class='code-list'>
+  <li>
+    <span class='fa fa-archive'></span> <a href='https://www.nuget.org/packages/Okta.AspNetCore'>.ASP.NET Core OIDC middleware on NuGet</a>
+  </li>
+  <li>
+    <span class='fa fa-archive'></span> <a href='https://www.nuget.org/packages/Okta.AspNet'>.ASP.NET 4.x OIDC middleware on NuGet</a>
+  </li>
+  <li>
+    <span class='fa fa-github'></span> <a href='https://github.com/okta/okta-aspnet'>ASP.NET OIDC middleware source code</a>
+  </li>
+</ul>
+
 
 ## .NET Management SDK
 
