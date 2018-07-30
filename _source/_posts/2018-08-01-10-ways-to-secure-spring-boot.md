@@ -15,7 +15,7 @@ Spring Boot was first released in 2014, and a lot has changed since then. Much l
 
 {% img blog/spring-boot-10-ways-to-secure/simon-maple.jpg alt:"Simon Maple" class:"BlogPost-avatar pull-right img-150px" %}
 
-I collaborated on this post with [Simon Maple](https://twitter.com/sjmaple), fellow Java Champion and Director of Developer Relations at Snyk. We both work for companies in the security industry, love Java, and want to help developers create more secure applications, so we figured it'd be a fun way to give back to the community. If you have additional suggestions from the ones we've listed, please add them in the comments!
+I collaborated on this post with [Simon Maple](https://twitter.com/sjmaple), fellow Java Champion and Director of Developer Relations at Snyk. We both work for companies in the security industry, love Java, and want to help developers create more secure applications. We figured writing this post would be a fun way to give back to the community. If you have additional suggestions from the ones we've listed, please add them in the comments!
 
 ## 1. Use HTTPS in Production
 
@@ -81,11 +81,11 @@ There are various reasons to regularly upgrade the dependencies in your applicat
 
 > "I find looking for vulnerabilities in your dependencies may help motivate people to upgrade. However, there is plenty of evidence that not all CVEs are even reported. Generally, I find the ideal (perhaps not practical) solution is to be on latest and greatest." &mdash; [Rob Winch](https://twitter.com/rob_winch)
 
-Infrastructure upgrades are often less disruptive that dependency upgrades, as library authors vary in their sensitivity to backward compatibility and behaviour changes between releases. That being said, you have three options when you find a security vulnerability in your configuration: Upgrade, Patch or Ignore. 
+Infrastructure upgrades are often less disruptive that dependency upgrades, as library authors vary in their sensitivity to backward compatibility and behavior changes between releases. That being said, you have three options when you find a security vulnerability in your configuration: Upgrade, Patch or Ignore. 
 
 Upgrades are the safest, in terms of the overall health of your application after you make any necessary changes to your app to make use of the newer version. 
 
-Patches to a vulnerable project eliminate the vulnerability from the package, but typically leaves you will a configuration which might not be as well tested. There will be fewer code changes to your library as the patch will only be changing vulnerable code, so your chances of breaking backward compatibility or introducing behaviour changes are reduced. Third party security companies such as Snyk handcraft patches for many vulnerabilities so that if it's not possible to upgrade to a newer version of a library you can still use an older version with a patch.
+Patches to a vulnerable project eliminate the vulnerability from the package, but typically leaves you will a configuration which might not be as well tested. There will be fewer code changes to your library as the patch will only be changing vulnerable code, so your chances of breaking backward compatibility or introducing behavior changes are reduced. Third party security companies such as Snyk handcraft patches for many vulnerabilities so that if it's not possible to upgrade to a newer version of a library you can still use an older version with a patch.
 
 Ignoring a vulnerability is, of course, an option, but not a good one. Perhaps you know of a vulnerability, but do not believe it is directly exploitable. Keep in mind that it might not be in your application flow today, but at some point, a developer might add additional code that uses a vulnerable path.
 
@@ -198,7 +198,7 @@ public interface PasswordEncoder {
 
 Spring Security provides several implementations, the most popular being `BCryptPasswordEncoder` and `Pbkdf2PasswordEncoder`. 
 
-For managing passwords in general, we recommend using either SCrypt or Argon2. SCrypt is old now (been around a while), and has an extra complexity factor that bcrypt doesn't, making it exponentially more difficult/expensive to brute force. It's written by a famous cryptographer/security guy ([Colin Percival](https://twitter.com/cperciva)) and has great libraries in just about every programming language. It's also endorsed by [Latacora](https://latacora.singles/2018/04/03/cryptographic-right-answers.html).
+For managing passwords in general, we recommend using either SCrypt or Argon2. SCrypt is old now (been around a while), and has an extra complexity factor that bcrypt doesn't, making it exponentially more difficult/expensive to brute force. It's written by a famous cryptographer/security guy ([Colin Percival](https://twitter.com/cperciva)) and has great libraries in just about every programming language. SCrypt is also endorsed by [Latacora](https://latacora.singles/2018/04/03/cryptographic-right-answers.html).
 
 From [Randall Degges](https://twitter.com/rdegges), a cryptography expert on the Okta Developer Relations team:
 
@@ -214,7 +214,7 @@ For those that want to use SCrypt, there is support in Spring Security through B
 
 Sensitive information such as passwords, access tokens, etc., should be handled with care. You cannot leave these around, pass them in plain text, or be predictable if keeping them in your local storage. As (GitHub) [history has proved](https://github.com/search?q=removed+password&type=Commits) time and time again, developers do not think carefully enough about how they store their secrets. 
 
-Of course, you could and should encrypt your sensitive data, such as a password. Now that your password is safe, you have a new secret, your decryption key! What are you going to do with this new secret? Maybe store it locally? Perhaps in another location, somewhere you think an attacker would struggle to find it. The problem isn't being fixed; it's just being deferred. Without putting a proper process in place, you only make it slightly harder for a hacker to unlock your secrets. 
+Of course, you could and should encrypt your sensitive data, such as a password. Now that your password is safe, you have a new secret, your decryption key! What are you going to do with this new secret? Maybe store it locally? Perhaps in another location, somewhere you think an attacker would struggle to find it. This doesn't fix the problem; it just defers it. Without putting a proper process in place, you only make it slightly harder for a hacker to unlock your secrets. 
 
 A good practice is to store secrets in a vault that can be used to store, provide access to, and even generate credentials to services that your application may use. [Vault by HashiCorp](https://www.vaultproject.io/) makes storing secrets trivial, as well as offering a number of additional services. Vault can be configured so that no one person can access all data, providing no single point of control. The root key Vault uses change regularly is only stored in memory. There's a master switch that when triggered will seal your vault, stopping it from sharing secrets if an issue occurs. Vault uses tokens that are assigned to policies that can scope particular users, services or applications. You can also integrate with common authentication mechanisms such as LDAP to obtain tokens.
 
