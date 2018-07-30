@@ -31,10 +31,10 @@ To force HTTPS in your Spring Boot app, you can extend `WebSecurityConfigurerAda
 @Configuration
 public class WebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    http.requiresChannel().requiresSecure();
-  }
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.requiresChannel().requiresSecure();
+    }
 }
 ```
 
@@ -44,12 +44,12 @@ This configuration will also force HTTPS in development, which can be a pain bec
 @Configuration
 public class WebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    http.requiresChannel()
-      .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
-      .requiresSecure();
-  }
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.requiresChannel()
+            .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
+            .requiresSecure();
+    }
 }
 ```
 
