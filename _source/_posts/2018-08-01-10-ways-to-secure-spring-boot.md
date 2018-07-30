@@ -9,7 +9,7 @@ tweets:
 - "10 Excellent Ways to Secure Your Spring Boot Application, by @Java_Champions @sjmaple and @mraible. Thanks to @rob_winch and @rdegges for reviewing and helping with this post!"
 ---
 
-Spring Boot has dramaticallygreatly simplified the development of Spring applications. Its autoconfiguration  and starter dependencies reduce the amount of code and configuration you need to begin an app. If you were used to Spring and lots of XML in back in the day, Spring Boot is a breath of fresh air. 
+Spring Boot has dramatically simplified the development of Spring applications. Its autoconfiguration and starter dependencies reduce the amount of code and configuration you need to begin an app. If you were used to Spring and lots of XML in back in the day, Spring Boot is a breath of fresh air. 
 
 Spring Boot was first released in 2014, and a lot has changed since then. Much like code quality and testing, security has become a concern in developers minds. If you're a developer and you're not concerned about security, chances are you think you should be. This post aims to educate you on steps you can take to create a more secure Spring Boot application. 
 
@@ -19,13 +19,13 @@ I collaborated on this post with [Simon Maple](https://twitter.com/sjmaple), fel
 
 ## 1. Use HTTPS in Production
 
-Transport Layer Security (TLS) is the official name for HTTPS. You might've heard it called SSL (Secure Sockets Layer). SSL is the deprecated name. TLS is a cryptographic protocol that provides secure communication over a computer network. Its primarymain goal is to ensureprovide privacy and data integrity between computer applications.
+Transport Layer Security (TLS) is the official name for HTTPS. You might've heard it called SSL (Secure Sockets Layer). SSL is the deprecated name. TLS is a cryptographic protocol that provides secure communication over a computer network. Its primary goal is to ensure privacy and data integrity between computer applications.
 
 TLS/SSL certificates used to be expensive, and HTTPS was considered slow. Machines have become much faster, solving the performance problem, and [Let's Encrypt](https://letsencrypt.org/) provides free TLS certificates. These two developments have changed the game and caused TLS to become mainstream. 
 
-As of July 24, 2018, Google Chrome [now labels HTTP sites as “not secure”](https://www.wired.com/story/google-chrome-https-not-secure-label/). While this has created a fair amount of controversy in the web community, it's here to stay. Troy Hunt, a well-known security researcher, has created a [Why No HTTPS?](https://www.troyhunt.com/why-no-https-heres-the-worlds-largest-websites-not-redirecting-insecure-requests/) site that tracks large websites not using HTTPS. You might not be developing the next major website, but why limit yourself?!
+As of July 24, 2018, Google Chrome [now labels HTTP sites as "not secure"](https://www.wired.com/story/google-chrome-https-not-secure-label/). While this has created a fair amount of controversy in the web community, it's here to stay. Troy Hunt, a well-known security researcher, has created a [Why No HTTPS?](https://www.troyhunt.com/why-no-https-heres-the-worlds-largest-websites-not-redirecting-insecure-requests/) site that tracks large websites not using HTTPS. You might not be developing the next major website, but why limit yourself?!
 
-Generating and renewing Let's Encrypt TLS certificates can be automated. Since they're free, there's no reason not to do it! [Spring Boot Secured By Let's Encrypt](https://dzone.com/articles/spring-boot-secured-by-lets-encrypt) is a usefulgood guide on how to do this.
+Generating and renewing Let's Encrypt TLS certificates can be automated. Since they're free, there's no reason not to do it! [Spring Boot Secured By Let's Encrypt](https://dzone.com/articles/spring-boot-secured-by-lets-encrypt) is a useful guide on how to do this.
 
 To force HTTPS in your Spring Boot app, you can extend `WebSecurityConfigurerAdapter` and require a secure connection.
 
@@ -57,7 +57,7 @@ public class WebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
 Cloud providers can greatly simplify TLS certificates. [Amazon Certificate Manager](https://aws.amazon.com/certificate-manager/) is exactly like Let's Encrypt except it's built into all of the AWS products/services by default. It lets you provision 100% free SSL certs and handles automatic renewal, etc., with literally zero effort/config. Heroku has [Automated Certificate Management](https://devcenter.heroku.com/articles/automated-certificate-management) too. 
 
-Another important thing to do is to use HTTP Strict Transport Security (HSTS). HSTS is a web security policy mechanism that protects websites against protocol downgrade attacks and cookie hijacking. The server communicates the HSTS Policy is communicated by the server to the browser with a response header field named `Strict-Transport-Security`. Spring Security sends this header by default to avoid the unnecessary HTTP hop in the beginning.
+Another important thing to do is to use HTTP Strict Transport Security (HSTS). HSTS is a web security policy mechanism that protects websites against protocol downgrade attacks and cookie hijacking. The server communicates the HSTS Policy to the browser with a response header field named `Strict-Transport-Security`. Spring Security sends this header by default to avoid the unnecessary HTTP hop in the beginning.
 
 ## 2. Check Your Dependencies with Snyk
 
@@ -71,7 +71,7 @@ Additionally, it will suggest upgrade versions or provide patches to remediate y
 
 New vulnerabilities are found in existing projects and libraries every day, so it's important to also monitor and protect your production deployments. Snyk takes snapshots and monitors your deployment so that when new vulnerabilities are found, you can automatically be notified via your preferred channel, JIRA, slack or email as well as have pull requests created to offer upgrades and patches to the new vulnerabilities.
 
-Snyk is available via a web UI as well as a CLI, so you can easily integrate it with your CI environment, and configure it to  break your build when vulnerabilities exist with a severity beyond your set threshold.
+Snyk is available via a web UI as well as a CLI, so you can easily integrate it with your CI environment, and configure it to break your build when vulnerabilities exist with a severity beyond your set threshold.
 
 You can use Snyk for free for open source projects or for private projects with a limited number of monthly tests.
 
@@ -79,23 +79,23 @@ You can use Snyk for free for open source projects or for private projects with 
 
 There are various reasons to regularly upgrade the dependencies in your application. Security is one of the most important reasons that will give you the motivation to upgrade. The [start.spring.io](http://start.spring.io) starter page uses the most recent versions of Spring packages as well as dependencies, where possible.
 
-> “I find looking for vulnerabilities in your dependencies may help motivate people to upgrade. However, there is plenty of evidence that not all CVEs are even reported. Generally, I find the ideal (perhaps not practical) solution is to be on latest and greatest.” &mdash; [Rob Winch](https://twitter.com/rob_winch)
+> "I find looking for vulnerabilities in your dependencies may help motivate people to upgrade. However, there is plenty of evidence that not all CVEs are even reported. Generally, I find the ideal (perhaps not practical) solution is to be on latest and greatest." &mdash; [Rob Winch](https://twitter.com/rob_winch)
 
-Infrastructure upgrades are often less disruptive that dependency upgrades, as library authors vary in their sensitivity to backwards compatibility and behaviour changes between releases. That being said, you have three options when you find a security vulnerability in your configuration: Upgrade, Patch or Ignore. 
+Infrastructure upgrades are often less disruptive that dependency upgrades, as library authors vary in their sensitivity to backward compatibility and behaviour changes between releases. That being said, you have three options when you find a security vulnerability in your configuration: Upgrade, Patch or Ignore. 
 
 Upgrades are the safest, in terms of the overall health of your application after you make any necessary changes to your app to make use of the newer version. 
 
-Patches to a vulnerable project eliminate the vulnerability from the package, but typically leaves you will a configuration which might not be as well tested. There will be fewer code changes to your library as the patch will only be changing vulnerable code, so your chances of breaking backward compatibility or introducing behaviour changes are reduceds. Third party security companies such as Snyk hand craft patches for many vulnerabilities so that if it's not possible to upgrade to a newer version of a library you can still use an older version with a patch.
+Patches to a vulnerable project eliminate the vulnerability from the package, but typically leaves you will a configuration which might not be as well tested. There will be fewer code changes to your library as the patch will only be changing vulnerable code, so your chances of breaking backward compatibility or introducing behaviour changes are reduced. Third party security companies such as Snyk handcraft patches for many vulnerabilities so that if it's not possible to upgrade to a newer version of a library you can still use an older version with a patch.
 
 Ignoring a vulnerability is, of course, an option, but not a good one. Perhaps you know of a vulnerability, but do not believe it is directly exploitable. Keep in mind that it might not be in your application flow today, but at some point, a developer might add additional code that uses a vulnerable path.
 
 ## 4. Enable CSRF Protection
 
-[Cross-Site Request Forgery](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)) is an attack that forces a user to execute unwanted actions in an application they're currently logged into. If the user is a normal user, a successful attack can involve state- changing requests like transferring funds or changing their email address. If the user has elevated permissions, a CSRF attack can compromise the entire application.
+[Cross-Site Request Forgery](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)) is an attack that forces a user to execute unwanted actions in an application they're currently logged into. If the user is a normal user, a successful attack can involve state-changing requests like transferring funds or changing their email address. If the user has elevated permissions, a CSRF attack can compromise the entire application.
 
 Spring Security has [excellent CSRF support](https://docs.spring.io/spring-security/site/docs/current/reference/html/csrf.html) that's on by default. If you're using Spring MVC's `<form:form>` tag or Thymeleaf and `@EnableWebSecurity`, the CSRF token will automatically be added as a hidden input field.
 
-If you're using a JavaScript framework like Angular or React, you will need to configure the `CookieCsrfTokenRepository` so JavaScript can read the cookie can be read by JavaScript.
+If you're using a JavaScript framework like Angular or React, you will need to configure the `CookieCsrfTokenRepository` so JavaScript can read the cookie.
 
 ```java
 @EnableWebSecurity
@@ -160,7 +160,7 @@ The diagram below shows how OIDC works for authentication.
 
 If you use OIDC for authentication, you won't have to worry about storing users, passwords, or authenticating users. Instead, you'll use an Identity Provider (IdP) to do this for you. Your IdP might even offer security add-ons like multi-factor authentication (MFA). 
 
-To see how to use OIDC in your Spring Boot application, see [Get Started with Spring Security 5.0 and OIDC](/blog/2017/12/18/spring-security-5-oidc). To summarize how to use it, you just need to add a few dependencies to your project, then configure a few properties in your `application.yml` file.
+To see how to use OIDC in your Spring Boot application, see [Get Started with Spring Security 5.0 and OIDC](/blog/2017/12/18/spring-security-5-oidc). To summarize how to use it, you need to add a few dependencies to your project, then configure a few properties in your `application.yml` file.
 
 ```yaml
 spring:
@@ -177,7 +177,7 @@ spring:
             issuer-uri: https://{yourOktaDomain}/oauth2/default
 ```
 
-**NOTE:** Using `issuer-uri` is only supported in Spring Security 5.1, which is under active development and scheduled for releaseto be released in September 2018. 
+**NOTE:** Using `issuer-uri` is only supported in Spring Security 5.1, which is under active development and scheduled for release in September 2018. 
 
 You can set up your own OIDC Server using an open source system like [Keycloak](https://www.keycloak.org/). If you'd rather not maintain your own server in production, you can use Okta's Developer APIs. Sign up today for a free account and get 1000 active users per month at developer.okta.com/signup! 
 
@@ -206,29 +206,29 @@ From [Randall Degges](https://twitter.com/rdegges), a cryptography expert on the
 
 From Rob Winch, Spring Security Lead:
 
-> “I like BCrypt, but the general advice is one-way adaptive hashes. Some users may need to use PBKDF2 for compliance reasons. There is a [ticket logged](https://github.com/spring-projects/spring-security/issues/5354) for Argon2 support, but there are not any Apache 2 native Java implementations that I have found (if you know of any, please let me know!). Instead, the libraries rely on a binary that they delegate to which isn't ideal from my perspective. We are on the fence about waiting vs. leveraging one of the implementations that delegate to a binary.”
+> "I like BCrypt, but the general advice is one-way adaptive hashes. Some users may need to use PBKDF2 for compliance reasons. There is a [ticket logged](https://github.com/spring-projects/spring-security/issues/5354) for Argon2 support, but there are not any Apache 2 native Java implementations that I have found (if you know of any, please let me know!). Instead, the libraries rely on a binary that they delegate to which isn't ideal from my perspective. We are on the fence about waiting vs. leveraging one of the implementations that delegate to a binary."
 
 For those that want to use SCrypt, there is support in Spring Security through Bouncy Castle in [`SCryptPasswordEncoder`](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#pe-scpe). Spring Security 5.1 (est. late September 2018) will ship with a [UserDetailsPasswordService API](https://github.com/spring-projects/spring-security/issues/2778) that allows you to upgrade your password storage.
 
 ## 8. Store Secrets Securely
 
-Sensitive information such as passwords, access tokens, etc., should be handled with care. They each protect our most confidential information and user data that we must protect. YouWe cannot leave these around, pass them in plain text, or be predictable if keeping them in your local storage. As (GitHub) [history has proved](https://github.com/search?q=removed+password&type=Commits) time and time again, developers do not think carefully enough about how they store their secrets. 
+Sensitive information such as passwords, access tokens, etc., should be handled with care. You cannot leave these around, pass them in plain text, or be predictable if keeping them in your local storage. As (GitHub) [history has proved](https://github.com/search?q=removed+password&type=Commits) time and time again, developers do not think carefully enough about how they store their secrets. 
 
-Of course, you could and should encrypt your sensitive data, such as a password. Now that your password is safe, you have a new secret, your decryption key! What are you going to do with this new secret? Maybe store it locally? Perhaps in another location, somewhere you think an attacker would struggle to find it. The problem isn't being fixed', it's just being deferred. Without putting a proper process in place, youwe only make it slightly harder for a hacker to unlock your secrets. 
+Of course, you could and should encrypt your sensitive data, such as a password. Now that your password is safe, you have a new secret, your decryption key! What are you going to do with this new secret? Maybe store it locally? Perhaps in another location, somewhere you think an attacker would struggle to find it. The problem isn't being fixed; it's just being deferred. Without putting a proper process in place, you only make it slightly harder for a hacker to unlock your secrets. 
 
 A good practice is to store secrets in a vault that can be used to store, provide access to, and even generate credentials to services that your application may use. [Vault by HashiCorp](https://www.vaultproject.io/) makes storing secrets trivial, as well as offering a number of additional services. Vault can be configured so that no one person can access all data, providing no single point of control. The root key Vault uses change regularly is only stored in memory. There's a master switch that when triggered will seal your vault, stopping it from sharing secrets if an issue occurs. Vault uses tokens that are assigned to policies that can scope particular users, services or applications. You can also integrate with common authentication mechanisms such as LDAP to obtain tokens.
 
 In addition to the golden-path view where no issues exists, Vault also helps with the scenario that exists when you have been hacked. At this point it's important to revoke single or multiple secrets, perhaps by a specific user, or of a specific type. Vault offers an automated way to do this quickly when the time comes.
 
-If this interests you, be sure to invest some time looking at the [Spring Vault](http://projects.spring.io/spring-vault/) which adds an abstraction over the HashiCorp Vault, providing Spring annotation based access for clients, allowing them to access, store and revoke secrets without getting lost in the infrastructure.
+If this interests you, be sure to invest some time looking at the [Spring Vault](http://projects.spring.io/spring-vault/) which adds an abstraction over the HashiCorp Vault, providing Spring annotation based access for clients, allowing them to access, store and revoke secrets without getting lost in the infrastructure. The following code snippet shows how easy it is to extract a password from the Spring Vault using an annotation.
 
 ```java
-  @Value("${password}")
-  String password;
+@Value("${password}")
+String password;
 ```
 ## 9. Test Your App with OWASP's ZAP
 
-The [OWASP ZAP](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project) security tool is a proxy that performs penetration testing against your live application at runtime. It's a popular (over 4k stars) free, open source project that is hosted onin [GitHub](https://github.com/zaproxy/zaproxy). 
+The [OWASP ZAP](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project) security tool is a proxy that performs penetration testing against your live application at runtime. It's a popular (over 4k stars) free, open source project that is hosted on [GitHub](https://github.com/zaproxy/zaproxy). 
 
 Two approaches OWASP ZAP uses to find vulnerabilities are Spider and Active Scan. The Spider tool starts with a seed of URLs, which it will access and parse through each response, identifying hyperlinks and adding them to a list. It will then access these newly found URLs and recursively continue, creating a map of URLs for your web application. The Active Scan tool will automatically test your selected targets against a list of potential vulnerabilities. It provides you with a report that shows where your web application is exploitable, with details about the vulnerability.
 
@@ -238,7 +238,7 @@ Code reviews are essential for any high performing software development team. At
 
 ## Don't Allow Your Lack of Security to be Disturbing
 
-Okta has some great t-shirts that say “I find your lack of security disturbing”. We love to hear the sound of latex gloves being put on as we wear them when traveling through airports. Don't be the type of developer that lacks security in their Spring Boot apps!
+Okta has some great t-shirts that say "I find your lack of security disturbing". We love to hear the sound of latex gloves being put on as we wear them when traveling through airports. Don't be the type of developer that lacks security in their Spring Boot apps!
 
 {% img blog/spring-boot-10-ways-to-secure/i-find-your-lack-of-security-disturbing.png alt:"I find your lack of security disturbing" width:"800" %}{: .center-image }
 
@@ -250,4 +250,4 @@ To learn more about Spring Boot and security in your applications, check out the
 * [Security and the API Journey](https://www.okta.com/security-blog/2018/05/security-and-the-api-journey/)
 * [Preparing a Spring Boot App for Production on Heroku](https://devcenter.heroku.com/articles/preparing-a-spring-boot-app-for-production-on-heroku)
 
-If you like this article, and want to see more like it, follow [@oktadev on Twitter](https://twitter.com/oktadev), or [on Facebook](https://www.facebook.com/oktadevelopers/). And as always, we'd love to hear from you in the comments below.
+If you like this article and want to see more like it, follow [@oktadev on Twitter](https://twitter.com/oktadev), or [on Facebook](https://www.facebook.com/oktadevelopers/). And as always, we'd love to hear from you in the comments below.
