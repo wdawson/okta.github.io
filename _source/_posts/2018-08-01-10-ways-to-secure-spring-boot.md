@@ -13,6 +13,8 @@ Spring Boot has dramaticallygreatly simplified the development of Spring applica
 
 Spring Boot was first released in 2014, and a lot has changed since then. Much like code quality and testing, security has become a concern in developers minds. If you're a developer and you're not concerned about security, chances are you think you should be. This post aims to educate you on steps you can take to create a more secure Spring Boot application. 
 
+{% img blog/spring-boot-10-ways-to-secure/simon-maple.jpg alt:"Simon Maple" class:"BlogPost-avatar pull-right img-150px" %}
+
 I collaborated on this post with [Simon Maple](https://twitter.com/sjmaple), fellow Java Champion and Director of Developer Relations at Snyk. We both work for companies in the security industry, love Java, and want to help developers create more secure applications, so we figured it'd be a fun way to give back to the community. If you have additional suggestions from the ones we've listed, please add them in the comments!
 
 ## 1. Use HTTPS in Production
