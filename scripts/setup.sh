@@ -1,6 +1,6 @@
 #!/bin/bash
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+[[ -s "${HOME}/.rvm/scripts/rvm" ]] && source "${HOME}/.rvm/scripts/rvm"
 
 # Where the generated Jekyll site will be placed
 GENERATED_SITE_LOCATION="dist"
@@ -21,3 +21,4 @@ setup_service node v10.7.0
 # Install required dependencies
 npm install -g @okta/ci-update-package
 npm install -g @okta/ci-pkginfo
+
