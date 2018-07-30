@@ -13,9 +13,7 @@ Spring Boot has dramatically simplified the development of Spring applications. 
 
 Spring Boot was first released in 2014, and a lot has changed since then. Much like code quality and testing, security has become a concern in developers minds. If you're a developer and you're not concerned about security, chances are you think you should be. This post aims to educate you on steps you can take to create a more secure Spring Boot application. 
 
-{% img blog/spring-boot-10-ways-to-secure/simon-maple.jpg alt:"Simon Maple" class:"BlogPost-avatar pull-right img-150px" %}
-
-I collaborated on this post with [Simon Maple](https://twitter.com/sjmaple), fellow Java Champion and Director of Developer Relations at Snyk. We both work for companies in the security industry, love Java, and want to help developers create more secure applications. We figured writing this post would be a fun way to give back to the community. If you have additional suggestions from the ones we've listed, please add them in the comments!
+{% img blog/spring-boot-10-ways-to-secure/simon-maple.jpg alt:"Simon Maple" class:"BlogPost-avatar pull-right img-100px" %} I collaborated on this post with [Simon Maple](https://twitter.com/sjmaple), fellow Java Champion and Director of Developer Relations at Snyk. We both work for companies in the security industry, love Java, and want to help developers create more secure applications. We figured writing this post would be a fun way to give back to the community. If you have additional suggestions from the ones we've listed, please add them in the comments!
 
 ## 1. Use HTTPS in Production
 
@@ -156,7 +154,7 @@ OpenID Connect (OIDC) is an OAuth 2.0 extension that provides user information. 
 
 The diagram below shows how OIDC works for authentication.
 
-{% img blog/spring-boot-10-ways-to-secure/oidc-for-authentication.png alt:"OIDC Authorization Code Flow" width:"700" %}{: .center-image }
+{% img blog/spring-boot-10-ways-to-secure/oidc-for-authentication.png alt:"OIDC Authorization Code Flow" width:"800" %}{: .center-image }
 
 If you use OIDC for authentication, you won't have to worry about storing users, passwords, or authenticating users. Instead, you'll use an Identity Provider (IdP) to do this for you. Your IdP might even offer security add-ons like multi-factor authentication (MFA). 
 
@@ -204,7 +202,7 @@ From [Randall Degges](https://twitter.com/rdegges), a cryptography expert on the
 
 > Argon2 is relatively new (a few years old now), but has been widely audited/reviewed and was the result of a cryptographic hashing challenge that many organizations took part in over the course of several years. It's without a doubt the "strongest" hashing algorithm of them all adds another layer of complexity that scrypt doesn't, which makes it exponentially more expensive/difficult to brute force compared to scrypt. Argon2 is awesome, and I've used it with great success in several languages, but if you're worried about being too bleeding-edge scrypt is a safe bet, and not controversial.
 
-From Rob Winch, Spring Security Lead:
+From [Rob Winch](https://twitter.com/rob_winch), Spring Security Lead:
 
 > "I like BCrypt, but the general advice is one-way adaptive hashes. Some users may need to use PBKDF2 for compliance reasons. There is a [ticket logged](https://github.com/spring-projects/spring-security/issues/5354) for Argon2 support, but there are not any Apache 2 native Java implementations that I have found (if you know of any, please let me know!). Instead, the libraries rely on a binary that they delegate to which isn't ideal from my perspective. We are on the fence about waiting vs. leveraging one of the implementations that delegate to a binary."
 
