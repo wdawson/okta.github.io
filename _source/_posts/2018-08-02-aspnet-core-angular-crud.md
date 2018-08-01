@@ -104,7 +104,7 @@ Once you've logged in and landed on the dashboard page, copy down the Org URL pi
 
 {% img blog/angular-aspnetcore-crud/OktaOrgUrl.png alt:"Okta developer dashboard highlighting the org URL." width:"800" %}{: .center-image }
 
-Then create a new application by browsing to the Applications tab and clicking Add Application, and from the first page of the wizard choose **Single-Page App**.
+Then create a new application by browsing to the **Applications** tab and clicking **Add Application**, and from the first page of the wizard choose **Single-Page App**.
 
 {% img blog/angular-aspnetcore-crud/CreateSpaAppScreenshot.png alt:"Create application wizard with Single Page App selected." width:"800" %}{: .center-image }
 
@@ -123,7 +123,7 @@ Now that your application has been created copy down the Client ID and Client se
 
 {% img blog/angular-aspnetcore-crud/OktaAppSecrets.png alt:"The new client ID and client secret." width:"800" %}{: .center-image }
 
-Finally, create a new authentication token. This will allow your app to talk to Okta to retrieve user information, among other things. To do this, click the API tab at the top of the page followed by the Create Token button. Give your token a name, in this case, "Crud API" would be a good name, then click Create Token. Copy down this token value as you will need it soon.
+Finally, create a new authentication token. This will allow your app to talk to Okta to retrieve user information, among other things. To do this, click the **API** tab at the top of the page followed by the **Create Token** button. Give your token a name, in this case, "Crud API" would be a good name, then click **Create Token**. Copy down this token value as you will need it soon.
 
 ![Create Okta API Token]()
 {% img blog/angular-aspnetcore-crud/CrudApiToken.png alt:"Screen showing the API Token." width:"800" %}{: .center-image }
