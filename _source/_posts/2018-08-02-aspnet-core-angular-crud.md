@@ -96,11 +96,11 @@ And much more! Check out our [product documentation](https://developer.okta.com/
 
 ### Add Okta to Your ASP.NET Core + Angular App
 
-To get started, you’ll need to create an OpenID Connect application in Okta. Sign up for a forever-free developer account (or log in if you already have one).
+To get started, you'll need to create an OpenID Connect application in Okta. Sign up for a forever-free developer account (or log in if you already have one).
 
 {% img blog/angular-aspnetcore-crud/OktaSignUp.png alt:"Okta's sign up page." width:"800" %}{: .center-image }
 
-Once you’ve logged in and landed on the dashboard page, copy down the Org URL pictured below. You will need this later.
+Once you've logged in and landed on the dashboard page, copy down the Org URL pictured below. You will need this later.
 
 {% img blog/angular-aspnetcore-crud/OktaOrgUrl.png alt:"Okta developer dashboard highlighting the org URL." width:"800" %}{: .center-image }
 
@@ -119,7 +119,7 @@ You can leave the other values unchanged, and click **Done**.
 ![Application Settings Screenstho]()
 {% img blog/angular-aspnetcore-crud/AngularCrudAppSettings.png alt:"The settings page for the application." width:"800" %}{: .center-image }
 
-Now that your application has been created copy down the Client ID and Client secret values on the following page, you’ll need them soon.
+Now that your application has been created copy down the Client ID and Client secret values on the following page, you'll need them soon.
 
 {% img blog/angular-aspnetcore-crud/OktaAppSecrets.png alt:"The new client ID and client secret." width:"800" %}{: .center-image }
 
@@ -138,7 +138,7 @@ npm install @okta/okta-angular rxjs-compat@6 --save
 
 This installs Okta's Angular SDK and the rxjs compatibility library for rxjs 6. Since the Angular SDK is still using rxjs 5 internally, this package provides backward compatibility for it.
 
-Now you’ll want to store the configuration information in your Angular application.
+Now you'll want to store the configuration information in your Angular application.
 
 In the `ClientApp/src/app/app.module.ts` file, you'll need to import some Okta modules and components and configure Okta as your identity provider. First, import the `OktaAuthModule` and the `OktaCallbackComponent`.
 
@@ -345,7 +345,7 @@ Now you can fire up the application (with `F5`) and see the application, login, 
 
 ## Add Authentication to the ASP.NET Core API
 
-For the ASP.NET Core application, the best thing to do is set up a file in your home folder to store the configuration. Okta’s SDK will pick the settings up for you, and you’ll never accidentally check them into source control!
+For the ASP.NET Core application, the best thing to do is set up a file in your home folder to store the configuration. Okta's SDK will pick the settings up for you, and you'll never accidentally check them into source control!
 
 In your home directory, create an .okta folder and add a file called okta.yaml. Your home folder will depend on your operating system. For \*nix variants like Linux or macOS it is:
 
@@ -389,7 +389,7 @@ And in the Configure() method before the app.UseMvc() line add:
 app.UseAuthentication();
 ```
 
-That’s it! Now your ASP.NET Core app will take that bearer token, get the user’s information from Okta add them to the User object so you can get the currently requesting user’s data.
+That's it! Now your ASP.NET Core app will take that bearer token, get the user's information from Okta add them to the User object so you can get the currently requesting user's data.
 
 ## Set Up The ASP.NET Core API Database
 
