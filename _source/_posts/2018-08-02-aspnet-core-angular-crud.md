@@ -116,7 +116,6 @@ On the settings page, enter the following values:
 
 You can leave the other values unchanged, and click **Done**.
 
-![Application Settings Screenstho]()
 {% img blog/angular-aspnetcore-crud/AngularCrudAppSettings.png alt:"The settings page for the application." width:"800" %}{: .center-image }
 
 Now that your application has been created copy down the Client ID and Client secret values on the following page, you'll need them soon.
@@ -125,7 +124,6 @@ Now that your application has been created copy down the Client ID and Client se
 
 Finally, create a new authentication token. This will allow your app to talk to Okta to retrieve user information, among other things. To do this, click the **API** tab at the top of the page followed by the **Create Token** button. Give your token a name, in this case, "Crud API" would be a good name, then click **Create Token**. Copy down this token value as you will need it soon.
 
-![Create Okta API Token]()
 {% img blog/angular-aspnetcore-crud/CrudApiToken.png alt:"Screen showing the API Token." width:"800" %}{: .center-image }
 
 ## Add Okta to Your Angular Application
