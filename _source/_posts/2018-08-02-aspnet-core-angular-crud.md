@@ -847,8 +847,8 @@ That's it! You should be able to fire up the application and Create, Read, Updat
 Check out our other CRUD posts on the Okta developer blog:
 
 - Ibrahim creates a [CRUD app with an ASP.NET Framework 4.x API in his post](/blog/2018/07/27/build-crud-app-in-aspnet-framework-webapi-and-angular)
-- If you would like to use [React instead of Angular for your CRUD app, I've got you covered](https://developer.okta.com/blog/2018/07/02/build-a-secure-crud-app-with-aspnetcore-and-react)
-- If you want to go [Node and React, Braden's got a post for you](https://developer.okta.com/blog/2018/07/10/build-a-basic-crud-app-with-node-and-react)
-- Randall's got your [Python and Flask CRUD post here](https://developer.okta.com/blog/2018/07/23/build-a-simple-crud-app-with-flask-and-python)
+- If you would like to use [React instead of Angular for your CRUD app, I've got you covered](/blog/2018/07/02/build-a-secure-crud-app-with-aspnetcore-and-react)
+- If you want to go [Node and React, Braden's got a post for you](/blog/2018/07/10/build-a-basic-crud-app-with-node-and-react)
+- Randall's got your [Python and Flask CRUD post here](/blog/2018/07/23/build-a-simple-crud-app-with-flask-and-python)
 
 As always, if you have any comments or concerns, feel free to leave a comment below. Don't forget to follow us [on Twitter](https://twitter.com/oktadev) and [on Facebook](https://www.facebook.com/oktadevelopers)!
