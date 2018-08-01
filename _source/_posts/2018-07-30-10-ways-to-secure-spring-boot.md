@@ -128,7 +128,7 @@ X-Frame-Options: DENY
 X-XSS-Protection: 1; mode=block
 ```
 
-Spring Security \*_does not add_ a CSP by default. You can enable the CSP header in your Spring Boot app using the configuration below.
+Spring Security _does not add_ a CSP by default. You can enable the CSP header in your Spring Boot app using the configuration below.
 
 ```java
 @EnableWebSecurity
@@ -177,9 +177,9 @@ spring:
 
 **NOTE:** Using `issuer-uri` is only supported in Spring Security 5.1, which is under active development and scheduled for release in September 2018.
 
-You can set up your own OIDC Server using an open source system like [Keycloak](https://www.keycloak.org/). If you'd rather not maintain your own server in production, you can use Okta's Developer APIs. Sign up today for a free account and get 1000 active users per month at developer.okta.com/signup!
+You can set up your own OIDC Server using an open source system like [Keycloak](https://www.keycloak.org/). If you'd rather not maintain your own server in production, you can use Okta's Developer APIs. Sign up today for a free account and get 1000 active users per month at [developer.okta.com/signup](https://developer.okta.com/signup/)!
 
-If you want to play with OAuth 2.0, OIDC, and the different flows it allows, see https://www.oauth.com/playground/. This site does not require you to create an account, but it does use Okta's Developer APIs under the covers.
+If you want to play with OAuth 2.0, OIDC, and the different flows it allows, see [https://www.oauth.com/playground](https://www.oauth.com/playground/). This site does not require you to create an account, but it does use Okta's Developer APIs under the covers.
 
 ## 7. Managing Passwords? Use Password Hashing!
 
