@@ -518,11 +518,11 @@ If no Okta session exists, this endpoint has no effect and the browser is redire
 
 The following parameters can be included in the query string of the request:
 
-| Parameter                | Description                                                                                                                              | Type   |
-|:-------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------|:-------|
-| id_token_hint            | **Required**. A valid ID token with a subject matching the current session.                                                              | String |
-| post_logout_redirect_uri | Location to redirect to after the logout has been performed. It must match the value preregistered in Okta during client registration.   | String |
-| state                    | Any `state` value is included in the redirect to the `post_logout_redirect_uri`.                                                         | String |
+| Parameter                | Description                                                                                                                              | Type   | Required
+|:-------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------|:-------|:--------
+| id_token_hint            | A valid ID token with a subject matching the current session.                                                                            | String | TRUE
+| post_logout_redirect_uri | Location to redirect to after the logout has been performed. It must match the value preregistered in Okta during client registration.   | String | FALSE
+| state                    | An optional value that is returned as a query parameter during the redirect to the `post_logout_redirect_uri`.                           | String | FALSE
 
 #### Request Examples
 
@@ -545,7 +545,7 @@ GET https://{baseUrl}/logout?
 
 ~~~http
 HTTP 302 Found
-Location: https://...
+Location: https://example.com/post_logout/redirect&state=${state}
 ~~~
 
 This will redirect the browser to either the Okta login page or the specified logout redirect URI.
