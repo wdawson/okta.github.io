@@ -2726,12 +2726,11 @@ Lists all grants for the specified user
 | userId    | ID of the user for whom you are fetching grants                                              | URL        | String   | TRUE     |         |
 | expand    | Valid value: `scope`. If specified, scope details are included in the `_embedded` attribute. | Query      | String   | FALSE    |         |
 | scopeId   | The scope ID to filter on                                                                    | Query      | String   | FALSE    |         |
-| limit     | The maximum number of grants to return                                                       | Query      | Number   | FALSE    | 20      |
+| limit     | The number of grants to return (maximum 200)                                                       | Query      | Number   | FALSE    | 20      |
 | after     | Specifies the pagination cursor for the next page of grants                                  | Query      | String   | FALSE    |         |
 
-> Note: The after cursor should treated as an opaque value and obtained through [the next link relation](/docs/api/getting_started/design_principles#pagination).
+> Note: `after` should treated as a cursor (an opaque value) and obtained through [the next link relation](/docs/api/getting_started/design_principles#pagination).
 
-* The maximum value for `limit` is 200.
 
 #### Request Example
 {:.api .api-request .api-request-example}
@@ -2898,10 +2897,8 @@ Lists all grants for a specified user and client
 | userId    | ID of the user whose grants you are listing for the specified `clientId`                     | URL            | String   | TRUE     |         |
 | clientId  | ID of the client whose grants you are listing for the specified `userId`                     | URL            | String   | TRUE     |         |
 | expand    | Valid value: `scope`. If specified, scope details are included in the `_embedded` attribute. | Query          | String   | FALSE    |         |
-| limit     | The maximum number of tokens to return                                                       | Query          | Number   | FALSE    | 20      |
+| limit     | The number of tokens to return (maximum 200)                                                       | Query          | Number   | FALSE    | 20      |
 | after     | Specifies the pagination cursor for the next page of tokens                                  | Query          | String   | FALSE    |         |
-
-* The maximum value for `limit` is 200.
 
 #### Request Example
 {:.api .api-request .api-request-example}
@@ -3094,12 +3091,11 @@ Lists all tokens for the specified user and client
 | userId    | ID of the user for whom you are fetching tokens                                              | URL        | String   | TRUE     |         |
 | clientId  | ID of the client                                                                             | URL        | String   | TRUE     |         |
 | expand    | Valid value: `scope`. If specified, scope details are included in the `_embedded` attribute. | Query      | String   | FALSE    |         |
-| limit     | The maximum number of tokens to return                                                       | Query      | Number   | FALSE    | 20      |
+| limit     | The number of tokens to return (maximum 200)                                                       | Query      | Number   | FALSE    | 20      |
 | after     | Specifies the pagination cursor for the next page of tokens                                  | Query      | String   | FALSE    |         |
 
-> Note: The after cursor should treated as an opaque value and obtained through [the next link relation](/docs/api/getting_started/design_principles#pagination).
+> Note: `after` should treated as a cursor (an opaque value) and obtained through [the next link relation](/docs/api/getting_started/design_principles#pagination).
 
-* The maximum value for `limit` is 200.
 
 #### Request Example
 {:.api .api-request .api-request-example}
@@ -3181,12 +3177,11 @@ Gets a token for the specified user and client
 | clientId  | ID of the client                                                                             | URL        | String   | TRUE     |         |
 | tokenId   | ID of the token                                                                             | URL        | String   | TRUE     |         |
 | expand    | Valid value: `scope`. If specified, scope details are included in the `_embedded` attribute. | Query      | String   | FALSE    |         |
-| limit     | The maximum number of grants to return                                                       | Query      | Number   | FALSE    | 20      |
+| limit     | The number of grants to return (maximum 200)                                                      | Query      | Number   | FALSE    | 20      |
 | after     | Specifies the pagination cursor for the next page of grants                                  | Query      | String   | FALSE    |         |
 
-> Note: The after cursor should treated as an opaque value and obtained through [the next link relation](/docs/api/getting_started/design_principles#pagination).
+> Note: `after` should treated as a cursor (an opaque value) and obtained through [the next link relation](/docs/api/getting_started/design_principles#pagination).
 
-* The maximum value for `limit` is 200.
 
 #### Request Example
 {:.api .api-request .api-request-example}
@@ -4156,27 +4151,28 @@ Specifies the authentication provider that validates the user's password credent
 
 ### Links Object
 
-Specifies link relations (See [Web Linking](http://tools.ietf.org/html/rfc5988)) available for the current status of a user.  The Links Object is used for dynamic discovery of relaed resources and lifecycle or credential operations.  The Links Object is **read-only**.
+Specifies link relations (See [Web Linking](http://tools.ietf.org/html/rfc5988)) available for the current status of a user.  The Links object is used for dynamic discovery of related resources, lifecycle operations, and credential operations.  The Links object is read-only.
 
-#### Individual Users vs Collection of Users
+#### Individual Users vs. Collection of Users
 
-For an individual User result, the Links Object contains a full set of link relations available for that User as determined by Policy. For a collection of Users, the Links Object contains only the self link. Operations that return a collection of Users include [List Users](#list-users) and [List Group Members](groups#list-group-members).
+For an individual User result, the Links object contains a full set of link relations available for that User as determined by your policies. For a collection of Users, the Links object contains only the `self` link. Operations that return a collection of Users include [List Users](#list-users) and [List Group Members](groups#list-group-members).
 
+Here are some links that may be available on a User, as determined by your policies:
 
-| Link Relation Type     | Description                                                                                                                                           |
-|:-----------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------|
-| self                   | The actual user                                                                                                                                       |
-| activate               | [Lifecycle action](#activate-user) to transition user to `ACTIVE` status                                                                              |
-| deactivate             | [Lifecycle action](#deactivate-user) to transition user to `DEPROVISIONED` status                                                                     |
-| suspend                | [Lifecycle action](#suspend-user) to transition user to `SUSPENDED` status                                                                            |
-| unsuspend              | [Lifecycle action](#unsuspend-user) to return a user to `ACTIVE` status when their current status is `SUSPENDED`                                      |
-| resetPassword          | [Lifecycle action](#reset-password) to transition user to `RECOVERY` status                                                                           |
-| expirePassword         | [Lifecycle action](#expire-password) to transition user to `PASSWORD_EXPIRED` status                                                                  |
-| resetFactors           | [Lifecycle action](#reset-factors) to reset all the MFA factors for the user                                                                          |
-| unlock                 | [Lifecycle action](#unlock-user) to return a user to `ACTIVE` status when their current status is `LOCKED_OUT` due to exceeding failed login attempts |
-| forgotPassword         | [Resets a user&#8217;s password](#forgot-password) by validating the user&#8217;s recovery credential.                                                |
-| changePassword         | [Changes a user&#8217;s password](#change-password) validating the user&#8217;s current password                                                      |
-| changeRecoveryQuestion | [Changes a user&#8217;s recovery credential](#change-recovery-question) by validating the user&#8217;s current password                               |
+| Link Relation Type     | Description                                                                                                           |
+|:-----------------------|:----------------------------------------------------------------------------------------------------------------------|
+| self                   | A self-referential link to this user                                                                                  |
+| activate               | Lifecycle action to [activate the user](#activate-user)                                                               |
+| deactivate             | Lifecycle action to [deactivate the user](#deactivate-user)                                                           |
+| suspend                | Lifecycle action to [suspend the user](#suspend-user)                                                                 |
+| unsuspend              | Lifecycle action to [unsuspend the user](#unsuspend-user)                                                             |
+| resetPassword          | Lifecycle action to [trigger a password reset](#reset-password)                                                       |
+| expirePassword         | Lifecycle action to [expire the user's password](#expire-password)                                                    |
+| resetFactors           | Lifecycle action to [reset all MFA factors](#reset-factors)                                                           |
+| unlock                 | Lifecycle action to [unlock a locked-out user](#unlock-user)                                                          |
+| forgotPassword         | [Resets a user's password](#forgot-password) by validating the user's recovery credential.                            |
+| changePassword         | [Changes a user's password](#change-password) validating the user's current password                                  |
+| changeRecoveryQuestion | [Changes a user's recovery credential](#change-recovery-question) by validating the user's current password           |
 
 ### User-Consent Grant Object
 

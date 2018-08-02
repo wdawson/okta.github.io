@@ -23,6 +23,10 @@ The policy API supports the following **rule operations**:
 * Create, read, update, and delete a rule for a policy
 * Activate and deactivate a rule
 
+## Getting Started
+
+Explore the Policy API: [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/0dfd99e544a12ea3db5b)
+
 ## Policy API Operations
 
 ### Get a Policy
