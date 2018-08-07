@@ -205,7 +205,7 @@ You'll also be using this file in the Node server later, which won't be using Ty
 
 ```javascript
 module.exports = {
-  oktaOrgURL: '{yourOktaOrgURL}',
+  oktaOrgURL: '{yourOktaDomain}',
   oktaClientId: '{yourClientId}'
 };
 ```
@@ -432,7 +432,7 @@ const { oktaClientId, oktaOrgURL } = require('../environments/.env.js');
 
 const oktaJwtVerifier = new OktaJwtVerifier({
   clientId: oktaClientId,
-  issuer: `${oktaOrgURL}/oauth2/default`
+  issuer: `${yourOktaDomain}/oauth2/default`
 });
 
 const app = express();
@@ -485,7 +485,7 @@ const { oktaClientId, oktaOrgURL } = require('../environments/.env.js');
 
 const oktaJwtVerifier = new OktaJwtVerifier({
   clientId: oktaClientId,
-  issuer: `${oktaOrgURL}/oauth2/default`
+  issuer: `${yourOktaDomain}/oauth2/default`
 });
 ```
 
