@@ -11,13 +11,13 @@ tweets:
 - "If you're getting started with @nodejs and/or @angular 6, learn how to write a CRUD-y SPA using both! →"
 ---
 
-Even before the release of Angular 6, Angular had gone through some changes over the years. The biggest one was the jump from AngularJS (v1.x) to Angular (v2+), which included a lot of breaking syntax changes and made TypeScript the default language instead of JavaScript. TypeScript is actually a superset of JavaScript, but it allows you to have strongly typed functions and variables, and it will get compiled down to JavaScript so that it can still run in your browser. Given the popularity of of Angular and Node, it wouldn’t be shocking if you were considering this stack for your next project.
+Even before the release of Angular 6, Angular had gone through some changes over the years. The biggest one was the jump from AngularJS (v1.x) to Angular (v2+), which included a lot of breaking syntax changes and made TypeScript the default language instead of JavaScript. TypeScript is actually a superset of JavaScript, but it allows you to have strongly typed functions and variables, and it will get compiled down to JavaScript so that it can still run in your browser. Given the popularity of of Angular and Node, it wouldn't be shocking if you were considering this stack for your next project.
 
-Today I'll show you how you to build a secure single-page app with basic CRUD functionality. You’ll use [Okta's OpenID Connect (OIDC) API](https://developer.okta.com/docs/api/resources/oidc) to handle authentication. Okta provides a simple to use [Angular SDK](https://github.com/okta/okta-oidc-js/tree/master/packages/okta-angular) to get you up and running very quickly. On the backend, I'll show you how to use the [Okta JWT Verifier](https://github.com/okta/okta-oidc-js/tree/master/packages/jwt-verifier) to ensure that the user is properly authenticated before serving any sensitive content.
+Today I'll show you how you to build a secure single-page app with basic CRUD functionality. You'll use [Okta's OpenID Connect (OIDC) API](https://developer.okta.com/docs/api/resources/oidc) to handle authentication. Okta provides a simple to use [Angular SDK](https://github.com/okta/okta-oidc-js/tree/master/packages/okta-angular) to get you up and running very quickly. On the backend, I'll show you how to use the [Okta JWT Verifier](https://github.com/okta/okta-oidc-js/tree/master/packages/jwt-verifier) to ensure that the user is properly authenticated before serving any sensitive content.
 
-We’ll be working with Angular 6 for this project, so you can get a feel for some of the changes and news features (read more about them in our [Angular 6: What’s New, and Why Upgrade? post](https://developer.okta.com/blog/2018/05/09/upgrade-to-angular-6)).
+We'll be working with Angular 6 for this project, so you can get a feel for some of the changes and news features (read more about them in our [Angular 6: What's New, and Why Upgrade? post](https://developer.okta.com/blog/2018/05/09/upgrade-to-angular-6)).
 
-Let’s get started!
+Let's get started!
 
 ## Create Your Angular 6 App
 
@@ -178,7 +178,7 @@ That should be it to get a basic homepage up and running. Your site should now l
 
 ## Add Authentication to Your Node + Angular App with Okta
 
-You would never ship your new app out to the Internet without secure [identity management](https://developer.okta.com/product/user-management/), right? Well, Okta makes that a lot easier and more scalable than what you’re probably used to. Okta is a cloud service that allows developers to create, edit, and securely store user accounts and user account data, and connect them with one or multiple applications. Our API enables you to:
+You would never ship your new app out to the Internet without secure [identity management](https://developer.okta.com/product/user-management/), right? Well, Okta makes that a lot easier and more scalable than what you're probably used to. Okta is a cloud service that allows developers to create, edit, and securely store user accounts and user account data, and connect them with one or multiple applications. Our API enables you to:
 
 - [Authenticate](https://developer.okta.com/product/authentication/) and [authorize](https://developer.okta.com/product/authorization/) your users
 - Store data about your users
@@ -186,7 +186,7 @@ You would never ship your new app out to the Internet without secure [identity m
 - Secure your application with [multi-factor authentication](https://developer.okta.com/use_cases/mfa/)
 - And much more! Check out our [product documentation](https://developer.okta.com/documentation/)
 
-If you don't already have one, [sign up for a forever-free developer account](https://developer.okta.com/signup/). You’ll be given an Organization URL when you sign up, which will be how you log in to your developer console. After you log in to your developer console, navigate to **Applications**, then click **Add Application**. Select **Single-Page App**, then click **Next**.
+If you don't already have one, [sign up for a forever-free developer account](https://developer.okta.com/signup/). You'll be given an Organization URL when you sign up, which will be how you log in to your developer console. After you log in to your developer console, navigate to **Applications**, then click **Add Application**. Select **Single-Page App**, then click **Next**.
 
 Since the app generated from Angular CLI runs on port 4200 by default, you should set that as the Base URI and Login Redirect URI. Your settings should look like the following:
 
@@ -1244,4 +1244,4 @@ If you're itching for more information, check out some of these other great arti
 - [Angular 6: What's New, and Why Upgrade](https://developer.okta.com/blog/2018/05/09/upgrade-to-angular-6)
 - [Add Authentication to Your Angular PWA](https://developer.okta.com/blog/2017/06/13/add-authentication-angular-pwa)
 
-And as always, we’d love to hear from you. Hit us up with questions or feedback in the comments, or on Twitter [@oktadev](https://twitter.com/oktadev).
+And as always, we'd love to hear from you. Hit us up with questions or feedback in the comments, or on Twitter [@oktadev](https://twitter.com/oktadev).
