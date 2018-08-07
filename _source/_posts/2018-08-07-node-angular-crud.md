@@ -432,7 +432,7 @@ const { oktaClientId, oktaOrgURL } = require('../environments/.env.js');
 
 const oktaJwtVerifier = new OktaJwtVerifier({
   clientId: oktaClientId,
-  issuer: `${yourOktaDomain}/oauth2/default`
+  issuer: `{yourOktaDomain}/oauth2/default`
 });
 
 const app = express();
@@ -485,7 +485,7 @@ const { oktaClientId, oktaOrgURL } = require('../environments/.env.js');
 
 const oktaJwtVerifier = new OktaJwtVerifier({
   clientId: oktaClientId,
-  issuer: `${yourOktaDomain}/oauth2/default`
+  issuer: `{yourOktaDomain}/oauth2/default`
 });
 ```
 
