@@ -3070,18 +3070,27 @@ curl -v -X DELETE \
 HTTP/1.1 204 No Content
 ~~~
 
-## User OAuth 2.0 Token Operations
+## User OAuth 2.0 Token Management Operations
+
+* [List Refresh Tokens](#list-refresh-tokens)
+* [Get Refresh Token](#get-refresh-token)
+* [Revoke All Refresh Tokens](#revoke-all-refresh-tokens)
+* [Revoke Refresh Token](#revoke-refresh-token)
+
+These endpoints allow you to manage tokens issued by an Authorization Server for a particular User and Client. For example, you could revoke every active refresh token for a User in the context of a specific Client. You can also [revoke specific tokens](/authentication-guide/tokens/revoking-tokens) or [manage tokens at the Authorization Server level](/docs/api/resources/authorization-servers#oauth-20-token-management-operations).
+
+Read [Working With Tokens](/authentication-guide/tokens/) to understand more about how OAuth 2.0 tokens work.
 
 {% api_lifecycle ea %}
 
-### List OAuth 2.0 Tokens for User and Client
+### List Refresh Tokens
 {:.api .api-operation}
 
 {% api_lifecycle ea %}
 
 {% api_operation get /api/v1/users/${userId}/clients/${clientId}/tokens %}
 
-Lists all tokens for the specified user and client
+Lists all refresh tokens issued for the specified User and Client.
 
 #### Request Parameters
 {:.api .api-request .api-request-params}
@@ -3159,14 +3168,14 @@ curl -v -X GET \
 ]
 ~~~
 
-### Get OAuth 2.0 Token for User and Client
+### Get Refresh Token
 {:.api .api-operation}
 
 {% api_lifecycle ea %}
 
 {% api_operation get /api/v1/users/${userId}/clients/${clientId}/tokens/${tokenId} %}
 
-Gets a token for the specified user and client
+Gets a refresh token issued for the specified User and Client.
 
 #### Request Parameters
 {:.api .api-request .api-request-params}
@@ -3270,14 +3279,14 @@ curl -v -X GET \
 }
 ~~~
 
-### Revoke OAuth 2.0 Tokens for User and Client
+### Revoke All Refresh Tokens
 {:.api .api-operation}
 
 {% api_lifecycle ea %}
 
 {% api_operation delete /api/v1/users/${userId}/clients/${clientId}/tokens %}
 
-Revokes all tokens for the specified user and client
+Revokes all refresh tokens issued for the specified User and Client. Any access tokens issued with these refresh tokens will also be revoked, but access tokens issued without a refresh token will not be affected.
 
 #### Request Parameters
 {:.api .api-request .api-request-params}
@@ -3305,14 +3314,14 @@ curl -v -X DELETE \
 HTTP/1.1 204 No Content
 ~~~
 
-### Revoke OAuth 2.0 Token for User and Client
+### Revoke Refresh Token
 {:.api .api-operation}
 
 {% api_lifecycle ea %}
 
 {% api_operation delete /api/v1/users/${userId}/clients/${clientId}/tokens/${tokenId} %}
 
-Revokes the specified token for the specified user and client
+Revokes the specified refresh token. If an access token was issued with this refresh token, it will also be revoked.
 
 #### Request Parameters
 {:.api .api-request .api-request-params}
