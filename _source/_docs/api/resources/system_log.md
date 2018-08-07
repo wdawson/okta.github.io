@@ -613,6 +613,45 @@ The table below summarizes the supported query parameters:
 | `limit`     | Sets the number of results returned in the response                                                   | Integer between 0 and 1000                                | 100                     |
 |-------------+-------------------------------------------------------------------------------------------------------+----------------------------------------------------------+-------------------------|
 
+##### Request Types
+
+All requests to the `/api/v1/logs` endpoint fall into one of these two categories:
+  - [Polling Requests](#polling-requests)
+  - [Bounded Requests](#bounded-requests)
+
+###### Polling Requests
+Polling requests are for situations when you want to consume an ongoing stream of events from Okta.
+
+Example use cases include:
+  - [Ingesting System Log data into an external SIEM system](#transferring-data-to-a-separate-system).
+  - Utilizing System Log data for real-time monitoring.
+
+For a request to be a _polling_ request it must meet the following request parameter criteria:
+  - `until` must be unspecified.
+  - `sortOrder` must be `ASCENDING`.
+
+Polling requests to the `/api/v1/logs` API have the following semantics:
+  - They return every event that occurs in your organization.
+  - They may return events out of order according to the `published` field.
+  - They have an infinite number of pages. That is, a [`next` `Link` relation header](#next-link-response-header) is always present, even if there are no new events (the event list may be empty).
+
+###### Bounded Requests
+Bounded requests are for situations when you know the definite time period of logs you want to retrieve.
+
+Example use cases include:
+  - [Debugging or troubleshooting system behavior](#debugging).
+  - Auditing events that happened at a particular time.
+
+For a request to be a _bounded_ request it must meet the following request parameter criteria:
+  - `since` must be specified.
+  - `until` must be specified.
+
+Bounded requests to the `/api/v1/logs` API have the following semantics:
+  - The returned events are guaranteed to be in order according to the `published` field.
+  - They have a finite number of pages. That is, the last page does not contain a [`next` `Link` relation header](#next-link-response-header).
+  - Not all events for the specified time range may be present— events may be delayed. Such delays are rare but possible.
+
+
 ##### Filtering Results
 
 ###### Expression Filter
