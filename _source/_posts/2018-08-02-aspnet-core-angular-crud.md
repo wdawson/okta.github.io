@@ -1,6 +1,6 @@
 ---
 layout: blog_post
-title: "Build a Simple CRUD App with ASP.NET Core 2.1 and Angular 6"
+title: "Upgrade your ASP.NET Core 2.1 App to Angular 6"
 author: leebrandt
 description: "This tutorial walks you through building a simple CRUD application in ASP.NET Core 2.1 and Angular 6."
 tags: [asp.net, dotnet, core, asp.net core, dotnet core, dot net core, angular, crud]
