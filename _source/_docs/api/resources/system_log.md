@@ -29,7 +29,7 @@ The System Log API has one endpoint:
 
 {% api_operation get /api/v1/logs %}
 
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/9cfb0dd661a5432a77c6){:target="_blank"}
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/54def5ab52f04b7e4011){:target="_blank"}
 
 This collection resource is backed by a [LogEvent object](#logevent-object) model and associated [event types](#event-types).
 
