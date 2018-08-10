@@ -75,7 +75,7 @@ See how all these files are in the Android Studio project output ? For a great e
 Next we need to set up our project to build Android. The first step is to change `settings.gradle` to simply include the app module (which is just a folder).
 
 ```
-include ‘:app'
+include ':app'
 ```
 
 Next, put the following into your root `build.gradle`.
