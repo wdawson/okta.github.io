@@ -537,7 +537,7 @@ Rate limit violations are sent when a rate limit is exceeded.
 
 | Event              | Description                         |
 |:-------------------|:------------------------------------|
-| security.request.blocked | A request was blocked due to a blacklist rule (such as a IP network zone or location rule). |
+| security.request.blocked | A request was blocked due to a blacklist rule (such as an IP network zone or location rule). |
 
 ### User Events
 
