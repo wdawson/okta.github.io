@@ -10,15 +10,15 @@ tweets:
   - "Let us show you how to create a basic @Android app. You don't even need an IDE! →"
 ---
 
-Virtually every Android tutorial uses Android Studio to create and develop an app. This isn’t great for learning since you don’t see how things work, namely
+Virtually every Android tutorial uses Android Studio to create and develop an app. This isn't great for learning since you don't see how things work, namely
 
 - The components that make up an Android Studio project
 - How builds are setup and configured
 - What parts comprise the source
 
-Software development is about files and in this tutorial we’re going to go through every file in a basic Android project – first by examining what Android Studio outputs and then by building up an Android project from scratch. We won’t assume any previous Android experience, just a little Java.
+Software development is about files and in this tutorial we're going to go through every file in a basic Android project – first by examining what Android Studio outputs and then by building up an Android project from scratch. We won't assume any previous Android experience, just a little Java.
 
-Note: I’ll be doing this on Windows but most instructions should work on other platforms.
+Note: I'll be doing this on Windows but most instructions should work on other platforms.
 
 ## Break Down Your Android Studio Project
 
@@ -32,33 +32,33 @@ The first thing to notice is that most files involve Gradle, the system for conf
 
 Only three folders and three files. Clearly the main complexity in Android projects is the build system.
 
-Let’s look at what files are not included in source control by looking at _.gitignore_.
+Let's look at what files are not included in source control by looking at _.gitignore_.
 
 {% img blog/build-android-app-without-ide/gitignore.png alt:"gitignore file contents" width:"400" %}{: .center-image }
 
-So `MyApplication.iml` isn’t important. If you [Google what iml files are for](https://stackoverflow.com/questions/30737082/what-are-iml-files-in-android-studio) you will see they are used by Android Studio and can be regenerated from the configurations in `.idea/`.
+So `MyApplication.iml` isn't important. If you [Google what iml files are for](https://stackoverflow.com/questions/30737082/what-are-iml-files-in-android-studio) you will see they are used by Android Studio and can be regenerated from the configurations in `.idea/`.
 
-Also, `local.properties` aren’t important either, as well as `build/`. What does that leave us with? Just the`app/` folder and some files in `.idea/` which is where IntelliJ (which Android Studio is built on) stores configuration files.
+Also, `local.properties` aren't important either, as well as `build/`. What does that leave us with? Just the`app/` folder and some files in `.idea/` which is where IntelliJ (which Android Studio is built on) stores configuration files.
 
-Inside the `app` folder you’ll find two directories and three files:
+Inside the `app` folder you'll find two directories and three files:
 
 - `libs/`, which is empty
-- `src/`, which isn’t
+- `src/`, which isn't
 - `.gitignore`
 - `build.gradle`
 - `ProGuard`
 
-ProGuard helps shrink your final APK by removing unused libraries. You don’t need this file (it’s actually all commented out). The`.gitignore` is use for source control, if you didn’t know that already. So it’s just `src/` and `build.gradle` that are important.
+ProGuard helps shrink your final APK by removing unused libraries. You don't need this file (it's actually all commented out). The`.gitignore` is use for source control, if you didn't know that already. So it's just `src/` and `build.gradle` that are important.
 
 `src/` contains your Java source code, the resources you use like layouts and configuration files, and the `AndroidManifest` which tells Android what your app is. And `build.gradle` tells Gradle how to convert your source into an APK using the Gradle Android plugin.
 
-To see all of this in action, let’s get to building our code base from the ground up, first installing the SDK, then initializing gradle, onto converting to an Android build, and finally writing the app code.
+To see all of this in action, let's get to building our code base from the ground up, first installing the SDK, then initializing gradle, onto converting to an Android build, and finally writing the app code.
 
 ## Get Started with the Android SDK
 
-For this project, you’ll need to download the Android SDK. This is just a ZIP file. Go to the [normal install page](https://developer.android.com/studio/) and scroll right to the bottom at Command Line Tools. There you’ll find the zips which are only around 150MB. Extract and set your `ANDROID_SDK_ROOT` environment variable to the extracted location.
+For this project, you'll need to download the Android SDK. This is just a ZIP file. Go to the [normal install page](https://developer.android.com/studio/) and scroll right to the bottom at Command Line Tools. There you'll find the zips which are only around 150MB. Extract and set your `ANDROID_SDK_ROOT` environment variable to the extracted location.
 
-And that’s it! Gradle should pick this up automatically. (Note: Gradle stores the SDK location in the `local.properties` file, which as we saw before isn’t saved to source control).
+And that's it! Gradle should pick this up automatically. (Note: Gradle stores the SDK location in the `local.properties` file, which as we saw before isn't saved to source control).
 
 ## Initialize Gradle
 
@@ -75,7 +75,7 @@ See how all these files are in the Android Studio project output ? For a great e
 Next we need to set up our project to build Android. The first step is to change `settings.gradle` to simply include the app module (which is just a folder).
 
 ```
-include ‘:app’
+include ‘:app'
 ```
 
 Next, put the following into your root `build.gradle`.
@@ -136,7 +136,7 @@ dependencies {
 
 This uses the Android Gradle plugin (com.android.application) and sets some values like the SDK version and Proguard (which optimizes our output size). Also, in the dependencies section it gives any libraries we want to import (here we import two, both used in building our interface later).
 
-Now create `app/src/main/res/values/styles.xml` which we’ll use to set our app’s theme.
+Now create `app/src/main/res/values/styles.xml` which we'll use to set our app's theme.
 
 ```xml
 <resources>
@@ -158,7 +158,7 @@ Finally put the following into `app/src/main/AndroidManifest.xml`:
 
     <application
         android:label="Demo App"
-        android:theme=”@styles/AppTheme”>
+        android:theme="@styles/AppTheme">
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -173,9 +173,9 @@ Finally put the following into `app/src/main/AndroidManifest.xml`:
 
 This defines the package, label and main activity of our app.
 
-Now when you run `gradlew build` you should see BUILD SUCCESSFUL. And in `app/build/outputs/apk/debug` you should see `app-debug.apk`. You’ve just set up an Android build from scratch!
+Now when you run `gradlew build` you should see BUILD SUCCESSFUL. And in `app/build/outputs/apk/debug` you should see `app-debug.apk`. You've just set up an Android build from scratch!
 
-To deploy this simply say `gradlew installDebug` with your phone plugged in (and [USB Debugging enabled[(https://www.howtogeek.com/129728/how-to-access-the-developer-options-menu-and-enable-usb-debugging-on-android-4.2/)). You should then see a new app called Demo App. It will crash when you run it because you haven’t written any Java code yet!
+To deploy this simply say `gradlew installDebug` with your phone plugged in (and [USB Debugging enabled[(https://www.howtogeek.com/129728/how-to-access-the-developer-options-menu-and-enable-usb-debugging-on-android-4.2/)). You should then see a new app called Demo App. It will crash when you run it because you haven't written any Java code yet!
 
 ## Write the Java Application
 
@@ -224,17 +224,17 @@ Put this into `app/src/main/res/layout/activity_main.xml`.
 </android.support.constraint.ConstraintLayout>
 ```
 
-This just creates a “Hello World!” message center-screen.
+This just creates a "Hello World!" message center-screen.
 
 Now run `gradlew build` and you should see BUILD SUCCESSFUL again. Use `gradlew installDebug` to install to your phone and you should see the following:
 
 {% img blog/build-android-app-without-ide/hello-world.png alt:"Hello world Android screen" width:"400" %}{: .center-image }
 
-You’ve just made a working Android app with nothing but a text editor :).
+You've just made a working Android app with nothing but a text editor :).
 
 ## Add Authentication with Okta
 
-Most modern apps require some level of security, so it’s worthwhile to know how to build authentication simply and easily. For this, we’ll use the [OktaAppAuth](https://github.com/okta/okta-sdk-appauth-android) wrapper library.
+Most modern apps require some level of security, so it's worthwhile to know how to build authentication simply and easily. For this, we'll use the [OktaAppAuth](https://github.com/okta/okta-sdk-appauth-android) wrapper library.
 
 ### Why Okta?
 
@@ -303,13 +303,13 @@ android.defaultConfig.manifestPlaceholders = [
         ]
 ```
 
-Finally, add the following to the same file’s dependencies:
+Finally, add the following to the same file's dependencies:
 
 ```
 implementation 'com.okta.android:appauth-android:0.1.0'
 ```
 
-That should build and deploy. You can use `logcat` to see what is happening in the background. Looking at the [source code for the main library class](https://github.com/okta/okta-sdk-appauth-android/blob/master/library/src/main/java/com/okta/appauth/android/OktaAppAuth.java) we see the tag we need to use is “OktaAppAuth”.
+That should build and deploy. You can use `logcat` to see what is happening in the background. Looking at the [source code for the main library class](https://github.com/okta/okta-sdk-appauth-android/blob/master/library/src/main/java/com/okta/appauth/android/OktaAppAuth.java) we see the tag we need to use is "OktaAppAuth".
 
 {% img blog/build-android-app-without-ide/logcat-output.png alt:"Logcat output" width:"800" %}{: .center-image }
 
@@ -338,7 +338,7 @@ Configuration should now be complete! If you `gradlew installDebug` and do the l
 
 ### Set Up Your Login Page
 
-Let’s add a button and progress bar to our login page. Create app/src/main/res/layout/activity_login.xml.
+Let's add a button and progress bar to our login page. Create app/src/main/res/layout/activity_login.xml.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -385,7 +385,7 @@ Let’s add a button and progress bar to our login page. Create app/src/main/res
 </android.support.constraint.ConstraintLayout>
 ```
 
-Initially the button is hidden. We’ll show that (and hide the progress bar) once Okta has finished initializing. To do that put the following into the onSuccess() method in `LoginActivity.java`.
+Initially the button is hidden. We'll show that (and hide the progress bar) once Okta has finished initializing. To do that put the following into the onSuccess() method in `LoginActivity.java`.
 
 ```java
     findViewById(R.id.auth_button).setVisibility(View.VISIBLE);
@@ -490,7 +490,7 @@ We attach a listener to the button logging us out and taking us back to the logi
 </android.support.constraint.ConstraintLayout>
 ```
 
-As with the login page it’s just a title with a button. Wire up the login button in `LoginActivity.java` by placing the following at the end of the onCreate method.
+As with the login page it's just a title with a button. Wire up the login button in `LoginActivity.java` by placing the following at the end of the onCreate method.
 
 ```java
 Button button = (Button) findViewById(R.id.auth_button);
@@ -524,7 +524,7 @@ If you enter in user details which are correct for the Application we made previ
 
 Clicking the logout button should take you back to our first screen.
 
-And that’s it for authorization!
+And that's it for authorization!
 
 Most people think you need Android Studio to make an Android app. In this post, you shattered that notion and built an Android app from scratch. With some configuration and a little code, you integrated authentication into your app with the OktaAppAuth library. Then you created a view that only authenticated users can see. From here, you can build out the rest of your app safe in the knowledge that authentication is handled, thanks to Okta.
 
