@@ -833,6 +833,7 @@ export class MovieListComponent implements OnInit {
 
 We have the data and we can show it in the MovieListComponent:
 
+{% raw %}
 ```html
 src/app/movie-list/movie-list.component.html
 
@@ -862,6 +863,7 @@ src/app/movie-list/movie-list.component.html
     </table>
 </div>
 ```
+{% endraw %}
 
 We'll also modify our `MovieListComponent` class to include the `isLoading` property (initialized to `true` and set to `false` after the list of movies is retrieved from the server), and our `Movie` model and service to include an `isUpdating` flag for every movie (initialized to `false`):
 
@@ -977,6 +979,7 @@ We'll create a new component (`MovieForm`) and display it within the `MovieList`
 ng generate component MovieForm
 ```
 
+{% raw %}
 ```html
 src/app/movie-list/movie-list.component.html
 ...
@@ -1052,6 +1055,7 @@ appendMovie(movie: Movie) {
     this.movies.push(movie);
 }
 ```
+{% endraw %}
 
 Congratulations, your application is now complete! 
 
