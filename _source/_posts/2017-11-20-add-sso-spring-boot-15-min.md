@@ -141,7 +141,7 @@ okta.oauth2.clientSecret=(your **Client Secret**)
 Like so:
 
 ```properties
-okta.oauth2.issuer=https://dev-279161.oktapreview.com/oauth2/default
+okta.oauth2.issuer=https://{yourOktaDomain}/oauth2/default
 okta.oauth2.clientId=0oacqif7do3e0hD0h7
 okta.oauth2.clientSecret=(your **Client Secret**)
 ```

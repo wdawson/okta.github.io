@@ -555,7 +555,7 @@ YAML is just a file format for configuration. The okta.yaml file looks like:
 ```yaml
 okta:
   client:
-    orgUrl: "https://dev-846291.oktapreview.com/"
+    orgUrl: "https://{yourOktaDomain}"
     token: "{yourApiToken}"
 ```
 

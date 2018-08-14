@@ -85,7 +85,7 @@ If you don't already have a free Okta account, you can follow [these instruction
 
   - Client ID - e.g.: ***oot9wrjjararhfaa***
   - Client secret - e.g.: ***(Your Client Secret)***
-  - Issuer - e.g.: ***https://dev-123123.oktapreview.com/oauth2/default*** ...be sure to include the ***/oauth2/default*** path!
+  - Issuer - e.g.: ***https://{yourOktaDomain}/oauth2/default*** ...be sure to include the ***/oauth2/default*** path!
   - Login redirect URI - this will be ***http://localhost:8080/login*** if you followed the instructions above.
 
 ### Use Dropwizard Configuration to Store Your OAuth Settings
@@ -374,11 +374,11 @@ The only thing left to do create a login page.  I'm actually going to create a s
       // You could statically define your config like if you wanted too:
       /*
       let config = {
-        baseUrl: 'https://dev-123456.oktapreview.com',
+        baseUrl: 'https://{yourOktaDomain}',
         clientId: '00icu81200icu812w0h7',
         redirectUri: 'http://localhost:8080',
         authParams: {
-          issuer: 'https://dev-123456.oktapreview.com/oauth2/default',
+          issuer: 'https://{yourOktaDomain}/oauth2/default',
           responseType: ['id_token', 'token']
         }
       }; */
