@@ -514,7 +514,7 @@ Now add a configuration variable right below the import statements:
 const config = {
   issuer: 'https://{yourOktaDomain}/oauth2/default',
   redirectUri: 'http://localhost:5000/implicit/callback',
-  clientId: '{yourClientId}'
+  clientId: '{clientId}'
 };
 ```
 

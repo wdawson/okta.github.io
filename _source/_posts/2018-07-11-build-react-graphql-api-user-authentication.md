@@ -1134,7 +1134,7 @@ import * as OktaJwtVerifier from '@okta/jwt-verifier';
 import { CurrentUser } from './CurrentUser';
 
 const oktaJwtVerifier = new OktaJwtVerifier({
-  clientId: '{yourClientId}',
+  clientId: '{clientId}',
   issuer: 'https://{yourOktaDomain}/oauth2/default'
 });
 ```

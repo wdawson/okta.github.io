@@ -72,7 +72,7 @@ Open `holdings-api/src/main/resources/application.properties` and add your API t
 
 ```properties
 okta.oauth2.issuer=https://{yourOktaDomain}/oauth2/default
-okta.oauth2.clientId={yourClientId}
+okta.oauth2.clientId={clientId}
 okta.client.token=XXX
 ```
 
