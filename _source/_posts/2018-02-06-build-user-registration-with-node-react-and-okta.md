@@ -115,7 +115,7 @@ Or, if you're using the [yarn](https://yarnpkg.com) package manager:
 yarn add @okta/okta-react react-router-dom
 ```
 
-Add a file to the `client/src' folder called`app.config.js`. The contents of the file are:
+Add a file to the `client/src' folder called` app.config.js`. The contents of the file are:
 
 ```js
 export default {
