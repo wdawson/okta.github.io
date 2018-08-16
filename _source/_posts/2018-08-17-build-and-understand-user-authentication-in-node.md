@@ -114,7 +114,7 @@ Applications in OpenID Connect have a username and password (referred to as a cl
  
 To create a new application browse to the **Applications** tab and click **Add Application**.
  
-{% img blog/build-understand-auth-node/okta-add-application.png alt:"okta add application" width:"800" %}{: .center-image }
+{% img blog/build-understand-auth-node/okta-app-dashboard.png alt:"okta add application" width:"800" %}{: .center-image }
 
 Next, click the **Web** platform option (since this project is a web app).
  
@@ -465,7 +465,7 @@ npm start
  
 Then visit `http://localhost:3000` in your browser. You should see the following page rendered.
  
-{% img blog/build-understand-auth-node/app-unstyles.png alt:"app unstyled" width:"800" %}{: .center-image }
+{% img blog/build-understand-auth-node/app-unstyled.png alt:"app unstyled" width:"800" %}{: .center-image }
  
 **NOTE**: This page doesn't look just right yet because we haven't created any CSS yet. We'll do that last.
  
@@ -709,7 +709,7 @@ This will make the page styles look a little nicer.
  
 Now that your Express.js website is built, why not take it for a test drive?  Start up your web server by running the `npm start` command, visit `http://localhost:3000`, and test things out!
  
-{% img blog/build-understand-auth-node/using-the-site-local.png alt:"using the site locally" width:"800" %}{: .center-image }
+{% img blog/build-understand-auth-node/using-the-site-local.gif alt:"using the site locally" width:"800" %}{: .center-image }
  
 You'll notice a few things:
  
