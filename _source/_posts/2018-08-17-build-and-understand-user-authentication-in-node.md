@@ -18,7 +18,7 @@ Building websites with user authentication and management (login, registration, 
 * Building registration and login forms
 * Creating password reset workflows that email users a link
 * Verifying new users when they sign up via email
-* Etc…
+* Etc...
  
 The list goes on and on.
  
@@ -194,7 +194,7 @@ Next, you need to remove the `cookie-parser` library that express-generator incl
 ```javascript
 var cookieParser = require('cookie-parser');
  
-// and…
+// and...
  
 app.use(cookieParser());
 ```
@@ -415,7 +415,7 @@ router.get("/test", (req, res) => {
 });
 ```
  
-… You would find that a user would need to visit `/dashboard/test` to trigger the function to run. Again: don't worry about this not adding up just yet, we'll get to that down below.
+... You would find that a user would need to visit `/dashboard/test` to trigger the function to run. Again: don't worry about this not adding up just yet, we'll get to that down below.
  
 ## Enable the Routes
  
@@ -734,4 +734,4 @@ Finally, please [follow us on Twitter](https://twitter.com/OktaDev) to find more
  
 **PS**: If you liked this project and want to see the source code in one place, please go checkout and star the [GitHub repository](https://github.com/rdegges/okta-express-login-portal).
  
-And… If you have any questions, please leave a comment below!
+And... If you have any questions, please leave a comment below!
