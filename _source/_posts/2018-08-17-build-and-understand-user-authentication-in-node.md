@@ -492,12 +492,12 @@ To do this, open up your `./app.js` file again, find the line that reads `var ap
  
 ```javascript
 var oktaClient = new okta.Client({
-  orgUrl: '{yourOktaDomain}',
+  orgUrl: 'https://{yourOktaDomain}',
   token: '{yourOktaToken}'
 });
 
 const oidc = new ExpressOIDC({
-  issuer: "{yourOktaDomain}/oauth2/default",
+  issuer: "https://{yourOktaDomain}/oauth2/default",
   client_id: {yourClientId},
   client_secret: {yourClientSecret},
   redirect_uri: 'http://localhost:3000/users/callback',
