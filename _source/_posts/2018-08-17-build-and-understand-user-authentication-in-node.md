@@ -714,7 +714,7 @@ If you're already logged into your Okta account and instantly get logged into th
  
 ## Learn More About Node.js and Authentication
  
-I hope you enjoyed seeing how authentication works with OpenID Connect and Node.js. Building websites with user management can be a pain, but new protocols like OpenID Connect alongside providers like [Okta](/) make the process much simpler.
+I hope you enjoyed seeing how authentication works with OpenID Connect and Node.js. Building websites with user management can be a pain, but new protocols like OpenID Connect alongside providers like [Okta](https://developer.okta.com) make the process much simpler.
  
 If you'd like to learn more about building web apps in Node, you might want to check out these other great posts:
  
