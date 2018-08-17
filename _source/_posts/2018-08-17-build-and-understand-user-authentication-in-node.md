@@ -6,13 +6,13 @@ description: "Learn how to build and understand authentication in Node.js websit
 tags: [node, nodejs, authentication, auth, user management]
 tweets:
 - "Are you a @NodeJS developer? Read this post to actually understand how web authentication works!"
-- "Like building web apps in @nodejs? @rdegges just published a tutorial that walks you through building and undstanding web authentication."
+- "Like building web apps in @nodejs? @rdegges just published a tutorial that walks you through building and understanding web authentication."
 - "Check out @rdegges' new tutorial that helps you truly understand user authentication in a @nodejs web app."
 ---
 
 Building websites with user authentication and management (login, registration, password reset, etc.), can be a huge pain. As a developer there are a million little things you need to worry about:
  
-* Storing the users in your database``
+* Storing the users in your database
 * Making sure you have the right user attributes defined
 * Forcing users to be logged in to view a page
 * Building registration and login forms
@@ -87,7 +87,7 @@ Now, on with the show!
  
 ## Setup Your Authorization Server
  
-Historically, implementing web authentication has been a bit of a mess. Everyone used to implement authentication patterns in different, arbitrary ways. Over the last few years, however, the game has changed quite a bit with the introduction and growing popularity of the OpenID Connect protocol. If you want to read up on OpenID Connect, I recommend [this series]](https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1).
+Historically, implementing web authentication has been a bit of a mess. Everyone used to implement authentication patterns in different, arbitrary ways. Over the last few years, however, the game has changed quite a bit with the introduction and growing popularity of the OpenID Connect protocol. If you want to read up on OpenID Connect, I recommend [this series](https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1).
  
 One of the core tenants of OpenID Connect is the **authorization server**. An authorization server is a one-stop shop that handles all of the user login flows for your applications. The idea is that your application redirects to the authorization server to process user logins and the authorization server then redirects the user back to your website once the user has been authenticated.
  
@@ -97,14 +97,14 @@ Okta is free to use and allows you to create and manage users, authorization ser
  
 To get started with the authorization server setup, you first need to go create a free Okta developer account: [https://developer.okta.com/signup/](https://developer.okta.com/signup/). Once you've created your account and logged in, follow the steps below configure Okta and then you'll be ready to write some code!
  
-{% img blog/build-understand-auth-node/okta-signup.png alt:"okta signup" width:"800" %}{: .center-image }
+{% img blog/build-understand-auth-node/okta-signup.png alt:"Okta signup" width:"800" %}{: .center-image }
  
  
 ### Step 1: Store Your Org URL
  
 The first thing you need to do is copy down the **Org URL** from the top-right portion of your Okta dashboard page. This URL will be used to route to your authorization server, communicate with it, and much more. You'll need this value later, so don't forget it.
  
-{% img blog/build-understand-auth-node/okta-org-url.png alt:"okta org url" width:"800" %}{: .center-image } 
+{% img blog/build-understand-auth-node/okta-org-url.png alt:"Okta org url" width:"800" %}{: .center-image } 
  
 ### Step 2: Create an OpenID Connect Application
  
@@ -114,11 +114,11 @@ Applications in OpenID Connect have a username and password (referred to as a cl
  
 To create a new application browse to the **Applications** tab and click **Add Application**.
  
-{% img blog/build-understand-auth-node/okta-app-dashboard.png alt:"okta add application" width:"800" %}{: .center-image }
+{% img blog/build-understand-auth-node/okta-app-dashboard.png alt:"Okta add application" width:"800" %}{: .center-image }
 
 Next, click the **Web** platform option (since this project is a web app).
  
-{% img blog/build-understand-auth-node/okta-create-app-platform.png alt:"okta create app web" width:"800" %}{: .center-image }
+{% img blog/build-understand-auth-node/okta-create-app-platform.png alt:"Okta create app web" width:"800" %}{: .center-image }
 
 On the settings page, enter the following values:
  
@@ -128,11 +128,11 @@ On the settings page, enter the following values:
  
 You can leave all the other values unchanged.
  
-{% img blog/build-understand-auth-node/okta-create-app-settings.png alt:"okta create app settings" width:"800" %}{: .center-image }
+{% img blog/build-understand-auth-node/okta-create-app-settings.png alt:"Okta create app settings" width:"800" %}{: .center-image }
 
 Now that your application has been created, copy down the **Client ID** and **Client secret** values on the following page, you'll need them later when we start writing code.
  
-{% img blog/build-understand-auth-node/okta-app-credentials.png alt:"okta signup" width:"800" %}{: .center-image }
+{% img blog/build-understand-auth-node/okta-app-credentials.png alt:"Okta signup" width:"800" %}{: .center-image }
 
  
 ### Step 3: Create an Authentication Token
@@ -146,7 +146,7 @@ In order to access the Okta APIs and be able to manage your user accounts with a
  
 To create an authentication token click the **API** tab at the top of the page followed by the **Create Token** button. Give your token a name, preferably the same name as your application, then click **Create Token**. Once your token has been created, copy down the token value as you will need it later.
  
-{% img blog/build-understand-auth-node/okta-create-token.png alt:"okta create token" width:"800" %}{: .center-image }
+{% img blog/build-understand-auth-node/okta-create-token.png alt:"Okta create token" width:"800" %}{: .center-image }
  
 ### Step 4: Enable User Registration
  
@@ -154,11 +154,11 @@ The last piece of setup you need to complete is to enable user registration func
  
 In your Okta dashboard, you'll notice a small button labeled **< > Developer Console** at the top-left of your page. Hover over that button and select the **Classic UI** menu option that appears.
  
-{% img blog/build-understand-auth-node/okta-switch-to-classic-ui.png alt:"okta switch to classic ui" width:"800" %}{: .center-image }
+{% img blog/build-understand-auth-node/okta-switch-to-classic-ui.png alt:"Okta switch to classic ui" width:"800" %}{: .center-image }
  
 Next, hover over the **Directory** tab at the top of the page then select the **Self-Service Registration** menu item. On this page click the **Enable Registration** button.
  
-{% img blog/build-understand-auth-node/okta-enable-registration.png alt:"okta enable registration" width:"800" %}{: .center-image }
+{% img blog/build-understand-auth-node/okta-enable-registration.png alt:"Okta enable registration" width:"800" %}{: .center-image }
 
 On the configuration page, leave all the settings as their default values, except for the **Default redirect** option. For this option, click the **Custom URL** radiobox and enter `http://localhost:3000/dashboard` as the value.
  
@@ -166,7 +166,7 @@ This setting essentially tells the authorization server where to redirect users 
  
 Once you've clicked **Save**, the last thing you need to is switch back to the developer console.
  
-{% img blog/build-understand-auth-node/okta-registration-settings.png alt:"okta registration settings" width:"800" %}{: .center-image }
+{% img blog/build-understand-auth-node/okta-registration-settings.png alt:"Okta registration settings" width:"800" %}{: .center-image }
 
 Hover over the **Classic UI** button at the top right of the page and select the **< > Developer Console** menu item from the dropdown.
  
@@ -215,7 +215,7 @@ app.use(session({
 ```
 Make sure to replace `LONG_RANDOM_STRING_HERE` with an actual random string you type. This string is what will keep your user's cookies safe from compromise. I personally like to bash my hands around on the keyboard for a second to generate something random.
  
-{% img blog/build-understand-auth-node/programming.gif alt:"okta signup" width:"400" %}{: .center-image }
+{% img blog/build-understand-auth-node/programming.gif alt:"programming" width:"400" %}{: .center-image }
  
 This session library handles a lot of work behind the scenes:
  
@@ -370,14 +370,12 @@ Next, create a file named `./routes/public.js` and insert the following code.
 ```javascript
 const express = require("express");
  
- 
 const router = express.Router();
  
 // Home page
 router.get("/", (req, res) => {
   res.render("index");
 });
- 
  
 module.exports = router;
 ```
@@ -393,14 +391,12 @@ Next, create a file named `./routes/dashboard.js` and insert the following code.
 ```javascript
 const express = require("express");
  
- 
 const router = express.Router();
  
 // Display the dashboard page
 router.get("/", (req, res) => {
   res.render("dashboard");
 });
- 
  
 module.exports = router;
 ```
@@ -499,6 +495,7 @@ var oktaClient = new okta.Client({
   orgUrl: '{yourOktaOrgUrl}',
   token: '{yourOktaToken}'
 });
+
 const oidc = new ExpressOIDC({
   issuer: "{yourOktaOrgUrl}/oauth2/default",
   client_id: {yourClientId},
@@ -612,7 +609,6 @@ To do this, create a new file named `./routes/users.js` and put the following co
 ```javascript
 const express = require("express");
  
- 
 const router = express.Router();
  
 // Log a user out
@@ -620,7 +616,6 @@ router.get("/logout", (req, res) => {
   req.logout();
   res.redirect("/");
 });
- 
  
 module.exports = router;
 ```
@@ -671,7 +666,6 @@ If you enter your credentials and click the **Sign In** button on the authorizat
 * From this point on, each time your browser makes a request to the Express.js website, the cookie containing your profile information will be sent back to Express.js, so that the oidc-middleware library can recognize who you are and populate a `req.userinfo` object with your account data.
  
 Once your session cookies have expired (or have been wiped via a logout procedure), the process starts all over again.
- 
  
  
 ## Create Styles
