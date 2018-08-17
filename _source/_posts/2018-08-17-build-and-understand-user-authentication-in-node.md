@@ -514,7 +514,7 @@ const oidc = new ExpressOIDC({
 });
 ```
  
-Now, remember those values I told you to write down way back at the beginning of this post? Now you need them! Make sure you substitute out the following variables above for the proper values: `{yourOktaOrgUrl}`, `{yourOktaToken}`, `{yourClientId}`, and `{yourClientSecret}`.
+Now, remember those values I told you to write down way back at the beginning of this post? Now you need them! Make sure you substitute out the following variables above for the proper values: `{yourOktaDomain}`, `{yourOktaToken}`, `{yourClientId}`, and `{yourClientSecret}`.
  
 The `oidc` object created handles 100% of the OpenID Connect protocol support. It handles router the users to the authorization server to handle user registration, login, password reset, etc. It handles logging the users into your application using secure cookies (powered by express-session), and it also handles everything else.
  
