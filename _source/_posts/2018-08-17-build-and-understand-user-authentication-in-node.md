@@ -47,7 +47,7 @@ The site will be built using a few different tools (you don't need to know them 
 * [Express.js](https://expressjs.com/), the most popular web framework in the Node.js ecosystem.
 * [express-session](https://github.com/expressjs/session), a popular session management library. This is what will allow us to create and store cookies that remember who a user is.
 * [Pug](https://pugjs.org/api/getting-started.html), a popular templating language that makes writing HTML a bit simpler.
-* [oidc-middleware](https://github.com/okta/okta-oidc-js/tree/master/packages/oidc-middleware), a popular developer library that makes handling authentication using the [OpenID Connect](https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1) protocol simple
+* [oidc-middleware](https://github.com/okta/okta-oidc-js/tree/master/packages/oidc-middleware), a popular developer library that makes handling authentication using the [OpenID Connect](/blog/2017/07/25/oidc-primer-part-1) protocol simple
  
 ## Install the Tools
  
@@ -87,7 +87,7 @@ Now, on with the show!
  
 ## Setup Your Authorization Server
  
-Historically, implementing web authentication has been a bit of a mess. Everyone used to implement authentication patterns in different, arbitrary ways. Over the last few years, however, the game has changed quite a bit with the introduction and growing popularity of the OpenID Connect protocol. If you want to read up on OpenID Connect, I recommend [this series](https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1).
+Historically, implementing web authentication has been a bit of a mess. Everyone used to implement authentication patterns in different, arbitrary ways. Over the last few years, however, the game has changed quite a bit with the introduction and growing popularity of the OpenID Connect protocol. If you want to read up on OpenID Connect, I recommend [this series](/blog/2017/07/25/oidc-primer-part-1).
  
 One of the core tenants of OpenID Connect is the **authorization server**. An authorization server is a one-stop shop that handles all of the user login flows for your applications. The idea is that your application redirects to the authorization server to process user logins and the authorization server then redirects the user back to your website once the user has been authenticated.
  
@@ -659,8 +659,8 @@ Once you've landed on the authorization server page, you can either enter your a
 If you enter your credentials and click the **Sign In** button on the authorization server, what happens behind the scenes is:
  
 * Your password is hashed and your credentials are checked against the Okta user database to determine whether or not they are correct
-* If your credentials are correct, a new session cookie is created for you on the Okta hosted domain (eg: `dev-842917.oktapreview.com`, in this case), and you are redirected to the `redirect_uri` setting you provided earlier when defining the `ExpressOIDC` object. In this case, you'd be redirected to `http://localhost:3000/users/callback`. When you're redirected to this URL, the authorization server will also pass along a special `code` token. This is part of the [OpenID Connect Authorization Code flow](https://developer.okta.com/authentication-guide/implementing-authentication/auth-code).
-* Your Express.js app will receive the request to `/users/callback` and service the request automatically using the oidc-middleware library's built-in routes. The route servicing this URL will intercept the request and exchange the `code` token for an `access` and `id` token. This process of exchanging the code token is part of the OpenID Connect authorization code flow and is detailed more here: [https://developer.okta.com/authentication-guide/implementing-authentication/auth-code#3-exchanging-the-code-for-tokens](https://developer.okta.com/authentication-guide/implementing-authentication/auth-code#3-exchanging-the-code-for-tokens).
+* If your credentials are correct, a new session cookie is created for you on the Okta hosted domain (eg: `dev-842917.oktapreview.com`, in this case), and you are redirected to the `redirect_uri` setting you provided earlier when defining the `ExpressOIDC` object. In this case, you'd be redirected to `http://localhost:3000/users/callback`. When you're redirected to this URL, the authorization server will also pass along a special `code` token. This is part of the [OpenID Connect Authorization Code flow](/authentication-guide/implementing-authentication/auth-code).
+* Your Express.js app will receive the request to `/users/callback` and service the request automatically using the oidc-middleware library's built-in routes. The route servicing this URL will intercept the request and exchange the `code` token for an `access` and `id` token. This process of exchanging the code token is part of the OpenID Connect authorization code flow and is detailed more here: [/authentication-guide/implementing-authentication/auth-code#3-exchanging-the-code-for-tokens](/authentication-guide/implementing-authentication/auth-code#3-exchanging-the-code-for-tokens).
 * Once these tokens have been retrieved, the oidc-middleware library takes the user's basic information embedded in the id token and stores it in a session cookie.
 * Then, the oidc-middleware library redirects you to the dashboard page as a fully logged-in user.
 * From this point on, each time your browser makes a request to the Express.js website, the cookie containing your profile information will be sent back to Express.js, so that the oidc-middleware library can recognize who you are and populate a `req.userinfo` object with your account data.
@@ -714,7 +714,7 @@ If you're already logged into your Okta account and instantly get logged into th
  
 ## Learn More About Node.js and Authentication
  
-I hope you enjoyed seeing how authentication works with OpenID Connect and Node.js. Building websites with user management can be a pain, but new protocols like OpenID Connect alongside providers like [Okta](https://developer.okta.com/) make the process much simpler.
+I hope you enjoyed seeing how authentication works with OpenID Connect and Node.js. Building websites with user management can be a pain, but new protocols like OpenID Connect alongside providers like [Okta](/) make the process much simpler.
  
 If you'd like to learn more about building web apps in Node, you might want to check out these other great posts:
  
