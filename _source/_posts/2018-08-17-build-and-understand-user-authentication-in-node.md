@@ -492,12 +492,12 @@ To do this, open up your `./app.js` file again, find the line that reads `var ap
  
 ```javascript
 var oktaClient = new okta.Client({
-  orgUrl: '{yourOktaOrgUrl}',
+  orgUrl: '{yourOktaDomain}',
   token: '{yourOktaToken}'
 });
 
 const oidc = new ExpressOIDC({
-  issuer: "{yourOktaOrgUrl}/oauth2/default",
+  issuer: "{yourOktaDomain}/oauth2/default",
   client_id: {yourClientId},
   client_secret: {yourClientSecret},
   redirect_uri: 'http://localhost:3000/users/callback',
@@ -666,7 +666,6 @@ If you enter your credentials and click the **Sign In** button on the authorizat
 * From this point on, each time your browser makes a request to the Express.js website, the cookie containing your profile information will be sent back to Express.js, so that the oidc-middleware library can recognize who you are and populate a `req.userinfo` object with your account data.
  
 Once your session cookies have expired (or have been wiped via a logout procedure), the process starts all over again.
- 
  
 ## Create Styles
  
