@@ -5,15 +5,15 @@ author: bkelley
 description: "JavaScript is used everywhere on the web, but can also be used server-side. This tutorial shows you how to create a server-to-server REST API complete with OAuth 2.0 authentication."
 tags: [authentication, node, nodejs, oauth 2.0, server-to-server, machine-to-machine, client credentials flow, express, sequelize, epilogue, rest api]
 tweets:
-- "Learn how to easily build a secure REST API in @nodejs with OAuth 2.0 Client Credentials"
-- "Need a secure server-to-server REST API? It's simple to do with @nodejs and Okta"
+- "Learn how to easily build a secure REST API in @nodejs with OAuth 2.0 Client Credentials."
+- "Need a secure server-to-server REST API? It's simple to do with @nodejs and Okta."
 ---
 
 JavaScript is used everywhere on the web - nearly every web page will include at least some JavaScript, and even if it doesn't, your browser probably has some sort of extension that injects bits of JavaScript code on to the page anyway. It's hard to avoid in 2018.
 
 JavaScript can also be used outside the context of a browser, for anything from hosting a web server to controlling an RC car or running a full-fledged operating system. Sometimes you want a couple of servers to talk to each other, whether on a local network or over the internet.
 
-Today, I'll show you how to create a REST API using Node JS, and secure it with OAuth 2.0 to prevent unwarranted requests. REST APIs are all over the web, but without the proper tools require a ton of boilerplate code. I'll show you how to use a couple of amazing tools that make it all a breeze, including Okta to implement the Client Credentials Flow, which securely connects two machines together without the context of a user.
+Today, I'll show you how to create a REST API using Node.js, and secure it with OAuth 2.0 to prevent unwarranted requests. REST APIs are all over the web, but without the proper tools require a ton of boilerplate code. I'll show you how to use a couple of amazing tools that make it all a breeze, including Okta to implement the Client Credentials Flow, which securely connects two machines together without the context of a user.
 
 ## Build Your Node Server
 
@@ -425,7 +425,7 @@ module.exports = async (req, res, next) => {
 }
 ```
 
-This function first checks that the `authorization` header is on the request and throws an error otherwise. If it exists, it should look like `Bearer {token}` where `{token}` is a [JWT](https://jwt.io) string. This will throw another error if the header doesn't start with `Bearer `. Then we send the token to [Okta's JWT Verifier](https://github.com/okta/okta-oidc-js/tree/master/packages/jwt-verifier) to validate the token. If the token is invalid, the JWT verifier will throw an error. Otherwise, it will return an object with some information. You can then verify that the claims include the scope that you're expecting.
+This function first checks that the `authorization` header is on the request and throws an error otherwise. If it exists, it should look like `Bearer {token}` where `{token}` is a [JWT](https://www.jsonwebtoken.io/) string. This will throw another error if the header doesn't start with `Bearer `. Then we send the token to [Okta's JWT Verifier](https://github.com/okta/okta-oidc-js/tree/master/packages/jwt-verifier) to validate the token. If the token is invalid, the JWT verifier will throw an error. Otherwise, it will return an object with some information. You can then verify that the claims include the scope that you're expecting.
 
 If everything is successful, it calls the `next()` function without any parameters, which tells Express that it's OK to move on to the next function in the chain (either another middleware or the final endpoint). If you pass a string into the `next` function, Express treats it as an error that will be passed back to the client, and will not proceed in the chain.
 
@@ -713,12 +713,10 @@ $ node client http://localhost:3000/parts | json
 
 Hopefully you've seen how easy it is to create a REST API in Node and secure it from unauthorized users. Now that you've had a chance to make your own sample project, check out some of these other great resources about Node, OAuth 2.0, and Okta. You can also browse the Okta developer blog for other excellent articles.
 
-
 * [Implementing the Client Credentials Flow](https://developer.okta.com/authentication-guide/implementing-authentication/client-creds)
 * [Validating Access Tokens](https://developer.okta.com/authentication-guide/tokens/validating-access-tokens)
 * [Customizing Your Authorization Server](https://developer.okta.com/authentication-guide/implementing-authentication/set-up-authz-server)
 * [Tutorial: Build a Basic CRUD App with Node.js](/blog/2018/06/28/tutorial-build-a-basic-crud-app-with-node)
-
 * [Secure a Node API with OAuth 2.0 Client Credentials](/blog/2018/06/06/node-api-oauth-client-credentials)
 
 As always, you can hit us up in the comments below with feedback or questions, or on Twitter [@oktadev](https://twitter.com/OktaDev). We look forward to hearing from you!
