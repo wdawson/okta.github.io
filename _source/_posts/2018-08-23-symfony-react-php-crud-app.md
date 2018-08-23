@@ -975,7 +975,7 @@ import IncreaseCountButton from './IncreaseCountButton';
 
 (replacing the "Increase Count button" placeholder text in the table inside the render() method):
 
-```
+```jsx
 <IncreaseCountButton onIncrease={this.onIncrease} movieId={movie.id} />
 ```
 
