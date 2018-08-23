@@ -305,7 +305,7 @@ We'll also add some additional methods to our ApiController:
 ```php
 use Symfony\Component\HttpFoundation\Request;
 
-…
+...
 
 /**
  * Returns a 422 Unprocessable Entity
@@ -727,7 +727,7 @@ Now we have a nice navbar with placeholder pages for Home, Movies (only availabl
 
 ## Display the List of Movies
 
-We need to get our list of movies from the API and display it as a table on the Movies page. Of course, we also want a 'Loading…' message until the API request completes.
+We need to get our list of movies from the API and display it as a table on the Movies page. Of course, we also want a 'Loading...' message until the API request completes.
 
 We'll define our base API url in a new config.js file:
 
