@@ -2,7 +2,7 @@
 layout: blog_post
 title: "Tutorial: Build a Secure CRUD App with Symfony and React"
 author: krasimir
-description: "This tutorial teaches you how to build a simple CRUD single-page application with a Symfony 4 backend API and a React/Semantic UI frontend"
+description: "This tutorial teaches you how to build a simple CRUD single-page application with a Symfony 4 backend API and a React/Semantic UI frontend."
 tags: [php, react, symfony, crud, semanticui]
 tweets:
 - "Learn how to use @Symfony and @ReactJS to create a simple CRUD application →"
@@ -38,7 +38,7 @@ Here's what the completed app will look like:
 
 
 ## Bootstrap the Symfony 4 Backend
-Symfony 4 introduced Flex which is a new way to build Web applications – instead of starting with a full-stack framework, Flex allows you to pick just the components you need and gradually evolve your installation so you can build a quick console app, a lightweight API or a complete Web application using the same starting point. We will initialize a skeleton project with a much simplified directory structure:
+Symfony 4 introduced Flex which is a new way to build Web applications – instead of starting with a full-stack framework, Flex allows you to pick just the components you need and gradually evolve your installation so you can build a quick console app, a lightweight API, or a complete Web application using the same starting point. We will initialize a skeleton project with a much simplified directory structure:
 
 ```bash
 composer create-project symfony/skeleton bad-puns-tracker-server
@@ -57,7 +57,7 @@ Let's add support for annotated routes to our app:
 composer require sensio/framework-extra-bundle
 ```
 
-We can now create a new MovieController with a basic GET route:
+We can now create a new `MovieController` with a basic GET route:
 
 ```php
 src/Controller/MovieController.php:
@@ -85,9 +85,9 @@ class MovieController
 }
 ```
 
-Load [http://localhost:8000/movies](http://localhost:8000/movies) and you should see a status code of 200 OK and a JSON response.
+Load `http://localhost:8000/movies` and you should see a status code of 200 OK and a JSON response.
 
-Let's extract a base API controller with some useful methods and make our MovieController extend from it:
+Let's extract a base API controller with some useful methods and make our `MovieController` extend from it:
 
 ```php
 src/Controller/ApiController.php
@@ -553,8 +553,8 @@ npm start
 
 We will start with a bare-bones React application. We will delete everything from the `/src` folder except `index.js` and `App.js`, and we will modify them like this:
 
-```js
-src/index.js
+```jsx
+// src/index.js
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -563,8 +563,8 @@ import App from './App';
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
-```js
-src/App.js
+```jsx
+// src/App.js
 
 import React, { Component } from 'react';
 
@@ -590,8 +590,8 @@ Add:
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css"></link>
 ```
 
-```js
-src/Home.js
+```jsx
+// src/Home.js
 
 import React, { Component } from 'react';
 
@@ -604,8 +604,8 @@ class Home extends Component {
 export default Home
 ```
 
-```js
-src/Movies.js
+```jsx
+// src/Movies.js
 
 import React, { Component } from 'react';
 
@@ -618,8 +618,8 @@ class Movies extends Component {
 export default Movies
 ```
 
-```js
-src/Navbar.js
+```jsx
+// src/Navbar.js
 
 import React, { Component } from 'react';
 import { withAuth } from '@okta/okta-react';
@@ -678,8 +678,8 @@ export default withAuth(class Navbar extends Component {
 ```
 
 {% raw %}
-```js
-src/App.js
+```jsx
+// src/App.js
 
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
@@ -732,7 +732,7 @@ We need to get our list of movies from the API and display it as a table on the 
 We'll define our base API url in a new config.js file:
 
 ```js
-src/config.js
+// src/config.js
 
 export const API_BASE_URL = 'http://localhost:8000';
 ```
@@ -740,7 +740,7 @@ export const API_BASE_URL = 'http://localhost:8000';
 We can now modify our Movies.js component so that it looks like the below:
 
 {% raw %}
-```js
+```jsx
 import React, { Component } from 'react';
 import { Header, Message, Table } from 'semantic-ui-react';
 import { withAuth } from '@okta/okta-react';
@@ -823,12 +823,12 @@ export default withAuth(class Movies extends Component {
 
 Let's create a new component for the Add Movie form and add it below the table on the Movies page. First, we will modify Movies.js to include the form and add a new method which updates the list of movies when a new movie is created:
 
-```js
-src/Movies.js
+```jsx
+// src/Movies.js
 
 import MovieForm from './MovieForm';
 
-(replace the constructor method)
+// replace the constructor method
     constructor(props) {
         super(props);
         this.state = {
@@ -838,21 +838,21 @@ import MovieForm from './MovieForm';
         this.onAddition = this.onAddition.bind(this);
     }
 
-(add a new method)
+// add a new method
     onAddition(movie) {
         this.setState({
             movies: [...this.state.movies, movie]
         })
     }
 
-(below the closing </Table> tag in the render() method):
+// below the closing </Table> tag in the render() method:
                         <MovieForm onAddition={this.onAddition} />
 ```
 
 We also need to create a new `MovieForm` component:
 
-```js
-src/MovieForm.js
+```jsx
+// src/MovieForm.js
 
 import React, { Component } from 'react';
 import { Button, Form, Message } from 'semantic-ui-react'
@@ -944,8 +944,8 @@ Great, we can use the form to add some new movies to our collection!
 
 The final step is to implement the "Increase Count" button. We'll create a new component for the button and pass the movie id as a prop.
 
-```js
-src/Movies.js
+```jsx
+// src/Movies.js
 
 import IncreaseCountButton from './IncreaseCountButton';
 
@@ -975,8 +975,8 @@ import IncreaseCountButton from './IncreaseCountButton';
 <IncreaseCountButton onIncrease={this.onIncrease} movieId={movie.id} />
 ```
 
-```js
-src/IncreaseCountButton.js
+```jsx
+// src/IncreaseCountButton.js
 
 import React, { Component } from 'react';
 import { Form, Button } from 'semantic-ui-react'
@@ -1033,7 +1033,7 @@ The app is fully functional and you can enjoy your bad puns counting now!
 
 As a next step, you can clean up the React code by extracting the common API-related boilerplate code (retrieving the auth token, sending the Authorization header, sending a request and receiving a response) into a service class. React does not provide dependency injection out of the box (like Angular does, for example) but you can use higher-order component functions to wrap your components and decorate them with the API-related functionality (the approach would be similar to the `withAuth()` decoration applied to `Movies.js`, `MovieForm.js` and `IncreaseCountButton.js`).
 
-You can find the full code here: https://github.com/oktadeveloper/okta-php-symfony-react-crud-example
+You can find the full code here: [https://github.com/oktadeveloper/okta-php-symfony-react-crud-example](https://github.com/oktadeveloper/okta-php-symfony-react-crud-example).
 
 ## Learn More About Symfony, React and Okta
 
