@@ -30,14 +30,14 @@ Well, we might be biased, but we think Okta makes [identity management](https://
 
 ## What Will We Build?
 
-The application we'll build is a 'bad puns' tracker for movies. You can add a new movie when you start watching it, and you can hit a button to increase the count whenever you hear a bad pun. 
+The application we'll build is a "bad puns" tracker for movies. You can add a new movie when you start watching it, and you can hit a button to increase the count whenever you hear a bad pun. 
 
 Here's what the completed app will look like:
 
 {% img blog/symfony-react-php-crud-app/movie-list.png alt:"List of movies" width:"800" %}{: .center-image }
 
-
 ## Bootstrap the Symfony 4 Backend
+
 Symfony 4 introduced Flex which is a new way to build Web applications – instead of starting with a full-stack framework, Flex allows you to pick just the components you need and gradually evolve your installation so you can build a quick console app, a lightweight API, or a complete Web application using the same starting point. We will initialize a skeleton project with a much simplified directory structure:
 
 ```bash
@@ -49,7 +49,7 @@ php -S 127.0.0.1:8000 -t public
 Loading `http://localhost:8000/` now shows the default Symfony 4 page.
 
 ## Create the Symfony API Skeleton
-I do not recommend you to build your Symfony APIs from scratch when working on commercial applications - instead, give [API Platform](https://api-platform.com/) or the FOSRestBundle a try. However, in this tutorial we'll go old school and build our own API without any dependencies outside the micro framework we've already installed (for the learning experience and fun).
+I do not recommend you to build your Symfony APIs from scratch when working on commercial applications - instead, give [API Platform](https://api-platform.com/) or the `FOSRestBundle` a try. However, in this tutorial we'll go old school and build our own API without any dependencies outside the micro framework we've already installed (for the learning experience and fun).
 
 Let's add support for annotated routes to our app: 
 
@@ -198,7 +198,9 @@ class MovieController extends ApiController
 ```
 
 Now we can use the `respond()` method to return a JSON response with the default status code of 200, and a `respondUnauthorized()` method to return a 401 Unauthorized response with an error message.
+
 ## Set Up the MySQL Database for Your Symfony App
+
 We'll use a MySQL database for our project (of course, if you prefer PostgreSQL, Sqlite or something else, you can replace it):
 
 ```
@@ -222,7 +224,7 @@ Enter the database connection string using the credentials you just created in t
 DATABASE_URL=mysql://bpcuser:temppass123@127.0.0.1:3306/bad_puns_counter
 ```
 
-Now we can create our Movie entity. 
+Now we can create our `Movie` entity. 
 
 ```
 php bin/console make:entity
@@ -273,6 +275,7 @@ php bin/console doctrine:migrations:migrate
 ```
 
 ## Implementing the Symfony API
+
 We are ready to create our API endpoints and test them with Postman or a similar tool. We'll skip the proper validation, pagination, rate limiting, advanced security, etc. We'll leave these concerns to more advanced APIs.
 
 Let's add API transformers for an individual movie and a movie collection to `src/Repository/MovieRepository.php`:
@@ -300,7 +303,7 @@ public function transformAll()
 }
 ```
 
-We'll also add some additional methods to our ApiController:
+We'll also add some additional methods to our `ApiController`:
 
 ```php
 use Symfony\Component\HttpFoundation\Request;
@@ -365,7 +368,7 @@ protected function transformJsonBody(\Symfony\Component\HttpFoundation\Request $
 
 ```
 
-Here's the full version of our simple and dirty API controller (in `src/Controllers/MovieController.php` in the server code repository). Make sure your `MovieController.php` matches this now
+Here's the full version of our simple and dirty API controller (in `src/Controllers/MovieController.php` in the server code repository). Make sure your `MovieController.php` matches this now.
 
 ```php
 <?php
@@ -439,19 +442,20 @@ class MovieController extends ApiController
 ```
 
 ## Add API Security to Symfony with Okta
+
 Before you proceed, you need to log into your Okta account (or [create a new one for free](https://developer.okta.com/signup/)) and set up a new OIDC app. You'll mostly use the default settings. Make sure to take note of your Okta domain and the Client ID generated for the app.
 
 Here are the step-by-step instructions:
 
-Go to the Applications menu item and click the "Add Application" button:
+Go to the Applications menu item and click **Add Application**:
 
 {% img blog/symfony-react-php-crud-app/okta-add-app-btn.png alt:"Add Application button" width:"232" %}{: .center-image }
 
-Select "Single Page Application" and click "Next".
+Select **Single Page Application** and click **Next**.
 
 {% img blog/symfony-react-php-crud-app/okta-create-app.png alt:"Create a new Single-Page application" width:"800" %}{: .center-image }
 
-Set a descriptive application name, add `http://localhost:3000/login` as a Login redirect URI, and click Done. You can leave the rest of the settings as they are.
+Set a descriptive application name, add `http://localhost:3000/login` as a Login redirect URI, and click **Done**. You can leave the rest of the settings as they are.
 
 Now we'll install the Okta dependencies and add an authorization method to our API Controller. Don't forget to replace the Okta parameters with your own values!
 
@@ -587,7 +591,7 @@ React doesn't get more basic than that. Next we'll add a Navbar using Semantic U
 public/index.html
 
 Add:
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css"></link>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css">
 ```
 
 ```jsx
@@ -727,9 +731,9 @@ Now we have a nice navbar with placeholder pages for Home, Movies (only availabl
 
 ## Display the List of Movies
 
-We need to get our list of movies from the API and display it as a table on the Movies page. Of course, we also want a 'Loading...' message until the API request completes.
+We need to get our list of movies from the API and display it as a table on the Movies page. Of course, we also want a "Loading..." message until the API request completes.
 
-We'll define our base API url in a new config.js file:
+We'll define our base API URL in a new `config.js` file:
 
 ```js
 // src/config.js
@@ -737,7 +741,7 @@ We'll define our base API url in a new config.js file:
 export const API_BASE_URL = 'http://localhost:8000';
 ```
 
-We can now modify our Movies.js component so that it looks like the below:
+We can now modify our `Movies.js` component so that it looks like the below:
 
 {% raw %}
 ```jsx
@@ -821,7 +825,7 @@ export default withAuth(class Movies extends Component {
 
 ## Add a New Movie Component to Your Symfony + React App
 
-Let's create a new component for the Add Movie form and add it below the table on the Movies page. First, we will modify Movies.js to include the form and add a new method which updates the list of movies when a new movie is created:
+Let's create a new component for the Add Movie form and add it below the table on the Movies page. First, we will modify `Movies.js` to include the form and add a new method which updates the list of movies when a new movie is created:
 
 ```jsx
 // src/Movies.js
