@@ -612,7 +612,7 @@ That could be placed under the following:
 After adding the route to our router we can add a link to this route. We will do this by changing our layout. Locate the `src/App.vue` file and add the following above the link for Login:
 
 ```html
- <b-nav-item to="/food-records">Food Records</b-nav-item>
+<b-nav-item to="/food-records">Food Records</b-nav-item>
 ```
 
 Your navbar should now look like this:
