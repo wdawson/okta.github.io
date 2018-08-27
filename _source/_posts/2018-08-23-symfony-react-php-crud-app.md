@@ -8,7 +8,7 @@ tweets:
 - "Learn how to use @Symfony and @ReactJS to create a simple CRUD application →"
 - "Create a CRUD application with @Symfony and @ReactJS, and add authentication with Okta! #symfony4"
 - "Look how easy it is to add authentication to a @Symfony app with Okta! #symfony4 #php"
-featured_img: "blog/symfony-react-php-crud-app/movie-list.png"
+image: "blog/symfony-react-php-crud-app/movie-list.png"
 ---
 
 Building a modern single-page application can be a daunting task for a sole developer because of the sheer amount of different components you need to get in place – you need a backend API, a dynamic frontend, a decent user interface, and everything has to be secure and scalable. However, with the right tools in place, you can get started quickly without compromising quality or performance. Today I'll show you how to create an app using Symfony 4 as the backend API with a React frontend (and the [React version of Semantic UI](https://react.semantic-ui.com/)) for a hassle-free user interface – I promise you we will write only the bare minimum of HTML, and not a single line of CSS.
