@@ -911,7 +911,7 @@ If you are new to Vue, I hope you found it interesting enough to explore it more
 
 Hopefully this article was helpful for you and you now realize how easy it is to add authentication to ASP.NET Core APIs and Vue.js applications.
 
-You can find the source code for complete application at [https://github.com/oktadeveloper/okta-dotnet-cuew-crud-example](https://github.com/oktadeveloper/okta-dotnet-cuew-crud-example).
+You can find the source code for complete application at [https://github.com/oktadeveloper/okta-aspnetcore-vue-crud-example](https://github.com/oktadeveloper/okta-aspnetcore-vue-crud-example).
 
 If you want to read more about Okta, Vue or ASP.NET Core check out the Okta Dev Blog. This post was not-so-loosely based on [Build a Basic CRUD App with Vue.js and Node](/blog/2018/02/15/build-crud-app-vuejs-node), which I would definitely recommend checking out if you're interested in learning more about Vue.js.
 
