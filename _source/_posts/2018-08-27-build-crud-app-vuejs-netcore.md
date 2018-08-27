@@ -627,7 +627,7 @@ Your navbar should now look like this:
 ```
 
 
-## Building the ASP.NET Core API
+## Build the ASP.NET Core API
 
 Inside of our main folder `food-records` navigate to AspNetCore folder and run the following:
 
@@ -834,15 +834,15 @@ First, add the Okta details to your `appsettings.json` file. Above `Logging` sec
 
 ```json
 "Okta": {
-"ClientId": "{OktaClientId}",
-"ClientSecret": "{OktaClientSecret}",
-"Authority": "https://{yourOktaDomain}/oauth2/default"
+  "ClientId": "{OktaClientId}",
+  "ClientSecret": "{OktaClientSecret}",
+  "Authority": "https://{yourOktaDomain}/oauth2/default"
 },
 ```
 
 Add the following namespace at the top of `Startup.cs` file:
 
-```
+```cs
 Microsoft.AspNetCore.Authentication.JwtBearer;
 ```
 
@@ -864,21 +864,31 @@ app.UseAuthentication();
 ```
 
 Now you can protect your endpoints by adding an authorization attribute to your controller. Go to `FoodRecordsController.cs` file, add the following namespace:
-```Microsoft.AspNetCore.Authorization```
- Above the `[ApiController]` attribute add the following:
 
-```[Authorize]```
+```cs
+Microsoft.AspNetCore.Authorization
+```
+
+Above the `[ApiController]` attribute add the following:
+
+```cs
+[Authorize]
+```
 
 
 ## Test out the application
 
 Let's give our application a spin. Run the ASP.NET Core by running the following in your bash inside of `AspNetCore` folder:
 
-```dotnet run```
+```sh
+dotnet run
+```
 
 You can now start the Vue application by running the following in your bash inside of `Vue/food-tracker` folder:
 
-```npm run dev```
+```sh
+npm run dev
+```
 
 Your default browser should now open and show a page like this:
 
@@ -906,7 +916,7 @@ If you want to read more about Okta, Vue or ASP.NET Core check out the Okta Dev 
 Here are some other great articles to check out as well:
 
 * [The Ultimate Guide to Progressive Web Applications](/blog/2017/07/20/the-ultimate-guide-to-progressive-web-applications)
-*[The Lazy Developer's Guide to Authentication with Vue.js](/blog/2017/09/14/lazy-developers-guide-to-auth-with-vue)
+* [The Lazy Developer's Guide to Authentication with Vue.js](/blog/2017/09/14/lazy-developers-guide-to-auth-with-vue)
 * [Build a Secure CRUD App with ASP.NET Core and React](/blog/2018/07/02/build-a-secure-crud-app-with-aspnetcore-and-react)
 * [Token Authentication in ASP.NET Core 2.0 - A Complete Guide](/blog/2018/03/23/token-authentication-aspnetcore-complete-guide)
 
