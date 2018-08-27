@@ -2,7 +2,7 @@
 layout: blog_post
 title: "Build a Simple CRUD App with ASP.NET Core and Vue"
 author: ibrahim
-description: "This tutorial walks you through building a basic CRUD application with ASP.NET Core and Vue.js"
+description: "This tutorial walks you through building a basic CRUD application with ASP.NET Core and Vue.js."
 tags: [aspnet, aspnetcore, vue, vuejs, vue.js]
 tweets:
 - "Wanna build an app using #aspnetcore and @vuejs? We've got you covered!"
@@ -17,15 +17,16 @@ Keeping an eye on your daily calorie intake can be crucial to healthy lifestyle.
 
 You are probably asking why should we go with Vue if there are trusted, established players like Angular and React. Well, it turns out that Vue is a lot easier to get started with and you don't have to learn JSX or TypeScript, it is simply a pure, vanilla JavaScript. In my opinion, Vue is as fast as React and simpler than original AngularJS (Angular 1). Vue is also a lot less opinionated about the way you approach your code. Furthermore, it's bundle size is much smaller when compared to Angular and React.
 
-Vue's popularity doesn't stop rising, and it's been rising so fast that at the moment, with over 110k stars it's 3rd most starred repository on GitHub and most starred JavaScript library/framework.
+Vue's popularity keeps increasing. In fact, it's been rising so fast that it has over 110K starts on GitHub! It ranks as the 3rd most starred repository on GitHub and most started JavaScript library/framework.
 
 ASP.NET Core is another bright and rising star, which takes the best from Rails and Node.js worlds. ASP.NET MVC itself was in many ways a copy of Rails, with many concepts and features borrowed from Rails. ASP.NET Core takes the modularity of Node packages and the middleware concept from Express, the most popular web framework in Node world. However, it still contains all of the old MVC and Web API features, which makes it super powerful for building any kind of web applications.
+
 The web framework has been rewritten from scratch, made cross-platform and it's the fastest mainstream web framework out there by various [benchmarks](https://www.techempower.com/benchmarks/#section=test&runid=283e5ea5-7d26-4ed6-bf47-62b9dcbdb9ea&hw=ph&test=plaintext). Also, more than welcome addition in ASP.NET Core 2 is a new, page-oriented development approach with [Razor Pages](https://docs.microsoft.com/en-us/aspnet/core/razor-pages/?view=aspnetcore-2.1&tabs=visual-studio). Hence, by choosing ASP.NET Core for any kind of web applications, you really can't go wrong.
 
 
 ## Prerequisites for this ASP.NET Core + Vue App
 
-First of all, you need Node and npm installed, you can get them from the official [Node site](https://nodejs.org/en/download/).
+First of all, you need Node and npm installed; you can get them from the official [Node site](https://nodejs.org/en/download/).
 
 You will also need [Vue CLI tools](https://github.com/vuejs/vue-cli).
 
@@ -35,7 +36,7 @@ To install, simply execute the following command in PowerShell or in your favori
 npm install -g vue-cli@2.9.6
 ```
 
-After you make sure you have all that installed, we will install [.NET Core SDK](https://www.microsoft.com/net/download).
+After you make sure you have all that installed, you will need to install the [.NET Core SDK](https://www.microsoft.com/net/download).
 
 After that, you are ready. This demo will use VS Code, but feel free to use your preferred editor.
 
@@ -44,9 +45,9 @@ After that, you are ready. This demo will use VS Code, but feel free to use your
 
 For this tutorial, you'll use the official [Vue CLI](https://github.com/vuejs/vue-cli) to make the process of bootstrapping a new template application as smooth as possible. You'll use the [PWA template](https://github.com/vuejs-templates/pwa) for Vue.js applications.
 
-Create a root folder for all of your source files, including backend and frontend code, and name the folder `FoodTracker`. After that, inside of that folder create a folder named `Vue` and folder named `AspNetCore`.
+Create a root folder for all of your source files, including backend and frontend code, and name the folder `FoodTracker`. Inside of that folder create a folder named `Vue` and folder named `AspNetCore`.
 
-Inside of `Vue` folder you'll initialize the new Vue application:
+Inside of `Vue` folder, initialize the new Vue application:
 
 ```sh
 vue init pwa food-tracker  .
@@ -77,13 +78,13 @@ Your default browser should now open up at `http://localhost:8080/#/` and displa
 
 You will install the most popular Bootstrap package for Vue, [bootstrap-vue](https://github.com/bootstrap-vue/bootstrap-vue). It might not be the official package since there is no official Bootstrap Vue plugin, but with 6k stars and over 150 contributors, it's a great choice.
 
-We will use the latest version, which is at the time of writing this post 2.0 RC11:
+Use the latest version, which is at the time of writing this post 2.0 RC11:
 
 ```sh
 npm i bootstrap-vue@2.0.0-rc.11
 ```
 
-Now you want to register the BootstrapVue plugin inside your `main.js` file (inside `src` folder):
+Now register the BootstrapVue plugin inside your `main.js` file (inside `src` folder):
 
 ```js
 import BootstrapVue from 'bootstrap-vue'
@@ -98,7 +99,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 ```
 
-After you apply those changes, this is how your `main.js` file is supposed to look:
+After you apply those changes, this is how your `main.js` file should look:
 
 ```js
 // The Vue build version to load with the `import` command
@@ -213,6 +214,7 @@ header span {
 
 While you are changing the files for layout, you will also do the cleanup of your `Hello` component which is used for the main page. Replace the content of `Hello.vue` with the following:
 
+{% raw %}
 ```html
 <template>
   <div class="hello">
@@ -224,9 +226,9 @@ While you are changing the files for layout, you will also do the cleanup of you
 <script>
 export default {
   data () {
-	return {
-  	title: 'Food Tracker Application'
-	}
+	  return {
+  	  title: 'Food Tracker Application'
+	  }
   }
 }
 </script>
@@ -252,6 +254,7 @@ a {
 }
 </style>
 ```
+{% endraw %}
 
 
 ## Set Up Authentication for Your Vue Application
@@ -280,7 +283,7 @@ Now that your application has been created, copy down the Client ID from the fol
 
 {% img blog/netcore-vue-crud/okta-client-credentials.png alt:"Okta client credentials" width:"800" %}{: .center-image }
 
-Before proceeding you will need to install the Okta SDK for Vue.js:
+Before proceeding, install the Okta SDK for Vue.js:
 
 ```sh
 npm install @okta/okta-vue@1.0.1
@@ -381,36 +384,36 @@ Locate the `App.vue` file inside of `src` folder and replace code inside of `scr
 
 ```js
 export default {
-	name: 'app',
-	data () {
-  	return {
-    	user: null
-  	}
-	},
-	async created () {
-  	await this.refreshUser()
-	},
-	watch: {
-  	'$route': 'onRouteChange'
-	},
-	methods: {
-  	login () {
-    	this.$auth.loginRedirect()
-  	},
-  	async onRouteChange() {
-    	// every time a route is changed refresh the user details
-    	await this.refreshUser()
-  	},
-  	async refreshUser () {
-    	// get new user details and store it to user object
-    	this.user = await this.$auth.getUser()
-  	},
-  	async logout () {
-    	await this.$auth.logout()
-    	await this.refreshUser()
-    	this.$router.push('/')
-  	}
-	}
+  name: 'app',
+  data() {
+    return {
+      user: null
+    }
+  },
+  async created() {
+    await this.refreshUser()
+  },
+  watch: {
+    '$route': 'onRouteChange'
+  },
+  methods: {
+    login() {
+      this.$auth.loginRedirect()
+    },
+    async onRouteChange() {
+      // every time a route is changed refresh the user details
+      await this.refreshUser()
+    },
+    async refreshUser() {
+      // get new user details and store it to user object
+      this.user = await this.$auth.getUser()
+    },
+    async logout() {
+      await this.$auth.logout()
+      await this.refreshUser()
+      this.$router.push('/')
+    }
+  }
 }
 ```
 Here you are watching for route changes and then refreshing the user details every time a route change happens. You are making use of Okta's `this.$auth.getUser()` mechanism to get current user details. You can also use Okta's to redirect user to the login page, by using the `this.$auth.loginRedirect()` method.
@@ -440,86 +443,87 @@ const client = axios.create({
 })
 
 export default {
-  async execute (method, resource, data) {
-	const accessToken = await Vue.prototype.$auth.getAccessToken()
-	return client({
-  	method,
-  	url: resource,
-  	data,
-  	headers: {
-    	Authorization: `Bearer ${accessToken}`
-  	}
-	}).then(req => {
-  	return req.data
-	})
+  async execute(method, resource, data) {
+    const accessToken = await Vue.prototype.$auth.getAccessToken()
+    return client({
+      method,
+      url: resource,
+      data,
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    }).then(req => {
+      return req.data
+    })
   },
-  getAll () {
-	return this.execute('get', '/')
+  getAll() {
+    return this.execute('get', '/')
   },
-  create (data) {
-	return this.execute('post', '/', data)
+  create(data) {
+    return this.execute('post', '/', data)
   },
-  update (id, data) {
-	return this.execute('put', `/${id}`, data)
+  update(id, data) {
+    return this.execute('put', `/${id}`, data)
   },
-  delete (id) {
-	return this.execute('delete', `/${id}`)
+  delete(id) {
+    return this.execute('delete', `/${id}`)
   }
 }
 ```
 
 With `FoodRecordsApiService` available you can proceed to create a component for food records. Inside of `src/components` folder create a new file `FoodRecords.vue` and paste the following code: 
 
+{% raw %}
 ```html
 <template>
   <div class="container-fluid mt-4">
-	<h1 class="h1">Food Records</h1>
-	<b-alert :show="loading" variant="info">Loading...</b-alert>
-	<b-row>
-  	<b-col>
-    	<table class="table table-striped">
-      	<thead>
-      	<tr>
-        	<th>ID</th>
-        	<th>Name</th>
-        	<th>Value</th>
-        	<th>Date Time</th>
-        	<th>&nbsp;</th>
-      	</tr>
-      	</thead>
-      	<tbody>
-      	<tr v-for="record in records" :key="record.id">
-        	<td>{{ record.id }}</td>
-        	<td>{{ record.name }}</td>
-        	<td>{{ record.value }}</td>
-        	<td>{{ record.dateTime }}</td>
-        	<td class="text-right">
-          	<a href="#" @click.prevent="updateFoodRecord(record)">Edit</a> -
-          	<a href="#" @click.prevent="deleteFoodRecord(record.id)">Delete</a>
-        	</td>
-      	</tr>
-      	</tbody>
-    	</table>
-  	</b-col>
-  	<b-col lg="3">
-    	<b-card :title="(model.id ? 'Edit Food ID#' + model.id : 'New Food Record')">
-      	<form @submit.prevent="createFoodRecord">
-        	<b-form-group label="Name">
-          	<b-form-input type="text" v-model="model.name"></b-form-input>
-        	</b-form-group>
-        	<b-form-group label="Value">
-          	<b-form-input rows="4" v-model="model.value" type="number"></b-form-input>
-        	</b-form-group>
-        	<b-form-group label="Date Time">
-          	<b-form-input rows="4" v-model="model.dateTime" type="datetime-local"></b-form-input>
-        	</b-form-group>
-        	<div>
-          	<b-btn type="submit" variant="success">Save Record</b-btn>
-        	</div>
-      	</form>
-    	</b-card>
-  	</b-col>
-	</b-row>
+    <h1 class="h1">Food Records</h1>
+    <b-alert : show="loading" variant="info">Loading...</b-alert>
+    <b-row>
+      <b-col>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Value</th>
+              <th>Date Time</th>
+              <th>&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="record in records" : key="record.id">
+              <td>{{ record.id }}</td>
+              <td>{{ record.name }}</td>
+              <td>{{ record.value }}</td>
+              <td>{{ record.dateTime }}</td>
+              <td class="text-right">
+                <a href="#" @click.prevent="updateFoodRecord(record)">Edit</a> -
+                <a href="#" @click.prevent="deleteFoodRecord(record.id)">Delete</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </b-col>
+      <b-col lg="3">
+        <b-card : title="(model.id ? 'Edit Food ID#' + model.id : 'New Food Record')">
+          <form @submit.prevent="createFoodRecord">
+            <b-form-group label="Name">
+              <b-form-input type="text" v-model="model.name"></b-form-input>
+            </b-form-group>
+            <b-form-group label="Value">
+              <b-form-input rows="4" v-model="model.value" type="number"></b-form-input>
+            </b-form-group>
+            <b-form-group label="Date Time">
+              <b-form-input rows="4" v-model="model.dateTime" type="datetime-local"></b-form-input>
+            </b-form-group>
+            <div>
+              <b-btn type="submit" variant="success">Save Record</b-btn>
+            </div>
+          </form>
+        </b-card>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
@@ -527,60 +531,61 @@ With `FoodRecordsApiService` available you can proceed to create a component for
   import api from '@/FoodRecordsApiService';
 
   export default {
-	data() {
-  	return {
-    	loading: false,
-    	records: [],
-    	model: {}
-  	};
-	},
-	async created() {
-  	this.getAll()
-	},
-	methods: {
-  	async getAll() {
-    	this.loading = true
+    data() {
+      return {
+        loading: false,
+        records: [],
+        model: {}
+      };
+    },
+    async created() {
+      this.getAll()
+    },
+    methods: {
+      async getAll() {
+        this.loading = true
 
-    	try {
-      	this.records = await api.getAll()
-    	} finally {
-      	this.loading = false
-    	}
-  	},
-  	async updateFoodRecord(foodRecord) {
-    	// We use Object.assign() to create a new (separate) instance
-    	this.model = Object.assign({}, foodRecord)
-  	},
-  	async createFoodRecord() {
-    	const isUpdate = !!this.model.id;
+        try {
+          this.records = await api.getAll()
+        } finally {
+          this.loading = false
+        }
+      },
+      async updateFoodRecord(foodRecord) {
+        // We use Object.assign() to create a new (separate) instance
+        this.model = Object.assign({}, foodRecord)
+      },
+      async createFoodRecord() {
+        const isUpdate = !!this.model.id;
 
-    	if (isUpdate) {
-      	await api.update(this.model.id, this.model)
-    	} else {
-      	await api.create(this.model)
-    	}
+        if (isUpdate) {
+          await api.update(this.model.id, this.model)
+        } else {
+          await api.create(this.model)
+        }
 
-    	// Clear the data inside of the form
-    	this.model = {}
+        // Clear the data inside of the form
+        this.model = {}
 
-    	// Fetch all records again to have latest data
-    	await this.getAll()
-  	},
-  	async deleteFoodRecord(id) {
-    	if (confirm('Are you sure you want to delete this record?')) {
-      	// if we are editing a food record we deleted, remove it from the form
-      	if (this.model.id === id) {
-        	this.model = {}
-      	}
+        // Fetch all records again to have latest data
+        await this.getAll()
+      },
+      async deleteFoodRecord(id) {
+        if (confirm('Are you sure you want to delete this record?')) {
+          // if we are editing a food record we deleted, remove it from the form
+          if (this.model.id === id) {
+            this.model = {}
+          }
 
-      	await api.delete(id)
-      	await this.getAll()
-    	}
-  	}
-	}
+          await api.delete(id)
+          await this.getAll()
+        }
+      }
+    }
   }
 </script>
 ```
+{% endraw %}
 
 Now it's time to add this component to the main menu and make sure our router renders the component once we navigate to `/food-records`. Inside of your Vue application, update the `src/router/index.js` file. Add the following to the list of routes:
 
@@ -629,7 +634,7 @@ Your navbar should now look like this:
 
 ## Build the ASP.NET Core API
 
-Inside of our main folder `food-records` navigate to AspNetCore folder and run the following:
+Inside of your main folder `food-records` navigate to AspNetCore folder and run the following:
 
 ```sh
 dotnet new webapi
@@ -650,7 +655,7 @@ And now you can set up the connection string for your database. Change the conte
 
 ```json
 "ConnectionStrings": {
- "DefaultConnection": "Data Source=Database.db"
+  "DefaultConnection": "Data Source=Database.db"
 },
 ```
 
@@ -660,15 +665,13 @@ Inside your ASP.NET Core project create a new file `ApplicationDbContext.cs` tha
 using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCore.Controllers {
+  public class ApplicationDbContext : DbContext
+  {
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    { }
 
- public class ApplicationDbContext : DbContext
- {
-  public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        	: base(options)
-     	{ }
- 
-     public DbSet<FoodRecord> FoodRecords { get; set; }
- }
+    public DbSet<FoodRecord> FoodRecords { get; set; }
+  }
 }
 ```
 
@@ -679,7 +682,7 @@ var connectionString = Configuration.GetConnectionString("DefaultConnection");
 services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));
 ```
 
-This retrieves the connection string from our configuration (appsettings.json file) and adds the DbContext to our ASP.NET Core application, to its DI container. We also make sure to specify the connection string that will be used by our DbContext.
+This retrieves the connection string from our configuration (`appsettings.json` file) and adds the DbContext to our ASP.NET Core application, to its DI container. We also make sure to specify the connection string that will be used by our DbContext.
 
 
 ## Create FoodRecord model 
@@ -689,14 +692,14 @@ Then change the `Configure` method inside of `Startup` class to look like this:
 ```cs
 public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationDbContext dbContext)
 {
-    if (env.IsDevelopment())
-    {
-        app.UseDeveloperExceptionPage();
-    }
+  if (env.IsDevelopment())
+  {
+    app.UseDeveloperExceptionPage();
+  }
+  
+  dbContext.Database.EnsureCreated();
     
-    dbContext.Database.EnsureCreated();
-      
-    app.UseMvc();
+  app.UseMvc();
 }
 ```
 
@@ -708,13 +711,13 @@ Inside your main project let's make a class `FoodRecord`:
 ```cs
 public class FoodRecord
 {
-   public string Id { get; set; }
- 
-   public string Name { get; set; }
- 
-   public decimal Value { get; set; }
- 
-   public DateTime DateTime { get; set; }
+  public string Id { get; set; }
+
+  public string Name { get; set; }
+
+  public decimal Value { get; set; }
+
+  public DateTime DateTime { get; set; }
 }
 ```
 
@@ -725,17 +728,16 @@ Inside of `ConfigureServices` method within `Startup` class add the following:
 
 ```cs
 services.AddCors(options =>
-  {
-      options.AddPolicy("VueCorsPolicy",
-          builder =>
-          {
-              builder
-                  .AllowAnyHeader()
-                  .AllowAnyMethod()
-                  .AllowCredentials()
-                  .WithOrigins("http://localhost:8080");
-          });
-  });
+{
+  options.AddPolicy("VueCorsPolicy", builder =>
+    {
+      builder
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials()
+        .WithOrigins("http://localhost:8080");
+    });
+});
 ```
 
 And inside of `Configure` method, after `if-else` block, add the following:
@@ -757,71 +759,71 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCore.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class FoodRecordsController : ControllerBase
-	{
-    	private readonly ApplicationDbContext _dbContext;
+  [Route("api/[controller]")]
+  [ApiController]
+  public class FoodRecordsController : ControllerBase
+  {
+    private readonly ApplicationDbContext _dbContext;
 
-    	public FoodRecordsController(ApplicationDbContext dbContext)
-    	{
-        	_dbContext = dbContext;
-    	}
+    public FoodRecordsController(ApplicationDbContext dbContext)
+    {
+      _dbContext = dbContext;
+    }
 
-    	// GET api/foodrecords
-    	[HttpGet]
-    	public async Task<ActionResult<List<FoodRecord>>> Get()
-    	{
-        	return await _dbContext.FoodRecords.ToListAsync();
-    	}
+    // GET api/foodrecords
+    [HttpGet]
+    public async Task<ActionResult<List<FoodRecord>>> Get()
+    {
+      return await _dbContext.FoodRecords.ToListAsync();
+    }
 
-    	// GET api/foodrecords/5
-    	[HttpGet("{id}")]
-    	public async Task<ActionResult<FoodRecord>> Get(string id)
-    	{
-        	return await _dbContext.FoodRecords.FindAsync(id);
-    	}
+    // GET api/foodrecords/5
+    [HttpGet("{id}")]
+    public async Task<ActionResult<FoodRecord>> Get(string id)
+    {
+      return await _dbContext.FoodRecords.FindAsync(id);
+    }
 
-    	// POST api/foodrecords
-    	[HttpPost]
-    	public async Task Post(FoodRecord model)
-    	{
-        	await _dbContext.AddAsync(model);
+    // POST api/foodrecords
+    [HttpPost]
+    public async Task Post(FoodRecord model)
+    {
+      await _dbContext.AddAsync(model);
+      
+      await _dbContext.SaveChangesAsync();
+    }
 
-        	await _dbContext.SaveChangesAsync();
-    	}
+    // PUT api/foodrecords/5
+    [HttpPut("{id}")]
+    public async Task<ActionResult> Put(string id, FoodRecord model)
+    {
+      var exists = await _dbContext.FoodRecords.AnyAsync(f => f.Id == id);
+      if (!exists)
+      {
+        return NotFound();
+      }
 
-    	// PUT api/foodrecords/5
-    	[HttpPut("{id}")]
-    	public async Task<ActionResult> Put(string id, FoodRecord model)
-    	{
-        	var exists = await _dbContext.FoodRecords.AnyAsync(f => f.Id == id);
-        	if (!exists)
-        	{
-            	return NotFound();
-        	}
+      _dbContext.FoodRecords.Update(model);
+      
+      await _dbContext.SaveChangesAsync();
 
-        	_dbContext.FoodRecords.Update(model);
+      return Ok();
 
-        	await _dbContext.SaveChangesAsync();
+    }
 
-        	return Ok();
+    // DELETE api/foodrecords/5
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete(string id)
+    {
+      var entity = await _dbContext.FoodRecords.FindAsync(id);
 
-    	}
-
-    	// DELETE api/foodrecords/5
-    	[HttpDelete("{id}")]
-    	public async Task<ActionResult> Delete(string id)
-    	{
-        	var entity = await _dbContext.FoodRecords.FindAsync(id);
-
-        	_dbContext.FoodRecords.Remove(entity);
-
-        	await _dbContext.SaveChangesAsync();
-       	 
-        	return Ok();
-    	}
-	}
+      _dbContext.FoodRecords.Remove(entity);
+      
+      await _dbContext.SaveChangesAsync();
+      
+      return Ok();
+    }
+  }
 }
 ```
 
@@ -907,9 +909,9 @@ With release of ASP.NET Core 2 a bunch of Microsoft's libraries are baked into t
 
 If you are new to Vue, I hope you found it interesting enough to explore it more and give it a try for your next project. With help of Okta's Vue SDK, doing authentication and authorization on client side is easier than ever.
 
-Hopefully this article was helpful for you and you realised how easy it is to add authentication to ASP.NET Core APIs and Vue.js applications.
+Hopefully this article was helpful for you and you now realize how easy it is to add authentication to ASP.NET Core APIs and Vue.js applications.
 
-You can find the source code for complete application at following link: [https://github.com/Ibro/FoodTrackerOkta](https://github.com/Ibro/FoodTrackerOkta).
+You can find the source code for complete application at [https://github.com/oktadeveloper/okta-dotnet-cuew-crud-example](https://github.com/oktadeveloper/okta-dotnet-cuew-crud-example).
 
 If you want to read more about Okta, Vue or ASP.NET Core check out the Okta Dev Blog. This post was not-so-loosely based on [Build a Basic CRUD App with Vue.js and Node](/blog/2018/02/15/build-crud-app-vuejs-node), which I would definitely recommend checking out if you're interested in learning more about Vue.js.
 
