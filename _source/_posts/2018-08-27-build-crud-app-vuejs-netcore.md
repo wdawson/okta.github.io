@@ -17,7 +17,7 @@ Keeping an eye on your daily calorie intake can be crucial to healthy lifestyle.
 
 You are probably asking why should we go with Vue if there are trusted, established players like Angular and React. Well, it turns out that Vue is a lot easier to get started with and you don't have to learn JSX or TypeScript, it is simply a pure, vanilla JavaScript. In my opinion, Vue is as fast as React and simpler than original AngularJS (Angular 1). Vue is also a lot less opinionated about the way you approach your code. Furthermore, it's bundle size is much smaller when compared to Angular and React.
 
-Vue's popularity keeps increasing. In fact, it's been rising so fast that it has over 110K starts on GitHub! It ranks as the 3rd most starred repository on GitHub and most started JavaScript library/framework.
+Vue's popularity keeps increasing. In fact, it's been rising so fast that it has over 110K stars on GitHub! It ranks as the 3rd most starred repository on GitHub and most starred JavaScript library/framework.
 
 ASP.NET Core is another bright and rising star, which takes the best from Rails and Node.js worlds. ASP.NET MVC itself was in many ways a copy of Rails, with many concepts and features borrowed from Rails. ASP.NET Core takes the modularity of Node packages and the middleware concept from Express, the most popular web framework in Node world. However, it still contains all of the old MVC and Web API features, which makes it super powerful for building any kind of web applications.
 
