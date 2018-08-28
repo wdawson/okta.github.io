@@ -71,31 +71,31 @@ server {
 Add the following to your existing `server` block:
 
 ```nginx
-  # Any request to this server will first be sent to this URL
-  auth_request /lasso-validate;
+# Any request to this server will first be sent to this URL
+auth_request /lasso-validate;
 
-  location = /lasso-validate {
-  	# This address is where Lasso will be listening on
-    proxy_pass http://127.0.0.1:9090/validate;
-    proxy_pass_request_body off; # no need to send the POST body
+location = /lasso-validate {
+	# This address is where Lasso will be listening on
+proxy_pass http://127.0.0.1:9090/validate;
+proxy_pass_request_body off; # no need to send the POST body
 
-    proxy_set_header Content-Length "";
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
+proxy_set_header Content-Length "";
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $scheme;
 
-    # these return values are passed to the @error401 call
-    auth_request_set $auth_resp_jwt $upstream_http_x_lasso_jwt;
-    auth_request_set $auth_resp_err $upstream_http_x_lasso_err;
-    auth_request_set $auth_resp_failcount $upstream_http_x_lasso_failcount;
-  }
+# these return values are passed to the @error401 call
+auth_request_set $auth_resp_jwt $upstream_http_x_lasso_jwt;
+auth_request_set $auth_resp_err $upstream_http_x_lasso_err;
+auth_request_set $auth_resp_failcount $upstream_http_x_lasso_failcount;
+}
 
-  error_page 401 = @error401;
+error_page 401 = @error401;
 
-  # If the user is not logged in, redirect them to Lasso's login URL
-  location @error401 {
-    return 302 https://login.avocado.lol/login?url=https://$http_host$request_uri&lasso-failcount=$auth_resp_failcount&X-Lasso-Token=$auth_resp_jwt&error=$auth_resp_err;
-  }
+# If the user is not logged in, redirect them to Lasso's login URL
+location @error401 {
+return 302 https://login.avocado.lol/login?url=https://$http_host$request_uri&lasso-failcount=$auth_resp_failcount&X-Lasso-Token=$auth_resp_jwt&error=$auth_resp_err;
+}
 ```
 
 Let's look at what's going on here. The first line, `auth_request /lasso-validate;` is what enables this flow. This tells the `auth_request` module to first send any request to this URL before deciding whether it's allowed to continue to the backend server.
@@ -137,7 +137,7 @@ Copy `config/config.yml_example` to `config/config.yml` and read through the set
 
 The easiest way to configure Lasso is to have it allow any user that can authenticate at the OAuth server be allowed to access the backend. This works great if you're using a private OAuth server like Okta to manage your users. Go ahead and set `allowAllUsers: true` to enable this behavior, and comment out the `domains:` chunk.
 
-You'll need to choose an OAuth provider to use to actually authenticate users. In this example we'll use Okta, since that's the easiest way to have a full OAuth/OpenID Connect server and be able to manage all your user accounts from a single dashboard. Before you can finish filling out the config file, you'll need to sign up for an Okta Developer account at [developer.okta.com/](https://developer.okta.com/). Once you create an account, click **Applications** in the top menu, and create a new application. Choose "Web" as the application platform.
+You'll need to choose an OAuth 2.0 provider to use to actually authenticate users. In this example we'll use Okta, since that's the easiest way to have a full OAuth/OpenID Connect server and be able to manage all your user accounts from a single dashboard. Before you can finish filling out the config file, you'll need to sign up for an Okta Developer account at [developer.okta.com/](https://developer.okta.com/). Once you create an account, click **Applications** in the top menu, and create a new application. Choose **Web** as the application platform.
 
 {% img blog/nginx-auth-request/okta-create-app.png alt:"Create a web application with Okta" width:"800" %}{: .center-image }
 
@@ -181,14 +181,14 @@ By default, Lasso will extract a user ID via OpenID Connect (or GitHub or Google
 In your main server block, just below the line `auth_request /lasso-validate;` which enables the `auth_request` module, add the following:
 
 ```nginx
-  auth_request_set $auth_user $upstream_http_x_lasso_user;
+auth_request_set $auth_user $upstream_http_x_lasso_user;
 ```
 
 This will take the HTTP header that Lasso sets, `X-Lasso-User`, and assign it to the nginx variable `$auth_user`. Then, depending on whether you use fastcgi or proxy_pass, include one of the two lines below in your server block:
 
 ```nginx
-  fastcgi_param REMOTE_USER $auth_user;
-  proxy_set_header Remote-User $auth_user;
+fastcgi_param REMOTE_USER $auth_user;
+proxy_set_header Remote-User $auth_user;
 ```
 
 These will set an HTTP header with the value of `$auth_user` that your backend server can read in order to know who logged in. For example, in PHP you can access this data using:
