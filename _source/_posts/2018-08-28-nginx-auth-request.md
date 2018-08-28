@@ -1,17 +1,15 @@
 ---
 layout: blog_post
-title: "Use nginx to add Authentication to any Application"
+title: "Use nginx to Add Authentication to Any Application"
 author: aaronpk
-description: "In this tutorial, I'll show you how to use the nginx auth_request module to protect any application running behind your nginx server with OAuth, without even writing any code! Lasso, a microservice written in Go, handles the OAuth dance to any number of different auth providers so you don't have to."
+description: "This tutorial will show you how to use the nginx auth_request module to protect any application running behind your nginx server with OAuth, without writing any code!"
 tags: [oauth, nginx, sso]
 Tweets:
-- "Let nginx handle authentication so you don't have to!"
-- "Add authentication to any application with the nginx auth_request module"
+- "Let @nginx handle authentication for your app so you don't have to! #oauth #oidc"
+- "Add authentication to any application with the @nginx auth_request module #oauth #oidc"
 ---
 
-Ever found yourself wanting to put an application behind a login form, but dreading writing all that code to deal with OAuth or passwords?
-
-In this tutorial, I'll show you how to use the nginx `auth_request` module to protect any application running behind your nginx server with OAuth, without even writing any code! Lasso, a microservice written in Go, handles the OAuth dance to any number of different auth providers so you don't have to.
+Ever found yourself wanting to put an application behind a login form, but dreading writing all that code to deal with OAuth 2.0 or passwords? In this tutorial, I'll show you how to use the nginx `auth_request` module to protect any application running behind your nginx server with OAuth 2.0, without writing any code! Lasso, a microservice written in Go, handles the OAuth dance to any number of different auth providers so you don't have to.
 
 ## Why Authenticate at the Web Server?
 
@@ -27,7 +25,7 @@ Surely there must be a better way to integrate all these systems to use a common
 
 If the web server could handle authenticating users, then each backend system wouldn't need to worry about it, since the only requests that could make it through would already be authenticated!
 
-## The nginx auth_request module
+## Using the nginx auth_request Module
 
 Enter the nginx `auth_request` module.
 
@@ -40,7 +38,7 @@ The `auth_request` module sits between the internet and your backend server that
 This diagram illustrates a request that comes in for the server name `stats.avocado.lol`. First, nginx fires off a sub-request to `login.avocado.lol` (1), and if the response (2) to that request returns HTTP 200, it then continues forwarding the request on to the backend `stats.avocado.lol.`
 
 
-## The Auth Proxy
+## Choosing an Auth Proxy
 
 Since the nginx `auth_request` module has no concept of users or how to authenticate anyone, we need something else in the mix that can actually handle logging users in. In the diagram above, this is illustrated by the server name `login.avocado.lol`.
 
@@ -210,4 +208,3 @@ For more information and tutorials about OAuth 2.0, check out some of our other 
 * [What is the OAuth 2.0 Implicit Grant Type?](/blog/2018/05/24/what-is-the-oauth2-implicit-grant-type)
 
 As always, we'd love to hear from you about this post, or really anything else! Hit us up in the comments, or on Twitter [@oktadev](https://twitter.com/OktaDev)!
-
