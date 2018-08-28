@@ -4,9 +4,10 @@ title: "Use nginx to Add Authentication to Any Application"
 author: aaronpk
 description: "This tutorial will show you how to use the nginx auth_request module to protect any application running behind your nginx server with OAuth, without writing any code!"
 tags: [oauth, nginx, sso]
-Tweets:
+tweets:
 - "Let @nginx handle authentication for your app so you don't have to! #oauth #oidc"
 - "Add authentication to any application with the @nginx auth_request module #oauth #oidc"
+image: blog/nginx-auth-request/nginx-auth-request-sample.jpg
 ---
 
 Ever found yourself wanting to put an application behind a login form, but dreading writing all that code to deal with OAuth 2.0 or passwords? In this tutorial, I'll show you how to use the nginx `auth_request` module to protect any application running behind your nginx server with OAuth 2.0, without writing any code! Lasso, a microservice written in Go, handles the OAuth dance to any number of different auth providers so you don't have to.
