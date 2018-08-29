@@ -1,11 +1,11 @@
 ---
 layout: quickstart_partial
-exampleDescription: ASP.NET 4.x MVC authorization code example
+exampleDescription: ASP.NET 4.x authorization code example
 ---
 
-## Okta ASP.NET 4.x MVC Quickstart
+## Okta ASP.NET 4.x Quickstart
 
-If you want a full, working example, head over to the [ASP.NET MVC example] repository and follow the readme instructions.
+If you want a full, working example, head over to the [ASP.NET examples GitHub] and follow the `README` instructions.
 
 ### Create a new project
 
@@ -30,17 +30,21 @@ public class Startup
     public void Configuration(IAppBuilder app)
     {
         app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
+
         app.UseCookieAuthentication(new CookieAuthenticationOptions());
+
         app.UseOktaMvc(new OktaMvcOptions()
         {
-            // These values are stored in Web.config. Make sure you update them!
+            OktaDomain = ConfigurationManager.AppSettings["okta:OktaDomain"],
             ClientId = ConfigurationManager.AppSettings["okta:ClientId"],
             ClientSecret = ConfigurationManager.AppSettings["okta:ClientSecret"],
-            OktaDomain = ConfigurationManager.AppSettings["okta:OktaDomain"],
             RedirectUri = ConfigurationManager.AppSettings["okta:RedirectUri"],
-            PostLogoutRedirectUri = ConfigurationManager.AppSettings["okta:PostLogoutRedirectUri"]
+            PostLogoutRedirectUri = ConfigurationManager.AppSettings["okta:PostLogoutRedirectUri"],
+            GetClaimsFromUserInfoEndpoint = true,
+            Scope = new List<string> {"openid", "profile", "email"},
         });
     }
+    
 }
 ```
 
@@ -65,7 +69,7 @@ using Owin;
 
 ### Additional middleware configuration
 
-The `OktaMvcOptions` class configures the Okta middleware. You can see all the available options in the [project's GitHub].
+The `OktaMvcOptions` class configures the Okta middleware. You can see all the available options in the [Okta ASP.NET middleware GitHub].
 
 ### Configure the application in Okta
 
@@ -190,15 +194,15 @@ Start the project in Visual Studio and try logging in or navigating to a route t
 
 ASP.NET automatically populates `HttpContext.User` with the information Okta sends back about the user. You can check whether the user is logged in with `User.Identity.IsAuthenticated` in your actions or views.
 
-The [full example project] has more examples of authenticating and interacting with the user's information (claims).
+The [ASP.NET examples GitHub] has more examples of authenticating and interacting with the user's information (claims).
 
 If you want to do more with the user, you can use the [Okta .NET SDK] to get or update the user's details stored in Okta.
 
 
-[ASP.NET MVC example]: https://github.com/okta/samples-aspnet/okta-hosted-login
+[ASP.NET examples GitHub]: https://github.com/okta/samples-aspnet
 [full example project]: https://github.com/okta/samples-aspnet/okta-hosted-login
 [Microsoft.Owin.Security.Cookies]: https://www.nuget.org/packages/Microsoft.Owin.Security.Cookies
 [Okta.AspNet]: https://nuget.org/packages/Okta.AspNet
 [Microsot.Owin.Host.SystemWeb]: https://www.nuget.org/packages/Microsoft.Owin.Host.SystemWeb
-[project's GitHub]: https://github.com/okta/okta-aspnet/blob/master/README.md
+[Okta ASP.NET middleware GitHub]: https://github.com/okta/okta-aspnet/blob/master/README.md
 [Okta .NET SDK]: https://github.com/okta/okta-sdk-dotnet
