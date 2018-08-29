@@ -17,19 +17,19 @@ New to Okta? Our Quick Start Guide will walk you through adding user authenticat
   </li>
   <li>
     <a href='https://github.com/okta/samples-aspnetcore' class='code-button'>
-      <span class='fa fa-github'></span><span>ASP.NET Core MVC/ Web API examples</span>
+      <span class='fa fa-github'></span><span>ASP.NET Core examples</span>
     </a>
   </li>
   <li>
     <a href='https://github.com/okta/samples-aspnet' class='code-button'>
-      <span class='fa fa-github'></span><span>ASP.NET 4.x MVC/ Web API examples</span>
+      <span class='fa fa-github'></span><span>ASP.NET 4.x examples</span>
     </a>
   </li>
 </ul>
 
-## ASP.NET 4.x/ Core Middleware
+## ASP.NET 4.x/Core Middleware
 
-Use our Okta OIDC middleware in your ASP.NET MVC 4.x/Core applications.
+Use our Okta OIDC middleware in your ASP.NET 4.x/Core applications.
 
 <ul class='code-list'>
   <li>
