@@ -7,6 +7,8 @@ exampleDescription: ASP.NET Core 2.0 API implicit example
 
 Now that your clients can get tokens, let's validate those tokens on your server.
 
+> If you would prefer to download a complete sample application instead, please visit the [ASP.NET Core Examples GitHub](https://github.com/okta/samples-aspnetcore) and follow those instructions.
+
 ### Create a new project
 
 If you don't already have an ASP.NET Core 2.0 project, create one using `dotnet new mvc` or the ASP.NET Core Web Application template in Visual Studio. Choose **No Authentication** if necessary.
@@ -18,21 +20,34 @@ Make sure you have these `using` statements at the top of your `Startup.cs` file
 
 ```csharp
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Okta.AspNetCore;
 
 ```
 
-In the `ConfigureServices` method, add this `UseAuthentication` block and configure it using the information from the Okta application you just created:
+Replace the `ConfigureServices` method with the code below, for more configuration options visit the [Okta ASP.NET middleware GitHub](https://github.com/okta/okta-aspnet).
 
 ```csharp
-services.AddAuthentication(sharedOptions =>
+public void ConfigureServices(IServiceCollection services)
 {
-    sharedOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    sharedOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options => {
-    options.Authority = "https://{yourOktaDomain}/oauth2/default";
-    options.Audience = "api://default";
-});
+    services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = OktaDefaults.ApiAuthenticationScheme;
+        options.DefaultChallengeScheme = OktaDefaults.ApiAuthenticationScheme;
+        options.DefaultSignInScheme = OktaDefaults.ApiAuthenticationScheme;
+    })
+        .AddOktaWebApi(new OktaWebApiOptions()
+        {
+            ClientId = Configuration["Okta:ClientId"],
+            OktaDomain = Configuration["Okta:OktaDomain"],
+        });
+
+    services.AddMvc();
+}
+
 ```
 
 Then, in the `Configure` method, add this line **above** the `UseMvc` line:
@@ -49,27 +64,28 @@ Use the `[Authorize]` attribute on controllers or actions to require an authenti
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
+[Produces("application/json")]
 [Authorize]
-[Route("/api")]
 public class MessagesController : Controller
 {
     [HttpGet]
-    [Route("messages")]
-    public IEnumerable<string> GetPrivateMessages()
+    [Route("~/api/messages")]
+    public IEnumerable<dynamic> Get()
     {
-        var login = User.Claims
+        var principal = HttpContext.User.Identity as ClaimsIdentity;
+
+        var login = principal.Claims
             .SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
             ?.Value;
 
-        return new string[]
+        return new dynamic[]
         {
-            $"For {login ?? "your"} eyes only",
-            "Your mission, should you choose to accept it..."
+            new { Date = DateTime.Now, Text = "I am a Robot." },
+            new { Date = DateTime.Now, Text = "Hello, world!" },
         };
     }
 }
