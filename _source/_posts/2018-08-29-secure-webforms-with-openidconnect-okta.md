@@ -19,7 +19,7 @@ To follow along, you'll need .NET Framework 4.7.1 and Visual Studio 2017.
 
 First, you need to create a new Web Forms application using one of the built-in templates that ship with Visual Studio. Choose the Web Forms template with Individual User Accounts authentication.  
 
-In Visual Studio, select File -> New Project -> Name the project AspNetWebFormsOkta
+In Visual Studio, select **File** -> **New Project** -> Name the project AspNetWebFormsOkta
 
 {% img blog/aspnet-webforms/vs-new-project-dialog.png alt:"Visual Studio new project dialog" width:"800" %}{: .center-image }
 
@@ -42,7 +42,7 @@ Uninstall-Package Microsoft.AspNet.TelemetryCorrelation
 
 You can also delete `ApplicationInsights.config` file.
 
-You'll want to specify the port that your app will be running on, so you can use it later during your Okta configuration. To do so, right click on the project in the solution explorer and click **properties**. In the main properties window, choose **Web** from the left-hand menu and set the **Project Url** property to `http://localhost:8080`.
+You'll want to specify the port that your app will be running on, so you can use it later during your Okta configuration. To do so, right click on the project in the solution explorer and click **Properties**. In the main properties window, choose **Web** from the left-hand menu and set the **Project Url** property to `http://localhost:8080`.
 
 
 
@@ -101,8 +101,8 @@ You want to add a connection string to `Web.config` file. Make sure to add it in
 
 ```cs
 <appSettings>
-  <add key="okta:ClientId" value="{clientId}" />
-  <add key="okta:ClientSecret" value="{clientSecret}" />
+  <add key="okta:ClientId" value="{yourClientId}" />
+  <add key="okta:ClientSecret" value="{yourClientSecret}" />
   <add key="okta:OrgUri" value="https://{yourOktaDomain}/oauth2/default" />
   <add key="okta:RedirectUri" value="http://localhost:8080/authorization-code/callback" />
 </appSettings>
@@ -201,7 +201,7 @@ Next, you will make use of your Okta credentials and Okta's `UseOpenIdConnectAut
 
 Next you'll add a `Login` button to your existing navigation bar. Inside of the `Site.Master` file, after the existing `<ul>` tag, add the following:
 
-```cs
+```html
 <asp:LoginView runat="server" ViewStateMode="Disabled">
 <AnonymousTemplate>
   <ul class="nav navbar-nav navbar-right">
@@ -302,7 +302,7 @@ Now go to the About page to see if you can see the protected data you added:
 
 {% img blog/aspnet-webforms/running-application.png alt:"Application Running" width:"800" %}{: .center-image }
 
-The complete and working sample that backs this tutorial is available on GitHub as [AspNetWebFormsOkta](https://github.com/Ibro/AspNetWebFormsOkta)
+The complete and working sample that backs this tutorial is available on GitHub as [AspNetWebFormsOkta](https://github.com/Ibro/AspNetWebFormsOkta).
 
 ## Learn More
 
