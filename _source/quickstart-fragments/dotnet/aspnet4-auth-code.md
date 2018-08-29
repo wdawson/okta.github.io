@@ -95,7 +95,8 @@ If you want to use a different port update the URIs in Okta and in `Web.config` 
 ### Configure the project
 
 Open the `Web.config` file and add your Okta configuration to the `<appSettings>` section.
-Check out the [project's GitHub] to see more details about this step.
+
+Check out the [Okta ASP.NET middleware GitHub] to see more details about this step.
 
 ### Secure your application
 
@@ -200,7 +201,6 @@ If you want to do more with the user, you can use the [Okta .NET SDK] to get or 
 
 
 [ASP.NET examples GitHub]: https://github.com/okta/samples-aspnet
-[full example project]: https://github.com/okta/samples-aspnet/okta-hosted-login
 [Microsoft.Owin.Security.Cookies]: https://www.nuget.org/packages/Microsoft.Owin.Security.Cookies
 [Okta.AspNet]: https://nuget.org/packages/Okta.AspNet
 [Microsot.Owin.Host.SystemWeb]: https://www.nuget.org/packages/Microsoft.Owin.Host.SystemWeb
