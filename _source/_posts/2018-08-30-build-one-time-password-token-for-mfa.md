@@ -131,7 +131,7 @@ Press the `A` button to return to the set date and time screen. Press the `B` bu
 
 In Okta, there are two complimentary pieces to MFA: enrollment and enforcement. An MFA enrollment policy drives the conditions under which a user will be required to enroll in MFA and what configured factors they must enroll in. A Signon Policy can be configured to require a second factor after authentication. That's the MFA enforcement part of the policy.
 
-To get started, signup for a free Okta Developer org at [https://developer.okta.com/signup/](https://developer.okta.com/signup)
+To get started, signup for a free Okta Developer org at <https://developer.okta.com/signup/>
 
 Setup an Okta group and a new user to make testing the MFA policies easier.
 
