@@ -33,7 +33,7 @@ Use these values to replace the placeholders in the `appsettings.json` file:
 "Okta": {
     "ClientId": "{ClientId}",
     "ClientSecret": "{ClientSecret}",
-    "OktaDomain": "https://{yourOktaDomain}.com"
+    "OktaDomain": "https://{yourOktaDomain}"
 }
 ```
 
