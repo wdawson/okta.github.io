@@ -27,7 +27,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Okta.AspNetCore;
 
 ```
-
 Replace the `ConfigureServices` method with the code below, for more configuration options visit the [Okta ASP.NET middleware GitHub](https://github.com/okta/okta-aspnet).
 
 ```csharp
