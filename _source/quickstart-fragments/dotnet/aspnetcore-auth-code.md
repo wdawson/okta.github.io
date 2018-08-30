@@ -56,7 +56,6 @@ using Okta.AspNetCore;
 ```
 
 Replace the `ConfigureServices` method with the code below, for more configuration options visit the [Okta ASP.NET middleware GitHub](https://github.com/okta/okta-aspnet).
-
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
@@ -78,8 +77,6 @@ public void ConfigureServices(IServiceCollection services)
 
 }
 ```
-
-**Note:** The value of `{yourOktaDomain}` should be something like dev-123456.oktapreview.com. Make sure you don't include `-admin` in the value!
 
 Then, in the `Configure` method, add this line **above** the `UseMvc` line:
 
