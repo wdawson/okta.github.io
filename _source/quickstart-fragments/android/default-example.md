@@ -24,8 +24,8 @@ At the end of the Android instructions you can choose your server type to learn 
 | Setting             | Value                                               |
 | ------------------- | --------------------------------------------------- |
 | Application Name    | My Android App                                      |
-| Login redirect URIs | com.oktapreview.{orgName}:/callback                 |
-| Logout redirect URIs| com.oktapreview.{orgName}:/logout                   |
+| Login redirect URIs | {yourOktaScheme}:/callback                          |
+| Logout redirect URIs| {yourOktaScheme:/logout                             |
 
 After you have created the application there are two more values you will need to gather:
 
@@ -46,6 +46,7 @@ compile 'com.okta.android:appauth-android:0.1.0'
 
 ### Configuration
 Create a new `okta_app_auth_config.json` file in your application's `res/raw` directory with the following contents:
+{% include domain-admin-warning.html %}
 ```json
 {
   "client_id": "{clientIdValue}",
