@@ -53,7 +53,12 @@ app.UseAuthentication();
 
 ### Additional middleware configuration
 
-The `OktaMvcOptions` class configures the Okta middleware. You can see all the available options in the project's readme [on GitHub][github-aspnetcore].
+The `OktaMvcOptions` class configures the Okta middleware. You can see all the available options in the project's readme [on GitHub][github-aspnetcore]. Once you have the middleware working, you can place the Okta configuration in `appsettings.json` and reference it with the Configuration pattern:
+
+```chsarp
+OktaDomain = Configuration["Okta:Domain"],
+ClientId = Configuration["Okta:ClientId"],
+```
 
 ### Secure your application's routes
 

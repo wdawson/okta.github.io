@@ -1,18 +1,18 @@
 ---
 layout: quickstart_partial
-exampleDescription: ASP.NET Core 2.0 API implicit example
+exampleDescription: ASP.NET Core 2.0+ API implicit example
 ---
 
 ## Okta ASP.NET Core Web API Quickstart
 
-If you want a full, working example, head over to the [ASP.NET Core WEB API example] repository.
+If you want a full, working example, head over to the [ASP.NET Core API samples][example-repo] repository.
 
 ### Create a new project
 
-If you don't already have an ASP.NET Core 2.0 project, create one using `dotnet new mvc` or the ASP.NET Core Web Application template in Visual Studio. Choose **No Authentication** if necessary.
+If you don't already have an ASP.NET Core project, create one using `dotnet new mvc` or the ASP.NET Core Web Application template in Visual Studio. Choose **No Authentication** if necessary.
 
 Install these packages in the new project:
-* [Microsoft.AspNetCore.All] it includes all the dependecies you need (and more!). 
+* [Microsoft.AspNetCore.All] (most projects will depend on this)
 * [Okta.AspNetCore]
 
 ### Configure the middleware
@@ -20,33 +20,26 @@ Install these packages in the new project:
 Make sure you have these `using` statements at the top of your `Startup.cs` file:
 
 ```csharp
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Okta.AspNetCore;
 ```
 
-Replace the `ConfigureServices` method with the following code block and configure it using the information from your Okta application:
+Add the following code anywhere in your `ConfigureServices` method, and add your Okta configuration:
 
 ```csharp
-public void ConfigureServices(IServiceCollection services)
+services.AddAuthentication(options =>
 {
-    services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddOktaWebApi(new OktaWebApiOptions()
-    {
-        ClientId = Configuration["Okta:ClientId"],
-        OktaDomain = Configuration["Okta:OktaDomain"],
-    });
+    options.DefaultAuthenticateScheme = OktaDefaults.ApiAuthenticationScheme;
+    options.DefaultChallengeScheme = OktaDefaults.ApiAuthenticationScheme;
+    options.DefaultSignInScheme = OktaDefaults.ApiAuthenticationScheme;
+})
+.AddOktaWebApi(new OktaWebApiOptions()
+{
+    OktaDomain = "https://{yourOktaDomain}"
+    ClientId = "{clientId}"
+});
 
-    services.AddMvc();
-}
+// ... the rest of ConfigureServices
+services.AddMvc();
 ```
 
 Then, in the `Configure` method, add this line **above** the `UseMvc` line:
@@ -55,9 +48,18 @@ Then, in the `Configure` method, add this line **above** the `UseMvc` line:
 app.UseAuthentication();
 ```
 
+### Additional middleware configuration
+
+The `OktaMvcOptions` class configures the Okta middleware. You can see all the available options in the project's readme [on GitHub][github-aspnetcore]. Once you have the middleware working, you can place the Okta configuration in `appsettings.json` and reference it with the Configuration pattern:
+
+```chsarp
+OktaDomain = Configuration["Okta:Domain"],
+ClientId = Configuration["Okta:ClientId"],
+```
+
 ### Protect application resources
 
-Use the `[Authorize]` attribute on controllers or actions to require an authenticated user. For example, create an `/api/messages` route in a new controller that returns secret messages if a token is present:
+Use the `[Authorize]` attribute on controllers or actions to require an authenticated user. For example, you could create an `/api/messages` route in a new controller that returns secret messages if a valid token is present:
 
 ```csharp
 using System;
@@ -99,7 +101,7 @@ If you want to do more with the user, you can use the [Okta .NET SDK] to get or 
 > Note: If your client application is running on a different server (or port) than your ASP.NET Core server, you'll need to add [CORS middleware](https://docs.microsoft.com/en-us/aspnet/core/security/cors) to the pipeline as well.
 
 
-[ASP.NET Core WEB API example]: https://github.com/okta/samples-aspnetcore/resource-server
+[example-repo]: https://github.com/okta/samples-aspnetcore/resource-server
 [Microsoft.AspNetCore.All]: https://www.nuget.org/packages/Microsoft.AspNetCore.All 
 [Okta.AspNetCore]: https://www.nuget.org/packages/Okta.AspNetCore
 [Okta .NET SDK]: https://github.com/okta/okta-sdk-dotnet
