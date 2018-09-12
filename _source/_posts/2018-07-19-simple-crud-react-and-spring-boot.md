@@ -1427,7 +1427,7 @@ As milestones and releases of Spring Boot 2.1 and Spring Security 5.1 are releas
 
 I hope you've enjoyed this tutorial on how to do CRUD with React, Spring Boot, and Spring Security. You can see that Spring Security's OIDC support is pretty robust, and doesn't require a whole lot of configuration. Adding CSRF protection and packaging your Spring Boot + React app as a single artifact is pretty cool too!
 
-You can find the example created in this tutorial on GitHub at https://github.com/oktadeveloper/okta-spring-boot-react-crud-example.
+You can find the example created in this tutorial on GitHub at [https://github.com/oktadeveloper/okta-spring-boot-react-crud-example](https://github.com/oktadeveloper/okta-spring-boot-react-crud-example).
 
 We've written some other cool Spring Boot and React tutorials, check them out if you're interested.
 
