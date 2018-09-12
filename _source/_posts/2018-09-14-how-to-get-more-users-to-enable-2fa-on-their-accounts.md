@@ -26,7 +26,7 @@ That 28% figure also generally aligns with the low 2FA adoption rates reported b
 
 Even more concerning, the same report found that only ~56% of people even knew what 2FA was before they took the survey. *Let that sink in a moment.* While you and I likely have 2FA enabled on all of our accounts right now, the majority of average internet users do not even know what 2FA even is! Certainly, they won't go about enabling it on their accounts if they don't know that it exists.
 
-For those who do know that 2FA exists, many still can't identify it when they see it. Pew Research Center conducted a [cybersecurity quiz](http://www.pewinternet.org/2017/03/22/what-the-public-knows-about-cybersecurity/) in which only 10% of users could correctly identify two-step authentication when presented with a set of options including a code sent to an email account, a reCaptcha, some knowledge-based security questions, and one of those ridiculous “security image” prompts.
+For those who do know that 2FA exists, many still can't identify it when they see it. Pew Research Center conducted a [cybersecurity quiz](http://www.pewinternet.org/2017/03/22/what-the-public-knows-about-cybersecurity/) in which only 10% of users could correctly identify two-step authentication when presented with a set of options including a code sent to an email account, a reCaptcha, some knowledge-based security questions, and one of those ridiculous "security image" prompts.
 
 **There is a fundamental education gap between the majority of internet users and the tech literate when it comes to 2FA.**
 
@@ -42,7 +42,7 @@ The site [twofactorauth.org](https://twofactorauth.org/) maintains a searchable 
 
 Another helpful resource is [turnon2FA.com](https://www.turnon2fa.com/), which provides step-by-step tutorials to enable 2FA on hundreds of different sites.
 
-As useful as these resources are, the main drawback of both is that users need to go out of their way to *proactively* use them. The old saying “out of sight, out of mind” seems fitting here. I focus on 2FA professionally, and even I often forget to check those resources regularly to see if a new service I am signing up for supports 2FA. I think the average internet user is likely to forget too.
+As useful as these resources are, the main drawback of both is that users need to go out of their way to *proactively* use them. The old saying "out of sight, out of mind" seems fitting here. I focus on 2FA professionally, and even I often forget to check those resources regularly to see if a new service I am signing up for supports 2FA. I think the average internet user is likely to forget too.
 
 ## Enable Wider 2FA Adoption Passively
 
