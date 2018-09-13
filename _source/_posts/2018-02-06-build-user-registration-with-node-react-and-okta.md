@@ -104,23 +104,23 @@ At the bottom, you will see a **Client ID** setting (yours won't be blurred out,
 ## Enable Self-Service Registration in Your Okta Application
 The last piece of setup you need to complete is to enable user registration functionality for the authorization server. Typically, authorization servers only support login, logout, and stuff like that. But Okta's authorization server also supports self-service registration, so that users can create accounts, log into them, reset passwords, and basically do everything without you writing any code for it.
 
-In your Okta dashboard, you'll notice a small button labeled < > Developer Console at the top-left of your page. Hover over that button and select the Classic UI menu option that appears.
+In your Okta dashboard, you'll notice a small button labeled < > **Developer Console** at the top-left of your page. Hover over that button and select the **Classic UI** menu option that appears.
 
 {% img blog/build-user-registration-with-node-react-and-okta/dashboard-classic-ui.png alt:"Dashboard Classic UI" width:"800" %}{: .center-image }
 
-Next, hover over the Directory tab at the top of the page then select the Self-Service Registration menu item. On this page click the Enable Registration button.
+Next, hover over the **Directory** tab at the top of the page then select the **Self-Service Registration** menu item. On this page click the **Enable Registration** button.
 
 {% img blog/build-user-registration-with-node-react-and-okta/okta-enable-self-service-registration-page.png alt:"Okta Self-Service Registration Page" width:"800" %}{: .center-image }
 
 On the configuration page, leave all the settings as their default values, except for two:
 
-- Disable the User must verify email address to be activated. checkbox. This setting removes the requirement for new users to verify their email address before being allowed to access your web app.
-- Set the Default redirect option by clicking the Custom URL radio box and entering http://localhost:5000/dashboard as the value. This setting tells the authorization server where to redirect users after they've successfully created a new account on your site.
-Once you've clicked Save, the last thing you need to is switch back to the developer console.
+- Disable the **User must verify email address** to be activated. checkbox. This setting removes the requirement for new users to verify their email address before being allowed to access your web app.
+- Set the **Default redirect** option by clicking the **Custom URL** radio box and entering http://localhost:3000/dashboard as the value. This setting tells the authorization server where to redirect users after they've successfully created a new account on your site.
+Once you've clicked **Save**, the last thing you need to is switch back to the developer console.
 
 {% img blog/build-user-registration-with-node-react-and-okta/okta-self-service-registration-settings-page.png alt:"Okta enable self-service registration settings page" width:"800" %}{: .center-image }
 
-Hover over the Classic UI button at the top right of the page and select the < > Developer Console menu item from the drop-down.
+Hover over the **Classic UI** button at the top right of the page and select the < > **Developer Console** menu item from the drop-down.
 
 ## Add Authentication to the ReactJS Application
 
