@@ -152,7 +152,7 @@ Then in the `server.js` file, you create an instance if the middleware with some
 
 ```js
 const oidc = new ExpressOIDC({
-  issuer: 'https://{yourOktaDomain}.com/oauth2/default',
+  issuer: 'https://{yourOktaDomain}/oauth2/default',
   client_id: '{yourClientId}',
   client_secret: '{yourClientSecret}',
   redirect_uri: 'http://localhost:3000/authorization-code/callback',
