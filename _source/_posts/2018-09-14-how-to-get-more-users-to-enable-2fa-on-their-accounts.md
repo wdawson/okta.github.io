@@ -6,7 +6,7 @@ description: "Interested in ways to improve two-factor authentication for your u
 tags: [security, mfa]
 tweets:
  - "Want to build a more secure userbase? Get your users to enable two-factor authentication! Our buddy @conorgil wrote an awesome guide you might enjoy on the topic:"
- - "We love two-factor! Learn how @conorgil is helping push for 2fa adoptoin in our latest post:"
+ - "We love two-factor! Learn how @conorgil is helping push for 2fa adoption in our latest post:"
  - "Multi-factor authentication is a great security tool, but it only works if users enable it! Learn how to increase user adoption of 2fa in our latest article, written by the one-and-only @conorgil:"
 ---
 
