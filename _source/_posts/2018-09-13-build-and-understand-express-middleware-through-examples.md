@@ -10,12 +10,12 @@ tweets:
 - "Let @leebrandt show you how to create and use middleware in #Express →"
 ---
 
-If you've done any significant Node development in the past seven or eight years, you've probably used [Express](https://expressjs.com) to build a web server at some point. While you can create a server in Node without using a library, it doesn't give you a lot out of the box and it can be quite cumbersome to add functionality. Express is a minimalist, "unopinionated" server library and has become the defacto standard Node server library. And to understand Express, you need to understand Express Middleware.
+If you've done any significant Node development in the past seven or eight years, you've probably used [Express](https://expressjs.com) to build a web server at some point. While you can create a server in Node without using a library, it doesn't give you a lot out of the box and can be quite cumbersome to add functionality. Express is a minimalist, "unopinionated" server library and has become the defacto standard for building web apps in Node. To understand Express, you need to understand Express Middleware.
 
 ## What is Express Middleware?
 Middleware literally means anything you put in the middle of one layer of the software and another. Express middleware are functions that execute during the lifecycle of a request to the Express server.  Each middleware has access to the HTTP `request` and `response` for each route (or path) it's attached to. In fact, Express itself is compromised wholly of middleware functions. Additionally, middleware can either terminate the HTTP request or pass it on to another middleware function using `next` (more on that soon!) This "chaining" of middleware allows you to compartmentalize your code and create reusable middleware.
 
-In this article, I'll explain what middleware is, why you would use it, how to use existing Express middleware, and how to write your own middleware for Express.
+In this article I'll explain what middleware is, why you would use it, how to use existing Express middleware, and how to write your own middleware for Express.
 
 ## Requirements to Write Express Middleware
 There are a few things you will need installed to create, use, and test Express middleware. First, you will need Node and NPM. To ensure you have them installed, you can run:
@@ -177,7 +177,7 @@ app.get('/protected', oidc.ensureAuthenticated(), (req, res) => {
 The `oidc.ensureAuthenticated()` function is a middleware in the Okta library. It runs a function to see if the current user is logged in. If they are, it calls `next()` to let the `app.get()` function continue handling the request. If they aren't it will send back an `HTTP 401 (Unauthorized)` response.
 
 ## Middleware Order is Important
-When a request is received by Express, each middleware that matches the request is run in the order it is added in the file until there is a terminating action (like a response being sent). 
+When a request is received by Express, each middleware that matches the request is run in the order it is initialized until there is a terminating action (like a response being sent). 
 
 {% img blog/express-middleware-examples/middleware.png alt:"Middleware Flow" width:"800" %}{: .center-image }
 
