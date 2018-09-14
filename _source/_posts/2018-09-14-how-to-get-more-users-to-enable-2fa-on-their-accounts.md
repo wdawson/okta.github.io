@@ -8,6 +8,7 @@ tweets:
  - "Want to build a more secure userbase? Get your users to enable two-factor authentication! Our buddy @conorgil wrote an awesome guide you might enjoy on the topic:"
  - "We love two-factor! Learn how @conorgil is helping push for 2fa adoption in our latest post:"
  - "Multi-factor authentication is a great security tool, but it only works if users enable it! Learn how to increase user adoption of 2fa in our latest article, written by the one-and-only @conorgil:"
+image: blog/2fa-notifier/2fa-enabled.png
 ---
 
 If you are reading this article on the Okta Developer blog, chances are high that you are already quite familiar with two-factor authentication (2FA) and how it helps keep hackers out of user accounts even if they're using compromised passwords.
