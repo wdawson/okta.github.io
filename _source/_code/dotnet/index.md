@@ -29,7 +29,7 @@ New to Okta? Our Quick Start Guide will walk you through adding user authenticat
 
 ## ASP.NET Core packages
 
-Use our Okta ASP.NET middleware in your ASP.NET or ASP.NET Core applications.
+Use our Okta ASP.NET Core middleware in your ASP.NET Core application.
 
 <ul class='code-list'>
   <li>
@@ -42,7 +42,7 @@ Use our Okta ASP.NET middleware in your ASP.NET or ASP.NET Core applications.
 
 ## ASP.NET packages
 
-Use our Okta ASP.NET middleware in your ASP.NET or ASP.NET Core applications.
+Use our Okta ASP.NET middleware in ASP.NET application.
 
 <ul class='code-list'>
   <li>
