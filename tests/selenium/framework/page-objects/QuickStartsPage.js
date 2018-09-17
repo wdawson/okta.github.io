@@ -42,8 +42,8 @@ class QuickStartsPage extends BasePage {
     this.$$javaGenericContentHeader = element(by.id('okta-java-quickstart'));
     this.$$javaSpringExpressContentHeader = element(by.id('okta-javaspring-quickstart'));
     this.$$phpGenericContentHeader = element(by.id('okta-php-quickstart'));
-    this.$$dotnetAspCoreGenericContentHeader = element(by.id('okta-aspnet-core-quickstart'));
-    this.$$dotnetAsp4GenericContentHeader = element(by.id('okta-aspnet-4x-mvc-quickstart'));
+    this.$$dotnetAspCoreGenericContentHeader = element(by.id('okta-aspnet-core-mvc-quickstart'));
+    this.$$dotnetAsp4GenericContentHeader = element(by.id('okta-aspnet-4x-quickstart'));
 
     this.setPageLoad(this.$clientSelector);
   }
