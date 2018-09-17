@@ -5,7 +5,7 @@ exampleDescription: ASP.NET Core 2.0+ MVC authorization code example
 
 ## Okta ASP.NET Core MVC Quickstart
 
-If you want a full, working example, head over to the [ASP.NET Core MVC samples][example-repo] repository.
+If you want a full, working example, head over to the [ASP.NET Core Samples][example-repo] repository.
 
 ### Create a new project
 
@@ -25,6 +25,7 @@ using Okta.AspNetCore;
 ```
 
 Add the following code anywhere in your `ConfigureServices` method, and add your Okta configuration:
+{% include domain-admin-warning.html %}
 
 ```csharp
 services.AddAuthentication(options =>
@@ -53,7 +54,7 @@ app.UseAuthentication();
 
 ### Additional middleware configuration
 
-The `OktaMvcOptions` class configures the Okta middleware. You can see all the available options in the project's readme [on GitHub][github-aspnetcore]. Once you have the middleware working, you can place the Okta configuration in `appsettings.json` and reference it with the Configuration pattern:
+The `OktaMvcOptions` class configures the Okta middleware. You can see all the available options in the project's `README` [on GitHub][github-aspnetcore]. Once you have the middleware working, you can place the Okta configuration in `appsettings.json` and reference it with the Configuration pattern:
 
 ```chsarp
 OktaDomain = Configuration["Okta:Domain"],
@@ -112,7 +113,7 @@ Start the project in Visual Studio, or with this command:
 dotnet run
 ```
 
-Open `http://localhost:5000` in a private or incognito window in your browser. (Note that your port may be be a random number instead of 5000.)
+Open `http://localhost:8080` in a private or incognito window in your browser. (Note that your port may be be a random number instead of 8080.)
 
 Try navigating to a route that has the `[Authorize]` attribute, or to the `/Account/Login` action you created above. You'll be redirected to the Okta Sign-In page.
 
@@ -121,7 +122,7 @@ Try navigating to a route that has the `[Authorize]` attribute, or to the `/Acco
 ASP.NET Core automatically populates `HttpContext.User` with the information Okta sends back about the user. You can check whether the user is logged in with `User.Identity.IsAuthenticated` in your actions or views, and see all of the user's claims in `User.Claims`.
 
 
-The [ASP.NET Core MVC samples repo][example-repo] has more examples of authenticating and interacting with the user's information (claims).
+The [ASP.NET Core Samples repository][example-repo] has more examples of authenticating and interacting with the user's information (claims).
 
 If you want to do more with the user, you can use the [Okta .NET SDK] to get or update the user's details stored in Okta.
 

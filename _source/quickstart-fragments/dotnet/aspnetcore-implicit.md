@@ -5,7 +5,7 @@ exampleDescription: ASP.NET Core 2.0+ API implicit example
 
 ## Okta ASP.NET Core Web API Quickstart
 
-If you want a full, working example, head over to the [ASP.NET Core API samples][example-repo] repository.
+If you want a full, working example, head over to the [ASP.NET Core Samples][example-repo] repository.
 
 ### Create a new project
 
@@ -24,6 +24,7 @@ using Okta.AspNetCore;
 ```
 
 Add the following code anywhere in your `ConfigureServices` method, and add your Okta configuration:
+{% include domain-admin-warning.html %}
 
 ```csharp
 services.AddAuthentication(options =>
@@ -50,7 +51,7 @@ app.UseAuthentication();
 
 ### Additional middleware configuration
 
-The `OktaMvcOptions` class configures the Okta middleware. You can see all the available options in the project's readme [on GitHub][github-aspnetcore]. Once you have the middleware working, you can place the Okta configuration in `appsettings.json` and reference it with the Configuration pattern:
+The `OktaMvcOptions` class configures the Okta middleware. You can see all the available options in the project's `README` [on GitHub][github-aspnetcore]. Once you have the middleware working, you can place the Okta configuration in `appsettings.json` and reference it with the Configuration pattern:
 
 ```chsarp
 OktaDomain = Configuration["Okta:Domain"],
