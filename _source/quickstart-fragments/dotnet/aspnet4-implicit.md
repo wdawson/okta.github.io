@@ -5,7 +5,7 @@ exampleDescription: ASP.NET 4.x Web API implicit example
 
 ## Okta ASP.NET Web API Quickstart
 
-If you want a full, working example, head over to the [ASP.NET 4.x examples] and follow the `README` instructions.
+If you want a full, working example, head over to the [ASP.NET examples] and follow the `README` instructions.
 
 ### Create a new Web API project
 
@@ -96,7 +96,7 @@ If you want to do more with the user, you can use the [Okta .NET SDK] to get or 
 > Note: If your client application is running on a different server (or port) than your ASP.NET Core server, you'll need to add [CORS middleware] to the pipeline as well.
 
 
-[ASP.NET 4.x examples]: https://github.com/okta/samples-aspnet/
+[ASP.NET examples]: https://github.com/okta/samples-aspnet/
 [Okta.AspNet]: https://nuget.org/packages/Okta.AspNet
 [Microsot.Owin.Host.SystemWeb]: https://www.nuget.org/packages/Microsoft.Owin.Host.SystemWeb
 [Okta ASP.NET middleware GitHub]: https://github.com/okta/okta-aspnet/blob/master/README.md

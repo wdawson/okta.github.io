@@ -14,8 +14,8 @@ If you don't already have an ASP.NET project, create one using the ASP.NET Web A
 Install these packages in the new project:
 
 * [Microsoft.Owin.Security.Cookies] 4.0.0 or higher
-* [Okta.AspNet]
 * [Microsot.Owin.Host.SystemWeb] 4.0.0 or higher
+* [Okta.AspNet]
 
 
 ### Add a Startup class
@@ -121,7 +121,7 @@ public class AccountController : Controller
         if (!HttpContext.User.Identity.IsAuthenticated)
         {
             HttpContext.GetOwinContext().Authentication.Challenge(
-                OpenIdConnectAuthenticationDefaults.AuthenticationType);
+                OktaDefaults.MvcAuthenticationType);
             return new HttpUnauthorizedResult();
         }
 
@@ -135,7 +135,7 @@ public class AccountController : Controller
         {
             HttpContext.GetOwinContext().Authentication.SignOut(
                 CookieAuthenticationDefaults.AuthenticationType,
-                OpenIdConnectAuthenticationDefaults.AuthenticationType);
+                OktaDefaults.MvcAuthenticationType);
         }
 
         return RedirectToAction("Index", "Home");
@@ -153,6 +153,7 @@ Add these using statements at the top of the `AccountController.cs` file:
 ```csharp
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
+using Okta.AspNet;
 using System.Web;
 using System.Web.Mvc;
 ```
