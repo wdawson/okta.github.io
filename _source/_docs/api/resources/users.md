@@ -137,7 +137,7 @@ curl -v -X POST \
 
 Creates a user without a [password](#password-object)
 
-When the user is activated, an email is sent to the user with an activation token that the can be used to complete the activation process.
+When the user is activated, an email is sent to the user with an activation token that can be used to complete the activation process.
 This flow is useful if migrating users from an existing user store.
 
 ##### Request Example
@@ -498,7 +498,7 @@ curl -v -X POST \
 
 Creates a user that is immediately added to the specified groups upon creation
 
-Use this in conjunction with other create operations for a Group Administrator that is scoped to only create users in specified groups.
+Use this in conjunction with other create operations for a Group Administrator that is scoped to create users only in specified groups.  The request may specify up to 20 group ids.  (This limit applies only when creating a user.  The user may later be added to more groups.)
 
 ##### Request Example
 {:.api .api-request .api-request-example}
@@ -925,7 +925,7 @@ The first three parameters correspond to different types of lists:
 | limit     | Specifies the number of results returned (maximum 200)                                                                                       | Query      | Number   | FALSE    |
 | after     | Specifies the pagination cursor for the next page of users                                                                                   | Query      | String   | FALSE    |
 
-  * If you don't specify a value for `limit`, the maximum (200) is used as a default.
+  * If you don't specify a value for `limit`, the maximum (200) is used as a default.  If you are using a `q` parameter, the default limit is 10.
   * An HTTP 500 status code usually indicates that you have exceeded the request timeout.  Retry your request with a smaller limit and paginate the results. For more information, see [Pagination](/docs/api/getting_started/design_principles#pagination).
   * Treat the `after` cursor as an opaque value and obtain it through the next link relation. See [Pagination](/docs/api/getting_started/design_principles#pagination).
 
