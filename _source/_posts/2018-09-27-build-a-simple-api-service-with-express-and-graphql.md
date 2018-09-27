@@ -74,13 +74,13 @@ query {
 
 {% img blog/graphql-express/hello-world.png alt:"hello world" width:"600" %}{: .center-image }
 
-## Improve Your Developer Experience
+## Improve Your GraphQL Developer Experience
 
 Here are a couple quick tips to help make your development experience a little better:
 
 1. Install a linter to help catch bugs in your editor. This will help keep your styling consistent and catch any easily-avoidable bugs.
 
-    * To install [StandardJS](https://standardjs.com/), type `npm install standard@12.0.1`. Most editors will be able to show you warnings and errors as you type.
+    * To install [StandardJS](https://standardjs.com/), type `npm install --save-dev standard@12.0.1`. Most editors will be able to show you warnings and errors as you type.
     * You can also edit the `scripts` object of your `package.json` so that you can run the linter at any time with `npm test`:
       ```
       "scripts": {
