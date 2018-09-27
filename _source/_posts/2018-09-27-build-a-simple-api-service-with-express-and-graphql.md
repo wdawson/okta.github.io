@@ -8,7 +8,7 @@ tweets:
 - "Curious about @graphql? We just published an interesting article which shows you how to build #graphql APIs using #expressjs"
 - "New article out! It walks you through building APIs with @graphql in Node. Stop scrolling through Twitter and learn something fun!"
 - "G... GRAPH... GRAPHQLLLLLLL. It's an awesome technology and makes building efficient APIs simple. Checkout our latest article on the subject:"
-image: blog/build-a-spring-boot-webapp/security-config.png
+image: blog/graphql-express/okta-node-skew.jpg
 ---
 
 GraphQL has become an immensely popular alternative to REST APIs. The flexibility you get from using GraphQL makes it easier for developers to get any information they need for an app, and _just_ the information they need for that portion of the app. That gives you the feel of a very customized API and can help cut down on bandwidth.
