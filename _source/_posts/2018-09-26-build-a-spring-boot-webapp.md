@@ -1,6 +1,6 @@
 ---
 layout: blog_post
-title: "Build a Web App with Spring Boot and Spring Security 15 Minutes"
+title: "Build a Web App with Spring Boot and Spring Security in 15 Minutes"
 author: moksamedia
 description: "In this tutorial, you're going to use Spring Boot to build a simple web application with a user registration system and a login system."
 tags: [authentication, spring boot, oidc, oauth2.0]
