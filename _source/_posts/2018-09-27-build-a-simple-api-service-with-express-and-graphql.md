@@ -131,7 +131,7 @@ Even though the resolvers aren't set up, you can already go back to GraphQL Play
 
 The schema explorer is really useful for figuring out how to create your query. Click the green `SCHEMA` button to check out your new schema.
 
-{% img blog/graphql-express/query-schema.png alt:"full query schema" width:"600" %}{: .center-image }
+{% img blog/graphql-express/query-schema.png alt:"full query schema" width:"800" %}{: .center-image }
 
 You'll need some way to store the data. To keep it simple, use JavaScript's [`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) object for in-memory storage. You can also create some classes that will help connect the data from one object to another.
 
