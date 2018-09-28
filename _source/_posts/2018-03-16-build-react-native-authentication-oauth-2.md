@@ -576,7 +576,7 @@ In iOS Simulator, press **Command + R** to reload everything and you should see 
 
 ## Learn More about React Native and React
 
-I hope you've enjoyed this whirlwind tour of how to do authentication with Okta and React Native. You can learn more about React Native on [its official site](https://facebook.github.io/react-native/). You can also add to its ~60K stars [on GitHub](https://github.com/facebook/react-native).
+I hope you've enjoyed this whirlwind tour of how to do authentication with Okta and React Native. You can learn more about React Native on [its official site](https://facebook.github.io/react-native/). You can also add to its ~69K stars [on GitHub](https://github.com/facebook/react-native).
 
 You can find the source code for this application at <https://github.com/oktadeveloper/okta-react-native-app-auth-example>.
 
