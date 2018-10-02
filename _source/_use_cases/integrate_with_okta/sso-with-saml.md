@@ -1,3 +1,3 @@
 ---
-redirect_to: https://www.okta.com/documentation/single-sign-on/
+redirect_to: https://www.okta.com/integrate/documentation/single-sign-on/
 ---
