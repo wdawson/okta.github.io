@@ -465,7 +465,7 @@ Also, we're going to use the default authorization server that is built in to th
 
 6. Follow the steps above to add your REDIRECT_URI as a Trusted Origin in your Okta tenant
 7. Follow the steps above to assign the authentication client (created via Mulesoft UI) to Everyone.
-8. Copy the file `/config/templates/app_settings_template.json` to `/config/instances/app_settings.json`. Update the values in `app_settings.json` and save.
+8. Copy the '.env_example' file to `.env`. Update the values in `.env` and save.
 9. Launch the web app!
 </div>
 
