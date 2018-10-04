@@ -10,10 +10,10 @@ tweets:
 - "Let @leebrandt show you how to create and use middleware in #Express →"
 ---
 
-If you've done any significant Node development in the past seven or eight years, you've probably used [Express](https://expressjs.com) to build a web server at some point. While you can create a server in Node without using a library, it doesn't give you a lot out of the box and can be quite cumbersome to add functionality. Express is a minimalist, "unopinionated" server library and has become the defacto standard for building web apps in Node. To understand Express, you need to understand Express Middleware.
+If you've done any significant Node development in the past seven or eight years, you've probably used [Express](https://expressjs.com) to build a web server at some point. While you can create a server in Node without using a library, it doesn't give you a lot out of the box and can be quite cumbersome to add functionality. Express is a minimalist, "unopinionated" server library and has become the de facto standard for building web apps in Node. To understand Express, you need to understand Express Middleware.
 
 ## What is Express Middleware?
-Middleware literally means anything you put in the middle of one layer of the software and another. Express middleware are functions that execute during the lifecycle of a request to the Express server.  Each middleware has access to the HTTP `request` and `response` for each route (or path) it's attached to. In fact, Express itself is compromised wholly of middleware functions. Additionally, middleware can either terminate the HTTP request or pass it on to another middleware function using `next` (more on that soon!) This "chaining" of middleware allows you to compartmentalize your code and create reusable middleware.
+Middleware literally means anything you put in the middle of one layer of the software and another. Express middleware are functions that execute during the lifecycle of a request to the Express server.  Each middleware has access to the HTTP `request` and `response` for each route (or path) it's attached to. In fact, Express itself is compromised wholly of middleware functions. Additionally, middleware can either terminate the HTTP request or pass it on to another middleware function using `next` (more on that soon). This "chaining" of middleware allows you to compartmentalize your code and create reusable middleware.
 
 In this article I'll explain what middleware is, why you would use it, how to use existing Express middleware, and how to write your own middleware for Express.
 
@@ -55,7 +55,7 @@ app.listen(3000);
 
 Run the server via `node server.js`, access `http://localhost:3000`, and you should see "Welcome Home" printed in your browser.
 
-The `app.get()` function is actually built-in Express middleware. You'll notice the parameters passed to the method are `req`, `res`, and `next`. These are the incoming request, the response being written and a method to call once the middleware is finished. In this case, once the response is sent, the function exits so there is no need to call the `next()` method. You could also chain other middleware here by calling the `next()` method.
+The `app.get()` function is [Application-level Middleware](https://expressjs.com/en/guide/using-middleware.html#middleware.application). You'll notice the parameters passed to the method are `req`, `res`, and `next`. These are the incoming request, the response being written, and a method to call to pass the call to the next middleware function once the current middleware is finished. In this case, once the response is sent, the function exits. You could also chain other middleware here by calling the `next()` method.
 
 Let's take a look at a few more examples of the different types of middleware.
 
@@ -82,7 +82,7 @@ app.listen(3000);
 
 This time, when you go to `http://localhost:3000` you should see the same thing in your browser window, but back in the console window you will see the output of the incoming request object.
 
-The middleware logs out the request object and then calls `next()`. The next middleware in the pipeline handles the get request to the root URL and sends back the text response. Using `app.use()` means that this is global middleware and will be called for every call. 
+The middleware logs out the request object and then calls `next()`. The next middleware in the pipeline handles the get request to the root URL and sends back the text response. Using `app.use()` means that this middleware will be called for every call to the application. 
 
 ## Restrict Express Request Content Type Example
 In addition to running middleware for all calls, you could also specify to only run middleware for specific calls. 
@@ -181,7 +181,75 @@ When a request is received by Express, each middleware that matches the request 
 
 {% img blog/express-middleware-examples/middleware.png alt:"Middleware Flow" width:"800" %}{: .center-image }
 
-So if an error occurs, all middleware that is meant to handle errors will be called in order until one of them calls a terminating event like `res.send()` or `res.end()`.
+So if an error occurs, all middleware that is meant to handle errors will be called in order until one of them does not call the `next()` function call.
+
+## Error Handling in Express Middleware
+Express has a built-in default error handler that is inserted at the end of the middleware pipeline that handles any unhandled errors that may have occurred in the pipeline. Its signature adds an error parameter to the standard parameters of request, response, and next. The basic signature looks like this:
+
+```js
+app.use((err, req, res, next) => {
+  // middleware functionality here
+})
+```
+
+In order to call an error-handling middleware, you simply pass the error to `next()`, like this:
+
+```js
+app.get('/my-other-thing', (req, res, next) => {
+  next(new Error('I am passing you an error!'));
+});
+
+app.use((err, req, res, next) => {
+  console.log(err);    
+  if(!res.headersSent){
+    res.status(500).send(err.message);
+  }
+});
+```
+
+In this case, the error handling middleware at the end of the pipeline will handle the error. You might also notice that I checked the `res.headersSent` property. This just checks to see if the response has already sent the headers to the client. If it hasn't it sends a 500 HTTP status and the error message to the client. You can also chain error-handling middleware. This is common to handle different types of errors in different ways. For instance:
+
+```js
+
+app.get('/nonexistant', (req, res, next) => {
+  let err = new Error('I couldn\'t find it.');
+  err.httpStatusCode = 404;
+  next(err);
+});
+
+app.get('/problematic', (req, res, next) => {
+  let err = new Error('I\'m sorry, you can\'t do that, Dave.');
+  err.httpStatusCode = 304;
+  next(err);
+});
+
+// handles not found errors
+app.use((err, req, res, next) => {
+  if (err.httpStatusCode === 404) {
+    res.status(400).render('NotFound');
+  }
+  next(err);
+});
+
+// handles unauthorized errors
+app.use((err, req, res, next) => {
+  if(err.httpStatusCode === 304){
+    res.status(304).render('Unauthorized');
+  }
+  next(err);
+})
+
+// catch all
+app.use((err, req, res, next) => {
+  console.log(err);
+  if (!res.headersSent) {
+    res.status(err.httpStatusCode || 500).render('UnknownError');
+  }
+});
+```
+
+In this case, the middleware checks to see if a 404 (not found) error was thrown. If so, it renders the 'NotFound' template page and then passes the error to the next item in the middleware. The next middleware checks to see if a 304 (unauthorized) error was thrown. If it was, it renders the 'Unauthorized' page, and passes the error to the next middleware in the pipeline. Finally the "catch all" error handler just logs the error and if no response has been sent, it sends the error's `httpStatusCode` (or an HTTP 500 status if none is provided) and renders the 'UnknownError' template.
+
 
 ## Learn More About Express Middleware
 For detailed instructions on setting up the Okta OIDC middleware, you can follow the [ExpressJS Quickstart](https://developer.okta.com/quickstart/#/okta-sign-in-page/nodejs/express).
@@ -190,4 +258,4 @@ There is also a list of officially supported Express middleware in this [GitHub 
 
 Finally, if you're interested in learning more about how to use Okta, there's an [Okta Node SDK](https://github.com/okta/okta-sdk-nodejs) for implementing more user management functionality in your application.
 
-As always, I'd love to hear your thoughts and questions in the comments or on twitter @oktadev!
+As always, I'd love to hear your thoughts and questions in the comments or on Twitter [@oktadev](https://twitter.com/oktadev)!
