@@ -27,7 +27,7 @@ You can anticipate hitting the rate limit by checking [Okta's rate limiting head
 
 Rate limits differ depending on the level of service you have purchased from Okta. See the [pricing page](https://developer.okta.com/pricing/) for more details.
 
-> If you have a One App or Enterprise organization, the admin console will display a banner and you receive an email notification when your org reaches its rate limit.
+> If you have a One App or Enterprise organization, the admin console will display a banner and you will receive an email notification when your org reaches its rate limit.
 
 ### Okta API Endpoints and Per Minute Limits
 
