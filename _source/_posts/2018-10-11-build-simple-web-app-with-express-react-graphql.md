@@ -5,8 +5,8 @@ author: bkelley
 description: "In this tutorial you'll use Express.js and React to build a simple web application with GraphQL and secure it using Okta."
 tags: [authentication, graphql, web, express, node]
 tweets:
-- "Curious about @graphql? We just published an interesting post which shows you how to build a simple web app using #expressjs, @reactjs, and #graphql"
-- "New post out! It walks you through building a simple web app with @graphql in Node and @reactjs. Stop scrolling through Twitter and learn something fun!"
+- "Curious about @graphql? We just published an interesting post which shows you how to build a simple web app using #expressjs, @reactjs, and #graphql."
+- "Check our post out! It walks you through building a simple web app with @graphql in Node and @reactjs. Stop scrolling through Twitter and learn something fun!"
 - "@graphql + @nodejs + @reactjs = 💥"
 image: blog/graphql-express/okta-node-skew.jpg
 ---
@@ -108,16 +108,16 @@ The `gql` tag allows your favorite code editor to realize that you're writing Gr
 The GraphQL schema might be the most interesting part of this code. This is what defines the different types and allows you to say what the client can query. This will also automatically generate some very useful documentation so that you can just focus on coding.
 
 ```graphql
-  type Query {
-    posts: [Post]
-    post(id: ID!): Post
-  }
+type Query {
+  posts: [Post]
+  post(id: ID!): Post
+}
 
-  type Post {
-    id: ID
-    author: String
-    body: String
-  }
+type Post {
+  id: ID
+  author: String
+  body: String
+}
 ```
 
 Here, you've defined a `Post` type, which contains an `id`, and `author`, and a `body`. You need to say what the types are for each element. Here, `author` and `body` both use the primitive `String` type, and `id` is an `ID`.
@@ -344,7 +344,7 @@ yarn add final-form@4.10.0 react-final-form@3.6.5
 
 Now, make a new file `src/PostEditor.js` and fill it with the following (I'll explain it in more detail just below):
 
-```javascript
+```jsx
 import React from 'react';
 import gql from 'graphql-tag';
 import {
@@ -441,7 +441,7 @@ Final Form also takes an `initialValues` object to define what values the form s
 
 The other required prop is the `render` function, which will render the form. Final Form gives you a few useful form props so you can know if the form is valid or not, or if it's been modified from the `initialValues`.
 
-```javascript
+```jsx
 const PostEditor = ({ post, onClose }) => (
   <FinalForm
     onSubmit={/* ... */}
@@ -475,7 +475,7 @@ The form needs to have the `handleSubmit` function passed to it as an `onSubmit`
 
 Final Form also handles all the boilerplate needed to have a controlled `input`. Instead of storing the data in state whenever the user types something, you can just use the `Field` component.
 
-```javascript
+```jsx
 render={({ handleSubmit, pristine, invalid }) => (
   <Modal isOpen toggle={onClose}>
     <Form onSubmit={handleSubmit}>
@@ -559,7 +559,7 @@ index 5c53b5a..84177e0 100644
 
 Now, tie this all together in `src/App.js`. You can create a "New Post" button to create a new post, and make it so that you can edit any other existing post as well:
 
-```javascript
+```jsx
 import React, { Component } from 'react';
 import { Button, Container } from 'reactstrap';
 
@@ -617,7 +617,7 @@ Click **Done** to save your app, then copy your **Client ID** and paste it as a 
 **.env.local**
 ```bash
 REACT_APP_OKTA_CLIENT_ID={yourClientId}
-REACT_APP_OKTA_ORG_URL=https://{yourOktaOrgUrl}
+REACT_APP_OKTA_ORG_URL=https://{yourOktaDomain}
 ```
 
 You're also going to need an API token later for the server, so while you're in there, navigate to **API** -> **Tokens**, then click on **Create Token**. You can have many tokens, so just give this one a name that reminds you what it's for, like "GraphQL Express". You'll be given a token that you can only see right now. If you lose the token, you'll have to create another one. Add this to `.env` also.
@@ -667,7 +667,7 @@ if (module.hot) module.hot.accept();
 
 The Okta SDK comes with a `withAuth` higher order component (HoC) that can be used for a wide variety of auth-related things, but for this example, you'll only need to know whether or not you're authenticated, and some information about the user. To make this a little easier, I wrote a simple HoC to override the one that comes with the Okta SDK. Create a new file `src/withAuth.js` containing the following:
 
-```javascript
+```jsx
 import React from 'react';
 import { withAuth } from '@okta/okta-react';
 
@@ -717,7 +717,7 @@ const { user, login, logout } = auth;
 
 Now you can replace the "New Post" button with the following code, which will render a "Sign In" button if you're not logged in. If you are logged in, you'll instead see both the "New Post" button you had before, as well as a "Sign Out" button. This will make it so that you must be logged in order to create a new post.
 
-```javascript
+```jsx
 {user ? (
   <div>
     <Button
@@ -754,7 +754,7 @@ canEdit={() => Boolean(user)}
 
 You also need to export `withAuth(App)` instead of `App`. Your `src/App.js` file should now look like this:
 
-```javascript
+```jsx
 import React, { Component } from 'react';
 import { Button, Container } from 'reactstrap';
 
@@ -1184,15 +1184,15 @@ onChange={(post) => user && user.sub === post.author.id}
 
 ## Learn more about GraphQL, React, Express and Web Security
 
-You've now successfully built a GraphQL server, hooked it up to React, and locked it down with secure user authentication! As an exercise, see if you can switch the server from using simple, in-memory JavaScript objects to using a persistent data storage. For an example of using Sequelize in Node, check out [Randall's blog](https://developer.okta.com/blog/2018/06/28/tutorial-build-a-basic-crud-app-with-node).
+You've now successfully built a GraphQL server, hooked it up to React, and locked it down with secure user authentication! As an exercise, see if you can switch the server from using simple, in-memory JavaScript objects to using a persistent data storage. For an example of using Sequelize in Node, check out [Randall's blog](/blog/2018/06/28/tutorial-build-a-basic-crud-app-with-node).
 
 If you'd like to see the final sample code, you can find it [on github](https://github.com/oktadeveloper/okta-graphql-react-express-example).
 
 If you'd like to learn more about GraphQL, Express, or React, check out some of these other posts on the Okta developer blog:
 
-* [Build and Understand Express Middleware Through Examples](https://developer.okta.com/blog/2018/09/13/build-and-understand-express-middleware-through-examples)
-* [Build a Basic CRUD App with Node and React](https://developer.okta.com/blog/2018/07/10/build-a-basic-crud-app-with-node-and-react)
-* [Build and Understand a Simple Node.js Website with User Authentication](https://developer.okta.com/blog/2018/08/17/build-and-understand-user-authentication-in-node)
-* [Build a Health Tracking App with React, GraphQL, and User Authentication](https://developer.okta.com/blog/2018/07/11/build-react-graphql-api-user-authentication)
+* [Build and Understand Express Middleware Through Examples](/blog/2018/09/13/build-and-understand-express-middleware-through-examples)
+* [Build a Basic CRUD App with Node and React](/blog/2018/07/10/build-a-basic-crud-app-with-node-and-react)
+* [Build and Understand a Simple Node.js Website with User Authentication](/blog/2018/08/17/build-and-understand-user-authentication-in-node)
+* [Build a Health Tracking App with React, GraphQL, and User Authentication](/blog/2018/07/11/build-react-graphql-api-user-authentication)
 
 If you have any questions about this post, please add a comment below. For more awesome content, follow [@oktadev](https://twitter.com/oktadev) on Twitter, like us [on Facebook](https://www.facebook.com/oktadevelopers/), or subscribe to [our YouTube channel](https://www.youtube.com/channel/UC5AMiWqFVFxF1q9Ya1FuZ_Q).
