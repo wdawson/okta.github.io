@@ -6,7 +6,7 @@ description: "In this tutorial you'll use Express.js and React to build a simple
 tags: [authentication, graphql, web, express, node]
 tweets:
 - "Curious about @graphql? We just published an interesting post which shows you how to build a simple web app using #expressjs, @reactjs, and #graphql."
-- "Check our post out! It walks you through building a simple web app with @graphql in Node and @reactjs. Stop scrolling through Twitter and learn something fun!"
+- "Check out our kick-ass tutorial! It walks you through building a simple web app with @graphql in Node and @reactjs. Stop scrolling through Twitter and learn something fun!"
 - "@graphql + @nodejs + @reactjs = 💥"
 image: blog/graphql-express/okta-node-skew.jpg
 ---
