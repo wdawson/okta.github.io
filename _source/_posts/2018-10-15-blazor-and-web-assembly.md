@@ -160,6 +160,6 @@ You can find the source code for complete application at following link: [https:
 
 Here are some other great resources to check out as well:
 
-* [Official Blazor repository](Blazor)
+* [Official Blazor repository](https://github.com/aspnet/blazor)
 * [Get started with Blazor](https://blazor.net/docs/get-started.html)
 * [Getting started with Blazort](https://www.jerriepelser.com/blog/getting-started-with-blazor/)
