@@ -10,13 +10,11 @@ tweets:
 - "Looking for a quick introduction to #blazor and Web Assembly, check this out!"
 ---
 
-No matter what kind of development you do, if you want to work or create a serious web application you are supposed to use JavaScript. Actually, until recently, it was your only serious choice. Luckily for people who prefer some other language, times are starting to change. There is a new form of web development on the scene – WebAssembly (Wasm). WebAssembly is an alternative way of developing web applications, and it doesn't require you to know any JavaScript. However, it was designed to run alongside JavaScript, and you can load your WebAssembly modules in JavaScript using the WebAssembly JavaScript APIs. 
+If you’re a modern web dev, you’re probably using JavaScript. Until recently, it was the only serious choice for more web development. For those of us who may not have JS as their primary language competency (but who are still interested in building web apps) that world is beginning to change. Today, we have WebAssembly (Wasm). WebAssembly is an alternative way of developing web applications, and it doesn’t require you to know any JavaScript. WebAssembly is a new type of code that can be run in modern web browsers and provides new features and major gains in performance. It is not primarily intended to be written by hand, rather it is designed to be an effective compilation target for other languages. It was designed to run alongside JavaScript, and allows you to load WebAssembly modules in JavaScript using the WebAssembly JavaScript APIs.
 
-WebAssembly is a new type of code that can be run in modern web browsers and provides new features and major gains in performance. It is not primarily intended to be written by hand, rather it is designed to be an effective compilation target for other languages. 
+Microsoft has been closely following the progress of WebAssembly, and recently they decided to get more serious in their experimenting. Last year in August it was announced that .NET is coming to the browser using the Mono runtime. Some months after, we got Blazor a .NET web framework using the power of Razor and C# to run in the browser with WebAssembly. It’s a SPA web framework with all the features of a modern web framework (component model, routing, layouts, forms and validation, DI, live reloading, server-side rendering, full .NET debugging in browsers and in the IDE).
 
-For a while now Microsoft has been following progress on WebAssembly, and recently they decided to get more serious in their experimenting. Last year in August it was announced that .NET is coming to the browser using the Mono runtime. Some months after we got Blazor, a .NET web framework using power of Razor and C# to run in the browser with WebAssembly. It's a SPA web framework with all the features of a modern web framework (component model, routing, layouts, forms and validation, DI, live reloading, server-side rendering, full .NET debugging in browsers and in the IDE).
-
-Running Blazor in a browser really depends on the browser's support for WebAssembly. Luckily, all modern browsers supports WebAssembly. This includes Edge, Edge Mobile, Chrome, Chrome for Android, Firefox, Firefox for Android, Safari, iOS Safari and Samsung Internet.
+Running Blazor in a browser really depends on the browser’s support for WebAssembly. Luckily, all modern browsers supports WebAssembly. This includes Edge, Edge Mobile, Chrome, Chrome for Android, Firefox, Firefox for Android, Safari, iOS Safari and Samsung Internet.
 
 
 ## Advantages of Blazor
@@ -54,7 +52,7 @@ You'll want to specify the port that for the Blazor application and the API. To 
 
 For the Blazor project set the **App Url** property to `http://localhost:5000`. Do the same for the API project and set the **App Url** property to `http://localhost:5001`.
 
-{% img blog/blazor/set-web-uri.png alt:"set web uir" width:"800" %}{: .center-image }
+{% img blog/blazor/set-web-url.png alt:"set web url" width:"800" %}{: .center-image }
 
 Update the Solution properties for Startup Project. Within Solution Explorer right click on Solution file `OktaBlazor` -> Properties and at `Startup Project` tab make sure you have following settings:
 
@@ -162,4 +160,13 @@ Here are some other great resources to check out as well:
 
 * [Official Blazor repository](https://github.com/aspnet/blazor)
 * [Get started with Blazor](https://blazor.net/docs/get-started.html)
-* [Getting started with Blazort](https://www.jerriepelser.com/blog/getting-started-with-blazor/)
+* [Getting started with Blazor](https://www.jerriepelser.com/blog/getting-started-with-blazor/)
+
+
+You can also learn more about ASP.NET and from our developer blog.
+
+* [CRUD with ASP.NET Framework WebAPI and Angular](/blog/2018/07/27/build-crud-app-in-aspnet-framework-webapi-and-angular)
+* [Build a simple CRUD app with ASP.NET Core and Vue](/blog/2018/08/27/build-crud-app-vuejs-netcore)
+* [Deploy your ASP.NET Core app to Azure](/blog/2018/06/19/deploy-your-aspnet-core-app-to-azure)
+
+As always, if you have questions feel free to post them in the comments below. Don't forget to follow us on [Twitter](https://twitter.com/oktadev), [Facebook](https://www.facebook.com/oktadevelopers/), and [LinkedIn](https://www.linkedin.com/company/oktadev/). Also, check out our [YouTube Channel](https://www.youtube.com/channel/UC5AMiWqFVFxF1q9Ya1FuZ_Q).
