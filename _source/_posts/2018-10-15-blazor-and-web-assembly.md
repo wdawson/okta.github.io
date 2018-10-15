@@ -68,14 +68,14 @@ using System.Collections.Generic;
 
 namespace OktaBlazor.API.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class ValuesController : ControllerBase
-	{
+  [Route("api/[controller]")]
+  [ApiController]
+  public class ValuesController : ControllerBase
+  {
     // GET api/values
     [HttpGet]
     public ActionResult<IEnumerable<string>> Get() => new[] { "Okta", "Blazor", ".NET", "Razor" };   	 
-	}
+  }
 }
 ```
 
@@ -119,24 +119,24 @@ Back in the OktaBlazor project, inside of `Pages` folder there is `FetchData.csh
 
 @if (words == null)
 {
-	<p><em>Loading...</em></p>
+  <p><em>Loading...</em></p>
 }
 else
 {
-	foreach (var word in words)
-	{
+  foreach (var word in words)
+  {
     <span>@word</span>
     <br />
-	}
+  }
 }
 
 @functions {
-	string[] words;
+  string[] words;
 
-	protected override async Task OnInitAsync()
-	{
+  protected override async Task OnInitAsync()
+  {
     words = await Http.GetJsonAsync<string[]>("http://localhost:5001/api/Values");
-	}
+  }
 }
 ```
 You can run the application by pressing `CTRL + F5` or simply `F5`. You won't need to do anything special to configure it. It will simply work since Blazor will do everything for you. Blazor will not compile your .NET code to JS. It will download .NET assemblies in the browser, load them with the help of Mono and will execute those directly in the browser via WebAssembly.
