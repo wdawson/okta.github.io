@@ -1,13 +1,13 @@
 ---
 layout: blog_post
-title: "Get Started with Blazor and Web Assembly"
+title: "Get Started with Blazor and WebAssembly"
 author: ibrahim
-description: "This tutorial walks you through the basics of Blazor and Web Assembly."
-tags: [blazor, web assembly]
+description: "This tutorial walks you through the basics of Blazor and WebAssembly."
+tags: [blazor, webassembly]
 tweets:
 - "Getting started with #blazor? @ibro has you covered!"
-- "A quick introduction to #blazor and Web Assembly. ->"
-- "Looking for a quick introduction to #blazor and Web Assembly, check this out!"
+- "A quick introduction to #blazor and WebAssembly. ->"
+- "Looking for a quick introduction to #blazor and WebAssembly, check this out!"
 ---
 
 If you're a modern web dev, you're probably using JavaScript. Until recently, it was the only serious choice for more web development. For those of us who may not have JS as their primary language competency (but who are still interested in building web apps) that world is beginning to change. Today, we have WebAssembly (Wasm). WebAssembly is an alternative way of developing web applications, and it doesn't require you to know any JavaScript. WebAssembly is a new type of code that can be run in modern web browsers and provides new features and major gains in performance. It is not primarily intended to be written by hand, rather it is designed to be an effective compilation target for other languages. It was designed to run alongside JavaScript, and allows you to load WebAssembly modules in JavaScript using the WebAssembly JavaScript APIs.
@@ -135,7 +135,7 @@ else
 
   protected override async Task OnInitAsync()
   {
-    words = await Http.GetJsonAsync<string[]>("http://localhost:5001/api/Values");
+    words = await Http.GetJsonAsync<string[]>("http://localhost:5001/api/values");
   }
 }
 ```
