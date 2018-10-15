@@ -2,7 +2,7 @@
 layout: blog_post
 title: "Get Started with Blazor and Web Assembly"
 author: ibrahim
-description: "This tutorial walks you through the basics of Blazor and Web Assembly"
+description: "This tutorial walks you through the basics of Blazor and Web Assembly."
 tags: [blazor, web assembly]
 tweets:
 - "Getting started with #blazor? @ibro has you covered!"
@@ -12,9 +12,9 @@ tweets:
 
 If you're a modern web dev, you're probably using JavaScript. Until recently, it was the only serious choice for more web development. For those of us who may not have JS as their primary language competency (but who are still interested in building web apps) that world is beginning to change. Today, we have WebAssembly (Wasm). WebAssembly is an alternative way of developing web applications, and it doesn't require you to know any JavaScript. WebAssembly is a new type of code that can be run in modern web browsers and provides new features and major gains in performance. It is not primarily intended to be written by hand, rather it is designed to be an effective compilation target for other languages. It was designed to run alongside JavaScript, and allows you to load WebAssembly modules in JavaScript using the WebAssembly JavaScript APIs.
 
-Microsoft has been closely following the progress of WebAssembly, and recently they decided to get more serious in their experimenting. Last year in August it was announced that .NET is coming to the browser using the Mono runtime. Some months after, we got Blazor a .NET web framework using the power of Razor and C# to run in the browser with WebAssembly. It's a SPA web framework with all the features of a modern web framework (component model, routing, layouts, forms and validation, DI, live reloading, server-side rendering, full .NET debugging in browsers and in the IDE).
+Microsoft has been closely following the progress of WebAssembly, and recently they decided to get more serious in their experimenting. Last year in August it was announced that .NET is coming to the browser using the Mono runtime. Some months after, we got Blazor a .NET web framework using the power of Razor and C# to run in the browser with WebAssembly. It's a SPA web framework with all the features of a modern web framework like the component model, routing, layouts, forms and validation, DI, live reloading, server-side rendering, and full .NET debugging in browsers and in the IDE.
 
-Running Blazor in a browser really depends on the browser's support for WebAssembly. Luckily, all modern browsers supports WebAssembly. This includes Edge, Edge Mobile, Chrome, Chrome for Android, Firefox, Firefox for Android, Safari, iOS Safari and Samsung Internet.
+Running Blazor in a browser really depends on the browser's support for WebAssembly. Luckily, all modern browsers supports WebAssembly. This includes Edge, Edge Mobile, Chrome, Chrome for Android, Firefox, Firefox for Android, Safari, iOS Safari, and Samsung Internet.
 
 
 ## Advantages of Blazor
@@ -28,7 +28,7 @@ You should have [.NET Core 2.1 SDK (2.1.302)](https://go.microsoft.com/fwlink/?l
 
 Now we can create a Blazor app using built-in template within Visual Studio. We will start from a scratch.
 
-In Visual Studio, select File -> New Project
+In Visual Studio, select **File** > **New Project**.
 
 {% img blog/blazor/new-blazor-project.png alt:"new blazor project" width:"800" %}{: .center-image }
 
@@ -38,15 +38,15 @@ Select a location where your code will be stored.
 
 Now we will create a simple API project that will act as server-side API. 
 
-In Visual Studio, right click on the Solution inside of the Solution Explorer -> New Project
+In Visual Studio, right click on the Solution inside of the **Solution Explorer** > **New Project**.
 
 {% img blog/blazor/new-api-project.png alt:"new api project" width:"800" %}{: .center-image }
 
-Choose the existing folder for your application and click OK.
+Choose the existing folder for your application and click **OK**.
 
 {% img blog/blazor/choose-api-type.png alt:"choose api type" width:"800" %}{: .center-image }
 
-You should choose the API template, uncheck `Configure for HTTPS` and click OK.
+You should choose the API template, uncheck `Configure for HTTPS` and click **OK**.
 
 You'll want to specify the port that for the Blazor application and the API. To do so, right click on the project in the solution explorer and click **properties**. In the main properties window, choose **Debug** from the left-hand menu, find *Web Server Settings* section.
 
@@ -64,7 +64,6 @@ For the API project, we will update the ValuesController with the following cont
 
 ```cs
 using Microsoft.AspNetCore.Mvc;
-
 using System.Collections.Generic;
 
 namespace OktaBlazor.API.Controllers
@@ -73,9 +72,9 @@ namespace OktaBlazor.API.Controllers
 	[ApiController]
 	public class ValuesController : ControllerBase
 	{
-    	// GET api/values
-    	[HttpGet]
-    	public ActionResult<IEnumerable<string>> Get() => new[] { "Okta", "Blazor", ".NET", "Razor" };   	 
+    // GET api/values
+    [HttpGet]
+    public ActionResult<IEnumerable<string>> Get() => new[] { "Okta", "Blazor", ".NET", "Razor" };   	 
 	}
 }
 ```
@@ -84,19 +83,20 @@ namespace OktaBlazor.API.Controllers
 If you want to be able to fetch data from the server you will need to enable CORS on your API.
 
 Inside of `ConfigureServices` method within `Startup` class add the following:
-```
- 	services.AddCors(options =>
-        	{
-            	options.AddPolicy("CorsPolicy",
-                	builder =>
-                	{
-                    	builder
-                        	.AllowAnyHeader()
-                        	.AllowAnyMethod()
-                        	.AllowCredentials()
-                        	.WithOrigins("http://localhost:5000");
-                	});
-        	});
+
+```cs
+services.AddCors(options =>
+{
+  options.AddPolicy("CorsPolicy",
+    builder =>
+    {
+      builder
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials()
+        .WithOrigins("http://localhost:5000");
+    });
+});
 ```
 
 And inside of `Configure` method, before `app.UseMvc();` line add the following:
@@ -125,8 +125,8 @@ else
 {
 	foreach (var word in words)
 	{
-      	 <span>@word</span>
-    	<br />
+    <span>@word</span>
+    <br />
 	}
 }
 
@@ -135,10 +135,9 @@ else
 
 	protected override async Task OnInitAsync()
 	{
-    	words = await Http.GetJsonAsync<string[]>("http://localhost:5001/api/Values");
+    words = await Http.GetJsonAsync<string[]>("http://localhost:5001/api/Values");
 	}
 }
-
 ```
 You can run the application by pressing `CTRL + F5` or simply `F5`. You won't need to do anything special to configure it. It will simply work since Blazor will do everything for you. Blazor will not compile your .NET code to JS. It will download .NET assemblies in the browser, load them with the help of Mono and will execute those directly in the browser via WebAssembly.
 
@@ -151,14 +150,13 @@ With the possibility to use your C# skills for frontend applications, Blazor ope
 
 After playing around with Blazor, I hope you will follow its progress in the future. It definitely seems interesting, and it promises a lot, but we still need to see what will Microsoft do and what kind of tooling they will offer for Visual Studio and outside of Visual Studio. Also, it will be interesting to see how the community will react and if we can build a healthy ecosystem around Blazor and create amazing client-side libraries.
 
-You can find the source code for complete application at following link: [https://github.com/Ibro/OktaBlazor](https://github.com/Ibro/OktaBlazor).
+You can find the source code for complete application at following link: [https://github.com/oktadeveloper/blazor-example](https://github.com/oktadeveloper/blazor-example).
 
 Here are some other great resources to check out as well:
 
 * [Official Blazor repository](https://github.com/aspnet/blazor)
 * [Get started with Blazor](https://blazor.net/docs/get-started.html)
 * [Getting started with Blazor](https://www.jerriepelser.com/blog/getting-started-with-blazor/)
-
 
 You can also learn more about ASP.NET and from our developer blog.
 
