@@ -23,7 +23,7 @@ As a .NET developer you will be able to use your favorite language and framework
 Onboarding new developers to the project should be a lot easier since they won't need to know yet another major language. Also, having backend developers work on frontend tasks is going to be more realistic and enjoyable for developers.
 
 
-## Getting started
+## Building Your First Blazor and WebAssembly App
 You should have [.NET Core 2.1 SDK (2.1.302)](https://go.microsoft.com/fwlink/?linkid=873092), Visual Studio 2017 (15v.7 or later) with the *ASP.NET and web development workload* installed, and finally, you should install the [Blazor Language Service extension](https://go.microsoft.com/fwlink/?linkid=870389).
 
 Now we can create a Blazor app using built-in template within Visual Studio. We will start from a scratch.
@@ -59,8 +59,7 @@ Update the Solution properties for Startup Project. Within Solution Explorer rig
 {% img blog/blazor/set-startup-project.png alt:"set startup project" width:"800" %}{: .center-image }
 
 
-### Update the API
-
+## Update the Blazor API
 For the API project, we will update the ValuesController with the following content:
 
 ```cs
@@ -81,7 +80,7 @@ namespace OktaBlazor.API.Controllers
 }
 ```
 
-### Enable CORS
+## Enable CORS in Your Blazor API
 If you want to be able to fetch data from the server you will need to enable CORS on your API.
 
 Inside of `ConfigureServices` method within `Startup` class add the following:
@@ -106,9 +105,7 @@ And inside of `Configure` method, before `app.UseMvc();` line add the following:
 app.UseCors("CorsPolicy");
 ```
 
-### Update the Client side (Blazor application)
-
-
+## Update Your Blazor Application
 Back in the OktaBlazor project, inside of `Pages` folder there is `FetchData.cshtml` file which represents a Blazor component. Update the file with following content:
 
 
@@ -145,7 +142,7 @@ else
 ```
 You can run the application by pressing `CTRL + F5` or simply `F5`. You won't need to do anything special to configure it. It will simply work since Blazor will do everything for you. Blazor will not compile your .NET code to JS. It will download .NET assemblies in the browser, load them with the help of Mono and will execute those directly in the browser via WebAssembly.
 
-## Learn More About Blazor
+## Learn More About Blazor, WebAssembly, and Secure Web Development
 Blazor is an experimental technology that has the perspective to replace current major client-side frameworks eventually. It is still not a production-ready framework, but it promises to be an enjoyable full SPA framework powered by C# and Razor.
 
 If this turns out to be true, Microsoft will probably be aiming to make it a solid replacement for the most used SPA frameworks (React, Angular, Vue). As time passes, I am sure there will be other WebAssembly frameworks that will compete with Razor. However, it seems that Microsoft is starting to invest more and more in Blazor and taking it more seriously.
