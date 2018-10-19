@@ -5,8 +5,8 @@ author: keith_casey
 description: "In recent weeks, we've seen a number of hacks around OAuth access tokens. As much as we'd like to blame the underlying technology, it's more out of misuse and misunderstanding than anything else."
 tags: [oauth, security]
 Tweets:
-- ""
-- ""
+- "Our own @caseysoftware walks us through how to handle stolen access tokens 🔓 #oauth #security"
+- "How should stolen access tokens be dealt with? @caseysoftware walks us through it ➡"
 image: blog/stolen-access-tokens/server-rack.jpg
 ---
 
@@ -41,11 +41,11 @@ Unfortunately, expecting every developer of every downstream application to adhe
 
 First, we should implement OAuth 2.0 Token Revocation ([RFC 7009](https://tools.ietf.org/html/rfc7009)) and OAuth 2.0 Token Introspection ([RFC 7662](https://tools.ietf.org/html/rfc7662)). The two specifications are a powerful combination. They give us both the ability to kill a token and a way to safely confirm it's dead. The sooner we can teach developers to determine if a token is active, the safer all of our systems are.
 
-Next, we should use finely grained scopes (aka permissions). In our [Recommended Practices for API Access Management](https://developer.okta.com/use_cases/api_access_management/#authorization-server), we note that a generic “admin” scope is rarely appropriate. Your scopes should be specific to your use case. If your use case is downloading today's data for reporting, your scope should be read only and restricted to that specific data. If your use case involves moving money or reading health information, the scopes should be unique and more fine-grained. Now a compromised token is less valuable to an attacker and less devastating for you.
+Next, we should use finely grained scopes (aka permissions). In our [Recommended Practices for API Access Management](https://developer.okta.com/use_cases/api_access_management/#authorization-server), we note that a generic "admin" scope is rarely appropriate. Your scopes should be specific to your use case. If your use case is downloading today's data for reporting, your scope should be read only and restricted to that specific data. If your use case involves moving money or reading health information, the scopes should be unique and more fine-grained. Now a compromised token is less valuable to an attacker and less devastating for you.
 
 Finally, we need to expire our tokens frequently. At first glance, this seems wrong. After all, a long-lived token allows a user to accomplish everything they need. But remember, we have a solution for that: the refresh token! The refresh token allows an application to return to the OAuth server and get a new access token. More importantly, it can be revoked just like an access token. If your tokens are compromised, you revoke them and the refresh token exchange fails. The attacker is locked out.
 
-The only open question is “what's a good access token lifetime?” My general rule is that a use case involving spending or moving money; modifying health, insurance, or financial data; or updating contact information or credentials should have an extremely short lifetime on the order of minutes. And even within that, we may need flexibility. For example, sending $10 to a friend for lunch is not the same as transferring $10,000 to purchase a car. For more mundane or read-only use cases, a longer lifetime is acceptable.
+The only open question is "what's a good access token lifetime?" My general rule is that a use case involving spending or moving money; modifying health, insurance, or financial data; or updating contact information or credentials should have an extremely short lifetime on the order of minutes. And even within that, we may need flexibility. For example, sending $10 to a friend for lunch is not the same as transferring $10,000 to purchase a car. For more mundane or read-only use cases, a longer lifetime is acceptable.
 
 ## It's not OAuth's Fault
 
