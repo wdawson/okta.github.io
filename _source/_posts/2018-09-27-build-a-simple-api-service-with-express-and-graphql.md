@@ -17,6 +17,8 @@ In this tutorial, I'll show you how to write a custom GraphQL API using Node and
 
 ## Create the GraphQL API with Express
 
+If you're in a hurry and would rather cut to the chase, you can find the final sample code [on github](https://github.com/oktadeveloper/okta-express-graphql-example). However, if you want to follow along to get more detail and see how the code was put together, keep reading.
+
 To create the API, start by creating a new folder and creating a `package.json` file to manage your dependencies. You'll also need to install a few dependencies to get GraphQL with Express up and running:
 
 ```bash
