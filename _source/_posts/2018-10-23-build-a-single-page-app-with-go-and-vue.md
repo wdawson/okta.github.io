@@ -419,7 +419,7 @@ To install vuex, run:
 yarn add vuex
 ```
 
-You now need to create `./kudo-oos/pkg/http/web/app/src/store.js` with  `actions`, `mutations` and `getters`. Your initial data is `{ kudos: {}, repos: [] }`. `kudos` holds all the user's favorites OSS projects asa JavaScript Object where the key is the project id and the value is the project itself. ‘repos` is an array that holds the search results.
+You now need to create `./kudo-oos/pkg/http/web/app/src/store.js` with  `actions`, `mutations` and `getters`. Your initial data is `{ kudos: {}, repos: [] }`. `kudos` holds all the user's favorites OSS projects asa JavaScript Object where the key is the project id and the value is the project itself. `repos` is an array that holds the search results.
 
 There are two cases in which you may need to mutate state. First, when the user logs in you need to fetch the user's  favorites OSS projects from the Go server and set the `repos` in the store by calling `resetRepos`. Second, when the user favorites or unfavorites an OSS project, you need update the `kudos` in the store by calling `resetKudos` to reflect that change on the server.
 
