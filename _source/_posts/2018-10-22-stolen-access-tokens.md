@@ -10,7 +10,6 @@ Tweets:
 image: blog/stolen-access-tokens/server-rack.jpg
 ---
 
-
 What never dies, spreads rampantly, and is guaranteed to bite you? You guessed it: Stolen access tokens!
 
 In recent weeks, we've seen a number of hacks around OAuth access tokens. As much as we'd like to blame the underlying technology, it's more out of misuse and misunderstanding than anything else.
