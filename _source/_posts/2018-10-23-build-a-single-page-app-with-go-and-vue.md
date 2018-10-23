@@ -1120,7 +1120,7 @@ func UseMiddlewares(h http.Handler) http.Handler {
 ```
 {% endraw %}
 
-As you can see, the middleware `OktaAuth` uses [okta-jwt-verifier-golang](github.com/okta/okta-jwt-verifier-golang) to validate the user's access token.
+As you can see, the middleware `OktaAuth` uses [okta-jwt-verifier-golang](https://github.com/okta/okta-jwt-verifier-golang) to validate the user's access token.
 
 ## Define Your Go REST API Entry Point
 
