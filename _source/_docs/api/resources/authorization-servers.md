@@ -922,7 +922,7 @@ curl -v -X GET \
 
 Rotates the current [keys](#certificate-json-web-key-object) for a Custom Authorization Server. If you rotate keys, the `ACTIVE` key becomes the `EXPIRED` key, the `NEXT` key becomes the `ACTIVE` key, and the Custom Authorization Server immediately begins using the new active key to sign tokens.
 
->NOTE: Authorization server keys can be rotated in both `MANUAL` and `AUTO` mode, however, it is recommended to rotate keys manually only when the authorization server is in `MANUAL` mode. If keys are rotated manually, any intermediate cache should be invalidated and keys should be fetched again using the [keys](#get-authorization-server-keys) endpoint.
+>NOTE: Okta rotates your keys automatically in `AUTO` mode. You can rotate keys yourself in either mode. If keys are rotated manually, any intermediate cache should be invalidated and keys should be fetched again using the [keys](#get-authorization-server-keys) endpoint.
 
 ##### Request Parameters
 {:.api .api-request .api-request-params}
@@ -1315,7 +1315,7 @@ After you enable the Custom URL Domain feature, all new Custom Authorization Ser
 | Property  | Description                                                                                   | Type                                     | Required for create or update            |
 |:-----------|:----------------------------------------------------------------------------------------------|:-----------------------------------------|:-----------------------------------------|
 | conditions | Specifies the people, groups, grant types and scopes the rule will be applied to              |[Condition Object](#condition-object)  | False                                    |
-| id         | ID of the rule                                                                                | String                                   | True except for create or get all claims |
+| id         | ID of the rule                                                                                | String                                   | False except for create |
 | name       | Name of the rule                                                                              | String                                   | True                                     |
 | status     | Specifies whether requests have access to this claim. Valid values: `ACTIVE` or `INACTIVE`    | Enum                                     | True                                     |
 | system     | Specifies whether the rule was created by Okta or not                                         | Boolean                                  | True                                     |
