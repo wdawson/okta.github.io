@@ -920,7 +920,7 @@ deletePlayer(id): Observable<Player> {
         new RequestOptions({ headers: this.headers })
     );
 }
-…
+...
 ```
 
 `src/app/trivia-game/trivia-game.component.ts`
