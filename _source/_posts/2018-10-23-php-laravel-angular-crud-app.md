@@ -961,7 +961,7 @@ ng generate service trivia
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
-const TRIVIA_ENDPOINT: string = 'http://localhost:8000/question';
+const TRIVIA_ENDPOINT: string = 'http://jservice.io/api/random?count=1';
 
 @Injectable({
     providedIn: 'root'
@@ -1066,18 +1066,6 @@ export class TriviaGameComponent implements OnInit {
             );
     }
 ...
-```
-
-We'll add a quick unauthenticated endpoint to our API to return a random trivia question. In reality, you'd probably want to connect a real trivia database to your app, but this will do for this quick demo.
-
-In the server project, add the following route:
-
-`routes/web.php`
-
-```php
-Route::get('/question', function(Request $request) {
-    return response()->json(json_decode(file_get_contents('http://jservice.io/api/random?count=1')));
-});
 ```
 
 ## Add Buttons to Mark Answers Right and Wrong
