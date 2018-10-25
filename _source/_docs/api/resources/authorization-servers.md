@@ -1226,7 +1226,7 @@ After you enable the Custom URL Domain feature, all new Custom Authorization Ser
 | created     | Timestamp when the policy was created                                                                               | DateTime                                  | System                                   |
 | conditions  | Specifies the clients that the policy will be applied to.                                                           |[Condition Object](#condition-object) | False                                    |
 | description | Description of the policy                                                                                           | String                                    | True                                     |
-| id          | ID of the policy                                                                                                    | String                                    | True except for create or get all claims |
+| id          | ID of the policy                                                                                                    | String                                    | True except for create |
 | lastUpdated | Timestamp when the policy was last updated                                                                          | DateTime                                  | System                                   |
 | name        | Name of the policy                                                                                                  | String                                    | True                                     |
 | priority    | Specifies the order in which this policy is evaluated in relation to the other policies in a Custom Authorization Server              | Integer                                   | True                                     |
@@ -1312,14 +1312,14 @@ After you enable the Custom URL Domain feature, all new Custom Authorization Ser
 
 #### Rule Properties
 
-| Property  | Description                                                                                   | Type                                     | Required for create or update            |
-|:-----------|:----------------------------------------------------------------------------------------------|:-----------------------------------------|:-----------------------------------------|
-| conditions | Specifies the people, groups, grant types and scopes the rule will be applied to              |[Condition Object](#condition-object)  | False                                    |
-| id         | ID of the rule                                                                                | String                                   | False except for create |
-| name       | Name of the rule                                                                              | String                                   | True                                     |
-| status     | Specifies whether requests have access to this claim. Valid values: `ACTIVE` or `INACTIVE`    | Enum                                     | True                                     |
-| system     | Specifies whether the rule was created by Okta or not                                         | Boolean                                  | True                                     |
-| actions    | An object that contains the `tokens` array, which shows lifetime durations for the tokens                                             | Object                                  | System generated                         |
+| Property  | Description                                                                                   | Type                                     | Required for create            | Required for update            |
+|:-----------|:----------------------------------------------------------------------------------------------|:-----------------------------------------|:-----------------------------------------|:-----------------------------------------|
+| conditions | Specifies the people, groups, grant types and scopes the rule will be applied to              |[Condition Object](#condition-object)  | False                                    | False                                    |
+| id         | ID of the rule                                                                                | String                                   | False | True                                   |
+| name       | Name of the rule                                                                              | String                                   | True                                     | True                                    |
+| status     | Specifies whether requests have access to this claim. Valid values: `ACTIVE` or `INACTIVE`    | Enum                                     | True                                     | True                                    |
+| system     | Specifies whether the rule was created by Okta or not                                         | Boolean                                  | True                                     | True                                    |
+| actions    | An object that contains the `tokens` array, which shows lifetime durations for the tokens                                             | Object                                  | System generated                         | System generated                                    |
 
 Token limits:
 
