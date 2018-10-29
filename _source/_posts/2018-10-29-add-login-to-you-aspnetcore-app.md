@@ -156,7 +156,7 @@ It has never been easier to add authorization to ASP.NET Core applications. Usin
 Install the official Okta NuGet package:
 
 ```sh
-dotnet add package Okta.AspNetCore --version 1.1.0
+dotnet add package Okta.AspNetCore --version 1.1.1
 ```
 
 First, add the Okta details to your `appsettings.json` file. At the top of the file, above the `Logging` section paste the following code:
