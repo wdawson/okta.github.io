@@ -2,7 +2,7 @@
 layout: blog_post
 title: "Add Login to Your ASP.NET Core MVC App"
 author: ibrahim
-description: "This tutorial walks you through adding simple authenticationa and authorization to your ASP.NET Core application using Okta."
+description: "This tutorial walks you through adding simple authentication and authorization to your ASP.NET Core application using Okta."
 tags: [aspnet, aspnetcore, dotnet, dotnetcore, authentication, authorization]
 tweets:
 - "Need to add login to your #aspnetcore MVC application? @ibro has you covered!"
@@ -23,7 +23,7 @@ dotnet new mvc -n OktaMvcLogin
 ```
 
 ### Set Up a Database with SQLite
-Create a new folder called `Data` within the root folder of the project. Inside this folder we will create two files. First one is the database model `Employee.cs`:
+Create a new folder called `Data` within the root folder of the project. Inside this folder you will create two files. First one is the database model `Employee.cs`:
 
 ```cs
 namespace OktaMvcLogin.Data
@@ -87,14 +87,14 @@ dbContext.Database.EnsureCreated();
 ```
 
 ### Scaffold Your Controller and Views
-For the scaffolding to work we will need to install code generator tools:
+For the scaffolding to work you will need to install code generator tools:
 
 ```sh
 dotnet tool install --global dotnet-aspnet-codegenerator
 dotnet add package Microsoft.VisualStudio.Web.CodeGeneration.Design
 ```
 
-After that, we can use our existing model and DbContext class to generate controller and matching views:
+After that, you can use your existing model and `DbContext` class to generate controller and matching views:
 
 ```sh
 dotnet aspnet-codegenerator controller -async -m Employee -dc ApplicationDbContext -name EmployeesController -outDir Controllers -udl
@@ -163,9 +163,9 @@ First, add the Okta details to your `appsettings.json` file. At the top of the f
 
 ```json
 "Okta": {
-	"ClientId": "{OktaClientId}",
-	"ClientSecret": "{OktaClientSecret}",
-	"Domain": "https://{yourOktaDomain}"
+  "ClientId": "{OktaClientId}",
+  "ClientSecret": "{OktaClientSecret}",
+  "Domain": "https://{yourOktaDomain}"
 },
 ```
 
@@ -181,16 +181,16 @@ After that, add the details about your identity provider to your application. In
 ```cs 
 services.AddAuthentication(options =>
 {
-	options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-	options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-	options.DefaultChallengeScheme = OktaDefaults.MvcAuthenticationScheme;
+  options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+  options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+  options.DefaultChallengeScheme = OktaDefaults.MvcAuthenticationScheme;
 })
 .AddCookie()
 .AddOktaMvc(new OktaMvcOptions
 {
-	OktaDomain = Configuration["Okta:Domain"],
-	ClientId = Configuration["Okta:ClientId"],
-	ClientSecret = Configuration["Okta:ClientSecret"]
+  OktaDomain = Configuration["Okta:Domain"],
+  ClientId = Configuration["Okta:ClientId"],
+  ClientSecret = Configuration["Okta:ClientSecret"]
 });
 
 // ... the rest of ConfigureServices
@@ -198,7 +198,7 @@ services.AddAuthentication(options =>
 services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 ```
 
-The section above sets up the authentication schemes with ASP.NET Core `AddAuthentication` extension and also sets up the Okta details by using the extension method `AddOktaMvc` available with Okta NuGet package
+The section above sets up the authentication schemes with ASP.NET Core `AddAuthentication` extension and also sets up the Okta details by using the extension method `AddOktaMvc` available with Okta NuGet package.
 
 After that, add the following to the `Configure` method, above the `app.UseMvc();` line:
 
@@ -212,7 +212,7 @@ Finally, add the `Authorize` attribute to the `EmployeesController` class. Insid
 using Microsoft.AspNetCore.Authorization;
 ```
 
-Above `EmployeesController` class name add the authorization attribute:
+Above the `EmployeesController` class name add the authorization attribute:
 
 ```cs
 [Authorize]
@@ -222,7 +222,7 @@ public class EmployeesController : Controller
 This code ensures that all requests to this controller are allowed only for authorized users.
 
 ## Add Login and Registration to Your ASP.NET Core MVC Application
-Create a new file inside of `Controllers` folder: `AccountController.cs`. Past the following inside to the file:
+Create a new file inside of `Controllers` folder: `AccountController.cs`. Paste the following inside of the file:
 
 ```cs
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -256,9 +256,9 @@ namespace OktaMvc.Controllers
 }
 ```
 
-Inside of the `Login` method, we make sure that if the user is not authenticated that we challenge the system with Okta's MVC Auth scheme. Okta's handlers will then make sure to check the user's authentication status. If needed Okta's code will automatically redirect the user to the login screen.
+Inside of the `Login` method, make sure that if the user is not authenticated that the system challenges them with Okta's MVC Auth scheme. Okta's handlers will then make sure to check the user's authentication status. If needed Okta's code will automatically redirect the user to the login screen.
 
-The `Logout` method makes sure we are signed out from both Cookie and Okta's custom schemes.
+The `Logout` method makes sure users are signed out from both Cookie and Okta's custom schemes.
 
 
 Inside of `Views\Shared` folder create a new file `_LoginPartial.cshtml` and paste the following code:
