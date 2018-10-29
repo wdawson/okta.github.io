@@ -266,17 +266,17 @@ Inside of `Views\Shared` folder create a new file `_LoginPartial.cshtml` and pas
 ```html
 @if (User.Identity.IsAuthenticated)
 {
-	<ul class="nav navbar-nav navbar-right">
+  <ul class="nav navbar-nav navbar-right">
     <li><p class="navbar-text">Hello, @User.Identity.Name</p></li>                 	 
     <li><a onclick="document.getElementById('logout_form').submit();" style="cursor: pointer;">Log out</a></li>
- 	</ul>
+  </ul>
   <form asp-controller="Account" asp-action="Logout" method="post" id="logout_form"></form>
 }
 else
 {
-	<ul class="nav navbar-nav navbar-right">   
+  <ul class="nav navbar-nav navbar-right">   
     <li><a asp-controller="Account" asp-action="Login">Log in</a></li>
-	</ul>
+  </ul>
 }
 ```
 
