@@ -127,7 +127,7 @@ If all goes well, you should see this message written to the console.
 server started at http://localhost:8080
 ```
 
-Launch your browser and navigate to `http://localhost:8080`. You should see the text "Hello world!"
+Launch your browser and navigate to <a href="http://localhost:8080" target="_blank">http://localhost:8080</a>. You should see the text "Hello world!"
 
 {% img blog/node-express-typescript/hello-world.jpg alt:"Hello World" width:"500" %}{: .center-image }
 
@@ -184,11 +184,12 @@ It's also a great idea to create a `tslint.json` file that instructs TypeScript 
 }
 ```
 
-Next, update your `package.json` to change `main` to point to the new `dist` folder created by the TypeScript compiler. Also, add a couple of scripts to execute the TypeScript compiler just before starting the Node.js server.
+Next, update your `package.json` to change `main` to point to the new `dist` folder created by the TypeScript compiler. Also, add a couple of scripts to execute TSLint and the TypeScript compiler just before starting the Node.js server.
 
 ```
   "main": "dist/index.js",
   "scripts": {
+    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc",
     "prestart": "npm run build",
     "start": "node .",
@@ -202,13 +203,16 @@ Finally, change the extension of the `src/index.js` file from `.js` to `.ts`, th
 npm run start
 ```
 
-> Note: You can run the TypeScript compiler without starting the Node.js server using `npm run build` or `npx tsc`. `npx` is an alternative way to run any command-line interface (CLI) utility installed with `npm`.
+> Note: You can run TSLint and the TypeScript compiler without starting the Node.js server using `npm run build`.
 
 ### TypeScript errors
 
 Oh no! Right away, you may see some errors logged to the console like these.
 
 ```bash
+
+ERROR: /Users/reverentgeek/Projects/guitar-inventory/src/index.ts[12, 5]: Calls to 'console.log' are not allowed.
+
 src/index.ts:1:17 - error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node`.
 
 1 const express = require( "express" );
@@ -220,7 +224,16 @@ src/index.ts:6:17 - error TS7006: Parameter 'req' implicitly has an 'any' type.
                   ~~~
 ```
 
-The two most common errors you may see are syntax errors and missing type information. TypeScript prefers to use the `import` module syntax over `require`, so you'll start by changing the first line in `src/index.ts` from:
+The two most common errors you may see are syntax errors and missing type information. TSLint considers using `console.log` to be an issue for production code. The best solution is to replace uses of console.log with a logging framework such as [winston](https://www.npmjs.com/package/winston). For now, add the following comment to `src/index.ts` to disable the rule.
+
+```javascript
+app.listen( port, () => {
+    // tslint:disable-next-line:no-console
+    console.log( `server started at http://localhost:${ port }` );
+} );
+```
+
+TypeScript prefers to use the `import` module syntax over `require`, so you'll start by changing the first line in `src/index.ts` from:
 
 ```javascript
 const express = require( "express" );
@@ -248,9 +261,13 @@ Next, rerun the start script and verify there are no more errors.
 npm run start
 ```
 
-## Create a PostgreSQL database
+## Create the API
 
-Before moving on to create the application's API, you need a way to store data. This tutorial uses [PostgreSQL](https://www.postgresql.org/). To make things easier, use [Docker](https://www.docker.com) to set up an instance of PostgreSQL. If you don't already have Docker installed, you can follow the [install guide](https://docs.docker.com/install/#supported-platforms).
+The next step is to add the API to the Guitar Inventory application. Before moving on, you need a way to store data.
+
+### Create a PostgreSQL database
+
+This tutorial uses [PostgreSQL](https://www.postgresql.org/). To make things easier, use [Docker](https://www.docker.com) to set up an instance of PostgreSQL. If you don't already have Docker installed, you can follow the [install guide](https://docs.docker.com/install/#supported-platforms).
 
 Once you have Docker installed, run the following command to download the latest PostgreSQL container.
 
@@ -261,7 +278,7 @@ docker pull postgres:latest
 Now, run this command to create an instance of a PostgreSQL database server. Feel free to change the administrator password value.
 
 ```bash
-docker run -d --name guitar-db -p 5432:5432 -e 'POSTGRES_PASSWORD=admin42' postgres
+docker run -d --name guitar-db -p 5432:5432 -e 'POSTGRES_PASSWORD=p@ssw0rd42' postgres
 ```
 
 Here is a quick explanation of the previous Docker parameters.
@@ -271,5 +288,146 @@ Here is a quick explanation of the previous Docker parameters.
 |-d         |This launches the container in daemon mode, so it runs in the background.|
 |--name|This gives your Docker container a friendly name, which is useful for stopping and starting containers|
 |-p|This maps the host (your computer) port 5432 to the container's port 5432. PostgreSQL, by default, listens for connections on TCP port 5432.|
-|-e|This sets an environment variable in the container. In this example, the administrator password is `admin42`. You can change this value to any password you desire.|
+|-e|This sets an environment variable in the container. In this example, the administrator password is `p@ssw0rd42`. You can change this value to any password you desire.|
 |postgres|This final parameter tells Docker to use the postgres image.|
+
+### Install dependencies
+
+Node.js applications typically rely on environment variables for configuration. [Dotenv](https://www.npmjs.com/package/dotenv) is a module designed to load environment variables from a file named `.env`.
+
+Install `dotenv` and the PostgreSQL client module using the following command.
+
+```bash
+npm install dotenv pg pg-promise
+```
+Install the following development dependencies used to build and run the application.
+
+```bash
+npm install --save-dev ts-node shelljs fs-extra nodemon rimraf
+```
+
+Install the necessary TypeScript declarations.
+
+```bash
+npm install --save-dev @types/dotenv @types/fs-extra @types/pg @types/shelljs
+```
+
+### Development configuration settings
+
+Create a file named `.env` in the root folder of the project, and add the following code. 
+
+*Note: If you changed the database administrator password, be sure to replace the default `p@ssw0rd42` with that password in this file.*
+
+```bash
+# Set to production when deploying to production
+NODE_ENV=development
+
+# Node.js server configuration
+SERVER_PORT=8080
+
+# Postgres configuration
+PGHOST=localhost
+PGUSER=postgres
+PGDATABASE=postgres
+PGPASSWORD=p@ssw0rd42
+PGPORT=5432
+```
+
+### Add a database build script
+
+You need a build script to initialize the PostgreSQL database. This script should read in a `.pgsql` file and execute the SQL commands against the local database.
+
+First, create a new folder in the project named `tools`. In this folder, create two files: `initdb.ts` and `initdb.pgsql`. Copy and paste the following code into `initdb.ts`.
+
+```javascript
+import dotenv from "dotenv";
+import fs from "fs-extra";
+import { Client } from "pg";
+
+const init = async () => {
+    // read environment variables
+    dotenv.config();
+    // create an instance of the PostgreSQL client
+    const client = new Client();
+    try {
+        // connect to the local database server
+        await client.connect();
+        // read the contents of the initdb.pgsql file
+        const sql = await fs.readFile( "./tools/initdb.pgsql", { encoding: "UTF-8" } );
+        // split the file into separate statements
+        const statements = sql.split( /;\s*$/m );
+        for ( const statement of statements ) {
+            if ( statement.length > 3 ) {
+                // execute each of the statements
+                await client.query( statement );
+            }
+        }
+    } catch ( err ) {
+        console.log( err );
+        throw err;
+    } finally {
+        // close the database client
+        await client.end();
+    }
+};
+
+init().then( () => {
+    console.log( "finished" );
+} ).catch( () => {
+    console.log( "finished with errors" );
+} );
+```
+
+Next, copy and paste the following code into `initdb.pgsql`.
+
+```sql
+-- Drops guitars table
+DROP TABLE IF EXISTS guitars;
+
+-- Creates guitars table
+CREATE TABLE IF NOT EXISTS guitars (
+    id INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY
+    , user_id varchar(50) NOT NULL
+    , brand varchar(50) NOT NULL
+    , model varchar(50) NOT NULL
+    , year smallint NULL 
+    , color varchar(50) NULL
+);
+```
+
+### Add an asset build script
+
+The TypeScript compiler does the work of generating the JavaScript files and copies them to the `dist` folder. However, it does not copy the other types of files the project needs to run. To accomplish this, create a build script that copies all the other files to the `dist` folder.
+
+Create a file in the `tools` folder named `copyAssets.ts`. Copy the following code into this file.
+
+```javascript
+import * as shell from "shelljs";
+
+// Copy all of the database files
+shell.cp( "-R", "src/db/sql", "dist/db/" );
+
+// Copy all the view templates and assets in the public folder
+shell.cp( "-R", [ "src/views", "src/public" ], "dist/" );
+```
+
+### Update npm scripts
+
+Update the `scripts` in `package.json` to the following code.
+
+```javascript
+  "scripts": {
+    "clean": "rimraf dist/*",
+    "copy-assets": "ts-node tools/copyAssets",
+    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
+    "build": "tsc && npm run copy-assets",
+    "dev:build": "npm run build && node dist/index.js",
+    "dev": "nodemon --watch src -e ts,ejs --exec npm run dev:build",
+    "prestart": "npm run build",
+    "start": "node .",
+    "initdb": "ts-node tools/initdb",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+```
+
+If you are not familiar with using `npm` scripts, they can be very powerful and useful to any Node.js project. 
