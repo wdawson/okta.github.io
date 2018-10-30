@@ -25,7 +25,7 @@ Any users that exist in your Okta account will be able to log in, and a WordPres
 
 To get started, [sign up for a free Okta Developer account](https://developer.okta.com/signup/).
 
-Download the [Okta WordPress plugin](https://github.com/oktadeveloper/okta-wordpress-sign-in-widget) into your plugins folder, and copy the env.example.json to env.json. This is where you'll configure your Okta API credentials.
+Download the [Okta WordPress plugin](https://github.com/oktadeveloper/okta-wordpress-sign-in-widget) into your plugins folder, and copy the `env.example.json` to `env.json`. This is where you'll configure your Okta API credentials.
 
 Go into your Dashboard and create a new web application.
 
@@ -35,7 +35,7 @@ Make sure to set your **Base URI** and **Login redirect URI** to the location of
 
 {% img blog/okta-wordpress-sign-in/okta-app-config.png alt:"Configure your application settings" width:"800" %}{: .center-image }
 
-Copy the Client ID and Secret and paste them into your env.json file. You'll also need to set the base URL to https://{yourOktaDomain}, and you can leave the authorization server ID set to "default".
+Copy the Client ID and Secret and paste them into your env.json file. You'll also need to set the base URL to `https://{yourOktaDomain}`, and you can leave the authorization server ID set to "default".
 
 {% img blog/okta-wordpress-sign-in/okta-client-credentials.png alt:"Client Credentials" width:"800" %}{: .center-image }
 
@@ -57,7 +57,7 @@ You now have an easy way to enable multi-factor authentication for your WordPres
 
 From your Okta Developer dashboard, first switch into the Classic UI.
 
-{% img blog/okta-wordpress-sign-in/okta-switch-classic-ui.png alt:"Switch to the classic UI" width:"800" %}{: .center-image }
+{% img blog/okta-wordpress-sign-in/okta-switch-classic-ui.png alt:"Switch to the classic UI" width:"400" %}{: .center-image }
 
 Next you'll need to create what's called a "Sign-On Policy" for your Okta application. Click on the **Applications** menu, then select your application from the list. Click the **Sign On** tab to navigate to the place you can create the policy.
 
@@ -67,7 +67,7 @@ Scroll to the bottom of this page to the "Sign On Policy" section, and click **A
 
 Give your rule a name like "Always require MFA challenge", and check the **Prompt for factor** and **Every sign on** options.
 
-{% img blog/okta-wordpress-sign-in/okta-mfa-rule.png alt:"Configure an MFA rule" width:"800" %}{: .center-image }
+{% img blog/okta-wordpress-sign-in/okta-mfa-rule.png alt:"Configure an MFA rule" width:"600" %}{: .center-image }
 
 Lastly, navigate to the **Security** -> **Multifactor** menu to configure which types of multifactor authentication you want to support.
 
