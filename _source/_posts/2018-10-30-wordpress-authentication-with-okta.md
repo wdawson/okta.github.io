@@ -21,7 +21,7 @@ We've created a proof of concept WordPress plugin that replaces the WordPress lo
 Any users that exist in your Okta account will be able to log in, and a WordPress user will be created for them automatically. If your users have multi-factor authentication enabled, they'll be prompted for that too when they log in!
 
 
-## Get Started with Okta’s WordPress Login Plugin
+## Get Started with Okta's WordPress Login Plugin
 
 To get started, [sign up for a free Okta Developer account](https://developer.okta.com/signup/).
 
@@ -79,7 +79,7 @@ You can find the source code for the application at [github.com/oktadeveloper/ok
 
 ## Learn More About Authentication in PHP
 
-If you want to read more about app security in PHP or Angular, we’d love to have you follow the [Okta Developer Blog](https://developer.okta.com/blog/). Here are some great posts to get you started:
+If you want to read more about app security in PHP or Angular, we'd love to have you follow the [Okta Developer Blog](https://developer.okta.com/blog/). Here are some great posts to get you started:
 
 * [Add Authentication to Any Web Page in 10 Minutes](https://developer.okta.com/blog/2018/06/08/add-authentication-to-any-web-page-in-10-minutes)
 * [Build an Angular App with Okta's Sign-In Widget in 15 Minutes](https://developer.okta.com/blog/2017/03/27/angular-okta-sign-in-widget)
