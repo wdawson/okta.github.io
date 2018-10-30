@@ -2,7 +2,7 @@
 layout: blog_post
 title: "Add Secure Authentication to your WordPress Site in 15 Minutes"
 author: aaronpk
-description: "This post will show you how to secure your WordPress login with two-factor authentication by using Okta's sign-in widget."
+description: "This post will show you how to secure your WordPress login with two-factor authentication by using Okta's Sign-In Widget."
 tags: [wordpress,authentication,login,plugin]
 tweets:
 - "Secure your WordPress with two-factor authentication 🔐 #wordpress #2fa"
@@ -14,7 +14,7 @@ Do you run a WordPress site and want to avoid managing a separate list of user a
 
 This is where Okta can help out! Okta is an API service that allows you to create, edit, and securely store user accounts and user account data, and connect them with one or more applications. It also provides a sign-in widget which you can embed into your own applications to avoid creating your own login form for every application.
 
-We've created a proof of concept WordPress plugin that replaces the WordPress login form with the Okta sign-in widget! Once you install and activate this plugin, the next time you try to log in to WordPress, you'll instead see the Okta sign-in page.
+We've created a proof of concept WordPress plugin that replaces the WordPress login form with the Okta Sign-In Widget! Once you install and activate this plugin, the next time you try to log in to WordPress, you'll instead see the Okta sign-in page.
 
 {% img blog/okta-wordpress-sign-in/wordpress-authentication.png alt:"WordPress Authentication" width:"800" %}{: .center-image }
 
@@ -35,7 +35,7 @@ Make sure to set your **Base URI** and **Login redirect URI** to the location of
 
 {% img blog/okta-wordpress-sign-in/okta-app-config.png alt:"Configure your application settings" width:"800" %}{: .center-image }
 
-Copy the Client ID and Secret and paste them into your env.json file. You'll also need to set the base URL to `https://{yourOktaDomain}`, and you can leave the authorization server ID set to "default".
+Copy the Client ID and Secret and paste them into your `env.json` file. You'll also need to set the base URL to `https://{yourOktaDomain}`, and you can leave the authorization server ID set to "default".
 
 {% img blog/okta-wordpress-sign-in/okta-client-credentials.png alt:"Client Credentials" width:"800" %}{: .center-image }
 
@@ -47,7 +47,7 @@ In your WordPress admin page, you'll see the Okta plugin listed. Click "activate
 
 {% img blog/okta-wordpress-sign-in/wordpress-plugin-activated.png alt:"WordPress plugin activated" width:"800" %}{: .center-image }
 
-Now log out of WordPress and try to log back in! When you visit the WordPress login page, instead of the default WordPress username and password fields, you'll see your Okta sign-in widget! Enter your Okta account credentials and you will be logged in to WordPress!
+Now log out of WordPress and try to log back in! When you visit the WordPress login page, instead of the default WordPress username and password fields, you'll see your Okta Sign-In Widget! Enter your Okta account credentials and you will be logged in to WordPress!
 
 <iframe width="800" height="500" src="https://www.youtube.com/embed/l8fWJTSDlWo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
@@ -79,9 +79,9 @@ You can find the source code for the application at [github.com/oktadeveloper/ok
 
 ## Learn More About Authentication in PHP
 
-If you want to read more about app security in PHP or Angular, we'd love to have you follow the [Okta Developer Blog](https://developer.okta.com/blog/). Here are some great posts to get you started:
+If you want to read more about app security in PHP or Angular, we'd love to have you follow the [Okta Developer Blog](/blog/). Here are some great posts to get you started:
 
-* [Add Authentication to Any Web Page in 10 Minutes](https://developer.okta.com/blog/2018/06/08/add-authentication-to-any-web-page-in-10-minutes)
-* [Build an Angular App with Okta's Sign-In Widget in 15 Minutes](https://developer.okta.com/blog/2017/03/27/angular-okta-sign-in-widget)
+* [Add Authentication to Any Web Page in 10 Minutes](/blog/2018/06/08/add-authentication-to-any-web-page-in-10-minutes)
+* [Build an Angular App with Okta's Sign-In Widget in 15 Minutes](/blog/2017/03/27/angular-okta-sign-in-widget)
 
-As always, we'd love to hear from you. Hit us up with questions or feedback in the comments, or find us on Twitter [@oktadev](https://twitter.com/oktadev), [Facebook](https://www.facebook.com/oktadevelopers/), and [LinkedIn](https://www.linkedin.com/company/okta-inc-/)!
+As always, we'd love to hear from you. Hit us up with questions or feedback in the comments, or find us on Twitter [@oktadev](https://twitter.com/oktadev), [Facebook](https://www.facebook.com/oktadevelopers/), and [LinkedIn](https://www.linkedin.com/company/oktadev)!
