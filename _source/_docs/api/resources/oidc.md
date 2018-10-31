@@ -143,13 +143,13 @@ Use the postMessage() data model to help you when working with the `okta_post_me
 
 `message`:
 
-| Parameter         | Description                                                                                                       | DataType |
-|:------------------|:------------------------------------------------------------------------------------------------------------------|:---------|
-| access_token      | An [access token](#access-token). This is returned if the `response_type` included `token`.                       | String   |
-| error             | The error code, if something went wrong.                                               | String   |
-| error_description | Additional error information (if any).                                                                | String   |
-| id_token          | An [ID token](#id-token). This is returned if the `response_type` included `id_token`.                            | String   |
-| state             | If the request contained a `state` parameter, then the same unmodified value is returned in the response.    | String   |
+| Parameter         | Description                                                                                    | DataType |
+|:------------------|:-----------------------------------------------------------------------------------------------|:---------|
+| access_token      | An [access token](#access-token). This is returned if the `response_type` included `token`.    | String   |
+| error             | The error code, if something went wrong.                                                       | String   |
+| error_description | Additional error information (if any).                                                         | String   |
+| id_token          | An [ID token](#id-token). This is returned if the `response_type` included `id_token`.         | String   |
+| state             | See information on the `state` parameter in [Parameter Details](#parameter-details). | String   |
 
 `targetOrigin`:
 
