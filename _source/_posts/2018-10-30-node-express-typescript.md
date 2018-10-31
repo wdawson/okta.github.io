@@ -261,6 +261,176 @@ Next, rerun the start script and verify there are no more errors.
 npm run start
 ```
 
+## A Better User Interface
+
+Your Node.js application is off to a great start, but is not very pretty, yet. This step uses [Materialize](https://materializecss.com/), a modern CSS framework based on Google's Material Design, and [Embedded JavaScript Templates](https://www.npmjs.com/package/ejs) (EJS) to create a better UI.
+
+First, install EJS as a dependency.
+
+```bash
+npm install ejs
+```
+
+Next, make a new folder under `/src` named `views`. In the `/src/views` folder, create a file named `index.ejs`. Add the following code to `/src/views/index.ejs`.
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Guitar Inventory</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<body>
+    <div class="container">
+        <h1 class="header">Guitar Inventory</h1>
+        <a class="btn" href="/guitars"><i class="material-icons right">arrow_forward</i>Get started!</a>
+    </div>
+</body>
+</html>
+```
+
+Update `/src/index.ts` with the following code.
+
+```javascript
+import express from "express";
+import path from "path";
+const app = express();
+const port = 8080; // default port to listen
+
+// Configure Express to use EJS
+app.set( "views", path.join( __dirname, "views" ) );
+app.set( "view engine", "ejs" );
+
+// define a route handler for the default home page
+app.get( "/", ( req, res ) => {
+    // render the index template
+    res.render( "index" );
+} );
+
+// start the express server
+app.listen( port, () => {
+    // tslint:disable-next-line:no-console
+    console.log( `server started at http://localhost:${ port }` );
+} );
+```
+
+Now run the application and navigate to http://localhost:8080.
+
+```bash
+npm run start
+```
+
+{% img blog/node-express-typescript/guitar-inventory-home-v2.jpg alt:"Guitar Inventory home page" width:"500" %}{: .center-image }
+
+The home page is starting to look better!
+
+## A Better Way to Manage Configuration Settings
+
+Node.js applications typically use environment variables for configuration. However, managing environment variables can be a chore. A popular module for managing application configuration data is [dotenv](https://www.npmjs.com/package/dotenv).
+
+Install `dotenv` as a project dependency.
+
+```bash
+npm install dotenv
+```
+Create a file named `.env` in the root folder of the project, and add the following code. 
+
+```bash
+# Set to production when deploying to production
+NODE_ENV=development
+
+# Node.js server configuration
+SERVER_PORT=8080
+```
+
+> Note: When using a source control system such as `git`, **do not** add the `.env` file to source control. Each environment requires a custom `.env` file. It is recommended you document the values expected in the `.env` file in the project README or a separate `.env.sample` file.
+
+Now, update `src/index.ts` to use `dotenv` to configure the application server port value.
+
+```javascript
+import dotenv from "dotenv";
+import express from "express";
+import path from "path";
+
+// initialize configuration
+dotenv.config();
+
+// port is now available to the Node.js runtime 
+// as if it were an environment variable
+const port = process.env.SERVER_PORT;
+
+const app = express();
+
+// Configure Express to use EJS
+app.set( "views", path.join( __dirname, "views" ) );
+app.set( "view engine", "ejs" );
+
+// define a route handler for the default home page
+app.get( "/", ( req, res ) => {
+    // render the index template
+    res.render( "index" );
+} );
+
+// start the express server
+app.listen( port, () => {
+    // tslint:disable-next-line:no-console
+    console.log( `server started at http://localhost:${ port }` );
+} );
+```
+
+You will use the `.env` for much more configuration information as the project grows.
+
+## Easily add authentication to Node and Express
+
+Adding user registration and login (authentication) to any application is not a trivial task. The good news is Okta makes this step very easy. To begin, create a free developer account with Okta. First, navigate to [developer.okta.com](https://developer.okta.com/) and click the **Create Free Account** button, or click the [Sign Up](https://developer.okta.com/signup/) button.
+
+{% img blog/node-express-typescript/add-application-00.jpg alt:"Sign up for free account" width:"800" %}{: .center-image }
+
+After creating your account, click the **Applications** link at the top, and then click **Add Application**.
+
+{% img blog/node-express-typescript/add-application-01.jpg alt:"Create application" width:"500" %}{: .center-image }
+
+Next, choose a **Web Application** and click **Next**.
+
+{% img blog/node-express-typescript/add-application-02.jpg alt:"Create a web application" width:"800" %}{: .center-image }
+
+Enter a name for your application, such as *Guitar Inventory*. Verify the port number is the same as configured for your local web application. Then, click **Done** to finish creating the application.
+
+{% img blog/node-express-typescript/add-application-03.jpg alt:"Application settings" width:"800" %}{: .center-image }
+
+After creating the application, click on the application's **General** tab, and find near the bottom of the page a section titled "Client Credentials." You need both the **Client ID** and **Client secret** values.
+
+{% img blog/node-express-typescript/add-application-04.jpg alt:"Client credentials" width:"800" %}{: .center-image }
+
+Copy and paste the following code into your `.env` file.
+
+```bash
+# Okta configuration
+OKTA_ORG_URL=https://dev-123456.oktapreview.com
+OKTA_CLIENT_ID=
+OKTA_CLIENT_SECRET=
+```
+
+Copy the **Client ID** and **Client secret** values and paste them into your `.env` file. Last, you need to replace the value of `dev-123456` in the `OKTA_ORG_URL` to match the ID for your account. You can find this ID in the URL of your Okta management console. 
+
+{% img blog/node-express-typescript/okta-instance-id.jpg alt:"Client credentials" width:"500" %}{: .center-image }
+
+### Enable self-service registration
+
+One of the great features of Okta is allowing users of your application to sign up for an account. By default, this feature is disabled, but you can easily enable it. First, click on the **Users** menu and select **Registration**.
+
+{% img blog/node-express-typescript/self-service-registration-01.jpg alt:"User registration" width:"500" %}{: .center-image }
+
+1. Click on the **Edit** button.
+2. Change **Self-service registration** to *Enabled*.
+3. Click the **Save** button at the bottom of the form.
+
+{% img blog/node-express-typescript/self-service-registration-02.jpg alt:"Enable self-registration" width:"800" %}{: .center-image }
+
 ## Create the API
 
 The next step is to add the API to the Guitar Inventory application. Before moving on, you need a way to store data.
@@ -298,7 +468,7 @@ Node.js applications typically rely on environment variables for configuration. 
 Install `dotenv` and the PostgreSQL client module using the following command.
 
 ```bash
-npm install dotenv pg pg-promise
+npm install pg pg-promise
 ```
 Install the following development dependencies used to build and run the application.
 
@@ -312,19 +482,11 @@ Install the necessary TypeScript declarations.
 npm install --save-dev @types/dotenv @types/fs-extra @types/pg @types/shelljs
 ```
 
-### Development configuration settings
+### Database configuration settings
 
-Create a file named `.env` in the root folder of the project, and add the following code. 
-
-*Note: If you changed the database administrator password, be sure to replace the default `p@ssw0rd42` with that password in this file.*
+Add the following settings to the end of the `.env` file. 
 
 ```bash
-# Set to production when deploying to production
-NODE_ENV=development
-
-# Node.js server configuration
-SERVER_PORT=8080
-
 # Postgres configuration
 PGHOST=localhost
 PGUSER=postgres
@@ -332,6 +494,7 @@ PGDATABASE=postgres
 PGPASSWORD=p@ssw0rd42
 PGPORT=5432
 ```
+*Note: If you changed the database administrator password, be sure to replace the default `p@ssw0rd42` with that password in this file.*
 
 ### Add a database build script
 
