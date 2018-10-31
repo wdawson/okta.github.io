@@ -239,10 +239,11 @@ HOST_URL=http://localhost:4000
 OKTA_ORG_URL=https://{yourOktaOrgUrl}
 ```
 
-You will also need a random string to use as an App Secret for sessions. You can generate this with the following command:
+You will also need a random string to use as an App Secret for sessions. You can generate this with the following commands:
 
 ```bash
-echo "APP_SECRET=`openssl rand -base64 32`" >> .env
+npm install -g uuid-cli
+echo "APP_SECRET=`uuid`" >> .env
 ```
 
 Next, log in to your developer console, navigate to **Applications**, then click **Add Application**. Select **Web**, then click **Next**.
@@ -327,7 +328,7 @@ okta.initializeApp(app)
 To make this all work, you'll also need to install a few new dependencies:
 
 ```bash
-npm i @okta/jwt-verifier@0.0.12 @okta/oidc-middleware@1.0.0 @okta/oidc-sdk-nodejs@1.2.0 dotenv@6.0.0 express-session@1.15.6
+npm i @okta/jwt-verifier@0.0.12 @okta/oidc-middleware@1.0.0 @okta/okta-sdk-nodejs@1.2.0 dotenv@6.0.0 express-session@1.15.6
 ```
 
 You should now be able to go to `http://localhost:4000/access-token` to log in and get an access token. If you were just at your developer console, you'll probably find you're already logged in. You can log out of your developer console to ensure the flow works properly.
