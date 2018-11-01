@@ -579,4 +579,4 @@ You can see the code this lazy developer created for this article [on GitHub](ht
 
 **Changelog:**
 
-* Nov 1, 2018: Updated to use Vue CLI 2.9.6, Vue 2.5.2, and Vue Okta Auth SDK 2.1. You can see the example app changes in [okta-vue-auth-example#2](https://github.com/oktadeveloper/okta-spring-boot-react-crud-example/pull/8); changes to this post can be viewed in [okta.github.io#2455](https://github.com/okta/okta.github.io/pull/2455).
+* Nov 1, 2018: Updated to use Vue CLI 2.9.6, Vue 2.5.2, and Vue Okta Auth SDK 2.1. You can see the example app changes in [okta-vue-auth-example#4](https://github.com/oktadeveloper/okta-vue-auth-example/pull/4); changes to this post can be viewed in [okta.github.io#2453](https://github.com/okta/okta.github.io/pull/2453).
