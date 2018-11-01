@@ -300,7 +300,7 @@ The easiest way to fix this is to update `.eslintrc.js` to allow callback litera
 
 _Thanks to [nikivancic](https://developer.okta.com/blog/2017/09/14/lazy-developers-guide-to-auth-with-vue#comment-4167385661) for this tip in the comments!_
 
-After making this change, you should be able to run `npm start` and authenticate with the hard coded values from `auth.js` (joe@example.com / password1).
+After making this change, you should be able to run `npm start` and authenticate with the hard coded values from `auth.js`.
 
 If you open your browser to `http://localhost:8080`, you should see a screen that resembles the one below.
 
