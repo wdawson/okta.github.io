@@ -33,7 +33,7 @@ This tutorial is designed to show you how to build a new Node.js application usi
 
 ## Guitar Inventory Web Application
 
-Among guitar players, there's a joke everyone understands.
+Among guitar players, there's a joke everyone _should_ understand.
 
 > Q: "How many guitars do you _need_?"
 
@@ -263,7 +263,7 @@ npm run start
 
 ## A Better User Interface
 
-Your Node.js application is off to a great start, but is not very pretty, yet. This step uses [Materialize](https://materializecss.com/), a modern CSS framework based on Google's Material Design, and [Embedded JavaScript Templates](https://www.npmjs.com/package/ejs) (EJS) to create a better UI.
+Your Node.js application is off to a great start, but perhaps not the best looking, yet. This step adds [Materialize](https://materializecss.com/), a modern CSS framework based on Google's Material Design, and [Embedded JavaScript Templates](https://www.npmjs.com/package/ejs) (EJS). Materialize and EJS are a good foundation for a much better UI.
 
 First, install EJS as a dependency.
 
@@ -318,15 +318,67 @@ app.listen( port, () => {
 } );
 ```
 
+### Add an asset build script
+
+The TypeScript compiler does the work of generating the JavaScript files and copies them to the `dist` folder. However, it does not copy the other types of files the project needs to run, such as the EJS view templates. To accomplish this, create a build script that copies all the other files to the `dist` folder.
+
+Install the needed modules and TypeScript declarations using these commands.
+
+```bash
+npm install --save-dev ts-node shelljs fs-extra nodemon rimraf npm-run-all
+npm install --save-dev @types/fs-extra @types/shelljs
+```
+
+Here is a quick overview of the modules you just installed.
+
+|Module|Description|
+|------|-----------|
+|[`ts-node`](https://www.npmjs.com/package/ts-node)|Use to run TypeScript files directly.|
+|[shelljs](https://www.npmjs.com/package/shelljs)|Use to execute shell commands such as to copy files and remove directories.|
+|[fs-extra](https://www.npmjs.com/package/fs-extra)|A module that extends the Node.js file system (`fs`) module with features such as reading and writing JSON files.|
+|[rimraf](https://www.npmjs.com/package/rimraf)|Use to recursively remove folders.|
+|[npm-run-all](https://www.npmjs.com/package/npm-run-all)|Use to excecute multiple `npm` scripts sequentially or in parallel.|
+|[nodemon](https://www.npmjs.com/package/nodemon)|A very useful tool for running Node.js in a development environment. Nodemon watches files for changes and automatically restarts the Node.js application when changes are detected. No more stopping and restarting Node.js!|
+
+Make a new folder in the root of the project named `tools`. Create a file in the `tools` folder named `copyAssets.ts`. Copy the following code into this file.
+
+```javascript
+import * as shell from "shelljs";
+
+// Copy all the view templates
+shell.cp( "-R", "src/views", "dist/" );
+```
+
+### Update npm scripts
+
+Update the `scripts` in `package.json` to the following code.
+
+```javascript
+  "scripts": {
+    "clean": "rimraf dist/*",
+    "copy-assets": "ts-node tools/copyAssets",
+    "lint": "tslint -c tslint.json -p tsconfig.json --fix",
+    "tsc": "tsc",
+    "build": "npm-run-all clean lint tsc copy-assets",
+    "dev:start": "npm-run-all build start",
+    "dev": "nodemon --watch src -e ts,ejs --exec npm run dev:start",
+    "start": "node .",
+    "initdb": "ts-node tools/initdb",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+```
+
+> Note: If you are not familiar with using `npm` scripts, they can be very powerful and useful to any Node.js project. `npm` scripts can be chained together in several ways. One way to chain scripts together is to use the `pre` and `post` prefixes. In your scripts you now have a script named `start` and another labeled `prestart`. Executing `npm run start` at the terminal will now result in the `prestart` running first, and only after it successfully finishes does `start` run.
+
 Now run the application and navigate to http://localhost:8080.
 
 ```bash
-npm run start
+npm run dev
 ```
 
 {% img blog/node-express-typescript/guitar-inventory-home-v2.jpg alt:"Guitar Inventory home page" width:"500" %}{: .center-image }
 
-The home page is starting to look better!
+The home page is starting to look better! Of course, the button leads to a disappointing error message. You will fix that soon!
 
 ## A Better Way to Manage Configuration Settings
 
@@ -336,7 +388,9 @@ Install `dotenv` as a project dependency.
 
 ```bash
 npm install dotenv
+npm install --save-dev @types/dotenv
 ```
+
 Create a file named `.env` in the root folder of the project, and add the following code. 
 
 ```bash
@@ -431,9 +485,246 @@ One of the great features of Okta is allowing users of your application to sign 
 
 {% img blog/node-express-typescript/self-service-registration-02.jpg alt:"Enable self-registration" width:"800" %}{: .center-image }
 
+### Secure your Node.js application
+
+The last step to securing your Node.js application is to configure Express to use the [Okta OpenId Connect (OIDC) middleware](https://www.npmjs.com/package/@okta/oidc-middleware).
+
+```bash
+npm install @okta/oidc-middleware express-session
+npm install --save-dev @types/express-session
+```
+
+Next, update your `.env` file to add a `HOST_URL` and `SESSION_SECRET` value. You may change the `SESSION_SECRET` value to any string you wish.
+
+```bash
+# Node.js server configuration
+SERVER_PORT=8080
+HOST_URL=http://localhost:8080
+SESSION_SECRET=MySuperCoolAndAwesomeSecretForSigningSessionCookies
+```
+
+Create a folder under `src` named `middleware`. Add a file to the `src/middleware` folder named `sessionAuth.ts`. Add the following code to `src/middleware/sessionAuth.ts`.
+
+```javascript
+import { ExpressOIDC } from "@okta/oidc-middleware";
+import session from "express-session";
+
+export const register = ( app: any ) => {
+    // Create the OIDC client
+    const oidc = new ExpressOIDC( {
+        client_id: process.env.OKTA_CLIENT_ID,
+        client_secret: process.env.OKTA_CLIENT_SECRET,
+        issuer: `${ process.env.OKTA_ORG_URL }/oauth2/default`,
+        redirect_uri: `${ process.env.HOST_URL }/authorization-code/callback`,
+        scope: "openid profile"
+    } );
+
+    // Configure Express to use authentication sessions
+    app.use( session( {
+        resave: true,
+        saveUninitialized: false,
+        secret: process.env.SESSION_SECRET
+    } ) );
+
+    // Configure Express to use the OIDC client router
+    app.use( oidc.router );
+
+    // add the OIDC client to the app.locals
+    app.locals.oidc = oidc;
+};
+```
+
+At this point, if you are using a code editor like VS Code, you may see TypeScript complaining about the `@okta/oidc-middleware` module. At the time of this writing, this module does not yet have an official TypeScript declaration file. For now, create a file in the `src` folder named `global.d.ts` and add the following code.
+
+```javascript
+declare module "@okta/oidc-middleware";
+```
+
+### Refactor routes
+
+As the application grows, you will add many more routes. It is a good idea to define all the routes in one area of the project. Make a new folder under `src` named `routes`. Add a new file to `src/routes` named `index.ts`. Then, add the following code to this new file.
+
+```javascript
+import * as express from "express";
+
+export const register = ( app: express.Application ) => {
+    const oidc = app.locals.oidc;
+
+    // define a route handler for the default home page
+    app.get( "/", ( req: any, res ) => {
+        res.render( "index" );
+    } );
+
+    // define a secure route handler for the login page that redirects to /guitars
+    app.get( "/login", oidc.ensureAuthenticated(), ( req, res ) => {
+        res.redirect( "/guitars" );
+    } );
+
+    // define a route to handle logout
+    app.get( "/logout", ( req: any, res ) => {
+        req.logout();
+        res.redirect( "/" );
+    } );
+
+    // define a secure route handler for the guitars page
+    app.get( "/guitars", oidc.ensureAuthenticated(), ( req: any, res ) => {
+        res.render( "guitars" );
+    } );
+};
+```
+
+Next, update `src/index.ts` to use the `sessionAuth` and `routes` modules you created.
+
+```javascript
+import dotenv from "dotenv";
+import express from "express";
+import path from "path";
+import * as sessionAuth from "./middleware/sessionAuth";
+import * as routes from "./routes";
+
+// initialize configuration
+dotenv.config();
+
+// port is now available to the Node.js runtime
+// as if it were an environment variable
+const port = process.env.SERVER_PORT;
+
+const app = express();
+
+// Configure Express to use EJS
+app.set( "views", path.join( __dirname, "views" ) );
+app.set( "view engine", "ejs" );
+
+// Configure session auth
+sessionAuth.register( app );
+
+// Configure routes
+routes.register( app );
+
+// start the express server
+app.listen( port, () => {
+    // tslint:disable-next-line:no-console
+    console.log( `server started at http://localhost:${ port }` );
+} );
+```
+
+Next, create a new file for the guitar list view template at `src/views/guitars.ejs` and enter the following HTML.
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Guitar Inventory</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<body>
+    <div class="container">
+        <h1 class="header">Guitar Inventory</h1>
+        <p>Your future list of guitars!</p>
+    </div>
+</body>
+</html>
+```
+
+Finally, run the application.
+
+```bash
+npm run dev
+```
+
+> Note: To verify authentication is working as expected, open a new browser or use a private/incognito browser window.
+
+Click the **Get Started** button. If everything goes well, you should be prompted to login to your Okta account, and then redirected back to the "Guitar List" page!
+
+{% img blog/node-express-typescript/okta-login.jpg alt:"Okta login" width:"500" %}{: .center-image }
+
+## Add a Navigation Menu
+
+Now that authentication is working, you can take advantage of the user profile information returned from Okta. The OIDC middleware automatically attaches a `userContext` object and an `isAuthenticated()` function to every request. This `userContext` has a `userinfo` property that contains information that looks like the following object.
+
+```javascript
+{ 
+  sub: '00abc12defg3hij4k5l6',
+  name: 'First Last',
+  locale: 'en-US',
+  preferred_username: 'account@company.com',
+  given_name: 'First',
+  family_name: 'Last',
+  zoneinfo: 'America/Los_Angeles',
+  updated_at: 1539283620 
+}
+```
+
+The first step is get the user profile object and pass it to the views as data. Update the `src/routes/index.ts` with the following code.
+
+```javascript
+import * as express from "express";
+
+export const register = ( app: express.Application ) => {
+    const oidc = app.locals.oidc;
+
+    // define a route handler for the default home page
+    app.get( "/", ( req: any, res ) => {
+        const user = req.userContext ? req.userContext.userinfo : null;
+        res.render( "index", { isAuthenticated: req.isAuthenticated(), user } );
+    } );
+
+    // define a secure route handler for the login page that redirects to /guitars
+    app.get( "/login", oidc.ensureAuthenticated(), ( req, res ) => {
+        res.redirect( "/guitars" );
+    } );
+
+    // define a route to handle logout
+    app.get( "/logout", ( req: any, res ) => {
+        req.logout();
+        res.redirect( "/" );
+    } );
+
+    // define a secure route handler for the guitars page
+    app.get( "/guitars", oidc.ensureAuthenticated(), ( req: any, res ) => {
+        const user = req.userContext ? req.userContext.userinfo : null;
+        res.render( "guitars", { isAuthenticated: req.isAuthenticated(), user } );
+    } );
+};
+```
+
+Make a new folder under `src/views` named `partials`. Create a new file in this folder named `nav.ejs`. Add the following code to `src/views/partials/nav.ejs`.
+
+```html
+<nav>
+    <div class="nav-wrapper">
+        <a href="/" class="brand-logo"><% if ( user ) { %><%= user.name %>'s <% } %>Guitar Inventory</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/guitars">My Guitars</a></li>
+            <% if ( isAuthenticated ) { %>
+            <li><a href="/logout">Logout</a></li>
+            <% } %>
+            <% if ( !isAuthenticated ) { %>
+            <li><a href="/login">Login</a></li>
+            <% } %>
+        </ul>
+    </div>
+</nav>
+```
+
+Modify the `src/views/index.ejs` and `src/views/guitars.ejs` files. Immediately following the `<body>` tag, insert the following code.
+
+```html
+<body>
+    <% include partials/nav %>
+```
+
+With these changes in place, you application now has a navigation menu at the top that changes based on the login status of the user.
+
+{% img blog/node-express-typescript/navigation.jpg alt:"Navigation" width:"800" %}{: .center-image }
+
 ## Create the API
 
-The next step is to add the API to the Guitar Inventory application. Before moving on, you need a way to store data.
+The next step is to add the API to the Guitar Inventory application. However, before moving on, you need a way to store data.
 
 ### Create a PostgreSQL database
 
@@ -461,25 +752,11 @@ Here is a quick explanation of the previous Docker parameters.
 |-e|This sets an environment variable in the container. In this example, the administrator password is `p@ssw0rd42`. You can change this value to any password you desire.|
 |postgres|This final parameter tells Docker to use the postgres image.|
 
-### Install dependencies
-
-Node.js applications typically rely on environment variables for configuration. [Dotenv](https://www.npmjs.com/package/dotenv) is a module designed to load environment variables from a file named `.env`.
-
-Install `dotenv` and the PostgreSQL client module using the following command.
+Install the PostgreSQL client module and type declarations using the following commands.
 
 ```bash
 npm install pg pg-promise
-```
-Install the following development dependencies used to build and run the application.
-
-```bash
-npm install --save-dev ts-node shelljs fs-extra nodemon rimraf
-```
-
-Install the necessary TypeScript declarations.
-
-```bash
-npm install --save-dev @types/dotenv @types/fs-extra @types/pg @types/shelljs
+npm install --save-dev @types/pg
 ```
 
 ### Database configuration settings
@@ -558,39 +835,13 @@ CREATE TABLE IF NOT EXISTS guitars (
 );
 ```
 
-### Add an asset build script
-
-The TypeScript compiler does the work of generating the JavaScript files and copies them to the `dist` folder. However, it does not copy the other types of files the project needs to run. To accomplish this, create a build script that copies all the other files to the `dist` folder.
-
-Create a file in the `tools` folder named `copyAssets.ts`. Copy the following code into this file.
-
 ```javascript
 import * as shell from "shelljs";
 
-// Copy all of the database files
-shell.cp( "-R", "src/db/sql", "dist/db/" );
-
 // Copy all the view templates and assets in the public folder
 shell.cp( "-R", [ "src/views", "src/public" ], "dist/" );
+
+// Copy all of the database files
+shell.cp( "-R", "src/db/sql", "dist/db/" );
 ```
 
-### Update npm scripts
-
-Update the `scripts` in `package.json` to the following code.
-
-```javascript
-  "scripts": {
-    "clean": "rimraf dist/*",
-    "copy-assets": "ts-node tools/copyAssets",
-    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
-    "build": "tsc && npm run copy-assets",
-    "dev:build": "npm run build && node dist/index.js",
-    "dev": "nodemon --watch src -e ts,ejs --exec npm run dev:build",
-    "prestart": "npm run build",
-    "start": "node .",
-    "initdb": "ts-node tools/initdb",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-```
-
-If you are not familiar with using `npm` scripts, they can be very powerful and useful to any Node.js project. 
