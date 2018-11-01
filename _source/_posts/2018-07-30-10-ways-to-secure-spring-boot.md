@@ -7,6 +7,7 @@ tags: [spring boot, security, snyk, https, hsts, csrf, xss, csp, content securit
 tweets:
 - "Spring Boot is an excellent way to build Java applications with the @springframework. Want to learn how to secure them? @mraible and @sjmaple give you some advice in 10 Excellent Ways to Secure your Spring Boot Application →"
 - "10 Excellent Ways to Secure Your Spring Boot Application, by @Java_Champions @sjmaple and @mraible. Thanks to @rob_winch and @rdegges for reviewing and helping with this post!"
+image: blog/featured/okta-java-skew.jpg
 ---
 
 Spring Boot has dramatically simplified the development of Spring applications. Its autoconfiguration and starter dependencies reduce the amount of code and configuration you need to begin an app. If you were used to Spring and lots of XML back in the day, Spring Boot is a breath of fresh air.
