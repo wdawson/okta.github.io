@@ -263,7 +263,7 @@ npm run start
 
 ## A Better User Interface
 
-Your Node.js application is off to a great start, but perhaps not the best looking, yet. This step adds [Materialize](https://materializecss.com/), a modern CSS framework based on Google's Material Design, and [Embedded JavaScript Templates](https://www.npmjs.com/package/ejs) (EJS). Materialize and EJS are a good foundation for a much better UI.
+Your Node.js application is off to a great start, but perhaps not the best looking, yet. This step adds [Materialize](https://materializecss.com/), a modern CSS framework based on Google's Material Design, and [Embedded JavaScript Templates](https://www.npmjs.com/package/ejs) (EJS), an HTML template language for Express. Materialize and EJS are a good foundation for a much better UI.
 
 First, install EJS as a dependency.
 
@@ -337,8 +337,8 @@ Here is a quick overview of the modules you just installed.
 |[shelljs](https://www.npmjs.com/package/shelljs)|Use to execute shell commands such as to copy files and remove directories.|
 |[fs-extra](https://www.npmjs.com/package/fs-extra)|A module that extends the Node.js file system (`fs`) module with features such as reading and writing JSON files.|
 |[rimraf](https://www.npmjs.com/package/rimraf)|Use to recursively remove folders.|
-|[npm-run-all](https://www.npmjs.com/package/npm-run-all)|Use to excecute multiple `npm` scripts sequentially or in parallel.|
-|[nodemon](https://www.npmjs.com/package/nodemon)|A very useful tool for running Node.js in a development environment. Nodemon watches files for changes and automatically restarts the Node.js application when changes are detected. No more stopping and restarting Node.js!|
+|[npm-run-all](https://www.npmjs.com/package/npm-run-all)|Use to execute multiple `npm` scripts sequentially or in parallel.|
+|[nodemon](https://www.npmjs.com/package/nodemon)|A handy tool for running Node.js in a development environment. Nodemon watches files for changes and automatically restarts the Node.js application when changes are detected. No more stopping and restarting Node.js!|
 
 Make a new folder in the root of the project named `tools`. Create a file in the `tools` folder named `copyAssets.ts`. Copy the following code into this file.
 
@@ -638,13 +638,13 @@ npm run dev
 
 > Note: To verify authentication is working as expected, open a new browser or use a private/incognito browser window.
 
-Click the **Get Started** button. If everything goes well, you should be prompted to login to your Okta account, and then redirected back to the "Guitar List" page!
+Click the **Get Started** button. If everything goes well, log in with your Okta account, and Okta should automatically redirect you back to the "Guitar List" page!
 
 {% img blog/node-express-typescript/okta-login.jpg alt:"Okta login" width:"500" %}{: .center-image }
 
 ## Add a Navigation Menu
 
-Now that authentication is working, you can take advantage of the user profile information returned from Okta. The OIDC middleware automatically attaches a `userContext` object and an `isAuthenticated()` function to every request. This `userContext` has a `userinfo` property that contains information that looks like the following object.
+With authentication working, you can take advantage of the user profile information returned from Okta. The OIDC middleware automatically attaches a `userContext` object and an `isAuthenticated()` function to every request. This `userContext` has a `userinfo` property that contains information that looks like the following object.
 
 ```javascript
 { 
@@ -718,7 +718,7 @@ Modify the `src/views/index.ejs` and `src/views/guitars.ejs` files. Immediately 
     <% include partials/nav %>
 ```
 
-With these changes in place, you application now has a navigation menu at the top that changes based on the login status of the user.
+With these changes in place, your application now has a navigation menu at the top that changes based on the login status of the user.
 
 {% img blog/node-express-typescript/navigation.jpg alt:"Navigation" width:"800" %}{: .center-image }
 
