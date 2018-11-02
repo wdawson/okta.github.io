@@ -1,6 +1,6 @@
 ---
 layout: blog_post
-title: "How to Use TypeScript to Build a Node.js API with Express"
+title: "Use TypeScript to Build a Node.js API with Express"
 author: reverentgeek
 description: "This tutorial walks you through building a simple and secure Node.js application using TypeScript, Express, and Okta."
 tags: [authentication, typescript, web, express, node]
@@ -11,27 +11,25 @@ tweets:
 image: blog/node-express-typescript/node-express-typescript.jpg
 ---
 
+Like it or not, JavaScript has been helping developers power the Internet since 1995. In that time, JavaScript usage has grown from small user experience enhancements to complex full-stack applications using Node.js on the server and one of many frameworks on the client such as Angular, React, or Vue. 
+
+Today, building JavaScript applications _at scale_ remains a challenge. More and more teams are turning to TypeScript to supplement their JavaScript projects. 
+
+Node.js server applications can benefit from using TypeScript, as well. The goal of this tutorial is to show you how to build a new Node.js application using TypeScript and Express.
+
+## The Case for TypeScript
+
 As a Web developer, I long stopped resisting JavaScript, and have grown to appreciate its flexibility and ubiquity. Language features added to ES2015 and beyond have significantly improved its utility and reduced common frustrations of writing applications.
 
-However, building JavaScript applications _at scale_ remains a challenge. Larger JavaScript projects demand tools such as ESLint to catch common mistakes, and greater discipline to saturate the code base with useful tests. As with any software project, a healthy team culture that includes a peer review process can improve quality and guard against issues that can creep into a project.
+However, larger JavaScript projects demand tools such as ESLint to catch common mistakes, and greater discipline to saturate the code base with useful tests. As with any software project, a healthy team culture that includes a peer review process can improve quality and guard against issues that can creep into a project.
 
-## The case for TypeScript
-
-It appears more and more teams are turning to TypeScript to supplement their JavaScript projects. The primary goal of TypeScript is to catch more errors before they go into production and make it easier to work with your code base. 
+The primary benefits of using TypeScript are to catch more errors before they go into production and make it easier to work with your code base. 
 
 TypeScript is not a different language. It's a flexible _superset_ of JavaScript with ways to describe optional data types. All "standard" and valid JavaScript is also valid TypeScript. You can dial in as much or little as you desire. 
 
 As soon as you add the TypeScript compiler or a TypeScript plugin to your favorite code editor, there are immediate safety and productivity benefits. TypeScript can alert you to misspelled functions and properties, detect passing the wrong types of arguments or the wrong number of arguments to functions, and provide smarter autocomplete suggestions.
 
-### TypeScript and Node.js
-
-I give talks and write articles that help people learn Node.js. With higher frequency, people ask, "Can I use TypeScript with Node.js?"
-
-Yes! TypeScript supports Node.js, and Node.js projects can benefit from its features.
-
-This tutorial is designed to show you how to build a new Node.js application using TypeScript and Express.
-
-## Guitar Inventory Web Application
+## Build a Guitar Inventory Application
 
 Among guitar players, there's a joke everyone _should_ understand.
 
@@ -133,7 +131,7 @@ Launch your browser and navigate to <a href="http://localhost:8080" target="_bla
 
 > Note: To stop the web application, you can go back to the terminal or command prompt and press `CTRL+C`.
 
-## How to set up a Node.js project to use TypeScript
+## Set Up Your Node.js Project to Use TypeScript
 
 The first step is to add the TypeScript compiler. You can install the compiler as a developer dependency using the `--save-dev` flag.
 
@@ -261,7 +259,7 @@ Next, rerun the start script and verify there are no more errors.
 npm run start
 ```
 
-## A Better User Interface
+## Build a Better User Interface with Materialize and EJS
 
 Your Node.js application is off to a great start, but perhaps not the best looking, yet. This step adds [Materialize](https://materializecss.com/), a modern CSS framework based on Google's Material Design, and [Embedded JavaScript Templates](https://www.npmjs.com/package/ejs) (EJS), an HTML template language for Express. Materialize and EJS are a good foundation for a much better UI.
 
@@ -378,7 +376,7 @@ npm run dev
 
 {% img blog/node-express-typescript/guitar-inventory-home-v2.jpg alt:"Guitar Inventory home page" width:"500" %}{: .center-image }
 
-The home page is starting to look better! Of course, the button leads to a disappointing error message. You will fix that soon!
+The home page is starting to look better! Of course, the **Get Started** button leads to a disappointing error message. No worries! The fix for that is coming soon!
 
 ## A Better Way to Manage Configuration Settings
 
@@ -438,7 +436,7 @@ app.listen( port, () => {
 
 You will use the `.env` for much more configuration information as the project grows.
 
-## Easily add authentication to Node and Express
+## Easily Add Authentication to Node and Express
 
 Adding user registration and login (authentication) to any application is not a trivial task. The good news is Okta makes this step very easy. To begin, create a free developer account with Okta. First, navigate to [developer.okta.com](https://developer.okta.com/) and click the **Create Free Account** button, or click the [Sign Up](https://developer.okta.com/signup/) button.
 
@@ -722,7 +720,7 @@ With these changes in place, your application now has a navigation menu at the t
 
 {% img blog/node-express-typescript/navigation.jpg alt:"Navigation" width:"800" %}{: .center-image }
 
-## Create the API
+## Create the API with Node and PostreSQL
 
 The next step is to add the API to the Guitar Inventory application. However, before moving on, you need a way to store data.
 
