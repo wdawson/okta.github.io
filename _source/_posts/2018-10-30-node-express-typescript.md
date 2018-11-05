@@ -37,17 +37,7 @@ Among guitar players, there's a joke everyone _should_ understand.
 
 > A: "_n_ + 1. Always one more."
 
-In this tutorial, you are going to create a new Node.js application to keep track of an inventory of guitars. Here is a list of technologies used in this example.
-
-* [Node.js](https://nodejs.org)
-* [TypeScript](https://www.typescriptlang.org/)
-* [Express](https://expressjs.com/)
-* [PostgreSQL](https://www.postgresql.org/)
-* [EJS](https://github.com/mde/ejs)
-* [Vue](https://vuejs.org/)
-* [Materialize](https://materializecss.com/)
-* [Axios](https://github.com/axios/axios)
-* [Okta](https://www.npmjs.com/package/@okta/oidc-middleware)
+In this tutorial, you are going to create a new Node.js application to keep track of an inventory of guitars. In a nutshell, this tutorial uses [Node.js](https://nodejs.org) with [Express](https://expressjs.com/), [EJS](https://github.com/mde/ejs), and [PostgreSQL](https://www.postgresql.org/) on the backend, [Vue](https://vuejs.org/), [Materialize](https://materializecss.com/), and [Axios](https://github.com/axios/axios) on the frontend, [Okta](https://developer.okta.com/) for account registration and authorization, and [TypeScript](https://www.typescriptlang.org/) to govern the JavaScripts!
 
 ## Create the Node.js project
 
@@ -720,7 +710,7 @@ With these changes in place, your application now has a navigation menu at the t
 
 {% img blog/node-express-typescript/navigation.jpg alt:"Navigation" width:"800" %}{: .center-image }
 
-## Create the API with Node and PostreSQL
+## Create the API with Node and PostgreSQL
 
 The next step is to add the API to the Guitar Inventory application. However, before moving on, you need a way to store data.
 
@@ -749,6 +739,8 @@ Here is a quick explanation of the previous Docker parameters.
 |-p|This maps the host (your computer) port 5432 to the container's port 5432. PostgreSQL, by default, listens for connections on TCP port 5432.|
 |-e|This sets an environment variable in the container. In this example, the administrator password is `p@ssw0rd42`. You can change this value to any password you desire.|
 |postgres|This final parameter tells Docker to use the postgres image.|
+
+> Note: If you restart your computer, may need to restart the Docker container. You can do that using the `docker start guitar-db` command.
 
 Install the PostgreSQL client module and type declarations using the following commands.
 
@@ -833,13 +825,479 @@ CREATE TABLE IF NOT EXISTS guitars (
 );
 ```
 
+Next, add a new script to `package.json`.
+
 ```javascript
-import * as shell from "shelljs";
-
-// Copy all the view templates and assets in the public folder
-shell.cp( "-R", [ "src/views", "src/public" ], "dist/" );
-
-// Copy all of the database files
-shell.cp( "-R", "src/db/sql", "dist/db/" );
+    "initdb": "ts-node tools/initdb",
 ```
 
+Now, go to the terminal and run the new script.
+
+```bash
+npm run initdb
+```
+
+You should see the message `finished` at the console. A new table named `guitars` is now in your database! Any time you want to reset your database, just rerun the script.
+
+### Add API routes
+
+To complete the API, you need to add new routes to Express to create, query, update, and delete guitars. First, create a new file under `src/routes` named `api.ts`. Add the following code to this file.
+
+```javascript
+import * as express from "express";
+import pgPromise from "pg-promise";
+
+export const register = ( app: express.Application ) => {
+    const oidc = app.locals.oidc;
+    const port = parseInt( process.env.PGPORT || "5432", 10 );
+    const config = {
+        database: process.env.PGDATABASE || "postgres",
+        host: process.env.PGHOST || "localhost",
+        port,
+        user: process.env.PGUSER || "postgres"
+    };
+
+    const pgp = pgPromise();
+    const db = pgp( config );
+
+    app.get( `/api/guitars/all`, oidc.ensureAuthenticated(), async ( req: any, res ) => {
+        try {
+            const userId = req.userContext.userinfo.sub;
+            const guitars = await db.any( `
+                SELECT
+                    id
+                    , brand
+                    , model
+                    , year
+                    , color
+                FROM    guitars
+                WHERE   user_id = $[userId]
+                ORDER BY year, brand, model`, { userId } );
+            return res.json( guitars );
+        } catch ( err ) {
+            // tslint:disable-next-line:no-console
+            console.error(err);
+            res.json( { error: err.message || err } );
+        }
+    } );
+
+    app.get( `/api/guitars/total`, oidc.ensureAuthenticated(), async ( req: any, res ) => {
+        try {
+            const userId = req.userContext.userinfo.sub;
+            const total = await db.one( `
+            SELECT  count(*) AS total
+            FROM    guitars
+            WHERE   user_id = $[userId]`, { userId }, ( data: { total: number } ) => {
+                return {
+                    total: +data.total
+                };
+            } );
+            return res.json( total );
+        } catch ( err ) {
+            // tslint:disable-next-line:no-console
+            console.error(err);
+            res.json( { error: err.message || err } );
+        }
+    } );
+
+    app.get( `/api/guitars/find/:search`, oidc.ensureAuthenticated(), async ( req: any, res ) => {
+        try {
+            const userId = req.userContext.userinfo.sub;
+            const guitars = await db.any( `
+                SELECT
+                    id
+                    , brand
+                    , model
+                    , year
+                    , color
+                FROM    guitars
+                WHERE   user_id = $[userId]
+                AND   ( brand ILIKE $[search] OR model ILIKE $[search] )`,
+                { userId, search: `%${ req.params.search }%` } );
+            return res.json( guitars );
+        } catch ( err ) {
+            // tslint:disable-next-line:no-console
+            console.error(err);
+            res.json( { error: err.message || err } );
+        }
+    } );
+
+    app.post( `/api/guitars/add`, oidc.ensureAuthenticated(), async ( req: any, res ) => {
+        try {
+            const userId = req.userContext.userinfo.sub;
+            const id = await db.one( `
+                INSERT INTO guitars( user_id, brand, model, year, color )
+                VALUES( $[userId], $[brand], $[model], $[year], $[color] )
+                RETURNING id;`,
+                { userId, ...req.body  } );
+            return res.json( { id } );
+        } catch ( err ) {
+            // tslint:disable-next-line:no-console
+            console.error(err);
+            res.json( { error: err.message || err } );
+        }
+    } );
+
+    app.post( `/api/guitars/update`, oidc.ensureAuthenticated(), async ( req: any, res ) => {
+        try {
+            const userId = req.userContext.userinfo.sub;
+            const id = await db.one( `
+                UPDATE guitars
+                SET brand = $[brand]
+                    , model = $[model]
+                    , year = $[year]
+                    , color = $[color]
+                WHERE
+                    id = $[id]
+                    AND user_id = $[userId]
+                RETURNING
+                    id;`,
+                { userId, ...req.body  } );
+            return res.json( { id } );
+        } catch ( err ) {
+            // tslint:disable-next-line:no-console
+            console.error(err);
+            res.json( { error: err.message || err } );
+        }
+    } );
+
+    app.delete( `/api/guitars/remove/:id`, oidc.ensureAuthenticated(), async ( req: any, res ) => {
+        try {
+            const userId = req.userContext.userinfo.sub;
+            const id = await db.result( `
+                DELETE
+                FROM    guitars
+                WHERE   user_id = $[userId]
+                AND     id = $[id]`,
+                { userId, id: req.params.id  }, ( r ) => r.rowCount );
+            return res.json( { id } );
+        } catch ( err ) {
+            // tslint:disable-next-line:no-console
+            console.error(err);
+            res.json( { error: err.message || err } );
+        }
+    } );
+};
+```
+
+Update `src/routes/index.ts` to include the new `api` module.
+
+```javascript
+import * as express from "express";
+import * as api from "./api";
+
+export const register = ( app: express.Application ) => {
+    const oidc = app.locals.oidc;
+
+    // define a route handler for the default home page
+    app.get( "/", ( req: any, res ) => {
+        const user = req.userContext ? req.userContext.userinfo : null;
+        res.render( "index", { isAuthenticated: req.isAuthenticated(), user } );
+    } );
+
+    // define a secure route handler for the login page that redirects to /guitars
+    app.get( "/login", oidc.ensureAuthenticated(), ( req, res ) => {
+        res.redirect( "/guitars" );
+    } );
+
+    // define a route to handle logout
+    app.get( "/logout", ( req: any, res ) => {
+        req.logout();
+        res.redirect( "/" );
+    } );
+
+    // define a secure route handler for the guitars page
+    app.get( "/guitars", oidc.ensureAuthenticated(), ( req: any, res ) => {
+        const user = req.userContext ? req.userContext.userinfo : null;
+        res.render( "guitars", { isAuthenticated: req.isAuthenticated(), user } );
+    } );
+
+    api.register( app );
+};
+```
+
+Finally, update `src/index.ts` to add a new configuration option immediately following the line to create the Express application. This code enables Express to parse incoming JSON data.
+
+```javascript
+const app = express();
+
+// Configure Express to parse incoming JSON data
+app.use( express.json() );
+```
+
+## Update the User Interface with Vue, Axios, and Parcel 
+
+The API is ready. To complete the application, you need to add some code to the frontend to consume the API. You can take advantage of TypeScript with frontend code, as well.
+
+This final step of the project uses [Vue](https://vuejs.org/) for frontend rendering, [Axios](https://www.npmjs.com/package/axios) for making HTTP calls to the backend API, and [Parcel](https://www.npmjs.com/package/parcel) to both transpile TypeScript and bundle all the dependencies together into a single JavaScript file.
+
+First, install new dependencies at the console using the following commands.
+
+```bash
+npm install axios vue materialize-css
+npm install --save-dev parcel-bundler @types/axios @types/materialize-css @types/vue
+```
+
+Make a new folder under `src` named `public`. Make a new folder under `src/public` named `js`. Create a file under `src/public/js` named `main.ts` and add the following code.
+
+```javascript
+import axios from "axios";
+import * as M from "materialize-css";
+import Vue from "vue";
+
+// tslint:disable-next-line no-unused-expression
+new Vue( {
+    computed: {
+        hazGuitars(): boolean {
+            return this.isLoading === false && this.guitars.length > 0;
+        },
+        noGuitars(): boolean {
+            return this.isLoading === false && this.guitars.length === 0;
+        }
+    },
+    data() {
+        return {
+            brand: "",
+            color: "",
+            guitars: [],
+            isLoading: true,
+            model: "",
+            selectedGuitar: "",
+            selectedGuitarId: 0,
+            year: ""
+        };
+    },
+    el: "#app",
+    methods: {
+        addGuitar() {
+            const guitar = {
+                brand: this.brand,
+                color: this.color,
+                model: this.model,
+                year: this.year
+            };
+            axios
+                .post( "/api/guitars/add", guitar )
+                .then( () => {
+                    this.$refs.year.focus();
+                    this.brand = "";
+                    this.color = "";
+                    this.model = "";
+                    this.year = "";
+                    this.loadGuitars();
+                } )
+                .catch( ( err: any ) => {
+                    // tslint:disable-next-line:no-console
+                    console.log( err );
+                } );
+        },
+        confirmDeleteGuitar( id: string ) {
+            const guitar = this.guitars.find( ( g ) => g.id === id );
+            this.selectedGuitar = `${ guitar.year } ${ guitar.brand } ${ guitar.model }`;
+            this.selectedGuitarId = guitar.id;
+            const dc = this.$refs.deleteConfirm;
+            const modal = M.Modal.init( dc );
+            modal.open();
+        },
+        deleteGuitar( id: string ) {
+            axios
+                .delete( `/api/guitars/remove/${ id }` )
+                .then( this.loadGuitars )
+                .catch( ( err: any ) => {
+                    // tslint:disable-next-line:no-console
+                    console.log( err );
+                } );
+        },
+        loadGuitars() {
+            axios
+                .get( "/api/guitars/all" )
+                .then( ( res: any ) => {
+                    this.isLoading = false;
+                    this.guitars = res.data;
+                } )
+                .catch( ( err: any ) => {
+                    // tslint:disable-next-line:no-console
+                    console.log( err );
+                } );
+        }
+    },
+    mounted() {
+        return this.loadGuitars();
+    }
+} );
+```
+
+Update `tsconfig.json` to exclude the `src/public` folder from the backend Node.js build process.
+
+```javascript
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "target": "es6",
+        "noImplicitAny": true,
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "outDir": "dist",
+        "baseUrl": ".",
+        "paths": {
+            "*": [
+                "node_modules/*"
+            ]
+        }
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "src/public"
+    ]
+}
+```
+
+Create a new `tsconfig.json` file under `src/public/js` and add the following code. This TypeScript configuration is to compile `main.ts` for use in the browser.
+
+```javascript
+{
+    "compilerOptions": {
+        "lib": [
+            "es6",
+            "dom"
+        ],
+        "noImplicitAny": true,
+        "allowJs": true,
+        "target": "es5",
+        "strict": true,
+        "module": "es6",
+        "moduleResolution": "node",
+        "outDir": "../../../dist/public/js",
+        "sourceMap": true
+    }
+}
+```
+
+Next, update `src/index.ts` to configure Express to serve static files from the `public` folder. Add this line after the code that configures Express to use `EJS`.
+
+```javascript
+...
+// Configure Express to use EJS
+app.set( "views", path.join( __dirname, "views" ) );
+app.set( "view engine", "ejs" );
+
+// Configure Express to serve static files in the public folder
+app.use( express.static( path.join( __dirname, "public" ) ) );
+```
+
+Update `src/views/guitars.ejs` to add the Vue application template and a reference to the `js/main.js` file.
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Guitar Inventory</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<body>
+    <% include partials/nav %>
+    <div class="container">
+        <div id="app">
+            <div class="row" id="guitarList">
+                <h3>Guitar list</h3>
+                <table v-if="hazGuitars">
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Brand</th>
+                            <th>Model</th>
+                            <th>Color</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="guitar in guitars">
+                            <td>{{ guitar.year }}</td>
+                            <td>{{ guitar.brand }}</td>
+                            <td>{{ guitar.model }}</td>
+                            <td>{{ guitar.color }}</td>
+                            <td>
+                                <button id="guitarDelete" @click="confirmDeleteGuitar(guitar.id)" class="btn-small"><i class="material-icons right">delete</i>Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p v-if="noGuitars">No guitars yet!</p>
+            </div>
+            <div class="row" id="guitarEdit">
+                <h3>Add a guitar</h3>
+                <form class="col s12" @submit.prevent="addGuitar">
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input v-model="year" ref="year" placeholder="2005" id="year" type="text" class="validate">
+                            <label for="brand">Year</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input v-model="brand" ref="brand" placeholder="Paul Reed Smith" id="brand" type="text" class="validate">
+                            <label for="brand">Brand</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input v-model="model" ref="model" placeholder="Custom 24" id="model" type="text" class="validate">
+                            <label for="model">Model</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input v-model="color" ref="color" placeholder="Whale Blue" id="color" type="text" class="validate">
+                            <label for="model">Color</label>
+                        </div>
+                    </div>
+                    <button id="guitarEditSubmit" class="btn" type="submit"><i class="material-icons right">send</i>Submit</button>
+                </form>
+            </div>
+            <div id="deleteConfirm" ref="deleteConfirm" class="modal">
+                <div class="modal-content">
+                    <h4>Confirm delete</h4>
+                    <p>Delete {{ selectedGuitar }}?</p>
+                </div>
+                <div class="modal-footer">
+                    <button @click="deleteGuitar(selectedGuitarId)" class="modal-close btn-flat">Ok</button>
+                    <button class="modal-close btn-flat">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/main.js"></script></body>
+</html>
+```
+
+Finally, update `package.json` to add a new `parcel` script, update the `build` script, and add a new `alias` section for Vue. The `alias` section points Parcel to the correct Vue file to bundle with `src/public/js/main.ts`. 
+
+```javascript
+  "scripts": {
+    "clean": "rimraf dist/*",
+    "copy-assets": "ts-node tools/copyAssets",
+    "lint": "tslint -c tslint.json -p tsconfig.json --fix",
+    "tsc": "tsc",
+    "parcel": "parcel build src/public/js/main.ts -d dist/public/js",
+    "build": "npm-run-all clean lint tsc copy-assets parcel",
+    "dev:start": "npm-run-all build start",
+    "dev": "nodemon --watch src -e ts,ejs --exec npm run dev:start",
+    "start": "node .",
+    "initdb": "ts-node tools/initdb",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "alias": {
+    "vue": "./node_modules/vue/dist/vue.common.js"
+  },
+```
+
+Now, restart the build and take a look at the web application!
+
+```bash
+npm run dev
+```
+
+{% img blog/node-express-typescript/guitar-inventory-empty.jpg alt:"Guitar Inventory" width:"800" %}{: .center-image }
