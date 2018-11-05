@@ -159,7 +159,7 @@ Create a `react-app/src/ProfileList.tsx` component that fetches data from the `/
 
 [source,tsx]
 ----
-import * as React from 'react';
+import React, { Component } from 'react';
 
 interface Profile {
   id: number;
@@ -174,7 +174,7 @@ interface ProfileListState {
   isLoading: boolean;
 }
 
-class ProfileList extends React.Component<ProfileListProps, ProfileListState> {
+class ProfileList extends Component<ProfileListProps, ProfileListState> {
 
   constructor(props: ProfileListProps) {
     super(props);
@@ -533,7 +533,7 @@ public class ServerSentEventController {
 <1> The `.share()` method is important to allow multiple clients to consume your data.
 <2> You must use `MediaType.TEXT_EVENT_STREAM_VALUE` to indicate you'll be sending streaming text.
 <3> You have to allow access from the React app's origin because https://github.com/facebook/create-react-app/issues/3391[Create React App's proxy doesn't support SSE].
-<4> Return the `ProfileCreatedEvent` as a JSON string. I added the two carriage returns because a reader commented that they were necessary for them.
+<4> Return the `ProfileCreatedEvent` as a JSON string. I added the two carriage returns because a reader commented that they needed them.
 ====
 
 On the React side of things, you can use https://developer.mozilla.org/en-US/docs/Web/API/EventSource[`EventSource`] to listen for new profiles. Change your `ProfileList` component to use `EventSource` as follows.
@@ -1005,7 +1005,7 @@ async componentDidMount() {
 
 After making these changes, you should have an app that gets real-time updates from Spring WebFlux when new profiles are added.
 
-You can prove this works by creating an access token using https://oidcdebugger.com/[OpenID Connect <debugger/>] to generate an access token. FWIW, I had to tweak my application to allow Implicit flow with an access token, add `https://oidcdebugger.com/debug` as a login redirect URI, and manually enter a state variable. Then I was able to modify `create-stream.sh` to use the access token when creating profiles.
+You can prove this works by creating an access token using https://oidcdebugger.com/[OpenID Connect <debugger/>]. To use this, I had to tweak my application to allow Implicit flow with an access token, add `https://oidcdebugger.com/debug` as a login redirect URI, and manually enter a state variable. Then I was able to modify `create-stream.sh` to use the access token when creating profiles.
 
 [source,bash]
 ----
@@ -1052,4 +1052,4 @@ If you have any questions, please leave a comment below, ask us on Twitter (http
 
 **Changelog:**
 
-* Nov 5, 2018: Updated to use the Spring Boot 2.1 GA release and Create React App 2.1.0. You can see the example app changes in [okta-spring-webflux-react-example#6](https://github.com/oktadeveloper/okta-spring-webflux-react-example/pull/6); changes to this post can be viewed in [okta.github.io#2459](https://github.com/okta/okta.github.io/pull/2459).
+* Nov 5, 2018: Updated to use the Spring Boot 2.1 GA release and Create React App 2.1.0. You can see the example app changes in https://github.com/oktadeveloper/okta-spring-webflux-react-example/pull/6[okta-spring-webflux-react-example#6]; changes to this post can be viewed in https://github.com/okta/okta.github.io/pull/2459[okta.github.io#2459].
