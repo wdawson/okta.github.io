@@ -39,6 +39,8 @@ Among guitar players, there's a joke everyone _should_ understand.
 
 In this tutorial, you are going to create a new Node.js application to keep track of an inventory of guitars. In a nutshell, this tutorial uses [Node.js](https://nodejs.org) with [Express](https://expressjs.com/), [EJS](https://github.com/mde/ejs), and [PostgreSQL](https://www.postgresql.org/) on the backend, [Vue](https://vuejs.org/), [Materialize](https://materializecss.com/), and [Axios](https://github.com/axios/axios) on the frontend, [Okta](https://developer.okta.com/) for account registration and authorization, and [TypeScript](https://www.typescriptlang.org/) to govern the JavaScripts!
 
+{% img blog/node-express-typescript/guitar-inventory-demo.gif alt:"Guitar Inventory Demo" width:"800" %}{: .center-image }
+
 ## Create the Node.js project
 
 Open up a terminal (Mac/Linux) or a command prompt (Windows) and type the following command:
