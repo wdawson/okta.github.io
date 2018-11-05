@@ -471,7 +471,7 @@ public class ProfileCreatedEvent extends ApplicationEvent {
 
 That wasn't so bad, was it? Our service was pretty straightforward. The only novelty was the publishing of an event. Everything should be working just fine now. But, of course, we can't possibly know that unless we test it.
 
-=== Test our Reactive Service
+=== Test Your Reactive Service
 
 Reactive code presents some subtle issues when testing. Remember, our code is asynchronous. It's possibly concurrent. Each `Subscriber<T>` could execute on a different thread because the pipeline is managed by a `Scheduler`. You can change which scheduler is to be used by calling `(Flux,Mono).subscribeOn(Scheduler)`. There's a convenient factory, `Schedulers.\*`, that lets you build a new `Scheduler` from, for example, a `java.util.concurrent.Executor`. You don't normally need to override the `Scheduler`, though. By default there's one thread per core and the scheduler will just work. You only really need to worry about it when the thing to which you're subscribing could end up blocking. If, for example, you end up making a call to a blocking JDBC datastore in your `Publisher<T>`, then you should scale up interactions with that datastore with more threads using a `Scheduler`.
 
@@ -1482,7 +1482,6 @@ image::{% asset_path 'blog/spring-webflux-apis/profiles-json.png' %}[alt=the Spr
 To turn your API into a resource server, that can be accessed with an access token, you'll need to add a `resourceserver` configuration to your `application.yml`. Modify your `application.yml` to look as follows:
 
 [source,yaml]
-.src/main/resources/application.yml
 ----
 oidc:
   issuer-uri: https://{yourOktaDomain}/oauth2/default
@@ -1509,8 +1508,9 @@ spring:
 
 Then create a `SecurityConfiguration.java` class to configure the resource server.
 
+.`src/main/java/com/example/demo/SecurityConfiguration.java`
+====
 [source,java]
-.src/main/java/com/example/demo/SecurityConfiguration.java
 ----
 package com.example.demo;
 
@@ -1535,6 +1535,7 @@ public class SecurityConfiguration {
         }
 }
 ----
+====
 
 Now you should be able to call your application from the command line. You can use https://oidcdebugger.com/[OpenID Connect <debugger/>] to get an access token. This website was written by Okta's own https://twitter.com/nbarbettini[Nate Barbettini].
 
@@ -1588,4 +1589,4 @@ https://github.com/oktadeveloper/okta-spring-webflux-react-example/pull/5
 
 **Changelog:**
 
-* Nov 5, 2018: Updated to use Spring Boot 2.1 GA release. You can see the example app changes in https://github.com/oktadeveloper/okta-spring-webflux-react-example/pull/5[okta-spring-webflux-react-example#5]; changes to this post can be viewed in [okta.github.io#2460](https://github.com/okta/okta.github.io/pull/2460).
+* Nov 5, 2018: Updated to use Spring Boot 2.1 GA release. You can see the example app changes in https://github.com/oktadeveloper/okta-spring-webflux-react-example/pull/5[okta-spring-webflux-react-example#5]; changes to this post can be viewed in https://github.com/okta/okta.github.io/pull/2458[okta.github.io#2458].
