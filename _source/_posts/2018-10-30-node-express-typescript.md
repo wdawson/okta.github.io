@@ -1301,3 +1301,17 @@ npm run dev
 ```
 
 {% img blog/node-express-typescript/guitar-inventory-empty.jpg alt:"Guitar Inventory" width:"800" %}{: .center-image }
+
+## Learn More About Node and TypeScript
+
+This tutorial only begins to scratch the surface of what you can do with Node.js and TypeScript. Below are more resources to explore.
+
+* [TypeScript Learning Resources](https://medium.com/@jcreamer898/typescript-learning-resources-b1205a98c47c) by [Jonathan Creamer](https://twitter.com/jcreamer898)
+* [TypeScript Node Starter](https://github.com/Microsoft/TypeScript-Node-Starter) - an open-source project by Microsoft
+* [TypeScript Deep Dive](https://basarat.gitbooks.io/typescript/) - Free online book by [Basarat Ali Syed](https://twitter.com/basarat)
+* [TypeScript Documentation](http://www.typescriptlang.org/docs/home.html)
+* [Simple Node Authentication](https://developer.okta.com/blog/2018/04/24/simple-node-authentication)
+
+You can find the completed [Guitar Inventory](https://github.com/oktadeveloper/okta-node-express-typescript-vue-example) project on GitHub.
+
+Follow us for more great content and updates from our team! You can find us on [Twitter](https://twitter.com/OktaDev), [Facebook](https://www.facebook.com/oktadevelopers/), and [LinkedIn](https://www.linkedin.com/company/oktadev/).
