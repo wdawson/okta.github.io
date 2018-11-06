@@ -358,7 +358,7 @@ Update the `scripts` in `package.json` to the following code.
   },
 ```
 
-> Note: If you are not familiar with using `npm` scripts, they can be very powerful and useful to any Node.js project. `npm` scripts can be chained together in several ways. One way to chain scripts together is to use the `pre` and `post` prefixes. In your scripts you now have a script named `start` and another labeled `prestart`. Executing `npm run start` at the terminal will now result in the `prestart` running first, and only after it successfully finishes does `start` run.
+> Note: If you are not familiar with using `npm` scripts, they can be very powerful and useful to any Node.js project. `npm` scripts can be chained together in several ways. One way to chain scripts together is to use the `pre` and `post` prefixes. For example, if you have one script labeled `start` and another labeled `prestart`, executing `npm run start` at the terminal will first run `prestart`, and only after it successfully finishes does `start` run.
 
 Now run the application and navigate to http://localhost:8080.
 
