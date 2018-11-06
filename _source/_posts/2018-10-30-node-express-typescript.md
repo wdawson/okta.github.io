@@ -1312,6 +1312,7 @@ This tutorial only begins to scratch the surface of what you can do with Node.js
 * [TypeScript Node Starter](https://github.com/Microsoft/TypeScript-Node-Starter) - an open-source project by Microsoft
 * [TypeScript Deep Dive](https://basarat.gitbooks.io/typescript/) - Free online book by [Basarat Ali Syed](https://twitter.com/basarat)
 * [TypeScript Documentation](http://www.typescriptlang.org/docs/home.html)
+* [Vue TypeScript Support](https://vuejs.org/v2/guide/typescript.html)
 * [Simple Node Authentication](https://developer.okta.com/blog/2018/04/24/simple-node-authentication)
 
 You can find the completed [Guitar Inventory](https://github.com/oktadeveloper/okta-node-express-typescript-vue-example) project on GitHub.
