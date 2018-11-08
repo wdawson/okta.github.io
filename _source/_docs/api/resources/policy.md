@@ -325,7 +325,7 @@ curl -v -X POST \
     "network": {
       "connection": "ZONE",
       "include": [
-        "nzopaohNwahkqanun0g3"
+        "nzowdja2YRaQmOQYp0g3"
       ]
     },
     "authContext": {
