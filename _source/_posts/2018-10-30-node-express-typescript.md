@@ -117,7 +117,7 @@ If all goes well, you should see this message written to the console.
 server started at http://localhost:8080
 ```
 
-Launch your browser and navigate to <a href="http://localhost:8080" target="_blank">http://localhost:8080</a>. You should see the text "Hello world!"
+Launch your browser and navigate to `http://localhost:8080`. You should see the text "Hello world!"
 
 {% img blog/node-express-typescript/hello-world.jpg alt:"Hello World" width:"500" %}{: .center-image }
 
@@ -131,7 +131,9 @@ The first step is to add the TypeScript compiler. You can install the compiler a
 npm install --save-dev typescript
 ```
 
-The next step is to add a `tsconfig.json` file to your project. This file instructs TypeScript how to compile (transpile) your TypeScript code into plain JavaScript. Create a file named `tsconfig.json` in the root folder of your project, and add the following configuration.
+The next step is to add a `tsconfig.json` file. This file instructs TypeScript how to compile (transpile) your TypeScript code into plain JavaScript. 
+
+Create a file named `tsconfig.json` in the root folder of your project, and add the following configuration.
 
 ```javascript
 {
@@ -158,7 +160,15 @@ The next step is to add a `tsconfig.json` file to your project. This file instru
 
 Based on this `tsconfig.json` file, the TypeScript compiler will (attempt to) compile any files ending with `.ts` it finds in the `src` folder, and store the results in a folder named `dist`. Node.js uses the CommonJS module system, so the value for the `module` setting is `commonjs`. Also, the target version of JavaScript is ES6 (ES2015), which is compatible with modern versions of Node.js.
 
-It's also a great idea to create a `tslint.json` file that instructs TypeScript how to lint your code. If you're not familiar with linting, it is a code analysis tool to alert you to potential problems in your code beyond syntax issues.
+It's also a great idea to add `tslint` and create a `tslint.json` file that instructs TypeScript how to lint your code. If you're not familiar with linting, it is a code analysis tool to alert you to potential problems in your code beyond syntax issues.
+
+Install `tslint` as a developer dependency.
+
+```bash
+npm install --save-dev typescript tslint
+```
+
+Next, create a new file in the root folder named `tslint.json` file and add the following configuration.
 
 ```javascript
 {
@@ -353,7 +363,6 @@ Update the `scripts` in `package.json` to the following code.
     "dev:start": "npm-run-all build start",
     "dev": "nodemon --watch src -e ts,ejs --exec npm run dev:start",
     "start": "node .",
-    "initdb": "ts-node tools/initdb",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
 ```
@@ -446,22 +455,19 @@ Enter a name for your application, such as *Guitar Inventory*. Verify the port n
 
 {% img blog/node-express-typescript/add-application-03.jpg alt:"Application settings" width:"800" %}{: .center-image }
 
-After creating the application, click on the application's **General** tab, and find near the bottom of the page a section titled "Client Credentials." You need both the **Client ID** and **Client secret** values.
-
-{% img blog/node-express-typescript/add-application-04.jpg alt:"Client credentials" width:"800" %}{: .center-image }
-
 Copy and paste the following code into your `.env` file.
 
 ```bash
 # Okta configuration
-OKTA_ORG_URL=https://dev-123456.oktapreview.com
-OKTA_CLIENT_ID=
-OKTA_CLIENT_SECRET=
+OKTA_ORG_URL=https://{yourOktaDomain}
+OKTA_CLIENT_ID={yourClientId}
+OKTA_CLIENT_SECRET={yourClientSecret}
 ```
 
-Copy the **Client ID** and **Client secret** values and paste them into your `.env` file. Last, you need to replace the value of `dev-123456` in the `OKTA_ORG_URL` to match the ID for your account. You can find this ID in the URL of your Okta management console. 
+In the Okta application console, click on your new application's **General** tab, and find near the bottom of the page a section titled "Client Credentials." Copy the **Client ID** and **Client secret** values and paste them into your `.env` file to replace `{yourClientId}` and `{yourClientSecret}`, respectively.
 
-{% img blog/node-express-typescript/okta-instance-id.jpg alt:"Client credentials" width:"500" %}{: .center-image }
+{% img blog/node-express-typescript/add-application-04.jpg alt:"Client credentials" width:"800" %}{: .center-image }
+
 
 ### Enable self-service registration
 
@@ -732,6 +738,8 @@ Now, run this command to create an instance of a PostgreSQL database server. Fee
 docker run -d --name guitar-db -p 5432:5432 -e 'POSTGRES_PASSWORD=p@ssw0rd42' postgres
 ```
 
+> Note: If you already have PostgreSQL installed locally, you will need to change the `-p` parameter to map port 5432 to a different port that does not conflict with your existing instance of PostgreSQL.
+
 Here is a quick explanation of the previous Docker parameters.
 
 | parameter | description |
@@ -769,7 +777,7 @@ PGPORT=5432
 
 You need a build script to initialize the PostgreSQL database. This script should read in a `.pgsql` file and execute the SQL commands against the local database.
 
-First, create a new folder in the project named `tools`. In this folder, create two files: `initdb.ts` and `initdb.pgsql`. Copy and paste the following code into `initdb.ts`.
+In the `tools` folder, create two files: `initdb.ts` and `initdb.pgsql`. Copy and paste the following code into `initdb.ts`.
 
 ```javascript
 import dotenv from "dotenv";
