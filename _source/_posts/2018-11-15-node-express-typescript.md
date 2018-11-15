@@ -1,13 +1,13 @@
 ---
 layout: blog_post
-title: "Use TypeScript to Build a Node.js API with Express"
+title: "Use TypeScript to Build a Node API with Express"
 author: reverentgeek
-description: "This tutorial walks you through building a simple and secure Node.js application using TypeScript, Express, and Okta."
+description: "This tutorial walks you through building a simple and secure Node application using TypeScript, Express, and Okta."
 tags: [authentication, typescript, web, express, node]
 tweets:
-- "Can you build a Node.js application using TypeScript? @reverentgeek shows you how!"
-- "A quick introduction to building a Node.js application using TypeScript"
-- "Build a Node.js application using TypeScript and Express"
+- "Can you build a @nodejs application using @typescriptlang? @reverentgeek shows you how!"
+- "A quick introduction to building a @nodejs application using @typescriptlang"
+- "Build a @nodejs application using @typescriptlang and #expressjs"
 image: blog/node-express-typescript/node-express-typescript.jpg
 ---
 
@@ -19,7 +19,7 @@ Node.js server applications can benefit from using TypeScript, as well. The goal
 
 ## The Case for TypeScript
 
-As a Web developer, I long stopped resisting JavaScript, and have grown to appreciate its flexibility and ubiquity. Language features added to ES2015 and beyond have significantly improved its utility and reduced common frustrations of writing applications.
+As a web developer, I long ago stopped resisting JavaScript, and have grown to appreciate its flexibility and ubiquity. Language features added to ES2015 and beyond have significantly improved its utility and reduced common frustrations of writing applications.
 
 However, larger JavaScript projects demand tools such as ESLint to catch common mistakes, and greater discipline to saturate the code base with useful tests. As with any software project, a healthy team culture that includes a peer review process can improve quality and guard against issues that can creep into a project.
 
@@ -29,7 +29,8 @@ TypeScript is not a different language. It's a flexible _superset_ of JavaScript
 
 As soon as you add the TypeScript compiler or a TypeScript plugin to your favorite code editor, there are immediate safety and productivity benefits. TypeScript can alert you to misspelled functions and properties, detect passing the wrong types of arguments or the wrong number of arguments to functions, and provide smarter autocomplete suggestions.
 
-## Build a Guitar Inventory Application
+## Build a Guitar Inventory Application with TypeScript and Node.js
+
 
 Among guitar players, there's a joke everyone _should_ understand.
 
@@ -41,7 +42,7 @@ In this tutorial, you are going to create a new Node.js application to keep trac
 
 {% img blog/node-express-typescript/guitar-inventory-demo.gif alt:"Guitar Inventory Demo" width:"800" %}{: .center-image }
 
-## Create the Node.js project
+## Create Your Node.js Project
 
 Open up a terminal (Mac/Linux) or a command prompt (Windows) and type the following command:
 
@@ -318,7 +319,7 @@ app.listen( port, () => {
 } );
 ```
 
-### Add an asset build script
+### Add an asset build script for Typescript
 
 The TypeScript compiler does the work of generating the JavaScript files and copies them to the `dist` folder. However, it does not copy the other types of files the project needs to run, such as the EJS view templates. To accomplish this, create a build script that copies all the other files to the `dist` folder.
 
@@ -379,7 +380,7 @@ npm run dev
 
 The home page is starting to look better! Of course, the **Get Started** button leads to a disappointing error message. No worries! The fix for that is coming soon!
 
-## A Better Way to Manage Configuration Settings
+## A Better Way to Manage Configuration Settings in Node.js
 
 Node.js applications typically use environment variables for configuration. However, managing environment variables can be a chore. A popular module for managing application configuration data is [dotenv](https://www.npmjs.com/package/dotenv).
 
@@ -638,7 +639,7 @@ Click the **Get Started** button. If everything goes well, log in with your Okta
 
 {% img blog/node-express-typescript/okta-login.jpg alt:"Okta login" width:"500" %}{: .center-image }
 
-## Add a Navigation Menu
+## Add a Navigation Menu to Your Node + Typescript App
 
 With authentication working, you can take advantage of the user profile information returned from Okta. The OIDC middleware automatically attaches a `userContext` object and an `isAuthenticated()` function to every request. This `userContext` has a `userinfo` property that contains information that looks like the following object.
 
@@ -718,7 +719,7 @@ With these changes in place, your application now has a navigation menu at the t
 
 {% img blog/node-express-typescript/navigation.jpg alt:"Navigation" width:"800" %}{: .center-image }
 
-## Create the API with Node and PostgreSQL
+## Create an API with Node and PostgreSQL
 
 The next step is to add the API to the Guitar Inventory application. However, before moving on, you need a way to store data.
 
@@ -849,7 +850,7 @@ npm run initdb
 
 You should see the message `finished` at the console. A new table named `guitars` is now in your database! Any time you want to reset your database, just rerun the script.
 
-### Add API routes
+### Add API routes in Node.js
 
 To complete the API, you need to add new routes to Express to create, query, update, and delete guitars. First, create a new file under `src/routes` named `api.ts`. Add the following code to this file.
 
@@ -1314,7 +1315,7 @@ npm run dev
 
 ## Learn More About Node and TypeScript
 
-This tutorial only begins to scratch the surface of what you can do with Node.js and TypeScript. Below are more resources to explore.
+This tutorial only scratches the surface of what you can do with Node.js and TypeScript. Below are more resources to explore.
 
 * [TypeScript Learning Resources](https://medium.com/@jcreamer898/typescript-learning-resources-b1205a98c47c) by [Jonathan Creamer](https://twitter.com/jcreamer898)
 * [TypeScript Node Starter](https://github.com/Microsoft/TypeScript-Node-Starter) - an open-source project by Microsoft
@@ -1325,4 +1326,4 @@ This tutorial only begins to scratch the surface of what you can do with Node.js
 
 You can find the completed [Guitar Inventory](https://github.com/oktadeveloper/okta-node-express-typescript-vue-example) project on GitHub.
 
-Follow us for more great content and updates from our team! You can find us on [Twitter](https://twitter.com/OktaDev), [Facebook](https://www.facebook.com/oktadevelopers/), and [LinkedIn](https://www.linkedin.com/company/oktadev/).
+Follow us for more great content and updates from our team! You can find us on [Twitter](https://twitter.com/OktaDev), [Facebook](https://www.facebook.com/oktadevelopers/), and [LinkedIn](https://www.linkedin.com/company/oktadev/). Questions? Hit us up in the comments below.
