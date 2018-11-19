@@ -738,7 +738,7 @@ curl -X GET \
 | token_endpoint                                | URL of the authorization server's [token endpoint](#token).                                                                                                                                                                      | String  |
 | registration_endpoint                         | URL of the authorization server's [Dynamic Client Registration endpoint](/docs/api/resources/oauth-clients.html#register-new-client).                                                                                            | String  |
 | jwks_uri                                      | URL of the authorization server's [JSON Web Key Set](/docs/api/resources/authorization-servers#certificate-json-web-key-object) document.                                                                                        | String  |
-| response_types_supported                      | JSON array containing a list of the `response_type` values that this authorization server supports.                                                                                                                              | Array   |
+| response_types_supported                      | JSON array containing a list of the `response_type` values that this authorization server supports. Can be a combination of `code`, `token`, and `id_token`.                                                                                                                              | Array   |
 | response_modes_supported                      | JSON array containing a list of the `response_mode` values that this authorization server supports. More information [here](#parameter-details).                                                                                 | Array   |
 | grant_types_supported                         | JSON array containing a list of the `grant_type` values that this authorization server supports.                                                                                                                                 | Array   |
 | subject_types_supported                       | JSON array containing a list of the Subject Identifier types that this OP supports. Valid values are `pairwise` and `public`. More info [here](https://openid.net/specs/openid-connect-core-1_0.html#SubjectIDTypes).            | Array   |
@@ -768,7 +768,11 @@ curl -X GET \
     "response_types_supported": [
         "code",
         "token",
-        "code token"
+        "id_token",
+        "code id_token",
+        "code token",
+        "id_token token",
+        "code it_token token"
     ],
     "response_modes_supported": [
         "query",
