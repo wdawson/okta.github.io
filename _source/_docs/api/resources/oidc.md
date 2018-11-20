@@ -772,7 +772,7 @@ curl -X GET \
         "code id_token",
         "code token",
         "id_token token",
-        "code it_token token"
+        "code id_token token"
     ],
     "response_modes_supported": [
         "query",
