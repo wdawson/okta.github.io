@@ -4787,7 +4787,7 @@ Client authentication credentials for an [OAuth 2.0 Authorization Server (AS)](h
 | `LINKEDIN`   | `AUTO`, `CALLOUT`, `DISABLED` | `NONE` or `ASSIGN`                    | `AUTO`, `CALLOUT`, `DISABLED` | `groups`             |
 |------------- | ----------------------------- | ------------------------------------- | ----------------------------- | --------------------- |
 
-> `CALLOUT` is a {% api_lifecycle deprecated %} User Provisioning Action.
+> `CALLOUT` is a {% api_lifecycle deprecated %} User Provisioning Action and Account Link Action.
 
 #### Provisioning Policy Object
 
@@ -5244,8 +5244,6 @@ Webhook settings for an IdP provisioning or account link transaction:
 ~~~
 
 ##### Callout Authorization Object
-
-> This is a {% api_lifecycle deprecated %} feature.
 
 Webhook authorization settings for an IdP provisioning or account link transaction:
 
