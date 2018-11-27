@@ -835,7 +835,7 @@ curl -v -X POST \
 #### Enroll Okta Call Factor
 {:.api .api-operation}
 
-Enrolls a user with the Okta `call` factor and a [Call profile](#call-profile).  A text message with an OTP is sent to the device during enrollment and must be [activated](#activate-call-factor) by following the `activate` link relation to complete the enrollment process.
+Enrolls a user with the Okta `call` factor and a [Call profile](#call-profile).  A voice call with an OTP is made to the device during enrollment and must be [activated](#activate-call-factor).
 
 ##### Request Example
 {:.api .api-request .api-request-example}
