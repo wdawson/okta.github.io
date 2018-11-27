@@ -2107,6 +2107,8 @@ curl -v -X POST \
 
 ## Identity Provider Transaction Operations
 
+> This is a {% api_lifecycle deprecated %} feature.
+
 Operations for just-in-time provisioning or account linking with a `callout` action (webhook)
 
 All transaction operations require a transaction ID which is obtained as part of the authentication call.
@@ -4785,6 +4787,7 @@ Client authentication credentials for an [OAuth 2.0 Authorization Server (AS)](h
 | `LINKEDIN`   | `AUTO`, `CALLOUT`, `DISABLED` | `NONE` or `ASSIGN`                    | `AUTO`, `CALLOUT`, `DISABLED` | `groups`             |
 |------------- | ----------------------------- | ------------------------------------- | ----------------------------- | --------------------- |
 
+> `CALLOUT` is a {% api_lifecycle deprecated %} User Provisioning Action.
 
 #### Provisioning Policy Object
 
@@ -4795,9 +4798,10 @@ Specifies the behavior for just-in-time (JIT) provisioning of an IdP user as a n
 | ------------------------------------| --- ------------------------------- | ----------- ----------- | -------- | -------- |
 | action                              | Provisioning action for an IdP user during authentication                         | [User Provisioning Action Type](#user-provisioning-action-type)       | FALSE    | FALSE    |
 | profileMaster                       | Determines if the IdP should act as a source of truth for user profile attributes | Boolean                                                               | FALSE    | FALSE    |
-| callout                             | Webhook settings for the `CALLOUT` action                                         | [Callout Object](#callout-object)                                     | TRUE     | FALSE    |
+| callout {% api_lifecycle deprecated %} | Webhook settings for the `CALLOUT` action                                         | [Callout Object](#callout-object)                                     | TRUE     | FALSE    |
 | groups                              | Provisioning settings for a user's group memberships                              | [Group Provisioning Policy Object](#group-provisioning-policy-object) | FALSE    | FALSE    |
 | conditions | Conditional behaviors for an IdP user during authentication                       | [Provisioning Conditions Object](#provisioning-conditions-object)     | FALSE    | FALSE    |
+
 
 ~~~json
 {
@@ -4836,6 +4840,9 @@ The follow provisioning actions are support by each IdP provider:
 | `LINKEDIN`   | `AUTO`, `CALLOUT`, `DISABLED` | `NONE` or `ASSIGN`                    |
 |------------- | ----------------------------- | ------------------------------------- |
 
+> `CALLOUT` is a {% api_lifecycle deprecated %} User Provisioning Action.
+
+
 ##### User Provisioning Action Type
 
 Specifies the user provisioning action during authentication when an IdP user is not linked to an existing Okta user.
@@ -4846,6 +4853,8 @@ Specifies the user provisioning action during authentication when an IdP user is
 | `AUTO`      | The IdP user profile is transformed via defined universal directory profile mappings to an Okta user profile and automatically provisioned as an Okta user.          |
 | `CALLOUT`   | Okta calls out to an external web service during authentication to validate the IdP user profile, determine whether to provision a new Okta user, and define the resulting Okta user profile. |
 | `DISABLED`  | Okta rejects the authentication request and skip provisioning of a new Okta user if the IdP user is not linked to an existing Okta User.                                     |
+
+> `CALLOUT` is a {% api_lifecycle deprecated %} Action Type.
 
 Property Details
 
@@ -5054,6 +5063,8 @@ The follow-account link actions are supported by each IdP provider:
 | `LINKEDIN`   | `AUTO`, `CALLOUT`, `DISABLED` | `groups`             |
 |------------- | ----------------------------- | -------------------- |
 
+> `CALLOUT` is a {% api_lifecycle deprecated %} Account Link Action.
+
 ##### Account Link Action Type
 
 The account link action for an IdP user during authentication:
@@ -5064,6 +5075,8 @@ The account link action for an IdP user during authentication:
 | `AUTO`      | The IdP user is automatically linked to an Okta user when the transformed IdP user matches an existing Okta user according to [subject match rules](#subject-policy-object).           |
 | `CALLOUT`   | Okta calls out to an external web service during authentication to validate the IdP user profile and determine whether to link the IdP user to an Okta user candidate.                 |
 | `DISABLED`  | Okta never attempts to link the IdP user to an existing Okta user, but may still attempt to provision a new Okta user (See [Provisioning Action Type](#user-provisioning-action-type). |
+
+> `CALLOUT` is a {% api_lifecycle deprecated %} Action Type.
 
 ~~~json
 {
@@ -5206,6 +5219,8 @@ The IdP Authorization Server (AS) endpoints are defined as part of the [IdP prov
 
 #### Callout Object
 
+> This is a {% api_lifecycle deprecated %} feature.
+
 Webhook settings for an IdP provisioning or account link transaction:
 
 |-------------- | -------------------------------------------------------------- | -------------------------------------------------- | ----------- | ------------- | ------------- | -----------------|
@@ -5231,6 +5246,8 @@ Webhook settings for an IdP provisioning or account link transaction:
 ~~~
 
 ##### Callout Authorization Object
+
+> This is a {% api_lifecycle deprecated %} feature.
 
 Webhook authorization settings for an IdP provisioning or account link transaction:
 
