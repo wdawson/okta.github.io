@@ -4851,10 +4851,9 @@ Specifies the user provisioning action during authentication when an IdP user is
 | Action Type | Description                                                                                                              |
 | ---------------------------------------------------------------------------------------------------------------------------- |
 | `AUTO`      | The IdP user profile is transformed via defined universal directory profile mappings to an Okta user profile and automatically provisioned as an Okta user.          |
-| `CALLOUT`   | Okta calls out to an external web service during authentication to validate the IdP user profile, determine whether to provision a new Okta user, and define the resulting Okta user profile. |
+| `CALLOUT` {% api_lifecycle deprecated %} | Okta calls out to an external web service during authentication to validate the IdP user profile, determine whether to provision a new Okta user, and define the resulting Okta user profile. |
 | `DISABLED`  | Okta rejects the authentication request and skip provisioning of a new Okta user if the IdP user is not linked to an existing Okta User.                                     |
 
-> `CALLOUT` is a {% api_lifecycle deprecated %} Action Type.
 
 Property Details
 
@@ -5033,7 +5032,7 @@ Specifies the behavior for linking an IdP user to an existing Okta user.
 | -------- | ----------------------------------------------------- | --------------------------------------------------------- | -------- | -------- |
 | action   | Specifies the account linking action for an IdP user  | [Account Link Action Type](#account-link-action-type)     | FALSE    | FALSE    |
 | filter   | Whitelist for link candidates                         | [Account Link Filter Object](#account-link-filter-object) | TRUE     | FALSE    |
-| callout  | Webhook settings for the `CALLOUT` action             | [Callout Object](#callout-object)                         | TRUE     | FALSE    |
+| callout {% api_lifecycle deprecated %}  | Webhook settings for the `CALLOUT` action             | [Callout Object](#callout-object)                         | TRUE     | FALSE    |
 
 ~~~json
 {
@@ -5073,10 +5072,9 @@ The account link action for an IdP user during authentication:
 | Action Type | Description                                                                                                                                                                            |
 | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `AUTO`      | The IdP user is automatically linked to an Okta user when the transformed IdP user matches an existing Okta user according to [subject match rules](#subject-policy-object).           |
-| `CALLOUT`   | Okta calls out to an external web service during authentication to validate the IdP user profile and determine whether to link the IdP user to an Okta user candidate.                 |
+| `CALLOUT` {% api_lifecycle deprecated %} | Okta calls out to an external web service during authentication to validate the IdP user profile and determine whether to link the IdP user to an Okta user candidate.                 |
 | `DISABLED`  | Okta never attempts to link the IdP user to an existing Okta user, but may still attempt to provision a new Okta user (See [Provisioning Action Type](#user-provisioning-action-type). |
 
-> `CALLOUT` is a {% api_lifecycle deprecated %} Action Type.
 
 ~~~json
 {
