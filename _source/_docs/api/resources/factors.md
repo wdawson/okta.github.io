@@ -971,7 +971,7 @@ curl -v -X POST \
 ##### Enroll and Auto-Activate Okta Call Factor
 {:.api .api-operation}
 
-To enroll and immediately activate the Okta `call` factor, add the `activate` option to the enroll API and set it `true`.  An activation text message will not be sent to the device.
+To enroll and immediately activate the Okta `call` factor, add the `activate` option to the enroll API and set it `true`.  An activation call will not be made to the device.
 
 ##### Request Example
 {:.api .api-request .api-request-example}
