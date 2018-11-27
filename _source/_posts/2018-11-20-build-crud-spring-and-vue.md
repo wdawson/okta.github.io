@@ -1138,6 +1138,8 @@ public class SpringBootVueApplication {
 
 And that's it! You now have a fully functioning Vue client and Spring Boot REST service using Okta's authentication services. Too easy.
 
+You can find the source code for this application developed in this tutorial on GitHub at <https://github.com/oktadeveloper/okta-spring-boot-vue-crud-example>.
+
 ## Do More with Okta, Vue, and Spring Boot
 
 This tutorial did quite a lot. You built a Vue.js client application and a Spring Boot REST service, using them to demonstrate a fully functioning CRUD application. You also added authentication using Okta and the Okta Vue SDK. 
