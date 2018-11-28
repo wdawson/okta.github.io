@@ -1,0 +1,103 @@
+---
+layout: blog_post
+title: "Angular 7: What's New and Noteworthy"
+author: mraible
+description: "This post explains what's new in Angular 7 and shows options for adding authentication to an Angular app. You'll also learn about OAuth 2.0, implicit flow, and authorization code flow."
+tags: [angular, angular-oauth2-oidc, oidc, oauth2, pcke]
+tweets:
+- todo
+image: blog/featured/okta-angular-skew.jpg
+---
+:page-liquid:
+
+Angular 7 was released earlier this quarter and I'm pumped about a few of its features.
+
+[optimize for keywords]
+
+Before I dive into showing you how to build an Angular app with authn/authz, let's take a look at what's new and noteworthy in this release.
+
+== What's New in Angular 7
+
+Refer to a good article, summarize the top 4-5 features.
+
+Highlight security-related features from official release notes.
+
+Add another feature that looks interesting.
+
+== Create a Secure Angular Application
+
+Angular CLI
+
+How to install
+
+Create an app
+
+== Add Identity and Authentication with OIDC
+
+Using the same username and password for all your users is silly. Since friends don't let friends write authentication, I'll show you how to use Okta for auth with just a few lines of code.
+
+OIDC requires an identity provider (or IdP). There are many well-known IdPs like Google, Twitter, and Facebook, but those services don't allow you to manage your users like you would in Active Directory. Okta allows this, _and_ you can use Okta's API for OIDC.
+
+https://developer.okta.com/signup/[Register for a forever-free developer account], and when you're done, come on back so you can learn more about how to secure your Spring Boot app!
+
+image::{% asset_path 'blog/spring-boot-2.1/okta-signup.png' %}[alt=Register for a free developer account,width=800,align=center]
+
+=== Create an OIDC App in Okta
+
+Log in to your Okta Developer account and navigate to **Applications** > **Add Application**. Click **Web** and click **Next**. Give the app a name you'll remember, and specify `http://localhost:8080/login/oauth2/code/okta` as a Login redirect URI. Click **Done**. The result should look something like the screenshot below.
+
+image::{% asset_path 'blog/spring-boot-2.1/okta-oidc-app.png' %}[alt=Okta OIDC App,width=700,align=center]
+
+Copy and paste the URI of your default authorization server, client ID, and the client secret into `application.yml` (you'll need to create this file).
+
+=== Use Auth Code Flow
+
+https://github.com/manfredsteyer/angular-oauth2-oidc/issues/19
+
+According the new OAuth2 draft spec implicit flow MUST NOT be used any more for SPA
+tools.ietf.org/html/draft-parecki-oauth-browser-based-apps-00#section-7.8
+See also medium.com/@torsten_lodderstedt/why-you-should-stop-using-the-oauth-implicit-grant-2436ced1c926
+
+https://www.npmjs.com/package/angular-oauth2-oidc-codeflow
+
+https://github.com/manfredsteyer/angular-oauth2-oidc/issues/470
+
+=== Use AppAuth-JS
+
+=== Okta's Angular SDK and PKCE
+
+
+== Limiting Access Based on Group
+
+
+To use these annotations in your app, you'll need to add a "groups" claim to your ID token.  Log in to your Okta account, navigate to **API** > **Authorization Servers**, click the **Authorization Servers** tab and edit the default one. Click the **Claims** tab and **Add Claim**. Name it "groups", and include it in the ID Token. Set the value type to "Groups" and set the filter to be a Regex of `.*`.
+
+Now you can create an Angular directive to show/hide information. Point to issue.
+
+== Control Access to Routes with an AuthGuard
+
+== Angular CLI Tutorial and Spring Boot
+
+I updated a few of my favorite tutorials on this blog to use Spring Boot 2.1 recently.
+
+* link:/blog/2018/08/22/basic-crud-angular-7-and-spring-boot-2[Build a Basic CRUD App with Angular 7.0 and Spring Boot 2.1]: uses implicit flow, Okta's Angular SDK, and a Spring Security resource server.
+* link:/blog/2018/07/19/simple-crud-react-and-spring-boot[Use React and Spring Boot to Build a Simple CRUD App]: uses authorization code flow and packages everything in a single JAR.
+* link:/blog/2018/09/25/spring-webflux-websockets-react[Full Stack Reactive with Spring WebFlux, WebSockets, and React]: uses implicit flow, along with Spring Security OIDC login and resource server.
+
+I enjoyed writing the full stack reactive tutorial so much, I turned it into a screencast! _A keen eye will notice I'm using Java 11 **and** Node 11 in this video._ 😃
+
+++++
+<div style="text-align: center">
+<iframe width="560" height="315" style="max-width: 100%" src="https://www.youtube.com/embed/HoDzatvGDlI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+++++
+
+== JHipster and Angular 7
+
+Earlier I mentioned https://www.jhipster.tech[JHipster]. The JHipster team is actively working on upgrading its baseline to Spring Boot 2.1. You can watch progress by following https://github.com/jhipster/generator-jhipster/issues/8683[issue #8683].
+
+If you've never heard of JHipster before, you should download the https://www.infoq.com/minibooks/jhipster-mini-book-5[free JHipster Mini-Book] from InfoQ! It's a book I wrote to help you get started with hip technologies today: Angular, Bootstrap and Spring Boot. The 5.0 version was http://www.jhipster-book.com/#!/news/entry/jhipster-mini-book-v5-now-available[just released].
+
+== Learn More About Angular and OAuth 2.0
+
+If you enjoyed this post, follow us on social media { https://twitter.com/oktadev[Twitter], https://www.facebook.com/oktadevelopers[Facebook], https://www.linkedin.com/company/oktadev/[LinkedIn], https://www.youtube.com/channel/UC5AMiWqFVFxF1q9Ya1FuZ_Q[YouTube] } to know when we've posted ones like it.
