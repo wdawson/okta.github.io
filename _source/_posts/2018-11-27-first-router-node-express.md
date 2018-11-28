@@ -40,7 +40,7 @@ cd files
 http-server
 ```
 
-{% img blog/first-router-node-express/file-server.gif alt:"File Server Demo" width:"800" %}{: .center-image }
+{% img blog/first-router-node-express/file-server.gif alt:"File Server Demo" width:"600" %}{: .center-image }
 
 In Express, a route consists of a `method`, a `path`, and a `handler`.
 
@@ -64,13 +64,17 @@ The method and path are essential to know _when_ to do something, but the handle
 * **Request (`req`)**: The request contains all kinds of information about what's been asked by the user. From here you can access the path, parameters, headers, and a myriad of other things. For everything on a request, you can consult the [API reference](https://expressjs.com/en/4x/api.html#req)
 * **Response (`res`)**: The response is how you send information back to the user. The simplest way to send back data is with the `.send` method (e.g. `res.send('Hello, world!')`), but there are many other methods. Again, you can find all the methods in the [API reference](https://expressjs.com/en/4x/api.html#res)
 * **Next Callback (`next`)**: The `next` function allows you to use multiple handlers for the same route. You can use one handler to process information, and when it's done it can call `next()` to signal it's OK to move on to the next handler. If you pass in a string, it will instead throw an error, which you can catch elsewhere, or display to the user (e.g. `next('You must be authenticated to access this route')`).
+
 ## What is a Router in Express?
+
 Now that you're a little more familiar with routes, how is that different from a router? You can think of a router as a collection of routes. This can be a useful way to organize different sections of your app.
 
 When using a router, you can think in terms of a root path, even if you're going to be using that router from some subpath. For example, say you have an API to manage messages. You could have a router with a path `'/'` to `GET` all messages or `POST` a new message. You could have another path `'/:id'` to `GET` or `PUT` (edit) a specific message.
 
 Your app could then take that router and host it at `/messages`, with `app.use('/messages', messageRouter)`. The router itself doesn't have to care what its global path is going to be, and can even be used in multiple routes (e.g. `/messages`, `/texts`, and `/email`).
+
 ## Create a Simple App with a Router in Node with Express
+
 Enough talk already... let's get to some real code. To get started, create a folder that will house all your code. Then set up a `package.json` folder to help manage dependencies. You can use `npm init` to do this. You'll also need to install [Express](https://expressjs.com/).
 
 ```bash
@@ -157,10 +161,10 @@ Then modify your `package.json` file so that the `"scripts"` entry includes a st
 
 Now in your terminal, if you type `npm start` you'll start the server. You can then go to `http://localhost:3000` to see the app running.
 
-{% img blog/first-router-node-express/hello-world.png alt:"File Server Demo" width:"800" %}{: .center-image }
-
+{% img blog/first-router-node-express/hello-world.png alt:"File Server Demo" width:"564" %}{: .center-image }
 
 ## Create a Router in Express
+
 Well, that's kind of boring. How about making it do something useful? Let's create a simple to-do list. Start by creating a router to manage a list of items. Make a new file called `todo.js`:
 
 **todo.js**
@@ -265,9 +269,10 @@ The only JavaScript used here is for automatically submitting the form when you 
 
 Now go to `http://localhost:3000/todo` and enter some items into your todo list.
 
-{% img blog/first-router-node-express/buy-milk.gif alt:"Buy Milk" width:"800" %}{: .center-image }
+{% img blog/first-router-node-express/buy-milk.gif alt:"Buy Milk" width:"600" %}{: .center-image }
 
 ## Add User Authentication in Node
+
 Now you have a functional to-do list. You may have noticed though, this would only work if you want everyone using it to share the same list. If you add in authentication, you can have a separate to-do list for each user.
 
 Adding users doesn't have to be a pain. In fact, it can be done really simply with Okta. _What is Okta?_, you might ask. Okta is a cloud service that allows developers to create, edit, and securely store user accounts and user account data, and connect them with one or multiple applications. 
@@ -291,7 +296,7 @@ Next, log in to your developer console, navigate to **Applications**, then click
 
 Click **Edit** and add a **Logout redirect URI** of `http://localhost:3000/`, then click **Save**.
 
-{% img blog/first-router-node-express/okta-app-settings.png alt:"Okta application settings" width:"800" %}{: .center-image }
+{% img blog/first-router-node-express/okta-app-settings.png alt:"Okta application settings" width:"700" %}{: .center-image }
 
 The page you come to after creating an application has some more information you need to save to your `.env` file. Copy in the client ID and client secret.
 
@@ -454,7 +459,7 @@ OK, so now you're requiring users to log in before they can edit the to-do list,
 
 ```
 
-{% img blog/first-router-node-express/multi-user.gif alt:"Multi-User Demo" width:"800" %}{: .center-image }
+{% img blog/first-router-node-express/multi-user.gif alt:"Multi-User Demo" width:"600" %}{: .center-image }
 
 ## Learn more about Node, Express, and Secure Web Development
 
