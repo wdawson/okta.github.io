@@ -5315,6 +5315,8 @@ This object is used for dynamic discovery of related resources and lifecycle ope
 
 ## Identity Provider Transaction Model
 
+> This is a {% api_lifecycle deprecated %} feature.
+
 The Identity Provider Transaction Model represents an account link or just-in-time (JIT) provisioning transaction.
 
 ### Example
