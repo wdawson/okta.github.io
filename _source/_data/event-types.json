@@ -33,6 +33,9 @@
     "id" : "directories",
     "name" : "Directories"
   }, {
+    "id" : "end-user-security",
+    "name" : "End User Security"
+  }, {
     "id" : "enterprise-auth",
     "name" : "Enterprise Auth"
   }, {
@@ -5623,6 +5626,12 @@
       "tags" : [ "zendesk-app" ],
       "mappings" : [ "application.integration.authentication_failure" ]
     }, {
+      "id" : "application.appuser.mapping.invalid.expression",
+      "category" : "ud-core",
+      "description" : "App user property mapping has invalid expression.",
+      "tags" : [ "app-user-management" ],
+      "mappings" : [ "application.appuser.mapping.invalid.expression" ]
+    }, {
       "id" : "core.billing.sms_usage_sent",
       "category" : "aelm",
       "description" : "Indicates that a report for SMS usage was sent to the billing system.",
@@ -5658,12 +5667,6 @@
       "description" : "",
       "tags" : [ "rate-limit" ],
       "mappings" : [ "system.org.suspicious.ip.rate_time.violation" ]
-    }, {
-      "id" : "core.framework.ratelimit.upcoming_warning",
-      "category" : "performance",
-      "description" : "Upcoming rate limit warning.",
-      "tags" : [ "rate-limit" ],
-      "mappings" : [ "system.org.rate_limit.upcoming_warning" ]
     }, {
       "id" : "core.framework.ratelimit.warning",
       "category" : "performance",
@@ -9444,6 +9447,16 @@
       "tags" : [ "app", "app-user-management" ],
       "mappings" : [ "app.user_management.user_group_import.upsert_success" ]
     }, {
+      "id" : "application.appuser.mapping.invalid.expression",
+      "category" : "ud-core",
+      "description" : "App user property mapping has invalid expressions. Can be used to identify invalid expressions. Note that a single event is fired for all invalid expressions.",
+      "info" : {
+        "created" : "2018-11-11",
+        "release" : "2018.47"
+      },
+      "tags" : [ "app" ],
+      "mappings" : [ "application.appuser.mapping.invalid.expression" ]
+    }, {
       "id" : "application.cache.invalidate",
       "category" : "app-platform",
       "description" : "Event fired when a app list cache is invalidated because a new app is created. Can be used to make sure App List cache is invalidated after a new app is created.",
@@ -9506,7 +9519,7 @@
     }, {
       "id" : "application.configuration.import_schema",
       "category" : "oin-advanced-apps",
-      "description" : "",
+      "description" : "Okta couldn't download application configuration. Can be used to identify when an app schema couldn't be downloaded from a remote application. Event fired when Okta couldn't download application-specific data from a remote app. This may happen when admin updates provisioning details.",
       "info" : {
         "created" : "2017-09-14",
         "release" : "2017.33"
@@ -9526,7 +9539,7 @@
     }, {
       "id" : "application.configuration.update",
       "category" : "oin-advanced-apps",
-      "description" : "",
+      "description" : "Okta couldn't verify api credentials. Can be used when Okta couldn't check the credentials by execution some custom, application dependent, set of requests. Okta fires this event to notify issues with credentials validation. Could be issues with proper permissions as well.",
       "info" : {
         "created" : "2017-09-14",
         "release" : "2017.33"
@@ -9556,7 +9569,7 @@
     }, {
       "id" : "application.integration.api_query",
       "category" : "oin-advanced-apps",
-      "description" : "",
+      "description" : "Unable to query remote API. Can be used to determine when okta fails to query remote application. Okta fires this event for unspecified events which include remote api response processing.",
       "info" : {
         "created" : "2017-09-14",
         "release" : "2017.33"
@@ -9566,7 +9579,7 @@
     }, {
       "id" : "application.integration.authentication_failure",
       "category" : "oin-advanced-apps",
-      "description" : "",
+      "description" : "Error authenticating. Can be used when Okta couldn't authenticate with the provided credentials to a remote api. Okta fires this event when it couldn't access a remote api with provided credentials.",
       "info" : {
         "created" : "2017-09-14",
         "release" : "2017.33"
@@ -9576,7 +9589,7 @@
     }, {
       "id" : "application.integration.general_failure",
       "category" : "oin-advanced-apps",
-      "description" : "General error encountered for application integration.",
+      "description" : "Generic error occured. Can be used when there is some uncategorized error occurs. Okta fires this event for different unhandled exceptions.",
       "info" : {
         "created" : "2017-09-14",
         "release" : "2017.33"
@@ -9586,7 +9599,7 @@
     }, {
       "id" : "application.integration.rate_limit_exceeded",
       "category" : "oin-advanced-apps",
-      "description" : "",
+      "description" : "API rate limit exceeded. Can be used when Okta reaches api calls/minute rate limit. Okta fires this event when there are too many requests for a specific customer.",
       "info" : {
         "created" : "2017-09-14",
         "release" : "2017.33"
@@ -9596,7 +9609,7 @@
     }, {
       "id" : "application.integration.transfer_files",
       "category" : "oin-advanced-apps",
-      "description" : "",
+      "description" : "Unable to transfer files. Can be used when Okta fails to transfer files from one user to another. Okta fires this event when it fails to process user-to-user file transfers.",
       "info" : {
         "created" : "2017-09-14",
         "release" : "2017.33"
@@ -9706,7 +9719,7 @@
     }, {
       "id" : "application.provision.group.add",
       "category" : "oin-advanced-apps",
-      "description" : "",
+      "description" : "Fired when Okta provisions a new group on a remote application. Can be used to identify when Okta provisions a group on a remote application. Event fired when the group provisioning failed for any reason.",
       "info" : {
         "created" : "2017-09-14",
         "release" : "2017.33"
@@ -9716,7 +9729,7 @@
     }, {
       "id" : "application.provision.group.import",
       "category" : "oin-advanced-apps",
-      "description" : "",
+      "description" : "Fired when Okta downloads a remote group. Can be used to identify when Okta tries to download remote group details. Event fired when Okta fails to reach the group detail from a remote application.",
       "info" : {
         "created" : "2017-09-14",
         "release" : "2017.33"
@@ -9726,7 +9739,7 @@
     }, {
       "id" : "application.provision.group.remove",
       "category" : "oin-advanced-apps",
-      "description" : "",
+      "description" : "Fired when Okta removes a remote group. Can be used to identify when a group has been unassigned. Event fired when Okta failed to delete group from remote application.",
       "info" : {
         "created" : "2017-09-14",
         "release" : "2017.33"
@@ -9736,7 +9749,7 @@
     }, {
       "id" : "application.provision.group.update",
       "category" : "oin-advanced-apps",
-      "description" : "",
+      "description" : "Fired when Okta updates the user group. Can be used to identify when a group has been updated. Event fired when Okta fails to update a remote group for any reason.",
       "info" : {
         "created" : "2017-09-14",
         "release" : "2017.33"
@@ -9746,7 +9759,7 @@
     }, {
       "id" : "application.provision.group.verify_exists",
       "category" : "oin-advanced-apps",
-      "description" : "",
+      "description" : "Fired when group no longer exists on a remote application. Can be used to identify when a group no longer exists on a remote application. Event fired when group push enhancement enabled and there is no group found on update or delete.",
       "info" : {
         "created" : "2017-09-14",
         "release" : "2017.33"
@@ -9756,7 +9769,7 @@
     }, {
       "id" : "application.provision.group_membership.add",
       "category" : "oin-advanced-apps",
-      "description" : "",
+      "description" : "Failed to assign a user to a group. Can be used when Okta failed to assign user to a group on remote application. Okta fires this event if there are any issues while provision a membership to a remote application.",
       "info" : {
         "created" : "2017-09-14",
         "release" : "2017.33"
@@ -9766,7 +9779,7 @@
     }, {
       "id" : "application.provision.group_membership.import",
       "category" : "oin-advanced-apps",
-      "description" : "",
+      "description" : "Error while downloading memberships. Can be used when Okta failed to download users and groups relationships. Okta fires this event if there are any issues while importing a membership from a remote application.",
       "info" : {
         "created" : "2017-09-14",
         "release" : "2017.33"
@@ -9776,7 +9789,7 @@
     }, {
       "id" : "application.provision.group_membership.remove",
       "category" : "oin-advanced-apps",
-      "description" : "",
+      "description" : "Fired when there is an error while removing user(s) from group. Can be used when Okta failed to unassign user from a group on remote application. Okta fires this event when there are any issues while provision a membership to a remote application.",
       "info" : {
         "created" : "2017-09-14",
         "release" : "2017.33"
@@ -9786,7 +9799,7 @@
     }, {
       "id" : "application.provision.group_membership.update",
       "category" : "oin-advanced-apps",
-      "description" : "",
+      "description" : "Fired when there is an error while updating user group membership for group. Can be used when Okta failed to push updated memberships to a remote application. Okta fires this event when couldn't update memberships on a remote application. Could be user removal/addition.",
       "info" : {
         "created" : "2017-09-14",
         "release" : "2017.33"
@@ -9796,7 +9809,7 @@
     }, {
       "id" : "application.provision.group_membership.verify_exists",
       "category" : "oin-advanced-apps",
-      "description" : "",
+      "description" : "Verify group membership exists in a external application. Can be used when Okta failed to verify membership exists on a remote application. There is no actual implementations yet.",
       "info" : {
         "created" : "2017-09-14",
         "release" : "2017.33"
@@ -12113,16 +12126,6 @@
       },
       "tags" : [ "system" ],
       "mappings" : [ "core.framework.ratelimit.expiration.warning" ]
-    }, {
-      "id" : "system.org.rate_limit.upcoming_warning",
-      "category" : "performance",
-      "description" : "Upcoming rate limit warning.",
-      "info" : {
-        "created" : "2017-01-04",
-        "release" : "2017.02"
-      },
-      "tags" : [ "system" ],
-      "mappings" : [ "core.framework.ratelimit.upcoming_warning" ]
     }, {
       "id" : "system.org.rate_limit.violation",
       "category" : "performance",
