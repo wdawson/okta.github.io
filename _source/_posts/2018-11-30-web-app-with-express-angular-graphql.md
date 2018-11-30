@@ -33,7 +33,7 @@ npm install --save express@4.16.4 cors@2.8.4 express-graphql@0.6.12 graphql@14.0
 
 ### Import Data to Your Express Server
 
-Next, let’s create the database tables and import some data into them. I will be making use of the freely available ATP Tennis Rankings by Jeff Sackmann. In some directory on your system clone the GitHub repository.
+Next, let's create the database tables and import some data into them. I will be making use of the freely available ATP Tennis Rankings by Jeff Sackmann. In some directory on your system clone the GitHub repository.
 
 ```bash
 git clone https://github.com/JeffSackmann/tennis_atp.git
@@ -154,7 +154,7 @@ function query(sql, single) {
 }
 ```
 
-Now it’s time to implement the database queries that power the GraphQL queries. GraphQL uses something called `rootValue` to define the functions corresponding to the GraphQL queries.
+Now it's time to implement the database queries that power the GraphQL queries. GraphQL uses something called `rootValue` to define the functions corresponding to the GraphQL queries.
 
 ```js
 const root = {
@@ -396,7 +396,7 @@ const routes: Routes = [
 
 Now the router knows which components to place into the outlet when a specific route is selected. At this point, your application already shows the three pages and the links in the top-bar will load them into the content area of your application.
 
-Finally, let’s give the page some styling. In `app.component.css` paste the following content.
+Finally, let's give the page some styling. In `app.component.css` paste the following content.
 
 ```css
 .content {
@@ -886,12 +886,12 @@ I have not talked about how to use GraphQL to add or modify the data in the data
 
 The complete code for this project can be found at https://github.com/holgerschmitz/graphql-angular
 
-If you’re interested in learning more about Express, Angular, GraphQL, or secure user management, I’d encourage you to check out any of these resources:
+If you're interested in learning more about Express, Angular, GraphQL, or secure user management, I'd encourage you to check out any of these resources:
 
 - [Build a Simple API Service with Express and GraphQL](https://developer.okta.com/blog/2018/09/27/build-a-simple-api-service-with-express-and-graphql)
 - [Build a Secure API with Spring Boot and GraphQL](https://developer.okta.com/blog/2018/08/16/secure-api-spring-boot-graphql)
 - [Build and Understand Express Middleware](https://developer.okta.com/blog/2018/09/13/build-and-understand-express-middleware-through-examples)
-- [Angular 6: What’s New and Why Upgrade?](https://developer.okta.com/blog/2018/05/09/upgrade-to-angular-6)
+- [Angular 6: What's New and Why Upgrade?](https://developer.okta.com/blog/2018/05/09/upgrade-to-angular-6)
 - [Build a Basic CRUD App with Angular and Node](https://developer.okta.com/blog/2018/10/30/basic-crud-angular-and-node)
 
-Like what you learned today? We’d love to have you follow us [on Twitter](https://twitter.com/oktadev) and [subscribe to our YouTube channel](https://www.youtube.com/channel/UC5AMiWqFVFxF1q9Ya1FuZ_Q)!
+Like what you learned today? We'd love to have you follow us [on Twitter](https://twitter.com/oktadev) and [subscribe to our YouTube channel](https://www.youtube.com/channel/UC5AMiWqFVFxF1q9Ya1FuZ_Q)!
