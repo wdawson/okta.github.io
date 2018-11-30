@@ -2,12 +2,12 @@
 layout: blog_post
 title: 'Build a Simple Web App with Express, Angular, and GraphQL'
 author: holgerschmitz
-description: 'A tutorial to build a simple web application using Express, Angular, and GraphQL'
+description: 'A tutorial to build a simple web application using Express, Angular, and GraphQL.'
 tags: [express, expressjs, node, angular, graphql, web application, web]
 tweets:
-  - ''
-  - ''
-  - ''
+  - "Get started with @expressjs, @angular, and @graphql in this handy tutorial!"
+  - "Like @nodejs and @typescriptlang? Then you're goind to love this tutorial! Express + Angular + GraphQL = 💜"
+  - "@expressjs + @angular + @graphql = 😍! Get started using this in-depth tutorial that includes authentication."
 image: blog/featured/okta-angular-skew.jpg
 ---
 
@@ -130,7 +130,7 @@ const schema = buildSchema(`
 `);
 ```
 
-The first two lines import `graphqlHTTP` and `buildSchema`. The function `graphqlHTTP` plugs into Express and is able to understand and respond to GraphQL requests. The `buildSchema` is used to create a GraphQL schema from a string. Let's look at the schema definition in a little detail.
+The first two lines import `graphqlHTTP` and `buildSchema`. The function `graphqlHTTP` plugs into Express and is able to understand and respond to GraphQL requests. The `buildSchema` is used to create a GraphQL schema from a string. Let's look at the schema definition in a little more detail.
 
 The two types `Player` and `Ranking` reflect the contents of the database tables. These will be used as the return types to the GraphQL queries. If you look closely, you can see that the definition of `Ranking` contains a `player` field that has the `Player` type. At this point, the database only has an `INTEGER` that refers to a row in the `players` table. The GraphQL data structure should replace this integer with the player it refers to.
 
@@ -215,7 +215,7 @@ app.listen(4201, err => {
   if (err) {
     return console.log(err);
   }
-  return console.log('My Angular App listening on port 4201');
+  return console.log('My Express App listening on port 4201');
 });
 ```
 
@@ -236,7 +236,7 @@ Then open your browser and navigate to `http://localhost:4201/graphql`. You will
 What is a web application without a client? In this section, I will walk you through the implementation of a single page application using Angular 7. To start off, create a new Angular application. If you haven't already done so, install the newest version of the angular command line tool on your system.
 
 ```bash
-npm install -g @angular/cli@latest
+npm install -g @angular/cli@7.1.0
 ```
 
 You might have to run this command using `sudo`, depending on your operating system. Now you can create a new angular application. In a new directory run:
@@ -645,7 +645,6 @@ As you can see, most of the code is very similar to that in `players.component.t
 The template for the rankings component contains a text field and button in which the user can enter a rank and reload the page. Below that is the table of players. This is the content of `ranking.component.html`.
 
 {% raw %}
-
 ```html
 <h1>Rankings</h1>
 <input class="mdl-textfield__input" type="text" id="rank" [(ngModel)]="rank" />
@@ -680,7 +679,6 @@ The template for the rankings component contains a text field and button in whic
   </tr>
 </table>
 ```
-
 {% endraw %}
 
 To start the client, run:
@@ -731,13 +729,13 @@ Now add the module to the list of `imports` of the `app` module.
 
 ```ts
 OktaAuthModule.initAuth({
-  issuer: 'https://{YourOktaDomain}/oauth2/default',
+  issuer: 'https://{yourOktaDomain}/oauth2/default',
   redirectUri: 'http://localhost:4200/implicit/callback',
-  clientId: '{YourClientId}'
+  clientId: '{yourClientId}'
 });
 ```
 
-You will need to replace `YourOktaDomain` development domain you see in your browser when you navigate to your Okta dashboard. Also, replace `YourClientId` with the client ID that you obtained when registering your application. Now you are ready to use Okta authentication throughout your application. Next, you will implement logging in and logging out from the application. Open `app.component.ts` and import `OktaAuthService` from `okta-angular`. Paste the following code into the file.
+You will need to replace `yourOktaDomain` development domain you see in your browser when you navigate to your Okta dashboard. Also, replace `yourClientId` with the client ID that you obtained when registering your application. Now you are ready to use Okta authentication throughout your application. Next, you will implement logging in and logging out from the application. Open `app.component.ts` and import `OktaAuthService` from `okta-angular`. Paste the following code into the file.
 
 ```ts
 import { Component, OnInit } from '@angular/core';
@@ -836,15 +834,15 @@ Next, let's create that function in a separate file called `auth.js` in the root
 const OktaJwtVerifier = require('@okta/jwt-verifier');
 
 const oktaJwtVerifier = new OktaJwtVerifier({
-  clientId: '{YourClientId}',
-  issuer: 'https://{YourOktaDomain}/oauth2/default'
+  clientId: '{yourClientId}',
+  issuer: 'https://{yourOktaDomain}/oauth2/default'
 });
 
 module.exports = async function oktaAuth(req, res, next) {
   try {
     const token = req.token;
     if (!token) {
-      return res.status(401).send('Not Auhorised');
+      return res.status(401).send('Not Authorized');
     }
     const jwt = await oktaJwtVerifier.verifyAccessToken(token);
     req.user = {
@@ -858,7 +856,7 @@ module.exports = async function oktaAuth(req, res, next) {
 };
 ```
 
-Again, you have to replace `YourOktaDomain` and `YourClientId` with the development domain and the client id. The purpose of this function is simple. It checks the presence of a token field in the request. If present, `oktaJwtVerifier` checks the validity of the token. If everything is in order, calling `next()` signals success. Otherwise, a `401` error is returned. All you have to do now is to make sure that the function is used in the application. Add the following require statements to the `index.js` file.
+Again, you have to replace `yourOktaDomain` and `yourClientId` with the development domain and the client id. The purpose of this function is simple. It checks the presence of a token field in the request. If present, `oktaJwtVerifier` checks the validity of the token. If everything is in order, calling `next()` signals success. Otherwise, a `401` error is returned. All you have to do now is to make sure that the function is used in the application. Add the following require statements to the `index.js` file.
 
 ```js
 const bodyParser = require('body-parser');
@@ -884,14 +882,14 @@ In this simple tutorial, I have shown you how to create a single page applicatio
 
 I have not talked about how to use GraphQL to add or modify the data in the database. In GraphQL language this is called _mutations_. To learn more about mutations using Apollo, check out [the manual pages](https://www.apollographql.com/docs/angular/basics/mutations.html).
 
-The complete code for this project can be found at https://github.com/holgerschmitz/graphql-angular
+The complete code for this project can be found at <https://github.com/oktadeveloper/okta-graphql-angular-example>.
 
 If you're interested in learning more about Express, Angular, GraphQL, or secure user management, I'd encourage you to check out any of these resources:
 
-- [Build a Simple API Service with Express and GraphQL](https://developer.okta.com/blog/2018/09/27/build-a-simple-api-service-with-express-and-graphql)
-- [Build a Secure API with Spring Boot and GraphQL](https://developer.okta.com/blog/2018/08/16/secure-api-spring-boot-graphql)
-- [Build and Understand Express Middleware](https://developer.okta.com/blog/2018/09/13/build-and-understand-express-middleware-through-examples)
-- [Angular 6: What's New and Why Upgrade?](https://developer.okta.com/blog/2018/05/09/upgrade-to-angular-6)
-- [Build a Basic CRUD App with Angular and Node](https://developer.okta.com/blog/2018/10/30/basic-crud-angular-and-node)
+- [Build a Simple API Service with Express and GraphQL](/blog/2018/09/27/build-a-simple-api-service-with-express-and-graphql)
+- [Build a Secure API with Spring Boot and GraphQL](/blog/2018/08/16/secure-api-spring-boot-graphql)
+- [Build and Understand Express Middleware](/blog/2018/09/13/build-and-understand-express-middleware-through-examples)
+- [Angular 6: What's New and Why Upgrade?](/blog/2018/05/09/upgrade-to-angular-6)
+- [Build a Basic CRUD App with Angular and Node](/blog/2018/10/30/basic-crud-angular-and-node)
 
 Like what you learned today? We'd love to have you follow us [on Twitter](https://twitter.com/oktadev) and [subscribe to our YouTube channel](https://www.youtube.com/channel/UC5AMiWqFVFxF1q9Ya1FuZ_Q)!
