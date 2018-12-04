@@ -157,7 +157,7 @@ import GitHubRepoDetails from './components/GithubRepoDetails';
 
 Vue.use(VueRouter);
 Vue.use(Auth, {
-  issuer: {ADD_YOUR_DOMAIN},
+  issuer: {ADD_YOUR_OKTA_ORG_URL}/oauth2/default,
   client_id: {ADD_YOUR_CLIENT_ID},
   redirect_uri: 'http://localhost:8080/implicit/callback',
   scope: 'openid profile email'
@@ -179,7 +179,7 @@ Make sure to add your `domain` and `client_id` where indicated - these values ca
 
 ## Create Vue Components
 
-The `vue-router` library contains a number of components to help developers create dynamic and rich UIs. One of them, `router-view, renders the component for the matched route. In our case, when the user accesses the root route  `/`, `vue-router` will render the `Login` component as configured in `routers.js`.
+The `vue-router` library contains a number of components to help developers create dynamic and rich UIs. One of them, `router-view`, renders the component for the matched route. In our case, when the user accesses the root route `/`, `vue-router` will render the `Login` component as configured in `routers.js`.
 
 Open `./kudo-oos/pkg/http/web/app/src/components/App.vue` and copy in the following code.
 
