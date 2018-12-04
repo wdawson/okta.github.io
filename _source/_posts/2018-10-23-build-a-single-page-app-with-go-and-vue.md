@@ -57,7 +57,15 @@ Install `vue-cli` by running:
 yarn global add @vue/cli
 ```
 
-Then, create a new Vue project:
+If you aren't familiar with [yarn](https://yarnpkg.com/en/), it's an alternative
+to npm that many developers like. To install `yarn` you can run the command
+below:
+
+```bash
+npm install -g yarn
+```
+
+Next, create a new Vue project:
 
 ```bash
 mkdir -p pkg/http/web
@@ -73,7 +81,6 @@ Congratulations, you have created your Vue.js SPA! Try it out by running:
 
 ```bash
 cd app
-yarn install
 yarn serve
 ```
 
