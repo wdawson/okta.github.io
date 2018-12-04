@@ -37,7 +37,7 @@ Once complete, users will be able to authenticate via OpenID Connect (OIDC), sea
 
 ### Create the Vue and Go Directory Structure
 
-For the sake of simplicity, let's write the REST API and the SPA in the same project, starting with the project directory in the Go workspace.
+For the sake of simplicity, let's create the REST API and SPA in the same project, starting with a project directory in the Go workspace.
 
 Go projects live inside the directory the environment variable `$GOPATH` points to. In order to find the current `$GOPATH` value, run: `go env GOPATH`. To learn more about GOPATH, including how to set it yourself, refer to the official [Go documentation](https://github.com/golang/go/wiki/SettingGOPATH) on the topic.
 
@@ -49,7 +49,7 @@ With the GOPATH defined, you now can create a directory for your project:
 mkdir -p $GOPATH/src/github.com/{YOUR_GITHUB_USERNAME}/kudo-oos
 ```
 
-To get your SPA off the ground quickly, leverage the scaffolding functionality from [vue-cli](https://cli.vuejs.org/). The CLI will prompt you with a series of options - pick the technology appropriate for this project: `vue.js`, `vuex`, and, `webpack`.
+To get your SPA off the ground quickly, leverage the scaffolding functionality of [vue-cli](https://cli.vuejs.org/). The CLI will prompt you with a series of options - pick the technology appropriate for this project: `vue.js`, `vuex`, and, `webpack`.
 
 Install `vue-cli` by running:
 
