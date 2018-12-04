@@ -177,7 +177,7 @@ export default new VueRouter({
 
 Make sure to add your `domain` and `client_id` where indicated - these values can be found on the application overview page in the Okta Developer Console. Calling `Vue.use(Auth, ...)` will inject an `authClient` object into your Vue instance which can be accessed by calling `this.$auth` anywhere inside your Vue instance. This is what you'll use to make sure a user is logged in and/or to force the user to identify themself!
 
-## Create Vue Components
+## Create the Vue Components
 
 The `vue-router` library contains a number of components to help developers create dynamic and rich UIs. One of them, `router-view`, renders the component for the matched route. In our case, when the user accesses the root route `/`, `vue-router` will render the `Login` component as configured in `routers.js`.
 
