@@ -12,7 +12,7 @@ image: blog/go-vue/vue-app.png
 
 Single-Page Applications (SPAs) improve user experience by offering rich UI interactions, fast feedback, and the relief of knowing you don't need to download and install a traditional application. Browsers are now operating systems and websites are apps. While a SPA isn't always the answer, for apps that rely on snappy user interaction they are increasingly common.
 
-To the end user, a well-designed SPA feels like rainbows and unicorns. From the developer perspective, reality can often be the opposite. Tough problems long-since solved on the backend like authentication, routing, state management, data binding, and more become time-consuming frontend challenges. Luckily for us, JavaScript frameworks like Vue, React, and Angular exist to help us craft powerful applications and focus more of our time on critical functionality and not reinventing the wheel.
+To the end user, a well-designed SPA feels like rainbows and unicorns. From the developer perspective, reality can often be the opposite. Tough problems long-since solved on the backend like authentication, routing, state management, data binding, etc. all become time-consuming frontend challenges. Luckily for us, JavaScript frameworks like Vue, React, and Angular exist to help us craft powerful applications and allow us to focus our time on critical functionality and not reinventing the wheel.
 
 ## About Vue.js
 
