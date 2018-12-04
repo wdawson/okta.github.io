@@ -92,7 +92,7 @@ Next, let's make your SPA modern and responsive using `vuetify`.
 
 ## Add Vuetify
 
-[Vuetify](https://vuetifyjs.com/en/) is a collection of Vue.js components that abstracts [Material Design's](https://material.io/design/) concepts. Vuetify provides out-of-the box features including a grid system, typography, basic layout, and also components like cards, dialogs, chips, tabs, icons and so on. Vuetify will pave your way to a rich UI!
+[Vuetify](https://vuetifyjs.com/en/) is a collection of Vue.js components that abstract [Material Design's](https://material.io/design/) concepts. Vuetify provides out-of-the box features including a grid system, typography, basic layout, and also components like cards, dialogs, chips, tabs, icons and so on. Vuetify will pave your way to a rich UI!
 
 When installing vuetify, you will be prompted with a series of questions. For the sake of simplicity just go with the default choices again.
 
