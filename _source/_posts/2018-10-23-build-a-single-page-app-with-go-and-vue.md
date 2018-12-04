@@ -23,8 +23,8 @@ Who better to describe Vue than its creator, Evan You?
 Here are some of Vue's benefits:
 
 - A gentle learning curve and low barrier to entry
-- Provides the ability to bootstrap your app with`vue-cli`,saving you the hassle of setting up webpack and complex build pipelines
-- Explosive community growth! Vue now has more stars on GitHub than React and Angular
+- Provides the ability to bootstrap your app with`vue-cli`, saving you the hassle of setting up webpack and complex build pipelines
+- Explosive community growth! Vue now has more stars on GitHub than both React *and* Angular
 - It's flexible enough to adopt at a reasonable pace, component by component
 
 ## Create Your Vue + Go App
