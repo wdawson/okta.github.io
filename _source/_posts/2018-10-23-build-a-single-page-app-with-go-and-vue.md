@@ -139,9 +139,9 @@ yarn add @okta/okta-vue
 
 For this app, you need only 4 routes, all of which require authentication except for the login route.
 
-The root route `/` is our landing page where the login component will be rendered. Once the user has authenticated, we redirect them to the `/me` route where the bulk of the functionality takes place: The user should be able to query for OSS projects via GitHub's REST API, favorite projects returned from the query, see more details about the project, and leave a note describing why the project is important to them.
+The root route `/` is our landing page where the login component will be rendered. Once the user has authenticated, we'll redirect them to the `/me` route where the bulk of the functionality takes place: the user should be able to query for OSS projects via GitHub's REST API, favorite projects returned from the query, see more details about the project, and leave a note describing why the project is important to them.
 
-Take note that both the `/me` and `repo/:id` have a `meta: { requiresAuth: true }` property specifying that the user must be authenticated to access that area of the app. The Okta plugin will use it to redirect the user the the Okta's login page if not authenticated.
+Take note that both the `/me` and `repo/:id` have a `meta: { requiresAuth: true }` property specifying that the user must be authenticated to access that area of the app. The Okta plugin will use it to redirect the user the Okta login page if not authenticated.
 
 First, create `pkg/http/web/app/src/routes.js` and define the following routes:
 
