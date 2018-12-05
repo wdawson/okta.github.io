@@ -4,6 +4,10 @@ title: "Configure .NET Authentication in OWIN"
 author: jonathan-ray
 description: "This tutorial walks you through how to configure authentication in an ASP.NET web app using OWIN and Okta."
 tags: [authentication, asp.net core, web app, owin]
+tweets: 
+- "Wanna understand OWIN better? Check out this post! #aspnet #owin"
+- "Learn how to configure authentication in ASP.NET with OWIN. #aspnet #owin"
+- "ASP.NET + OWIN + OKTA === <3"
 image: blog/featured/okta-dotnet-tile-mouse.jpg
 ---
 
@@ -11,7 +15,8 @@ The Open Web Interface for .NET (OWIN) is a standard that defines the interface 
 
 In this tutorial you'll learn about the basic concepts of OWIN, and then apply this acquired knowledge in the implementation of user authentication within your very own ASP.NET web application. All you'll need to follow along is a copy of [Visual Studio](https://visualstudio.microsoft.com/downloads/).
 
-## The OWIN Contract
+## Understand The OWIN Contract
+
 The contract defined by OWIN for application/server communication can be found within the `IAppBuilder` interface and at its core is boiled down into two pieces: the environment dictionary and a function to register middleware.
 
 The environment dictionary outlines the state of the request/response and simplifies it down to a mapping of `string` key to `object` within the `Properties` property. Within the domain of the .NET Framework for each HTTP request there are the following required keys:
