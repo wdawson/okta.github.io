@@ -10,7 +10,7 @@ tweets:
 image: blog/featured/okta-react-headphones.jpg
 ---
 
-Laravel is an amazing web application framework which regularly tops the lists of best frameworks available today. This is partly because its based on PHP which runs 80% of the web today and the learning curve is relatively small (despite it being packed with advanced features, you can understand the basic concepts easily). However, the real reason for its popularity is its robust ecosystem and abundance of high-quality learning resources available for free (like this blog post!).
+Laravel is an amazing web application framework which regularly tops the lists of best PHP frameworks available today. This is partly because its based on PHP which runs 80% of the web today and the learning curve is relatively small (despite it being packed with advanced features, you can understand the basic concepts easily). However, the real reason for its popularity is its robust ecosystem and abundance of high-quality learning resources available for free (like this blog post!).
 
 Laravel is configured with Vue and build tools (based on webpack) out of the box so you can set up a development environment for building dynamic, single-page applications with little hassle. You are not limited to Vue though - you can also use Laravel as a backend that powers a frontend built in your preferred framework. Today I'll show you how you can build a Laravel API and connect it to a React frontend. We'll use Okta for user authentication and authorization which will allow us to implement a top-notch security system in (almost) no time at all.
 
@@ -327,13 +327,13 @@ ReactDOM.render(<App />, document.getElementById('root'));
 import React, { Component } from 'react';
 
 class App extends Component {
-    render() {
-        return (
-            <div>
-                App
-            </div>
-        );
-    }
+  render() {
+    return (
+      <div>
+        App
+      </div>
+    );
+  }
 }
 
 export default App;
@@ -369,9 +369,9 @@ export default Home
 import React, { Component } from 'react';
 
 class Trivia extends Component {
-    render() {
-        return <div>Trivia Game page</div>
-    }
+  render() {
+    return <div>Trivia Game page</div>
+  }
 }
 
 export default Trivia
@@ -387,53 +387,53 @@ import { withAuth } from '@okta/okta-react';
 import { Container, Menu } from 'semantic-ui-react';
 
 export default withAuth(class Navbar extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { authenticated: null };
-        this.checkAuthentication = this.checkAuthentication.bind(this);
-        this.login = this.login.bind(this);
-        this.logout = this.logout.bind(this);
-    }
+  constructor(props) {
+    super(props);
+    this.state = { authenticated: null };
+    this.checkAuthentication = this.checkAuthentication.bind(this);
+    this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
+  }
 
-    async componentDidMount() {
-        this.checkAuthentication();
-    }
+  async componentDidMount() {
+    this.checkAuthentication();
+  }
 
-    async componentDidUpdate() {
-        this.checkAuthentication();
-    }
+  async componentDidUpdate() {
+    this.checkAuthentication();
+  }
 
-    async login() {
-        this.props.auth.login('/');
-    }
+  async login() {
+    this.props.auth.login('/');
+  }
 
-    async logout() {
-        this.props.auth.logout('/');
-    }
+  async logout() {
+    this.props.auth.logout('/');
+  }
 
-    async checkAuthentication() {
-        const authenticated = await this.props.auth.isAuthenticated();
-        if (authenticated !== this.state.authenticated) {
-            this.setState({ authenticated });
-        }
+  async checkAuthentication() {
+    const authenticated = await this.props.auth.isAuthenticated();
+    if (authenticated !== this.state.authenticated) {
+      this.setState({ authenticated });
     }
+  }
 
-    render() {
-        return (
-            <div>
-                <Menu fixed="top" inverted>
-                    <Container>
-                        <Menu.Item as="a" header href="/">
-                            Home
-                        </Menu.Item>
-                        {this.state.authenticated === true && <Menu.Item id="trivia-button" as="a" href="/trivia">Trivia Game</Menu.Item>}
-                        {this.state.authenticated === true && <Menu.Item id="logout-button" as="a" onClick={this.logout}>Logout</Menu.Item>}
-                        {this.state.authenticated === false && <Menu.Item as="a" onClick={this.login}>Login</Menu.Item>}
-                    </Container>
-                </Menu>
-            </div>
-        );
-    }
+  render() {
+    return (
+      <div>
+        <Menu fixed="top" inverted>
+          <Container>
+            <Menu.Item as="a" header href="/">
+              Home
+            </Menu.Item>
+            {this.state.authenticated === true && <Menu.Item id="trivia-button" as="a" href="/trivia">Trivia Game</Menu.Item>}
+            {this.state.authenticated === true && <Menu.Item id="logout-button" as="a" onClick={this.logout}>Logout</Menu.Item>}
+            {this.state.authenticated === false && <Menu.Item as="a" onClick={this.login}>Login</Menu.Item>}
+          </Container>
+        </Menu>
+      </div>
+    );
+  }
 });
 ```
 {% endraw %}
@@ -453,9 +453,9 @@ import Home from './Home'
 import Trivia from './Trivia'
 
 const config = {
-    issuer: 'https://{yourOktaDomain}/oauth2/default',
-    redirect_uri: window.location.origin + '/implicit/callback',
-    client_id: '{yourClientId}'
+  issuer: 'https://{yourOktaDomain}/oauth2/default',
+  redirect_uri: window.location.origin + '/implicit/callback',
+  client_id: '{yourClientId}'
 }
 
 class App extends Component {
@@ -488,7 +488,7 @@ The app now contains a navbar with placeholder pages for Home, Trivia (only avai
 
 ## Display Your Players List Using React
 
-We will display the list of players in a table on the Trivia page. We'll get the list from the API and add a 'Loading…' message until the API request completes.
+We will display the list of players in a table on the Trivia page. We'll get the list from the API and add a 'Loading...' message until the API request completes.
 
 We'll create a new `config.js` file and define our base API URL there:
 
@@ -833,7 +833,7 @@ import DeletePlayerButton from './DeletePlayerButton';
     }
 ```
 
-(replacing the action buttons placeholder text in the table inside the `render()` method):
+Replacing the action buttons placeholder text in the table inside the `render()` method:
 
 ```
 <DeletePlayerButton onDelete={this.onDelete} playerId={player.id} />
@@ -1164,11 +1164,11 @@ You can refactor `RightAnswerButton` and `WrongAnswerButton` to remove the code 
 You can improve the code further by extracting the API boilerplate code (retrieving the auth token, sending the Authorization header, sending a request and receiving a response) into a service class. React does not provide dependency injection out of the box (like Angular, for example) but you can use higher-order component functions to wrap your components and decorate them with the API-related functionality (the approach would be similar to the `withAuth()` decoration applied to `Trivia.js`, `PlayerForm.js` and `DeletePlayerButton.js` for example).
 
 You can find the full code here:
-https://github.com/oktadeveloper/okta-php-trivia-react/
+<https://github.com/oktadeveloper/okta-php-trivia-react/>
 
 If you would like to dig deeper into the topics covered in this article, the following resources are a great starting point:
 * [Our React/PHP Quickstart Guide](https://developer.okta.com/quickstart/#/react/php/generic)
-* [Symfony/React Example App](https://developer.okta.com/blog/2018/08/23/symfony-react-php-crud-app)
+* [Symfony/React Example App](/blog/2018/08/23/symfony-react-php-crud-app)
 * [Add Identity Management to Your React App](https://developer.okta.com/code/react/)
 
 As always, we'd love to hear from you. Hit us up with questions or feedback in the comments, or on Twitter [@oktadev](https://twitter.com/oktadev)!
