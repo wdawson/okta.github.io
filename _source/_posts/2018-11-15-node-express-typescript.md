@@ -75,7 +75,7 @@ npm install express
 
 Next, open the project in your editor of choice.
 
-> If you don't already have a favorite code editor, I use and recommend [Visual Studio Code](https://code.visualstudio.com/). VS Code has exceptional support for JavaScript and Node.js, such as smart code completing and debugging, and there's a vast library of free extensions contributed by the community.
+> If you don't already have a favorite code editor, I use and recommend [Visual Studio Code](https://code.visualstudio.com/). VS Code has exceptional support for JavaScript and Node.js, such as smart code completion and debugging, and there's a vast library of free extensions contributed by the community.
 
 
 Create a folder named `src`. In this folder, create a file named `index.js`. Open the file and add the following JavaScript.
@@ -166,7 +166,7 @@ It's also a great idea to add `tslint` and create a `tslint.json` file that inst
 Install `tslint` as a developer dependency.
 
 ```bash
-npm install --save-dev typescript tslint
+npm install --save-dev tslint
 ```
 
 Next, create a new file in the root folder named `tslint.json` file and add the following configuration.
@@ -227,7 +227,7 @@ src/index.ts:6:17 - error TS7006: Parameter 'req' implicitly has an 'any' type.
 
 The two most common errors you may see are syntax errors and missing type information. TSLint considers using `console.log` to be an issue for production code. The best solution is to replace uses of console.log with a logging framework such as [winston](https://www.npmjs.com/package/winston). For now, add the following comment to `src/index.ts` to disable the rule.
 
-```javascript
+```typescript
 app.listen( port, () => {
     // tslint:disable-next-line:no-console
     console.log( `server started at http://localhost:${ port }` );
@@ -236,13 +236,13 @@ app.listen( port, () => {
 
 TypeScript prefers to use the `import` module syntax over `require`, so you'll start by changing the first line in `src/index.ts` from:
 
-```javascript
+```typescript
 const express = require( "express" );
 ```
 
 to:
 
-```javascript
+```typescript
 import express from "express";
 ```
 
@@ -296,7 +296,7 @@ Next, make a new folder under `/src` named `views`. In the `/src/views` folder, 
 
 Update `/src/index.ts` with the following code.
 
-```javascript
+```typescript
 import express from "express";
 import path from "path";
 const app = express();
@@ -343,7 +343,7 @@ Here is a quick overview of the modules you just installed.
 
 Make a new folder in the root of the project named `tools`. Create a file in the `tools` folder named `copyAssets.ts`. Copy the following code into this file.
 
-```javascript
+```typescript
 import * as shell from "shelljs";
 
 // Copy all the view templates
@@ -405,7 +405,7 @@ SERVER_PORT=8080
 
 Now, update `src/index.ts` to use `dotenv` to configure the application server port value.
 
-```javascript
+```typescript
 import dotenv from "dotenv";
 import express from "express";
 import path from "path";
@@ -502,7 +502,7 @@ SESSION_SECRET=MySuperCoolAndAwesomeSecretForSigningSessionCookies
 
 Create a folder under `src` named `middleware`. Add a file to the `src/middleware` folder named `sessionAuth.ts`. Add the following code to `src/middleware/sessionAuth.ts`.
 
-```javascript
+```typescript
 import { ExpressOIDC } from "@okta/oidc-middleware";
 import session from "express-session";
 
@@ -533,7 +533,7 @@ export const register = ( app: any ) => {
 
 At this point, if you are using a code editor like VS Code, you may see TypeScript complaining about the `@okta/oidc-middleware` module. At the time of this writing, this module does not yet have an official TypeScript declaration file. For now, create a file in the `src` folder named `global.d.ts` and add the following code.
 
-```javascript
+```typescript
 declare module "@okta/oidc-middleware";
 ```
 
@@ -541,7 +541,7 @@ declare module "@okta/oidc-middleware";
 
 As the application grows, you will add many more routes. It is a good idea to define all the routes in one area of the project. Make a new folder under `src` named `routes`. Add a new file to `src/routes` named `index.ts`. Then, add the following code to this new file.
 
-```javascript
+```typescript
 import * as express from "express";
 
 export const register = ( app: express.Application ) => {
@@ -572,7 +572,7 @@ export const register = ( app: express.Application ) => {
 
 Next, update `src/index.ts` to use the `sessionAuth` and `routes` modules you created.
 
-```javascript
+```typescript
 import dotenv from "dotenv";
 import express from "express";
 import path from "path";
@@ -658,7 +658,7 @@ With authentication working, you can take advantage of the user profile informat
 
 The first step is get the user profile object and pass it to the views as data. Update the `src/routes/index.ts` with the following code.
 
-```javascript
+```typescript
 import * as express from "express";
 
 export const register = ( app: express.Application ) => {
@@ -780,7 +780,7 @@ You need a build script to initialize the PostgreSQL database. This script shoul
 
 In the `tools` folder, create two files: `initdb.ts` and `initdb.pgsql`. Copy and paste the following code into `initdb.ts`.
 
-```javascript
+```typescript
 import dotenv from "dotenv";
 import fs from "fs-extra";
 import { Client } from "pg";
@@ -854,7 +854,7 @@ You should see the message `finished` at the console. A new table named `guitars
 
 To complete the API, you need to add new routes to Express to create, query, update, and delete guitars. First, create a new file under `src/routes` named `api.ts`. Add the following code to this file.
 
-```javascript
+```typescript
 import * as express from "express";
 import pgPromise from "pg-promise";
 
@@ -993,7 +993,7 @@ export const register = ( app: express.Application ) => {
 
 Update `src/routes/index.ts` to include the new `api` module.
 
-```javascript
+```typescript
 import * as express from "express";
 import * as api from "./api";
 
@@ -1029,7 +1029,7 @@ export const register = ( app: express.Application ) => {
 
 Finally, update `src/index.ts` to add a new configuration option immediately following the line to create the Express application. This code enables Express to parse incoming JSON data.
 
-```javascript
+```typescript
 const app = express();
 
 // Configure Express to parse incoming JSON data
@@ -1051,7 +1051,7 @@ npm install --save-dev parcel-bundler @types/axios @types/materialize-css @types
 
 Make a new folder under `src` named `public`. Make a new folder under `src/public` named `js`. Create a file under `src/public/js` named `main.ts` and add the following code.
 
-```javascript
+```typescript
 import axios from "axios";
 import * as M from "materialize-css";
 import Vue from "vue";
@@ -1189,7 +1189,7 @@ Create a new `tsconfig.json` file under `src/public/js` and add the following co
 
 Next, update `src/index.ts` to configure Express to serve static files from the `public` folder. Add this line after the code that configures Express to use `EJS`.
 
-```javascript
+```typescript
 ...
 // Configure Express to use EJS
 app.set( "views", path.join( __dirname, "views" ) );
