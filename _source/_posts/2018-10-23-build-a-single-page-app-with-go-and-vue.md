@@ -29,7 +29,7 @@ Here are some of Vue's benefits:
 
 ## Create Your Vue + Go App
 
-In this tutorial, you will create a single-page application that allows users to show their love for open source projects on GitHub. For the frontend you'll use Vue and popular tooling like `vuex`, `vue-cli`, `vuetify`, and `vue-router`. On the backend, you'll use Go to build a REST API and persist your data in MongoDB.
+In this tutorial, you'll create a single-page application that allows users to show their love for open source projects on GitHub. For the frontend you'll use Vue and popular tooling like `vuex`, `vue-cli`, `vuetify`, and `vue-router`. On the backend, you'll use Go to build a REST API and persist your data in MongoDB.
 
 Authentication and user management can be a major pain, so you'll use JSON Web Token (JWT) based authentication when making requests from the SPA and [Okta's Go JWT Verifier](https://github.com/okta/okta-jwt-verifier-golang) as a middleware on your backend to validate the user's token on every request.
 
