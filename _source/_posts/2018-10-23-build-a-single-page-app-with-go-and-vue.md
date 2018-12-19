@@ -135,6 +135,22 @@ Next, install the Okta Vue SDK by running the following command:
 yarn add @okta/okta-vue
 ```
 
+
+## Install Your Vue App Dependencies
+
+You'll also need to install a few dependencies in order to get your project
+running. Run the following command to install them all:
+
+```bash
+yarn add vue-router
+yarn add vuex
+yarn add axios
+```
+
+- [vue-router](https://router.vuejs.org/) is a popular routing tool you'll be using to manage app routes
+- [vuex](https://vuex.vuejs.org/) is what you'll be using to manage page state
+- [axios](https://github.com/axios/axios) is a popular HTTP library that lets you easily make REST calls
+
 ## Create Your Vue App Routes
 
 For this app, you need only 4 routes, all of which require authentication except for the login route.
@@ -143,7 +159,9 @@ The root route `/` is our landing page where the login component will be rendere
 
 Take note that both the `/me` and `repo/:id` have a `meta: { requiresAuth: true }` property specifying that the user must be authenticated to access that area of the app. The Okta plugin will use it to redirect the user the Okta login page if not authenticated.
 
-First, create `pkg/http/web/app/src/routes.js` and define the following routes:
+First, install the `vue-router` and `vuex` packages.
+
+Now create `pkg/http/web/app/src/routes.js` and define the following routes:
 
 {% raw %}
 ```js
@@ -157,8 +175,8 @@ import GitHubRepoDetails from './components/GithubRepoDetails';
 
 Vue.use(VueRouter);
 Vue.use(Auth, {
-  issuer: {ADD_YOUR_OKTA_ORG_URL}/oauth2/default,
-  client_id: {ADD_YOUR_CLIENT_ID},
+  issuer: '{OKTA_ORG_URL}/oauth2/default',
+  client_id: '{OKTA_APP_CLIENT_ID}',
   redirect_uri: 'http://localhost:8080/implicit/callback',
   scope: 'openid profile email'
 })
@@ -175,7 +193,17 @@ export default new VueRouter({
 ```
 {% endraw %}
 
-Make sure to add your `domain` and `client_id` where indicated - these values can be found on the application overview page in the Okta Developer Console. Calling `Vue.use(Auth, ...)` will inject an `authClient` object into your Vue instance which can be accessed by calling `this.$auth` anywhere inside your Vue instance. This is what you'll use to make sure a user is logged in and/or to force the user to identify themself!
+Calling `Vue.use(Auth, ...)` will inject an `authClient` object into your Vue instance which can be accessed by calling `this.$auth` anywhere inside your Vue instance. This is what you'll use to make sure a user is logged in and/or to force the user to identify themself!
+
+Be sure to replace {% raw %}`{OKTA_ORG_URL}`{% endraw %} with your Okta ORG Url.  This value can be found on the dashboard page of your Okta dashboard (pictured below).
+
+{% img blog/go-vue/okta-org-url.png alt:"Okta Org URL" width:"600" %}{: .center-image }
+
+You'll also need to replace {% raw %}`{OKTA_APP_CLIENT_ID}`{% endraw %} with your new Okta app's Client ID. If you navigate back to your newly created application, you should see your Client ID value on the **General** tab (pictured below).
+
+{% img blog/go-vue/okta-app-client-id.png alt:"Okta App Client ID" width:"600" %}{: .center-image }
+
+Also, note the hard-coded value `http://localhost:8080/implicit/callback`. If you later change your app to run in production on a different URL, you'll need to modify this value. A best practice is to store this value in an environment variable so that depending on where you're running your application, the correct value will be used.
 
 ## Create the Vue Components
 
