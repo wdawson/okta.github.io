@@ -209,7 +209,7 @@ Also, note the hard-coded value `http://localhost:8080/implicit/callback`. If yo
 
 The `vue-router` library contains a number of components to help developers create dynamic and rich UIs. One of them, `router-view`, renders the component for the matched route. In our case, when the user accesses the root route `/`, `vue-router` will render the `Login` component as configured in `routers.js`.
 
-Open `./kudo-oos/pkg/http/web/app/src/components/App.vue` and copy in the following code.
+Open `./kudo-oos/pkg/http/web/app/src/App.vue` and copy in the following code.
 
 {% raw %}
 ```js
@@ -234,7 +234,7 @@ export default {
 ```
 {% endraw %}
 
-For every route other than the  matched route component, Vue will  render the `Footer` component. Create `./kudo-oos/pkg/http/web/app/src/components/Footer.vue` and copy in the following code to create that footer component.
+For every route other than the matched route component, Vue will render the `Footer` component. Create `./kudo-oos/pkg/http/web/app/src/components/Footer.vue` and copy in the following code to create that footer component.
 
 {% raw %}
 ```js
@@ -248,61 +248,105 @@ For every route other than the  matched route component, Vue will  render the `F
 ```
 {% endraw %}
 
-Your landing page should now look like this:
+Next, create the `Login` component. Create `./kudo-oos/pkg/http/web/app/src/components/Login.vue` and copy in the following code.
+
+{% raw %}
+```javascript
+<template>
+  <v-app id="inspire">
+    <v-content>
+      <v-container fluid fill-height>
+        <v-layout align-center justify-center>
+          <v-flex xs12 sm8 md4>
+            <v-card class="elevation-12">
+              <v-toolbar dark color="teal">
+                <v-toolbar-title justify-center>Login</v-toolbar-title>
+              </v-toolbar>
+              <v-card-text>
+                <v-btn @click.prevent="login" color="primary">Sign in with Okta</v-btn>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
+  </v-app>
+</template>
+
+<script>
+export default {
+  data() {
+    return {};
+  },
+  async mounted() {
+    const isAuthenticated = await this.$auth.isAuthenticated();
+    isAuthenticated && this.$router.push('/me');
+  },
+  methods: {
+    login () {
+      this.$auth.loginRedirect('/me')
+    }
+  }
+}
+</script>
+```
+{% endraw %}
+
+This Login component will eventually render a "sign in" button on the homepage of the website when a user visits the page who isn't logged in. The home page will eventually look like the following:
 
 {% img blog/go-vue/vue-landing-page.png alt:"Vue landing page" width:"600" %}{: .center-image }
 
-With our login component rendered, the user will be redirected to the login page after clicking the sign in button.
+Once the login component is rendered, the user will be redirected to the login page after clicking the sign in button.
 
 {% img blog/go-vue/okta-sign-in.png alt:"Okta sign-in" width:"600" %}{: .center-image }
 
-And after a successful login, the user is redirected back to your application to the configured route. In our app, that's the `/me` route.
+And after a successful login, the user will be redirected back to your application to the configured route. In our app, that's the `/me` route.
 
 {% img blog/go-vue/vue-app.png alt:"Vue app" width:"600" %}{: .center-image }
 
-The `/me` route was configured to render the `Home` component, which in turn renders the `Sidebar`,the Kudos, and Search `vuetify tabs`. Each tab renders a specific set of `GitHubRepo`s.
+The `/me` route was configured to render the `Home` component, which in turn renders the Sidebar, Kudos, and Search tabs. Each tab renders a specific set of `GitHubRepo`s. Let's create these components now.
 
-Go ahead and create the `./kudo-oos/pkg/http/web/app/src/components/Home.vue` component.
+Create the `./kudo-oos/pkg/http/web/app/src/components/Home.vue` component.
 
 {% raw %}
 ```js
 <template>
- <div>
-   <SearchBar v-on:search-submitted="githubQuery" />
-   <v-container grid-list-md fluid class="grey lighten-4" >
-        <v-tabs
-       slot="extension"
-       v-model="tabs"
-       centered
-       color="teal"
-       text-color="white"
-       slider-color="white"
-     >
-       <v-tab class="white--text" :key="2">
-         KUDOS
-       </v-tab>
-       <v-tab class="white--text" :key="1">
-         SEARCH
-       </v-tab>
-     </v-tabs>
-       <v-tabs-items style="width:100%" v-model="tabs">
-         <v-tab-item :key="2">
-           <v-layout row wrap>
-             <v-flex v-for="kudo in allKudos" :key="kudo.id" md4 >
-               <GitHubRepo :repo="kudo" />
-             </v-flex>
-           </v-layout>
-         </v-tab-item>
-         <v-tab-item :key="1">
-           <v-layout row wrap>
-             <v-flex v-for="repo in repos" :key="repo.id" md4>
-               <GitHubRepo :repo="repo" />
-             </v-flex>
-           </v-layout>
-         </v-tab-item>
-       </v-tabs-items>
-   </v-container>
- </div>
+  <div>
+    <SearchBar defaultQuery='okta' v-on:search-submitted="githubQuery" />
+    <v-container grid-list-md fluid class="grey lighten-4" >
+         <v-tabs
+        slot="extension"
+        v-model="tabs"
+        centered
+        color="teal"
+        text-color="white"
+        slider-color="white"
+      >
+        <v-tab class="white--text" :key="2">
+          KUDOS
+        </v-tab>
+        <v-tab class="white--text" :key="1">
+          SEARCH
+        </v-tab>
+      </v-tabs>
+        <v-tabs-items style="width:100%" v-model="tabs">
+          <v-tab-item :key="2">
+            <v-layout row wrap>
+              <v-flex v-for="kudo in allKudos" :key="kudo.id" md4 >
+                <GitHubRepo :repo="kudo" />
+              </v-flex>
+            </v-layout>
+          </v-tab-item>
+          <v-tab-item :key="1">
+            <v-layout row wrap>
+              <v-flex v-for="repo in repos" :key="repo.id" md4>
+                <GitHubRepo :repo="repo" />
+              </v-flex>
+            </v-layout>
+          </v-tab-item>
+        </v-tabs-items>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -312,78 +356,78 @@ import githubClient from '../githubClient'
 import { mapMutations, mapGetters, mapActions } from 'vuex'
 
 export default {
- name: 'Home',
- components: { SearchBar, GitHubRepo },
- data() {
-   return {
-     tabs: 0
-   }
- },
- computed: mapGetters(['allKudos', 'repos']),
- created() {
-   this.getKudos();
- },
- methods: {
-   githubQuery(query) {
-     this.tabs = 1;
-     githubClient
-       .getJSONRepos(query)
-       .then(response => this.resetRepos(response.items) )
-   },
-   ...mapMutations(['resetRepos']),
-   ...mapActions(['getKudos']),
- },
+  name: 'Home',
+  components: { SearchBar, GitHubRepo },
+  data() {
+    return {
+      tabs: 0
+    }
+  },
+  computed: mapGetters(['allKudos', 'repos']),
+  created() {
+    this.getKudos();
+  },
+  methods: {
+    githubQuery(query) {
+      this.tabs = 1;
+      githubClient
+        .getJSONRepos(query)
+        .then(response => this.resetRepos(response.items) )
+    },
+    ...mapMutations(['resetRepos']),
+    ...mapActions(['getKudos']),
+  },
 }
 </script>
 
 <style>
-.v-tabs__content {
-  padding-bottom: 2px;
-}
+ .v-tabs__content {
+   padding-bottom: 2px;
+ }
 </style>
 ```
 {% endraw %}
 
-`SearchBar` is the first component rendered in `Home`. When the user enters a query into the text input in the `Sidebar`, the component triggers a call to the Github API. `SearchBar` simply emits an event to its parent, `Home`, which contains the `githubQuery`.
+`SearchBar` is the first component rendered in `Home`. When the user enters a query into the text input in the `Sidebar`, this component triggers a call to the Github API. `SearchBar` simply emits an event to its parent, `Home`, which contains the `githubQuery`.
 
-`./kudo-oos/pkg/http/web/app/src/components/SearchBar.vue` should look like this:
+Create `./kudo-oos/pkg/http/web/app/src/components/SearchBar.vue` and copy in the following code:
 
 {% raw %}
 ```js
 <template>
-   <v-toolbar dark color="teal">
-     <v-spacer></v-spacer>
-     <v-text-field
-       solo-inverted
-       flat
-       hide-details
-       label="Search for your OOS project on Github + Press Enter"
-       prepend-inner-icon="search"
-       v-model="query"
-       @keyup.enter="onSearchSubmition"
-     ></v-text-field>
-     <v-spacer></v-spacer>
-     <button @click.prevent="logout">Logout</button>
-   </v-toolbar>
+    <v-toolbar dark color="teal">
+      <v-spacer></v-spacer>
+      <v-text-field
+        solo-inverted
+        flat
+        hide-details
+        label="Search for your OOS project on Github + Press Enter"
+        prepend-inner-icon="search"
+        v-model="query"
+        @keyup.enter="onSearchSubmition"
+      ></v-text-field>
+      <v-spacer></v-spacer>
+      <button @click.prevent="logout">Logout</button>
+    </v-toolbar>
 </template>
 
 <script>
 export default {
-   data() {
-     return {
-       query: null,
-     };
-   },
-   props: ['defaultQuery'],
-   methods: {
-     onSearchSubmition() {
-       this.$emit('search-submitted', this.query);
-     },
-     async logout () {
-       await this.$auth.logout()
-       this.$router.push('/')
-   }
- }
+    data() {
+      return {
+        query: null,
+      };
+    },
+    props: ['defaultQuery'],
+    methods: {
+      onSearchSubmition() {
+        this.$emit('search-submitted', this.query);
+      },
+      async logout () {
+        await this.$auth.logout()
+        this.$router.push('/')
+    }
+  }
 }
 </script>
 ```
@@ -393,68 +437,64 @@ Thanks to `@keyup.enter="onSearchSubmition"`, whenever the user hits enter `onSe
 
 The `Sidebar` is also responsible for logging the user out. Okta Vue SDK offers a handy method to clean up the session using the method `this.$auth.logout()`. Whenever the user logs out,  they can be redirected to the login page.
 
-The second component rendered in `Home` is the `GithupRepo`. This component is used inside two tabs: the first tab `Kudos` represents the user's favorites OSS projects and the `Search` tab renders the OSS projects returned from GitHub.
+The second component rendered in `Home` is the `GithubRepo`. This component is used inside two tabs: the first tab `Kudos` represents the user's favorites OSS projects and the `Search` tab renders the OSS projects returned from GitHub.
+
+Create `./kudo-oos/pkg/http/web/app/src/components/GithubRepo.vue` and copy in the following code:
 
 {% raw %}
 ```js
 <template>
- <v-card >
-   <v-card-title primary-title>
-     <div class="repo-card-content">
-       <h3 class="headline mb-0">
-         <router-link :to="{ name: 'repo-details', params: { id: repo.id }}" >{{repo.full_name}}</router-link>
-       </h3>
-       <div>{{repo.description}}</div>
-     </div>
-   </v-card-title>
-   <v-card-actions>
-     <v-chip>
-       {{repo.language}}
-     </v-chip>
-     <v-spacer></v-spacer>
-     <v-btn @click.prevent="toggleKudo(repo)"  flat icon color="pink">
-       <v-icon v-if="isKudo(repo)">favorite</v-icon>
-       <v-icon v-else>favorite_border</v-icon>
-     </v-btn>
-   </v-card-actions>
- </v-card>
+  <v-card >
+    <v-card-title primary-title>
+      <div class="repo-card-content">
+        <h3 class="headline mb-0">
+          <router-link :to="{ name: 'repo-details', params: { id: repo.id }}" >{{repo.full_name}}</router-link>
+        </h3>
+        <div>{{repo.description}}</div>
+      </div>
+    </v-card-title>
+    <v-card-actions>
+      <v-chip>
+        {{repo.language}}
+      </v-chip>
+      <v-spacer></v-spacer>
+      <v-btn @click.prevent="toggleKudo(repo)"  flat icon color="pink">
+        <v-icon v-if="isKudo(repo)">favorite</v-icon>
+        <v-icon v-else>favorite_border</v-icon>
+      </v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
 
 export default {
- data() {
-   return {}
- },
- props: ['repo'],
- methods: {
-   isKudo(repo) {
-     return this.$store.getters.isKudo(repo);
-   },
-   ...mapActions(['toggleKudo'])
- }
+  data() {
+    return {}
+  },
+  props: ['repo'],
+  methods: {
+    isKudo(repo) {
+      return this.$store.getters.isKudo(repo);
+    },
+    ...mapActions(['toggleKudo'])
+  }
 }
 </script>
 
 <style>
-.repo-card-content {
-  height: 90px;
-  overflow: scroll;
-}
+ .repo-card-content {
+   height: 90px;
+   overflow: scroll;
+ }
 </style>
 ```
 {% endraw %}
 
-Your SPA uses `vuex` to manage state in one centralized store accessible by all components.  `Vuex` also ensures that access to the store is performed in a predictable fashion respecting a few rules. To read the state, you need to define `getters`, synchronous changes to the state must be done via `mutations`, and asynchronous changes are done via `actions`.
+Your SPA uses `vuex` to manage state in one centralized store accessible by all components. `Vuex` also ensures that access to the store is performed in a predictable fashion respecting a few rules. To read the state, you need to define `getters`, synchronous changes to the state must be done via `mutations`, and asynchronous changes are done via `actions`.
 
-To install vuex, run:
-
-```sh
-yarn add vuex
-```
-
-You now need to create `./kudo-oos/pkg/http/web/app/src/store.js` with  `actions`, `mutations` and `getters`. Your initial data is `{ kudos: {}, repos: [] }`. `kudos` holds all the user's favorites OSS projects asa JavaScript Object where the key is the project id and the value is the project itself. `repos` is an array that holds the search results.
+You now need to create `./kudo-oos/pkg/http/web/app/src/store.js` with `actions`, `mutations` and `getters`. Your initial data is `{ kudos: {}, repos: [] }`. `kudos` holds all the user's favorites OSS projects as a JavaScript Object where the key is the project id and the value is the project itself. `repos` is an array that holds the search results.
 
 There are two cases in which you may need to mutate state. First, when the user logs in you need to fetch the user's  favorites OSS projects from the Go server and set the `repos` in the store by calling `resetRepos`. Second, when the user favorites or unfavorites an OSS project, you need update the `kudos` in the store by calling `resetKudos` to reflect that change on the server.
 
@@ -462,7 +502,7 @@ There are two cases in which you may need to mutate state. First, when the user 
 
 The `Home` component uses the `getters` `allKudos` and `repos` to render the list of Kudos and SearchResults. In order to know whether a `repo` has been favorited or not, your app needs to call the `isKudo` getter.
 
-Create your `./kudo-oos/pkg/http/web/app/src/store.js` with the code below:
+Create the `./kudo-oos/pkg/http/web/app/src/store.js` file and copy in the code below:
 
 {% raw %}
 ```js
@@ -474,68 +514,68 @@ import APIClient from './apiClient';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
- state: {
-   kudos: {},
-   repos: [],
- },
- mutations: {
-   resetRepos (state, repos) {
-     state.repos = repos;
-   },
-   resetKudos(state, kudos) {
-     state.kudos = kudos;
-   }
- },
- getters: {
-   allKudos(state) {
-     return Object.values(state.kudos);
-   },
-   kudos(state) {
-     return state.kudos;
-   },
-   repos(state) {
-     return state.repos;
-   },
-   isKudo(state) {
-     return (repo)=> {
-       return !!state.kudos[repo.id];
-     };
-   }
- },
- actions: {
-   getKudos ({commit}) {
-     APIClient.getKudos().then((data) => {
-       commit('resetKudos', data.reduce((acc, kudo) => {
-                              return {[kudo.id]: kudo, ...acc}
-                            }, {}))
-     })
-   },
-   updateKudo({ commit, state }, repo) {
-     const kudos = { ...state.kudos, [repo.id]: repo };
+  state: {
+    kudos: {},
+    repos: [],
+  },
+  mutations: {
+    resetRepos (state, repos) {
+      state.repos = repos;
+    },
+    resetKudos(state, kudos) {
+      state.kudos = kudos;
+    }
+  },
+  getters: {
+    allKudos(state) {
+      return Object.values(state.kudos);
+    },
+    kudos(state) {
+      return state.kudos;
+    },
+    repos(state) {
+      return state.repos;
+    },
+    isKudo(state) {
+      return (repo)=> {
+        return !!state.kudos[repo.id];
+      };
+    }
+  },
+  actions: {
+    getKudos ({commit}) {
+      APIClient.getKudos().then((data) => {
+        commit('resetKudos', data.reduce((acc, kudo) => {
+                               return {[kudo.id]: kudo, ...acc}
+                             }, {}))
+      })
+    },
+    updateKudo({ commit, state }, repo) {
+      const kudos = { ...state.kudos, [repo.id]: repo };
 
-     return APIClient
-       .updateKudo(repo)
-       .then(() => {
-         commit('resetKudos', kudos)
-       });
-   },
-   toggleKudo({ commit, state }, repo) {
-     if (!state.kudos[repo.id]) {
-       return APIClient
-         .createKudo(repo)
-         .then(kudo => commit('resetKudos', { [kudo.id]: kudo, ...state.kudos }))
-     }
+      return APIClient
+        .updateKudo(repo)
+        .then(() => {
+          commit('resetKudos', kudos)
+        });
+    },
+    toggleKudo({ commit, state }, repo) {
+      if (!state.kudos[repo.id]) {
+        return APIClient
+          .createKudo(repo)
+          .then(kudo => commit('resetKudos', { [kudo.id]: kudo, ...state.kudos }))
+      }
 
-     const kudos = Object.entries(state.kudos).reduce((acc, [repoId, kudo]) => {
-                     return (repoId == repo.id) ? acc
-                                                : { [repoId]: kudo, ...acc };
-                   }, {});
+      const kudos = Object.entries(state.kudos).reduce((acc, [repoId, kudo]) => {
+                      return (repoId == repo.id) ? acc
+                                                 : { [repoId]: kudo, ...acc };
+                    }, {});
 
-     return APIClient
-       .deleteKudo(repo)
-       .then(() => commit('resetKudos', kudos));
-   }
- }
+      return APIClient
+        .deleteKudo(repo)
+        .then(() => commit('resetKudos', kudos));
+    }
+  }
 });
 
 export default store;
@@ -544,9 +584,9 @@ export default store;
 
 Inside `actions` you are performing ajax calls to the Go server. Every request made to the server must be authenticated or the server will respond with a client error. When the user logs in, an access token is created and can be accessed by calling: `await Vue.prototype.$auth.getAccessToken()`. This asynchronous function returns an access token required to send authenticated requests to the server.
 
-The Go server exposes a REST API for the `kudo` resource. You will implement methods to make ajax calls in order to create with `createKudo`, update with `updateKudo`, delete with `deleteKudo`, and list all kudos with`getKudos`. Notice that these methods call the `perform` method by passing the endpoint and the HTTP verb. `perform`, in turn, populates the request `Authorization` header with the access token so the Go server can validate the request.
+The Go server exposes a REST API for the `kudo` resource. You will implement methods to make ajax calls in order to create with `createKudo`, update with `updateKudo`, delete with `deleteKudo`, and list all kudos with `getKudos`. Notice that these methods call the `perform` method by passing the endpoint and the HTTP verb. `perform`, in turn, populates the request `Authorization` header with the access token so the Go server can validate the request.
 
-Create your `./kudo-oos/pkg/http/web/app/src/apiClient.js` with the code below.
+Create `./kudo-oos/pkg/http/web/app/src/apiClient.js` and copy in the code below.
 
 {% raw %}
 ```js
@@ -554,7 +594,6 @@ import Vue from 'vue';
 import axios from 'axios';
 
 const BASE_URI = 'http://localhost:4444';
-
 const client = axios.create({
   baseURL: BASE_URI,
   json: true
@@ -600,9 +639,22 @@ export default APIClient;
 ```
 {% endraw %}
 
+Also, create`./kudo-oos/pkg/http/web/app/src/githubClient.js` and copy in the code below. This file contains helper functions used to interact with the GitHub API.
+
+{% raw %]
+```js
+const API_URL = "https://api.github.com/search/repositories"
+export default {
+  getJSONRepos(query) {
+    return fetch(`${API_URL}?q=` + query).then(response => response.json());
+  }
+}
+```
+{% endraw %}
+
 Each `GithubRepo` has a `router-link` to `/repo/:id` that renders the `GithubRepoDetails` component. `GithubRepoDetails` shows details about the OSS project, like how many times the project has been of starred and the amount of open issues. The user can also leave a note describing why the project is special by clicking the Kudo button. The message is sent to Go server button by calling `updateKudo`.
 
-Create your `./kudo-oos/pkg/http/web/app/src/components/GithubRepoDetails.js` with the code below.
+Create the `./kudo-oos/pkg/http/web/app/src/components/GithubRepoDetails.js` file with the code below.
 
 {% raw %}
 ```js
@@ -610,6 +662,12 @@ Create your `./kudo-oos/pkg/http/web/app/src/components/GithubRepoDetails.js` wi
   <v-container grid-list-md fluid class="grey lighten-4" >
     <v-layout align-center justify-space-around wrap>
       <v-flex md6>
+        <!-- <v-img
+          :src="repo.owner.avatar_url"
+          :alt="repo.owner.login"
+          class="grey darken-4"
+          width="200"
+        ></v-img> -->
         <h1 class="primary--text">
           <a :href="repo.html_url">{{repo.full_name}}</a>
         </h1>
@@ -630,7 +688,6 @@ Create your `./kudo-oos/pkg/http/web/app/src/components/GithubRepoDetails.js` wi
           <v-avatar class="teal white--text">O</v-avatar>
           Open Issues: {{repo.open_issues_count}}
         </v-chip>
-
         <v-textarea
           name="input-7-1"
           label="Show some love"
@@ -647,7 +704,6 @@ Create your `./kudo-oos/pkg/http/web/app/src/components/GithubRepoDetails.js` wi
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import githubClient from '../githubClient';
 
 export default {
   data() {
@@ -664,8 +720,8 @@ export default {
   },
   methods: {
     fetchData() {
-      githubClient
-        .getJSONRepo(this.$route.params.id)
+      fetch('https://api.github.com/repositories/' + this.$route.params.id)
+        .then(response => response.json())
         .then((response) => {
           this.repo = Object.assign(response, this.kudos[this.$route.params.id])
         })
@@ -674,10 +730,13 @@ export default {
   }
 }
 </script>
+
+<style>
+</style>
 ```
 {% endraw %}
 
-Now that your router, store, and components are in place, go ahead and modify `./kudo-oos/pkg/http/web/app/src/main.js` to properly initialize your SPA.
+Now that your router, store, and components are in place, go ahead and modify `./kudo-oos/pkg/http/web/app/src/main.js` to properly initialize your SPA. Copy in the following code and overwrite whatever is there.
 
 {% raw %}
 ```js
@@ -693,9 +752,9 @@ Vue.config.productionTip = process.env.NODE_ENV == 'production';
 router.beforeEach(Vue.prototype.$auth.authRedirectGuard())
 
 new Vue({
- store,
- router,
- render: h => h(App)
+  store,
+  router,
+  render: h => h(App)
 }).$mount('#app')
 ```
 {% endraw %}
