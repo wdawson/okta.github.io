@@ -763,18 +763,15 @@ Note that we are calling `router.beforeEach(Vue.prototype.$auth.authRedirectGuar
 
 ## Create a REST API with Go
 
-Now that users can securely authenticate on the frontend, you need to create a HTTP server written in Go to handle the requests, validate whether the user is authenticated, and perform CRUD operations.
+Now that users can securely authenticate on the frontend, you need to create a HTTP server written in Go to handle the requests, handle user authentication, and perform CRUD operations.
 
-I like using the [dep tool](https://github.com/golang/dep) to manage dependencies, so be sure to install it [from here](https://github.com/golang/dep#installation) before continuing.
+The first code you need to create is a structure to represent a GitHub repository. Start by creating `./kudo-oos/pkg/core/kudo.go`.
 
 ```bash
-dep init
-dep ensure -add github.com/okta/okta-jwt-verifier-golang
-dep ensure -add github.com/rs/cors
-dep ensure -add github.com/globalsign/mgo
+mkdir pkg/core
 ```
 
-You now need a structure to represent a GitHub repository. Start by creating `./kudo-oos/pkg/core/kudo.go` and define the following struct to represent a "kudo" (someone giving kudos to a specific repo).
+Now define the following struct to represent a "kudo" (someone giving kudos to a specific repo). Copy the code below into your newly created file, `./kudo-oos/pkg/core/kudo.go`.
 
 {% raw %}
 ```go
@@ -782,158 +779,164 @@ package core
 
 // Kudo represents a oos kudo.
 type Kudo struct {
-  UserID      string `json:"user_id" bson:"userId"`
-  RepoID      string `json:"id" bson:"repoId"`
-  RepoName    string `json:"full_name" bson:"repoName"`
-  RepoURL     string `json:"html_url" bson:"repoUrl"`
-  Language    string `json:"language" bson:"language"`
-  Description string `json:"description" bson:"description"`
-  Notes       string `json:"notes" bson:"notes"`
+        UserID      string `json:"user_id" bson:"userId"`
+        RepoID      string `json:"id" bson:"repoId"`
+        RepoName    string `json:"full_name" bson:"repoName"`
+        RepoURL     string `json:"html_url" bson:"repoUrl"`
+        Language    string `json:"language" bson:"language"`
+        Description string `json:"description" bson:"description"`
+        Notes       string `json:"notes" bson:"notes"`
 }
 ```
 {% endraw %}
 
-Next, create `./kudo-oos/pkg/core/repository.go` file and add the following interface to represent an API for any persistence layer you might want to use. In this article, we are going to use MongoDB.
+Next, create the `./kudo-oos/pkg/core/repository.go` file and add the following interface to represent an API for any persistence layer you might want to use. In this article, we are going to use MongoDB.
 
 {% raw %}
 ```go
 package core
-// Repository defines the API a repository implementation should follow.
+
+// Repository defines the API repository implementation should follow.
 type Repository interface {
-  Find(id string) (*Kudo, error)
-  FindAll(selector map[string]interface{}) ([]*Kudo, error)
-  Delete(kudo *Kudo) error
-  Update(kudo *Kudo) error
-  Create(kudo ...*Kudo) error
-  Count() (int, error)
+        Find(id string) (*Kudo, error)
+        FindAll(selector map[string]interface{}) ([]*Kudo, error)
+        Delete(kudo *Kudo) error
+        Update(kudo *Kudo) error
+        Create(kudo ...*Kudo) error
+        Count() (int, error)
 }
 ```
 {% endraw %}
 
-Finally, create the MongoDB repository that implements the interface you've just created. Create `./kudo-oos/pkg/storage/mongo.go` and add the following code.
+Finally, create the MongoDB repository that implements the interface you've just created. First, create a new directory to hold this code.
+
+```bash
+mkdir pkg/storage
+```
+
+Then create the file `./kudo-oos/pkg/storage/mongo.go` and add the following code.
 
 {% raw %}
 ```go
 package storage
 
 import (
-  "log"
-  "os"
-
-  "github.com/globalsign/mgo"
-  "github.com/globalsign/mgo/bson"
-  "github.com/{YOUR_GITHUB_USERNAME}/kudo-oos/pkg/core"
+        "log"
+        "os"
+        "github.com/globalsign/mgo"
+        "github.com/globalsign/mgo/bson"
+        "github.com/klebervirgilio/vue-crud-app-with-golang/pkg/core"
 )
 
 const (
-  collectionName = "kudos"
+        collectionName = "kudos"
 )
 
 func GetCollectionName() string {
-  return collectionName
+        return collectionName
 }
 
 type MongoRepository struct {
-  logger  *log.Logger
-  session *mgo.Session
+        logger  *log.Logger
+        session *mgo.Session
 }
 
 // Find fetches a kudo from mongo according to the query criteria provided.
 func (r MongoRepository) Find(repoID string) (*core.Kudo, error) {
-  session := r.session.Copy()
-  defer session.Close()
-  coll := session.DB("").C(collectionName)
+        session := r.session.Copy()
+        defer session.Close()
+        coll := session.DB("").C(collectionName)
 
-  var kudo core.Kudo
-  err := coll.Find(bson.M{"repoId": repoID, "userId": kudo.UserID}).One(&kudo)
-  if err != nil {
-    r.logger.Printf("error: %v\n", err)
-    return nil, err
-  }
-  return &kudo, nil
+        var kudo core.Kudo
+        err := coll.Find(bson.M{"repoId": repoID, "userId": kudo.UserID}).One(&kudo)
+        if err != nil {
+                r.logger.Printf("error: %v\n", err)
+                return nil, err
+        }
+        return &kudo, nil
 }
 
-// FindAll fetches kudos from the database.
+// FindAll fetches all kudos from the database. YES.. ALL! be careful.
 func (r MongoRepository) FindAll(selector map[string]interface{}) ([]*core.Kudo, error) {
-  session := r.session.Copy()
-  defer session.Close()
-  coll := session.DB("").C(collectionName)
+        session := r.session.Copy()
+        defer session.Close()
+        coll := session.DB("").C(collectionName)
 
-  var kudos []*core.Kudo
-  err := coll.Find(selector).All(&kudos)
-  if err != nil {
-    r.logger.Printf("error: %v\n", err)
-    return nil, err
-  }
-  return kudos, nil
+        var kudos []*core.Kudo
+        err := coll.Find(selector).All(&kudos)
+        if err != nil {
+                r.logger.Printf("error: %v\n", err)
+                return nil, err
+        }
+        return kudos, nil
 }
 
 // Delete deletes a kudo from mongo according to the query criteria provided.
 func (r MongoRepository) Delete(kudo *core.Kudo) error {
-  session := r.session.Copy()
-  defer session.Close()
-  coll := session.DB("").C(collectionName)
+        session := r.session.Copy()
+        defer session.Close()
+        coll := session.DB("").C(collectionName)
 
-  return coll.Remove(bson.M{"repoId": kudo.RepoID, "userId": kudo.UserID})
+        return coll.Remove(bson.M{"repoId": kudo.RepoID, "userId": kudo.UserID})
 }
 
 // Update updates an kudo.
 func (r MongoRepository) Update(kudo *core.Kudo) error {
-  session := r.session.Copy()
-  defer session.Close()
-  coll := session.DB("").C(collectionName)
+        session := r.session.Copy()
+        defer session.Close()
+        coll := session.DB("").C(collectionName)
 
-  return coll.Update(bson.M{"repoId": kudo.RepoID, "userId": kudo.UserID}, kudo)
+        return coll.Update(bson.M{"repoId": kudo.RepoID, "userId": kudo.UserID}, kudo)
 }
 
 // Create kudos in the database.
 func (r MongoRepository) Create(kudos ...*core.Kudo) error {
-  session := r.session.Copy()
-  defer session.Close()
-  coll := session.DB("").C(collectionName)
+        session := r.session.Copy()
+        defer session.Close()
+        coll := session.DB("").C(collectionName)
 
-  for _, kudo := range kudos {
-    _, err := coll.Upsert(bson.M{"repoId": kudo.RepoID, "userId": kudo.UserID}, kudo)
-    if err != nil {
-      return err
-    }
-  }
+        for _, kudo := range kudos {
+                _, err := coll.Upsert(bson.M{"repoId": kudo.RepoID, "userId": kudo.UserID}, kudo)
+                if err != nil {
+                        return err
+                }
+        }
 
-  return nil
+        return nil
 }
 
 // Count counts documents for a given collection
 func (r MongoRepository) Count() (int, error) {
-  session := r.session.Copy()
-  defer session.Close()
-  coll := session.DB("").C(collectionName)
-  return coll.Count()
+        session := r.session.Copy()
+        defer session.Close()
+        coll := session.DB("").C(collectionName)
+        return coll.Count()
 }
 
 // NewMongoSession dials mongodb and creates a session.
 func newMongoSession() (*mgo.Session, error) {
-  mongoURL := os.Getenv("MONGO_URL")
-  if mongoURL == "" {
-    log.Fatal("MONGO_URL not provided")
-  }
-  return mgo.Dial(mongoURL)
+        mongoURL := os.Getenv("MONGO_URL")
+        if mongoURL == "" {
+                log.Fatal("MONGO_URL not provided")
+        }
+        return mgo.Dial(mongoURL)
 }
 
 func newMongoRepositoryLogger() *log.Logger {
-  return log.New(os.Stdout, "[mongoDB] ", 0)
+        return log.New(os.Stdout, "[mongoDB] ", 0)
 }
 
 func NewMongoRepository() core.Repository {
-  logger := newMongoRepositoryLogger()
-  session, err := newMongoSession()
-  if err != nil {
-    logger.Fatalf("Could not connect to the database: %v\n", err)
-  }
+        logger := newMongoRepositoryLogger()
+        session, err := newMongoSession()
+        if err != nil {
+                logger.Fatalf("Could not connect to the database: %v\n", err)
+        }
 
-  return MongoRepository{
-    session: session,
-    logger:  logger,
-  }
+        return MongoRepository{
+                session: session,
+                logger:  logger,
+        }
 }
 ```
 {% endraw %}
@@ -942,7 +945,13 @@ func NewMongoRepository() core.Repository {
 
 Before you can create HTTP handlers, you'll need to write code to handle incoming request payloads.
 
-Create `./kudo-oos/pkg/kudo/service.go` and insert the code below.
+First, create the necessary directory:
+
+```bash
+mkdir pkg/kudo
+```
+
+Then, create the file `./kudo-oos/pkg/kudo/service.go` and insert the code below.
 
 {% raw %}
 ```go
@@ -950,8 +959,7 @@ package kudo
 
 import (
   "strconv"
-
-  "github.com/{YOUR_GITHUB_USERNAME}/kudo-oos/pkg/core"
+  "github.com/{{ YOUR_GITHUB_USERNAME }}/kudo-oos/pkg/core"
 )
 
 type GitHubRepo struct {
@@ -1027,17 +1035,21 @@ Your REST API exposes the `kudo` resource to support clients like your SPA. A no
 ```
  # Fetches all open source projects favorited by the user
 GET /kudos
+
 # Fetches a favorited open source project by id
 GET /kudos/:id
-# Creates (or favorites)  a open source project for the logged in user
+
+# Creates (or favorites) an open source project for the logged in user
 POST /kudos
-# Updates  a favorited open source project
+
+# Updates a favorited open source project
 PUT /kudos/:id
+
 # Deletes (or unfavorites) a favorited open source project
 DELETE /kudos/:id
 ```
 
-To support this, you need to add new file named `./kudo-oos/pkg/http/handlers.go` and define your HTTP handlers using the fabulous [httprouter library](https://github.com/julienschmidt/httprouter).
+To support this, you need to create a new file named `./kudo-oos/pkg/http/handlers.go` and define your HTTP handlers using the fabulous [httprouter library](https://github.com/julienschmidt/httprouter).
 
 {% raw %}
 ```go
@@ -1048,10 +1060,9 @@ import (
   "io/ioutil"
   "net/http"
   "strconv"
-
   "github.com/julienschmidt/httprouter"
-  "github.com/{YOUR_GITHUB_USERNAME}/kudo-oos/pkg/core"
-  "github.com/{YOUR_GITHUB_USERNAME}/kudo-oos/pkg/kudo"
+  "github.com/{{ YOUR_GITHUB_USERNAME }}/kudo-oos/pkg/core"
+  "github.com/{{ YOUR_GITHUB_USERNAME }}/kudo-oos/pkg/kudo"
 )
 
 type Service struct {
@@ -1140,7 +1151,7 @@ func (s Service) Update(w http.ResponseWriter, r *http.Request, params httproute
 
 This is the most crucial component of your REST API server. Without this middleware, any user can perform CRUD operations against the database.
 
-In the event that no valid JWT is provided in the HTTP authorization header, the API call is aborted and an error returned to the client.
+In the event that no valid JWT is provided in the HTTP authorization header, the API call will be aborted and an error will be returned to the client.
 
 Create `./kudo-oos/pkg/http/middlewares.go` and paste in the following code:
 
@@ -1153,7 +1164,6 @@ import (
   "log"
   "net/http"
   "strings"
-
   jwtverifier "github.com/okta/okta-jwt-verifier-golang"
   "github.com/rs/cors"
 )
@@ -1218,7 +1228,13 @@ As you can see, the middleware `OktaAuth` uses [okta-jwt-verifier-golang](https:
 
 ## Define Your Go REST API Entry Point
 
-Open up `./kudo-oos/pkg/cmd/main.go` and add the following code to spin up your Go webserver.
+Now create a new folder to hold the main Go application:
+
+```bash
+mkdir cmd
+```
+
+Then create the file `./kudo-oos/cmd/main.go` and add the following code to spin up your Go web server.
 
 {% raw %}
 ```go
@@ -1228,9 +1244,8 @@ import (
   "log"
   "net/http"
   "os"
-
-  web "github.com/{YOUR_GITHUB_USERNAME}/kudo-oos/pkg/http"
-  "github.com/{YOUR_GITHUB_USERNAME}/kudo-oos/pkg/storage"
+  web "github.com/{{ YOUR_GITHUB_USERNAME }}/kudo-oos/pkg/http"
+  "github.com/{{ YOUR_GITHUB_USERNAME }}/kudo-oos/pkg/storage"
 )
 
 func main() {
@@ -1245,9 +1260,63 @@ func main() {
 ```
 {% endraw %}
 
-## Run the Go +Vue SPA
+Next, create a folder to hold your DB initialization code.
 
-There are many ways to run backend and frontend apps. The simplest way (for development purposes) is to just use good old fashioned [Make](https://www.gnu.org/software/make/manual/html_node/Introduction.html).
+```bash
+mkdir cmd/db
+```
+
+Then create a new file, `./kudo-oos/cmd/db/setup.go` and insert the following code.
+
+{% raw %}
+```go
+package main
+
+import (
+        "log"
+        "os"
+        "github.com/globalsign/mgo"
+)
+
+func main() {
+        var err error
+        mongoURL := os.Getenv("MONGO_URL")
+        if mongoURL == "" {
+                log.Fatal("MONGO_URL not provided")
+        }
+        session, err := mgo.Dial(mongoURL)
+        defer session.Close()
+
+        err = session.DB("").AddUser("mongo_user", "mongo_secret", false)
+
+        info := &mgo.CollectionInfo{}
+        err = session.DB("").C("kudos").Create(info)
+
+        if err != nil {
+                log.Fatal(err)
+        }
+}
+```
+{% endraw %}
+
+## Manage Dependencies
+
+I like using the [dep tool](https://github.com/golang/dep) to manage dependencies, so be sure to [install it](https://github.com/golang/dep#installation) before continuing.
+
+Next, run the following commands to initialize the dep tool and create a
+`Gopkg.lock` and `Gopkg.toml` file (which will hold dependency resolution
+information).
+
+```bash
+dep init
+dep ensure -add github.com/okta/okta-jwt-verifier-golang
+dep ensure -add github.com/rs/cors
+dep ensure -add github.com/globalsign/mgo
+```
+
+## Run the Go + Vue SPA
+
+There are many ways to run back-end and front-end apps. The simplest way (for development purposes) is to just use good old fashioned [Make](https://www.gnu.org/software/make/manual/html_node/Introduction.html).
 
 A Makefile contains build instructions for your website. It's like an old-school version of `gulp`, `grunt`, and the more hip Node tools. To get started, create a file named `Makefile` in the root of your project folder and copy in the following code.
 
@@ -1262,13 +1331,15 @@ run_server:
 	@MONGO_URL=mongodb://mongo_user:mongo_secret@0.0.0.0:27017/kudos PORT=:4444 go run cmd/main.go
 
 run_client:
-    @/bin/bash -c "cd $$GOPATH/src/github.com/klebervirgilio/kudo-oos/pkg/http/web/app && yarn serve"
+	@/bin/bash -c "cd $$GOPATH/src/github.com/{{ YOUR_GITHUB_USERNAME }}/kudo-oos/pkg/http/web/app && yarn serve"
 ```
 ### Create a Dockerfile
 
 Next, you'll want to create a Dockerfile. This file tells Docker how to run your application and spares you the effort of deploying a real MongoDB instance for testing purposes.
 
-All you need to do here is create a file named `docker-compose.yml` and copy in the following code.
+If you don't already have them installed, go install [docker](https://docs.docker.com/install/) and [docker-compose](https://docs.docker.com/compose/install/#install-compose).
+
+Then create a file named `docker-compose.yml` and copy in the following code.
 
 ```yaml
 version: '3'
@@ -1296,6 +1367,7 @@ Your Go webserver should be listening on `0.0.0.0:4444` and your SPA should be s
 ## Learn More About Go and Vue
 
 Vue.js is a powerful and straightforward framework with phenomenal adoption and community growth. In this tutorial, you learned to build a fully-functional, secure SPA with Vue and Go.
+
 To learn more about Vue.js, head over to <https://vuejs.org> or check out these other great resources from the [@oktadev team](https://twitter.com/oktadev):
 
 - [The Ultimate Guide to Progressive Web Applications](/blog/2017/07/20/the-ultimate-guide-to-progressive-web-applications)
