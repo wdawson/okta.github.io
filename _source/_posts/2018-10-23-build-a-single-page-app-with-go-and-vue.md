@@ -49,7 +49,7 @@ With the GOPATH defined, you now can create a directory for your project:
 mkdir -p $GOPATH/src/github.com/{YOUR_GITHUB_USERNAME}/kudo-oos
 ```
 
-To get your SPA off the ground quickly, leverage the scaffolding functionality of [vue-cli](https://cli.vuejs.org/). The CLI will prompt you with a series of options - pick the technology appropriate for this project: `vue.js`, `vuex`, and, `webpack`.
+To get your SPA off the ground quickly you can leverage the scaffolding functionality of [vue-cli](https://cli.vuejs.org/). The CLI will prompt you with a series of options - pick the technology appropriate for this project: `vue.js`, `vuex`, and, `webpack`.
 
 Install `vue-cli` by running:
 
@@ -132,7 +132,7 @@ The default application settings should be the same as those pictured.
 Next, install the Okta Vue SDK by running the following command:
 
 ```bash
-yarn add @okta/okta-vue
+yarn add @okta/okta-vue@1.0.7
 ```
 
 
@@ -142,9 +142,9 @@ You'll also need to install a few dependencies in order to get your project
 running. Run the following command to install them all:
 
 ```bash
-yarn add vue-router
-yarn add vuex
-yarn add axios
+yarn add vue-router@3.0.2
+yarn add vuex@3.0.1
+yarn add axios@0.18.0
 ```
 
 - [vue-router](https://router.vuejs.org/) is a popular routing tool you'll be using to manage app routes
