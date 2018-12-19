@@ -35,6 +35,9 @@ Authentication and user management can be a major pain, so you'll use JSON Web T
 
 Once complete, users will be able to authenticate via OpenID Connect (OIDC), search for projects on GitHub, favorite those projects, and even write notes about their favorite projects!
 
+**PS**: Don't want to follow the tutorial? That's fine! Feel free to check out
+the finished [repository on GitHub](https://github.com/oktadeveloper/okta-go-vue-example).
+
 ### Create the Vue and Go Directory Structure
 
 For the sake of simplicity, let's create the REST API and SPA in the same project, starting with a project directory in the Go workspace.
@@ -45,9 +48,11 @@ If you're totally new to Go, check out [this article](https://golang.org/doc/cod
 
 With the GOPATH defined, you now can create a directory for your project:
 
+{% raw %}
 ```bash
-mkdir -p $GOPATH/src/github.com/{YOUR_GITHUB_USERNAME}/kudo-oos
+mkdir -p $GOPATH/src/github.com/{{ YOUR_GITHUB_USERNAME} }/kudo-oos
 ```
+{% endraw %}
 
 To get your SPA off the ground quickly you can leverage the scaffolding functionality of [vue-cli](https://cli.vuejs.org/). The CLI will prompt you with a series of options - pick the technology appropriate for this project: `vue.js`, `vuex`, and, `webpack`.
 
@@ -175,8 +180,8 @@ import GitHubRepoDetails from './components/GithubRepoDetails';
 
 Vue.use(VueRouter);
 Vue.use(Auth, {
-  issuer: '{OKTA_ORG_URL}/oauth2/default',
-  client_id: '{OKTA_APP_CLIENT_ID}',
+  issuer: '{{ OKTA_ORG_URL }}/oauth2/default',
+  client_id: '{{ OKTA_APP_CLIENT_ID }}',
   redirect_uri: 'http://localhost:8080/implicit/callback',
   scope: 'openid profile email'
 })
@@ -195,11 +200,11 @@ export default new VueRouter({
 
 Calling `Vue.use(Auth, ...)` will inject an `authClient` object into your Vue instance which can be accessed by calling `this.$auth` anywhere inside your Vue instance. This is what you'll use to make sure a user is logged in and/or to force the user to identify themself!
 
-Be sure to replace {% raw %}`{OKTA_ORG_URL}`{% endraw %} with your Okta ORG Url.  This value can be found on the dashboard page of your Okta dashboard (pictured below).
+Be sure to replace {% raw %}`{{ OKTA_ORG_URL }}`{% endraw %} with your Okta ORG Url.  This value can be found on the dashboard page of your Okta dashboard (pictured below).
 
 {% img blog/go-vue/okta-org-url.png alt:"Okta Org URL" width:"600" %}{: .center-image }
 
-You'll also need to replace {% raw %}`{OKTA_APP_CLIENT_ID}`{% endraw %} with your new Okta app's Client ID. If you navigate back to your newly created application, you should see your Client ID value on the **General** tab (pictured below).
+You'll also need to replace {% raw %}`{{ OKTA_APP_CLIENT_ID }}`{% endraw %} with your new Okta app's Client ID. If you navigate back to your newly created application, you should see your Client ID value on the **General** tab (pictured below).
 
 {% img blog/go-vue/okta-app-client-id.png alt:"Okta App Client ID" width:"600" %}{: .center-image }
 
@@ -494,7 +499,7 @@ export default {
 
 Your SPA uses `vuex` to manage state in one centralized store accessible by all components. `Vuex` also ensures that access to the store is performed in a predictable fashion respecting a few rules. To read the state, you need to define `getters`, synchronous changes to the state must be done via `mutations`, and asynchronous changes are done via `actions`.
 
-You now need to create `./kudo-oos/pkg/http/web/app/src/store.js` with `actions`, `mutations` and `getters`. Your initial data is `{ kudos: {}, repos: [] }`. `kudos` holds all the user's favorites OSS projects as a JavaScript Object where the key is the project id and the value is the project itself. `repos` is an array that holds the search results.
+You now need to create `./kudo-oos/pkg/http/web/app/src/store.js` with `actions`, `mutations` and `getters`. Your initial data is {% raw %}`{ kudos: {}, repos: [] }`{% endraw %}. `kudos` holds all the user's favorites OSS projects as a JavaScript Object where the key is the project id and the value is the project itself. `repos` is an array that holds the search results.
 
 There are two cases in which you may need to mutate state. First, when the user logs in you need to fetch the user's  favorites OSS projects from the Go server and set the `repos` in the store by calling `resetRepos`. Second, when the user favorites or unfavorites an OSS project, you need update the `kudos` in the store by calling `resetKudos` to reflect that change on the server.
 
@@ -641,7 +646,7 @@ export default APIClient;
 
 Also, create`./kudo-oos/pkg/http/web/app/src/githubClient.js` and copy in the code below. This file contains helper functions used to interact with the GitHub API.
 
-{% raw %]
+{% raw %}
 ```js
 const API_URL = "https://api.github.com/search/repositories"
 export default {
@@ -759,7 +764,7 @@ new Vue({
 ```
 {% endraw %}
 
-Note that we are calling `router.beforeEach(Vue.prototype.$auth.authRedirectGuard())` to look for routes tagged with `meta: {requiresAuth: true}` and redirect the user to the authentication flow if they are not logged in.
+Note that we are calling `router.beforeEach(Vue.prototype.$auth.authRedirectGuard())` to look for routes tagged with {% raw %}`meta: {requiresAuth: true}`{% endraw %} and redirect the user to the authentication flow if they are not logged in.
 
 ## Create a REST API with Go
 
@@ -1320,6 +1325,7 @@ There are many ways to run back-end and front-end apps. The simplest way (for de
 
 A Makefile contains build instructions for your website. It's like an old-school version of `gulp`, `grunt`, and the more hip Node tools. To get started, create a file named `Makefile` in the root of your project folder and copy in the following code.
 
+{% raw %}
 ```
 setup: run_services
 	@go run ./cmd/db/setup.go
@@ -1333,6 +1339,8 @@ run_server:
 run_client:
 	@/bin/bash -c "cd $$GOPATH/src/github.com/{{ YOUR_GITHUB_USERNAME }}/kudo-oos/pkg/http/web/app && yarn serve"
 ```
+{% endraw %}
+
 ### Create a Dockerfile
 
 Next, you'll want to create a Dockerfile. This file tells Docker how to run your application and spares you the effort of deploying a real MongoDB instance for testing purposes.
