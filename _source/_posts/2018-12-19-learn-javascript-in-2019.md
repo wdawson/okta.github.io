@@ -17,15 +17,9 @@ image: blog/learn-javascript-in-2019/learn-javascript-in-2019.jpg
 
 Technology isn't slowing down. Neither will the demand for innovative solutions to solve new challenges or take advantage of new opportunities. The key differentiation in the marketplace is often the one with the better technology. And companies are willing to pay big bucks for it.
 
-*There's never been a better time to be a programmer.*
-
 Not only are there new challenges and opportunities, but there are also better systems today to support programmers. Languages, code editors, libraries, automation tools, platforms, and services are all continuing to evolve and improve.
 
-*There's never been a better time to be a programmer.*
-
 I have to admit I am a little jealous of people who are getting into programming today. Sure, there will be challenges and frustrations, but newcomers to programming may never know the struggles and pain some of us have endured a decade ago. Or, just a few years ago.
-
-*There's never been a better time to be a programmer.*
 
 Oh, and learning? You can choose from books, blogs, social media, real-time chat, on-demand video training, free meetups, and insanely inexpensive conferences. It's almost criminal more people don't take advantage of the learning opportunities available!
 
