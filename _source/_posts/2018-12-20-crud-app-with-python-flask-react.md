@@ -333,7 +333,7 @@ touch app/http/api/endpoints.py
 touch app/http/api/middlewares.py
 ```
 
-The requests made to your ReST API are JWT-authenticated, which means you need to make sure that every single request carries a valid [json web token](https://stormpath.com/blog/beginners-guide-jwts-in-java). [`pyjwt`](https://pyjwt.readthedocs.io/en/latest/) will take care of the validation for us. To install it run the following command:
+The requests made to your ReST API are JWT-authenticated, which means you need to make sure that every single request carries a valid [json web token](https://stormpath.com/blog/beginners-guide-jwts-in-java/). [`pyjwt`](https://pyjwt.readthedocs.io/en/latest/) will take care of the validation for us. To install it run the following command:
 
 ```bash
 pipenv install pyjwt==1.7.1
@@ -530,7 +530,7 @@ Great! With your OIDC application in place, you can now move forward and secure 
 
 Your React application will have two routes:
 
-`/`  The root route does not require the user to be logged in, it actually is the landing page of your application. A user should be able to access this page in order to log in. You will use the [Okta React SDK](/code/react) to integrate react-router with Okta's OpenID Connect API.
+`/`  The root route does not require the user to be logged in, it actually is the landing page of your application. A user should be able to access this page in order to log in. You will use the [Okta React SDK](https://developer.okta.com/code/react/) to integrate react-router with Okta's OpenID Connect API.
 
 `/home` The Home route will render most of the React components you application will have. It should implement the following user stories.
 
