@@ -544,7 +544,7 @@ To install `react-router` run the command:
 yarn add react-router-dom
 ```
 
-And to install the [Okta React SDK](https://developer.okta.com/code/react) run the command:
+And to install the Okta React SDK run the command:
 
 ```bash
 yarn add @okta/okta-react
@@ -718,7 +718,7 @@ Now try running `npm start` and open `http://localhost:8080` in your browser. Yo
 
 {% img blog/python-react/app-login-button.png alt:"login button" width:"800" %}{: .center-image }
 
-In the Login component you are using the [Okta React SDK](https://developer.okta.com/code/react) to check whether the user has signed in.. If the user has already signed in, they should be redirected to the `/home` route, otherwise he/she could click `Login With Okta` to be redirected to Okta, authenticate and be sent to the the home page. 
+In the Login component you are using the Okta React SDK to check whether the user has signed in.. If the user has already signed in, they should be redirected to the `/home` route, otherwise he/she could click `Login With Okta` to be redirected to Okta, authenticate and be sent to the the home page. 
 
 {% img blog/python-react/app-login.png alt:"login page" width:"800" %}{: .center-image }
 
@@ -949,7 +949,7 @@ export default withStyles(styles)(withAuth(SearchBar));
 
 The `SearchBar` component receives one `prop` called `onSearch` which is the function that should be called in each `keyPress` event triggered in the search text input.
 
-The `SearchBar` uses the `withAuth` helper provided by [Okta React SDK](https://developer.okta.com/code/react) which will inject the `auth` object in the `props` of the component. The `auth` object has a method called `logout` that will wipe out all user related data from the session. This is exactly what you want in order to log the user out. 
+The `SearchBar` uses the `withAuth` helper provided by Okta React SDK which will inject the `auth` object in the `props` of the component. The `auth` object has a method called `logout` that will wipe out all user related data from the session. This is exactly what you want in order to log the user out. 
 
 Now it's time to work on the `Home` component. One of the dependencies the component has is the [`react-swipeable-views`](https://github.com/oliviertassinari/react-swipeable-views) library which will add nice animations when the user changes tabs.
 
