@@ -1193,9 +1193,9 @@ Now run `npm start` and open `http://localhost:8080` in your browser. You should
 Learn More About Python, Flask, and React
 As we've seen, React is a powerful and straightforward JavaScript library with phenomenal adoption and community growth. In this tutorial, you learned to build a fully-functional, secure JavaScript with React, Python, and Flask. To learn more about React and other technologies check out these other great resources from the @oktadev team:
 
-[The Ultimate Guide to Progressive Web Applications](https://developer.okta.com/blog/2017/07/20/the-ultimate-guide-to-progressive-web-applications)
-[Build a Simple CRUD App with Python and Flask](https://developer.okta.com/blog/2018/07/23/build-a-simple-crud-app-with-flask-and-python)
-[Build a Basic CRUD App with Node and React](https://developer.okta.com/blog/2018/07/10/build-a-basic-crud-app-with-node-and-react)
+[The Ultimate Guide to Progressive Web Applications](/blog/2017/07/20/the-ultimate-guide-to-progressive-web-applications)
+[Build a Simple CRUD App with Python and Flask](/blog/2018/07/23/build-a-simple-crud-app-with-flask-and-python)
+[Build a Basic CRUD App with Node and React](/blog/2018/07/10/build-a-basic-crud-app-with-node-and-react)
 
 As always, if you have any questions feel free to leave us a comment below. Don't forget to follow us Follow us on [Twitter](https://twitter.com/oktadev), like us on [Facebook](https://www.facebook.com/oktadevelopers), check us out on [LinkedIn](https://www.linkedin.com/company/oktadev/), and subscribe to our [YouTube channel](https://www.youtube.com/channel/UC5AMiWqFVFxF1q9Ya1FuZ_Q).
 
