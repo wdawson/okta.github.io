@@ -1185,7 +1185,7 @@ curl -v -X POST \
 ### Update Group Rule
 {:.api .api-operation}
 
-{% api_operation post /api/v1/groups/rules/${ruleId} %}
+{% api_operation put /api/v1/groups/rules/${ruleId} %}
 
 Updates a group rule.
 
