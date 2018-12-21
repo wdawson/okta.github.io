@@ -703,6 +703,6 @@ If you enjoyed building this ASP.NET MVC with Angular, check out more full-stack
 * [Build a CRUD App with ASP.NET Framework 4.x Web API and Angular](/blog/2018/07/27/build-crud-app-in-aspnet-framework-webapi-and-angular)
 * [Angular 7: What's New and Noteworthy + OIDC Goodness](/blog/2018/12/04/angular-7-oidc-oauth2-pkce)
 * [Token Authentication in ASP.NET Core – A Complete Guide](/blog/2018/03/23/token-authentication-aspnetcore-complete-guide)
-* [Build a Secure CRUD App with ASP.NET Core and React](https://developer.okta.com/blog/2018/07/02/build-a-secure-crud-app-with-aspnetcore-and-react)
+* [Build a Secure CRUD App with ASP.NET Core and React](/blog/2018/07/02/build-a-secure-crud-app-with-aspnetcore-and-react)
 
 As always if you have any questions, comments, or concerns about this post feel free to leave a comment below. For other great content from the Okta Dev Team, follow us on Twitter [@OktaDev](https://twitter.com/oktadev), [Facebook](https://www.facebook.com/oktadevelopers), [LinkedIn](https://www.linkedin.com/company/oktadev/) and [YouTube](https://www.youtube.com/channel/UC5AMiWqFVFxF1q9Ya1FuZ_Q)!
