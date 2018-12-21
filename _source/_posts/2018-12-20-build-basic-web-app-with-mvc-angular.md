@@ -633,7 +633,7 @@ export class AppModule { }
 ```
 
 ## Fetch Data from the ASP.NET API Endpoint
-Update the `app.component.ts` file with the following content
+Update the `app.component.ts` file with the following content:
 
 ```ts
 import { Component, OnInit } from '@angular/core';
