@@ -207,7 +207,7 @@ On the settings page, enter `OktaMvcAngular` as your name value and select Impli
 
 Now that your application has been created copy down the Client ID and Client secret values on the following page, you'll need them soon (of course, yours will be different).
 
-{% img blog/mvc-angular/okta-client-credentials.png alt:"okta client credentials" width:"400" %}{: .center-image }
+{% img blog/mvc-angular/okta-client-credentials.png alt:"okta client credentials" width:"500" %}{: .center-image }
 
 It is quite easy to add authentication to ASP.NET MVC with help of Okta.
 
