@@ -115,7 +115,7 @@ namespace OktaAspNetMvcAngular.Models
 
 Nothing special here, a standard `Id` property that represents a unique identifier for every row within a table and Entity Framework will use a naming convention and automatically set it as a primary key for this table. You definitely need the `Distance` property to track your jogs, a `Description` to describe the jog and `CreatedAt` property for an audit trail.
 
-Next, create an ApplicationDbContext class inside of a new folder called Data. For now, it will be pretty straightforward:
+Next, create an `ApplicationDbContext` class inside of a new folder called `Data`. For now, it will be pretty straightforward:
 
 ```cs
 using System.Data.Entity;
