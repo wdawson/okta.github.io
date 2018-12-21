@@ -16,8 +16,9 @@ You’ll go through choosing what app to make, how to pick a design, as well as 
 
 This is what the eventual app will look like (note: this mockup was made with [MockUPhone](https://mockuphone.com/):
 
-<img src="/img/blog/prime-components/final.png" 
-     alt="Final Result" width="283" class="center-image">
+{% img blog/react-native-play-store/final.png alt:"Final Result" width:"283" %}{: .center-image }
+
+
 
 ## Choosing an App to Make
 
@@ -25,7 +26,7 @@ The first choice when publishing an app is deciding what to put on the app store
 
 ## Interface Theming
 
-The next choice is how the app looks. This includes the controls like drop-downs and buttons, as well as the layout on the screen. One place to start is out-of-box solutions for React Native like [NativeBase](https://nativebase.io/), [Shoutem](https://shoutem.github.io/ui/) and [React Native Elements](https://react-native-training.github.io/react-native-elements/). These are quite heavy, all-or-nothing solutions. Since we are using a React-based technology another solution would be to use something based on [Styled Components](https://www.styled-components.com/) which is a popular, light-weight approach to theming React applications (and it also [works great on React Native](https://www.styled-components.com/docs/basics#react-native)). There’s an [entire page](https://github.com/styled-components/awesome-styled-components#built-with-styled-components) listing components and component-systems based on Styled Components. In this tutorial, you’ll be using Styled Components to build up components yourself.
+The next choice is how the app looks. This includes the controls like dropdowns and buttons, as well as the layout on the screen. One place to start is out-of-box solutions for React Native like [NativeBase](https://nativebase.io/), [Shoutem](https://shoutem.github.io/ui/) and [React Native Elements](https://react-native-training.github.io/react-native-elements/). These are quite heavy, all-or-nothing solutions. Since we are using a React-based technology another solution would be to use something based on [Styled Components](https://www.styled-components.com/) which is a popular, light-weight approach to theming React applications (and it also [works great on React Native](https://www.styled-components.com/docs/basics#react-native)). There’s an [entire page](https://github.com/styled-components/awesome-styled-components#built-with-styled-components) listing components and component-systems based on Styled Components. In this tutorial, you’ll be using Styled Components to build up components yourself.
 
 ## Setting up the Production Environment
 
@@ -51,17 +52,19 @@ You should have a command `react-native` available to you, which includes the **
 react-native init prime_components
 ```
 
-This will create the `prime_components/` directory and put a React Native project inside, with a runnable skeleton. Change to the directory, [connect your Android phone](https://facebook.github.io/react-native/docs/running-on-device) or [run an emulator](https://developer.android.com/studio/run/managing-avds) (after having [installed Android Studio](https://developer.android.com/studio/)), and run the project.
+This will create the `prime_components` directory and put a React Native project inside, with a runnable skeleton. Change to the directory, [connect your Android phone](https://facebook.github.io/react-native/docs/running-on-device) or [run an emulator](https://developer.android.com/studio/run/managing-avds) (after having [installed Android Studio](https://developer.android.com/studio/)), and run the project.
+
+**NOTE:** If Android Studio prompts you to open a project before you can create an emulator, you can point to the `prime_components/android` directory.
 
 ```bash
 cd prime_components
 react-native run-android
 ```
 
-<img src="/img/blog/prime-components/welcome.png" 
-     alt="Welcome" width="270" class="center-image">
+{% img blog/react-native-play-store/welcome.png alt:"Welcome to React Native" width:"400" %}{: .center-image }
 
-To see the output you’ll upload to the Play Store, go to `android\app\build\outputs\apk\debug`. You should see an `app-debug.apk` that is around 8MB in size.
+
+To see the output you’ll upload to the Play Store, go to `android/app/build/outputs/apk/debug`. You should see an `app-debug.apk` that is around 8MB in size.
 
 ### Reducing Output Size
 
@@ -72,12 +75,12 @@ def enableSeparateBuildPerCPUArchitecture = true
 def enableProguardInReleaseBuilds = true
 ```
 
-You’ll also have to remove the `ndk` section of `defaultConfig`:
+You’ll also have to remove the `ndk` section of `defaultConfig` to removing the [conflicting configuration in ndk abiFilters](https://stackoverflow.com/a/49802507) error:
 
 ```
-        ndk {
-            abiFilters "armeabi-v7a", "x86"
-        }
+ndk {
+    abiFilters "armeabi-v7a", "x86"
+}
 ```
 
 Now after re-running `react-native run-android` you should see two (much smaller - between 4MB and 5MB) APKs in the output directory.
@@ -98,7 +101,7 @@ One common set of plugins is [Airbnb’s configuration](https://github.com/airbn
 npm install -D eslint-config-airbnb@17.1.0 eslint-plugin-jsx-a11y@6.1.2 eslint-plugin-react@7.11.1 eslint-plugin-import@2.14.0
 ```
 
-Now put the following into `.eslintrc.js`:
+Now put the following into `.eslintrc.js` (you'll need to create this file):
 
 ```javascript
 module.exports = {
@@ -119,10 +122,10 @@ module.exports = {
 }
 ```
 
-Now you just need to add the plugins to your editor. For Sublime there’s [ESLint](https://packagecontrol.io/packages/ESLint) which gives you an output of errors (or issues) with `CTRL + ALT + e` (`Cmd + Option + e` on Mac). There also [one for VSCode](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint).
+Now you just need to add the plugins to your editor. For Sublime there’s [ESLint](https://packagecontrol.io/packages/ESLint) which gives you an output of errors (or issues) with **CTRL + ALT + e** (**Cmd + Option + e** on Mac). There also [one for VSCode](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint).
 
-<img src="/img/blog/prime-components/eslint.png" 
-     alt="ES Lint" width="548" class="center-image">
+{% img blog/react-native-play-store/eslint.png alt:"ESLint" width:"500" %}{: .center-image }
+
 
 A lot of these errors can be fixed automatically using the `eslint --fix` command which you can run from your editor with the [ESLint Fix](https://packagecontrol.io/packages/ESLint%20Fix) package.
 
@@ -214,17 +217,17 @@ To install it, run `npm install styled-components@4.1.1` from the root directory
 
 ## Custom Fonts
 
-To get a custom font like [Racing Sans One](https://fonts.google.com/specimen/Racing+Sans+One?selection.family=Racing+Sans+One|Roboto) into your application you first need to download the ttf and put it into `assets/fonts`. Then add the following to your `package.json`:
+To get a custom font like [Racing Sans One](https://fonts.google.com/specimen/Racing+Sans+One?selection.family=Racing+Sans+One|Roboto) into your application you first need to download the ttf and put it into `assets/fonts` (you will need to create this directory). Then add the following to your `package.json`:
 
 ```json
 "rnpm": {
   "assets": [
     "./assets/fonts/"
   ]
-},
+}
 ```
 
-Finally run `react-native link` from the command line. You should now see your font inside of `android/app/src/main/assets/font`.  You should be able to use it now. Create the `components` folder and put the following inside of `components/Heading.js`:
+Finally run `react-native link` from the command line. You should now see your font inside of `android/app/src/main/assets/fonts`.  You should be able to use it now. Create a `components` folder and put the following inside of `components/Header.js`:
 
 ```javascript
 import styled from 'styled-components/native';
@@ -239,9 +242,11 @@ export default styled.Text`
 `;
 ```
 
-If you import this into your `App.js` with `import Header from './components/Header';` and add `<Heading>Welcome</Heading>` above the `Text` nodes:
+Then, import this into your `App.js` and add `<Heading>Welcome</Heading>` above the `Text` nodes:
 
 ```jsx
+import Header from './components/Header';
+...
 export default class App extends Component<Props> {
   render() {
     return (
@@ -258,8 +263,8 @@ export default class App extends Component<Props> {
 
 And you should get a nicely formatted header:
 
-<img src="/img/blog/prime-components/custom-fonts.png" 
-     alt="Custom Fonts" width="300" class="center-image">
+{% img blog/react-native-play-store/custom-fonts.png alt:"Custom fonts" width:"400" %}{: .center-image }
+
 
 ## Fullscreen Apps
 
@@ -278,11 +283,6 @@ It can take a long time to decide on a final design, with layout, colors and fon
 Change `App.js` to the following:
 
 ```jsx
-/**
- * Prime Components app
- * https://github.com/kewp/prime-components
- */
-
 import React from 'react';
 import { Container, Header, Input, Keypad, ButtonRow } from './components';
 
@@ -345,7 +345,7 @@ export default Header = styled.Text`
 `;
 ```
 
-Also a styled text component, with large, centered fonts, a gold color and grey background. Make sure you **install the Chathura font** from Google Fonts as before!
+Also a styled text component, with large, centered fonts, a gold color and grey background. Make sure you **install the [Chathura font](https://fonts.google.com/?selection.family=Chathura)** from Google Fonts as before!
 
 `components/Input.js`:
 
@@ -363,14 +363,14 @@ export default Input = styled.Text`
 `;
 ```
 
-Similar to before except now with the Audiowide-Regular font (also available from Google Fonts).
+Similar to before except now with the Audiowide-Regular font (also [available from Google Fonts](https://fonts.google.com/?selection.family=Audiowide)).
 
 `components/Keypad.js`:
 
 ```jsx
 import styled from 'styled-components/native';
 
-export default Input = styled.View`
+export default Keypad = styled.View`
   flex: 6;
   background-color: rgb(29, 31, 33);
   padding-top: 10px;
@@ -402,7 +402,7 @@ export default ButtonRow = ({keys}) => (
 );
 ```
 
-Here things get complicated. You are importing a `Button` from the current directory (which you’ll create in a second), creating a component called `RowBox` which is not exported, and then `ButtonRow` is defined having a [React property](https://reactjs.org/docs/components-and-props.html) called `keys`.
+Here, things get complicated. You are importing a `Button` from the current directory (which you’ll create in a second), creating a component called `RowBox` which is not exported, and then `ButtonRow` is defined having a [React property](https://reactjs.org/docs/components-and-props.html) called `keys`.
 
 Then you are mapping each key to a button component. This is a clean way of looping through an array as with `for each` and using the value to set both the `text` and `key` attributes (you must set a key attribute to make the DOM object unique!). You’ll be using the text to render the button.
 
@@ -445,11 +445,13 @@ export default Button = ({text}) => (
 
 This is the last component. You start by creating a `ButtonBox` which just acts like a container over the whole button. It is using [TouchableHighlight](https://facebook.github.io/react-native/docs/touchablehighlight) which is a React Native component that will change color when touched. The styling is normal except for the underlay color (the color you see when touching) since this needs to be [hacked to work in Styled Components](https://github.com/styled-components/styled-components/issues/149).
 
-Next, you have `ButtonText` which is a text control. **Install Orbitron-Bold** from Google Fonts for this. The color is set using a boolean check (another great feature of Styled Components, full-CSS support). Essentially the color will be green if the text is “Go”, and orange otherwise. 
+Next, you have `ButtonText` which is a text control. **Install Orbitron-Bold** [from Google Fonts](https://fonts.google.com/?selection.family=Orbitron) for this. The color is set using a boolean check (another great feature of Styled Components, full-CSS support). Essentially the color will be green if the text is “Go”, and orange otherwise. 
 
 Next, define a function to handle button presses (empty for now), and then export the `Button` component that combines the two. Set the `text` attribute on `ButtonText` using the property set on `Button` so that Styled Components can see it when you set the styles.
 
 Once done, you should see the app render as you saw at the top of this article.
+
+
 
 ## Colors
 
@@ -467,7 +469,7 @@ For this, you need to understand about state in React.
 
 A great resource for this again is the [official React tutorials](https://reactjs.org/docs/lifting-state-up.html) (which apply just as well to React Native). We need a single source of truth for the current number (to be displayed) and the callback function that will modify it. It has to be a parent of both (the `Input` and the `Button`). Since this is part of the app you can put this into the `App` component in `App.js`.
 
-Start by modifying it to a React class (from the current functional definition) since [you need this to capture state](https://reactjs.org/docs/state-and-lifecycle.html).
+Start by modifying `App.js` and converting it  to a React class (from the current functional definition) since [you need this to capture state](https://reactjs.org/docs/state-and-lifecycle.html).
 
 ```jsx
 import React from 'react';
@@ -493,7 +495,7 @@ class App extends React.Component {
 export default App;
 ```
 
-`App` is now a [JavaScript ES6 class](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes), and there is now a `render()` method which returns the JSX.
+`App` is now a [JavaScript ES6 class](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes), and it has a `render()` method which returns the JSX.
 
 Reload the emulator/app (in the emulator you can use R+R) and it should still render as before.
 
@@ -506,15 +508,15 @@ constructor(props) {
 }
 ```
 
-You are implementing the [React constructor](https://reactjs.org/docs/react-component.html#constructor), calling the parent (which you always must) and then setting the state to a JSON object with one member: `number` (which we’ve initialized to our old value: 123456).
+You are overriding the [React constructor](https://reactjs.org/docs/react-component.html#constructor), calling the parent (which you always must) and then setting the state to a JSON object with one member: `number` (which we’ve initialized to our old value: 123456).
 
-Now add this above the `return()` in `App.js`:
+Now add this above the `return(...)` in `App.js`:
 
 ```javascript
 const { state } = this;
 ```
 
-This [destructures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) the state from `this` into a local variable. Change the `<input>` line to `<Input>{state.number}</Input>`. Now the input is being rendered from the state. Reload and you should see the same output (and change the state constructor to see it changing).
+This [destructures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) the state from `this` into a local variable. Change the `<Input>` line to `<Input>{state.number}</Input>`. Now the input is being rendered from the state. Reload and you should see the same output (and change the state constructor to see it changing).
 
 ### Modifying State
 
@@ -551,26 +553,26 @@ export default ButtonRow = ({func,keys}) => (
     {keys.map(key => (
       <Button func={func} text={key} key={key} />
     ))}
-</RowBox>
+  </RowBox>
 );
 ```
 
-Finally, change `Button` to take in this function and call it with the pressed button.
+Finally, change `Button` to take in this function and call it with the pressed button. You can also remove the previous button handler.
 
 ```jsx
 export default Button = ({func,text}) => (
   <ButtonBox onPress={() => func(text)}>
-    <ButtonText text={text}>{text}</ButtonText>
+	<ButtonText text={text}>{text}</ButtonText>
   </ButtonBox>
 );
 ```
 
-(You can also remove the previous button handler).
+
 
 Now when you press a button you should see an alert with what you pressed:
 
-<img src="/img/blog/prime-components/buttons.png" 
-     alt="Buttons" width="283" class="center-image">
+{% img blog/react-native-play-store/buttons.png alt:"Buttons" width:"400" %}{: .center-image }
+
 
 You now have a single function, defined at the __top__, which controls what buttons do.
 
@@ -598,9 +600,9 @@ press = (value) => {
 }
 ```
 
-First, this pulls out the value of the number from the state using [destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) (using our linter previously we’ll see it is [preferred](https://eslint.org/docs/rules/prefer-destructuring)). Then if the key is `Clear` divide the number by ten and floor it (i.e. remove the last digit) and then set the state. That should be enough to make the clear button work.
+First, this pulls out the value of the number from the state using [destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) (using your linter previously you’ll see it is [preferred](https://eslint.org/docs/rules/prefer-destructuring)). Then if the key is `Clear`, divide the number by ten, floor it (i.e. remove the last digit), and then set the state. That should be enough to make the clear button work.
 
-Now add the following to the if statement:
+Now add the following to the if statement in `press()`:
 
 ```javascript
 else if (value != 'Go' && number<1000000) {
@@ -609,7 +611,7 @@ else if (value != 'Go' && number<1000000) {
 }
 ```
 
-So if `Go` hasn’t been pressed and the value is less than one million (we have to stop somewhere - phones aren’t that fast), add the value to the back (interpreting it as a string instead of integer) and again, set the state. That should make every button work.
+So if `Go` hasn’t been pressed and the value is less than one million (you have to stop somewhere - phones aren’t that fast), add the value to the back (interpreting it as a string instead of integer) and again, set the state. That should make every button work.
 
 The only thing left to do is the `Go` button.
 
@@ -624,7 +626,15 @@ state = {
 };
 ```
 
-Now for the screen create `components/Processing.js`:
+Also add a check for `Go` in the **press** function:
+
+``` javascript
+else if (value === 'Go') {
+  this.setState({ processing: true });
+}
+```
+
+Then create `components/Processing.js`:
 
 ```jsx
 import React from 'react';
@@ -647,7 +657,20 @@ export default () => (
 );
 ```
 
-Add it to your `components/index.js`, import it at the top of your `App.js`, and use the state boolean to decide whether to render it or the keypad:
+Add it to your `components/index.js`:
+
+```js
+export { default as Processing } from './Processing';
+```
+
+Then import it at the top of your `App.js`:
+
+```js
+import { Container, Header, Input, Keypad, ButtonRow, Processing } from './components';
+```
+
+
+And use the `processing` boolean to decide whether to render it or the keypad:
 
 ```jsx
 {state.processing ? (
@@ -671,8 +694,7 @@ The simplest way to break a number down into prime factors is looping through al
 A clever algorithm is described [here](https://www.geeksforgeeks.org/print-all-prime-factors-of-a-given-number/). Start with 2 - keep dividing `num` by 2 and for each case add 2 to the list until it won’t divide anymore.
 
 ```javascript
-while (num%2 == 0)
-{
+while (num%2 == 0) {
   addFactor(2);
   num = num/2;
 }
@@ -681,10 +703,8 @@ while (num%2 == 0)
 Now `num` will be odd. Start the same process from 3 except only go until the square root of `num`, incrementing by 2 (only odd numbers):
 
 ```javascript
-for (int i = 3; i <= Math.floor(Math.sqrt(num)); i += 2)
-{
-  while (num%i == 0)
-  {
+for (int i = 3; i <= Math.floor(Math.sqrt(num)); i += 2) {
+  while (num%i == 0) {
     add_factor(i);
     num = num/i;
   }
@@ -700,6 +720,8 @@ The last step is to check if the number you have left is great than 1. If so, it
 ```javascript
 if (num > 1) { add_factor(num); } 
 ```
+
+You’ll be putting this all together shortly.
 
 Now that you have the code you need to display the results.
 
@@ -758,8 +780,8 @@ export default () => (
 
 So you have a `ProcessingBox`, a `Header` and an `Item` which are combined in the export. You should see the following when you click **Go**:
 
-<img src="/img/blog/prime-components/processing.png" 
-     alt="Processing" width="283" class="center-image">
+{% img blog/react-native-play-store/processing.png alt:"Processing" width:"400" %}{: .center-image }
+
 
 
 ## Pulling It All Together
@@ -787,7 +809,7 @@ export default ({ running, factors, press }) => (
 
 Here the control takes in three variables, which control which header is shown, the prime factors being displayed, and the function used to switch the parent state (the same function used when buttons are pressed), respectively.
 
-`FlatList` has been replaced with `List` which is just a styled component to control the size of the list rendering.
+`FlatList` has been replaced with `List` which is just a styled component to control the size of the list rendering. Add the following to `Processing.js`:
 
 ```jsx
 const List = styled.FlatList`
@@ -795,9 +817,9 @@ const List = styled.FlatList`
 `;
 ```
 
-There is also a `Button` which is your own control which you must import at the top with `import { Button } from '.';`. For this, set the function to be called on pressing to the press function passed into the control.
+There is also a `Button` which is your own control. Import it with `import { Button } from '.';`.
 
-Now move on to `App.js` and change the part of `render()` where processing starts to this:
+Now move on to `App.js` and change the `<Processing /> tag in `render()` to:
 
 ```jsx
 <Processing running={state.running} factors={state.factors} press={this.press} />
@@ -859,10 +881,10 @@ press = (value) => {
 
 Now when you run the app and press **Go** you should see a list of the prime factors, as well as a **Back** button which will take you back.
 
-<img src="/img/blog/prime-components/finished.png" 
-     alt="Finished" width="283" class="center-image">
+{% img blog/react-native-play-store/finished.png alt:"Finished" width:"400" %}{: .center-image }
 
-Editing the number and re-clicking **Go** should get a new list of factors. You’ve finished the app!
+
+Editing the number and re-clicking **Go** should get a new list of factors. Congrats, you’ve finished the app!
 
 ## Setting Name and Icon
 
@@ -874,9 +896,167 @@ To make things look good once deployed on the phone you need to set the name and
 </resources>
 ```
 
-For the icon, it’s best to open your project in Android Studio (use the `android` directory) and create a ‘drawable’ folder in `assets`. Then right-click and say **New -> Image Asset**. This will let you import your large icon and overwrite `ic_launcher` which is what is used for the launcher icon, generating all the versions you need for the Play Store. Re-deploy with `react-native run-android` and you should see a proper name and icon on your apps list.
+For the icon, it’s best to open your project in Android Studio (use the `android` directory) and create a ‘drawable’ directory in `assets`. Then right-click and say **New -> Image Asset**. This will let you import your large icon and overwrite `ic_launcher` which is what is used for the launcher icon, generating all the versions you need for the Play Store. Re-deploy with `react-native run-android` and you should see a proper name and icon on your apps list.
 
 If you get a bundling issue next time you run `react-native run-android` when running on Android there is a [Stack Overflow fix](https://stackoverflow.com/a/44476757) that works.
+
+## Add Authentication with AppAuth
+
+Authentication is not normally a requirement for a calculator-like app but it’s easy to do with Okta. First add a new `Login.js` component by copying `Button.js` and changing the font size to 20, the border radius and margin to zero, and the background color to something lighter like `rgb(49, 51, 53)`. 
+
+```js
+import React from 'react';
+import styled from 'styled-components/native';
+
+const ButtonBox = styled.TouchableHighlight.attrs({
+  underlayColor: '#193441',
+})`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(49, 51, 53);
+  border-radius: 0;
+  margin: 0;
+`;
+
+const ButtonText = styled.Text`
+  font-size: 20;
+  font-family: Orbitron-Bold;
+  color: orange;
+`;
+
+export default Login = ({func,text}) => (
+  <ButtonBox onPress={() => func(text)}>
+    <ButtonText text={text}>{text}</ButtonText>
+  </ButtonBox>
+);
+```
+
+Add it to `index.js` in the components directory, import it at the top of `App.js` and add `loggedin: false` to the `App` class state. Finally, below the `<Input>` control in render put a switch to determine what to print on the login button:
+
+```jsx
+    {state.loggedin ? (
+      <Login text="Logout" />
+    ) : (
+      <Login text="Login" />
+    )}
+```
+
+When you re-run the project you should see a new login button.
+
+
+
+Note: if you are not seeing any changes from your code reflected in the `react-native run-android` deploy it might be because you removed internet permissions in your `AndroidManifest.xml` which React Native uses to connect the app with your development machine. Simply replace it above the `application` directive:
+
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+```
+
+Next you need to [sign up for a free Okta developer account](https://developer.okta.com/signup/). Then login and navigate to **Applications > Add Application**. Select **Native** and click **Next**. Choose a name and click **Done**. Note your **Login redirect URI** and  the **Client ID** since you have to add them to your app.
+
+Now install [react-native-app-auth](https://github.com/FormidableLabs/react-native-app-auth) and link it.
+
+```bash
+react-native install react-native-app-auth@4.0.0
+react-native link react-native-app-auth
+```
+
+Now add the following to the `defaultConfig` section of the `android` config in `android/app/build.gradle`, using the base of your **Redirect URL**, e.g. `com.oktapreview.dev-628819`.
+
+```gradle
+defaultConfig {
+    applicationId "com.prime_components"
+    ...
+    manifestPlaceholders = [
+        appAuthRedirectScheme: "{redirectBase}"
+    ]
+}
+```
+
+At the top of your `App.js` import **Alert** from the React Native package and **authorize** and **revoke** from the App Auth package:
+
+```javascript
+import { Alert } from 'react-native';
+import { authorize, revoke } from 'react-native-app-auth';
+```
+
+Before you define your `App` class, add a `config` variable with the details of your Okta app:
+
+```javascript
+const config = {
+  issuer: 'https://{yourOktaDomain}/oauth2/default',
+  clientId: '{clientId}',
+  redirectUrl: '{redirectUrl}',
+  additionalParameters: {},
+  scopes: ['openid', 'profile', 'email', 'offline_access']
+};
+```
+
+You can find the value for `{yourOktaDomain}` on the Okta dashboard when you are logged in.
+
+Now add `accessToken: ‘’` to your state initialization and add the following two functions to your `App` class:
+
+```javascript
+  state = {
+    ...
+    accessToken: '',
+  };
+
+...
+
+authorize = async () => {
+  try {
+    const authState = await authorize(config);
+
+    this.setState({
+      loggedin: true,
+      accessToken: authState.accessToken
+    });
+  } catch (error) {
+    Alert.alert('Failed to log in', error.message);
+  }
+};
+
+revoke = async () => {
+  try {
+    const { state } = this;
+    await revoke(config, {
+      tokenToRevoke: state.accessToken,
+      sendClientId: true
+    });
+    this.setState({
+      accessToken: '',
+      loggedin: false
+    });
+  } catch (error) {
+    Alert.alert('Failed to revoke token', error.message);
+  }
+};
+```
+
+Finally add `func={this.authorize}` as an attribute on your login button and `func={this.revoke}` to your logout button.
+
+```jsx
+{state.loggedin ? (
+  <Login text="Logout" func={this.revoke}/>
+) : (
+  <Login text="Login" func={this.authorize}/>
+)}
+```
+
+Now when you re-run and click `Login` you should be redirected to an Okta login screen. Using the login details of a user attached to your Okta application should redirect you back to your app, now showing a logout button. When you click on logout, and then login again, you'll notice you're not prompted to log in again. To fix this, you can add a login prompt to `additionalParameters`.
+
+```js
+const config = {
+  ...
+  additionalParameters: {prompt: 'login'},
+  scopes: ['openid', 'profile', 'email', 'offline_access']
+};
+```
+
+This ensures the user is prompted for their password every time.
+
+
 
 ## Getting Onto the Play Store
 
@@ -886,12 +1066,13 @@ The last step is publishing what you have done on the play store. The standard d
 
 It not easy making something unique and striking as well as relevant to your app. One route is to buy them. Another is to make it from scratch using something like [Inkscape](https://inkscape.org/). Yet another is using a simple app like [Iconic](https://play.google.com/store/apps/details?id=xeus.iconic) (a mobile app on the Play Store) which links into free icon repositories and lets you edit them. With it you can create graphics like the following:
 
-<img src="/img/blog/prime-components/icon.png" 
-     alt="App Icon" width="100" class="center-image">
+{% img blog/react-native-play-store/app-icon.png alt:"App icon" width:"100" %}{: .center-image }
+
 
 **NOTE:** You need to pay around $5 to get the shadows feature.
 
 ### Creating the Application
+
 
 Open up the Play Console and click **Create Application**. Select the default language, enter a name and click **Create**. You will now see a lot you need to fill out in the store listing, including a least:
 
@@ -909,8 +1090,8 @@ For the feature graphic, you need something that is exactly 1024x500. You can ge
 
 Once done click **Save Draft** and you should see a large green tick on the side panel next to _Store listing_.
 
-<img src="/img/blog/prime-components/store-listing.png" 
-     alt="Store Listing" width="291" class="center-image">
+{% img blog/react-native-play-store/store-listing.png alt:”Store listing" width:"400" %}{: .center-image }
+
 
 This shows you have completed the listing details and still need to fill out the content rating form as well as pricing and distribution. Although before you can do that you need to put out an app release.
 
@@ -928,8 +1109,8 @@ You’ll see a message about using **App signing by Google Play**. This is a new
 * Choose passwords for the keystore and key
 * Enter the certificate information (note: this won’t be display in the app, just the certificate)
 
-<img src="/img/blog/prime-components/keystore.png" 
-     alt="Keystore" width="500" class="center-image">
+{% img blog/react-native-play-store/keystore.png alt:”Keystore" width:"500" %}{: .center-image }
+
 
 
 Click `OK` and click **Next**. Select both the V1 and the [V2 signature version](https://developer.android.com/about/versions/nougat/android-7.0#apk_signature_v2) and click **Finish**. A build should start after which you should see both `app-x86-release.apk` and `app-armeabi-v7a-release.apk` inside of `android/app/release` in your project (one for each device architecture).
@@ -976,3 +1157,4 @@ If you’re interested to know more about app design, React Native or secure use
 [Build a React Native App and Authentication with OAuth 2.0](/blog/2018/03/16/build-react-native-authentication-oauth-2)
 
 Like what you learned today? Follow us [on Twitter](https://twitter.com/oktadev), like us [on Facebook](https://www.facebook.com/oktadevelopers/), check us out [on LinkedIn](https://www.linkedin.com/company/oktadev/), and [subscribe to our YouTube channel](https://www.youtube.com/channel/UC5AMiWqFVFxF1q9Ya1FuZ_Q). 
+
