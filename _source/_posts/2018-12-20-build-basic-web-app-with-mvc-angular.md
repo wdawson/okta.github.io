@@ -65,7 +65,7 @@ ng new Angular --skip-tests --style=scss
 
 This will create a new Angular project under Angular folder within your MVC project. The `--skip-tests` argument will make sure that CLI skips creating spec files.
 
-You should include the Angular folder in your MVC project. To do that, click on the `Show All Files` button in your Solution Explorer. You can now navigate to `Angular ` folder and include all folders and files except for the `node_modules`. After you do that you should have a folder structure like on the following picture:
+You should include the Angular folder in your MVC project. To do that, click on the **Show All Files** button in your Solution Explorer. You can now navigate to **Angular** folder and include all folders and files except for `node_modules`. After you do that you should have a folder structure like on the following picture:
 
 {% img blog/mvc-angular/vs-file-structure-angular.png alt:"visual studio file structure angular" width:"400" %}{: .center-image }
 
