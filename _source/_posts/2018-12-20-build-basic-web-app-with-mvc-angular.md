@@ -663,7 +663,7 @@ export class AppComponent implements OnInit  {
 
 The code above will subscribe will assign the data that `ApiService` fetches from server to the `joggingRecords` property. 
 
-You also need to update the template for this component by updating `app.component.html` file:
+You also need to update this component's template (`app.component.html`):
 
 {% raw %}
 ```html
