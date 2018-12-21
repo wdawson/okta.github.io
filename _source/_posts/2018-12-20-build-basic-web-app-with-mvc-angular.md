@@ -203,7 +203,7 @@ Now you need to create a new application by browsing to the Applications tab and
 
 On the settings page, enter `OktaMvcAngular` as your name value and select Implicit(Hybrid).
 
-{% img blog/mvc-angular/okta-app-settings.png alt:"okta application settings" width:"800" %}{: .center-image }
+{% img blog/mvc-angular/okta-app-settings.png alt:"okta application settings" width:"700" %}{: .center-image }
 
 Now that your application has been created copy down the Client ID and Client secret values on the following page, you'll need them soon (of course, yours will be different).
 
