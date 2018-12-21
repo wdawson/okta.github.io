@@ -81,7 +81,7 @@ Install-Package EntityFramework -Version 6.2.0
 ```
 
 ### Add the Connection String
-You can get started by adding a connection string to your `Web.config` file. Make sure to add it inside of the `<configuration>` section, and after `<configSections></configSections>`
+You can get started by adding a connection string to your `Web.config` file. Make sure to add it inside of the `<configuration>` section, and after `<configSections></configSections>`:
 
 ```xml
 <connectionStrings>
