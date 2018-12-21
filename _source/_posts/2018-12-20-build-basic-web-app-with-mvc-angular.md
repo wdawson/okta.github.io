@@ -488,7 +488,7 @@ export class AppModule { }
 
 After that is done, delete the `<router-outlet></router-outlet>` code from `app.component.html`.
 
-You also need to make sure that the Angular CLI outputs files to the appropriate folder. Inside of your Angular folder open `angular.json file and change the `outputPath` setting:
+You also need to make sure that the Angular CLI outputs files to the appropriate folder. Inside of your Angular folder open `angular.json` file and change the `outputPath` setting:
 
 ```json
 "outputPath": "../Bundles/AngularOutput",
