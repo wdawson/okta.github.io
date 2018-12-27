@@ -12,7 +12,7 @@ image: blog/featured/okta-android-skew.jpg
 
 As mobile app usage is expected to [continue to grow](https://www.statista.com/statistics/271644/worldwide-free-and-paid-mobile-app-store-downloads/) now is as good a time as any to get into the market. Android is by far the [most popular OS worldwide](http://gs.statcounter.com/os-market-share/mobile/worldwide) (though [behind in iOS in America](http://gs.statcounter.com/os-market-share/mobile/worldwide)), and the dominant way to get Android apps to phone users is the Google Play Store.
 
-You’ll go through choosing what app to make, how to pick a design, as well as setting up your environment (React Native), tips for getting the most out of your editor, building the app with good practices, and publishing it on Google Play.
+You'll go through choosing what app to make, how to pick a design, as well as setting up your environment (React Native), tips for getting the most out of your editor, building the app with good practices, and publishing it on Google Play.
 
 This is what the eventual app will look like (note: this mockup was made with [MockUPhone](https://mockuphone.com/):
 
@@ -20,21 +20,21 @@ This is what the eventual app will look like (note: this mockup was made with [M
 
 ## Choosing an App to Make
 
-The first choice when publishing an app is deciding what to put on the app store. A good place to look is online lists of projects like Karan Goel’s [Mega Project List](https://github.com/karan/Projects#mega-project-list). Here you’ll make the **Prime Factorization** problem which takes a number and returns its prime factors. Not sure what you might use this for, but somebody might want to download it!
+The first choice when publishing an app is deciding what to put on the app store. A good place to look is online lists of projects like Karan Goel's [Mega Project List](https://github.com/karan/Projects#mega-project-list). Here you'll make the **Prime Factorization** problem which takes a number and returns its prime factors. Not sure what you might use this for, but somebody might want to download it!
 
 ## Interface Theming
 
-The next choice is how the app looks. This includes the controls like dropdowns and buttons, as well as the layout on the screen. One place to start is out-of-box solutions for React Native like [NativeBase](https://nativebase.io/), [Shoutem](https://shoutem.github.io/ui/) and [React Native Elements](https://react-native-training.github.io/react-native-elements/). These are quite heavy, all-or-nothing solutions. Since we are using a React-based technology another solution would be to use something based on [Styled Components](https://www.styled-components.com/) which is a popular, light-weight approach to theming React applications (and it also [works great on React Native](https://www.styled-components.com/docs/basics#react-native)). There’s an [entire page](https://github.com/styled-components/awesome-styled-components#built-with-styled-components) listing components and component-systems based on Styled Components. In this tutorial, you’ll be using Styled Components to build up components yourself.
+The next choice is how the app looks. This includes the controls like dropdowns and buttons, as well as the layout on the screen. One place to start is out-of-box solutions for React Native like [NativeBase](https://nativebase.io/), [Shoutem](https://shoutem.github.io/ui/) and [React Native Elements](https://react-native-training.github.io/react-native-elements/). These are quite heavy, all-or-nothing solutions. Since we are using a React-based technology another solution would be to use something based on [Styled Components](https://www.styled-components.com/) which is a popular, light-weight approach to theming React applications (and it also [works great on React Native](https://www.styled-components.com/docs/basics#react-native)). There's an [entire page](https://github.com/styled-components/awesome-styled-components#built-with-styled-components) listing components and component-systems based on Styled Components. In this tutorial, you'll be using Styled Components to build up components yourself.
 
 ## Setting up the Production Environment
 
 ### Install Android Studio
 
-In order to build the eventual APK (the format of the app you’ll upload to the store), you need to [install Android Studio](https://developer.android.com/studio/). Once done make sure you have SDK version 27 as this is what React Native uses.
+In order to build the eventual APK (the format of the app you'll upload to the store), you need to [install Android Studio](https://developer.android.com/studio/). Once done make sure you have SDK version 27 as this is what React Native uses.
 
 ### Install the JDK
 
-You also need to make sure you have  a recent Java Development Kit installed (like version 8). The installation differs depending on your platform. You can use [Oracle’s Java SDK](https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html) or use [SDKMAN](https://sdkman.io/) to install other options, like OpenJDK.
+You also need to make sure you have a recent Java Development Kit installed (like version 8). The installation differs depending on your platform. You can use [Oracle's Java SDK](https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html) or use [SDKMAN](https://sdkman.io/) to install other options, like OpenJDK.
 
 ### Initialize the Skeleton
 
@@ -61,18 +61,18 @@ react-native run-android
 
 {% img blog/react-native-play-store/welcome.png alt:"Welcome to React Native" width:"400" %}{: .center-image }
 
-To see the output you’ll upload to the Play Store, go to `android/app/build/outputs/apk/debug`. You should see an `app-debug.apk` that is around 8MB in size.
+To see the output you'll upload to the Play Store, go to `android/app/build/outputs/apk/debug`. You should see an `app-debug.apk` that is around 8MB in size.
 
 ### Reducing Output Size
 
-You want to make sure your users have the smallest download possible. It’s already quite small (around 8MB)  because you’re using the command line (something like Expo produces 25MB for even basic apps) but we can [reduce it further]https://medium.com/@aswinmohanme/how-i-reduced-the-size-of-my-react-native-app-by-86-27be72bba640). Go to `android/app/build.gradle` and change the following variables to be `true`:
+You want to make sure your users have the smallest download possible. It's already quite small (around 8MB)  because you're using the command line (something like Expo produces 25MB for even basic apps) but we can [reduce it further]https://medium.com/@aswinmohanme/how-i-reduced-the-size-of-my-react-native-app-by-86-27be72bba640). Go to `android/app/build.gradle` and change the following variables to be `true`:
 
 ```
 def enableSeparateBuildPerCPUArchitecture = true
 def enableProguardInReleaseBuilds = true
 ```
 
-You’ll also have to remove the `ndk` section of `defaultConfig` to removing the [conflicting configuration in ndk abiFilters](https://stackoverflow.com/a/49802507) error:
+You'll also have to remove the `ndk` section of `defaultConfig` to removing the [conflicting configuration in ndk abiFilters](https://stackoverflow.com/a/49802507) error:
 
 ```
 ndk {
@@ -84,7 +84,7 @@ Now after re-running `react-native run-android` you should see two (much smaller
 
 ### Linting
 
-Writing any JavaScript (like React) requires tools to ensure you haven’t made any obvious mistakes which can be a big help for beginners. The most common of these is [ESLint](https://eslint.org/) which can be plugged right into your project and editor.
+Writing any JavaScript (like React) requires tools to ensure you haven't made any obvious mistakes which can be a big help for beginners. The most common of these is [ESLint](https://eslint.org/) which can be plugged right into your project and editor.
 
 First, add the linter using NPM:
 
@@ -92,7 +92,7 @@ First, add the linter using NPM:
 npm install -D eslint@5.9.0 babel-eslint@10.0.1
 ```
 
-One common set of plugins is [Airbnb’s configuration](https://github.com/airbnb/javascript) so add those too:
+One common set of plugins is [Airbnb's configuration](https://github.com/airbnb/javascript) so add those too:
 
 ```bash
 npm install -D eslint-config-airbnb@17.1.0 eslint-plugin-jsx-a11y@6.1.2 eslint-plugin-react@7.11.1 eslint-plugin-import@2.14.0
@@ -119,7 +119,7 @@ module.exports = {
 }
 ```
 
-Now you just need to add the plugins to your editor. For Sublime there’s [ESLint](https://packagecontrol.io/packages/ESLint) which gives you an output of errors (or issues) with **CTRL + ALT + e** (**Cmd + Option + e** on Mac). There also [one for VSCode](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint).
+Now you just need to add the plugins to your editor. For Sublime there's [ESLint](https://packagecontrol.io/packages/ESLint) which gives you an output of errors (or issues) with **CTRL + ALT + e** (**Cmd + Option + e** on Mac). There also [one for VSCode](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint).
 
 {% img blog/react-native-play-store/eslint.png alt:"ESLint" width:"500" %}{: .center-image }
 
@@ -127,7 +127,7 @@ A lot of these errors can be fixed automatically using the `eslint --fix` comman
 
 ## Getting started with React
 
-If you’re just starting with React there is a lot to learn. The best place to start is the [official docs](https://reactjs.org/docs/hello-world.html) which give a great introduction. Make sure you go through all 12 steps, even if only superficially.
+If you're just starting with React there is a lot to learn. The best place to start is the [official docs](https://reactjs.org/docs/hello-world.html) which give a great introduction. Make sure you go through all 12 steps, even if only superficially.
 
 Once you have the basics down there is a [lot](https://medium.com/leanjs/introduction-to-react-3000e9cbcd26) [more](https://reactjs.org/docs/thinking-in-react.html) you [should](https://www.codementor.io/radubrehar/thinking-in-react-8duata34n) [read](https://camjackson.net/post/9-things-every-reactjs-beginner-should-know)..
 
@@ -206,7 +206,7 @@ export default class App extends Component<Props> {
 }
 ```
 
-It’s both cleaner and more portable (CSS names don’t clash, etc.).
+It's both cleaner and more portable (CSS names don't clash, etc.).
 
 To install it, run `npm install styled-components@4.1.1` from the root directory.
 
@@ -272,7 +272,7 @@ Now when you re-run you should see the navigation bar is gone.
 
 ## Creating the App Components
 
-It can take a long time to decide on a final design, with layout, colors and fonts. This is often an iterative process. Here you’ll go through how to build up the final result you saw at the start - which was inspired by [related online tutorials](https://kylewbanks.com/blog/react-native-tutorial-part-2-designing-a-calculator) and [styling examples](https://moarwick.github.io/react-super-styled/) - but remember that it takes time to get to something you like.
+It can take a long time to decide on a final design, with layout, colors and fonts. This is often an iterative process. Here you'll go through how to build up the final result you saw at the start - which was inspired by [related online tutorials](https://kylewbanks.com/blog/react-native-tutorial-part-2-designing-a-calculator) and [styling examples](https://moarwick.github.io/react-super-styled/) - but remember that it takes time to get to something you like.
 
 Change `App.js` to the following:
 
@@ -310,7 +310,7 @@ export { default as ButtonRow } from './ButtonRow';
 ```
 
 This is just a convenience module that allows for the importing as in `App.js`, i.e. `
-import { Container, Header, Input, Keypad, ButtonRow } from './components';`. Otherwise you’d have to import each component on a separate line.
+import { Container, Header, Input, Keypad, ButtonRow } from './components';`. Otherwise you'd have to import each component on a separate line.
 
 Put this into `components/Container.js`: (Note: you must use capital letters for your components in React Native!)
 
@@ -396,9 +396,9 @@ export default ButtonRow = ({keys}) => (
 );
 ```
 
-Here, things get complicated. You are importing a `Button` from the current directory (which you’ll create in a second), creating a component called `RowBox` which is not exported, and then `ButtonRow` is defined having a [React property](https://reactjs.org/docs/components-and-props.html) called `keys`.
+Here, things get complicated. You are importing a `Button` from the current directory (which you'll create in a second), creating a component called `RowBox` which is not exported, and then `ButtonRow` is defined having a [React property](https://reactjs.org/docs/components-and-props.html) called `keys`.
 
-Then you are mapping each key to a button component. This is a clean way of looping through an array as with `for each` and using the value to set both the `text` and `key` attributes (you must set a key attribute to make the DOM object unique!). You’ll be using the text to render the button.
+Then you are mapping each key to a button component. This is a clean way of looping through an array as with `for each` and using the value to set both the `text` and `key` attributes (you must set a key attribute to make the DOM object unique!). You'll be using the text to render the button.
 
 `components/Button.js`:
 
@@ -447,9 +447,9 @@ Once done, you should see the app render as you saw at the top of this article.
 
 ## Colors
 
-I found once getting colors right on the emulator I put it onto my phone and things just looked wrong. Turns out this is because [Android Oreo fixed color management](https://www.androidcentral.com/everything-you-need-know-about-android-color-management) to ensure things looked the same across devices. If you’re having similar issues, see if you are using Android 7 or before.
+I found once getting colors right on the emulator I put it onto my phone and things just looked wrong. Turns out this is because [Android Oreo fixed color management](https://www.androidcentral.com/everything-you-need-know-about-android-color-management) to ensure things looked the same across devices. If you're having similar issues, see if you are using Android 7 or before.
 
-You could restrict your users to Android 8 or above, but right now that’s only [about 20% of Android users](https://developer.android.com/about/dashboards/) so probably best just to put a message somewhere that things look a bit better on later versions.
+You could restrict your users to Android 8 or above, but right now that's only [about 20% of Android users](https://developer.android.com/about/dashboards/) so probably best just to put a message somewhere that things look a bit better on later versions.
 
 ## Writing up the Buttons
 
@@ -500,7 +500,7 @@ constructor(props) {
 }
 ```
 
-You are overriding the [React constructor](https://reactjs.org/docs/react-component.html#constructor), calling the parent (which you always must) and then setting the state to a JSON object with one member: `number` (which we’ve initialized to our old value: 123456).
+You are overriding the [React constructor](https://reactjs.org/docs/react-component.html#constructor), calling the parent (which you always must) and then setting the state to a JSON object with one member: `number` (which we've initialized to our old value: 123456).
 
 Now add this above the `return(...)` in `App.js`:
 
@@ -589,7 +589,7 @@ press = (value) => {
 }
 ```
 
-First, this pulls out the value of the number from the state using [destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) (using your linter previously you’ll see it is [preferred](https://eslint.org/docs/rules/prefer-destructuring)). Then if the key is `Clear`, divide the number by ten, floor it (i.e. remove the last digit), and then set the state. That should be enough to make the clear button work.
+First, this pulls out the value of the number from the state using [destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) (using your linter previously you'll see it is [preferred](https://eslint.org/docs/rules/prefer-destructuring)). Then if the key is `Clear`, divide the number by ten, floor it (i.e. remove the last digit), and then set the state. That should be enough to make the clear button work.
 
 Now add the following to the if statement in `press()`:
 
@@ -600,7 +600,7 @@ else if (value != 'Go' && number<1000000) {
 }
 ```
 
-So if `Go` hasn’t been pressed and the value is less than one million (you have to stop somewhere - phones aren’t that fast), add the value to the back (interpreting it as a string instead of integer) and again, set the state. That should make every button work.
+So if `Go` hasn't been pressed and the value is less than one million (you have to stop somewhere - phones aren't that fast), add the value to the back (interpreting it as a string instead of integer) and again, set the state. That should make every button work.
 
 The only thing left to do is the `Go` button.
 
@@ -677,9 +677,9 @@ This checks if `state.processing` is true and if so, show the processing. Otherw
 
 ## Calculating Prime Factors
 
-The simplest way to break a number down into prime factors is looping through all numbers from 2 to `num/2` (since anything greater than `num/2` won’t be a factor) and check if it divides. However, what about number 4? It is not prime. So we should also check if each factor is prime.
+The simplest way to break a number down into prime factors is looping through all numbers from 2 to `num/2` (since anything greater than `num/2` won't be a factor) and check if it divides. However, what about number 4? It is not prime. So we should also check if each factor is prime.
 
-A clever algorithm is described [here](https://www.geeksforgeeks.org/print-all-prime-factors-of-a-given-number/). Start with 2 - keep dividing `num` by 2 and for each case add 2 to the list until it won’t divide anymore.
+A clever algorithm is described [here](https://www.geeksforgeeks.org/print-all-prime-factors-of-a-given-number/). Start with 2 - keep dividing `num` by 2 and for each case add 2 to the list until it won't divide anymore.
 
 ```javascript
 while (num%2 == 0) {
@@ -709,7 +709,7 @@ The last step is to check if the number you have left is great than 1. If so, it
 if (num > 1) { add_factor(num); } 
 ```
 
-You’ll be putting this all together shortly.
+You'll be putting this all together shortly.
 
 Now that you have the code you need to display the results.
 
@@ -811,7 +811,7 @@ Now move on to `App.js` and change the `<Processing /> tag in `render()` to:
 <Processing running={state.running} factors={state.factors} press={this.press} />
 ```
 
-So you’re passing the three parameters just discussed, the first two from the state. Now change the state property to include these new values:
+So you're passing the three parameters just discussed, the first two from the state. Now change the state property to include these new values:
 
 ```javascript
 state = {
@@ -869,7 +869,7 @@ Now when you run the app and press **Go** you should see a list of the prime fac
 
 {% img blog/react-native-play-store/finished.png alt:"Finished" width:"400" %}{: .center-image }
 
-Editing the number and re-clicking **Go** should get a new list of factors. Congrats, you’ve finished the app!
+Editing the number and re-clicking **Go** should get a new list of factors. Congrats, you've finished the app!
 
 ## Setting Name and Icon
 
@@ -881,13 +881,13 @@ To make things look good once deployed on the phone you need to set the name and
 </resources>
 ```
 
-For the icon, it’s best to open your project in Android Studio (use the `android` directory) and create a ‘drawable’ directory in `assets`. Then right-click and say **New -> Image Asset**. This will let you import your large icon and overwrite `ic_launcher` which is what is used for the launcher icon, generating all the versions you need for the Play Store. Re-deploy with `react-native run-android` and you should see a proper name and icon on your apps list.
+For the icon, it's best to open your project in Android Studio (use the `android` directory) and create a ‘drawable' directory in `assets`. Then right-click and say **New -> Image Asset**. This will let you import your large icon and overwrite `ic_launcher` which is what is used for the launcher icon, generating all the versions you need for the Play Store. Re-deploy with `react-native run-android` and you should see a proper name and icon on your apps list.
 
 If you get a bundling issue next time you run `react-native run-android` when running on Android there is a [Stack Overflow fix](https://stackoverflow.com/a/44476757) that works.
 
 ## Add Authentication with AppAuth
 
-Authentication is not normally a requirement for a calculator-like app but it’s easy to do with Okta. First add a new `Login.js` component by copying `Button.js` and changing the font size to 20, the border radius and margin to zero, and the background color to something lighter like `rgb(49, 51, 53)`. 
+Authentication is not normally a requirement for a calculator-like app but it's easy to do with Okta. First add a new `Login.js` component by copying `Button.js` and changing the font size to 20, the border radius and margin to zero, and the background color to something lighter like `rgb(49, 51, 53)`. 
 
 ```jsx
 import React from 'react';
@@ -976,7 +976,7 @@ const config = {
 
 You can find the value for `{yourOktaDomain}` on the Okta dashboard when you are logged in.
 
-Now add `accessToken: ‘’` to your state initialization and add the following two functions to your `App` class:
+Now add `accessToken: ‘'` to your state initialization and add the following two functions to your `App` class:
 
 ```javascript
 state = {
@@ -1076,7 +1076,7 @@ This shows you have completed the listing details and still need to fill out the
 
 Click on **App release** in the sidebar. You should see a list of __tracks__ for various testing phases. Click on `MANAGE` in the production track. Then click `CREATE RELEASE`.
 
-You’ll see a message about using **App signing by Google Play**. This is a new feature which puts the managing of keys into Google’s hands. The reason you’d want this is simple: if you manage your own keys and you lose them you will no longer be able to release updates for your app. In fact, you’d have to create a new one under a new name! However, note that this is an option. Here you’ll be using it. For that, you will need to [generate an upload key](https://developer.android.com/studio/publish/app-signing#generate-key).
+You'll see a message about using **App signing by Google Play**. This is a new feature which puts the managing of keys into Google's hands. The reason you'd want this is simple: if you manage your own keys and you lose them you will no longer be able to release updates for your app. In fact, you'd have to create a new one under a new name! However, note that this is an option. Here you'll be using it. For that, you will need to [generate an upload key](https://developer.android.com/studio/publish/app-signing#generate-key).
 
 * Open your app in Android Studio by browsing to the `android` folder of your React Native project
 * Go to **Build > Generate signed bundle / APK**
@@ -1084,7 +1084,7 @@ You’ll see a message about using **App signing by Google Play**. This is a new
 * Under __Key store path__ click **Create new**
 * Choose a path like `/home/karl/keystores/android.jks`
 * Choose passwords for the keystore and key
-* Enter the certificate information (note: this won’t be display in the app, just the certificate)
+* Enter the certificate information (note: this won't be display in the app, just the certificate)
 
 {% img blog/react-native-play-store/keystore.png alt:"Keystore" width:"500" %}{: .center-image }
 
@@ -1098,7 +1098,7 @@ If you try upload these apps now you will get an error saying "Your app is using
 <uses-permission tools:node="remove" android:name="android.permission.READ_EXTERNAL_STORAGE" />
 ```
 
-You can also remove the alert window and internet `uses-permission` since we’re not using them. Re-build and re-upload. Put in some release notes and click `SAVE`.
+You can also remove the alert window and internet `uses-permission` since we're not using them. Re-build and re-upload. Put in some release notes and click `SAVE`.
 
 ### Content Rating
 
@@ -1124,7 +1124,7 @@ Go to **App release** and click `EDIT RELEASE`. Scroll to the bottom and click `
 
 You have walked through choosing, designing and developing an Android app using React Native, as well as publishing it to the Play Store. I hope you found this tutorial enlightening. Go and make something useful and publish it!
 
-If you’re interested to know more about app design, React Native or secure user management with Okta, check out the following resources:
+If you're interested to know more about app design, React Native or secure user management with Okta, check out the following resources:
 
 * [Create a Basic Android App without an IDE](/blog/2018/08/10/basic-android-without-an-ide)
 * [Getting Started with React Native](https://facebook.github.io/react-native/docs/getting-started.html)
