@@ -94,7 +94,7 @@ public static class Configuration
 
     public const string LoginRedirectUri = "{yourRedirectUri}";
 
-    public const string OrgUrl = "https://{yourOktaDomain}.com";
+    public const string OrgUrl = "https://{yourOktaDomain}";
 }
 ```
 
