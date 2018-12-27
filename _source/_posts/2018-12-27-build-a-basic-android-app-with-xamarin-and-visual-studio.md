@@ -517,7 +517,7 @@ If you've followed along with all these steps you now have a basic Android app b
 To see the code from this post in full head on over to [our GitHub page](https://github.com/jonathan-ray/Okta.Tutorial.Xamarin.Android).
 
 If this tutorial has whetted your appetite for Xamarin development and you'd like to learn more, then I'd strongly suggest you have a look at these other great articles:
-* [Add Identity Management to Your Android App](https://developer.okta.com/code/android)
+* [Add Identity Management to Your Android App](/code/android/)
 * [Add Authentication to Your Xamarin.Forms App with OpenID Connect](/blog/2018/05/01/add-authentication-xamarin-openid-connect)
 * [Build an App for iOS and Android with Xamarin](/blog/2018/01/10/build-app-for-ios-android-with-xamarin)
 
