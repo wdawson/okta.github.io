@@ -18,7 +18,7 @@ Xamarin has two main flavors: Xamarin platform (Xamarin.iOS and Xamarin.Android)
 In this tutorial, I'll be looking more closely at the Xamarin platform and the Android operating system toolset known as Xamarin.Android. The overall aim is to enable you to create a simple native Android app with basic user authentication included.
 
 ## Set Up Visual Studio and Your Environment
-To follow along you'll need a copy of [Visual Studio](https://visualstudio.microsoft.com/downloads/), plus the 'Mobile development with .NET' workload. You can either enable this feature from first installation of Visual Studio or access it from the 'Tools -> Get Tools and Features…' menu item:
+To follow along you'll need a copy of [Visual Studio](https://visualstudio.microsoft.com/downloads/), plus the 'Mobile development with .NET' workload. You can either enable this feature from first installation of Visual Studio or access it from the 'Tools -> Get Tools and Features...' menu item:
 
 {% img blog/xamarin-android-app/visual-studio-installer.png alt:"Visual Studio Installer" width:"800" %}{: .center-image }
 
@@ -341,7 +341,7 @@ With this code you've created a new option with a title to be defined in the str
 <string name="welcome_message_format">Hi, %1$s!</string>
 ```
 
-Not only have I declared a string for the 'Sign In' button here, but I've also added above a string for a welcome message to the user once they have signed in. The equivalent to the C# code of `this string would be `“Hi, {0}!”`, where the placeholder is of type string.
+Not only have I declared a string for the 'Sign In' button here, but I've also added above a string for a welcome message to the user once they have signed in. The equivalent to the C# code of `this string would be `"Hi, {0}!"`, where the placeholder is of type string.
 
 Note with all updates to these Resources-based files, the Resource.designer.cs class will automatically be regenerated with new IDs for each object you've created, that can be referenced within your code. If this isn't working for a particular file then select it in Solution Explorer and look at the Properties window. Make sure the `CustomTool` property is set to the value `MSBuild:UpdateGeneratedFiles`, as this is likely missing and preventing the designer file from recognising it as a resource.
 
@@ -433,7 +433,7 @@ private async void OnSignInAttempted()
 
 When the user is authenticated you should redirect them to the next page of your experience. If you recall earlier each page is represented by an Activity, and so you need to create a new one now. 
 
-To start, within the 'Resources -> layout' folder you'll need to create the new activity layout file “activity_dashboard.axml”. The easiest way to do this is by going to the New Item… option in the context menu and selecting the 'Android Layout' template. Within your new layout file add a simple TextView component to display text like this:
+To start, within the 'Resources -> layout' folder you'll need to create the new activity layout file "activity_dashboard.axml". The easiest way to do this is by going to the New Item... option in the context menu and selecting the 'Android Layout' template. Within your new layout file add a simple TextView component to display text like this:
 
 ```xml
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -452,7 +452,7 @@ To start, within the 'Resources -> layout' folder you'll need to create the new 
 </LinearLayout>
 ```
 
-In this snippet you have a `TextView` component with a referenceable ID that's centered in the middle of the page, of which will display a welcome message. Next create a corresponding activity class 'DashboardActivity' by means of the 'New Item…' option in the context menu from the project in the solution explorer and selecting the 'Activity' template. To link this class to its layout file, you need to call the SetContentView function in the generated `OnCreate()` method (under the inherited base method invocation):
+In this snippet you have a `TextView` component with a referenceable ID that's centered in the middle of the page, of which will display a welcome message. Next create a corresponding activity class 'DashboardActivity' by means of the 'New Item...' option in the context menu from the project in the solution explorer and selecting the 'Activity' template. To link this class to its layout file, you need to call the SetContentView function in the generated `OnCreate()` method (under the inherited base method invocation):
 
 ```cs
 SetContentView(Resource.Layout.activity_dashboard);
