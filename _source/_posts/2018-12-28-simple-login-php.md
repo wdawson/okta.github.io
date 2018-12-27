@@ -968,4 +968,7 @@ If you would like to dig deeper into the topics covered in this article, the fol
 
 * [OAuth 2.0 and OpenID Connect](https://developer.okta.com/authentication-guide/auth-overview/)
 * [Okta Users API](https://developer.okta.com/docs/api/resources/users)
-* [Get Started with PHP + Okta](https://developer.okta.com/code/php/)
+* [Build a Basic CRUD App with Laravel and React](/blog/2018/12/06/crud-app-laravel-react)
+* [Wordpress Authentication with Okta](/blog/2018/10/30/wordpress-authentication-with-okta)
+
+As always if you have any questions, comments, or concerns about this post feel free to leave a comment below. For other great content from the Okta Dev Team, follow us on Twitter [@OktaDev](https://twitter.com/oktadev), [Facebook](https://www.facebook.com/oktadevelopers), [LinkedIn](https://www.linkedin.com/company/oktadev/) and [YouTube](https://www.youtube.com/channel/UC5AMiWqFVFxF1q9Ya1FuZ_Q)!
