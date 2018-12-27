@@ -881,7 +881,7 @@ To make things look good once deployed on the phone you need to set the name and
 </resources>
 ```
 
-For the icon, it's best to open your project in Android Studio (use the `android` directory) and create a ‘drawable' directory in `assets`. Then right-click and say **New -> Image Asset**. This will let you import your large icon and overwrite `ic_launcher` which is what is used for the launcher icon, generating all the versions you need for the Play Store. Re-deploy with `react-native run-android` and you should see a proper name and icon on your apps list.
+For the icon, it's best to open your project in Android Studio (use the `android` directory) and create a 'drawable' directory in `assets`. Then right-click and say **New -> Image Asset**. This will let you import your large icon and overwrite `ic_launcher` which is what is used for the launcher icon, generating all the versions you need for the Play Store. Re-deploy with `react-native run-android` and you should see a proper name and icon on your apps list.
 
 If you get a bundling issue next time you run `react-native run-android` when running on Android there is a [Stack Overflow fix](https://stackoverflow.com/a/44476757) that works.
 
@@ -976,7 +976,7 @@ const config = {
 
 You can find the value for `{yourOktaDomain}` on the Okta dashboard when you are logged in.
 
-Now add `accessToken: ‘'` to your state initialization and add the following two functions to your `App` class:
+Now add `accessToken: ''` to your state initialization and add the following two functions to your `App` class:
 
 ```javascript
 state = {
@@ -1104,7 +1104,7 @@ You can also remove the alert window and internet `uses-permission` since we're 
 
 Now with the release made you can enter in rating information. Go to **Content rating** in the sidebar, read the message about IARC and click `CONTINUE`.
 
-For type, click ‘Utility` at the bottom. Then a questionnaire will show. You can click **No** for all the fields. Click `SAVE QUESTIONNAIRE`. After this, you can click `CALCULATE RATING`. You will see a list of how your app will be rated. Scroll to the bottom and click `APPLY RATING`.
+For type, click 'Utility` at the bottom. Then a questionnaire will show. You can click **No** for all the fields. Click `SAVE QUESTIONNAIRE`. After this, you can click `CALCULATE RATING`. You will see a list of how your app will be rated. Scroll to the bottom and click `APPLY RATING`.
 
 That should put a tick next to __Content rating__. The only thing left is pricing and distribution.
 
