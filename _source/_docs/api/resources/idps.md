@@ -3650,7 +3650,7 @@ curl -v -X GET \
 
 {% api_operation GET /api/v1/users/${userId}/idps %}
 
-Lists the IdPs associated with the user. This endpoint doesn't support the SAML2 [Identity Provider Type](#identity-provider-type).
+Lists the IdPs associated with the user.
 
 ##### Request Parameters
 {:.api .api-request .api-request-params}
@@ -3792,7 +3792,7 @@ Content-Type: application/json
 
 {% api_operation GET /api/v1/idps/${idpId}/users/${userId} %}
 
-Fetches a linked [IdP user](#identity-provider-user-model) by ID. This endpoint doesn't support the SAML2 [Identity Provider Type](#identity-provider-type).
+Fetches a linked [IdP user](#identity-provider-user-model) by ID.
 
 ##### Request Parameters
 {:.api .api-request .api-request-params}
