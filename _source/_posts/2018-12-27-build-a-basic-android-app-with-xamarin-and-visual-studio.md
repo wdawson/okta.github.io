@@ -518,7 +518,7 @@ To see the code from this post in full head on over to [our GitHub page](https:/
 
 If this tutorial has whetted your appetite for Xamarin development and you'd like to learn more, then I'd strongly suggest you have a look at these other great articles:
 * [Add Identity Management to Your Android App](https://developer.okta.com/code/android)
-* [Add Authentication to Your Xamarin.Forms App with OpenID Connect](https://developer.okta.com/blog/2018/05/01/add-authentication-xamarin-openid-connect)
-* [Build an App for iOS and Android with Xamarin](https://developer.okta.com/blog/2018/01/10/build-app-for-ios-android-with-xamarin)
+* [Add Authentication to Your Xamarin.Forms App with OpenID Connect](/blog/2018/05/01/add-authentication-xamarin-openid-connect)
+* [Build an App for iOS and Android with Xamarin](/blog/2018/01/10/build-app-for-ios-android-with-xamarin)
 
 As always if you have any questions, comments, or concerns about this post feel free to leave a comment below. For other great content from the Okta Dev Team, follow us on Twitter [@OktaDev](https://twitter.com/oktadev), [Facebook](https://www.facebook.com/oktadevelopers), [LinkedIn](https://www.linkedin.com/company/oktadev/) and [YouTube](https://www.youtube.com/channel/UC5AMiWqFVFxF1q9Ya1FuZ_Q)!
