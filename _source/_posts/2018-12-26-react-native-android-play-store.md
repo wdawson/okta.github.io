@@ -5,8 +5,8 @@ author: kpenzhorn
 description: "Learn how to plan, design, create and publish a React Native app to the Google Play Store."
 tags: [android, design, react native, play store]
 tweets:
-- "Design an Android app and publish it to the app store in this complete and in-depthy tutorial!"
-- "Want to get started with developing apps with Android? This tutorial is for you!"
+- "Design an Android app and publish it to the app store in this complete and in-depth tutorial!"
+- "Want to get started developing Android apps with React Native? This tutorial is for you!"
 image: blog/featured/okta-android-skew.jpg
 ---
 
@@ -18,15 +18,15 @@ This is what the eventual app will look like (note: this mockup was made with [M
 
 {% img blog/react-native-android-play-store/final.png alt:"Final Result" width:"283" %}{: .center-image }
 
-## Choosing an App to Make
+## Choose a React Native App to Make
 
 The first choice when publishing an app is deciding what to put on the app store. A good place to look is online lists of projects like Karan Goel's [Mega Project List](https://github.com/karan/Projects#mega-project-list). Here you'll make the **Prime Factorization** problem which takes a number and returns its prime factors. Not sure what you might use this for, but somebody might want to download it!
 
-## Interface Theming
+## React Native Interface Theme
 
 The next choice is how the app looks. This includes the controls like dropdowns and buttons, as well as the layout on the screen. One place to start is out-of-box solutions for React Native like [NativeBase](https://nativebase.io/), [Shoutem](https://shoutem.github.io/ui/) and [React Native Elements](https://react-native-training.github.io/react-native-elements/). These are quite heavy, all-or-nothing solutions. Since we are using a React-based technology another solution would be to use something based on [Styled Components](https://www.styled-components.com/) which is a popular, light-weight approach to theming React applications (and it also [works great on React Native](https://www.styled-components.com/docs/basics#react-native)). There's an [entire page](https://github.com/styled-components/awesome-styled-components#built-with-styled-components) listing components and component-systems based on Styled Components. In this tutorial, you'll be using Styled Components to build up components yourself.
 
-## Setting up the Production Environment
+## Set up the Android Production Environment
 
 ### Install Android Studio
 
@@ -63,7 +63,7 @@ react-native run-android
 
 To see the output you'll upload to the Play Store, go to `android/app/build/outputs/apk/debug`. You should see an `app-debug.apk` that is around 8MB in size.
 
-### Reducing Output Size
+### Reduce the Output Size of Your Android App
 
 You want to make sure your users have the smallest download possible. It's already quite small (around 8MB)  because you're using the command line (something like Expo produces 25MB for even basic apps) but we can [reduce it further]https://medium.com/@aswinmohanme/how-i-reduced-the-size-of-my-react-native-app-by-86-27be72bba640). Go to `android/app/build.gradle` and change the following variables to be `true`:
 
@@ -125,13 +125,13 @@ Now you just need to add the plugins to your editor. For Sublime there's [ESLint
 
 A lot of these errors can be fixed automatically using the `eslint --fix` command which you can run from your editor with the [ESLint Fix](https://packagecontrol.io/packages/ESLint%20Fix) package.
 
-## Getting started with React
+## Get started with React
 
 If you're just starting with React there is a lot to learn. The best place to start is the [official docs](https://reactjs.org/docs/hello-world.html) which give a great introduction. Make sure you go through all 12 steps, even if only superficially.
 
 Once you have the basics down there is a [lot](https://medium.com/leanjs/introduction-to-react-3000e9cbcd26) [more](https://reactjs.org/docs/thinking-in-react.html) you [should](https://www.codementor.io/radubrehar/thinking-in-react-8duata34n) [read](https://camjackson.net/post/9-things-every-reactjs-beginner-should-know)..
 
-## Styled Components
+## Styled React Components
 
 By now you should understand that React and React Native build interfaces uses web technologies, i.e. HTML, CSS, and JavaScript. One very popular library to use with React (and React Native) is [Styled Components](https://github.com/styled-components/styled-components) which clean up how one adds CSS to your components.
 
@@ -210,7 +210,7 @@ It's both cleaner and more portable (CSS names don't clash, etc.).
 
 To install it, run `npm install styled-components@4.1.1` from the root directory.
 
-## Custom Fonts
+## Custom Fonts for the React App
 
 To get a custom font like [Racing Sans One](https://fonts.google.com/specimen/Racing+Sans+One?selection.family=Racing+Sans+One\|Roboto) into your application you first need to download the ttf and put it into `assets/fonts` (you will need to create this directory). Then add the following to your `package.json`:
 
@@ -260,7 +260,7 @@ And you should get a nicely formatted header:
 
 {% img blog/react-native-android-play-store/custom-fonts.png alt:"Custom fonts" width:"400" %}{: .center-image }
 
-## Fullscreen Apps
+## Fullscreen React Native Apps
 
 To get your app to not show the title bar, go to `android/app/src/main/res/values/styled.xml` and add the following inside the `<styles>` element:
 
@@ -270,7 +270,7 @@ To get your app to not show the title bar, go to `android/app/src/main/res/value
 
 Now when you re-run you should see the navigation bar is gone.
 
-## Creating the App Components
+## Create the React App Components
 
 It can take a long time to decide on a final design, with layout, colors and fonts. This is often an iterative process. Here you'll go through how to build up the final result you saw at the start - which was inspired by [related online tutorials](https://kylewbanks.com/blog/react-native-tutorial-part-2-designing-a-calculator) and [styling examples](https://moarwick.github.io/react-super-styled/) - but remember that it takes time to get to something you like.
 
@@ -445,19 +445,19 @@ Next, define a function to handle button presses (empty for now), and then expor
 
 Once done, you should see the app render as you saw at the top of this article.
 
-## Colors
+## Get Android Colors Right
 
 I found once getting colors right on the emulator I put it onto my phone and things just looked wrong. Turns out this is because [Android Oreo fixed color management](https://www.androidcentral.com/everything-you-need-know-about-android-color-management) to ensure things looked the same across devices. If you're having similar issues, see if you are using Android 7 or before.
 
 You could restrict your users to Android 8 or above, but right now that's only [about 20% of Android users](https://developer.android.com/about/dashboards/) so probably best just to put a message somewhere that things look a bit better on later versions.
 
-## Writing up the Buttons
+## Wire Up the React Buttons
 
 That is it for the basic design and layout. Now you need to connect the buttons so they actually do something. To start, you need to make pressing the numbers (and clear key) add and remove numbers from the number display.
 
 For this, you need to understand about state in React.
 
-### Lifting Up State
+### Lift Up React State
 
 A great resource for this again is the [official React tutorials](https://reactjs.org/docs/lifting-state-up.html) (which apply just as well to React Native). We need a single source of truth for the current number (to be displayed) and the callback function that will modify it. It has to be a parent of both (the `Input` and the `Button`). Since this is part of the app you can put this into the `App` component in `App.js`.
 
@@ -510,7 +510,7 @@ const { state } = this;
 
 This [destructures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) the state from `this` into a local variable. Change the `<Input>` line to `<Input>{state.number}</Input>`. Now the input is being rendered from the state. Reload and you should see the same output (and change the state constructor to see it changing).
 
-### Modifying State
+### Modify React State
 
 Now you need to tell each button to call a function defined in your App class. Add the following to the constructor:
 
@@ -565,7 +565,7 @@ Now when you press a button you should see an alert with what you pressed:
 
 You now have a single function, defined at the __top__, which controls what buttons do.
 
-### Using Class Properties
+### Use Class Properties
 
 To clean things up a bit you can [use class properties to initialize state](https://michalzalecki.com/react-components-and-class-properties/) in React. Simply take out the constructor and replace it with this:
 
@@ -575,7 +575,7 @@ state = {
 };
 ```
 
-### Updating the Display
+### Update the React Display
 
 As number buttons are pressed, you need to add said number to the current number. Also, when **Clear** is pressed you have to delete. Do that first. Change `press()` to the following:
 
@@ -604,7 +604,7 @@ So if `Go` hasn't been pressed and the value is less than one million (you have 
 
 The only thing left to do is the `Go` button.
 
-###  Adding Screens
+### Add React Native Screens
 
 When the `Go` button is pressed you want to hide the keypad and show a progress screen. For this you need another state variable, a boolean, so add it to the state class property, i.e.
 
@@ -675,7 +675,7 @@ And use the `processing` boolean to decide whether to render it or the keypad:
 
 This checks if `state.processing` is true and if so, show the processing. Otherwise, show the keypad.
 
-## Calculating Prime Factors
+## Calculate Prime Factors
 
 The simplest way to break a number down into prime factors is looping through all numbers from 2 to `num/2` (since anything greater than `num/2` won't be a factor) and check if it divides. However, what about number 4? It is not prime. So we should also check if each factor is prime.
 
@@ -713,7 +713,7 @@ You'll be putting this all together shortly.
 
 Now that you have the code you need to display the results.
 
-### Displaying Lists
+### React Native Lists
 
 To display lists you need to use a [React Native list view](https://facebook.github.io/react-native/docs/using-a-listview), in our cast, a `FlatList`. This takes a list of values (objects) called `data` and a way to render each item called `renderItem`.
 
@@ -770,7 +770,7 @@ So you have a `ProcessingBox`, a `Header` and an `Item` which are combined in th
 
 {% img blog/react-native-android-play-store/processing.png alt:"Processing" width:"400" %}{: .center-image }
 
-## Pulling It All Together
+## Pull the React Native App Together
 
 To make this work with the app you need to control the rendering from outside, so change the render method to the following:
 
@@ -871,7 +871,7 @@ Now when you run the app and press **Go** you should see a list of the prime fac
 
 Editing the number and re-clicking **Go** should get a new list of factors. Congrats, you've finished the app!
 
-## Setting Name and Icon
+## Set the Android App Name and Icon
 
 To make things look good once deployed on the phone you need to set the name and icon. You can set the name in `android/app/src/main/res/values/strings.xml`:
 
@@ -1038,11 +1038,11 @@ const config = {
 
 This ensures the user is prompted for their password every time.
 
-## Getting Onto the Play Store
+## Publish to the Play Store
 
 The last step is publishing what you have done on the play store. The standard docs have [great advice on this](https://developer.android.com/studio/publish/) as well as a [pre-launch checklist](https://developer.android.com/distribute/best-practices/launch/launch-checklist). Besides reading the developer policies (which you should do) you need to [sign up for a developer account](https://support.google.com/googleplay/android-developer/answer/6112435) and pay the $25 registration fee. Then you need to create an icon.
 
-### Creating an Icon
+### Create an Android App Icon
 
 It not easy making something unique and striking as well as relevant to your app. One route is to buy them. Another is to make it from scratch using something like [Inkscape](https://inkscape.org/). Yet another is using a simple app like [Iconic](https://play.google.com/store/apps/details?id=xeus.iconic) (a mobile app on the Play Store) which links into free icon repositories and lets you edit them. With it you can create graphics like the following:
 
@@ -1050,7 +1050,7 @@ It not easy making something unique and striking as well as relevant to your app
 
 **NOTE:** You need to pay around $5 to get the shadows feature.
 
-### Creating the Application
+### Create the Android Application
 
 Open up the Play Console and click **Create Application**. Select the default language, enter a name and click **Create**. You will now see a lot you need to fill out in the store listing, including a least:
 
@@ -1072,7 +1072,7 @@ Once done click **Save Draft** and you should see a large green tick on the side
 
 This shows you have completed the listing details and still need to fill out the content rating form as well as pricing and distribution. Although before you can do that you need to put out an app release.
 
-### App Releases
+### Android App Releases
 
 Click on **App release** in the sidebar. You should see a list of __tracks__ for various testing phases. Click on `MANAGE` in the production track. Then click `CREATE RELEASE`.
 
@@ -1114,13 +1114,13 @@ This section should also be straight-forward since you are not charging for your
 
 At the top of the Play console, it should say **Ready to publish**.
 
-### Releasing App
+### Release the Android App
 
 Go to **App release** and click `EDIT RELEASE`. Scroll to the bottom and click `REVIEW`. Click on `START ROLL-OUT TO PRODUCTION`. Click **Confirm**. Your app should now say **Pending publication** at the top. You now need to wait a few hours for Google to check your app before releasing it.
 
 **NOTE:** It might be worthwhile using a testing release first to make sure everything works before you release to production, i.e. to everyone!
 
-## Finished
+## Learn More Android and React Native
 
 You have walked through choosing, designing and developing an Android app using React Native, as well as publishing it to the Play Store. I hope you found this tutorial enlightening. Go and make something useful and publish it!
 
