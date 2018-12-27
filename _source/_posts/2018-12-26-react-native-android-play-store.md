@@ -16,7 +16,7 @@ You'll go through choosing what app to make, how to pick a design, as well as se
 
 This is what the eventual app will look like (note: this mockup was made with [MockUPhone](https://mockuphone.com/):
 
-{% img blog/react-native-play-store/final.png alt:"Final Result" width:"283" %}{: .center-image }
+{% img blog/react-native-android-play-store/final.png alt:"Final Result" width:"283" %}{: .center-image }
 
 ## Choosing an App to Make
 
@@ -59,7 +59,7 @@ cd prime_components
 react-native run-android
 ```
 
-{% img blog/react-native-play-store/welcome.png alt:"Welcome to React Native" width:"400" %}{: .center-image }
+{% img blog/react-native-android-play-store/welcome.png alt:"Welcome to React Native" width:"400" %}{: .center-image }
 
 To see the output you'll upload to the Play Store, go to `android/app/build/outputs/apk/debug`. You should see an `app-debug.apk` that is around 8MB in size.
 
@@ -121,7 +121,7 @@ module.exports = {
 
 Now you just need to add the plugins to your editor. For Sublime there's [ESLint](https://packagecontrol.io/packages/ESLint) which gives you an output of errors (or issues) with **CTRL + ALT + e** (**Cmd + Option + e** on Mac). There also [one for VSCode](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint).
 
-{% img blog/react-native-play-store/eslint.png alt:"ESLint" width:"500" %}{: .center-image }
+{% img blog/react-native-android-play-store/eslint.png alt:"ESLint" width:"500" %}{: .center-image }
 
 A lot of these errors can be fixed automatically using the `eslint --fix` command which you can run from your editor with the [ESLint Fix](https://packagecontrol.io/packages/ESLint%20Fix) package.
 
@@ -212,7 +212,7 @@ To install it, run `npm install styled-components@4.1.1` from the root directory
 
 ## Custom Fonts
 
-To get a custom font like [Racing Sans One](https://fonts.google.com/specimen/Racing+Sans+One?selection.family=Racing+Sans+One|Roboto) into your application you first need to download the ttf and put it into `assets/fonts` (you will need to create this directory). Then add the following to your `package.json`:
+To get a custom font like [Racing Sans One](https://fonts.google.com/specimen/Racing+Sans+One?selection.family=Racing+Sans+One\|Roboto) into your application you first need to download the ttf and put it into `assets/fonts` (you will need to create this directory). Then add the following to your `package.json`:
 
 ```json
 "rnpm": {
@@ -237,7 +237,7 @@ export default styled.Text`
 `;
 ```
 
-Then, import this into your `App.js` and add `<Heading>Welcome</Heading>` above the `Text` nodes:
+Then, import this into your `App.js` and add `<Header>Welcome</Header>` above the `Text` nodes:
 
 ```jsx
 import Header from './components/Header';
@@ -258,7 +258,7 @@ export default class App extends Component<Props> {
 
 And you should get a nicely formatted header:
 
-{% img blog/react-native-play-store/custom-fonts.png alt:"Custom fonts" width:"400" %}{: .center-image }
+{% img blog/react-native-android-play-store/custom-fonts.png alt:"Custom fonts" width:"400" %}{: .center-image }
 
 ## Fullscreen Apps
 
@@ -561,7 +561,7 @@ export default Button = ({func,text}) => (
 
 Now when you press a button you should see an alert with what you pressed:
 
-{% img blog/react-native-play-store/buttons.png alt:"Buttons" width:"400" %}{: .center-image }
+{% img blog/react-native-android-play-store/buttons.png alt:"Buttons" width:"400" %}{: .center-image }
 
 You now have a single function, defined at the __top__, which controls what buttons do.
 
@@ -768,7 +768,7 @@ export default () => (
 
 So you have a `ProcessingBox`, a `Header` and an `Item` which are combined in the export. You should see the following when you click **Go**:
 
-{% img blog/react-native-play-store/processing.png alt:"Processing" width:"400" %}{: .center-image }
+{% img blog/react-native-android-play-store/processing.png alt:"Processing" width:"400" %}{: .center-image }
 
 ## Pulling It All Together
 
@@ -867,7 +867,7 @@ press = (value) => {
 
 Now when you run the app and press **Go** you should see a list of the prime factors, as well as a **Back** button which will take you back.
 
-{% img blog/react-native-play-store/finished.png alt:"Finished" width:"400" %}{: .center-image }
+{% img blog/react-native-android-play-store/finished.png alt:"Finished" width:"400" %}{: .center-image }
 
 Editing the number and re-clicking **Go** should get a new list of factors. Congrats, you've finished the app!
 
@@ -1046,7 +1046,7 @@ The last step is publishing what you have done on the play store. The standard d
 
 It not easy making something unique and striking as well as relevant to your app. One route is to buy them. Another is to make it from scratch using something like [Inkscape](https://inkscape.org/). Yet another is using a simple app like [Iconic](https://play.google.com/store/apps/details?id=xeus.iconic) (a mobile app on the Play Store) which links into free icon repositories and lets you edit them. With it you can create graphics like the following:
 
-{% img blog/react-native-play-store/app-icon.png alt:"App icon" width:"100" %}{: .center-image }
+{% img blog/react-native-android-play-store/icon.png alt:"App icon" width:"100" %}{: .center-image }
 
 **NOTE:** You need to pay around $5 to get the shadows feature.
 
@@ -1068,7 +1068,7 @@ For the feature graphic, you need something that is exactly 1024x500. You can ge
 
 Once done click **Save Draft** and you should see a large green tick on the side panel next to _Store listing_.
 
-{% img blog/react-native-play-store/store-listing.png alt:"Store listing" width:"400" %}{: .center-image }
+{% img blog/react-native-android-play-store/store-listing.png alt:"Store listing" width:"400" %}{: .center-image }
 
 This shows you have completed the listing details and still need to fill out the content rating form as well as pricing and distribution. Although before you can do that you need to put out an app release.
 
@@ -1086,7 +1086,7 @@ You'll see a message about using **App signing by Google Play**. This is a new f
 * Choose passwords for the keystore and key
 * Enter the certificate information (note: this won't be display in the app, just the certificate)
 
-{% img blog/react-native-play-store/keystore.png alt:"Keystore" width:"500" %}{: .center-image }
+{% img blog/react-native-android-play-store/keystore.png alt:"Keystore" width:"500" %}{: .center-image }
 
 Click `OK` and click **Next**. Select both the V1 and the [V2 signature version](https://developer.android.com/about/versions/nougat/android-7.0#apk_signature_v2) and click **Finish**. A build should start after which you should see both `app-x86-release.apk` and `app-armeabi-v7a-release.apk` inside of `android/app/release` in your project (one for each device architecture).
 
