@@ -77,8 +77,9 @@ Function | Input Parameter Signature | Return Type | Example | Output
 `String.stringContains` | (String input, String searchString) | Boolean |`String.stringContains("This is a test", "test")`  | true
  | | | `String.stringContains("This is a test", "doesn'tExist")` | false
 `String.stringSwitch` | (String input, String defaultString, String... keyValuePairs) | String | `String.stringSwitch("This is a test", "default", "key1", "value1")`| default
- | | | `String.stringSwitch("This is a test", "default", "is", "value1")`| value1
- | | | `String.stringSwitch("This is a test", "default", "key1", "value1", "test", "value2")` | value2
+ | | | `String.stringSwitch("This is a test", "default", "test", "value1")`| value1
+ | | | `String.stringSwitch(“First match wins”, "default", "absent", "value1", "wins", "value2", "match", "value3")` | value2
+ | | | `String.stringSwitch(“Substrings count”, "default", “ring”, "value1")`| value1
 `String.substring `| (String input, int startIndex, int endIndex) | String | `String.substring("This is a test", 2, 9)` | is is a
 `String.substringAfter` | (String input, String searchString) | String | `String.substringAfter("abc@okta.com", "@")` | okta.com
 `String.substringBefore` | (String input, String searchString) | String | `String.substringBefore("abc@okta.com", "@")` | abc
