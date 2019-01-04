@@ -37,7 +37,7 @@ To use these functions to create a token using a dynamic group whitelist, create
 
 4. In Groups claim expression, add one of the three functions with the criteria for your dynamic group whitelist:
 
-    `Groups.startsWith("active.directory", "myGroup", 10)`
+    `Groups.startsWith("active_directory", "myGroup", 10)`
 
   Notes:
   * The syntax for these three functions is different from `getFilteredGroups`.
