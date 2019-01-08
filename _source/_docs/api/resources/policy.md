@@ -5,7 +5,7 @@ category: management
 redirect_from: "/docs/getting_started/policy.html"
 ---
 
-# Policy API ()
+# Policy API
 
 The Okta Policy API enables an Administrator to perform policy and policy rule operations.  The policy framework is used by Okta to control rules and settings that govern, among other things, user session lifetime, whether multi-factor authentication is required when logging in, what MFA factors may be employed, password complexity requirements, what types of self-service operations are permitted under various circumstances, and what identity provider to route users to.
 
