@@ -31,6 +31,8 @@ You can anticipate hitting the rate limit by checking [Okta's rate limiting head
 
 Rate limits differ depending on the level of service you have purchased from Okta. See the [pricing page](https://developer.okta.com/pricing/) for more details.
 
+High capacity rate limits apply to a variety of endpoints across different APIs. These rate limits can be found [below](#high-capacity-rate-limits).
+
 > If you have a One App or Enterprise organization, the admin console will display a banner and you will receive an email notification when your org reaches its rate limit.
 
 ### Okta API Endpoints and Per Minute Limits
@@ -95,6 +97,27 @@ The following endpoints are used by the Okta home page for authentication and si
 | `/bc/globalFileStoreRecord`              | 100              | 300              | 300     | 600           |
 
 These rate limits apply to all new Okta organizations. For orgs created before 2018-05-17, the [previous rate limits](#previous-rate-limits) still apply.
+
+### High Capacity Rate Limits
+
+The following are the high capacity rate limits that apply across the Okta API:
+
+| Endpoint                                                                 | One App | Enterprise |
+|--------------------------------------------------------------------------|---------|------------|
+| `/api/v1`                                                                | 1500    | 3000       |
+| `/oauth2/{authorizationServerId}/v1/token`                               | 1500    | 3000       |
+| `/oauth2/{authorizationServerId}/v1/authorize`                           | 1500    | 3000       |
+| `/api/v1/sessions`                                                       | 1500    | 3000       |
+| `/app/template_saml_2_0/{key}/sso/saml`                                  | 1500    | 3000       |
+| `/app/{app}/{key}/sso/saml`                                              | 1500    | 3000       |
+| `/api/v1/groups/{id}`                                                    | 1500    | 3000       |
+| `/api/v1/users/{id}`                                                     | 1500    | 3000       |
+| `/api/v1/authn`                                                          | 1500    | 3000       |
+| `/api/plugin/{protocolVersion}/form-creds/{appUserIds}/{formSiteOption}` | 1500    | 3000       |
+| `/api/v1/authn/factors/{id}/verify`                                      | 1500    | 3000       |
+| `/api/v1/apps/{id}`                                                      | 1500    | 3000       |
+| `/bc/image/fileStoreRecord`                                              | 1500    | 3000       |
+| `/bc/globalFileStoreRecord`                                              | 1500    | 3000       |
 
 ### End-User Rate Limit
 
