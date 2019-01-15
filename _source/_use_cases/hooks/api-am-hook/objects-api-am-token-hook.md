@@ -1,6 +1,20 @@
 # Objects Reference: API Access Management Inline Hook
 
-This page provides reference documentation for the JSON objects contained in the outbound request from Okta to your external service, as well as the JSON objects you can include in your response. This information is specific to the API Access Management hook, one type of inline hook supported by Okta.
+This page provides reference documentation for:
+
+- JSON objects contained in the outbound request from Okta to your external service
+
+- JSON objects you can include in your response
+
+This information is specific to the API Access Management hook, one type of inline hook supported by Okta.
+
+## See Also
+
+For a general introduction Okta inline hooks, see [Inline Hooks](/use_cases/hooks/).
+
+For setup steps for the ${Hook_Type} inline hook, see [API Acess Management Inline Hook Setup}](/use_cases/hooks/setup/${Hook_Type}-setup.md).
+
+For information on the API for registering external service endpoints with Okta, see [Callbacks API](/api/resources/callbacks).
 
 ## Objects in the Request from Okta
 
@@ -50,20 +64,22 @@ Provides information on the properties of the ID token that Okta has generated, 
 | claims   | Claims included in the token. | [claims](#claims) object     |
 | lifetime | Lifetime of the token         | [lifetime](#lifetime) object |
 
-## Objects in Response to Okta
+<!-- Cover all objects in data.context? -->
+
+## Objects in Response You Send
 
 For API Access Management hooks, the `commands`, `error`, and `debugContext` objects that you can return in the JSON payload of your response are defined as follows:
 
 ### commands
 
-The `commands` object is where you can provide commands to Okta. It is an array, allowing you to include mutlitple commands. In each array element, there needs to be a `type` property and `value` property. The `type` property is where you specify which of the supported commands you wish to execute and `value` is where you supply an operand for the command.
+The `commands` object is where you can provide commands to Okta. It is an array, allowing you to include mutlitple commands. In each array element, there needs to be a `type` property and `value` property. The `type` property is where you specify which of the supported commands you wish to execute, and `value` is where you supply an operand for that command.
 
 In the case of the API Access Managment hook type, the `value` property is itself a nested object, in which you specify a particular operation, a path to act on, and a value.
 
-| Property | Description                                                              | Data Type              |
-|----------|--------------------------------------------------------------------------|------------------------|
-| type     | The name of one of the [supported commands](#list-of-supported-commands) | String                 |
-| value    | An operand to pass to the command.                                       | [value](#value) object |
+| Property | Description                                                            | Data Type                               |
+|-------|--------------------------------------------------------------------------|-----------------------------------------|
+| type  | One of the [supported commands](#supported-commands).                    | String                                  |
+| value | Operand to pass to the command. It specifies a particular op to perform. | Type or anchor link to [value](#value). |
 
 #### List of Supported Commands
 
@@ -267,14 +283,4 @@ The following commands are supported for the API Access Management inline hook t
     }
 ]}
 ```
-
-## See Also
-
-For a general introduction Okta inline hooks, see [Inline Hooks](/use_cases/hooks/).
-
-For setup steps for the API Access Management inline hook, see [API Access Management Setup](/use_cases/hooks/setup/api-am-token-hook-setup.md).
-
-For information on the API for registering external service endpoints with Okta, see [Callbacks API](/api/resources/callbacks).
-
-
 
