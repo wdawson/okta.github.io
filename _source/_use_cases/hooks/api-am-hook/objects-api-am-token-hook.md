@@ -12,7 +12,7 @@ This information is specific to the API Access Management hook, one type of inli
 
 For a general introduction Okta inline hooks, see [Inline Hooks](/use_cases/hooks/).
 
-For setup steps for the API Acccess Management inline hook, see [API Acess Management Inline Hook Setup}](/use_cases/hooks/setup/api-am-setup.md).
+For setup steps for the API Acccess Management inline hook, see [API Acess Management Inline Hook Setup](/use_cases/hooks/setup/api-am-setup.md).
 
 For information on the API for registering external service endpoints with Okta, see [Callbacks API](/api/resources/callbacks).
 
