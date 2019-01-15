@@ -12,9 +12,9 @@ image: blog/featured/okta-vue-tile-books-mouse.jpg
 
 Laravel is one of the most popular web frameworks today because of its elegance, simplicity, and readability. It also boasts one of the largest and most active developer communities. The Laravel community has produced a ton of valuable educational resources, including this one! In this tutorial, you'll build a trivia game as two separate projects: a Laravel API and a Vue frontend (using vue-cli). This approach offers some important benefits:
 
-It allows you to separate your backend and frontend and deploy them independently, using different strategies and schedules for testing and deployment
-You can deploy your frontend as a static application to a CDN and achieve virtually unlimited scaling for a fraction of the cost of hosting it together with the backend
-This structure allows developers to work on just the API or just the frontend without needing access to the source code of the other part of the system (this is still possible to achieve if the projects are integrated, but it's a bit of a headache to set up) making it an ideal architecture for large teams
+* It allows you to separate your backend and frontend and deploy them independently, using different strategies and schedules for testing and deployment
+* You can deploy your frontend as a static application to a CDN and achieve virtually unlimited scaling for a fraction of the cost of hosting it together with the backend
+* This structure allows developers to work on just the API or just the frontend without needing access to the source code of the other part of the system (this is still possible to achieve if the projects are integrated, but it's a bit of a headache to set up) making it an ideal architecture for large teams
 
 Before you start, you'll need to set up a development environment with PHP 7 and Node.js 8+/npm. You will also need an [Okta developer account](https://developer.okta.com/) so you can add user registration, user login, and all the other user related functionalities.
 
@@ -31,7 +31,11 @@ Here are the step-by-step instructions:
 
 1. Go to the **Applications** menu item and click the **Add Application** button:
 
+{% img blog/php-laravel-vue-app/add-application.png width:"200" alt:"Click Add Application" %}{: .center-image }
+
 2. Select **Single Page Application** and click **Next**.
+
+{% img blog/php-laravel-vue-app/new-spa.png alt:"Create a new SPA application" %}{: .center-image }
 
 3. Set a descriptive application name, add `http://localhost:8080/implicit/callback` as a **Login redirect URI**, and click **Done**. You can leave the rest of the settings as they are.
 
@@ -43,13 +47,15 @@ Now it's time to dig in and build a fun trivia game application! This app will b
 
 Here's what your completed application will look like:
 
+{% img blog/php-laravel-vue-app/finished-app.png alt:"The completed application" %}{: .center-image }
+
 You can create your own rules, but here's the general gist of the game:
 
-The game host reads questions to the players and marks their answers
-The host cannot be a player
-The players can attempt to answer the current question or pass
-If the answer is correct, the player gets +1 points. If the answer is wrong, the player gets -1 points.
-When the question is answered correctly or everyone has passed, the host can hit the **Refresh Question** button to load the next question.
+* The game host reads questions to the players and marks their answers
+* The host cannot be a player
+* The players can attempt to answer the current question or pass
+* If the answer is correct, the player gets +1 points. If the answer is wrong, the player gets -1 points.
+* When the question is answered correctly or everyone has passed, the host can hit the **Refresh Question** button to load the next question.
 
 ## Install Laravel and Configure the Application
 
@@ -257,7 +263,7 @@ composer require barryvdh/laravel-cors
 
 `app/Http/Kernel.php`
 
-```
+```php
 protected $middlewareGroups = [
     'web' => [
 		...
@@ -370,8 +376,8 @@ import Dashboard from './components/Dashboard.vue'
 import Auth from '@okta/okta-vue'
 
 Vue.use(Auth, {
-  issuer: 'https://{YOUR_OKTA_DOMAIN}/oauth2/default',
-  client_id: '{YOUR_CLIENT_ID}',
+  issuer: 'https://{yourOktaDomain}/oauth2/default',
+  client_id: '{yourClientId}',
   redirect_uri: 'http://localhost:8080/implicit/callback',
   scope: 'openid profile email'
 })
@@ -617,8 +623,8 @@ class AuthenticateWithOkta
             $jwtVerifier = (new \Okta\JwtVerifier\JwtVerifierBuilder())
                             ->setAdaptor(new \Okta\JwtVerifier\Adaptors\SpomkyLabsJose())
                             ->setAudience('api://default')
-                            ->setClientId('{YOUR_CLIENT_ID}')
-                            ->setIssuer('{YOUR_ISSUER_URL}')
+                            ->setClientId('{yourClientId}')
+                            ->setIssuer('{yourIssuerUrl}')
                             ->build();
 
             // Verify the JWT from the Authorization Header.
@@ -943,8 +949,7 @@ The game is complete now! You now have a basic Laravel API that returns trivia q
 
 This is a great start, but there is of course room for improvement. You can improve the code by extracting the common API boilerplate code (retrieving the access token, sending the Authorization header, sending a request and receiving a response) into a service class.
 
-You can find the full code here:
-https://github.com/oktadeveloper/okta-php-laravel-vue-crud-example
+You can find the full code here: [https://github.com/oktadeveloper/okta-php-laravel-vue-crud-example](https://github.com/oktadeveloper/okta-php-laravel-vue-crud-example)
 
 ## Learn More About Laravel, Vue, and Okta
 
