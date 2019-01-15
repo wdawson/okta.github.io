@@ -12,7 +12,7 @@ This information is specific to the API Access Management hook, one type of inli
 
 For a general introduction Okta inline hooks, see [Inline Hooks](/use_cases/hooks/).
 
-For setup steps for the ${Hook_Type} inline hook, see [API Acess Management Inline Hook Setup}](/use_cases/hooks/setup/${Hook_Type}-setup.md).
+For setup steps for the API Acccess Management inline hook, see [API Acess Management Inline Hook Setup}](/use_cases/hooks/setup/api-am-setup.md).
 
 For information on the API for registering external service endpoints with Okta, see [Callbacks API](/api/resources/callbacks).
 
@@ -104,7 +104,34 @@ The following commands are supported for the API Access Management inline hook t
 |-----|--------------|
 | add | Add a claim. | 
 
-## Sample Listing of JSON Payload of Request from Okta
+
+### error
+
+Indicate any errors that have been defined for use and how they affect the process flow.
+
+When you return an error object, it should have the following structure:
+
+| Property     | Description                          | Data Type                   |
+|--------------|--------------------------------------|-----------------------------|
+| errorCode    | A unique code.                       |                             |
+| errorSummary | Human-readable summary of the error. |                             |
+| errorCauses  | Additional information on the error. | [errorCauses](#errorCauses) |
+
+#### errorCauses
+
+| Property     | Description | Data Type |
+|--------------|-------------|-----------|
+| errorSummary |             |           |
+| reason       |             |           |
+| locationType |             |           |
+| location     |             |           |
+| domain       |             |           |
+
+### debugContext
+
+This object is user-defined. Information returned in it will be available in the Okta event log if (insert conditions, e.g., debug mode enabled for hook).
+
+## Sample Listing of JSON Payload of Request
 
 ```JSON
 {
@@ -253,7 +280,7 @@ The following commands are supported for the API Access Management inline hook t
 	}
 ```
 
-## Sample Listing of JSON Payload of Response from External Service
+## Sample Listing of JSON Payload of Response
 
 ```JSON
 {"commands":
