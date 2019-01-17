@@ -72,14 +72,14 @@ For API Access Management hooks, the `commands`, `error`, and `debugContext` obj
 
 ### commands
 
-The `commands` object is where you can provide commands to Okta. It is an array, allowing you to include mutlitple commands. In each array element, there needs to be a `type` property and `value` property. The `type` property is where you specify which of the supported commands you wish to execute, and `value` is where you supply an operand for that command.
+The `commands` object is where you can provide commands to Okta. It is an array, allowing you to send mutlitple commands. In each array element, there needs to be a `type` property and `value` property. The `type` property is where you specify which of the supported commands you wish to execute, and `value` is where you supply an operand for that command.
 
 In the case of the API Access Managment hook type, the `value` property is itself a nested object, in which you specify a particular operation, a path to act on, and a value.
 
-| Property | Description                                                            | Data Type                               |
-|-------|--------------------------------------------------------------------------|-----------------------------------------|
-| type  | One of the [supported commands](#supported-commands).                    | String                                  |
-| value | Operand to pass to the command. It specifies a particular op to perform. | Type or anchor link to [value](#value). |
+| Property | Description                                                              | Data Type       |
+|----------|--------------------------------------------------------------------------|-----------------|
+| type     | One of the [supported commands](#supported-commands).                    | String          |
+| value    | Operand to pass to the command. It specifies a particular op to perform. | [value](#value) |
 
 #### List of Supported Commands
 
