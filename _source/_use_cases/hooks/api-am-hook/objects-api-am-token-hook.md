@@ -10,7 +10,7 @@ This information is specific to the API Access Management hook, one type of inli
 
 ## See Also
 
-For a general introduction Okta inline hooks, see [Inline Hooks](/use_cases/hooks/).
+For a general introduction to Okta inline hooks, see [Inline Hooks](/use_cases/hooks/).
 
 For setup steps for the API Acccess Management inline hook, see [API Acess Management Inline Hook Setup](/use_cases/hooks/setup/api-am-setup.md).
 
@@ -107,7 +107,7 @@ The following commands are supported for the API Access Management inline hook t
 
 ### error
 
-Indicate any errors that have been defined for use and how they affect the process flow.
+(Indicate any errors that have been defined for use and how they affect the process flow.)
 
 When you return an error object, it should have the following structure:
 
