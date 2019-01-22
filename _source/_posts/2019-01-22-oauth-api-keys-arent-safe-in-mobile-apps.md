@@ -2,10 +2,11 @@
 layout: blog_post
 title: "Why OAuth API Keys and Secrets Aren't Safe in Mobile Apps"
 author: aaronpk
-description: ""
+description: "Let's take a look at two ways it's possible to hack secret API keys out of mobile apps."
 tags: [oauth, api, secret, keys, mobile, apps]
 tweets:
-- ""
+- "Keep API keys out of mobile apps! #oauth #api #security"
+- "Here are two ways to hack API keys out of mobile apps #security"
 image: blog/oauth-api-keys-mobile-apps/no-mobile-api-keys.jpg
 ---
 
