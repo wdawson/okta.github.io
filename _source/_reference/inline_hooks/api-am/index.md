@@ -16,17 +16,17 @@ This information is specific to the API Access Management hook, one type of inli
 
 ## See Also
 
-For a general introduction to Okta inline hooks, see [Inline Hooks](/use_cases/hooks/).
+For a general introduction to Okta inline hooks, see [Inline Hooks](/_reference/inline_hooks).
 
 For setup steps for the API Acccess Management inline hook, see [API Acess Management Inline Hook Setup](/use_cases/hooks/setup/api-am-setup.md).
 
-For information on the API for registering external service endpoints with Okta, see [Callbacks API](/api/resources/callbacks).
+For information on the API for registering external service endpoints with Okta, see [Inline Hooks API](_docs/api/resources/inline-hooks.md).
 
 ## Objects in the Request from Okta
 
 For API Access Management hooks, the outbound call from Okta to your external service will include the following objects in its JSON payload:
 
-### data.tokens.access_token
+### data.access
 
 Provides information on the properties of the access token that Okta has generated, including the existing claims it contains.
 
@@ -61,7 +61,7 @@ Any custom caims you have defined for your authorization server, will also be in
 |----------|-------------|-----------|
 |          |             |           |
 
-### data.tokens.id_token
+### data.identity
 
 Provides information on the properties of the ID token that Okta has generated, including the existing claims it contains.
 
@@ -140,150 +140,143 @@ This object is user-defined. Information returned in it will be available in the
 ## Sample Listing of JSON Payload of Request
 
 ```JSON
-{
-	"eventTypeVersion": "1.0",
-	"cloudEventVersion": "0.1",
-	"eventType": "com.okta.tokens.transform",
-	"contentType": "application/json",
-	"source": "https://gronberg.oktapreview.com/oauth2/ausar8buzjFYEyAf00h7/v1/authorize",
-	"eventId": "ue59hs25STaP4r0EVDK30A",
-	"eventTime": "2018-11-07T04:32:50.000Z",
-	"data": {
-		"context": {
-			"request": {
-				"id": "W@Jq8nDC85a0QjAcA7zG8gAABU0",
-				"method": "GET",
-				"url": {
-					"value": "https://gronberg.oktapreview.com/oauth2/ausar8buzjFYEyAf00h7/v1/authorize?scope=openid+profile+email+address+phone+providers%3Aread&response_type=id_token+token&redirect_uri=http%3A%2F%2Flocalhost%3A8080&state=myState&nonce=fc2422c5-dd72-469d-af25-23ad33052ec6&client_id=ULx7dd5LbNbXSs1HQOFn&response_mode=fragment"
-				},
-				"ipAddress": "24.4.98.131"
-			},
-			"protocol": {
-				"type": "OAUTH2.0",
-				"request": {
-					"scope": "openid profile email address phone providers:read",
-					"state": "myState",
-					"redirect_uri": "http://localhost:8080",
-					"response_mode": "fragment",
-					"response_type": "id_token token",
-					"client_id": "ULx7dd5LbNbXSs1HQOFn"
-				},
-				"issuer": {
-					"uri": "https://gronberg.oktapreview.com/oauth2/ausar8buzjFYEyAf00h7"
-				},
-				"client": {
-					"id": "ULx7dd5LbNbXSs1HQOFn",
-					"name": "AcmeHealth",
-					"type": "PUBLIC"
-				}
-			},
-			"session": {
-				"id": "1027TQm2pqHTyCeVhJmKHZnkw",
-				"userId": "00u8740btccGyzDWx0h7",
-				"login": "john.gronberg@okta.com",
-				"createdAt": "2018-10-26T00:45:18.000Z",
-				"expiresAt": "2019-02-05T04:32:50.000Z",
-				"status": "ACTIVE",
-				"lastPasswordVerification": "2018-10-26T00:45:18.000Z",
-				"lastFactorVerification": "2018-11-02T23:27:08.000Z",
-				"amr": ["MULTIFACTOR_AUTHENTICATION", "POP_SOFTWARE_KEY", "PASSWORD"],
-				"idp": {
-					"id": "00o8740bsphMpKDXb0h7",
-					"type": "OKTA"
-				},
-				"mfaActive": false
-			},
-			"user": {
-				"id": "00u8740btccGyzDWx0h7",
-				"passwordChanged": "2016-11-04T21:45:01.000Z",
-				"profile": {
-					"login": "john.gronberg@okta.com",
-					"firstName": "John",
-					"lastName": "Gronberg",
-					"locale": "en",
-					"timeZone": "America/Los_Angeles"
-				},
-				"_links": {
-					"groups": {
-						"href": "https://gronberg.oktapreview.com/00u8740btccGyzDWx0h7/groups"
-					},
-					"factors": {
-						"href": "https://gronberg.oktapreview.com/api/v1/users/00u8740btccGyzDWx0h7/factors"
-					}
-				}
-			},
-			"policy": {
-				"id": "00par8cw5hoBA4cbS0h7",
-				"rule": {
-					"id": "0prar8bv1vRYcx0BM0h7"
-				}
-			}
-		},
-		"tokens": {
-			"access_token": {
-				"claims": {
-					"ver": 1,
-					"jti": "AT.VqGGGOzfXBO9W8sQX9VVesoEZPNcfaA40O03kL3bmeY",
-					"iss": "https://gronberg.oktapreview.com/oauth2/ausar8buzjFYEyAf00h7",
-					"aud": "http://api.acmehealth.com",
-					"cid": "ULx7dd5LbNbXSs1HQOFn",
-					"uid": "00u8740btccGyzDWx0h7",
-					"sub": "john.gronberg@okta.com",
-					"patientId": "00u8740btccGyzDWx0h7",
-					"appProfile": [null],
-					"claim1": "123"
-				},
-				"lifetime": {
-					"expiration": 3600
-				},
-				"scopes": {
-					"providers:read": {
-						"id": "scpar8df93cuLZCxF0h7",
-						"action": "GRANT"
-					},
-					"address": {
-						"id": "scp84nOCzqB0J8XnANCm",
-						"action": "GRANT"
-					},
-					"phone": {
-						"id": "scpNswJCADebMsTYA8QK",
-						"action": "GRANT"
-					},
-					"openid": {
-						"id": "scpfdR6WGIhVJRdYu3Nn",
-						"action": "GRANT"
-					},
-					"profile": {
-						"id": "scpbqkNe8xw5Kn2TggXf",
-						"action": "GRANT"
-					},
-					"email": {
-						"id": "scpaCFpTtlAKTMa28vPW",
-						"action": "GRANT"
-					}
-				}
-			},
-			"id_token": {
-				"claims": {
-					"sub": "00u8740btccGyzDWx0h7",
-					"name": "Gronberg",
-					"email": "john.gronberg@okta.com",
-					"ver": 1,
-					"iss": "https://gronberg.oktapreview.com/oauth2/ausar8buzjFYEyAf00h7",
-					"aud": "ULx7dd5LbNbXSs1HQOFn",
-					"jti": "ID.ScFFhqwI6YT0pi8ryr00F0HR84Tom284TlismVBpBjM",
-					"amr": ["mfa", "swk", "pwd"],
-					"idp": "00o8740bsphMpKDXb0h7",
-					"nonce": "fc2422c5-dd72-469d-af25-23ad33052ec6",
-					"preferred_username": "john.gronberg@okta.com",
-					"auth_time": 1540514718
-				},
-				"lifetime": {
-					"expiration": 3600
-				}
-			}
-		}
-	}
+{  
+   "source":"https://rain.okta1.com/oauth2/default/v1/authorize",
+   "eventId":"3OWo4oo-QQ-rBWfRyTmQYw",
+   "eventTime":"2019-01-15T23:20:47.000Z",
+   "data":{  
+      "context":{  
+         "request":{  
+            "id":"reqv66CbCaCStGEFc8AdfS0ng",
+            "method":"GET",
+            "url":{  
+               "value":"https://rain.okta1.com/oauth2/default/v1/authorize?scope=openid+profile+email&response_type=token+id_token&redirect_uri=https%3A%2F%2Fhttpbin.org%2Fget&state=foobareere&nonce=asf&client_id=customClientIdNative"
+            },
+            "ipAddress":"127.0.0.1"
+         },
+         "protocol":{  
+            "type":"OAUTH2.0",
+            "request":{  
+               "scope":"openid profile email",
+               "state":"foobareere",
+               "redirect_uri":"https://httpbin.org/get",
+               "response_mode":"fragment",
+               "response_type":"token id_token",
+               "client_id":"customClientIdNative"
+            },
+            "issuer":{  
+               "uri":"https://rain.okta1.com/oauth2/default"
+            },
+            "client":{  
+               "id":"customClientIdNative",
+               "name":"Native client",
+               "type":"PUBLIC"
+            }
+         },
+         "session":{  
+            "id":"102Qoe7t5PcRnSxr8j3I8I6pA",
+            "userId":"00uq8tMo3zV0OfJON0g3",
+            "login":"administrator1@clouditude.net",
+            "createdAt":"2019-01-15T23:17:09.000Z",
+            "expiresAt":"2019-01-16T01:20:46.000Z",
+            "status":"ACTIVE",
+            "lastPasswordVerification":"2019-01-15T23:17:09.000Z",
+            "amr":[  
+               "PASSWORD"
+            ],
+            "idp":{  
+               "id":"00oq6kcVwvrDY2YsS0g3",
+               "type":"OKTA"
+            },
+            "mfaActive":false
+         },
+         "user":{  
+            "id":"00uq8tMo3zV0OfJON0g3",
+            "passwordChanged":"2018-09-11T23:19:12.000Z",
+            "profile":{  
+               "login":"administrator1@clouditude.net",
+               "firstName":"Add-Min",
+               "lastName":"O'Cloudy Tud",
+               "locale":"en",
+               "timeZone":"America/Los_Angeles"
+            },
+            "_links":{  
+               "groups":{  
+                  "href":"https://rain.okta1.com/00uq8tMo3zV0OfJON0g3/groups"
+               },
+               "factors":{  
+                  "href":"https://rain.okta1.com/api/v1/users/00uq8tMo3zV0OfJON0g3/factors"
+               }
+            }
+         },
+         "policy":{  
+            "id":"00pq8lGaLlI8APuqY0g3",
+            "rule":{  
+               "id":"0prq8mLKuKAmavOvq0g3"
+            }
+         }
+      },
+      "identity":{  
+         "claims":{  
+            "sub":"00uq8tMo3zV0OfJON0g3",
+            "name":"Add-Min O'Cloudy Tud",
+            "email":"webmaster@clouditude.net",
+            "ver":1,
+            "iss":"https://rain.okta1.com/oauth2/default",
+            "aud":"customClientIdNative",
+            "jti":"ID.YxF2whJfB3Eu4ktG_7aClqtCgjDq6ab_hgpiV7-ZZn0",
+            "amr":[  
+               "pwd"
+            ],
+            "idp":"00oq6kcVwvrDY2YsS0g3",
+            "nonce":"asf",
+            "preferred_username":"administrator1@clouditude.net",
+            "auth_time":1547594229
+         },
+         "token":{  
+            "lifetime":{  
+               "expiration":3600
+            }
+         }
+      },
+      "access":{  
+         "claims":{  
+            "ver":1,
+            "jti":"AT.W-rrB-z-kkZQmHW0e6VS3Or--QfEN_YvoWJa46A7HAA",
+            "iss":"https://rain.okta1.com/oauth2/default",
+            "aud":"api://default",
+            "cid":"customClientIdNative",
+            "uid":"00uq8tMo3zV0OfJON0g3",
+            "sub":"administrator1@clouditude.net",
+            "firstName":"Add-Min",
+            "preferred_username":"administrator1@clouditude.net"
+         },
+         "token":{  
+            "lifetime":{  
+               "expiration":3600
+            }
+         },
+         "scopes":{  
+            "openid":{  
+               "id":"scpq7bW1cp6dcvrz80g3",
+               "action":"GRANT"
+            },
+            "profile":{  
+               "id":"scpq7cWJ81CIP5Qkr0g3",
+               "action":"GRANT"
+            },
+            "email":{  
+               "id":"scpq7dxsoz6LQlRj00g3",
+               "action":"GRANT"
+            }
+         }
+      }
+   },
+   "eventTypeVersion":"1.0",
+   "cloudEventVersion":"0.1",
+   "contentType":"application/json",
+   "eventType":"com.okta.oauth2.tokens.transform"
+}
 ```
 
 ## Sample Listing of JSON Payload of Response
@@ -291,7 +284,7 @@ This object is user-defined. Information returned in it will be available in the
 ```JSON
 {"commands":
 [{
-    "type": "com.okta.tokens.id_token.patch",
+    "type": "com.okta.oauth.tokens.transform.identity.patch",
     "value":
     [
         {
