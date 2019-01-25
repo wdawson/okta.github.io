@@ -1,4 +1,10 @@
-# Objects Reference: API Access Management Inline Hook
+---
+layout: docs_page
+title: API Access Management Inline Hook
+excerpt: Customize tokens returned by Okta API Access Management process flow.
+---
+
+# API Access Management Inline Hook
 
 This page provides reference documentation for:
 
