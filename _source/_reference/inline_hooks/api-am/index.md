@@ -91,10 +91,10 @@ In the case of the API Access Managment hook type, the `value` property is itsel
 
 The following commands are supported for the API Access Management inline hook type:
 
-| Command                            | Description             | 
-|------------------------------------|-------------------------|
-| com.okta.tokens.id_token.patch     | Modify an ID token.     | 
-| com.okta.tokens.access_token.patch | Modify an access token. |
+| Command                 | Description             |
+|-------------------------|-------------------------|
+| com.okta.identity.patch | Modify an ID token.     |
+| com.okta.access.patch   | Modify an access token. |
 
 #### value
 
@@ -110,10 +110,7 @@ The following commands are supported for the API Access Management inline hook t
 |-----|--------------|
 | add | Add a claim. | 
 
-
 ### error
-
-(Indicate any errors that have been defined for use and how they affect the process flow.)
 
 When you return an error object, it should have the following structure:
 
@@ -135,7 +132,7 @@ When you return an error object, it should have the following structure:
 
 ### debugContext
 
-This object is user-defined. Information returned in it will be available in the Okta event log if (insert conditions, e.g., debug mode enabled for hook).
+This object is user-defined.
 
 ## Sample Listing of JSON Payload of Request
 
@@ -284,7 +281,7 @@ This object is user-defined. Information returned in it will be available in the
 ```JSON
 {"commands":
 [{
-    "type": "com.okta.oauth.tokens.transform.identity.patch",
+    "type": "com.okta.identity.patch",
     "value":
     [
         {
@@ -295,7 +292,7 @@ This object is user-defined. Information returned in it will be available in the
     ]
     },
     {
-    "type": "com.okta.tokens.access_token.patch",
+    "type": "com.okta.access.patch",
     "value":
 
 
