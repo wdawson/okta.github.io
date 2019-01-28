@@ -26,7 +26,6 @@ The table below summarizes the supported query parameters:
 >Note: Valid values for rel are `http://openid.net/specs/connect/1.0/issuer` and `okta:idp`, the first value being an Okta org, and the second being any configurable IdP.
 
 #### Request Example
-
 {:.api .api-request .api-request-example}
 
 ~~~sh
@@ -37,7 +36,6 @@ curl -v -X GET \
 ~~~
 
 #### Response Example
-
 {:.api .api-response .api-response-example}
 
 In this example, there is already a rule configured that has a user identifier condition which says that users with the domain `example.com` should be routed to a configured SAML IdP.
@@ -63,7 +61,6 @@ In this example, there is already a rule configured that has a user identifier c
 ~~~
 
 #### Request Example
-
 {:.api .api-request .api-request-example}
 
 ~~~sh
@@ -76,7 +73,6 @@ curl -v -X GET \
 >Note: This request looks similar to the previous one, but it includes a `rel` parameter which limits the results to a particular set of IdPs.
 
 #### Response Example
-
 {:.api .api-response .api-response-example}
 
 In this example, there is already a rule configured that has a user identifier condition which says that users with the domain `example.com` should be routed to a configured SAML IdP. However, we supplied a `rel` parameter of `http://openid.net/specs/connect/1.0/issuer` which limited the result to Okta
