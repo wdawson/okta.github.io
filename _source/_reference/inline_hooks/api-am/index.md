@@ -6,6 +6,8 @@ excerpt: Customize tokens returned by Okta API Access Management process flow.
 
 # API Access Management Inline Hook
 
+{% api_lifecycle ea %}
+
 This page provides reference documentation for:
 
 - JSON objects contained in the outbound request from Okta to your external service
