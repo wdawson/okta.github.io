@@ -5,20 +5,28 @@ title: Webfinger
 
 # WebFinger API
 
-The `webfinger` API allows a client to determine an IdP for a given username (or identifier) based on the org's Identity Provider Routing Rules (IdP Discovery Policy). If a rule is configured to match on a user attribute or if a user's shortname is provided (e.g. `joe.stormtrooper`), the API call will cross reference with all the users in the org to find the appropriate match.
+The `https://{yourOktaDomain}/.well-known/webfinger` API allows a client application to determine the IdP that a given username (or identifier) would be routed to, based on your org's Identity Provider Routing Rules (IdP Discovery Policy). If a rule is configured to match on a user attribute, or if a user's shortname is provided (e.g. `joe.stormtrooper`), the API call will cross-reference all users in the org to find the appropriate match.
 
 ## Finding a User's IdP 
 
-{% api_operation get /.well-known/webfinger?resource=okta%3Aacct%3Ajoe.stormtrooper%40example.com %}
+{% api_operation get /.well-known/webfinger %}
+
+Fetch IdP to be used for a particular user. You must supply a `resource` query paramter.
+
+### Request Parameters
+{:.api .api-request .api-request-params}
+
+The table below summarizes the supported query parameters:
 
 | Parameter      | Description                                                             | Param Type | DataType | Required |
 | :------------- | :---------------------------------------------------------------------- | :--------- | :------- | :------- |
 | resource       | User's login value prefixed with `okta:acct:`                           | URL        | String   | TRUE     |
 | rel            | Allows you to limit the result to certain IdPs                          | URL        | Array    | FALSE    |
 
->Note: Valid values for relArray are `http://openid.net/specs/connect/1.0/issuer` and `okta:idp`. The first value being an Okta org and the second being any configurable IdP.
+>Note: Valid values for rel are `http://openid.net/specs/connect/1.0/issuer` and `okta:idp`, the first value being an Okta org, and the second being any configurable IdP.
 
-##### Request Example
+#### Request Example
+
 {:.api .api-request .api-request-example}
 
 ~~~sh
@@ -28,7 +36,8 @@ curl -v -X GET \
 "https://{yourOktaDomain}/.well-known/webfinger?q=okta:acct:joe.stormtrooper%40example.com"
 ~~~
 
-##### Response Example
+#### Response Example
+
 {:.api .api-response .api-response-example}
 
 In this example, there is already a rule configured that has a user identifier condition which says that users with the domain `example.com` should be routed to a configured SAML IdP.
@@ -53,7 +62,8 @@ In this example, there is already a rule configured that has a user identifier c
 }
 ~~~
 
-##### Request Example
+#### Request Example
+
 {:.api .api-request .api-request-example}
 
 ~~~sh
@@ -65,7 +75,8 @@ curl -v -X GET \
 
 >Note: This request looks similar to the previous one, but it includes a `rel` parameter which limits the results to a particular set of IdPs.
 
-##### Response Example
+#### Response Example
+
 {:.api .api-response .api-response-example}
 
 In this example, there is already a rule configured that has a user identifier condition which says that users with the domain `example.com` should be routed to a configured SAML IdP. However, we supplied a `rel` parameter of `http://openid.net/specs/connect/1.0/issuer` which limited the result to Okta
