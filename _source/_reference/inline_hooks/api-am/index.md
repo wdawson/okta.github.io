@@ -32,11 +32,11 @@ For API Access Management hooks, the outbound call from Okta to your external se
 
 Provides information on the properties of the access token that Okta has generated, including the existing claims it contains.
 
-| Property | Description                               | Data Type                    |
-|----------|-------------------------------------------|------------------------------|
-| claims   | Claims included in the token.             | [claims](#claims) object     |
-| lifetime | Lifetime of the token                     | [lifetime](#lifetime) object |
-| scopes   | The scopes contained in the access token. | [scopes](#scopes) object     |
+| Property | Description                        | Data Type                    |
+|----------|------------------------------------|------------------------------|
+| claims   | Claims included in the token.      | [claims](#claims) object     |
+| lifetime | Lifetime of the token              | [lifetime](#lifetime) object |
+| scopes   | The scopes contained in the token. | [scopes](#scopes) object     |
 
 #### claims
 
@@ -68,7 +68,7 @@ Provides information on the properties of the ID token that Okta has generated, 
 | Property | Description                   | Data Type                    |
 |----------|-------------------------------|------------------------------|
 | claims   | Claims included in the token. | [claims](#claims) object     |
-| lifetime | Lifetime of the token         | [lifetime](#lifetime) object |
+| lifetime | Lifetime of the token.        | [lifetime](#lifetime) object |
 
 <!-- Cover all objects in data.context? -->
 
