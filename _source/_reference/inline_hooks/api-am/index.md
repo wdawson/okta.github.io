@@ -22,7 +22,7 @@ For a general introduction to Okta inline hooks, see [Inline Hooks](/_reference/
 
 For setup steps for the API Acccess Management inline hook, see [API Acess Management Inline Hook Setup](/use_cases/hooks/setup/api-am-setup.md).
 
-For information on the API for registering external service endpoints with Okta, see [Inline Hooks API](_docs/api/resources/inline-hooks.md).
+For information on the API for registering external service endpoints with Okta, see [Inline Hooks API](/api/resources/inline-hooks.md).
 
 ## Objects in the Request from Okta
 
