@@ -35,7 +35,7 @@ Provides information on the properties of the access token that Okta has generat
 | Property | Description                        | Data Type                    |
 |----------|------------------------------------|------------------------------|
 | claims   | Claims included in the token.      | [claims](#claims) object     |
-| lifetime | Lifetime of the token              | [lifetime](#lifetime) object |
+| lifetime | Lifetime of the token.             | [lifetime](#lifetime) object |
 | scopes   | The scopes contained in the token. | [scopes](#scopes) object     |
 
 #### claims
