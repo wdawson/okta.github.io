@@ -49,7 +49,7 @@ Provides information on the properties of the access token that Okta has generat
 | cid        |             |           |
 | uid        |             |           |
 
-Any custom caims you have defined for your authorization server, will also be included in `claims` as name-value pairs.
+Any custom caims you have defined for your authorization server will also be included in `claims` as name-value pairs.
 
 #### lifetime
 
