@@ -148,7 +148,7 @@ This object is user-defined.
 
 ```JSON
 {  
-   "source":"https://rain.okta1.com/oauth2/default/v1/authorize",
+   "source":"https://{yourOktaDomain}/oauth2/default/v1/authorize",
    "eventId":"3OWo4oo-QQ-rBWfRyTmQYw",
    "eventTime":"2019-01-15T23:20:47.000Z",
    "data":{  
@@ -157,7 +157,7 @@ This object is user-defined.
             "id":"reqv66CbCaCStGEFc8AdfS0ng",
             "method":"GET",
             "url":{  
-               "value":"https://rain.okta1.com/oauth2/default/v1/authorize?scope=openid+profile+email&response_type=token+id_token&redirect_uri=https%3A%2F%2Fhttpbin.org%2Fget&state=foobareere&nonce=asf&client_id=customClientIdNative"
+               "value":"https://{yourOktaDomain}/oauth2/default/v1/authorize?scope=openid+profile+email&response_type=token+id_token&redirect_uri=https%3A%2F%2Fhttpbin.org%2Fget&state=foobareere&nonce=asf&client_id=customClientIdNative"
             },
             "ipAddress":"127.0.0.1"
          },
@@ -172,7 +172,7 @@ This object is user-defined.
                "client_id":"customClientIdNative"
             },
             "issuer":{  
-               "uri":"https://rain.okta1.com/oauth2/default"
+               "uri":"https://{yourOktaDomain}/oauth2/default"
             },
             "client":{  
                "id":"customClientIdNative",
@@ -209,10 +209,10 @@ This object is user-defined.
             },
             "_links":{  
                "groups":{  
-                  "href":"https://rain.okta1.com/00uq8tMo3zV0OfJON0g3/groups"
+                  "href":"https://{yourOktaDomain}/00uq8tMo3zV0OfJON0g3/groups"
                },
                "factors":{  
-                  "href":"https://rain.okta1.com/api/v1/users/00uq8tMo3zV0OfJON0g3/factors"
+                  "href":"https://{yourOktaDomain}/api/v1/users/00uq8tMo3zV0OfJON0g3/factors"
                }
             }
          },
@@ -229,7 +229,7 @@ This object is user-defined.
             "name":"Add-Min O'Cloudy Tud",
             "email":"webmaster@clouditude.net",
             "ver":1,
-            "iss":"https://rain.okta1.com/oauth2/default",
+            "iss":"https://{yourOktaDomain}/oauth2/default",
             "aud":"customClientIdNative",
             "jti":"ID.YxF2whJfB3Eu4ktG_7aClqtCgjDq6ab_hgpiV7-ZZn0",
             "amr":[  
@@ -250,7 +250,7 @@ This object is user-defined.
          "claims":{  
             "ver":1,
             "jti":"AT.W-rrB-z-kkZQmHW0e6VS3Or--QfEN_YvoWJa46A7HAA",
-            "iss":"https://rain.okta1.com/oauth2/default",
+            "iss":"https://{yourOktaDomain}/oauth2/default",
             "aud":"api://default",
             "cid":"customClientIdNative",
             "uid":"00uq8tMo3zV0OfJON0g3",
