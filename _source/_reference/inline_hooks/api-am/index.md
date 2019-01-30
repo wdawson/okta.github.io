@@ -28,11 +28,11 @@ For information on the API for registering external service endpoints with Okta,
 
 This type of inline hook is triggered when OAuth 2.0 and OpenID tokens are minted by your Okta custom Authorization Server. Before sending the token to the requestor, Okta calls out to your external service. Your service can respond with commands to add aditional custom claims to the token before Okta sends it to the requestor.
 
-This capability can be used to add sensitive user data to tokens without having to store that data in Okta user profiles. For example, tokens minted for a medical app can be augmented with medical data, without that data needing to be stored in Okta.
+This capability can be used to add sensitive user data to tokens without having to store that data in Okta user profiles. For example, tokens minted for a medical app can be augmented with medical data, without that data needing to be stored in Okta user profiles.
 
 ### Limitations
 
-This inline hook works only with custom Authorization Servers created in your Okta org, not with the Okta default Authoritzation Server.
+This inline hook works only with custom Authorization Servers, not with the Okta default Authoritzation Server.
 
 You cannot use this inline hook to overwrite claims in tokens, only to add new ones.
 
@@ -52,20 +52,20 @@ Provides information on the properties of the access token that Okta has generat
 
 #### claims
 
-| Property   | Description | Data Type |
-|------------|-------------|-----------|
-| ver        |             |           |
-| jti        |             |           |
-| iss        |             |           |
-| aud        |             |           |
-| cid        |             |           |
-| uid        |             |           |
+| Property | Description                                                                 | Data Type |
+|----------|-----------------------------------------------------------------------------|-----------|
+| ver      | The semantic version of the access token.                                   | Number    |
+| jti      | Unique identifier for this JWT.                                             | String    |
+| iss      | The URL of the authorization server that issued the token.                  | String    |
+| aud      | The audience of the token.                                                  | String    |
+| cid      | Client ID of the client that requested the access token.                    | String    |
+| uid      | A unique identifier for the user (not included if token not bound to user). | String    |
 
 #### lifetime
 
-| Property   | Description | Data Type |
-|------------|-------------|-----------|
-| expiration |             | Number    |
+| Property   | Description                                                            | Data Type |
+|------------|------------------------------------------------------------------------|-----------|
+| expiration | The expiration time of the token in seconds since January 1, 1970 UTC. | number    |
 
 #### scopes
 
