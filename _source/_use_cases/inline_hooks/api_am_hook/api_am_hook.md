@@ -20,17 +20,17 @@ This information is specific to the API Access Management Inline Hook, one type 
 
 For a general introduction to Okta inline hooks, see [Inline Hooks](/use_cases/inline_hooks).
 
-For setup steps for the API Acccess Management Inline Hook, see [API Acess Management Inline Hook Setup](/use_cases/inline_hooks/api_am_hook/api_am_setup.md).
+For setup steps for the API Access Management Inline Hook, see [API Acess Management Inline Hook Setup](/use_cases/inline_hooks/api_am_hook/api_am_setup.md).
 
 For information on the API for registering external service endpoints with Okta, see [Inline Hooks API](/docs/api/resources/inline-hooks.md).
 
 ## About
 
-This type of inline hook is triggered when OAuth 2.0 and OpenID tokens are minted by your Okta custom Authorization Server. Before sending the token to the requestor, Okta calls out to your external service. Your service can respond with commands to add additional custom claims to the token before Okta sends it to the requestor.
+This type of inline hook is triggered when OAuth 2.0 and OpenID tokens are minted by your Okta custom Authorization Server. Before sending the token to the requester, Okta calls out to your external service. Your service can respond with commands to add additional custom claims to the token before Okta sends it to the requester.
 
 This capability can be used to add sensitive user data to tokens without having to store that data in Okta user profiles. For example, tokens minted for a medical app can be augmented with medical data, without that data needing to be stored in Okta user profiles.
 
-This inline hook works only with custom Authorization Servers, not with the Okta default Authoritzation Server.
+This inline hook works only with an Okta Custom Authorization Server, not the built-in Okta Authorization Server.
 
 You cannot use this inline hook to overwrite claims in tokens, only to add new ones.
 
@@ -86,9 +86,9 @@ For the API Access Management Inline hook, the `commands`, `error`, and `debugCo
 
 ### commands
 
-The `commands` object is where you can provide commands to Okta. It is an array, allowing you to send mutlitple commands. In each array element, there needs to be a `type` property and `value` property. The `type` property is where you specify which of the supported commands you wish to execute, and `value` is where you supply an operand for that command.
+The `commands` object is where you can provide commands to Okta. It is an array, allowing you to send multiple commands. In each array element, there needs to be a `type` property and `value` property. The `type` property is where you specify which of the supported commands you wish to execute, and `value` is where you supply an operand for that command.
 
-In the case of the API Access Managment hook type, the `value` property is itself a nested object, in which you specify a particular operation, a path to act on, and a value.
+In the case of the API Access Management hook type, the `value` property is itself a nested object, in which you specify a particular operation, a path to act on, and a value.
 
 | Property | Description                                                              | Data Type       |
 |----------|--------------------------------------------------------------------------|-----------------|

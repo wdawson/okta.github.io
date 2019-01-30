@@ -22,7 +22,7 @@ The Okta process that triggered the hook is paused until a response from your se
 
 Okta defines several different types of inline hooks. Each type of inline hook makes it possible to customize a different Okta process flow. All the types share the same general syntax for requests and responses sent between Okta and the external service, but each differs in the specifics of the JSON objects that are sent and received. When implementing your external service, you need to develop your code according to the details of the particular type of hook you intend to use.
 
-### Currently Suported Types
+### Currently-Supported Types
 
 | Name | Description |
 | --- | --- |
@@ -86,7 +86,7 @@ Always included is a `data.context` object, providing context information. In ge
 
 ## The Response
 
-Your service receives the request from Okta and needs to respond to it. The response needs to include an HTTP response code and will usually also include a JSON payload. In particular, you will typically include a `commands` object in the the JSON payload to specify actions for Okta to execute or to communicate information back to Okta.
+Your service receives the request from Okta and needs to respond to it. The response needs to include an HTTP response code and will usually also include a JSON payload. In particular, you will typically include a `commands` object in the JSON payload to specify actions for Okta to execute or to communicate information back to Okta.
 
 ### HTTP Status Code
 
@@ -107,7 +107,7 @@ Lets you return commands to Okta to affect the process flow being executed and t
 
 The `commands` object is an array, allowing you to return more than one command in your response. Each element within the array needs to consist of a pair of `type` and `value` elements. Each `type` element needs to be the name of a supported command you wish to invoke. The corresponding `value` element is the operand you wish to specify for the command.
 
-The names of commands follow Java-style reverse DNS name format, beginning with com.okta, followed by an Okta object that the command operates on, and then an action.
+The names of commands follow Java-style reverse DNS name format, beginning with `com.okta`, followed by an Okta object that the command operates on, and then an action.
 
 #### error
 
