@@ -14,19 +14,19 @@ This page provides reference documentation for:
 
 - JSON objects you can include in your response
 
-This information is specific to the API Access Management hook, one type of inline hook supported by Okta.
+This information is specific to the API Access Management Inline Hook, one type of inline hook supported by Okta.
 
 ## See Also
 
-For a general introduction to Okta inline hooks, see [Inline Hooks](/docs/_reference/inline_hooks).
+For a general introduction to Okta inline hooks, see [Inline Hooks](/use_cases/inline_hooks).
 
-For setup steps for the API Acccess Management Inline Hook, see [API Acess Management Inline Hook Setup](/docs/use_cases/hooks/setup/api-am-setup.md).
+For setup steps for the API Acccess Management Inline Hook, see [API Acess Management Inline Hook Setup](/use_cases/inline_hooks/api_am_hook/api_am_setup.md).
 
 For information on the API for registering external service endpoints with Okta, see [Inline Hooks API](/docs/api/resources/inline-hooks.md).
 
 ## About
 
-This type of inline hook is triggered when OAuth 2.0 and OpenID tokens are minted by your Okta custom Authorization Server. Before sending the token to the requestor, Okta calls out to your external service. Your service can respond with commands to add aditional custom claims to the token before Okta sends it to the requestor.
+This type of inline hook is triggered when OAuth 2.0 and OpenID tokens are minted by your Okta custom Authorization Server. Before sending the token to the requestor, Okta calls out to your external service. Your service can respond with commands to add additional custom claims to the token before Okta sends it to the requestor.
 
 This capability can be used to add sensitive user data to tokens without having to store that data in Okta user profiles. For example, tokens minted for a medical app can be augmented with medical data, without that data needing to be stored in Okta user profiles.
 
@@ -36,7 +36,7 @@ You cannot use this inline hook to overwrite claims in tokens, only to add new o
 
 ## Objects in the Request from Okta
 
-For API Access Management hooks, the outbound call from Okta to your external service will include the following objects in its JSON payload:
+For the API Access Management Inline Hook, the outbound call from Okta to your external service will include the following objects in its JSON payload:
 
 ### data.access
 
@@ -82,7 +82,7 @@ Provides information on the properties of the ID token that Okta has generated, 
 
 ## Objects in Response You Send
 
-For API Access Management hooks, the `commands`, `error`, and `debugContext` objects that you can return in the JSON payload of your response are defined as follows:
+For the API Access Management Inline hook, the `commands`, `error`, and `debugContext` objects that you can return in the JSON payload of your response are defined as follows:
 
 ### commands
 
@@ -97,7 +97,7 @@ In the case of the API Access Managment hook type, the `value` property is itsel
 
 #### List of Supported Commands
 
-The following commands are supported for the API Access Management inline hook type:
+The following commands are supported for the API Access Management Inline Hook type:
 
 | Command                 | Description             |
 |-------------------------|-------------------------|
