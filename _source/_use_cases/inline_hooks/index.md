@@ -10,7 +10,7 @@ excerpt: Integrate custom functionality into Okta process flows.
 
 ## What Are Okta Inline Hooks?
 
-Inline hooks are outbound calls from Okta to your own custom code, triggered at specific points in Okta process flows. They allow you to integrate custom functionality into those Okta process flows.
+Inline hooks are outbound calls from Okta to your own custom code, triggered at specific points in Okta process flows. They allow you to integrate custom functionality into those flows.
 
 You implement your custom code as a web service with an Internet-accessible endpoint. It's your responsibility to arrange hosting of your code on a system external to Okta. Okta defines the REST API contract for the requests it sends to your custom code, as well as for the responses your custom code can send back. 
 
@@ -27,7 +27,7 @@ Okta defines several different types of inline hooks. Each type of inline hook m
 | Name | Description |
 | --- | --- |
 | [API Access Management Inline Hook](/use_cases/inline_hooks/api_am_hook/api_am_hook) | Customizes tokens returned by Okta API Access Management.|
-| SAML Inline Hook |
+| [SAML Inline Hook](/use_cases/inline_hooks/saml_hook/saml_hook) | Customizes SAML assertions Okta passes to apps. |
 
 ## Inline Hook Process Flow
 
