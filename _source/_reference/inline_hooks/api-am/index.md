@@ -30,8 +30,6 @@ This type of inline hook is triggered when OAuth 2.0 and OpenID tokens are minte
 
 This capability can be used to add sensitive user data to tokens without having to store that data in Okta user profiles. For example, tokens minted for a medical app can be augmented with medical data, without that data needing to be stored in Okta user profiles.
 
-### Limitations
-
 This inline hook works only with custom Authorization Servers, not with the Okta default Authoritzation Server.
 
 You cannot use this inline hook to overwrite claims in tokens, only to add new ones.
@@ -119,6 +117,8 @@ The following commands are supported for the API Access Management inline hook t
 | Op  | Description  |
 |-----|--------------|
 | add | Add a claim. | 
+
+> Note: The `add` operation can only be used to add new claims to a token, not to overwrite the value of a claim that is already included in the token.
 
 ### error
 
