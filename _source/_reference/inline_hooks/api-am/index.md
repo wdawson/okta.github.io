@@ -118,7 +118,7 @@ The following commands are supported for the API Access Management inline hook t
 |-----|--------------|
 | add | Add a claim. | 
 
-> Note: The `add` operation can only be used to add new claims to a token, not to overwrite the value of a claim that is already included in the token.
+> Note: The `add` operation can only be used to add new claims to a token, not to overwrite the value of a claim already included in the token.
 
 ### error
 
