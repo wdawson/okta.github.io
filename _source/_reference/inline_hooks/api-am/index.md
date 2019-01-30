@@ -20,9 +20,21 @@ This information is specific to the API Access Management hook, one type of inli
 
 For a general introduction to Okta inline hooks, see [Inline Hooks](/docs/_reference/inline_hooks).
 
-For setup steps for the API Acccess Management inline hook, see [API Acess Management Inline Hook Setup](/docs/use_cases/hooks/setup/api-am-setup.md).
+For setup steps for the API Acccess Management Inline Hook, see [API Acess Management Inline Hook Setup](/docs/use_cases/hooks/setup/api-am-setup.md).
 
 For information on the API for registering external service endpoints with Okta, see [Inline Hooks API](/docs/api/resources/inline-hooks.md).
+
+## About
+
+This type of inline hook is triggered when OAuth 2.0 and OpenID tokens are minted by your Okta custom Authorization Server. Before sending the token to the requestor, Okta calls out to your external service. Your service can respond with commands to add aditional custom claims to the token before Okta sends it to the requestor.
+
+This capability can be used to add sensitive user data to tokens without having to store that data in Okta user profiles. For example, tokens minted for a medical app can be augmented with medical data, without that data needing to be stored in Okta.
+
+### Limitations
+
+This inline hook works only with custom Authorization Servers created in your Okta org, not with the Okta default Authoritzation Server.
+
+You cannot use this inline hook to overwrite claims in tokens, only to add new ones.
 
 ## Objects in the Request from Okta
 
@@ -69,8 +81,6 @@ Provides information on the properties of the ID token that Okta has generated, 
 |----------|-------------------------------|------------------------------|
 | claims   | Claims included in the token. | [claims](#claims) object     |
 | lifetime | Lifetime of the token.        | [lifetime](#lifetime) object |
-
-<!-- Cover all objects in data.context? -->
 
 ## Objects in Response You Send
 
