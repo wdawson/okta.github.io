@@ -52,20 +52,20 @@ Provides information on the properties of the access token that Okta has generat
 
 #### claims
 
-| Property | Description                                                                 | Data Type |
-|----------|-----------------------------------------------------------------------------|-----------|
-| ver      | The semantic version of the access token.                                   | Number    |
-| jti      | Unique identifier for this JWT.                                             | String    |
-| iss      | The URL of the authorization server that issued the token.                  | String    |
-| aud      | The audience of the token.                                                  | String    |
-| cid      | Client ID of the client that requested the access token.                    | String    |
-| uid      | A unique identifier for the user (not included if token not bound to user). | String    |
+| Property | Description                                                                   | Data Type |
+|----------|-------------------------------------------------------------------------------|-----------|
+| ver      | The semantic version of the access token.                                     | Number    |
+| jti      | Unique identifier for this JWT.                                               | String    |
+| iss      | The URL of the authorization server that issued the token.                    | String    |
+| aud      | The audience of the token.                                                    | String    |
+| cid      | Client ID of the client that requested the access token.                      | String    |
+| uid      | A unique identifier for the user (not included if token not bound to a user). | String    |
 
 #### lifetime
 
 | Property   | Description                                                            | Data Type |
 |------------|------------------------------------------------------------------------|-----------|
-| expiration | The expiration time of the token in seconds since January 1, 1970 UTC. | number    |
+| expiration | The expiration time of the token in seconds since January 1, 1970 UTC. | Number    |
 
 #### scopes
 
