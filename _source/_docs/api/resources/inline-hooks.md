@@ -9,7 +9,7 @@ excerpt: The Inline Hooks APIs provides a CRUD and execution interface for Inlin
 
 {% api_lifecycle ea %}
 
-The Inline Hooks Management API provides a CRUD interface for registering external inline hook endpoints, as well as a way to manually trigger invocation of an inline hook for testing purposes. For general information on inline hooks, see [Inline Hooks](/use_cases/inline_hooks).
+The Inline Hooks Management API provides a CRUD interface for registering external inline hook endpoints, as well as a way to manually trigger invocation of an inline hook for testing purposes. For general information on inline hooks, see [Inline Hooks](/use_cases/inline_hooks/).
 
 ## Inline Hook Operations
 
