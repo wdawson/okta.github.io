@@ -78,11 +78,11 @@ The Authorization header is a secret string you provide to Okta when you registe
 
 ### JSON Payload Objects
 
-The JSON payload is where Okta provides specific information about the process flow that's being executed, so that your external service can evaluate the specific situation. Information is encapsulated in JSON objects. The set of objects sent depends on the type of inline hook you're using. Objects are defined in the specific documentation for each kind of inline hook.
+The JSON payload is where Okta provides specific information about the process flow that's being executed, so that your external service can evaluate the specific situation. Information is encapsulated in JSON objects. The set of objects sent depends on the type of inline hook you're using. Objects are defined in the specific documentation for each type of inline hook.
 
 The objects providing this information are nested within a large object called `data`.
 
-Always included is a `data.context` object, providing context information. In general, `data.context` encapsulates Okta objects that your external service cannot affect, while objects in `data` outside of `data.context` encapsulate objects that your external service has the ability to affect by means of the commands it sends in its response.
+Always included is a `data.context` object, providing context information. In general, `data.context` encapsulates Okta objects that your external service cannot affect, while objects in `data` that are outside of `data.context` encapsulate objects that your external service does have the ability to affect, by means of the commands it sends in its response.
 
 ## The Response
 
@@ -125,7 +125,7 @@ After creating your external service, you need to tell Okta it exists, and enabl
 
 1. Create an external service.
 
-1. Register your service's endpoint with Okta by making a `POST` request to `/api/v1/inlineHooks`. You specify your endpoint's address in the request's JSON payload, in the property `channel.config.uri`. See [Inline Hooks Management API](/docs/api/resources/inline-hooks).
+1. Register your service's endpoint with Okta by making a `POST` request to `/api/v1/inlineHooks`. See [Inline Hooks Management API](/docs/api/resources/inline-hooks).
 
-1. Associate the endpoint with a particular Okta process flow. How to do this varies by inline hook.
+1. Associate the endpoint with a particular Okta process flow. How to do this varies by inline hook type.
 
