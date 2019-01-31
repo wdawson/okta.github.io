@@ -18,7 +18,7 @@ This information is specific to the API Access Management Inline Hook, one type 
 
 ## See Also
 
-For a general introduction to Okta inline hooks, see [Inline Hooks](/use_cases/inline_hooks).
+For a general introduction to Okta inline hooks, see [Inline Hooks](/use_cases/inline_hooks/index).
 
 For information on the API for registering external service endpoints with Okta, see [Inline Hooks Management API](/docs/api/resources/inline-hooks).
 
