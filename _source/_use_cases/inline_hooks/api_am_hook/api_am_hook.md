@@ -93,7 +93,7 @@ In the case of the API Access Management hook type, the `value` property is itse
 | type     | One of the [supported commands](#supported-commands).                    | String          |
 | value    | Operand to pass to the command. It specifies a particular op to perform. | [value](#value) |
 
-#### List of Supported Commands
+#### Supported Commands
 
 The following commands are supported for the API Access Management Inline Hook type:
 
