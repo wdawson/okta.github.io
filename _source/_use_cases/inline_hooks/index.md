@@ -24,10 +24,10 @@ Okta defines several different types of inline hooks. Each type of inline hook m
 
 ### Currently-Supported Types
 
-| Name | Description |
-| --- | --- |
-| [API Access Management Inline Hook](/use_cases/inline_hooks/api_am_hook/api_am_hook) | Customizes tokens returned by Okta API Access Management.|
-| [SAML Inline Hook](/use_cases/inline_hooks/saml_hook/saml_hook) | Customizes SAML assertions Okta passes to apps. |
+| Name                                                                                 | Description                                               |
+|--------------------------------------------------------------------------------------|-----------------------------------------------------------|
+| [API Access Management Inline Hook](/use_cases/inline_hooks/api_am_hook/api_am_hook) | Customizes tokens returned by Okta API Access Management. |
+| SAML Inline Hook                                                                     | Customizes SAML assertions Okta passes to apps.           |
 
 ## Inline Hook Process Flow
 
@@ -125,7 +125,7 @@ After creating your external service, you need to tell Okta it exists, and enabl
 
 1. Create an external service.
 
-1. Register your service's endpoint with Okta by making a `POST` request to `/api/v1/inlineHooks`. You specify your endpoint's address in the request's JSON payload, in the object `channel.config.uri`. See [Inline Hooks Management API](/docs/api/resources/inline-hooks).
+1. Register your service's endpoint with Okta by making a `POST` request to `/api/v1/inlineHooks`. You specify your endpoint's address in the request's JSON payload, in the property `channel.config.uri`. See [Inline Hooks Management API](/docs/api/resources/inline-hooks).
 
 1. Associate the endpoint with a particular Okta process flow. How to do this varies by inline hook.
 

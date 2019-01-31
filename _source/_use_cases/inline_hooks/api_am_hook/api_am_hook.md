@@ -20,13 +20,11 @@ This information is specific to the API Access Management Inline Hook, one type 
 
 For a general introduction to Okta inline hooks, see [Inline Hooks](/use_cases/inline_hooks).
 
-For setup steps for the API Access Management Inline Hook, see [API Acess Management Inline Hook Setup](/use_cases/inline_hooks/api_am_hook/api_am_setup.md).
-
-For information on the API for registering external service endpoints with Okta, see [Inline Hooks API](/docs/api/resources/inline-hooks.md).
+For information on the API for registering external service endpoints with Okta, see [Inline Hooks Management API](/docs/api/resources/inline-hooks).
 
 ## About
 
-This type of inline hook is triggered when OAuth 2.0 and OpenID tokens are minted by your Okta custom Authorization Server. Before sending the token to the requester, Okta calls out to your external service. Your service can respond with commands to add additional custom claims to the token before Okta sends it to the requester.
+This type of inline hook is triggered when OAuth 2.0 and OpenID Connect tokens are minted by your Okta custom Authorization Server. Before sending the token to the requester, Okta calls out to your external service. Your service can respond with commands to add additional custom claims to the token before Okta sends it to the requester.
 
 This capability can be used to add sensitive user data to tokens without having to store that data in Okta user profiles. For example, tokens minted for a medical app can be augmented with medical data, without that data needing to be stored in Okta user profiles.
 
