@@ -27,7 +27,6 @@ Okta defines several different types of inline hooks. Each type of inline hook m
 | Name                                                                                 | Description                                               |
 |--------------------------------------------------------------------------------------|-----------------------------------------------------------|
 | [API Access Management Inline Hook](/use_cases/inline_hooks/api_am_hook/api_am_hook) | Customizes tokens returned by Okta API Access Management. |
-| SAML Inline Hook                                                                     | Customizes SAML assertions Okta passes to apps.           |
 
 ## Inline Hook Process Flow
 
