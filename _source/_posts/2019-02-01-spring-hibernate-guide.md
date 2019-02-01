@@ -64,7 +64,7 @@ In this post, you are going to work in two different technology stacks. You’ll
 
 In this project, you are going to use core Hibernate functionality with JPA annotations. You are not addressing _XML_ configuration as it is not commonly used nowadays.
 
-The project is already implemented [here](https://github.com/oktadeveloper/okta-spring-boot-hibernate-spring-project/tree/raw). The database model is represented in the following model:
+The project is already implemented [here](https://github.com/oktadeveloper/okta-spring-boot-hibernate-spring-project/tree/raw) on the `raw` branch. The database model is represented in the following model:
 
 ```
 +--------+*        1 +-------+
@@ -272,7 +272,7 @@ Phew! That's a lot of code. Now we are going to remove a lot of then by introduc
 
 As you probably know, [Spring Boot](https://spring.io/projects/spring-boot) has a lot of [magic](https://www.brainyquote.com/quotes/arthur_c_clarke_101182) under the hood. I have to say, using it together with Spring Data is awesome.
 
-You need to create a new project using [Spring Initializr](https://start.spring.io/) with `Web`, `JPA`, and `H2` dependencies. After the project is created, copy all `entities` package to the new project, without any changes. Then, add the `@EnableTransactionManagement` annotation to `net.dovale.okta.springhibernate.spring.Application` class as follows:
+You need to create a new project using [Spring Initializr](https://start.spring.io/) with `JPA` and `H2` dependencies. After the project is created, copy all `entities` package to the new project, without any changes. Then, add the `@EnableTransactionManagement` annotation to `net.dovale.okta.springhibernate.spring.Application` class as follows:
 
 ```java
 @SpringBootApplication
@@ -364,7 +364,7 @@ To execute this code (which simply adds the entities to an ephemeral database), 
 ```
 ## Remove Even More Code with Project Lombok
 
-Have you read about [Project Lombok](https://projectlombok.org/)? It works in compile level to reduce Java _famous_ verbosity and add features that are not available in your current JDK version ([1](https://projectlombok.org/features/val),[2](https://projectlombok.org/features/var)). In our case, we will remove all boilerplate in entities classes.
+Have you read about [Project Lombok](https://projectlombok.org/)? It works in compile level to reduce Java _famous_ verbosity and add features that are not available in your current JDK version (e.g. [val](https://projectlombok.org/features/val) and [var](https://projectlombok.org/features/var)). In our case, we will remove all boilerplate in entities classes.
 
 Check branch `lombok` to see the final result. Now we just need to add the dependency:
 
@@ -443,107 +443,56 @@ About the magic thing, do you believe you just need to add a single dependency t
 </dependency>
 ```
 
-Run `./mvnw spring-boot run` and curl the following address:
+Run `./mvnw spring-boot run` and [HTTPie](https://httpie.org/) the following address:
 
 ```bash
-curl http://localhost:8080/teachingClasses
+http http://localhost:8080/teachers
 ```
 ```
+HTTP/1.1 200
+Content-Type: application/hal+json;charset=UTF-8
+Date: Fri, 01 Feb 2019 16:32:43 GMT
+Transfer-Encoding: chunked
+
 {
-  "_embedded" : {
-    "teachingClasses" : [ {
-      "year" : 1988,
-      "_links" : {
-        "self" : {
-          "href" : "http://localhost:8080/teachingClasses/13"
-        },
-        "teachingClass" : {
-          "href" : "http://localhost:8080/teachingClasses/13"
-        },
-        "course" : {
-          "href" : "http://localhost:8080/teachingClasses/13/course"
-        },
-        "students" : {
-          "href" : "http://localhost:8080/teachingClasses/13/students"
-        },
-        "teacher" : {
-          "href" : "http://localhost:8080/teachingClasses/13/teacher"
-        }
-      }
-    }, {
-      "year" : 1988,
-      "_links" : {
-        "self" : {
-          "href" : "http://localhost:8080/teachingClasses/14"
-        },
-        "teachingClass" : {
-          "href" : "http://localhost:8080/teachingClasses/14"
-        },
-        "course" : {
-          "href" : "http://localhost:8080/teachingClasses/14/course"
-        },
-        "students" : {
-          "href" : "http://localhost:8080/teachingClasses/14/students"
-        },
-        "teacher" : {
-          "href" : "http://localhost:8080/teachingClasses/14/teacher"
-        }
-      }
-    }, {
-      "year" : 1995,
-      "_links" : {
-        "self" : {
-          "href" : "http://localhost:8080/teachingClasses/15"
-        },
-        "teachingClass" : {
-          "href" : "http://localhost:8080/teachingClasses/15"
-        },
-        "course" : {
-          "href" : "http://localhost:8080/teachingClasses/15/course"
-        },
-        "students" : {
-          "href" : "http://localhost:8080/teachingClasses/15/students"
-        },
-        "teacher" : {
-          "href" : "http://localhost:8080/teachingClasses/15/teacher"
-        }
-      }
-    }, {
-      "year" : 1996,
-      "_links" : {
-        "self" : {
-          "href" : "http://localhost:8080/teachingClasses/16"
-        },
-        "teachingClass" : {
-          "href" : "http://localhost:8080/teachingClasses/16"
-        },
-        "course" : {
-          "href" : "http://localhost:8080/teachingClasses/16/course"
-        },
-        "students" : {
-          "href" : "http://localhost:8080/teachingClasses/16/students"
-        },
-        "teacher" : {
-          "href" : "http://localhost:8080/teachingClasses/16/teacher"
-        }
-      }
-    } ]
-  },
-  "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/teachingClasses{?page,size,sort}",
-      "templated" : true
+    "_embedded": {
+        "teachers": [
+            {
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/teachers/1"
+                    },
+                    "teacher": {
+                        "href": "http://localhost:8080/teachers/1"
+                    }
+                },
+                "email": "jirafales@example.com",
+                "name": "Profesor Jirafales",
+                "pictureURL": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Ruben2017.jpg/245px-Ruben2017.jpg"
+            },
+            {
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/teachers/2"
+                    },
+                    "teacher": {
+                        "href": "http://localhost:8080/teachers/2"
+                    }
+                },
+                "email": "director@xproject_.com",
+                "name": "Professor X",
+                "pictureURL": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9uI1Cb-nQ2uJOph4_t96KRvLSMjczAKnHLJYi1nqWXagvqWc4"
+            }
+        ]
     },
-    "profile" : {
-      "href" : "http://localhost:8080/profile/teachingClasses"
+    "_links": {
+        "profile": {
+            "href": "http://localhost:8080/profile/teachers"
+        },
+        "self": {
+            "href": "http://localhost:8080/teachers"
+        }
     }
-  },
-  "page" : {
-    "size" : 20,
-    "totalElements" : 4,
-    "totalPages" : 1,
-    "number" : 0
-  }
 }
 ```
 
