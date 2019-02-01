@@ -584,11 +584,11 @@ Now, start the application again. It’ll be locked and you will be unable to ma
 
 Create a new **Web** application in Okta:
 
-{% img blog/spring-hibernate-guide/okta-app-general.png alt:"New web application" width:"800" %}{: .center-image }
+{% img blog/spring-hibernate-guide/okta-app-wizard.png alt:"New web application" width:"800" %}{: .center-image }
 
-Set the _Login redirect URIs_ field to https://oidcdebugger.com/debug and _Grant Type Allowed_ to Hybrid. Click **Done** and copy the client ID for the next step.
+Set the **Login redirect URIs** field to `https://oidcdebugger.com/debug` and **Grant Type Allowed** to Hybrid. Click **Done** and copy the client ID for the next step.
 
-On the OpenID Connect website, fill the form in like the picture below (do not forget to fill in the client ID for your recently created Okta web application):
+On the [OIDC Debugger](https://oidcdebugger.com/) website, fill the form in like the picture below (do not forget to fill in the client ID for your recently created Okta web application):
 
 {% img blog/spring-hibernate-guide/oidc-config.png alt:"OpenID connect" width:"700" %}{: .center-image }
 
@@ -600,7 +600,7 @@ The token will be valid for one hour so you can do a lot of testing with your AP
 
 ```bash
 export TOKEN=${YOUR_TOKEN}
-curl http://localhost:8080 -H "Authorization: Bearer $TOKEN"
+http http://localhost:8080 "Authorization: Bearer $TOKEN"
 ```
 
 For this last step, you can check out the `master` branch and see all the changes I made.
@@ -615,7 +615,7 @@ Although all database schemas in this post were created automatically by Hiberna
 
 In this tutorial, you learned about Hibernate, JPA, and Spring’s evolution toward better SQL integration via object-oriented languages. Over the course of the tutorial, you also continuously improved your code so you had better readability and followed better practices.
 
-The source code for this tutorial is [available on GitHub](https://github.com/oktadeveloper/okta-spring-boot-hibernate-spring-project/tree/raw). 
+The source code for this tutorial is [available on GitHub](https://github.com/oktadeveloper/okta-spring-boot-hibernate-spring-project). 
 
 Here some articles on this blog that will help you for further understanding:
 
