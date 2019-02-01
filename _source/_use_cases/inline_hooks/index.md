@@ -74,15 +74,15 @@ Authorization: <key>
 
 #### Authorization Header
 
-The Authorization header is a secret string you provide to Okta when you register your external service. This string serves as an API access key for your service, and Okta will provide it in every request, allowing your code to check for its presence as a security measure. (This is not an Okta authorization token, it is simply a text string you decide on.)
+The Authorization header is a secret string you provide to Okta when you register your external service. This string serves as an API access key for your service, and Okta provides it in every request, allowing your code to check for its presence as a security measure. (This is not an Okta authorization token, it is simply a text string you decide on.)
 
 ### JSON Payload Objects
 
 The JSON payload is where Okta provides specific information about the process flow that's being executed, so that your external service can evaluate the specific situation. Information is encapsulated in JSON objects. The set of objects sent depends on the type of inline hook you're using. Objects are defined in the specific documentation for each type of inline hook.
 
-The objects providing this information are nested within a large object called `data`.
+The objects providing this information are nested within a larger object called `data`.
 
-Always included is a `data.context` object, providing context information. In general, `data.context` encapsulates Okta objects that your external service cannot affect, while objects in `data` that are outside of `data.context` encapsulate objects that your external service does have the ability to affect, by means of the commands it sends in its response.
+Always included is `data.context`, providing context information. In general, `data.context` encapsulates Okta objects that your external service cannot affect, while objects in `data` that are outside of `data.context` encapsulate objects that your external service does have the ability to affect, by means of the commands it sends in its response.
 
 ## The Response
 
