@@ -67,7 +67,7 @@ Consists of name-value pairs for each included claim. See [Tokens and Claims](/d
 
 #### scopes
 
-An array containing the scopes that have been granted by the Authorization server. See [Tokens and Claims](/docs/api/resources/oidc#tokens-and-claims), in the documentation for Okta's OpenID Connect and OAuth 2.0 API, for descriptions of the claims that can be included.
+The set of scopes that have been granted. See [Tokens and Claims](/docs/api/resources/oidc#tokens-and-claims), in the documentation for Okta's OpenID Connect and OAuth 2.0 API, for descriptions of the scopes that can be included.
 
 
 ## Objects in Response You Send
