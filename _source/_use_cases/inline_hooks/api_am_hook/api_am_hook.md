@@ -22,6 +22,8 @@ For a general introduction to Okta inline hooks, see [Inline Hooks](/use_cases/i
 
 For information on the API for registering external service endpoints with Okta, see [Inline Hooks Management API](/docs/api/resources/inline-hooks).
 
+For steps to enable this inline hook, see below, [Enabling an API Access Management Inline Hook](#enabling-an-api-access-management-inline-hook).
+
 ## About
 
 This type of inline hook is triggered when OAuth 2.0 and OpenID Connect tokens are minted by your Okta custom Authorization Server. Before sending the token to the requester, Okta calls out to your external service, and your service can respond with commands to add additional custom claims to the token.
