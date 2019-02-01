@@ -9,7 +9,7 @@ excerpt: The Inline Hooks APIs provides a CRUD and execution interface for Inlin
 
 {% api_lifecycle ea %}
 
-The Inline Hooks Management API provides a CRUD interface for registering external inline hook endpoints, as well as a way to manually trigger invocation of an inline hook for testing purposes. For general information on inline hooks, see [Inline Hooks](/use_cases/inline_hooks/).
+The Inline Hooks Management API provides a CRUD interface for registering external inline hook endpoints and updating them, as well as a way to manually trigger invocation of an inline hook for testing purposes. For general information on inline hooks and how to create them, see [Inline Hooks](/use_cases/inline_hooks/).
 
 ## Inline Hook Operations
 
@@ -21,9 +21,9 @@ Adds a new Inline Hook to your Organization in ACTIVE status.
 
 #### Request Parameters
 
-| Parameter | Description                                                                            | Param Type | DataType                                | Required |
-|-----------|----------------------------------------------------------------------------------------|------------|-----------------------------------------|----------|
-| Inline Hook  | A valid Inline Hook                                                                 | Body       |[Inline Hook Object](#inline-hook-object)| TRUE     |
+| Parameter   | Description         | Param Type | DataType                                  | Required |
+|-------------|---------------------|------------|-------------------------------------------|----------|
+| Inline Hook | A valid Inline Hook. | Body       | [Inline Hook Object](#inline-hook-object) | TRUE     |
 
 #### Response Parameters
 
@@ -103,13 +103,13 @@ curl -v -X POST \
 
 #### Request Parameters
 
-| Parameter    | Description                                                                               | Param Type | DataType                          | Required |
-|--------------|-------------------------------------------------------------------------------------------|------------|-----------------------------------|----------|
-| inlineHookId | A valid Inline Hook id                                                                    | Path       | String                            | TRUE     |
+| Parameter    | Description             | Param Type | DataType | Required |
+|--------------|-------------------------|------------|----------|----------|
+| inlineHookId | A valid Inline Hook ID. | Path       | String   | TRUE     |
 
 #### Response Parameters
 
-All responses return the Inline Hook that matches the inlineHookId provided
+All responses return the Inline Hook that matches the `inlineHookId` provided.
 
 ##### Request Example
 {:.api .api-request .api-request-example}
@@ -158,11 +158,11 @@ curl -v -X GET \
 
 {% api_operation get /api/v1/inlineHooks%}
 
-| Parameter | Description                                                                              | Param Type | DataType                          | Required |
-|-----------|------------------------------------------------------------------------------------------|------------|-----------------------------------|----------|
-| type      | A valid inlineHookType name                                                              | Query      | Enum                              | FALSE    |
+| Parameter | Description                    | Param Type | DataType | Required |
+|-----------|--------------------------------|------------|----------|----------|
+| type      | A valid `inlineHookType` name. | Query      | Enum     | FALSE    |
 
-All responses return a list of Inline Hooks, filtered by the optional type query parameter
+All responses return a list of Inline Hooks, filtered by the optional type query parameter.
 
 ##### Request Example
 {:.api .api-request .api-request-example}
@@ -215,10 +215,10 @@ curl -v -X GET \
 
 #### Request Parameters
 
-| Parameter | Description                                                                                    | Param Type | DataType                          | Required |
-|-----------|------------------------------------------------------------------------------------------------|------------|-----------------------------------|----------|
-| inlineHookId  | A valid Inline Hook id                                                                     | Path       | String                            | TRUE     |
-| inlineHook    | A valid Inline Hooks                                                                       | Body       | Inline Hook Model                    | TRUE     |
+| Parameter    | Description             | Param Type | DataType          | Required |
+|--------------|-------------------------|------------|-------------------|----------|
+| inlineHookId | A valid Inline Hook ID. | Path       | String            | TRUE     |
+| inlineHook   | A valid Inline Hook.    | Body       | Inline Hook Model | TRUE     |
 
 The submitted Inline Hook will replace the existing version after passing validation. Refer to the above models to see
 which properties are immutable.
@@ -301,16 +301,16 @@ curl -v -X PUT \
 
 #### Request Parameters
 
-| Parameter    | Description                                                                               | Param Type | DataType                          | Required |
-|--------------|-------------------------------------------------------------------------------------------|------------|-----------------------------------|----------|
-| inlineHookId | A valid Inline Hook id                                                                    | Path       | String                            | TRUE     |
+| Parameter    | Description            | Param Type | DataType | Required |
+|--------------|------------------------|------------|----------|----------|
+| inlineHookId | A valid Inline Hook id | Path       | String   | TRUE     |
 
-Deletes the Inline Hook matching the provided inlineHook. Once deleted, this Inline Hook will be unrecoverable.
+Deletes the Inline Hook matching the provided `inlineHook`. Once deleted, this Inline Hook will be unrecoverable.
 As a safety precaution, only Inline Hooks with a status of INACTIVE are eligible for deletion.
 
 #### Response Parameters
 
-All responses will return a 204 with no content
+All responses will return a 204 with no content.
 
 ##### Request Example
 {:.api .api-request .api-request-example}
@@ -324,16 +324,16 @@ curl -v -X DELETE \
 ##### Response Example
 {:.api .api-response .api-response-example}
 
-204 with no content
+204 with no content.
 
 ### Execute Inline Hook
 
 {% api_operation post /api/v1/inlineHooks/{inlineHookId}/execute%}
 
-| Parameter | Description                                                                            | Param Type | DataType                          | Required |
-|-----------|----------------------------------------------------------------------------------------|------------|-----------------------------------|----------|
-| inlineHookId  | A valid Inline Hook id                                                                  | Path       | String                            | TRUE     |
-| inlineHookType-specific input | JSON that matches the data contract of the linked inlineHookType       | Body       | JSON                              | TRUE     |
+| Parameter                     | Description                                                         | Param Type | DataType | Required |
+|-------------------------------|---------------------------------------------------------------------|------------|----------|----------|
+| inlineHookId                  | A valid Inline Hook ID.                                             | Path       | String   | TRUE     |
+| inlineHookType-specific input | JSON that matches the data contract of the linked `inlineHookType`. | Body       | JSON     | TRUE     |
 
 Executes the Inline Hook matching the provided `inlineHookId` using the request body as the input. This will send the provided
 data through the Channel and return a response if it matches the correct data contract. Otherwise it will throw
@@ -570,16 +570,16 @@ curl -v -X POST \
 
 ### Inline Hook Object
 
-| Property        | Description                                              | DataType        | Nullable | Unique | ReadOnly | MinLength | MaxLength | Validation |
-|-----------------|----------------------------------------------------------|-----------------|----------|--------|----------|-----------|-----------|------------|
-| id              | Unique key for the Inline Hook                           | String          | FALSE    | TRUE   | TRUE     |           |           |            |
-| status          | Status of the Inline Hook, INACTIVE will block execution | Enum            | FALSE    | FALSE  | FALSE    |           |           | One of ACTIVE, INACTIVE |
-| name            | Display name for Inline Hook                             | String          | FALSE    | TRUE   | FALSE    | 1         | 255       | |
-| type            | inlineHookType for the Inline Hook                       | inlineHookType  | FALSE    | FALSE  | TRUE     |           |           | Immutable after Inline Hook creation |
-| version         | Version of the Channel                                   | Integer         | FALSE    | FALSE  | TRUE     |           |           | Must match a valid version number |
-| channel         | Channel for the Inline Hook                              | Channel         | FALSE    | FALSE  | FALSE    |           |           | Validation is determined by the specific Channel |
-| created         | Date of Inline Hook creation                             | Date | TRUE | FALSE | TRUE | | | |
-| lastUpdated     | Date of Inline Hook update                               | Date | TRUE | FALSE | TRUE | | | |
+| Property    | Description                                               | DataType       | Nullable | Unique | ReadOnly | MinLength | MaxLength | Validation                                        |
+|-------------|-----------------------------------------------------------|----------------|----------|--------|----------|-----------|-----------|---------------------------------------------------|
+| id          | Unique key for the Inline Hook.                           | String         | FALSE    | TRUE   | TRUE     |           |           |                                                   |
+| status      | Status of the Inline Hook, INACTIVE will block execution. | Enum           | FALSE    | FALSE  | FALSE    |           |           | One of ACTIVE, INACTIVE                           |
+| name        | Display name for Inline Hook.                             | String         | FALSE    | TRUE   | FALSE    | 1         | 255       |                                                   |
+| type        | Type of the Inline Hook.                                  | inlineHookType | FALSE    | FALSE  | TRUE     |           |           | Immutable after Inline Hook creation              |
+| version     | Version of the Channel.                                   | Integer        | FALSE    | FALSE  | TRUE     |           |           | Must match a valid version number                 |
+| channel     | Channel for the Inline Hook.                              | Channel        | FALSE    | FALSE  | FALSE    |           |           | Validation is determined by the specific Channel. |
+| created     | Date of Inline Hook creation.                             | Date           | TRUE     | FALSE  | TRUE     |           |           |                                                   |
+| lastUpdated | Date of Inline Hook update.                               | Date           | TRUE     | FALSE  | TRUE     |           |           |                                                   |
 {:.table .table-word-break} 
 
 ~~~json

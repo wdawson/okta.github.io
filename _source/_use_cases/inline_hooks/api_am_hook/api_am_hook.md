@@ -24,7 +24,7 @@ For information on the API for registering external service endpoints with Okta,
 
 ## About
 
-This type of inline hook is triggered when OAuth 2.0 and OpenID Connect tokens are minted by your Okta custom Authorization Server. Before sending the token to the requester, Okta calls out to your external service. Your service can respond with commands to add additional custom claims to the token.
+This type of inline hook is triggered when OAuth 2.0 and OpenID Connect tokens are minted by your Okta custom Authorization Server. Before sending the token to the requester, Okta calls out to your external service, and your service can respond with commands to add additional custom claims to the token.
 
 This functionality can be used to add sensitive user data to tokens without having to store that data in Okta user profiles. For example, tokens minted for a medical app can be augmented with confidential patient data provided by your external service and not stored in Okta.
 
@@ -35,6 +35,15 @@ You cannot use this inline hook to overwrite claims in tokens, only to add new o
 ## Objects in the Request from Okta
 
 For the API Access Management Inline Hook, the outbound call from Okta to your external service will include the following objects in its JSON payload:
+
+### data.identity
+
+Provides information on the properties of the ID token that Okta has generated, including the existing claims it contains.
+
+| Property | Description                   | Data Type                    |
+|----------|-------------------------------|------------------------------|
+| claims   | Claims included in the token. | [claims](#claims) object     |
+| lifetime | Lifetime of the token.        | [lifetime](#lifetime) object |
 
 ### data.access
 
@@ -48,14 +57,7 @@ Provides information on the properties of the access token that Okta has generat
 
 #### claims
 
-| Property | Description                                                                   | Data Type |
-|----------|-------------------------------------------------------------------------------|-----------|
-| ver      | The semantic version of the access token.                                     | Number    |
-| jti      | Unique identifier for this JWT.                                               | String    |
-| iss      | The URL of the authorization server that issued the token.                    | String    |
-| aud      | The audience of the token.                                                    | String    |
-| cid      | Client ID of the client that requested the access token.                      | String    |
-| uid      | A unique identifier for the user (not included if token not bound to a user). | String    |
+Consists of name-value pairs for each included claim. See [Tokens and Claims](/docs/api/resources/oidc#tokens-and-claims), in the documentation for Okta's OpenID Connect and OAuth 2.0 API, for descriptions of the claims that can be included.
 
 #### lifetime
 
@@ -65,26 +67,18 @@ Provides information on the properties of the access token that Okta has generat
 
 #### scopes
 
-| Property | Description | Data Type |
-|----------|-------------|-----------|
-|          |             |           |
+An array containing the scopes that have been granted by the Authorization server. See [Tokens and Claims](/docs/api/resources/oidc#tokens-and-claims), in the documentation for Okta's OpenID Connect and OAuth 2.0 API, for descriptions of the claims that can be included.
 
-### data.identity
-
-Provides information on the properties of the ID token that Okta has generated, including the existing claims it contains.
-
-| Property | Description                   | Data Type                    |
-|----------|-------------------------------|------------------------------|
-| claims   | Claims included in the token. | [claims](#claims) object     |
-| lifetime | Lifetime of the token.        | [lifetime](#lifetime) object |
 
 ## Objects in Response You Send
 
-For the API Access Management Inline hook, the `commands`, `error`, and `debugContext` objects that you can return in the JSON payload of your response are defined as follows:
+For the API Access Management Inline hook, the `commands` and `error` objects that you can return in the JSON payload of your response are defined as follows:
 
 ### commands
 
-The `commands` object is where you can provide commands to Okta. It is an array, allowing you to send multiple commands. In each array element, there needs to be a `type` property and `value` property. The `type` property is where you specify which of the supported commands you wish to execute, and `value` is where you supply an operand for that command.
+The `commands` object is where you can provide commands to Okta. It is where you can tell Okta to add additional claims to the token.
+
+The `commands` object is an array, allowing you to send multiple commands. In each array element, there needs to be a `type` property and `value` property. The `type` property is where you specify which of the supported commands you wish to execute, and `value` is where you supply an operand for that command.
 
 In the case of the API Access Management hook type, the `value` property is itself a nested object, in which you specify a particular operation, a path to act on, and a value.
 
@@ -124,23 +118,9 @@ When you return an error object, it should have the following structure:
 
 | Property     | Description                          | Data Type                   |
 |--------------|--------------------------------------|-----------------------------|
-| errorCode    | A unique code.                       |                             |
-| errorSummary | Human-readable summary of the error. |                             |
-| errorCauses  | Additional information on the error. | [errorCauses](#errorCauses) |
+| errorSummary | Human-readable summary of the error. | String                      |
 
-#### errorCauses
-
-| Property     | Description | Data Type |
-|--------------|-------------|-----------|
-| errorSummary |             |           |
-| reason       |             |           |
-| locationType |             |           |
-| location     |             |           |
-| domain       |             |           |
-
-### debugContext
-
-This object is user-defined.
+Returning an error object will cause Okta to return an OAuth 2.0 error to the requester of the token, with the value of `error` set to `server_error`, and the value of`error_description` set to the string you supplied in the `errorSummary` property of the `error` object you returned.
 
 ## Sample Listing of JSON Payload of Request
 
@@ -314,4 +294,21 @@ This object is user-defined.
     }
 ]}
 ```
+## Enabling an API Access Management Inline Hook
+
+To activate the inline hook, you first need to register your external service endpoint with Okta using the [Inline Hooks Management API](/docs/api/resources/inline-hooks).
+
+You then need to associate the registered inline hook with a Custom Authorization Server Policy Rule by completing the following steps in Admin Console:
+
+1. Go to **Security > API Authorization Servers**.
+
+1. Select the Custom Authorization Server to use this inline hook with.
+
+1. One of the rules defined in the Custom Authorization server needs to be used to trigger invocation of the inline hook. Click the pencil icon for that rule to open it for editing.
+
+1. In the **Advanced Settings** section, click the **Assertion Inline Hook** dropdown menu. Any inline hooks you have registered will be listed. Select the one to use.
+
+1. Click **Update Rule**.
+
+> Note: Only one inline hook can be associated with each rule.
 
