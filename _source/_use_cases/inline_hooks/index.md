@@ -36,11 +36,11 @@ The points in Okta process flows where inline hooks can be triggered are called 
 
 ### Inline Hook Call within an Okta Process Flow
 
-The graphic below illustrates the position of an extension point within an Okta process flow, and how an inline hook call is triggered at that point:
+The graphic below illustrates the the sequence of steps:
 
 {% img hook-call-steps.png "Hook Call Steps Diagram" alt:"Hook Call Steps Diagram" %}
 
-1. During the execution of the Okta process flow, at the extension point, between points A and B, Okta sends a request to your external service. 
+1. During the execution of an Okta process flow, at the extension point, between points A and B, Okta sends a request to your external service. 
 
 1. Your external service performs some processing.
 
@@ -54,7 +54,7 @@ Okta's request to your external service consists of an HTTPS POST request with a
 
 {% img hook-request-response.png "Hook Request and Response" alt:"Hook Request and Response" %}
 
-Your service needs to handle the inline hook by responding to Okta's request. The JSON payload of your response contains a `commands` object, in which you can send commands to Okta that affect the course of the Okta process. The commands available vary depending on the type of inline hook you're using. 
+Your service needs to handle the inline hook by responding to Okta's request. The JSON payload of the response your service sends can contain a `commands` object, in which you send commands to Okta that affect the course of the Okta process flow. The commands available vary depending on the type of inline hook you're using. 
 
 ## The Request
 
@@ -66,11 +66,12 @@ Okta uses an HTTPS POST request to call your service.
 
 The header of the request sent by Okta includes the following fields:
 
-```
+```http
 Accept: application/json
 Content-Type: application/json
 Authorization: <key>
 ```
+
 #### Authorization Header
 
 The Authorization header is a secret string you provide to Okta when you register your external service. This string serves as an API access key for your service, and Okta will provide it in every request, allowing your code to check for its presence as a security measure. (This is not an Okta authorization token, it is simply a text string you decide on.)
