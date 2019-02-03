@@ -47,12 +47,13 @@ There is one last topic I'd like to discuss about JWTs security – how to revok
 There is no easy answer because of the stateless nature of JWTs – they are self-sufficient and (theoretically) should include all necessary information about a user's permissions without consulting external resources. This means that you cannot force them to expire, so you must keep their expiration time short (15 to 60 minutes usually, and use refresh tokens which are tracked on the server side and verified for validity before re-issuing an access token). If you absolutely must be able to kick users immediately, then you have to track each access token at the backend and verify it's not blacklisted on every request – but this approach loses the main benefit of JWTs (stateless authentication) and you're back to a solution that's dangerously close to server-side sessions.
 
 To summarize, here's the secure way to handle JWTs:
-Sign your tokens with a strong key, and keep their expiration times low.
-Store them in https-only cookies.
-Use the `SameSite=strict` cookie attribute if it doesn't affect your application's functionality.
-Use your Web application framework's default way of dealing with CSRF if `SameSite=strict` is not an option for you.
-Build your own CSRF token and backend code to verify each form request if you're unlucky enough to use a framework that doesn't handle CSRF out of the box.
-Always verify the signature on the server side before you trust any information in the JWT.
+
+* Sign your tokens with a strong key, and keep their expiration times low.
+* Store them in https-only cookies.
+* Use the `SameSite=strict` cookie attribute if it doesn't affect your application's functionality.
+* Use your Web application framework's default way of dealing with CSRF if `SameSite=strict` is not an option for you.
+* Build your own CSRF token and backend code to verify each form request if you're unlucky enough to use a framework that doesn't handle CSRF out of the box.
+* Always verify the signature on the server side before you trust any information in the JWT.
 
 ## The Structure of a JWT
 
@@ -360,10 +361,10 @@ Alternatively, you can also provide your own implementation. To create your own 
 
 ## Learn More About PHP, JWTs, and Secure Authentication
 
-You can find the whole code example here: 
-[GitHub link](https://github.com/oktadeveloper/okta-php-core-jwt-example)
+You can find the whole code example here: [GitHub link](https://github.com/oktadeveloper/okta-php-core-jwt-example)
 
 If you would like to dig deeper into the topics covered in this article, the following resources are a great starting point:
+
 * [Validating Access Tokens](https://developer.okta.com/authentication-guide/tokens/validating-access-tokens)
 * [Get Started with PHP + Okta](https://developer.okta.com/code/php/)
 * [Okta JWT Verifier library](https://github.com/okta/okta-jwt-verifier-php)
