@@ -70,7 +70,7 @@ curl -v -X POST \
     "id": "calr0dvWvbMQJHZCM0g3",
     "status": "ACTIVE",
     "name" : "My Test Inline Hook",
-    "type" : "com.okta.tokens.transform",
+    "type" : "com.okta.oauth2.tokens.transform",
     "version" : "1.0.0",
     "channel" : {
         "type" : "HTTPS",
@@ -127,7 +127,7 @@ curl -v -X GET \
     "id": "cali2j192cIE9VpHn0h7",
     "status": "ACTIVE",
     "name": "Test Inline Hook",
-    "type": "com.okta.tokens.transform",
+    "type": "com.okta.oauth2.tokens.transform",
     "version": "1.0.0",
     "channel": {
         "type": "HTTPS",
@@ -181,7 +181,7 @@ curl -v -X GET \
 	    "id": "cali2j192cIE9VpHn0h7",
 	    "status": "ACTIVE",
 	    "name": "Test Inline Hook",
-	    "type": "com.okta.tokens.transform",
+	    "type": "com.okta.oauth2.tokens.transform",
 	    "version": "1.0.0",
 	    "channel": {
 	        "type": "HTTPS",
@@ -236,7 +236,7 @@ curl -v -X PUT \
 -H "Authorization: SSWS ${api_token}" \
 -d '{
     "name" : "My Test Inline Hook",
-    "type" : "com.okta.tokens.transform",
+    "type" : "com.okta.oauth2.tokens.transform",
     "version" : "1.0.0",
     "channel" : {
         "type" : "HTTPS",
@@ -268,7 +268,7 @@ curl -v -X PUT \
     "id": "calr0dvWvbMQJHZCM0g3",
     "status": "ACTIVE",
     "name" : "My Test Inline Hook",
-    "type" : "com.okta.tokens.transform",
+    "type" : "com.okta.oauth2.tokens.transform",
     "version" : "1.0.0",
     "channel" : {
         "type" : "HTTPS",
@@ -556,13 +556,13 @@ curl -v -X POST \
     "id": "calr0dvWvbMQJHZCM0g3",
     "status": "ACTIVE",
     "name" : "My Test Inline Hook",
-    "type" : "com.okta.tokens.transform",
+    "type" : "com.okta.oauth2.tokens.transform",
     "version" : "1.0.0",
     "channel" : {
         "type" : "HTTPS",
         "version" : "1.0.0",
         "config" : {
-            "uri" : "https://127.0.0.1:4567/inlineHook",
+            "uri" : "https://127.0.0.1:8080/inlineHook",
             "method" : "POST",
             "headers" : [
                 {
@@ -576,8 +576,8 @@ curl -v -X POST \
                 "value" : "api-key"
             }
         }
-    }
-    "created": "2018-12-05T00:35:20.000Z",
-    "lastUpdated": "2018-12-05T00:35:20.000Z"
+    },
+    "created": "2018-05-15T01:23:08.000Z",
+    "lastUpdated": "2018-05-15T01:23:08.000Z"
 }
 ~~~
