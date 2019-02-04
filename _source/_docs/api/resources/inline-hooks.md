@@ -519,8 +519,6 @@ curl -v -X POST \
       {
       "type": "com.okta.tokens.access_token.patch",
       "value":
-
-
         [
           {
             "op": "add",
