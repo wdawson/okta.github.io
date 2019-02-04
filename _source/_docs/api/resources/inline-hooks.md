@@ -42,10 +42,10 @@ curl -v -X POST \
     "type" : "com.okta.tokens.transform",
     "version" : "1.0.0",
     "channel" : {
-        "type" : "HTTP",
+        "type" : "HTTPS",
         "version" : "1.0.0",
         "config" : {
-            "uri" : "http://127.0.0.1:4567/inlineHook",
+            "uri" : "https://127.0.0.1:4567/inlineHook",
             "method" : "POST",
             "headers" : [
                 {
@@ -74,10 +74,10 @@ curl -v -X POST \
     "type" : "com.okta.tokens.transform",
     "version" : "1.0.0",
     "channel" : {
-        "type" : "HTTP",
+        "type" : "HTTPS",
         "version" : "1.0.0",
         "config" : {
-            "uri" : "http://127.0.0.1:4567/inlineHook",
+            "uri" : "https://127.0.0.1:4567/inlineHook",
             "method" : "POST",
             "headers" : [
                 {
@@ -131,7 +131,7 @@ curl -v -X GET \
     "type": "com.okta.tokens.transform",
     "version": "1.0.0",
     "channel": {
-        "type": "HTTP",
+        "type": "HTTPS",
         "version": "1.0.0",
         "config": {
             "uri": "https://my.test.url",
@@ -185,7 +185,7 @@ curl -v -X GET \
 	    "type": "com.okta.tokens.transform",
 	    "version": "1.0.0",
 	    "channel": {
-	        "type": "HTTP",
+	        "type": "HTTPS",
 	        "version": "1.0.0",
 	        "config": {
 	            "uri": "https://my.test.url",
@@ -240,10 +240,10 @@ curl -v -X PUT \
     "type" : "com.okta.tokens.transform",
     "version" : "1.0.0",
     "channel" : {
-        "type" : "HTTP",
+        "type" : "HTTPS",
         "version" : "1.0.0",
         "config" : {
-            "uri" : "http://127.0.0.1:8080/inlineHook",
+            "uri" : "HTTPS://127.0.0.1:8080/inlineHook",
             "method" : "POST",
             "headers" : [
                 {
@@ -272,10 +272,10 @@ curl -v -X PUT \
     "type" : "com.okta.tokens.transform",
     "version" : "1.0.0",
     "channel" : {
-        "type" : "HTTP",
+        "type" : "HTTPS",
         "version" : "1.0.0",
         "config" : {
-            "uri" : "http://127.0.0.1:8080/inlineHook",
+            "uri" : "https://127.0.0.1:8080/inlineHook",
             "method" : "POST",
             "headers" : [
                 {
@@ -359,169 +359,142 @@ curl -v -X POST \
 -H "Content-Type: application/json" \
 -H "Authorization: SSWS ${api_token}" \
 -d '
-{
-    "eventTypeVersion": "1.0",
-    "cloudEventVersion": "0.1",
-    "contentType": "application/json",
-    "eventType": "com.okta.tokens.transform",
-    "source": "http://oauth.okta1.com:1802/app/oauth_samlsp_1/exk2i7aJ1R9v631PM0g4/sso/saml", // the SAML IDP URL generates the assertion
-    "eventId": "IxyGfzHoQOKmtVUgEXwOoA",
-    "eventTime": "2018-06-26T22:26:07.000Z",
-    "data": {
-        "context": {
-            // information about the original HTTP request
-            "request": {
-                "id": "reqLmhh_4uUTGG2QxwSQtw",
-                "method": "GET",
-                "url": {
-                    "value": "http://oauth.okta1.com:1802/app/oauth_samlsp_1/exk2i1R9v631PM0g4/sso/saml"
-                },
-                "ipAddress": "127.0.0.1"
+{  
+   "source":"https://{yourOktaDomain}/oauth2/default/v1/authorize",
+   "eventId":"3OWo4oo-QQ-rBWfRyTmQYw",
+   "eventTime":"2019-01-15T23:20:47.000Z",
+   "data":{  
+      "context":{  
+         "request":{  
+            "id":"reqv66CbCaCStGEFc8AdfS0ng",
+            "method":"GET",
+            "url":{  
+               "value":"https://{yourOktaDomain}/oauth2/default/v1/authorize?scope=openid+profile+email&response_type=token+id_token&redirect_uri=https%3A%2F%2Fhttpbin.org%2Fget&state=foobareere&nonce=asf&client_id=customClientIdNative"
             },
-            // information about the session, please refer to https://developer.okta.com/docs/api/resources/sessions#session-properties
-            "session": {
-                "id": "102Cwvn6kJhAwgLdlVag",
-                "userId": "00u12j7vjWm60gxixix4",
-                "login": "admin@test.com",
-                "createdAt": "2018-06-26T22:15:25.000Z",
-                "expiresAt": "2018-06-27T00:26:07.000Z",
-                "status": "ACTIVE",
-                "lastPasswordVerification": "2018-06-26T22:15:25.000Z",
-                "amr": [
-                    "PASSWORD"
-                ],
-                "idp": {
-                    "id": "00o12ich7X7pNrCO70g4",
-                    "type": "OKTA"
-                },
-                "mfaActive": false
+            "ipAddress":"127.0.0.1"
+         },
+         "protocol":{  
+            "type":"OAUTH2.0",
+            "request":{  
+               "scope":"openid profile email",
+               "state":"foobareere",
+               "redirect_uri":"https://httpbin.org/get",
+               "response_mode":"fragment",
+               "response_type":"token id_token",
+               "client_id":"customClientIdNative"
             },
-            // information about the user, please refer to https://developer.okta.com/docs/api/resources/authn#user-object
-            "user": {
-                "id": "00u12j7vjWt0T9um60g4",
-                "passwordChanged": "2018-05-03T20:01:35.000Z",
-                "profile": {
-                    "login": "admin@test.com",
-                    "firstName": "admin",
-                    "lastName": "oauth",
-                    "locale": "en",
-                    "timeZone": "America/Los_Angeles"
-                },
-                "_links": {
-                    "groups": {
-                        "href": "http://oauth.okta1.com:1802/00u12j7vjWt0T9um60g4/groups"
-                    },
-                    "factors": {
-                        "href": "http://oauth.okta1.com:1802/api/v1/users/00u12j7vjWt0T9um60g4/factors"
-                    }
-                }
+            "issuer":{  
+               "uri":"https://{yourOktaDomain}/oauth2/default"
             },
-            // information about the authentication protocol, please refer to https://developer.okta.com/docs/api/resources/authn#authentication-object
-            "authentication": {
-                // the SAML authn request
-                "request": {
-                    "id": "_1cf5518445236d11eae4",
-                    "version": "2.0",
-                    "issuerInstant": "2018-06-26T22:26:06.000Z",
-                    "destination": "http://oauth.okta1.com:1802/app/oauth_samlsp_1/exk2i7aJ1R9v631PM0g4/sso/saml",
-                    "providerName": "Simple SAML Service Provider",
-                    "forceAuthn": false,
-                    "passive": false,
-                    "issuer": "urn:example:sp",
-                    "assertionConsumerServiceURL": "http://localhost:7070/saml/sso",
-                    "protocolBinding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
-                    "nameIdPolicy": {
-                        "format": "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
-                        "allowCreate": true
-                    },
-                    "requestedAuthnContext": {
-                        "comparison": "exact",
-                        "authnContextClassRefs": [
-                            "urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport"
-                        ]
-                    }
-                },
-                "protocol": "SAML2.0",
-                "issuer": {
-                    "id": "0oa2i7brpuFcaE81T0g4",
-                    "name": "SAML SP",
-                    "uri": "http://www.okta.com/exk2i7aJ1R9v631PM0g4"
-                }
+            "client":{  
+               "id":"customClientIdNative",
+               "name":"Native client",
+               "type":"PUBLIC"
             }
-        },
-        "tokens": {
-            // the SAML assertion will be returned to the SP
-            "assertion": {
-                "subject": {
-                    "nameId": "admin@test.com",
-                    "format": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
-                    "confirmation": {
-                        "method": "urn:oasis:names:tc:SAML:2.0:cm:bearer",
-                        "data": {
-                            "inResponseTo": "_1cf5518445236d11eae4",
-                            "recipient": "http://localhost:7070/saml/sso"
-                        }
-                    }
-                },
-                "authentication": {
-                    "sessionIndex": "_1cf5518445236d11eae4",
-                    "authnContext": {
-                        "authnContextClassRef": "urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport"
-                    }
-                },
-                "conditions": {
-                    "audienceRestrictions": [
-                        "urn:example:sp"
-                    ]
-                },
-                // the AttributeStatement
-                "claims": {
-                    "email": {
-                        "attributes": {
-                            "NameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
-                        },
-                        "attributeValues": [
-                            {
-                                "attributes": {
-                                    "xsi:type": "xs:string"
-                                },
-                                "value": "admin@test.com"
-                            }
-                        ]
-                    },
-                    "trust-groups": {
-                        "attributes": {
-                            "NameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
-                        },
-                        "attributeValues": [
-                            {
-                                "attributes": {
-                                    "xsi:type": "xs:string"
-                                },
-                                "value": "Groups.contains(\"0oa2yp4BGz8oSYxjM0g4\", \"Admin\", 100)"
-                            }
-                        ]
-                    },
-                    "filtered-groups": {
-                        "attributes": {
-                            "NameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
-                        },
-                        "attributeValues": [
-                            {
-                                "attributes": {
-                                    "xsi:type": "xs:string"
-                                },
-                                "value": ""
-                            }
-                        ]
-                    }
-                },
-                "lifetime": {
-                    "expiration": 300 // SAML assertion returned to SP will be valid for 300 seconds
-                }
+         },
+         "session":{  
+            "id":"102Qoe7t5PcRnSxr8j3I8I6pA",
+            "userId":"00uq8tMo3zV0OfJON0g3",
+            "login":"administrator1@clouditude.net",
+            "createdAt":"2019-01-15T23:17:09.000Z",
+            "expiresAt":"2019-01-16T01:20:46.000Z",
+            "status":"ACTIVE",
+            "lastPasswordVerification":"2019-01-15T23:17:09.000Z",
+            "amr":[  
+               "PASSWORD"
+            ],
+            "idp":{  
+               "id":"00oq6kcVwvrDY2YsS0g3",
+               "type":"OKTA"
+            },
+            "mfaActive":false
+         },
+         "user":{  
+            "id":"00uq8tMo3zV0OfJON0g3",
+            "passwordChanged":"2018-09-11T23:19:12.000Z",
+            "profile":{  
+               "login":"administrator1@clouditude.net",
+               "firstName":"Add-Min",
+               "lastName":"O'Cloudy Tud",
+               "locale":"en",
+               "timeZone":"America/Los_Angeles"
+            },
+            "_links":{  
+               "groups":{  
+                  "href":"https://{yourOktaDomain}/00uq8tMo3zV0OfJON0g3/groups"
+               },
+               "factors":{  
+                  "href":"https://{yourOktaDomain}/api/v1/users/00uq8tMo3zV0OfJON0g3/factors"
+               }
             }
-        }
-    }
+         },
+         "policy":{  
+            "id":"00pq8lGaLlI8APuqY0g3",
+            "rule":{  
+               "id":"0prq8mLKuKAmavOvq0g3"
+            }
+         }
+      },
+      "identity":{  
+         "claims":{  
+            "sub":"00uq8tMo3zV0OfJON0g3",
+            "name":"Add-Min O'Cloudy Tud",
+            "email":"webmaster@clouditude.net",
+            "ver":1,
+            "iss":"https://{yourOktaDomain}/oauth2/default",
+            "aud":"customClientIdNative",
+            "jti":"ID.YxF2whJfB3Eu4ktG_7aClqtCgjDq6ab_hgpiV7-ZZn0",
+            "amr":[  
+               "pwd"
+            ],
+            "idp":"00oq6kcVwvrDY2YsS0g3",
+            "nonce":"asf",
+            "preferred_username":"administrator1@clouditude.net",
+            "auth_time":1547594229
+         },
+         "token":{  
+            "lifetime":{  
+               "expiration":3600
+            }
+         }
+      },
+      "access":{  
+         "claims":{  
+            "ver":1,
+            "jti":"AT.W-rrB-z-kkZQmHW0e6VS3Or--QfEN_YvoWJa46A7HAA",
+            "iss":"https://{yourOktaDomain}/oauth2/default",
+            "aud":"api://default",
+            "cid":"customClientIdNative",
+            "uid":"00uq8tMo3zV0OfJON0g3",
+            "sub":"administrator1@clouditude.net",
+            "firstName":"Add-Min",
+            "preferred_username":"administrator1@clouditude.net"
+         },
+         "token":{  
+            "lifetime":{  
+               "expiration":3600
+            }
+         },
+         "scopes":{  
+            "openid":{  
+               "id":"scpq7bW1cp6dcvrz80g3",
+               "action":"GRANT"
+            },
+            "profile":{  
+               "id":"scpq7cWJ81CIP5Qkr0g3",
+               "action":"GRANT"
+            },
+            "email":{  
+               "id":"scpq7dxsoz6LQlRj00g3",
+               "action":"GRANT"
+            }
+         }
+      }
+   },
+   "eventTypeVersion":"1.0",
+   "cloudEventVersion":"0.1",
+   "contentType":"application/json",
+   "eventType":"com.okta.oauth2.tokens.transform"
 }
 ' "https://{yourOktaDomain}/api/v1/inlineHooks/{inlineHookId}/execute"
 ~~~
@@ -532,40 +505,37 @@ curl -v -X POST \
 ~~~json
 
 {
-  [{
-    "type": "com.okta.tokens.assertion.patch",
+    "commands":
+    [{
+      "type": "com.okta.tokens.id_token.patch",
       "value":
-        [{
-          "op": "add",
-          "path": "/claims/externalData", // your claim name
-          "value":
+        [
           {
-            "attributes":
-              {
-                "NameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
-              },
-              "attributeValues":
-                [{
-                  "attributes":
-                    {
-                      "xsi:type": "xs:string"
-                    },
-                  "value": "NOT_STORED_IN_OKTA" // your claim value
-                }]
-            }
-          },
-          {
-            "op": "replace",
-            "path": "/subject/nameId",
-            "value": "notjohn@okta.com"
-          }],
-      "debugContext": 
+            "op": "add",
+            "path": "/claims/extPatientId",
+            "value": "1234"
+          }
+        ]
+      },
       {
-        "stuff": "debug content"
-      }
-	[}
-};
+      "type": "com.okta.tokens.access_token.patch",
+      "value":
 
+
+        [
+          {
+            "op": "add",
+            "path": "/claims/external_guid",
+            "value": "F0384685-F87D-474B-848D-2058AC5655A7"
+          }
+        ]
+      }
+  ],
+    "debugContext":
+    {
+        "lookAtMe": "hiThere"
+    }
+}
 ~~~
 
 ### Inline Hook Object
@@ -579,7 +549,7 @@ curl -v -X POST \
 | version     | Version of the Channel.                                   | Integer        | FALSE    | FALSE  | TRUE     |           |           | Must match a valid version number                 |
 | channel     | Channel for the Inline Hook.                              | Channel        | FALSE    | FALSE  | FALSE    |           |           | Validation is determined by the specific Channel. |
 | created     | Date of Inline Hook creation.                             | Date           | TRUE     | FALSE  | TRUE     |           |           |                                                   |
-| lastUpdated | Date of Inline Hook update.                               | Date           | TRUE     | FALSE  | TRUE     |           |           |                                                   |
+| lastUpdated | Date of Inline Hook update.                               | Date           | TRUE     | FALSE  | TRUE     |           |           |                                                   |                                      |
 {:.table .table-word-break} 
 
 ~~~json
@@ -590,10 +560,10 @@ curl -v -X POST \
     "type" : "com.okta.tokens.transform",
     "version" : "1.0.0",
     "channel" : {
-        "type" : "HTTP",
+        "type" : "HTTPS",
         "version" : "1.0.0",
         "config" : {
-            "uri" : "http://127.0.0.1:4567/inlineHook",
+            "uri" : "https://127.0.0.1:4567/inlineHook",
             "method" : "POST",
             "headers" : [
                 {
