@@ -45,7 +45,7 @@ curl -v -X POST \
         "type" : "HTTPS",
         "version" : "1.0.0",
         "config" : {
-            "uri" : "https://127.0.0.1:4567/inlineHook",
+            "uri" : "https://127.0.0.1:4567/inlineHooks",
             "headers" : [
                 {
                     "key" : "X-Other-Header",
@@ -76,7 +76,7 @@ curl -v -X POST \
         "type" : "HTTPS",
         "version" : "1.0.0",
         "config" : {
-            "uri" : "https://127.0.0.1:4567/inlineHook",
+            "uri" : "https://127.0.0.1:4567/inlineHooks",
             "method" : "POST",
             "headers" : [
                 {
@@ -133,7 +133,7 @@ curl -v -X GET \
         "type": "HTTPS",
         "version": "1.0.0",
         "config": {
-            "uri": "https://127.0.0.1:4567/inlineHook",
+            "uri": "https://127.0.0.1:4567/inlineHooks",
             "headers": [
                 {
                     "key": "X-Other-Header",
@@ -187,7 +187,7 @@ curl -v -X GET \
 	        "type": "HTTPS",
 	        "version": "1.0.0",
 	        "config": {
-	            "uri": "https://127.0.0.1:4567/inlineHook",
+	            "uri": "https://127.0.0.1:4567/inlineHooks",
 	            "headers": [
 	                {
 	                    "key": "X-Other-Header",
@@ -242,7 +242,7 @@ curl -v -X PUT \
         "type" : "HTTPS",
         "version" : "1.0.0",
         "config" : {
-            "uri" : "HTTPS://127.0.0.1:8080/inlineHook",
+            "uri" : "HTTPS://127.0.0.1:8080/inlineHooks",
             "method" : "POST",
             "headers" : [
                 {
@@ -274,7 +274,7 @@ curl -v -X PUT \
         "type" : "HTTPS",
         "version" : "1.0.0",
         "config" : {
-            "uri" : "https://127.0.0.1:8080/inlineHook",
+            "uri" : "https://127.0.0.1:8080/inlineHooks",
             "method" : "POST",
             "headers" : [
                 {
@@ -560,7 +560,7 @@ curl -v -X POST \
         "type" : "HTTPS",
         "version" : "1.0.0",
         "config" : {
-            "uri" : "https://127.0.0.1:8080/inlineHook",
+            "uri" : "https://127.0.0.1:8080/inlineHooks",
             "method" : "POST",
             "headers" : [
                 {
