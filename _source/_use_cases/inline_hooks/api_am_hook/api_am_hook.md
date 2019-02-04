@@ -100,11 +100,11 @@ The following commands are supported for the API Access Management Inline Hook t
 
 #### value
 
-| Property | Description                                                                                                                                                                                                       | Data Type |
-|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
-| op       | The name of one of the [supported ops](#list-of-supported-ops).                                                                                                                                                   | String    |
-| path     | Location within the token to apply the operation, specified as a slash-delimited path. When adding a claim, this will always begin with `/claims/`,  and be followed by the name of the new claim you are adding. | String    |
-| value    | Value to set the claim to.                                                                                                                                                                                        | Number    |
+| Property | Description                                                                                                                                                                                                       | Data Type       |
+|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------|
+| op       | The name of one of the [supported ops](#list-of-supported-ops).                                                                                                                                                   | String          |
+| path     | Location within the token to apply the operation, specified as a slash-delimited path. When adding a claim, this will always begin with `/claims/`,  and be followed by the name of the new claim you are adding. | String          |
+| value    | Value to set the claim to.                                                                                                                                                                                        | Any JSON object |
 
 #### List of Supported Ops
 
