@@ -100,6 +100,8 @@ The following commands are supported for the API Access Management Inline Hook t
 
 #### value
 
+The `value` object is where you specify the specific operation to perform. It is an array, allowing you to request more than one operation.
+
 | Property | Description                                                                                                                                                                                                       | Data Type       |
 |----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------|
 | op       | The name of one of the [supported ops](#list-of-supported-ops).                                                                                                                                                   | String          |
