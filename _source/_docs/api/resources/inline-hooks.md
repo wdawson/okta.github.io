@@ -133,7 +133,7 @@ curl -v -X GET \
         "type": "HTTPS",
         "version": "1.0.0",
         "config": {
-            "uri": "https://my.test.url",
+            "uri": "https://127.0.0.1:4567/inlineHook",
             "headers": [
                 {
                     "key": "X-Other-Header",
@@ -187,7 +187,7 @@ curl -v -X GET \
 	        "type": "HTTPS",
 	        "version": "1.0.0",
 	        "config": {
-	            "uri": "https://my.test.url",
+	            "uri": "https://127.0.0.1:4567/inlineHook",
 	            "headers": [
 	                {
 	                    "key": "X-Other-Header",
