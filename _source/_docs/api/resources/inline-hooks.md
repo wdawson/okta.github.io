@@ -39,14 +39,13 @@ curl -v -X POST \
 -H "Authorization: SSWS ${api_token}" \
 -d '{
     "name" : "My Test Inline Hook",
-    "type" : "com.okta.tokens.transform",
+    "type" : "com.okta.oauth2.tokens.transform",
     "version" : "1.0.0",
     "channel" : {
         "type" : "HTTPS",
         "version" : "1.0.0",
         "config" : {
             "uri" : "https://127.0.0.1:4567/inlineHook",
-            "method" : "POST",
             "headers" : [
                 {
                     "key" : "X-Other-Header",
@@ -60,7 +59,7 @@ curl -v -X POST \
             }
         }
     }
-}' "https://{yourOktaDomain}/api/v1/inlineHook"
+}' "https://{yourOktaDomain}/api/v1/inlineHooks"
 ~~~
 
 ##### Response Example
@@ -99,7 +98,7 @@ curl -v -X POST \
 
 ### Get Inline Hook
 
-{% api_operation get /api/v1/inlineHoooks/${inlineHookId}%}
+{% api_operation get /api/v1/inlineHooks/${inlineHookId}%}
 
 #### Request Parameters
 
