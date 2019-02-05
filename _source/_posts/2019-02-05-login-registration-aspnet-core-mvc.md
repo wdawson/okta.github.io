@@ -5,13 +5,13 @@ author: ibrahim
 description: "This tutorial walks you through setting up login and registration with ASP.NET Core MVC and Okta."
 tags: [aspnet, aspnetmvc, aspnetcore, dotnet, angular, mvc]
 tweets:
-- "Need to learn how to set up login and registration in your #aspnetcore MVC app? @ibro has you covered!"
+- "Need to learn how to set up login and registration in your #aspnetcore MVC app? @ibrahimsuta has you covered!"
 - "Set up login and registration in your #aspnetcore mvc app! ->"
 - "If you're looking for a quick intro to adding login to your #aspnetcore mvc app, check this out!"
 image: blog/featured/okta-dotnet-mouse-down.jpg
 ---
 
-User authentication and authorization are common features in web applications, but building these mechanics has the potential to take a lot of time. Doing so would require setting up persistent storage for user accounts (presumably a database table or tables) and paying keen attention to security vulnerabilities like hashing passwords and returning non-numeric unique identifiers for user records. The problem then becomes exacerbated when attempting to provide the feature sets that have come to be standard in most login system - username recovery, password recovery, registration, roles, permissions, etc. - weeks of development time begin to add up before we ever get to the functionality that delivers value to your users.
+User authentication and authorization are common features in web applications, but building these mechanics has the potential to take a lot of time. Doing so requires setting up persistent storage for user information (in some type of database) and paying keen attention to potential security issues around sensitive operations like hashing passwords, password reset workflows, etc. - weeks of development time begin to add up before we ever get to the functionality that delivers value to your users.
 
 In this post, we'll walk through how Okta simplifies this process for us and set up a simple integration for an ASP.NET Core MVC app using the Okta NuGet package. We'll build functionality for users to register for new accounts and login with their Okta credentials.
 
@@ -31,10 +31,9 @@ Upon submission of this form, you will receive an email Okta with instructions t
 
 Execute the following steps to configure Okta so that users can register themselves for an account.
 
-
-* From the Administrative Dashboard, hover over Users and click **Registration**
-* Click **Enable Registration**
-* Save the changes
+1. From the Administrative Dashboard, hover over Users and click **Registration**
+2. Click **Enable Registration**
+3. Save the changes
 
 {% img blog/login-reg-mvc/okta-enable-registration.png alt:"Enable Registration" width:"800" %}{: .center-image }
 
@@ -55,14 +54,12 @@ Select **Web** then click **Next**.
 
 On the Create New Application screen, set the following values:
 
-Base URIs:
-`https://localhost:5001/`
-Login redirect URIs:
-`https://localhost:5001/authorization-code/callback`
+* Base URIs: `https://localhost:5001/`
+* Login redirect URIs: `https://localhost:5001/authorization-code/callback`
 
 {% img blog/login-reg-mvc/okta-app-settings.png alt:"Okta Application Settings" width:"800" %}{: .center-image }
 
-Click **Done**, then click **Edit** beside General Settings on your newly created Okta app. Edit the following values:
+Click **Done**, then click **Edit** next to General Settings on your newly created Okta app. Edit the following values:
 
 Logout redirect URIs:
 `https://localhost:5001/signout-callback-oidc`
@@ -72,7 +69,7 @@ Initiate login URI:
 
 
 ## Add .NET Authentication Dependencies
-Once your account is set up we need to [add the Okta.Sdk library to your project](https://github.com/okta/okta-sdk-dotnet). This article will take the approach of using the NuGet package, but the Github repository for Okta.AspNetCore can be [found here](https://github.com/okta/okta-sdk-dotnet).
+Once your account is set up you need to [add the Okta.Sdk library to your project](https://github.com/okta/okta-sdk-dotnet). This post will take the approach of using the NuGet package, but the Github repository for Okta.AspNetCore can be [found here](https://github.com/okta/okta-sdk-dotnet).
 
 To proceed simply search for the latest version of the `Okta.Sdk` NuGet package in your IDE of choice (version 1.2.0 at the time of this publication) and install it. If you're using Visual Studio you can do this by right-clicking on the project in the _solution explorer_ and selecting **Manage NuGet Packages**. For those of you not using Visual Studio, add the package via console window using the following command:
 
@@ -81,25 +78,26 @@ dotnet add package Okta.Sdk --version 1.2.0
 ```
 
 ## Configure Your ASP.NET App for Login
-Authentication works by redirecting users to the Okta website, where they will log in with their credentials, and then be returned to your site via the URL we configured above.
+Authentication works by redirecting users to the Okta website, where they will log in with their credentials, and then be returned to your site via the URL you configured above.
 
 Add the following code to your appsettings.json file:
 
+
 ```json
   "Okta": {
-    "Issuer": "https://{yourOktaDomain}/oauth2/default",
+    "Issuer": "{yourOktaDomain}/oauth2/default",
     "ClientId": "{yourClientId}",
     "ClientSecret": "{yourClientSecret}"
   }
 ```
 
-You can find each of the actual values needed, to replace the settings in the config above, in the following places:
+You can find each of the actual values needed to replace the settings in the config above in the following places:
 
-**_ClientId_** refers to the client ID of the Okta application.
-**_ClientSecret_** refers to the client secret of the Okta application.
-**_Issuer_** will need the text {yourOktaDomain} replaced with your Okta domain, found at the top-right of the Dashboard page.
+**_ClientId_** refers to the client ID of the Okta application
+**_ClientSecret_** refers to the client secret of the Okta application
+**_Issuer_** will need the text {yourOktaDomain} replaced with your Okta domain, found at the top-right of the Dashboard page
 
-Add some using statements to your `Startup.cs` file:
+Add some `using` statements to your `Startup.cs` file:
 
 ```cs
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -164,7 +162,7 @@ namespace OktaAspNetCoreMvc.Models
 
 ## Add Login to Your ASP.NET App
 
-Now that all the configuration and plumbing is done, you're ready to add the code that will actually log users in to you application.
+Now that all the configuration and plumbing is done, you're ready to add the code that will actually log users into your application.
 
 Add the following `AccountController` to the _Controller_ directory.
 
@@ -199,7 +197,7 @@ namespace OktaAspNetCoreMvc.Controllers
 }
 ```
 
-Add the following code to your _Layout.cshtml file, just below the main menu to add the login button, or a welcome message based on the current user's status.:
+Add the following code to your `_Layout.cshtml` file, just below the main menu to add the login button, or a welcome message, based on the current user's status.:
 
 ```html
    @if (User.Identity.IsAuthenticated)
@@ -216,14 +214,14 @@ Add the following code to your _Layout.cshtml file, just below the main menu to 
     }
 ```
 
-For information on user authorization using Okta groups check out [Lee Brandt's article on user authorization in ASP.NET Core with Okta](https://developer.okta.com/blog/2017/10/04/aspnet-authorization).
+For information on user authorization using Okta groups check out [Lee Brandt's article on user authorization in ASP.NET Core with Okta](/blog/2017/10/04/aspnet-authorization).
 
 ## Register Users
-If you following the instructions above to enable self-service registration the "Don't have an account? Sign Up" message will appear at the bottom of the login form. In the next step, we'll run the application.
+If you following the instructions above to enable self-service registration the "Don't have an account? Sign Up" message will appear at the bottom of the login form. In the next step, you'll run the application.
 
 {% img blog/login-reg-mvc/login-reg-widget.png alt:"Okta Login and Registration Widget" width:"800" %}{: .center-image }
 
-## Login in ASP.NET
+## Log In Using ASP.NET
 That's it! To run your solution open up a terminal and enter the following command:
 
 ```sh
@@ -232,19 +230,17 @@ dotnet run
 
 Then navigate to `http://localhost:5001` in your browser and enjoy!
 
-In this tutorial, you learned how to use Okta to add authentication to your ASP.NET Core MVC app and allow users to register for a new account.
+In this tutorial, you learned how to add authentication to your ASP.NET Core MVC app and allow users to register for a new account.
 
-The source code for this tutorial is [available on GitHub](https://github.com/SoftwareAssassin2000/OktaSimpleLoginRegistration).
+The source code for this tutorial is [available on GitHub](https://github.com/oktadeveloper/okta-login-registration-example).
 
 Now you have a website with a working login and user registration form. Your website also allows users to recover lost passwords. By repeating these steps you can create a network of tools that your users can access all with the same login.
 
 ## Learn More about Login and Registration with MVC and ASP.NET Core
-Like what you learned today? Here are some other resources that will help you further your understanding of Okta in your .NET Projects:
+Like what you learned today? Here are some other resources that will help learn more about adding secure authentication and user management in your .NET Projects:
 
-
-* [Add Login to Your ASP.NET Core MVC App](https://developer.okta.com/blog/2018/10/29/add-login-to-you-aspnetcore-app)
-* [User Authorization in ASP.NET Core with Okta](https://developer.okta.com/blog/2017/10/04/aspnet-authorization)
-* [Policy-Based Authorization in ASP.NET Core](https://developer.okta.com/blog/2018/05/11/policy-based-authorization-in-aspnet-core)
-
+* [Add Login to Your ASP.NET Core MVC App](/blog/2018/10/29/add-login-to-you-aspnetcore-app)
+* [User Authorization in ASP.NET Core with Okta](/blog/2017/10/04/aspnet-authorization)
+* [Policy-Based Authorization in ASP.NET Core](/blog/2018/05/11/policy-based-authorization-in-aspnet-core)
 
 As always, if you have questions about this post please leave a comment below. Don't forget to follow us on [Twitter](https://twitter.com/oktadev), and subscribe to our [YouTube](https://www.youtube.com/channel/UC5AMiWqFVFxF1q9Ya1FuZ_Q) channel.
