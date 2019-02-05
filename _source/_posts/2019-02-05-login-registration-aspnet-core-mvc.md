@@ -85,7 +85,7 @@ Add the following code to your appsettings.json file:
 
 ```json
   "Okta": {
-    "Issuer": "{yourOktaDomain}/oauth2/default",
+    "Issuer": "https://{yourOktaDomain}/oauth2/default",
     "ClientId": "{yourClientId}",
     "ClientSecret": "{yourClientSecret}"
   }
@@ -232,7 +232,7 @@ Then navigate to `http://localhost:5001` in your browser and enjoy!
 
 In this tutorial, you learned how to add authentication to your ASP.NET Core MVC app and allow users to register for a new account.
 
-The source code for this tutorial is [available on GitHub](https://github.com/oktadeveloper/okta-login-registration-example).
+The source code for this tutorial is [available on GitHub](https://github.com/oktadeveloper/okta-aspnetcore-login-registration-example).
 
 Now you have a website with a working login and user registration form. Your website also allows users to recover lost passwords. By repeating these steps you can create a network of tools that your users can access all with the same login.
 
