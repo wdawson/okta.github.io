@@ -71,7 +71,6 @@ Consists of name-value pairs for each included claim. See [Tokens and Claims](/d
 
 The set of scopes that have been granted. See [Tokens and Claims](/docs/api/resources/oidc#tokens-and-claims), in the documentation for Okta's OpenID Connect and OAuth 2.0 API, for descriptions of the scopes that can be included.
 
-
 ## Objects in Response You Send
 
 For the API Access Management Inline hook, the `commands` and `error` objects that you can return in the JSON payload of your response are defined as follows:

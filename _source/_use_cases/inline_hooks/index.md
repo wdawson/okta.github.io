@@ -50,7 +50,7 @@ The graphic below illustrates the the sequence of steps:
 
 ### Request and Response Overview
 
-Okta's request to your external service consists of an HTTPS POST request with a JSON payload. The objects included in the JSON payload provide data relevant to the process flow that triggered the inline hook. The set of objects varies depending the type of inline hook you're using.
+Okta's request to your external service consists of an HTTPS POST request with a JSON payload. The objects included in the JSON payload provide data relevant to the process flow that triggered the inline hook. The set of objects varies depending on the type of inline hook you're using.
 
 {% img hook-request-response.png "Hook Request and Response" alt:"Hook Request and Response" %}
 
@@ -91,7 +91,6 @@ Your service receives the request from Okta and needs to respond to it. The resp
 ### HTTP Status Code
 
 You need to return an HTTP status code with your response. Typically, your service should return an HTTP status code of 200 (OK). In inline hook types that support empty responses, HTTP status code 204 (No Content) needs to be provided when sending an empty response.
-
 
 #### Don't Use HTTP Status Code to Return Information
 
