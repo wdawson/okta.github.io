@@ -2,7 +2,7 @@
 layout: docs_page
 title: Inline Hooks
 category: management
-excerpt: The Inline Hooks APIs provides a CRUD and execution interface for Inline Hooks.
+excerpt: The Inline Hooks Management API provides a CRUD interface for registering inline hook endpoints.
 ---
 
 # Inline Hooks Management API 
@@ -27,7 +27,7 @@ Adds a new Inline Hook to your Organization in ACTIVE status.
 
 #### Response Parameters
 
-All responses return the created Inline Hook.
+All responses return the created Inline Hook object.
 
 ##### Request Example
 {:.api .api-request .api-request-example}
@@ -55,7 +55,7 @@ curl -v -X POST \
             "authScheme" : {
                 "type" : "HEADER",
                 "key" : "Authorization",
-                "value" : "api-key"
+                "value" : "${api-key}"
             }
         }
     }
@@ -87,7 +87,6 @@ curl -v -X POST \
             "authScheme" : {
                 "type" : "HEADER",
                 "key" : "Authorization",
-                "value" : "api-key"
             }
         }
     },
@@ -95,6 +94,8 @@ curl -v -X POST \
     "lastUpdated": "2018-05-15T01:23:08.000Z"
 }
 ~~~
+
+> Note: The 'channel.authScheme.value' property is write-only. You set it, but it is never returned in the response.
 
 ### Get Inline Hook
 
@@ -144,7 +145,6 @@ curl -v -X GET \
             "authScheme": {
                 "type": "HEADER",
                 "key": "Authorization",
-                "value": "******"
             }
         }
     },
@@ -198,7 +198,6 @@ curl -v -X GET \
 	            "authScheme": {
 	                "type": "HEADER",
 	                "key": "Authorization",
-	                "value": "******"
 	            }
 	        }
 	    },
@@ -253,7 +252,7 @@ curl -v -X PUT \
             "authScheme" : {
                 "type" : "HEADER",
                 "key" : "Authorization",
-                "value" : "api-key"
+                "value" : "${api-key}"
             }
         }
     }
@@ -285,7 +284,6 @@ curl -v -X PUT \
             "authScheme" : {
                 "type" : "HEADER",
                 "key" : "Authorization",
-                "value" : "api-key"
             }
         }
     },
@@ -571,7 +569,6 @@ curl -v -X POST \
             "authScheme" : {
                 "type" : "HEADER",
                 "key" : "Authorization",
-                "value" : "api-key"
             }
         }
     },
