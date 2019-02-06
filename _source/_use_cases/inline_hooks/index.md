@@ -16,7 +16,7 @@ You implement your custom code as a web service with an Internet-accessible endp
 
 The outbound call from Okta is called a hook. Your code, which receives the call, is referred to as your external service.
 
-Inline hooks use asynchronous calls, which means that the Okta process that triggered the hook is paused until a response from your service is received.
+Inline hooks use synchronous calls, which means that the Okta process that triggered the hook is paused until a response from your service is received.
 
 ## Multiple Types of Okta Inline Hooks
 
