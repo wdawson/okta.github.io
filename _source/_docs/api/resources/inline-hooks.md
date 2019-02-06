@@ -17,7 +17,7 @@ The Inline Hooks Management API provides a CRUD interface for registering extern
 
 {% api_operation post /api/v1/inlineHooks%}
 
-Adds a new Inline Hook to your Organization in ACTIVE status.
+Adds a new Inline Hook to your Organization in `ACTIVE` status.
 
 #### Request Parameters
 
@@ -99,7 +99,7 @@ curl -v -X POST \
 
 ### Get Inline Hook
 
-{% api_operation get /api/v1/inlineHooks/${inlineHookId}%}
+{% api_operation get /api/v1/inlineHooks/${inlineHookId} %}
 
 #### Request Parameters
 
@@ -117,7 +117,7 @@ All responses return the Inline Hook that matches the `inlineHookId` provided.
 ~~~json
 curl -v -X GET \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}/api/v1/inlineHooks/{inlineHookId}"
+"https://{yourOktaDomain}/api/v1/inlineHooks/${inlineHookId}"
 ~~~
 
 ##### Response Example
@@ -159,7 +159,7 @@ curl -v -X GET \
 
 | Parameter | Description                    | Param Type | DataType | Required |
 |-----------|--------------------------------|------------|----------|----------|
-| type      | A valid `inlineHookType` name. | Query      | Enum     | FALSE    |
+| type      | A valid `inlineHookType` name. | Query      | String   | FALSE    |
 
 All responses return a list of Inline Hooks, filtered by the optional type query parameter.
 
@@ -209,16 +209,16 @@ curl -v -X GET \
 
 ### Update Inline Hook
 
-{% api_operation put /api/v1/inlineHooks/{inlineHookId}%}
+{% api_operation put /api/v1/inlineHooks/${inlineHookId} %}
 
 #### Request Parameters
 
 | Parameter    | Description             | Param Type | DataType          | Required |
 |--------------|-------------------------|------------|-------------------|----------|
 | inlineHookId | A valid Inline Hook ID. | Path       | String            | TRUE     |
-| inlineHook   | A valid Inline Hook.    | Body       | Inline Hook Model | TRUE     |
+| inlineHook   | A valid Inline Hook.    | Body       | [Inline Hook Object](#inline-hook-object) | TRUE     |
 
-The submitted Inline Hook will replace the existing version after passing validation. Refer to the above models to see
+The submitted Inline Hook will replace the existing version after passing validation. Refer to the [Inline Hook Object](#inline-hook-object) to see
 which properties are immutable.
 
 #### Response Parameters
@@ -294,7 +294,7 @@ curl -v -X PUT \
 
 ### Delete Inline Hook
 
-{% api_operation delete /api/v1/inlineHooks/{inelinHookId}%}
+{% api_operation delete /api/v1/inlineHooks/{inlinHookId}%}
 
 #### Request Parameters
 
@@ -303,7 +303,7 @@ curl -v -X PUT \
 | inlineHookId | A valid Inline Hook id | Path       | String   | TRUE     |
 
 Deletes the Inline Hook matching the provided `inlineHook`. Once deleted, this Inline Hook will be unrecoverable.
-As a safety precaution, only Inline Hooks with a status of INACTIVE are eligible for deletion.
+As a safety precaution, only Inline Hooks with a status of `INACTIVE` are eligible for deletion.
 
 #### Response Parameters
 
@@ -315,7 +315,7 @@ All responses will return a 204 with no content.
 ~~~json
 curl -v -X DELETE \
 -H "Authorization: SSWS ${api_token}" \
-"https://{yourOktaDomain}/api/v1/inlineHook/{inlineHookId}"
+"https://{yourOktaDomain}/api/v1/inlineHook/${inlineHookId}"
 ~~~
 
 ##### Response Example
@@ -325,7 +325,7 @@ curl -v -X DELETE \
 
 ### Execute Inline Hook
 
-{% api_operation post /api/v1/inlineHooks/{inlineHookId}/execute%}
+{% api_operation post /api/v1/inlineHooks/${inlineHookId}/execute%}
 
 | Parameter                     | Description                                                         | Param Type | DataType | Required |
 |-------------------------------|---------------------------------------------------------------------|------------|----------|----------|
@@ -493,7 +493,7 @@ curl -v -X POST \
    "contentType":"application/json",
    "eventType":"com.okta.oauth2.tokens.transform"
 }
-' "https://{yourOktaDomain}/api/v1/inlineHooks/{inlineHookId}/execute"
+' "https://{yourOktaDomain}/api/v1/inlineHooks/${inlineHookId}/execute"
 ~~~
 
 ##### Response Example
@@ -535,16 +535,16 @@ curl -v -X POST \
 
 ### Inline Hook Object
 
-| Property    | Description                                               | DataType       | Nullable | Unique | ReadOnly | MinLength | MaxLength | Validation                                        |
-|-------------|-----------------------------------------------------------|----------------|----------|--------|----------|-----------|-----------|---------------------------------------------------|
-| id          | Unique key for the Inline Hook.                           | String         | FALSE    | TRUE   | TRUE     |           |           |                                                   |
-| status      | Status of the Inline Hook, INACTIVE will block execution. | Enum           | FALSE    | FALSE  | FALSE    |           |           | One of ACTIVE, INACTIVE                           |
-| name        | Display name for Inline Hook.                             | String         | FALSE    | TRUE   | FALSE    | 1         | 255       |                                                   |
-| type        | Type of the Inline Hook.                                  | inlineHookType | FALSE    | FALSE  | TRUE     |           |           | Immutable after Inline Hook creation              |
-| version     | Version of the Channel.                                   | Integer        | FALSE    | FALSE  | TRUE     |           |           | Must match a valid version number                 |
-| channel     | Channel for the Inline Hook.                              | Channel        | FALSE    | FALSE  | FALSE    |           |           | Validation is determined by the specific Channel. |
-| created     | Date of Inline Hook creation.                             | Date           | TRUE     | FALSE  | TRUE     |           |           |                                                   |
-| lastUpdated | Date of Inline Hook update.                               | Date           | TRUE     | FALSE  | TRUE     |           |           |                                                   |                                      |
+| Property    | Description                                                                                | DataType       | Nullable | Unique | ReadOnly | Validation                                        |
+|-------------|--------------------------------------------------------------------------------------------|----------------|----------|--------|----------|---------------------------------------------------|
+| id          | Unique key for the Inline Hook.                                                            | String         | FALSE    | TRUE   | TRUE     |                                                   |
+| status      | Status of the Inline Hook, either `ACTIVE` or `INACTIVE`. `INACTIVE` will block execution. | String         | FALSE    | FALSE  | FALSE    |                                                   |
+| name        | Display name for Inline Hook. Must be between 1 and 255 characters in length.              | String         | FALSE    | TRUE   | FALSE    |                                                   |
+| type        | Type of the Inline Hook.                                                                   | inlineHookType | FALSE    | FALSE  | TRUE     | Immutable after Inline Hook creation.             |
+| version     | Version of the Channel.                                                                    | Integer        | FALSE    | FALSE  | TRUE     | Must match a valid version number.                |
+| channel     | Channel for the Inline Hook.                                                               | Channel        | FALSE    | FALSE  | FALSE    | Validation is determined by the specific Channel. |
+| created     | Date of Inline Hook creation.                                                              | Date           | TRUE     | FALSE  | TRUE     |                                                   |
+| lastUpdated | Date of Inline Hook update.                                                                | Date           | TRUE     | FALSE  | TRUE     |                                                   |
 {:.table .table-word-break} 
 
 ~~~json
