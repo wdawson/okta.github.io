@@ -535,16 +535,16 @@ curl -v -X POST \
 
 ### Inline Hook Object
 
-| Property    | Description                                                                                | DataType       | Nullable | Unique | ReadOnly | Validation                                        |
-|-------------|--------------------------------------------------------------------------------------------|----------------|----------|--------|----------|---------------------------------------------------|
-| id          | Unique key for the Inline Hook.                                                            | String         | FALSE    | TRUE   | TRUE     |                                                   |
-| status      | Status of the Inline Hook, either `ACTIVE` or `INACTIVE`. `INACTIVE` will block execution. | String         | FALSE    | FALSE  | FALSE    |                                                   |
-| name        | Display name for Inline Hook. Must be between 1 and 255 characters in length.              | String         | FALSE    | TRUE   | FALSE    |                                                   |
-| type        | Type of the Inline Hook.                                                                   | inlineHookType | FALSE    | FALSE  | TRUE     | Immutable after Inline Hook creation.             |
-| version     | Version of the Channel.                                                                    | Integer        | FALSE    | FALSE  | TRUE     | Must match a valid version number.                |
-| channel     | Channel for the Inline Hook.                                                               | Channel        | FALSE    | FALSE  | FALSE    | Validation is determined by the specific Channel. |
-| created     | Date of Inline Hook creation.                                                              | Date           | TRUE     | FALSE  | TRUE     |                                                   |
-| lastUpdated | Date of Inline Hook update.                                                                | Date           | TRUE     | FALSE  | TRUE     |                                                   |
+| Property    | Description                                                 | DataType       | Nullable | Unique | ReadOnly | Validation                                        |
+|-------------|-------------------------------------------------------------|----------------|----------|--------|----------|---------------------------------------------------|
+| id          | Unique key for the Inline Hook.                             | String         | FALSE    | TRUE   | TRUE     | Assigned                                          |
+| status      | Status of the Inline Hook. `INACTIVE` will block execution. | String         | FALSE    | FALSE  | FALSE    | Must be either `ACTIVE` or `INACTIVE`.            |
+| name        | Display name for Inline Hook.                               | String         | FALSE    | TRUE   | FALSE    | Must be between 1 and 255 characters in length.   |
+| type        | Type of the Inline Hook.                                    | inlineHookType | FALSE    | FALSE  | TRUE     | Immutable after Inline Hook creation.             |
+| version     | Version of the Channel.                                     | Integer        | FALSE    | FALSE  | TRUE     | Must match a valid version number.                |
+| channel     | Channel for the Inline Hook.                                | Channel        | FALSE    | FALSE  | FALSE    | Validation is determined by the specific Channel. |
+| created     | Date of Inline Hook creation.                               | Date           | TRUE     | FALSE  | TRUE     | Assigned                                          |
+| lastUpdated | Date of Inline Hook update.                                 | Date           | TRUE     | FALSE  | TRUE     | Assigned                                          |
 {:.table .table-word-break} 
 
 ~~~json
