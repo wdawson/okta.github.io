@@ -97,6 +97,8 @@ The following commands are supported for the API Access Management Inline Hook t
 | com.okta.identity.patch | Modify an ID token.     |
 | com.okta.access.patch   | Modify an access token. |
 
+> Note: The `commands` array should only contain commands that can be applied to the requested tokens. For example, if the token is an ID token, the `commands` array should not contain commands of the type `com.okta.access.patch`.
+
 #### value
 
 The `value` object is where you specify the specific operation to perform. It is an array, allowing you to request more than one operation.
