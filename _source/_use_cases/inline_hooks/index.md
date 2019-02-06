@@ -16,7 +16,7 @@ You implement your custom code as a web service with an Internet-accessible endp
 
 The outbound call from Okta is called a hook. Your code, which receives the call, is referred to as your external service.
 
-The Okta process that triggered the hook is paused until a response from your service is received (i.e., inline hooks are synchronous calls).
+Inline hooks use asynchronous calls, which means that the Okta process that triggered the hook is paused until a response from your service is received.
 
 ## Multiple Types of Okta Inline Hooks
 
@@ -36,11 +36,11 @@ The points in Okta process flows where inline hooks can be triggered are called 
 
 ### Inline Hook Call within an Okta Process Flow
 
-The graphic below illustrates the the sequence of steps:
+The graphic below illustrates the sequence of steps:
 
 {% img hook-call-steps.png "Hook Call Steps Diagram" alt:"Hook Call Steps Diagram" %}
 
-1. During the execution of an Okta process flow, at the extension point, between points A and B, Okta sends a request to your external service. 
+1. During the execution of an Okta process flow, at the extension point between points A and B, Okta sends a request to your external service. 
 
 1. Your external service performs some processing.
 
@@ -69,7 +69,7 @@ The header of the request sent by Okta includes the following fields:
 ```http
 Accept: application/json
 Content-Type: application/json
-Authorization: <key>
+Authorization: ${key}
 ```
 
 #### Authorization Header
@@ -123,4 +123,6 @@ After creating your external service, you need to tell Okta it exists, and enabl
 1. Register your service's endpoint with Okta by making a `POST` request to `/api/v1/inlineHooks`. See [Inline Hooks Management API](/docs/api/resources/inline-hooks).
 
 1. Associate the endpoint with a particular Okta process flow. How to do this varies by inline hook type.
+
+For more information on implementing inline hooks, see the documentation for specific inline hook types linked to in [Currently-Supported Types](#currently-supported-types).
 
