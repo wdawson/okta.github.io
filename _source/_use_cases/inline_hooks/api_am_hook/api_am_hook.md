@@ -59,17 +59,17 @@ Provides information on the properties of the access token that Okta has generat
 
 #### claims
 
-Consists of name-value pairs for each included claim. See [Tokens and Claims](/docs/api/resources/oidc#tokens-and-claims), in the documentation for Okta's OpenID Connect and OAuth 2.0 API, for descriptions of the claims that can be included.
+Consists of name-value pairs for each included claim. For descriptions of the claims that can be included, see Okta's [OpenID Connect and OAuth 2.0 API reference](/docs/api/resources/oidc#tokens-and-claims).
 
 #### lifetime
 
 | Property   | Description                                                            | Data Type |
 |------------|------------------------------------------------------------------------|-----------|
-| expiration | The expiration time of the token in seconds since January 1, 1970 UTC. | Number    |
+| expiration | Time in seconds until the token expires. | Number    |
 
 #### scopes
 
-The set of scopes that have been granted. See [Tokens and Claims](/docs/api/resources/oidc#tokens-and-claims), in the documentation for Okta's OpenID Connect and OAuth 2.0 API, for descriptions of the scopes that can be included.
+The set of scopes that have been granted. For descriptions of the claims that can be included, see Okta's [OpenID Connect and OAuth 2.0 API reference](/docs/api/resources/oidc#tokens-and-claims).
 
 ## Objects in Response You Send
 
