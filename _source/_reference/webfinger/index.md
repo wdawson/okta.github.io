@@ -23,7 +23,7 @@ The table below summarizes the supported query parameters:
 | resource       | User's login value prefixed with `okta:acct:`                           | URL        | String   | TRUE     |
 | rel            | Allows you to limit the result to certain IdPs                          | URL        | Array    | FALSE    |
 
->Note: Valid values for rel are `http://openid.net/specs/connect/1.0/issuer` and `okta:idp`, the first value being an Okta org, and the second being any configurable IdP.
+>Note: Valid values for `rel` are `http://openid.net/specs/connect/1.0/issuer` and `okta:idp`, the first value being an Okta org, and the second being any configurable IdP.
 
 #### Request Example
 {:.api .api-request .api-request-example}
