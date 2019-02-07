@@ -125,7 +125,7 @@ When you return an error object, it should have the following structure:
 |--------------|--------------------------------------|-----------------------------|
 | errorSummary | Human-readable summary of the error. | String                      |
 
-Returning an error object will cause Okta to return an OAuth 2.0 error to the requester of the token, with the value of `error` set to `server_error`, and the value of`error_description` set to the string you supplied in the `errorSummary` property of the `error` object you returned.
+Returning an error object will cause Okta to return an OAuth 2.0 error to the requester of the token, with the value of `error` set to `server_error`, and the value of `error_description` set to the string you supplied in the `errorSummary` property of the `error` object you returned.
 
 ## Sample Listing of JSON Payload of Request
 
