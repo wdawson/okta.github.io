@@ -159,7 +159,7 @@ When it is finished, you will get a pop up in the bottom right corner saying **D
 
 You're not quite finished though! Initially, you put your BreweryDB API key in the `local.settings.json` file. This doesn't get deployed, so you'll have to set up that key as an environment variable in Azure.
 
-Log in to the [Azure Portal](https://portal.azure.com) and on the home page, click on **Function Apps**. Choose your function from the list of Function Apps. If **Function Apps** is not listed on your home page, search the portal for “Function” and **Function Apps** will be listed there.  Choose **Application settings** under **Configured features**. Scroll down to the **Application Settings** heading and click on the **+ Add new setting** link below the list. The **APP SETTING NAME** should be `BREWERY_DB_API_KEY` and the **VALUE** will be your BreweryDB API key. You'll have to scroll back up to the top to find the **Save** button.
+Log in to the [Azure Portal](https://portal.azure.com) and on the home page, click on **Function Apps**. Choose your function from the list of Function Apps. If **Function Apps** is not listed on your home page, search the portal for "Function" and **Function Apps** will be listed there.  Choose **Application settings** under **Configured features**. Scroll down to the **Application Settings** heading and click on the **+ Add new setting** link below the list. The **APP SETTING NAME** should be `BREWERY_DB_API_KEY` and the **VALUE** will be your BreweryDB API key. You'll have to scroll back up to the top to find the **Save** button.
 
 Now you should be able to go to the URL for your new function and get a beer suggestion!! You can also see your URL on the **Overview** tab for your function in Azure. 
 
