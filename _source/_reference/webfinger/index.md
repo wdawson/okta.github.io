@@ -79,7 +79,7 @@ In this example, there is already a rule configured that has a user identifier c
 
 ~~~json
 {
-    "subject": "okta:acct:joe.stormtrooper@saml.com",
+    "subject": "okta:acct:joe.stormtrooper@example.com",
     "links": [
         {
             "rel": "https://openid.net/specs/connect/1.0/issuer",
