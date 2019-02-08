@@ -5,7 +5,11 @@ title: WebFinger
 
 # WebFinger API
 
-The `https://{yourOktaDomain}/.well-known/webfinger` API allows a client application to determine the IdP that a given username (or identifier) would be routed to, based on your org's Identity Provider Routing Rules (IdP Discovery Policy). If a rule is configured to match on a user attribute, or if a user's shortname is provided (e.g. `joe.stormtrooper`), the API call will cross-reference all users in the org to find the appropriate match.
+The purpose of this interface is to allow a client application to determine the Identity Provider given username (or identifier) should be routed to, based on your organization's Identity Provider Routing Rules (IdP Discovery Policy).
+
+The endpoint is: `https://{yourOktaDomain}/.well-known/webfinger`
+
+This is a public, unprotected interface, that can be queried without supplying any SSWS token.
 
 ## Finding a User's IdP 
 
