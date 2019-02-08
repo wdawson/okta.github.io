@@ -5,17 +5,17 @@ title: WebFinger
 
 # WebFinger
 
-The purpose of the WebFinger interface is to allow a client application to determine the Identity Provider a given username (or identifier) should be routed to, based on your organization's Identity Provider Routing Rules (IdP Discovery Policy).
+The purpose of the WebFinger interface is to allow a client application to determine the Identity Provider that a given username (or identifier) should be routed to based on your organization's Identity Provider Routing Rules (IdP Discovery Policy).
 
 The endpoint is: `https://{yourOktaDomain}/.well-known/webfinger`
 
-This is a public, unprotected interface, that can be queried without supplying an SSWS token.
+This is a public, unprotected interface that can be queried without supplying an SSWS token.
 
 ## Finding a User's IdP 
 
 {% api_operation get /.well-known/webfinger %}
 
-Fetch IdP to be used for a particular user. You must supply a `resource` query paramter.
+Fetch the IdP to be used for a particular user. You must supply a `resource` query parameter.
 
 ### Request Parameters
 {:.api .api-request .api-request-params}
@@ -74,12 +74,12 @@ curl -v -X GET \
 "https://{yourOktaDomain}/.well-known/webfinger?q=okta:acct:joe.stormtrooper%example.com&rel=http%3A%2F%2Fopenid.net%2Fspecs%2Fconnect%2F1.0%2Fissuer"
 ~~~
 
->Note: This request looks similar to the previous one, but it includes a `rel` parameter which limits the results to a particular set of IdPs.
+>Note: This request looks similar to the previous one, but it includes a `rel` parameter that limits the results to a particular set of IdPs.
 
 #### Response Example
 {:.api .api-response .api-response-example}
 
-In this example, there is already a rule configured that has a user identifier condition which says that users with the domain `example.com` should be routed to a configured SAML IdP. However, we supplied a `rel` parameter of `http://openid.net/specs/connect/1.0/issuer` which limited the result to Okta:
+In this example, there is already a rule configured that has a user identifier condition which says that users with the domain `example.com` should be routed to a configured SAML IdP. However, we supplied a `rel` parameter of `http://openid.net/specs/connect/1.0/issuer` that limited the result to Okta:
 
 ~~~json
 {
