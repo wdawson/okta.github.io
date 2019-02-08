@@ -3,13 +3,13 @@ layout: docs_page
 title: WebFinger
 ---
 
-# WebFinger API
+# WebFinger
 
-The purpose of this interface is to allow a client application to determine the Identity Provider given username (or identifier) should be routed to, based on your organization's Identity Provider Routing Rules (IdP Discovery Policy).
+The purpose of the WebFinger interface is to allow a client application to determine the Identity Provider given username (or identifier) should be routed to, based on your organization's Identity Provider Routing Rules (IdP Discovery Policy).
 
 The endpoint is: `https://{yourOktaDomain}/.well-known/webfinger`
 
-This is a public, unprotected interface, that can be queried without supplying any SSWS token.
+This is a public, unprotected interface, that can be queried without supplying an SSWS token.
 
 ## Finding a User's IdP 
 
