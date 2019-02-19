@@ -138,7 +138,7 @@ Choose a name for the app, and set the redirect URL to `http://localhost:8080/au
 
 {% img blog/oauth-device-flow-proxy/app-settings.png alt:"Set the application settings" %}{: .center-image }
 
-Once you create the app, you'll get a `client_id` for it. Copy that somewhere as we'll need it in a bit.
+Once you create the app, you'll get a `client_id` for it. Copy that somewhere as you'll need it in a bit.
 
 {% img blog/oauth-device-flow-proxy/app-credentials.png alt:"Find your application's client_id" %}{: .center-image }
 
