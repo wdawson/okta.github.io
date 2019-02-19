@@ -37,7 +37,7 @@ So now that we know what the OAuth 2.0 Device Flow is, let's look at how it work
 
 The OAuth 2.0 Device Flow works quite different from the other OAuth flows, since it doesn't involve a browser redirect on the device.
 
-When the user wants to log in, the device starts out by making a POST request to begin the process. The POST request contains only one piece of information, its `client_id`. (Devices like these are considered "public clients", so no `client_secret` is used in them, similar to [mobile apps](https://developer.okta.com/blog/2019/01/22/oauth-api-keys-arent-safe-in-mobile-apps).) This request is made to a new endpoint that is unique to the Device Flow.
+When the user wants to log in, the device starts out by making a POST request to begin the process. The POST request contains only one piece of information, its `client_id`. (Devices like these are considered "public clients", so no `client_secret` is used in them, similar to [mobile apps](/blog/2019/01/22/oauth-api-keys-arent-safe-in-mobile-apps).) This request is made to a new endpoint that is unique to the Device Flow.
 
 ```
 POST https://authorization-server.com/device
@@ -107,7 +107,7 @@ Now that you know how the Device Flow works, you see that it requires special su
 
 So what happens if you want to use the Device Flow with an API that doesn't support it natively? That's where this Device Flow Proxy Server comes into play. The Device Flow Proxy Server implements the parts specific to the Device Flow, but redirects the user out to whatever OAuth service you want. Let's set up an example using Okta.
 
-This project is written in PHP to make it easy to deploy, so make sure you have PHP on your computer. (It's built in to MacOS!) 
+This project is written in PHP to make it easy to deploy, so make sure you have PHP on your computer. (It's built-in to MacOS!) 
 
 ### Clone the Project from GitHub
 
@@ -144,23 +144,23 @@ depending on whether you've installed Composer globally or just in this folder.
 
 Next, you'll need to configure the proxy server to talk to Okta's OAuth server. If you're following this tutorial with a different OAuth server, it should work just fine. This proxy server needs to know two things: where to send the user to authenticate with the real OAuth server (the authorization endpoint), and where to get access tokens from (the token endpoint). These are defined in the project's config file.
 
-Copy the `config.template.php` file to `config.php`. There are two URLs in there we'll need to configure from the Okta account.
+Copy the `config.template.php` file to `config.php`. There are two URLs in there you'll need to configure for your Okta account.
 
 ### Create an Okta Developer Account
 
-Create a free Okta Developer account at [developer.okta.com/signup](https://developer.okta.com/signup/). From the **Applications** tab, click **Add Application**. Then choose the **Native** option. Remember, like iOS and Android apps, we can't trust these devices to keep secrets, so this enables the PKCE flow for this application.
+Create a free Okta Developer account at [developer.okta.com/signup](https://developer.okta.com/signup/). From the **Applications** tab, click **Add Application**. Then choose the **Native** option. Remember, like iOS and Android apps, you can't trust these devices to keep secrets, so this enables the PKCE flow for this application.
 
 {% img blog/oauth-device-flow-proxy/create-new-app.png alt:"Create a new Okta app" %}{: .center-image }
 
-Choose a name for the app, and set the redirect URL to `http://localhost:8080/auth/callback`
+Choose a name for the app, and set the redirect URL to `http://localhost:8080/auth/callback`.
 
 {% img blog/oauth-device-flow-proxy/app-settings.png alt:"Set the application settings" %}{: .center-image }
 
-Once you create the app, you'll get a `client_id` for it. Copy that somewhere as we'll need it in a bit.
+Once you create the app, you'll get a `client_id` for it. Copy that somewhere as you'll need it in a bit.
 
 {% img blog/oauth-device-flow-proxy/app-credentials.png alt:"Find your application's client_id" %}{: .center-image }
 
-Next, navigate to the **API** tab and choose **Authorization Servers**, and you'll see an authorization server that's been created for your account.
+Next, navigate to the **API** tab and choose **Authorization Servers**. You'll see an authorization server that's been created for your account.
 
 {% img blog/oauth-device-flow-proxy/api-authorization-server.png alt:"Find the authorization server URL" %}{: .center-image }
 
