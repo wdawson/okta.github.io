@@ -142,7 +142,7 @@ Once you create the app, you'll get a `client_id` for it. Copy that somewhere as
 
 {% img blog/oauth-device-flow-proxy/app-credentials.png alt:"Find your application's client_id" %}{: .center-image }
 
-Next, navigate to the **API** tab and choose **Authorization Servers**, and you'll see an authorization server that's been created for your account.
+Next, navigate to the **API** tab and choose **Authorization Servers**. You'll see an authorization server that's been created for your account.
 
 {% img blog/oauth-device-flow-proxy/api-authorization-server.png alt:"Find the authorization server URL" %}{: .center-image }
 
