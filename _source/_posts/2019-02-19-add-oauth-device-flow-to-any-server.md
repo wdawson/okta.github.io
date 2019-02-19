@@ -107,7 +107,7 @@ Now that you know how the Device Flow works, you see that it requires special su
 
 So what happens if you want to use the Device Flow with an API that doesn't support it natively? That's where this Device Flow Proxy Server comes into play. The Device Flow Proxy Server implements the parts specific to the Device Flow, but redirects the user out to whatever OAuth service you want. Let's set up an example using Okta.
 
-This project is written in PHP to make it easy to deploy, so make sure you have PHP on your computer. (It's built in to MacOS!) 
+This project is written in PHP to make it easy to deploy, so make sure you have PHP on your computer. (It's built-in to MacOS!) 
 
 ### Clone the Project from GitHub
 
