@@ -118,11 +118,29 @@ git clone https://github.com/aaronpk/Device-Flow-Proxy-Server.git
 cd Device-Flow-Proxy-Server
 ```
 
-We're using a few libraries, so you'll need to install them with Composer. 
+We're using a few libraries, so you'll need to install them with Composer.
+
+If you don't already have Composer installed, you can install it on Linux or MacOS with the command belo:
+
+```bash
+curl https://gist.githubusercontent.com/aaronpk/436bbfcf57644f1c8d6a230326c546bd/raw/8eac46272051f4bc965d4021300c9b21534408a6/install-composer.sh | bash
+```
+
+(Or visit [getcomposer.org](https://getcomposer.org/download/) for instructions on other platforms.)
+
+Then you can install this project's dependencies, using either
 
 ```bash
 composer install
 ```
+
+or 
+
+```bash
+php composer.phar install
+```
+
+depending on whether you've installed Composer globally or just in this folder.
 
 Next, you'll need to configure the proxy server to talk to Okta's OAuth server. If you're following this tutorial with a different OAuth server, it should work just fine. This proxy server needs to know two things: where to send the user to authenticate with the real OAuth server (the authorization endpoint), and where to get access tokens from (the token endpoint). These are defined in the project's config file.
 
