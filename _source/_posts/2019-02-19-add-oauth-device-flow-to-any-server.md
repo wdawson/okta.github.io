@@ -134,7 +134,7 @@ Create a free Okta Developer account at [developer.okta.com/signup](https://deve
 
 {% img blog/oauth-device-flow-proxy/create-new-app.png alt:"Create a new Okta app" %}{: .center-image }
 
-Choose a name for the app, and set the redirect URL to `http://localhost:8080/auth/callback`
+Choose a name for the app, and set the redirect URL to `http://localhost:8080/auth/callback`.
 
 {% img blog/oauth-device-flow-proxy/app-settings.png alt:"Set the application settings" %}{: .center-image }
 
