@@ -2,11 +2,11 @@
 layout: blog_post
 title: "Add the OAuth 2.0 Device Flow to any OAuth Server"
 author: aaronpk
-description: "Learn how to run an OAuth 2.0 Device Flow proxy server so you can use the Device Flow with servers that don't have native support"
-tags: [oauth, php, device]
+description: "Learn how to run an OAuth 2.0 Device Flow proxy server so you can use the Device Flow with servers that don't have native support."
+tags: [oauth, oauth2, php, device, oauth2 device flow]
 image: blog/oauth-device-flow-proxy/syfy.jpg
 tweets: 
-- "Using the #OAuth Device Flow on servers that don't support it"
+- "How to use the #OAuth Device Flow on servers that don't support it"
 - "Here's a way to add the #OAuth Device Flow to servers that don't have native support"
 - "This tutorial from @aaronpk shows you how you can start using the OAuth Device Flow today with any OAuth server!" 
 ---
@@ -163,7 +163,7 @@ php -S 127.0.0.1:8080 -t public
 
 Now you have a server listening on port 8080! Don't open your browser there just yet, since remember we have to have the device initiate the OAuth request.
 
-We're going to simulate a browserless device by interacting with the proxy server from the command line. In another terminal, make the following `curl` request to begin the Device Flow. Replace `{yourClientId}` with the client ID you got when creating the app above.
+You can simulate a browserless device by interacting with the proxy server from the command line. In another terminal, make the following `curl` request to begin the Device Flow. Replace `{yourClientId}` with the client ID you got when creating the app above.
 
 ```bash
 curl http://localhost:8080/device/code -d client_id={yourClientId}
@@ -189,7 +189,7 @@ curl http://localhost:8080/device/token -d client_id={yourClientId} -d device_co
 
 (Remember to replace `{yourClientId}` and `{yourDeviceCode}` with the values specific to your flow.
 
-Open http://localhost:8080/device in your browser, and you'll see a prompt asking you to enter the `user_code`. Go ahead and type that in now. (You can enter it with or without the hyphen, and in upper or lower case, the proxy server will normalize the input.)
+Open `http://localhost:8080/device` in your browser, and you'll see a prompt asking you to enter the `user_code`. Go ahead and type that in now. (You can enter it with or without the hyphen, and in upper or lower case, the proxy server will normalize the input.)
 
 {% img blog/oauth-device-flow-proxy/user-code-prompt.png alt:"The proxy server prompt to enter the user code" %}{: .center-image }
 
@@ -247,7 +247,7 @@ You can find the entire source code for this project [on GitHub](https://github.
 
 If you would like to dig deeper into the topics covered in this article, the following resources are a great starting point:
 
-* [Add Authentication to your PHP App in 5 Minutes](https://developer.okta.com/blog/2018/07/09/five-minute-php-app-auth)
+* [Add Authentication to your PHP App in 5 Minutes](/blog/2018/07/09/five-minute-php-app-auth)
 * [Get Started with PHP + Okta](https://developer.okta.com/code/php/)
 * [Device Code Flow on the OAuth Playground](https://www.oauth.com/playground/device-code.html)
 
