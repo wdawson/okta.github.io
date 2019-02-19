@@ -126,7 +126,7 @@ composer install
 
 Next, you'll need to configure the proxy server to talk to Okta's OAuth server. If you're following this tutorial with a different OAuth server, it should work just fine. This proxy server needs to know two things: where to send the user to authenticate with the real OAuth server (the authorization endpoint), and where to get access tokens from (the token endpoint). These are defined in the project's config file.
 
-Copy the `config.template.php` file to `config.php`. There are two URLs in there we'll need to configure from the Okta account.
+Copy the `config.template.php` file to `config.php`. There are two URLs in there you'll need to configure for your Okta account.
 
 ### Create an Okta Developer Account
 
