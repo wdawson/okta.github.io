@@ -189,7 +189,7 @@ curl http://localhost:8080/device/token -d client_id={yourClientId} -d device_co
 
 (Remember to replace `{yourClientId}` and `{yourDeviceCode}` with the values specific to your flow.
 
-Open http://localhost:8080/device in your browser, and you'll see a prompt asking you to enter the `user_code`. Go ahead and type that in now. (You can enter it with or without the hyphen, and in upper or lower case, the proxy server will normalize the input.)
+Open `http://localhost:8080/device` in your browser, and you'll see a prompt asking you to enter the `user_code`. Go ahead and type that in now. (You can enter it with or without the hyphen, and in upper or lower case, the proxy server will normalize the input.)
 
 {% img blog/oauth-device-flow-proxy/user-code-prompt.png %}{: .center-image }
 
