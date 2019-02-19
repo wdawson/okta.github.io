@@ -163,7 +163,7 @@ php -S 127.0.0.1:8080 -t public
 
 Now you have a server listening on port 8080! Don't open your browser there just yet, since remember we have to have the device initiate the OAuth request.
 
-We're going to simulate a browserless device by interacting with the proxy server from the command line. In another terminal, make the following `curl` request to begin the Device Flow. Replace `{yourClientId}` with the client ID you got when creating the app above.
+You can simulate a browserless device by interacting with the proxy server from the command line. In another terminal, make the following `curl` request to begin the Device Flow. Replace `{yourClientId}` with the client ID you got when creating the app above.
 
 ```bash
 curl http://localhost:8080/device/code -d client_id={yourClientId}
