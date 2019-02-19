@@ -19,7 +19,7 @@ The Apple TV is a great device, but it's missing a browser, which means it can't
 
 Instead, when you log in to an app on your Apple TV, you see a screen like this.
 
-{% img blog/oauth-device-flow-proxy/syfy.jpg %}{: .center-image }
+{% img blog/oauth-device-flow-proxy/syfy.jpg alt:"Syfy login screen on an AppleTV" width:800 %}{: .center-image }
 
 It asks you to visit a URL on some other device and enter the code shown on the screen. Then you finish logging in on that other device, usually your phone. 
 
@@ -27,7 +27,7 @@ This has a number of benefits! It doesn't require a browser on the device, but i
 
 This flow is also used by other kinds of devices, like the hardware video encoder below.
 
-{% img blog/oauth-device-flow-proxy/teradek.jpg %}{: .center-image }
+{% img blog/oauth-device-flow-proxy/teradek.jpg alt:"Logging in to Google on a Teradek video encoder" %}{: .center-image }
 
 This device not only doesn't have a browser, it barely has a screen! Text entry on this device is also super awkward, and involves wiggling the little "menu" joystick to navigate the one-line on-screen keyboard. But it's still a very powerful device! Connect an HDMI video source like a video camera and it will push the video stream to Facebook or YouTube Live. 
 
@@ -85,7 +85,7 @@ While the user is busy logging in on their phone, the token endpoint will return
 
 The `authorization_pending` error means the user isn't finished logging in, but the code hasn't yet expired either. The device should try this again after the specified number of seconds. Meanwhile the user will be logging in, choosing a YouTube account, and approving the request.
 
-{% img blog/oauth-device-flow-proxy/device-flow-phone.png %}{: .center-image }
+{% img blog/oauth-device-flow-proxy/device-flow-phone.png alt:"Device flow sequence on an iPhone" %}{: .center-image }
 
 Finally, when the user finishes logging in, their phone will give them a "success" message, and there isn't anything left to do on the phone.
 
@@ -132,25 +132,25 @@ Copy the `config.template.php` file to `config.php`. There are two URLs in there
 
 Create a free Okta Developer account at [developer.okta.com/signup](https://developer.okta.com/signup/). From the **Applications** tab, click **Add Application**. Then choose the **Native** option. Remember, like iOS and Android apps, we can't trust these devices to keep secrets, so this enables the PKCE flow for this application.
 
-{% img blog/oauth-device-flow-proxy/create-new-app.png %}{: .center-image }
+{% img blog/oauth-device-flow-proxy/create-new-app.png alt:"Create a new Okta app" %}{: .center-image }
 
 Choose a name for the app, and set the redirect URL to `http://localhost:8080/auth/callback`
 
-{% img blog/oauth-device-flow-proxy/app-settings.png %}{: .center-image }
+{% img blog/oauth-device-flow-proxy/app-settings.png alt:"Set the application settings" %}{: .center-image }
 
 Once you create the app, you'll get a `client_id` for it. Copy that somewhere as we'll need it in a bit.
 
-{% img blog/oauth-device-flow-proxy/app-credentials.png %}{: .center-image }
+{% img blog/oauth-device-flow-proxy/app-credentials.png alt:"Find your application's client_id" %}{: .center-image }
 
 Next, navigate to the **API** tab and choose **Authorization Servers**, and you'll see an authorization server that's been created for your account.
 
-{% img blog/oauth-device-flow-proxy/api-authorization-server.png %}{: .center-image }
+{% img blog/oauth-device-flow-proxy/api-authorization-server.png alt:"Find the authorization server URL" %}{: .center-image }
 
 Copy the Issuer URI that you see there, and use it as the base URL for your two endpoints to configure in the config file, adding `/v1/authorize` and `/v1/token` to the end. For example, if your Issuer URI is `https://{yourOktaDomain}/oauth2/default`, then the two URLs in your config file would be:
 
 ```php
-  public static $authEndpoint = 'https://{yourOktaDomain}/oauth2/default/v1/authorize';
-  public static $tokenEndpoint = 'https://{yourOktaDomain}/oauth2/default/v1/token';
+public static $authEndpoint = 'https://{yourOktaDomain}/oauth2/default/v1/authorize';
+public static $tokenEndpoint = 'https://{yourOktaDomain}/oauth2/default/v1/token';
 ```
 
 ### Run the PHP Server and Try it Out!
@@ -191,11 +191,11 @@ curl http://localhost:8080/device/token -d client_id={yourClientId} -d device_co
 
 Open http://localhost:8080/device in your browser, and you'll see a prompt asking you to enter the `user_code`. Go ahead and type that in now. (You can enter it with or without the hyphen, and in upper or lower case, the proxy server will normalize the input.)
 
-{% img blog/oauth-device-flow-proxy/user-code-prompt.png %}{: .center-image }
+{% img blog/oauth-device-flow-proxy/user-code-prompt.png alt:"The proxy server prompt to enter the user code" %}{: .center-image }
 
 If you're already signed in to Okta, you won't even see the OAuth prompt, and you'll be redirected back immediately to the proxy.
 
-{% img blog/oauth-device-flow-proxy/proxy-complete.png %}{: .center-image }
+{% img blog/oauth-device-flow-proxy/proxy-complete.png alt:"You successfully signed in!" %}{: .center-image }
 
 Now back in the terminal, go ahead and repeat the same POST request you made before. (You can type up arrow and enter to repeat the last command.)
 
