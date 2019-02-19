@@ -130,7 +130,7 @@ Copy the `config.template.php` file to `config.php`. There are two URLs in there
 
 ### Create an Okta Developer Account
 
-Create a free Okta Developer account at [developer.okta.com/signup](https://developer.okta.com/signup/). From the **Applications** tab, click **Add Application**. Then choose the **Native** option. Remember, like iOS and Android apps, we can't trust these devices to keep secrets, so this enables the PKCE flow for this application.
+Create a free Okta Developer account at [developer.okta.com/signup](https://developer.okta.com/signup/). From the **Applications** tab, click **Add Application**. Then choose the **Native** option. Remember, like iOS and Android apps, you can't trust these devices to keep secrets, so this enables the PKCE flow for this application.
 
 {% img blog/oauth-device-flow-proxy/create-new-app.png alt:"Create a new Okta app" %}{: .center-image }
 
