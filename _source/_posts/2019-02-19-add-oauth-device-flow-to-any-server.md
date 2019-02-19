@@ -247,7 +247,7 @@ You can find the entire source code for this project [on GitHub](https://github.
 
 If you would like to dig deeper into the topics covered in this article, the following resources are a great starting point:
 
-* [Add Authentication to your PHP App in 5 Minutes](https://developer.okta.com/blog/2018/07/09/five-minute-php-app-auth)
+* [Add Authentication to your PHP App in 5 Minutes](/blog/2018/07/09/five-minute-php-app-auth)
 * [Get Started with PHP + Okta](https://developer.okta.com/code/php/)
 * [Device Code Flow on the OAuth Playground](https://www.oauth.com/playground/device-code.html)
 
