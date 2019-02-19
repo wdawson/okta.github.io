@@ -37,7 +37,7 @@ So now that we know what the OAuth 2.0 Device Flow is, let's look at how it work
 
 The OAuth 2.0 Device Flow works quite different from the other OAuth flows, since it doesn't involve a browser redirect on the device.
 
-When the user wants to log in, the device starts out by making a POST request to begin the process. The POST request contains only one piece of information, its `client_id`. (Devices like these are considered "public clients", so no `client_secret` is used in them, similar to [mobile apps](https://developer.okta.com/blog/2019/01/22/oauth-api-keys-arent-safe-in-mobile-apps).) This request is made to a new endpoint that is unique to the Device Flow.
+When the user wants to log in, the device starts out by making a POST request to begin the process. The POST request contains only one piece of information, its `client_id`. (Devices like these are considered "public clients", so no `client_secret` is used in them, similar to [mobile apps](/blog/2019/01/22/oauth-api-keys-arent-safe-in-mobile-apps).) This request is made to a new endpoint that is unique to the Device Flow.
 
 ```
 POST https://authorization-server.com/device
