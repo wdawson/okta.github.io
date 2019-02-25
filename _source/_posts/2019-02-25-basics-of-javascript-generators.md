@@ -7,7 +7,7 @@ tags: [ javascript, javascript generators, generators]
 tweets:
 - "Build your first JavaScript Generator and find out what you can do with them! →"
 - "JavaScript Generators! Uh... What are they good for? We've got you covered. (Say it again) <3"
-- "Let @leebrandt show you how to build your first JavaScript Generator (and explain why they’re cool)! →"
+- "Let @leebrandt show you how to build your first JavaScript Generator (and explain why they're cool)! →"
 image: blog/featured/okta-node-skew.jpg
 ---
 
@@ -124,5 +124,5 @@ Want to know more about JavaScript, Node, Angular, and React? Check out this coo
 * [Build Your First PWA with Angular](/blog/2019/01/30/first-angular-pwa)
 * [Modern Token Authentication in Node](/blog/2019/02/14/modern-token-authentication-in-node-with-express)
 
-If you enjoyed this post, follow us on [Twitter](https://twitter.com/oktadev), and [YouTube](https://www.youtube.com/channel/UC5AMiWqFVFxF1q9Ya1FuZ_Q) so you’re always up on what’s new and noteworthy!
+If you enjoyed this post, follow us on [Twitter](https://twitter.com/oktadev), and [YouTube](https://www.youtube.com/channel/UC5AMiWqFVFxF1q9Ya1FuZ_Q) so you're always up on what's new and noteworthy!
 
