@@ -407,7 +407,7 @@ This component is used to process adding new pages and editing existing ones. Us
 
 Add a tiny bit of styling in `src/app/edit/edit.component.css`.
 
-CSS
+```css
 input {
   width: 100%;
 }
