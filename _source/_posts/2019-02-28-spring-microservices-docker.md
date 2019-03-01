@@ -881,6 +881,8 @@ In this post, you learned more about microservices and how to deploy them, along
 * How to deploy microservices using Docker and Docker Compose.
 * How to use Spring Profiles to deploy in a production environment.
 
+You can find the completed source code for this tutorial on GitHub at [oktadeveloper/okta-spring-microservices-docker-example](https://github.com/oktadeveloper/okta-spring-microservices-docker-example).
+
 If you're interested in learning more about microservices, or modern application development in Spring, I encourage you to check out these resources:
 
 * [Build and Secure Microservices with Spring Boot 2.0 and OAuth 2.0](https://developer.okta.com/blog/2018/05/17/microservices-spring-boot-2-oauth)
