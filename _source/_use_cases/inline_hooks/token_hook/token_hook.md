@@ -1,10 +1,12 @@
 ---
 layout: docs_page
-title: API Access Management Inline Hook
-excerpt: Customize tokens returned by Okta API Access Management process flow.
+title: Token Inline Hook
+excerpt: Customize tokens returned by the Okta API Access Management process flow.
+redirect_from:
+    - "/use_cases/inline_hooks/api_am_hook/api_am_hook"
 ---
 
-# API Access Management Inline Hook
+# Token Inline Hook
 
 {% api_lifecycle ea %}
 
@@ -14,7 +16,7 @@ This page provides reference documentation for:
 
 - JSON objects you can include in your response
 
-This information is specific to the API Access Management Inline Hook, one type of inline hook supported by Okta.
+This information is specific to the Token Inline Hook, one type of inline hook supported by Okta.
 
 ## See Also
 
@@ -22,7 +24,7 @@ For a general introduction to Okta inline hooks, see [Inline Hooks](/use_cases/i
 
 For information on the API for registering external service endpoints with Okta, see [Inline Hooks Management API](/docs/api/resources/inline-hooks).
 
-For steps to enable this inline hook, see below, [Enabling an API Access Management Inline Hook](#enabling-an-api-access-management-inline-hook).
+For steps to enable this inline hook, see below, [Enabling a Token Inline Hook](#enabling-a-token-inline-hook).
 
 ## About
 
@@ -36,7 +38,7 @@ You cannot use this inline hook to overwrite claims in tokens, only to add new o
 
 ## Objects in the Request from Okta
 
-For the API Access Management Inline Hook, the outbound call from Okta to your external service will include the following objects in its JSON payload:
+For the Token Inline Hook, the outbound call from Okta to your external service will include the following objects in its JSON payload:
 
 ### data.identity
 
@@ -73,7 +75,7 @@ The set of scopes that have been granted. For descriptions of the claims that ca
 
 ## Objects in Response You Send
 
-For the API Access Management Inline hook, the `commands` and `error` objects that you can return in the JSON payload of your response are defined as follows:
+For the Token Inline hook, the `commands` and `error` objects that you can return in the JSON payload of your response are defined as follows:
 
 ### commands
 
@@ -81,7 +83,7 @@ The `commands` object is where you can provide commands to Okta. It is where you
 
 The `commands` object is an array, allowing you to send multiple commands. In each array element, there needs to be a `type` property and `value` property. The `type` property is where you specify which of the supported commands you wish to execute, and `value` is where you supply an operand for that command.
 
-In the case of the API Access Management hook type, the `value` property is itself a nested object, in which you specify a particular operation, a path to act on, and a value.
+In the case of the Token hook type, the `value` property is itself a nested object, in which you specify a particular operation, a path to act on, and a value.
 
 | Property | Description                                                              | Data Type       |
 |----------|--------------------------------------------------------------------------|-----------------|
@@ -90,7 +92,7 @@ In the case of the API Access Management hook type, the `value` property is itse
 
 #### Supported Commands
 
-The following commands are supported for the API Access Management Inline Hook type:
+The following commands are supported for the Token Inline Hook type:
 
 | Command                 | Description             |
 |-------------------------|-------------------------|
@@ -125,7 +127,7 @@ When you return an error object, it should have the following structure:
 |--------------|--------------------------------------|-----------------------------|
 | errorSummary | Human-readable summary of the error. | String                      |
 
-Returning an error object will cause Okta to return an OAuth 2.0 error to the requester of the token, with the value of `error` set to `server_error`, and the value of`error_description` set to the string you supplied in the `errorSummary` property of the `error` object you returned.
+Returning an error object will cause Okta to return an OAuth 2.0 error to the requester of the token, with the value of `error` set to `server_error`, and the value of `error_description` set to the string you supplied in the `errorSummary` property of the `error` object you returned.
 
 ## Sample Listing of JSON Payload of Request
 
@@ -299,7 +301,7 @@ Returning an error object will cause Okta to return an OAuth 2.0 error to the re
     }
 ]}
 ```
-## Enabling an API Access Management Inline Hook
+## Enabling a Token Inline Hook
 
 To activate the inline hook, you first need to register your external service endpoint with Okta using the [Inline Hooks Management API](/docs/api/resources/inline-hooks).
 
