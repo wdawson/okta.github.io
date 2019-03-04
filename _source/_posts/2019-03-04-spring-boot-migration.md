@@ -50,7 +50,7 @@ Follow these links for more information about [OIDC](https://developer.okta.com/
 
 The [Spring Framework](https://spring.io/) is in its 17th year. The Spring Framework and the many projects it encompasses (like Spring Security) is vast.
 
-It’s fair to say that the engine at the heart of Spring and its many projects is configuration. Spring Boot brought the concept of “convention over configuration” to the world of Spring so that you could get a production ready application up and running very quickly. It does this through an opinionated auto-configuration system (which you can override, if need be).
+It’s fair to say that the engine at the heart of Spring and its many projects is configuration. Spring Boot brought the concept of "convention over configuration" to the world of Spring so that you could get a production ready application up and running very quickly. It does this through an opinionated auto-configuration system (which you can override, if need be).
 
 [Spring Security](https://spring.io/projects/spring-security) formalizes and approach to authentication and authorization in the Spring Framework.
 
@@ -263,7 +263,7 @@ The guts of the `api` method are nice and compact: `return tokenRelayTemplate(au
 
 We pass the `OAuth2Authentication` object into the call to the private `tokenRelayTemplate` method and then from there, it’s just a standard `RestTemplate.getForObject` method call with the url to our Resource Server’s api endpoint (http://localhost:8081/api).
 
-The heavy lifting is done in the `tokenRelayTemplate` method. We cast the `authentication.getDetails()` method call (which returns an `Object`) to `OAuth2AuthenticationDetails`. This is the first “ding” in this code - the need to cast a method call result.
+The heavy lifting is done in the `tokenRelayTemplate` method. We cast the `authentication.getDetails()` method call (which returns an `Object`) to `OAuth2AuthenticationDetails`. This is the first "ding" in this code - the need to cast a method call result.
 
 Once we have the `OAuth2AuthenticationDetails` object, we can use its `getTokenValue()` method to get the raw access token (in the case of Okta, this will be a JWT). This allows us to complete the creation of the OAuth2RestTemplate and the access token will now automatically be sent in an HTTP Authorize header when the request of the Resource Server is made.
 
