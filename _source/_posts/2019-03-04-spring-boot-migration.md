@@ -35,14 +35,14 @@ In this new world of consent and authorization, only one thing was missing: iden
 
 OAuth (and by extension OIDC) use a number of defined `Flows` to manage the interactions between the `Client App`, the `Authorization Server` and the `Resource Server`. In this post, we focus on the `Authorization Code Flow`. This flow is meant to be kicked off from your browser and goes like this:
 
-Yelp wants access to your contacts. It presents a button to link your Google Contacts.
-When you click the button, you’re redirected to Google where you login with your username and password (if you’re not already logged in).
-Google shows you a screen telling you that Yelp would like read-only access to your contacts.
-Once you give your consent, Google redirects back to Yelp, via your browser, with a temporary code (called an authorization code)
-Using this code, Yelp contacts Google to trade it for an Access Token
-Google validates the code and if all checks out, issues an Access Token with limited capabilities (read-only access to your contacts) to Yelp
-Yelp then presents the Access Token to the Google Contacts API
-Google Contacts API validates the token and, if the request matches the capabilities identified by the token, returns your contact list to Yelp
+1. Yelp wants access to your contacts. It presents a button to link your Google Contacts.
+2. When you click the button, you’re redirected to Google where you login with your username and password (if you’re not already logged in).
+3. Google shows you a screen telling you that Yelp would like read-only access to your contacts.
+4. Once you give your consent, Google redirects back to Yelp, via your browser, with a temporary code (called an authorization code)
+5. Using this code, Yelp contacts Google to trade it for an Access Token
+6. Google validates the code and if all checks out, issues an Access Token with limited capabilities (read-only access to your contacts) to Yelp
+7. Yelp then presents the Access Token to the Google Contacts API
+8. Google Contacts API validates the token and, if the request matches the capabilities identified by the token, returns your contact list to Yelp
 
 Follow these links for more information about [OIDC](https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1), [OAuth 2.0](https://developer.okta.com/blog/2018/04/10/oauth-authorization-code-grant-type), [JWT](https://developer.okta.com/blog/2018/10/31/jwts-with-java), and the various [Flows](https://aaronparecki.com/oauth-2-simplified/#authorization).
 
@@ -97,10 +97,10 @@ The [code example](https://github.com/oktadeveloper/okta-spring-boot-oauth2-migr
 
 Each version of the example code has 4 primary files
 
-`pom.xml` - identifies dependencies
-`application.yml` - required configuration for OIDC & OAuth
-`DemoApplication.java` - the Client Application
-`DemoResourceServer.java` - the Resource Server
+1. `pom.xml` - identifies dependencies
+2. `application.yml` - required configuration for OIDC & OAuth
+3. `DemoApplication.java` - the Client Application
+4. `DemoResourceServer.java` - the Resource Server
 
 In each case, I set a goal of minimizing dependencies, configuration and annotations to get the job done. Also, application code, controller code and configuration code are artificially included in single files. This was to keep the example clear and concise. In a real world application, you would separate out these concerns into their own classes.
 
