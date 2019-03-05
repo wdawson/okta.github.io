@@ -14,7 +14,7 @@ The number of API requests for an organization is limited for all APIs in order 
 Okta has two types of API rate limits:
 
 * [Org-wide rate limits](#org-wide-rate-limits) that vary by API endpoint. These limits are applied on a per-minute or per-second basis, and some are also applied on a per-user basis. For example, if your org sends a request to list applications more than one hundred times in a minute, the org-wide rate limit is exceeded. These limits protect against denial-of-service attacks, and help ensure that adequate resources are available for all customers.
-* [Concurrent rate limits](#concurrent-rate-limits) on the number of simultaneous transactions regardless of endpoint. For example, if you sent 77 very long-lasting requests to any API endpoint simultaneously, you might exceed the concurrent rate limit.
+* [Concurrent rate limits](#concurrent-rate-limits) on the number of simultaneous transactions. For example, if you sent 77 very long-lasting requests to any API endpoint simultaneously, you might exceed the concurrent rate limit.
 
 Okta has one type of email rate limit:
 
