@@ -49,6 +49,7 @@ Note that limits for more specific endpoints override the limits for less specif
 | **Get, update, or delete a group by ID:**<br>`/api/v1/groups/{id}` only                               | 100 | 300 | 300* | 600*  |
 | **Create or list users:**<br>Only `GET` or `POST` to `/api/v1/users`                                  | 100 | 300 | 300 | 600  |
 | **Get a user by ID or login:**<br>Only `GET` to `/api/v1/users/{idOrLogin}`                           | 100 | 300 | 300* | 1000* |
+| **Get my user:**<br>Only `GET` to `/api/v1/users/me`                                                  | 100 | 300 | 300* | 1000* |
 | **Update or delete a user by ID or login:**<br>Only `POST`, `PUT` or `DELETE` to `/api/v1/users/{idOrLogin}`  | 100 | 300 | 300* | 600*  |
 | **Get System Log data:**<br>`/api/v1/logs`                                                            | 20  | 25  | 25  | 50   |
 | **Get System Log data:**<br>`/api/v1/events`                                                          | 20  | 25  | 25  | 50   |
@@ -365,6 +366,7 @@ Extensions to the base URLs listed below are included in the specified limit, un
 | Get session information | `/api/v1/sessions`                               |   750 |
 | Create or list users | `/api/v1/users` except `/api/v1/users/{id}` and `/api/v1/users/{login}`    |   600 |
 | Get a user by user ID or login (combined) | `/api/v1/users/{id}` or `/api/v1/users/{login}`  only   | 2000 |
+| Get my user | `/api/v1/users/me` | 1000 |
 | Update or delete a user by ID | `/api/v1/users/{id}` only     |   600 |
 | Create an org (ISVs only)           | `/api/v1/orgs`                          |   50 |
 | All other actions | `/api/v1/`                                               |  1200 |
