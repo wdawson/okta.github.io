@@ -37,11 +37,11 @@ The outbound call from Okta to your external service will include the following 
 
 Provides the name-value pairs of the attributes contained in the app user profile of the user who is being imported. You can change the values of attributes in the user's app profile by means of the `commands` object you return. If you change attributes in the app profile, they will then flow through to the Okta user profile, based on matching and mapping rules.
 
-### data.user.profile
+### data.user
 
 Provides information on the Okta user profile currently set to be used for the user who is being imported, based on the matching rules and attribute mappings that were applied.
 
-This object contains an `id` and a `profile`: `id` is the unique identifier of the Okta user profile; `profile` contains the name-value pairs of the attributes in the profile.
+`data.user.profile` contains the name-value pairs of the attributes in the user profile.  If the user has been matched to an existing Okta user, a `data.user.id` object will be included, containing the unique identifier of the Okta user profile. 
 
 You can change the values of the attributes by means of the `commands` object you return.
 
@@ -50,13 +50,13 @@ You can change the values of the attributes by means of the `commands` object yo
 The current default action that Okta will take in the case of the user being imported. The two possible values are:
 
  - `CREATE_USER`: A new Okta user profile will be created for the user.
- - `LINK_USER`: The user will be treated as a match for the existing Okta user indicated in `data.user.profile`.
+ - `LINK_USER`: The user will be treated as a match for the existing Okta user indicated in the `data.user` object.
  
  You can change the action that will be taken by means of the `commands` object you return.
 
 ### data.context
 
- This object contains a number of sub-objects, each of which provides some time of contextual information. You cannot affect these objects by means of the commands you return. The following sub-objects are included:
+This object contains a number of sub-objects, each of which provides some time of contextual information. You cannot affect these objects by means of the commands you return. The following sub-objects are included:
 
  - `data.context.conflicts`: List of the user attributes that are in conflict.
  - `data.context.application`: Details of the app from which the user is being imported.
@@ -66,11 +66,11 @@ The current default action that Okta will take in the case of the user being imp
 
 ## Objects in Response You Send
 
-For the Token Inline hook, the `commands` and `error` objects that you can return in the JSON payload of your response are defined as follows:
+The `commands` and `error` objects that you can return in the JSON payload of your response are defined as follows:
 
 ### commands
 
-TThe `commands` object is where you can provide commands to Okta. It is an array, allowing you to send multiple commands. Each array element needs to consist of the following name-value pair:
+The `commands` object is where you can provide commands to Okta. It is an array, allowing you to send multiple commands. Each array element needs to consist of the following name-value pair:
 
 | Property | Description                                           | Data Type       |
 |----------|-------------------------------------------------------|-----------------|
