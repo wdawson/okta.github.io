@@ -2,7 +2,7 @@
 layout: blog_post
 title: "Simple User Authentication in React"
 author: bkelley
-description: "Build a React application with User Authentication."
+description: "Build a React application with User Authentication and Okta."
 tags: [react, authentication, auth, oauth]
 tweets:
 - "Build a simple @reactjs app with user authentication!"
