@@ -319,7 +319,7 @@ const [authenticated, user] = useAuth(auth);
 
 You can now add a new button after the "Get a new joke" button. When the `authenticated` variable is `null`, that means Okta hasn't initialized yet so you're not sure if the user is logged in or not. You could show some sort of loading indicator, or you could simply not render the button until you're sure about the state of authentication:
 
-```javascript
+```jsx
 {authenticated !== null && (
   <button
     onClick={() => authenticated ? auth.logout() : auth.login()}
