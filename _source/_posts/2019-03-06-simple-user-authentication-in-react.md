@@ -2,7 +2,7 @@
 layout: blog_post
 title: "Simple User Authentication in React"
 author: bkelley
-description: "Build a React application with User Authentication using Okta"
+description: "Build a React application with User Authentication."
 tags: [react, authentication, auth, oauth]
 tweets:
 - "Build a simple @reactjs app with user authentication!"
@@ -129,26 +129,26 @@ yarn add he@1.2.0
 Now you'll need to write a function to fetch jokes. Since this will need to reference `setJoke`, it should be written inside the `App` component. The `fetch` API supports a `signal` that will allow you to cancel the call. This would be important to make sure calls come back in the right order. If you have two or three calls successively, you don't really care about the first two, but instead, just want the final result.
 
 ```javascript
-  const fetchJoke = async signal => {
-    const url = new URL('https://api.icndb.com/jokes/random');
-    const response = await fetch(url, { signal });
-    const { value } = await response.json();
+const fetchJoke = async signal => {
+  const url = new URL('https://api.icndb.com/jokes/random');
+  const response = await fetch(url, { signal });
+  const { value } = await response.json();
 
-    setJoke(decode(value.joke));
-  };
+  setJoke(decode(value.joke));
+};
 ```
 
 You'll also need an "effect" hook to fetch the joke whenever there isn't one. The `useEffect` hook will run any time the component renders. However, you can add an array of values to watch, which will cause it to only run the effect when one of those values changes. In this case, you'll only want to run the effect when the `joke` changes, or fetch one if there is no joke set yet. If the effect has a return value, it will be run when cleaning up the app, or before rendering again. Here is where you can provide a function that will cancel the `fetch` call.
 
 ```javascript
-  useEffect(() => {
-    if (!joke) {
-      const controller = new AbortController();
-      fetchJoke(controller.signal);
+useEffect(() => {
+  if (!joke) {
+    const controller = new AbortController();
+    fetchJoke(controller.signal);
 
-      return () => controller.abort();
-    }
-  }, [joke]);
+    return () => controller.abort();
+  }
+}, [joke]);
 ```
 
 Now you just need to display the joke and add a button to fetch a new one. Clicking the button will set the joke back to an empty string, and the effect will take care of fetching a new joke. Replace the contents of the `<p>` tag with the joke (`<p>{joke || '...'}</p>`), and replace the `<a>` tag with a button:
@@ -225,7 +225,7 @@ Since Create React App runs on port 3000 by default, you should add that as a Ba
 Click **Done** to save your app, then copy your **Client ID** and paste it as a variable into a file called `.env.local` in the root of your project. This will allow you to access the file in your code without needing to store credentials in source control. You'll also need to add your organization URL (without the `-admin` suffix). Environment variables (other than `NODE_ENV`) need to start with `REACT_APP_` in order for Create React App to read them, so the file should end up looking like this:
 
 ```bash
-REACT_APP_OKTA_ORG_URL=https://{yourOktaOrgUrl}
+REACT_APP_OKTA_ORG_URL=https://{yourOktaDomain}
 REACT_APP_OKTA_CLIENT_ID={yourClientId}
 ```
 
@@ -342,9 +342,9 @@ if (user) {
 Lastly, add a new effect to reset the joke whenever the `user` state changes. This will cause the app to fetch a new joke with the user's name after they've logged in, or a default Chuck Norris joke when the user logs out.
 
 ```javascript
-  useEffect(() => {
-    setJoke('');
-  }, [user]);
+useEffect(() => {
+  setJoke('');
+}, [user]);
 ```
 
 Your final code should look like this:
@@ -417,12 +417,12 @@ export default App;
 
 Hopefully, you had some fun with this app and learned a bit about how easy it can be to add authentication to your React app. If you want to see the final code sample for reference, you can find it [on GitHub](https://github.com/oktadeveloper/okta-react-user-auth-example).
 
-For more examples using Okta with React, check out some of these other posts, or browse the [Okta Developer Blog](https://developer.okta.com/blog/).
+For more examples using Okta with React, check out some of these other posts, or browse the [Okta Developer Blog](/blog/).
 
-* [Build User Registration with Node, React, and Okta](https://developer.okta.com/blog/2018/02/06/build-user-registration-with-node-react-and-okta)
-* [Build a React Application with User Authentication in 15 Minutes](https://developer.okta.com/blog/2017/03/30/react-okta-sign-in-widget)
-* [Build a Basic CRUD App with Laravel and React](https://developer.okta.com/blog/2018/12/06/crud-app-laravel-react)
-* [Build a Basic CRUD App with Node and React](https://developer.okta.com/blog/2018/07/10/build-a-basic-crud-app-with-node-and-react)
+* [Build User Registration with Node, React, and Okta](/blog/2018/02/06/build-user-registration-with-node-react-and-okta)
+* [Build a React Application with User Authentication in 15 Minutes](/blog/2017/03/30/react-okta-sign-in-widget)
+* [Build a Basic CRUD App with Laravel and React](/blog/2018/12/06/crud-app-laravel-react)
+* [Build a Basic CRUD App with Node and React](/blog/2018/07/10/build-a-basic-crud-app-with-node-and-react)
 
 If you have any questions about this post, please add a comment below. For more awesome content, follow [@oktadev](https://twitter.com/oktadev) on Twitter, like us [on Facebook](https://www.facebook.com/oktadevelopers/), or subscribe to [our YouTube channel](https://www.youtube.com/channel/UC5AMiWqFVFxF1q9Ya1FuZ_Q).
 
