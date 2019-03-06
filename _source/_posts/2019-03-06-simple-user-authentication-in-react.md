@@ -111,7 +111,7 @@ It's not a huge difference, but it'll allow us to add hooks in, which are a bit 
 To add a piece of state with hooks, you'll need to use the `useState` function exported from React. You'll also be using `useEffect` later on, so you'll need to make sure to import both of those. Change the line importing `React` to look like this:
 
 ```javascript
-Import React, { useState, useEffect } from ‘react';
+Import React, { useState, useEffect } from 'react';
 ```
 
 Then to use a piece of state, add the following to the top of your `App` function, before the `return statement`:
