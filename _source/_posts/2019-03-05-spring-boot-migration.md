@@ -3,12 +3,12 @@ layout: blog_post
 title: "Migrate Your Spring Boot App to the Latest and Greatest Spring Security and OAuth 2.0"
 author: dogeared
 description: "Migrate Spring Boot with OAuth 2.0 support from version 1.5.x to 2.1.x"
-tags: [oauth, oauth2, oidc, openid connect, spring, spring boot, spring security, learning, programming, programming languages, education]
+tags: [java, oauth, oauth2, oidc, openid connect, spring, spring boot, spring security, learning, programming, programming languages, education]
 tweets:
 - "Checkout how easy OAuth 2.0 and OpenID Connect are with the latest version of Spring Boot and Spring Security!"
+- "🍃 Migration Guide from @afitnerd on Spring Security's OAuth 2.0 and OIDC support. It's bomb diggity! 👍"
 image: blog/featured/okta-java-tile-books-mouse.jpg
 ---
-Migrate Your Spring Boot App to the Latest and Greatest Spring Security and OAuth 2.0
 
 Spring Boot 1.5.x made it easier than ever before to integrate Spring Security with OAuth 2.0 into your application. Spring Boot 2.1.x dials it up to 11 by making OpenID Connect a first class citizen in the stack.
 
@@ -107,7 +107,7 @@ Take a look at the differences amongst each version of the code.
 
 In each of the examples, the Resource Server code is nearly identical:
 
-```
+```java
 @RestController
 @SpringBootApplication
 public class OAuth2DemoResourceServer_1_5 {
@@ -139,7 +139,7 @@ This version of Spring Boot and Spring Security went a long way to make working 
 
 Take a look at the `pom.xml` file for the Resource Server:
 
-```
+```xml
 <dependencies>
     <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -160,14 +160,14 @@ As you can see, Spring Security 4.2.x has OAuth2 support as a secondary dependen
 
 Take a look at the `application.yml` configuration file:
 
-```
+```yaml
 security:
   oauth2:
     client:
       clientId: {okta client id}
       clientSecret: {okta client secret}
     resource:
-      tokenInfoUri: https://{your okta org}.okta.com/oauth2/default/v1/introspect
+      tokenInfoUri: https://{yourOktaDomain}.okta.com/oauth2/default/v1/introspect
 ```
 
 All that's required is a `clientId`, a `clientSecret` and a `tokenInfoUri`.
@@ -184,18 +184,18 @@ The Client Application has the same three dependencies as the Resource Server: `
 
 Here's the `application.yml` file:
 
-```
+```yaml
 security:
   oauth2:
     client:
       clientId: {okta client id}
       clientSecret: {okta client secret}
-      accessTokenUri: https://{your okta org}.okta.com/oauth2/default/v1/token
-      userAuthorizationUri: https://{your okta org}.okta.com/oauth2/default/v1/authorize
+      accessTokenUri: https://{yourOktaDomain}.okta.com/oauth2/default/v1/token
+      userAuthorizationUri: https://{yourOktaDomain}.okta.com/oauth2/default/v1/authorize
       clientAuthenticationScheme: form
       scope: openid profile email
     resource:
-      userInfoUri: https://{your okta org}.okta.com/oauth2/default/v1/userinfo
+      userInfoUri: https://{yourOktaDomain}.okta.com/oauth2/default/v1/userinfo
       server: http://localhost:8081
 ```
 
@@ -205,7 +205,7 @@ The value for `server` is a custom property used by the Client Application to id
 
 Take a look at the Client Application Code:
 
-```
+```java
 @EnableOAuth2Sso
 @RestController
 @SpringBootApplication
@@ -270,7 +270,7 @@ With this version of Spring Boot and Spring Security, OAuth 2.0 and OpenID Conne
 
 Here's the `pom.xml` file:
 
-```
+```xml
 <dependencies>
     <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -291,13 +291,13 @@ Once again you have 3 dependencies, but this time you get rid of the direct Spri
 
 Next up is the `application.yml` configuration file:
 
-```
+```yaml
 spring:
   security:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: https://{your okta org}.okta.com/oauth2/default/v1/keys
+          jwk-set-uri: https://{yourOktaDomain}.okta.com/oauth2/default/v1/keys
 ```
 
 Well, this is a breath of terse fresh air! All your Resource Server needs is the `jwks` (JWT Key Set) endpoint. This endpoint returns a set of public keys that the Resource Server uses to validate the cryptographic signature of the access token.
@@ -308,7 +308,7 @@ This isn't just a benefit from the perspective of a smaller configuration file. 
 
 Here's the `pom.xml` file for the Client Application:
 
-```
+```xml
 <dependencies>
     <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -335,14 +335,14 @@ The last dependency, `spring-boot-starter-webflux`, is what you're going to use 
 
 Next up, `application.yml`
 
-```
+```yaml
 spring:
   security:
     oauth2:
       client:
         provider:
           okta:
-            issuer-uri: https://{your okta org}.okta.com/oauth2/default
+            issuer-uri: https://{yourOktaDomain}.okta.com/oauth2/default
         registration:
           okta:
             client-id: {okta client id}
@@ -353,7 +353,7 @@ spring:
 
 In this case, you just need a `client-id`, `client-secret` and an `issuer-uri`. The OAuth integration will automatically retrieve the authorization and token endpoints of the Authorization Server using a well-known endpoint. You can try it yourself by browsing to:
 
-`https://{your okta org}.okta.com/oauth2/default/.well-known/oauth-authorization-server`
+`https://{yourOktaDomain}.okta.com/oauth2/default/.well-known/oauth-authorization-server`
 
 You'll get back a json document that has all the configuration information for your Okta Authorization Server, including the link to the JWT key set uri.
 
@@ -363,7 +363,7 @@ Notice that `okta` is embedded in this configuration. Like: `spring.security.oau
 
 Here's the Client Application:
 
-```
+```java
 @RestController
 @SpringBootApplication
 public class OAuth2DemoApplication_2_1 {
@@ -442,17 +442,17 @@ As you've done for each of the previous examples, take a look at the dependencie
 
 Here's the `pom.xml` file for the resource server:
 
-```
+```xml
 <dependencies>
-	<dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-web</artifactId>
-	</dependency>
-	<dependency>
-		<groupId>com.okta.spring</groupId>
-		<artifactId>okta-spring-boot-starter</artifactId>
-		<version>1.1.0</version>
-	</dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.okta.spring</groupId>
+        <artifactId>okta-spring-boot-starter</artifactId>
+        <version>1.1.0</version>
+    </dependency>
 </dependencies>
 ```
 
@@ -460,12 +460,12 @@ You're down to 2 dependencies while keeping the code for your Resource Server ex
 
 Take a look at the `application.yml`:
 
-```
+```yaml
 okta:
   oauth2:
     clientId: {okta client id}
     clientSecret: {okta client secret}
-    issuer: https://{your okta org}.okta.com/oauth2/default
+    issuer: https://{yourOktaDomain}.okta.com/oauth2/default
     audience: http://localhost:8081
 ```
 
@@ -475,7 +475,7 @@ You now have an easy to read relatively flat configuration. You just need the `c
 
 Here are the dependencies for the Client Application from the `pom.xml` file:
 
-```
+```xml
 <dependencies>
     <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -498,7 +498,7 @@ You have the same 2 dependencies as you did for the Resource Server as well as `
 The `application.yml` file is exactly the same as the Resource server. You've now achieved complete parity for the configuration of the Resource Server and the Client Application.
 You also have the benefit of being able to reuse the `okta.oauth2.audience` value in the Client Application. Here's where you're bringing it into scope thanks to Spring Boot's environment variable support:
 
-```
+```java
 @Value("#{ @environment['okta.oauth2.audience'] }")
 private String resourceServerUrl;
 ```
@@ -507,7 +507,7 @@ The rest of the Client Application code is the same as the Spring Boot 2.1.x exa
 
 Here's the code that uses the `WebClient` object to make the api request of the Resource Server:
 
-```
+```java
 return this.webClient
     .get()
     .uri(this.resourceServerUrl + "/api")
@@ -530,6 +530,8 @@ Spring Boot and Spring Security's first-class support for OpenID Connect and OAu
 
 Want to learn more about the latest with Spring Boot? Check out these posts:
 
-* [Build a Reactive App with Spring Boot and MongoDB](https://developer.okta.com/blog/2019/02/21/reactive-with-spring-boot-mongodb)
-* [Spring Boot with PostgreSQL, Flyway, and JSONB](https://developer.okta.com/blog/2019/02/20/spring-boot-with-postgresql-flyway-jsonb)
-* [Data Persistence with Hibernate and Spring](https://developer.okta.com/blog/2019/02/01/spring-hibernate-guide)
+* [Build a Reactive App with Spring Boot and MongoDB](/blog/2019/02/21/reactive-with-spring-boot-mongodb)
+* [Spring Boot with PostgreSQL, Flyway, and JSONB](/blog/2019/02/20/spring-boot-with-postgresql-flyway-jsonb)
+* [Data Persistence with Hibernate and Spring](/blog/2019/02/01/spring-hibernate-guide)
+
+Follow [@oktadev](https://twitter.com/oktadev) if you want to keep up-to-date on OAuth 2.0 and OIDC!
